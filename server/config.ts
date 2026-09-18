@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import { resolveConcurrencySetting } from './services/renderCapacity';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
@@ -77,7 +78,9 @@ export const config: AppConfig = {
   queue: {
     driver: process.env.RENDER_QUEUE_DRIVER === 'bullmq' ? 'bullmq' : 'database',
     redisUrl: process.env.REDIS_URL || undefined,
-    workerConcurrency: Math.max(1, parseInt(process.env.RENDER_WORKER_CONCURRENCY || process.env.MAX_CONCURRENT_RENDERS || '2', 10)),
+    workerConcurrency: resolveConcurrencySetting(
+      process.env.RENDER_WORKER_CONCURRENCY || process.env.MAX_CONCURRENT_RENDERS,
+    ),
     workerId: process.env.RENDER_WORKER_ID || `${process.pid}-${Math.random().toString(36).slice(2, 8)}`,
   },
   storage: {

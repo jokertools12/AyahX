@@ -10,6 +10,7 @@ import { config } from '../config';
 import { enqueueRenderJob, startRenderWorker } from './renderQueueBroker';
 import { deleteStoredRender, isObjectStoragePath, uploadRender } from './objectStorage';
 import { recordRenderAudit, renderDurationSeconds } from './renderObservability';
+import { resolveConcurrencySetting } from './renderCapacity';
 
 export interface RenderJobRow {
   id: string;
@@ -49,7 +50,7 @@ export class RenderJobQueue {
   private storageDir: string;
 
   constructor() {
-    this.maxConcurrency = parseInt(process.env.MAX_CONCURRENT_RENDERS || '1', 10);
+    this.maxConcurrency = resolveConcurrencySetting(process.env.MAX_CONCURRENT_RENDERS, config.queue.workerConcurrency);
     this.storageDir = path.resolve(process.cwd(), process.env.RENDER_STORAGE_DIR || 'uploads/renders');
     if (!fs.existsSync(this.storageDir)) {
       fs.mkdirSync(this.storageDir, { recursive: true });

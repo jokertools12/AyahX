@@ -2,6 +2,7 @@ import { Queue, Worker, JobsOptions, Job } from 'bullmq';
 import IORedis from 'ioredis';
 import { config } from '../config';
 import { logger } from '../logger';
+import { capacityPollIntervalMs, getRenderCapacity, resolveConcurrencySetting } from './renderCapacity';
 
 export const RENDER_QUEUE_NAME = 'quran-render-v1';
 
@@ -33,12 +34,43 @@ export async function enqueueRenderJob(jobId: string, priority = 0): Promise<Job
 }
 
 export function startRenderWorker(processJob: (jobId: string) => Promise<void>): Worker {
+  const maxConcurrency = resolveConcurrencySetting(process.env.RENDER_MAX_CONCURRENCY, config.queue.workerConcurrency);
+  let activeJobs = 0;
+  let lastReportedConcurrency = config.queue.workerConcurrency;
   const worker = new Worker(RENDER_QUEUE_NAME, async (job) => {
     await processJob(String(job.data.jobId));
   }, { connection: getConnection(), concurrency: config.queue.workerConcurrency, lockDuration: 15 * 60 * 1000 });
+  const refreshConcurrency = () => {
+    const capacity = getRenderCapacity(activeJobs, maxConcurrency);
+    const nextConcurrency = Math.max(activeJobs, capacity.targetConcurrency);
+    if (worker.concurrency !== nextConcurrency) worker.concurrency = nextConcurrency;
+    if (nextConcurrency !== lastReportedConcurrency) {
+      lastReportedConcurrency = nextConcurrency;
+      logger.info(
+        `Render capacity adjusted: concurrency=${nextConcurrency}, active=${activeJobs}, ` +
+        `cpu=${capacity.cpuCores}, memoryAvailableMb=${Math.round(capacity.availableBytes / (1024 * 1024))}`,
+      );
+    }
+  };
+  const capacityTimer = setInterval(refreshConcurrency, capacityPollIntervalMs());
+  capacityTimer.unref?.();
+  worker.on('active', () => {
+    activeJobs += 1;
+    refreshConcurrency();
+  });
+  const onJobFinished = () => {
+    activeJobs = Math.max(0, activeJobs - 1);
+    refreshConcurrency();
+  };
+  worker.on('completed', onJobFinished);
+  worker.on('failed', onJobFinished);
+  worker.on('closing', () => clearInterval(capacityTimer));
   worker.on('failed', (job, error) => logger.error(`BullMQ render job failed [${job?.id}]`, error));
   worker.on('error', (error) => logger.error('BullMQ render worker error:', error));
-  logger.info(`BullMQ render worker ${config.queue.workerId} started with concurrency ${config.queue.workerConcurrency}`);
+  logger.info(
+    `BullMQ render worker ${config.queue.workerId} started with dynamic concurrency ` +
+    `${config.queue.workerConcurrency} (max ${maxConcurrency})`,
+  );
   return worker;
 }
 

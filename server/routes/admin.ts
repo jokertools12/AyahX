@@ -5,6 +5,7 @@ import path from 'path';
 import { query, transaction } from '../db';
 import { AuthenticatedRequest, requireAdmin } from '../middleware/auth';
 import { renderJobQueue } from '../services/renderJobQueue';
+import { resolveConcurrencySetting } from '../services/renderCapacity';
 import { SUBSCRIPTION_CATALOG, isCheckoutPlan } from '../../shared/subscriptionCatalog';
 
 const router = Router();
@@ -487,7 +488,7 @@ router.get('/render-stats', async (_req: AuthenticatedRequest, res: Response) =>
     const storageDir = path.resolve(process.cwd(), process.env.RENDER_STORAGE_DIR || 'uploads/renders');
     const diskBytes = getDirSizeBytes(storageDir);
     const diskUsageMb = Math.round((diskBytes / (1024 * 1024)) * 100) / 100;
-    const maxConcurrency = parseInt(process.env.MAX_CONCURRENT_RENDERS || '1', 10);
+    const maxConcurrency = resolveConcurrencySetting(process.env.RENDER_MAX_CONCURRENCY || process.env.MAX_CONCURRENT_RENDERS);
 
     return res.json({
       queued: Number(counts?.queued || 0),
