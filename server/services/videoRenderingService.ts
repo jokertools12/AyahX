@@ -3,8 +3,8 @@ import path from 'path';
 import os from 'os';
 import crypto from 'crypto';
 import { spawn } from 'child_process';
-import ffmpegPath from 'ffmpeg-static';
 import { logger } from '../logger';
+import { getFfmpegBinary as resolveFfmpegBinary, getFfmpegResourceArgs, getFfmpegVideoEncoderArgs } from './ffmpegBinary';
 
 export interface RenderOptions {
   fps?: number;
@@ -15,22 +15,15 @@ export interface RenderOptions {
 }
 
 export function getFfmpegBinary(): string {
-  if (process.env.FFMPEG_PATH && fs.existsSync(process.env.FFMPEG_PATH)) {
-    return process.env.FFMPEG_PATH;
-  }
-  if (ffmpegPath && fs.existsSync(ffmpegPath)) {
-    return ffmpegPath;
-  }
-  return 'ffmpeg';
+  return resolveFfmpegBinary();
 }
 
 /**
  * Checks if the native FFmpeg binary is available and executable
  */
 export function isFfmpegAvailable(): boolean {
-  if (process.env.FFMPEG_PATH && fs.existsSync(process.env.FFMPEG_PATH)) return true;
-  if (ffmpegPath && fs.existsSync(ffmpegPath)) return true;
-  return true; // system fallback
+  const binary = resolveFfmpegBinary();
+  return binary === 'ffmpeg' || fs.existsSync(binary);
 }
 
 
@@ -76,9 +69,11 @@ export async function processVideoToSmoothMp4(
     // 2. Configure professional broadcast arguments
     const args = [
       '-y',
+      ...getFfmpegResourceArgs(),
       '-i', tempInPath,
       // Video Codec & Profile (Universal Hardware Acceleration)
       '-c:v', 'libx264',
+      ...getFfmpegVideoEncoderArgs(),
       '-profile:v', 'high',
       '-level:v', '4.1',
       '-preset', preset,

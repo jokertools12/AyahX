@@ -1277,11 +1277,11 @@ export default function PreviewPage() {
   };
 
   // ── Video recording ─────────────────────────────────────────────────────────
-  const handleServerExport = async (options?: { backgroundAsync?: boolean }) => {
+  const handleServerExport = async (options?: { backgroundAsync?: boolean }): Promise<boolean> => {
     if (!isAuthenticated || !user) {
       toast.error('سجّل الدخول أولاً لاستخدام الريندر السحابي وحفظ حصتك اليومية.');
       navigate('/auth');
-      return;
+      return false;
     }
 
     // Do not let a click race the subscription fetch. The free-plan
@@ -1290,23 +1290,23 @@ export default function PreviewPage() {
     // visual setting in Browser Canvas.
     if (subscriptionLoading) {
       toast.info('جارٍ التحقق من مزايا خطتك، حاول مرة أخرى خلال لحظات.');
-      return;
+      return false;
     }
 
     if (!audioLoaded || audioError) {
       toast.error('يرجى الانتظار حتى اكتمال تحميل الصوت قبل بدء الريندر');
-      return;
+      return false;
     }
 
     const previewApi = videoPreviewRef.current;
     if (!previewApi) {
       toast.error('حدث خطأ في تجهيز المعاينة');
-      return;
+      return false;
     }
 
     if (permittedCustomBackground?.startsWith('blob:')) {
       toast.error('الفيديو المرفوع من جهازك يُصدّر عبر Browser Canvas. للريندر السحابي اختر فيديو Pexels أو خلفية صور مدعومة.');
-      return;
+      return false;
     }
 
     // Do not rely solely on the sanitising effect above: a member can click
@@ -1473,10 +1473,12 @@ export default function PreviewPage() {
         backgroundAsync: options?.backgroundAsync ?? false,
       });
       refetchUsage();
+      return true;
     } catch (err: any) {
       console.error('Server render job failed to start:', err);
       toast.error(err.message || 'فشل بدء عملية الريندر على الخادم');
       refetchUsage();
+      return false;
     }
   };
 
@@ -1890,8 +1892,10 @@ export default function PreviewPage() {
 
   const handleTriggerBackgroundRender = async () => {
     try {
-      await handleServerExport({ backgroundAsync: true });
-      toast.success('تم إطلاق مهمة الريندر في الخلفية بنجاح! سيتم حفظ الفيديو تلقائياً في مكتبتك لمدة 48 ساعة ويمكنك مغادرة الصفحة الآن وسيصلك إشعار فور الجاهزية.');
+      const started = await handleServerExport({ backgroundAsync: true });
+      if (started) {
+        toast.success('تم إطلاق مهمة الريندر في الخلفية بنجاح! سيتم حفظ الفيديو تلقائياً في مكتبتك لمدة 48 ساعة ويمكنك مغادرة الصفحة الآن وسيصلك إشعار فور الجاهزية.');
+      }
     } catch (err: any) {
       console.error('Failed background export trigger:', err);
     }
@@ -2485,7 +2489,7 @@ export default function PreviewPage() {
                     isConverting={videoRecorder.isConverting}
                     isRecording={videoRecorder.isRecording}
                     onTriggerBackgroundRender={handleTriggerBackgroundRender}
-                    isBackgroundRendering={serverRenderJob.status === 'submitting'}
+                    isBackgroundRendering={serverRenderJob.isRendering}
                   />
                   <MotionSpeedControl
                     speed={exportSettings.motionSpeed}

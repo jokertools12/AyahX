@@ -600,7 +600,7 @@ export class RenderJobQueue {
       // event. Requeue the same durable job (without charging a new slot) so
       // it is retried after capacity is available instead of exposing a
       // permanent failure for a recoverable infrastructure error.
-      const isTransient = /network|timeout|target closed|protocol error|ffmpeg process failed|out of memory|enomem|sigkill/i.test(errorMessage);
+      const isTransient = /network|timeout|target closed|protocol error|ffmpeg process failed|ffmpeg input pipe|epipe|out of memory|enomem|sigkill/i.test(errorMessage);
 
       if (isTransient && job.retry_count < job.max_retries) {
         await query(

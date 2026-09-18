@@ -7,7 +7,7 @@ import { RenderManifest } from '../models/renderManifest';
 import { logger } from '../logger';
 import { probeMediaFile, validateProbeAgainstSpec } from './mediaProbeService';
 import { prepareAudioTrack, prepareBackgroundAsset, DeterministicRenderOptions, DeterministicRenderResult, extractAyahsAndWords } from './deterministicVideoRenderer';
-import { getFfmpegBinary, getFfmpegPreset, getFfmpegResourceArgs } from './ffmpegBinary';
+import { getFfmpegBinary, getFfmpegPreset, getFfmpegResourceArgs, getFfmpegVideoEncoderArgs } from './ffmpegBinary';
 
 /**
  * Converts numbers to Arabic Eastern numerals (٠-٩)
@@ -350,6 +350,7 @@ export async function renderFfmpegAssVideo(
       '-map', '[v]',
       '-map', '1:a',
       '-c:v', 'libx264',
+      ...getFfmpegVideoEncoderArgs(),
       '-preset', getFfmpegPreset('veryfast'),
       '-crf', '19',
       '-pix_fmt', 'yuv420p',

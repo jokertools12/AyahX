@@ -9,7 +9,7 @@ import { logger } from '../logger';
 import { probeMediaFile, validateProbeAgainstSpec } from './mediaProbeService';
 import { prepareAudioTrack, prepareBackgroundAsset, DeterministicRenderOptions, DeterministicRenderResult, extractAyahsAndWords } from './deterministicVideoRenderer';
 import { toArabicDigits } from './ffmpegAssRenderer';
-import { getFfmpegBinary, getFfmpegPreset, getFfmpegResourceArgs } from './ffmpegBinary';
+import { getFfmpegBinary, getFfmpegPreset, getFfmpegResourceArgs, getFfmpegVideoEncoderArgs } from './ffmpegBinary';
 
 // Ensure standard Arabic fonts are registered into Skia
 let fontsRegistered = false;
@@ -210,6 +210,7 @@ export async function renderSkiaCanvasVideo(
       '-i', '-',
       '-i', audioTrackPath,
       '-c:v', 'libx264',
+      ...getFfmpegVideoEncoderArgs(),
       '-preset', getFfmpegPreset('fast'),
       '-crf', '19',
       '-pix_fmt', 'yuv420p',
@@ -226,6 +227,13 @@ export async function renderSkiaCanvasVideo(
 
     ffmpegProc = spawn(ffmpegPath, ffmpegArgs, { windowsHide: true });
     let ffmpegStderr = '';
+    let ffmpegInputError: Error | null = null;
+    const onFfmpegInputError = (error: Error) => {
+      ffmpegInputError = error;
+    };
+    // A renderer failure closes stdin while the canvas loop may still be
+    // writing. Always consume the stream error so EPIPE cannot crash worker.
+    ffmpegProc.stdin.on('error', onFfmpegInputError);
     ffmpegProc.stderr.on('data', (d: Buffer) => {
       ffmpegStderr += d.toString();
     });
@@ -551,9 +559,39 @@ export async function renderSkiaCanvasVideo(
       const rawBuffer = Buffer.from(imgData.data.buffer, imgData.data.byteOffset, imgData.data.byteLength);
 
       // Write to FFmpeg pipe with backpressure handling
-      const canWrite = ffmpegProc.stdin.write(rawBuffer);
+      if (ffmpegInputError) {
+        throw new Error(`FFmpeg input pipe failed: ${ffmpegInputError.message}`);
+      }
+
+      let canWrite = false;
+      try {
+        canWrite = ffmpegProc.stdin.write(rawBuffer);
+      } catch (error: any) {
+        throw new Error(`FFmpeg input pipe failed: ${error?.message || String(error)}`);
+      }
       if (!canWrite) {
-        await new Promise<void>((res) => ffmpegProc.stdin.once('drain', res));
+        await new Promise<void>((resolve, reject) => {
+          const cleanup = () => {
+            ffmpegProc.stdin.removeListener('drain', onDrain);
+            ffmpegProc.stdin.removeListener('error', onError);
+            ffmpegProc.stdin.removeListener('close', onClose);
+          };
+          const onDrain = () => {
+            cleanup();
+            resolve();
+          };
+          const onError = (error: Error) => {
+            cleanup();
+            reject(new Error(`FFmpeg input pipe failed: ${error.message}`));
+          };
+          const onClose = () => {
+            cleanup();
+            reject(new Error('FFmpeg input pipe closed before all frames were written.'));
+          };
+          ffmpegProc.stdin.once('drain', onDrain);
+          ffmpegProc.stdin.once('error', onError);
+          ffmpegProc.stdin.once('close', onClose);
+        });
       }
 
       if (frameIndex % 30 === 0 || frameIndex === totalFrames - 1) {
