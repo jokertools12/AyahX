@@ -19,6 +19,8 @@ export interface ExportSettings {
   fps?: 30 | 60;
   audioBitrate?: '128k' | '192k' | '320k';
   renderEngine?: RenderEngine;
+  /** Idea 3: run the selected cloud engine asynchronously and save to Library. */
+  backgroundAsync?: boolean;
 }
 
 interface ExportFormatSelectorProps {
@@ -29,8 +31,6 @@ interface ExportFormatSelectorProps {
   mp4Blob: Blob | null;
   isConverting: boolean;
   isRecording: boolean;
-  onTriggerBackgroundRender?: () => void;
-  isBackgroundRendering?: boolean;
 }
 
 const FORMAT_OPTIONS: { id: ExportFormat; label: string; description: string; icon: typeof FileVideo }[] = [
@@ -53,8 +53,6 @@ export function ExportFormatSelector({
   mp4Blob,
   isConverting,
   isRecording,
-  onTriggerBackgroundRender,
-  isBackgroundRendering = false,
 }: ExportFormatSelectorProps) {
   const { isPremium, entitlements, dailyUsage } = useSubscription();
 
@@ -262,7 +260,7 @@ export function ExportFormatSelector({
           )}
         </div>
 
-        {/* 5. Production Engine Choice - The 3 Architectures */}
+        {/* 5. Production Engine Choice */}
         <div className="space-y-3 pt-2 border-t border-border/40">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium flex items-center gap-2">
@@ -274,7 +272,11 @@ export function ExportFormatSelector({
 
           <RadioGroup
             value={effectiveEngine}
-            onValueChange={(val) => updateSetting('renderEngine', val as RenderEngine)}
+            onValueChange={(val) => onChange({
+              ...settings,
+              renderEngine: val as RenderEngine,
+              backgroundAsync: val === 'browser' ? false : settings.backgroundAsync,
+            })}
             className="space-y-2.5"
           >
             {/* Option 1: Browser Hybrid Engine */}
@@ -362,58 +364,48 @@ export function ExportFormatSelector({
           </RadioGroup>
         </div>
 
-        {/* 6. Idea 3: Asynchronous Background Cloud Processing Card */}
-        {onTriggerBackgroundRender && (
-          <div className="p-4 rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-background to-amber-500/10 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-primary" />
-                <span className="font-bold text-sm">الريندر السحابي في الخلفية (فكرة 3)</span>
-              </div>
-              {isPremium ? (
-                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600">
-                  {backgroundAsyncRemaining}/{backgroundAsyncLimit} متبقي اليوم
-                </span>
-              ) : (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-600 flex items-center gap-1">
-                  <Lock className="h-3 w-3" /> ميزة مميزة
-                </span>
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              أطلق أمر الريندر وأغلق الصفحة! سيقوم السيرفر بإنتاج الفيديو وحفظه تلقائياً في مكتبتك (صالح للتحميل لمدة 48 ساعة) مع إرسال إشعار فوري عند الجاهزية.
-            </p>
-            <Button
-              type="button"
-              variant="default"
-              disabled={!isPremium || isBackgroundRendering || backgroundAsyncRemaining <= 0}
-              onClick={() => {
+        {/* 6. Idea 3: Asynchronous Background Cloud Processing */}
+        <div className="p-4 rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-background to-amber-500/10 space-y-3">
+          <div className="flex items-center justify-between gap-3">
+            <Label htmlFor="background-render-mode" className="flex items-center gap-2 cursor-pointer">
+              <Sparkles className="h-5 w-5 text-primary" />
+              <span className="font-bold text-sm">الريندر السحابي في الخلفية (فكرة 3)</span>
+            </Label>
+            {isPremium ? (
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600">
+                {backgroundAsyncRemaining}/{backgroundAsyncLimit} متبقي اليوم
+              </span>
+            ) : (
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-600 flex items-center gap-1">
+                <Lock className="h-3 w-3" /> ميزة مميزة
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            فعّل هذا الخيار ليعمل محرك FFmpeg أو Skia المحدد في الخلفية، ويمكنك مغادرة الصفحة. سيُحفظ الفيديو تلقائياً في مكتبتك لمدة 48 ساعة ويصل إشعار عند الجاهزية.
+          </p>
+          <label className="flex items-center gap-3 rounded-lg border border-primary/20 bg-background/70 px-3 py-2.5 cursor-pointer">
+            <input
+              id="background-render-mode"
+              type="checkbox"
+              checked={settings.backgroundAsync === true}
+              disabled={!isPremium || backgroundAsyncRemaining <= 0 || effectiveEngine === 'browser'}
+              onChange={(event) => {
                 if (!isPremium) {
                   toast.error('ميزة الريندر في الخلفية متاحة للعضوية المميزة فقط');
                   return;
                 }
-                onTriggerBackgroundRender();
+                updateSetting('backgroundAsync', event.target.checked);
               }}
-              className="w-full gap-2 gradient-primary text-primary-foreground font-semibold text-xs shadow-sm"
-            >
-              {isBackgroundRendering ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  جاري إرسال المهمة للسيرفر...
-                </>
-              ) : (
-                <>
-                  <Zap className="h-4 w-4" />
-                  {!isPremium
-                    ? 'الترقية للعضوية المميزة لتفعيل الريندر في الخلفية 👑'
-                    : backgroundAsyncRemaining <= 0
-                    ? 'استُنفدت حصة الريندر الخلفي اليوم'
-                    : 'بدء الريندر في الخلفية وحفظه بالمكتبة 🚀'}
-                </>
-              )}
-            </Button>
-          </div>
-        )}
+              className="h-4 w-4 rounded border-border accent-primary"
+            />
+            <span className="text-xs font-medium">
+              {effectiveEngine === 'browser'
+                ? 'اختر FFmpeg أو Skia أولاً لتفعيل الريندر في الخلفية'
+                : 'تشغيل المحرك المحدد في الخلفية وحفظه تلقائياً بالمكتبة'}
+            </span>
+          </label>
+        </div>
 
         {/* 7. Client Recording Strategy (When Browser engine is used) */}
         {effectiveEngine === 'browser' && (

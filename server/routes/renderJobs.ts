@@ -10,7 +10,7 @@ import { validateRenderManifest } from '../models/renderManifest';
 import { validateManifestAssets } from '../services/assetCatalogResolver';
 import { getPlanEntitlements, validateRenderEntitlements } from '../../shared/planEntitlements';
 import { getActivePlanForUser, getTodayCloudRenderUsage, syncExpiredSubscriptions } from '../services/subscriptionService';
-import { isObjectStoragePath, signedRenderDownload } from '../services/objectStorage';
+import { isObjectStoragePath, streamStoredRender } from '../services/objectStorage';
 import { recordRenderAudit } from '../services/renderObservability';
 
 const router = Router();
@@ -417,9 +417,24 @@ router.get('/:id/download', requireAuth, async (req: AuthenticatedRequest, res: 
     const filename = job.output_filename || 'quran-reel.mp4';
     if (isObjectStoragePath(job.output_path)) {
       try {
-        const signed = await signedRenderDownload(job.output_path, filename);
+        const stored = await streamStoredRender(job.output_path);
+        res.setHeader('Content-Type', stored.contentType);
+        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"`);
+        res.setHeader('Cache-Control', 'private, no-store');
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        if (stored.size !== null) res.setHeader('Content-Length', stored.size);
         void recordRenderAudit(job.id, userId, 'download');
-        return res.redirect(302, signed.url);
+
+        stored.body.on('error', (error) => {
+          logger.error('Object storage render stream error:', error);
+          if (!res.headersSent) {
+            res.status(502).json({ error: 'تعذر بث ملف الفيديو، يرجى إعادة المحاولة.' });
+          } else {
+            res.destroy(error as Error);
+          }
+        });
+        stored.body.pipe(res);
+        return;
       } catch (error) {
         logger.error('Object storage download error:', error);
         return res.status(410).json({ error: 'ملف الفيديو غير متاح حاليًا، يرجى إعادة الريندر.' });

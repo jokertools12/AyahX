@@ -44,6 +44,36 @@ export async function signedRenderDownload(storagePath: string, filename: string
   return { url, size: head.ContentLength ?? null };
 }
 
+/**
+ * Streams a completed render through the authenticated application response.
+ *
+ * Do not redirect browser downloads to the object-storage URL here. Some S3
+ * compatible providers do not return CORS headers for signed GET requests,
+ * which makes an otherwise valid render look like a failed/cancelled file in
+ * the browser. Keeping the stream same-origin also protects the signed URL
+ * from being exposed to the client.
+ */
+export async function streamStoredRender(storagePath: string): Promise<{
+  body: NodeJS.ReadableStream;
+  size: number | null;
+  contentType: string;
+}> {
+  const response = await getClient().send(new GetObjectCommand({
+    Bucket: config.storage.bucket!,
+    Key: objectKeyFromPath(storagePath),
+  }));
+
+  if (!response.Body || typeof (response.Body as any).pipe !== 'function') {
+    throw new Error('Object storage returned an empty render body');
+  }
+
+  return {
+    body: response.Body as NodeJS.ReadableStream,
+    size: response.ContentLength ?? null,
+    contentType: response.ContentType || 'video/mp4',
+  };
+}
+
 export async function deleteStoredRender(storagePath: string): Promise<void> {
   await getClient().send(new DeleteObjectCommand({ Bucket: config.storage.bucket!, Key: objectKeyFromPath(storagePath) }));
 }

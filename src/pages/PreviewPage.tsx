@@ -1884,20 +1884,16 @@ export default function PreviewPage() {
   const handleStartExport = async () => {
     const engine = exportSettings.renderEngine || 'browser';
     if (engine === 'browser') {
+      if (exportSettings.backgroundAsync) {
+        toast.error('الريندر في الخلفية يعمل مع محرك FFmpeg أو Skia فقط. اختر أحدهما أولاً.');
+        return;
+      }
       await handleLegacyBrowserRecording();
     } else {
-      await handleServerExport();
-    }
-  };
-
-  const handleTriggerBackgroundRender = async () => {
-    try {
-      const started = await handleServerExport({ backgroundAsync: true });
-      if (started) {
-        toast.success('تم إطلاق مهمة الريندر في الخلفية بنجاح! سيتم حفظ الفيديو تلقائياً في مكتبتك لمدة 48 ساعة ويمكنك مغادرة الصفحة الآن وسيصلك إشعار فور الجاهزية.');
+      const started = await handleServerExport({ backgroundAsync: exportSettings.backgroundAsync === true });
+      if (started && exportSettings.backgroundAsync) {
+        toast.success('تم إطلاق الإنتاج في الخلفية. يمكنك مغادرة الصفحة وسيُحفظ الفيديو في المكتبة عند الجاهزية.');
       }
-    } catch (err: any) {
-      console.error('Failed background export trigger:', err);
     }
   };
 
@@ -2488,8 +2484,6 @@ export default function PreviewPage() {
                     mp4Blob={videoRecorder.mp4Blob}
                     isConverting={videoRecorder.isConverting}
                     isRecording={videoRecorder.isRecording}
-                    onTriggerBackgroundRender={handleTriggerBackgroundRender}
-                    isBackgroundRendering={serverRenderJob.isRendering}
                   />
                   <MotionSpeedControl
                     speed={exportSettings.motionSpeed}
@@ -2572,7 +2566,11 @@ export default function PreviewPage() {
                     </div>
 
                     <Button
-                      onClick={() => serverRenderJob.downloadRenderedMp4(downloadFilename)}
+                      onClick={() => {
+                        void serverRenderJob.downloadRenderedMp4(downloadFilename).catch((error: any) => {
+                          toast.error(error?.message || 'تعذر تحميل ملف الفيديو، يرجى المحاولة مرة أخرى.');
+                        });
+                      }}
                       className="w-full gap-2"
                       size="lg"
                     >
@@ -2774,7 +2772,7 @@ export default function PreviewPage() {
                     ) : (
                       <>
                         <Video className="h-5 w-5" />
-                        تصدير وإنتاج الفيديو (MP4 عالي الدقة)
+                        تصدير وإنتاج الفيديو
 
                       </>
                     )}
