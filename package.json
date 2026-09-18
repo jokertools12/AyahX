@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "tsx server/index.ts",
+    "railway:start": "tsx server/railwayEntrypoint.ts",
     "dev": "vite",
     "server": "tsx server/index.ts",
     "worker": "tsx server/worker.ts",

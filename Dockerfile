@@ -22,4 +22,4 @@ COPY --from=build /app/database ./database
 ENV FFMPEG_PATH=/usr/bin/ffmpeg
 ENV FFPROBE_PATH=/usr/bin/ffprobe
 ENV CHROME_BIN=/usr/bin/chromium
-CMD ["npm", "run", "server"]
+CMD ["npm", "run", "railway:start"]
