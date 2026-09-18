@@ -1,0 +1,10 @@
+node_modules
+dist
+uploads/renders
+.env
+.env.*
+!.env.example
+.git
+*.mp4
+*.mp3
+*.wav

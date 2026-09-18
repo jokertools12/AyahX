@@ -1,0 +1,260 @@
+import { z } from 'zod';
+
+export const RenderManifestSchema = z.object({
+  schemaVersion: z.literal('1.0.0'),
+  rendererVersion: z.literal('1.0.0'),
+  revision: z.string().min(1).max(128),
+  aspectRatio: z.enum(['9:16', '16:9']),
+  outputDimensions: z.object({
+    width: z.number().int().min(360).max(3840),
+    height: z.number().int().min(360).max(3840),
+  }),
+  fps: z.number().int().min(15).max(60).default(30),
+  qualityPreset: z.enum(['low', 'medium', 'high', 'ultra']).default('high'),
+  audioBitrate: z.enum(['128k', '192k', '320k']).default('192k'),
+  codecProfile: z.enum(['high-4.1', 'main-4.0', 'baseline']).default('high-4.1'),
+  
+  reciter: z.object({
+    id: z.string().min(1).max(100),
+    name: z.string().min(1).max(200),
+    quranFoundationId: z.number().int().optional(),
+    everyAyahSubfolder: z.string().optional(),
+  }),
+
+  canonicalAyahRange: z.object({
+    surahNumber: z.number().int().min(1).max(114),
+    surahName: z.string().min(1).max(100),
+    startAyah: z.number().int().min(1),
+    endAyah: z.number().int().min(1),
+    ayahs: z.array(
+      z.object({
+        numberInSurah: z.number().int().min(1),
+        text: z.string().min(1),
+      })
+    ).min(1),
+  }),
+
+  timingMap: z.object({
+    mapId: z.string().min(1),
+    audioContentHash: z.string().min(8),
+    validationStatus: z.enum(['approved', 'needs_review', 'rejected']),
+    words: z.array(
+      z.object({
+        canonicalWordKey: z.string(),
+        displayWordIndex: z.number().int().min(0),
+        displayToken: z.string(),
+        startMs: z.number().min(0),
+        endMs: z.number().min(0).optional(),
+        confidence: z.number().min(0).max(1).optional(),
+      })
+    ),
+    gaps: z.array(
+      z.object({
+        startMs: z.number().min(0),
+        endMs: z.number().min(0),
+        type: z.enum([
+          'waqf',
+          'silence',
+          'breath',
+          'intro',
+          'outro',
+          'inter_word',
+          'inter_ayah',
+          'acoustic_silence',
+        ]),
+      })
+    ).optional(),
+  }),
+
+  audio: z.object({
+    sourceMode: z.enum(['qf', 'everyayah', 'single_url']),
+    audioUrl: z.string().min(1).max(2048),
+    audioContentHash: z.string().min(8),
+    durationSeconds: z.number().min(0.5).max(1200), // Max 20 minutes
+    rangeMs: z.object({
+      from: z.number().min(0),
+      to: z.number().min(0),
+    }).nullable().optional(),
+    everyAyahUrls: z.array(z.string().max(2048)).optional(),
+    everyAyahTimestamps: z.array(
+      z.object({
+        from: z.number().min(0),
+        to: z.number().min(0),
+      })
+    ).optional(),
+  }),
+
+  audioEffects: z.object({
+    reverbEnabled: z.boolean().default(false),
+    reverbLevel: z.number().min(0).max(1).default(0.5),
+    echoEnabled: z.boolean().default(false),
+    echoDelay: z.number().min(0.05).max(2).default(0.3),
+    echoFeedback: z.number().min(0.05).max(0.9).default(0.4),
+    pitchShift: z.number().optional(),
+    speedAdjust: z.number().optional(),
+    copyrightProtectionEnabled: z.boolean().default(false),
+    normalizeEnabled: z.boolean().default(false),
+    eqEnabled: z.boolean().default(false),
+    volume: z.number().min(0.1).max(3.0).default(1.25).optional(),
+  }).optional(),
+
+  // A premium AI/custom image may be sent as a data URL. The request parser
+  // has a 60 MB ceiling; keep every individual inline visual comfortably
+  // below it while still allowing a high-resolution portrait background.
+  background: z.object({
+    id: z.string().min(1).max(128),
+    type: z.enum(['video', 'image', 'slideshow', 'color']),
+    url: z.string().max(16 * 1024 * 1024),
+    thumbnail: z.string().max(16 * 1024 * 1024).optional(),
+    category: z.string().optional(),
+    slideImages: z.array(z.string().max(1024)).optional(),
+    framesPattern: z.string().max(1024).optional(),
+    overlayOpacity: z.number().min(0).max(1).default(0.4),
+    shadowIntensity: z.number().min(0).max(1).default(0.5),
+    motionSpeed: z.number().min(1).max(10).default(3),
+  }),
+
+  typography: z.object({
+    fontSize: z.number().min(12).max(120).default(28),
+    fontFamily: z.string().min(1).max(100).default('"Noto Naskh Arabic", serif'),
+    textColor: z.string().regex(/^#[0-9a-fA-F]{6}$|^rgba?\(/).default('#ffffff'),
+    shadowIntensity: z.number().min(0).max(1).default(0.5),
+    overlayOpacity: z.number().min(0).max(1).default(0.4),
+  }),
+
+  displaySettings: z.object({
+    visualDesign: z.enum(['dawn', 'editorial', 'moonlit']).default('dawn'),
+    showSurahName: z.boolean().default(false),
+    showReciterName: z.boolean().default(false),
+    showAyahText: z.boolean().default(true),
+    showAyahNumber: z.boolean().default(false),
+    highlightStyle: z.enum(['none', 'solid', 'glow', 'underline', 'shadow']).default('glow'),
+    frameStyle: z.enum(['none', 'simple', 'ornate', 'golden', 'geometric', 'modern', 'minimal']).default('none'),
+    screenBorderStyle: z.enum(['none', 'goldenTrim', 'islamicCorners', 'doubleCinema', 'royalCrest', 'subtleVignette']).default('none'),
+    screenBorderColor: z.enum(['gold', 'emerald', 'silver', 'white']).default('gold'),
+    ayahNumberStyle: z.enum(['quran3d', 'circle', 'star', 'diamond', 'octagon', 'flower', 'square', 'hexagon']).default('quran3d'),
+    ayahNumberColor: z.enum(['gold', 'metallicGold3D', 'white', 'silver', 'emerald', 'royal']).default('metallicGold3D'),
+    verseDisplayMode: z.enum(['full', 'twoWords', 'threeTwo', 'wordByWord']).default('full'),
+    surahNamePosition: z.enum(['top', 'bottom', 'topLeft', 'topRight', 'center']).default('top'),
+    surahNameStyle: z.enum(['classic', 'goldenBadge', 'banner', 'calligraphy', 'circle', 'diamond', 'ribbon', 'modern', 'ornate', 'minimal']).default('classic'),
+    reciterNameStyle: z.enum(['simple', 'elegant', 'audioPill', 'badge', 'tag', 'glow', 'pill', 'gold', 'bordered']).default('simple'),
+    textShadowStyle: z.enum(['none', 'soft', 'strong', '3d', 'glow', 'outline', 'double']).default('none'),
+    ayahTransition: z.enum(['none', 'fade', 'slide', 'zoom', 'blur', 'rise', 'rotate', 'cinematic', 'elastic', 'random']).default('fade'),
+    
+    // Legacy Watermark
+    watermarkEnabled: z.boolean().default(false),
+    watermarkText: z.string().max(100).default('@AyaQuran'),
+    watermarkPosition: z.enum(['bottomLeft', 'bottomRight', 'topLeft', 'topRight', 'bottomCenter']).default('bottomRight'),
+
+    // Dual-mode Watermark: Logo
+    logoWatermarkEnabled: z.boolean().optional().default(false),
+    logoWatermarkPreset: z.enum(['goldCalligraphy', 'circularMedallion', 'custom']).optional().default('goldCalligraphy'),
+    logoWatermarkUrl: z.string().optional().default(''),
+    logoWatermarkPosition: z.enum(['topRight', 'topLeft', 'bottomRight', 'bottomLeft']).optional().default('topRight'),
+    logoWatermarkSize: z.number().min(20).max(300).optional().default(76),
+    logoWatermarkOpacity: z.number().min(0).max(1).optional().default(0.95),
+    logoBrandName: z.string().max(100).optional().default('آيات قرآنية'),
+    logoSubtitle: z.string().max(100).optional().default('تلاوات خاشعة'),
+
+    // Dual-mode Watermark: Social Handle
+    socialWatermarkEnabled: z.boolean().optional().default(false),
+    socialPlatform: z.enum(['facebook', 'instagram', 'tiktok', 'youtube', 'x', 'custom']).optional().default('facebook'),
+    socialHandle: z.string().max(100).optional().default(''),
+    socialWatermarkPosition: z.enum(['bottomCenter', 'bottomRight', 'bottomLeft', 'topCenter']).optional().default('bottomCenter'),
+    socialWatermarkSize: z.number().min(8).max(100).optional().default(18),
+    socialWatermarkOpacity: z.number().min(0).max(1).optional().default(0.9),
+
+    glowStyle: z.enum(['none', 'golden', 'soft', 'neon', 'pulse', 'emerald', 'royal']).default('golden'),
+    lyricsDisplayStyle: z.enum(['scroll', 'single', 'karaoke', 'fade']).optional().default('scroll'),
+    slideshowTransition: z.enum(['crossfade', 'slideLeft', 'slideRight', 'slideUp', 'zoomThrough', 'wipe', 'mixed']).default('crossfade'),
+  }).passthrough(),
+
+  outputFormat: z.literal('mp4').default('mp4'),
+  idempotencyKey: z.string().min(1).max(128).optional(),
+});
+
+export type RenderManifest = z.infer<typeof RenderManifestSchema>;
+
+export interface ValidationResult {
+  valid: boolean;
+  manifest?: RenderManifest;
+  errors?: string[];
+}
+
+/**
+ * Validates an incoming RenderManifest object against the schema and security rules
+ */
+export function validateRenderManifest(raw: unknown): ValidationResult {
+  if (!raw || typeof raw !== 'object') {
+    return { valid: false, errors: ['بيانات أمر الريندر غير صالحة (RenderManifest must be an object)'] };
+  }
+
+  // Auto-heal defense-in-depth: if client sent blob URL for audio, fallback to EveryAyah CDN if available
+  const manifestData = raw as any;
+  if (manifestData?.audio) {
+    const audioObj = manifestData.audio;
+    if (typeof audioObj.audioUrl === 'string' && audioObj.audioUrl.startsWith('blob:')) {
+      if (Array.isArray(audioObj.everyAyahUrls) && audioObj.everyAyahUrls.length > 0) {
+        audioObj.audioUrl = audioObj.everyAyahUrls[0];
+      } else if (manifestData.reciter && manifestData.canonicalAyahRange) {
+        const subfolder = manifestData.reciter.everyAyahSubfolder;
+        const surah = manifestData.canonicalAyahRange.surahNumber;
+        const start = manifestData.canonicalAyahRange.startAyah;
+        if (subfolder && surah && start) {
+          const pSurah = surah.toString().padStart(3, '0');
+          const pAyah = start.toString().padStart(3, '0');
+          audioObj.audioUrl = `https://everyayah.com/data/${subfolder}/${pSurah}${pAyah}.mp3`;
+        } else if (manifestData.reciter?.server && surah) {
+          const pSurah = surah.toString().padStart(3, '0');
+          audioObj.audioUrl = `${manifestData.reciter.server}/${pSurah}.mp3`;
+        }
+      }
+    }
+  }
+
+  // Auto-heal defense-in-depth: ensure all words have a non-null endMs
+  if (manifestData?.timingMap?.words && Array.isArray(manifestData.timingMap.words)) {
+    const words = manifestData.timingMap.words;
+    for (let i = 0; i < words.length; i++) {
+      const w = words[i];
+      if (w && (w.endMs === undefined || w.endMs === null || isNaN(w.endMs))) {
+        const nextStart = words[i + 1]?.startMs;
+        w.endMs = (typeof nextStart === 'number' && nextStart > w.startMs)
+          ? nextStart
+          : ((typeof w.startMs === 'number' ? w.startMs : 0) + 600);
+      }
+    }
+  }
+
+  const parseResult = RenderManifestSchema.safeParse(raw);
+  if (!parseResult.success) {
+    const errorDetails = parseResult.error.errors.map(
+      (e) => `${e.path.join('.')}: ${e.message}`
+    );
+    return { valid: false, errors: errorDetails };
+  }
+
+  const manifest = parseResult.data;
+  const errors: string[] = [];
+
+  // Allow approximate phonetic/proportional glow mode for reciters without approved exact word alignment
+
+
+  // Dimension sanity check
+  if (manifest.aspectRatio === '9:16' && manifest.outputDimensions.width > manifest.outputDimensions.height) {
+    errors.push('Aspect ratio 9:16 requires portrait dimensions (height > width).');
+  } else if (manifest.aspectRatio === '16:9' && manifest.outputDimensions.width < manifest.outputDimensions.height) {
+    errors.push('Aspect ratio 16:9 requires landscape dimensions (width > height).');
+  }
+
+  // Surah ayah range sanity check
+  if (manifest.canonicalAyahRange.startAyah > manifest.canonicalAyahRange.endAyah) {
+    errors.push('startAyah cannot be greater than endAyah.');
+  }
+
+  if (errors.length > 0) {
+    return { valid: false, errors };
+  }
+
+  return { valid: true, manifest };
+}

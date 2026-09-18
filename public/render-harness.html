@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Offline Deterministic Render Harness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;600;700;800&family=El+Messiri:wght@400;700&family=Katibeh&family=Lalezar&family=Lateef:wght@400;700&family=Mada:wght@400;700&family=Marhey:wght@400;700&family=Mirza:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Rakkas&family=Reem+Kufi:wght@400;700&family=Scheherazade+New:wght@400;700&family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: #040D12;
+      overflow: hidden;
+    }
+    #render-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="render-canvas"></canvas>
+
+  <script>
+    (function() {
+      const canvas = document.getElementById('render-canvas');
+      const ctx = canvas.getContext('2d', { alpha: false });
+
+      let currentManifest = null;
+      let bgImage = null;
+      let bgFramesPattern = null;
+      let lastValidVideoFrame = null;
+      let slideshowImages = [];
+      let logoWatermarkImage = null;
+      let isReady = false;
+
+      // Font family mapping for canvas
+      const FONT_MAP = {
+        '"Noto Naskh Arabic", serif': 'Noto Naskh Arabic',
+        '"Amiri", serif': 'Amiri',
+        '"Amiri Quran", serif': 'Amiri Quran',
+        '"Cairo", sans-serif': 'Cairo',
+        '"Scheherazade New", serif': 'Scheherazade New',
+        '"Aref Ruqaa", serif': 'Aref Ruqaa',
+        '"Reem Kufi", sans-serif': 'Reem Kufi',
+        '"Lateef", serif': 'Lateef',
+        '"El Messiri", sans-serif': 'El Messiri',
+        '"Tajawal", sans-serif': 'Tajawal',
+        '"Mada", sans-serif': 'Mada',
+        '"Katibeh", serif': 'Katibeh',
+        '"Rakkas", serif': 'Rakkas',
+        '"Lalezar", cursive': 'Lalezar',
+        '"Mirza", serif': 'Mirza',
+        '"Marhey", cursive': 'Marhey',
+      };
+
+      function resolveFontFamily(fam) {
+        if (!fam) return 'Noto Naskh Arabic';
+        return FONT_MAP[fam] || fam.replace(/"/g, '') || 'Noto Naskh Arabic';
+      }
+
+      // Convert Arabic digits
+      function toArabicDigits(num) {
+        const arabicNums = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+        return num.toString().split('').map(d => arabicNums[parseInt(d)] || d).join('');
+      }
+
+      // Strips Arabic diacritics / tashkeel for phonetic analysis
+      function stripTashkeel(str) {
+        return (str || '').replace(/[\u064B-\u0652\u0670\u06D6-\u06ED]/g, '');
+      }
+
+      // Computes phonetic Tajweed weight for a word (for smooth proportional pacing)
+      function computeWordPhoneticWeight(word, isFinal) {
+        if (!word) return 1.0;
+        let weight = 0;
+        const clean = stripTashkeel(word);
+        weight += Math.max(clean.length, 1) * 1.0;
+        const shortVowels = (word.match(/[\u064E\u064F\u0650]/g) || []).length;
+        weight += shortVowels * 0.45;
+        const shaddah = (word.match(/\u0651/g) || []).length;
+        weight += shaddah * 1.2;
+        const madd = (clean.match(/[اويىآ]/g) || []).length;
+        weight += madd * 1.5;
+        if (word.includes('\u0653') || word.includes('~')) weight += 3.0;
+        if (isFinal) weight += 3.5;
+        return Math.max(weight, 1.2);
+      }
+
+      // Rosette / Ayah Badge Drawing with full shape support
+      function drawAyahBadge(ctx, x, y, ayahNum, size, shape, colorScheme) {
+        ctx.save();
+        ctx.translate(x, y);
+
+        const colors = {
+          gold: { primary: '#D4AF37', secondary: '#F5E050', text: '#FFFFFF', border: '#AA820A' },
+          emerald: { primary: '#10B981', secondary: '#34D399', text: '#FFFFFF', border: '#059669' },
+          silver: { primary: '#9CA3AF', secondary: '#D1D5DB', text: '#FFFFFF', border: '#6B7280' },
+          white: { primary: '#FFFFFF', secondary: '#F3F4F6', text: '#000000', border: '#E5E7EB' },
+          royal: { primary: '#3B82F6', secondary: '#60A5FA', text: '#FFFFFF', border: '#1D4ED8' }
+        }[colorScheme || 'gold'] || { primary: '#D4AF37', secondary: '#F5E050', text: '#FFFFFF', border: '#AA820A' };
+
+        // 3D Gilded Quranic Bracket / Medallion Style ﴿...﴾
+        if (shape === 'quran3d') {
+          const metalGrad = ctx.createLinearGradient(-size, -size, size, size);
+          metalGrad.addColorStop(0, '#FFE082');
+          metalGrad.addColorStop(0.3, '#D4AF37');
+          metalGrad.addColorStop(0.6, '#FFF8E1');
+          metalGrad.addColorStop(0.85, '#B78727');
+          metalGrad.addColorStop(1, '#8C6B1B');
+
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.75)';
+          ctx.shadowBlur = size * 0.4;
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 1.05, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(15, 12, 5, 0.8)';
+          ctx.fill();
+
+          ctx.strokeStyle = metalGrad;
+          ctx.lineWidth = size * 0.1;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 0.85, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(255, 235, 150, 0.65)';
+          ctx.lineWidth = size * 0.04;
+          ctx.stroke();
+
+          const arabic = toArabicDigits(ayahNum);
+          ctx.font = `bold ${Math.round(size * 1.15)}px "Noto Naskh Arabic", "Amiri", serif`;
+          ctx.fillStyle = '#FFFFFF';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+          ctx.shadowBlur = 4;
+          ctx.fillText(arabic, 0, 1);
+          ctx.restore();
+          return;
+        }
+
+        // Outer glow
+        ctx.shadowColor = colors.primary;
+        ctx.shadowBlur = size * 0.45;
+        ctx.fillStyle = colors.primary;
+        ctx.strokeStyle = colors.border;
+        ctx.lineWidth = size * 0.08;
+
+        ctx.beginPath();
+        if (shape === 'star') {
+          for (let i = 0; i < 16; i++) {
+            const angle = (i * Math.PI) / 8 - Math.PI / 2;
+            const r = i % 2 === 0 ? size : size * 0.6;
+            const px = Math.cos(angle) * r;
+            const py = Math.sin(angle) * r;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+        } else if (shape === 'diamond') {
+          ctx.moveTo(0, -size);
+          ctx.lineTo(size * 1.1, 0);
+          ctx.lineTo(0, size);
+          ctx.lineTo(-size * 1.1, 0);
+          ctx.closePath();
+        } else if (shape === 'octagon') {
+          for (let i = 0; i < 8; i++) {
+            const angle = (i * Math.PI) / 4 - Math.PI / 8;
+            const px = Math.cos(angle) * size;
+            const py = Math.sin(angle) * size;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+        } else if (shape === 'hexagon') {
+          for (let i = 0; i < 6; i++) {
+            const angle = (i * Math.PI) / 3 - Math.PI / 6;
+            const px = Math.cos(angle) * size;
+            const py = Math.sin(angle) * size;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+        } else if (shape === 'flower') {
+          const petals = 8;
+          for (let i = 0; i < petals; i++) {
+            const angle = (i * 2 * Math.PI) / petals;
+            const nextAngle = ((i + 1) * 2 * Math.PI) / petals;
+            const midAngle = (angle + nextAngle) / 2;
+            const x1 = size * Math.cos(angle);
+            const y1 = size * Math.sin(angle);
+            const cpX = size * 1.28 * Math.cos(midAngle);
+            const cpY = size * 1.28 * Math.sin(midAngle);
+            const x2 = size * Math.cos(nextAngle);
+            const y2 = size * Math.sin(nextAngle);
+            if (i === 0) ctx.moveTo(x1, y1);
+            ctx.quadraticCurveTo(cpX, cpY, x2, y2);
+          }
+          ctx.closePath();
+        } else if (shape === 'square') {
+          if (ctx.roundRect) ctx.roundRect(-size * 0.9, -size * 0.9, size * 1.8, size * 1.8, size * 0.25);
+          else ctx.rect(-size * 0.9, -size * 0.9, size * 1.8, size * 1.8);
+        } else {
+          // Circle / Rosette default
+          ctx.arc(0, 0, size, 0, Math.PI * 2);
+        }
+        ctx.fill();
+        ctx.stroke();
+
+        // Inner circle
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+        ctx.beginPath();
+        ctx.arc(0, 0, size * 0.72, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Arabic Ayah Number Text
+        ctx.fillStyle = colors.text;
+        ctx.font = `bold ${Math.round(size * 0.85)}px "Amiri", "Cairo", sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(toArabicDigits(ayahNum), 0, size * 0.08);
+
+        ctx.restore();
+      }
+
+      // Safe roundRect helper
+      function safeRoundRect(ctx, x, y, w, h, r) {
+        if (ctx.roundRect) {
+          ctx.beginPath();
+          ctx.roundRect(x, y, w, h, r);
+        } else {
+          ctx.beginPath();
+          ctx.moveTo(x + r, y);
+          ctx.lineTo(x + w - r, y);
+          ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+          ctx.lineTo(x + w, y + h - r);
+          ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+          ctx.lineTo(x + r, y + h);
+          ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+          ctx.lineTo(x, y + r);
+          ctx.quadraticCurveTo(x, y, x + r, y);
+          ctx.closePath();
+        }
+      }
+
+      function getResponsiveHeaderLayout({ W, H, S, showSurahName, showReciterName, position, nameStyle, reciterStyle, fontSize }) {
+        const isBottom = position === 'bottom';
+        const titleShapeHalf = { banner:45, calligraphy:42, circle:75, diamond:80, ribbon:35, modern:38, ornate:41, minimal:34, classic:50 }[nameStyle || 'classic'] || 50;
+        const titleHalf = Math.max(titleShapeHalf * S, fontSize * 2.5 * S * 0.65 + 8 * S);
+        const reciterShapeHalf = ['badge', 'pill'].includes(reciterStyle || '') ? 22 : reciterStyle === 'tag' ? 19 : 17;
+        const reciterHalf = Math.max(reciterShapeHalf * S, fontSize * S * 0.65 + 3 * S);
+        const gap = Math.max(14 * S, H * 0.018);
+        const edge = Math.max(24 * S, H * 0.045);
+        const titleX = position === 'topLeft' ? Math.min(260 * S, W * 0.28) : position === 'topRight' ? Math.max(W - 260 * S, W * 0.72) : W / 2;
+        const titleY = isBottom ? H - edge - titleHalf : position === 'center' ? H * 0.25 : edge + titleHalf;
+        let reciterX = titleX;
+        let reciterY = titleY;
+        if (showReciterName) {
+          if (!showSurahName) {
+            reciterX = (position === 'topLeft' || position === 'topRight') ? titleX : W / 2;
+            reciterY = isBottom ? H - edge - reciterHalf : edge + reciterHalf;
+          } else {
+            reciterY = isBottom ? titleY - titleHalf - gap - reciterHalf : titleY + titleHalf + gap + reciterHalf;
+          }
+        }
+        const edgeY = showReciterName ? (isBottom ? reciterY - reciterHalf : reciterY + reciterHalf) : (isBottom ? titleY - titleHalf : titleY + titleHalf);
+        return { titleX, titleY, reciterX, reciterY, separatorY: isBottom ? edgeY - gap * 0.65 : edgeY + gap * 0.65 };
+      }
+
+      function getResponsiveBrandingLayout({ W, H, S, logoPosition, logoSize, socialPosition, socialSize, headerActive, headerPosition, headerSeparatorY, frameActive }) {
+        const edge = Math.max(28 * S, W * 0.025) + (frameActive ? 18 * S : 0);
+        const gap = Math.max(18 * S, H * 0.022);
+        const radius = logoSize * S / 2;
+        const socialHeight = Math.max(30 * S, socialSize * S + 14 * S);
+        let logoX = W - edge - radius;
+        let logoY = edge + radius;
+        if (logoPosition === 'topLeft') logoX = edge + radius;
+        if (logoPosition === 'bottomRight') { logoX = W - edge - radius; logoY = H - edge - radius; }
+        if (logoPosition === 'bottomLeft') { logoX = edge + radius; logoY = H - edge - radius; }
+        const collidesWithTopCorner = headerActive && ((logoPosition === 'topRight' && headerPosition === 'topRight') || (logoPosition === 'topLeft' && headerPosition === 'topLeft'));
+        if (collidesWithTopCorner) logoX = logoPosition === 'topRight' ? edge + radius : W - edge - radius;
+
+        let socialX = W / 2;
+        let socialY = H - edge;
+        if (socialPosition === 'bottomLeft') socialX = edge;
+        if (socialPosition === 'bottomRight') socialX = W - edge;
+        if (socialPosition === 'topCenter') {
+          socialY = edge + socialHeight;
+          if (headerActive) socialY = Math.max(socialY, headerSeparatorY + gap + socialHeight);
+        }
+        if ((socialPosition === 'bottomRight' && logoPosition === 'bottomRight') || (socialPosition === 'bottomLeft' && logoPosition === 'bottomLeft')) {
+          socialY = Math.min(socialY, logoY - radius - gap);
+        }
+        return { logoX, logoY, logoRadius: radius, socialX, socialY, socialHeight, edge };
+      }
+
+      // Islamic Corner Ornaments
+      function drawCornerOrnament(ctx, x, y, size, rotation, S) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate((rotation * Math.PI) / 180);
+        ctx.fillStyle = 'rgba(212, 175, 55, 0.4)';
+        ctx.beginPath();
+        ctx.arc(0, 0, size * 0.3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.6)';
+        ctx.lineWidth = 2 * S;
+        ctx.beginPath();
+        ctx.moveTo(size * 0.2, size * 0.2);
+        ctx.quadraticCurveTo(size * 0.5, 0, size * 0.2, -size * 0.2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawSideDecoration(ctx, x, y, size, S) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.fillStyle = 'rgba(212, 175, 55, 0.5)';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, size, size * 0.4, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.7)';
+        ctx.lineWidth = 1 * S;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawGoldenCorner(ctx, x, y, size, flipX = false, flipY = false, S = 1) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.75)';
+        ctx.lineWidth = 2 * S;
+        const r = Math.min(size * 0.45, 26 * S);
+        ctx.beginPath();
+        ctx.moveTo(0, r);
+        ctx.quadraticCurveTo(0, 0, r, 0);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(4 * S, r * 0.8);
+        ctx.quadraticCurveTo(4 * S, 4 * S, r * 0.8, 4 * S);
+        ctx.strokeStyle = 'rgba(255, 224, 130, 0.5)';
+        ctx.lineWidth = 1 * S;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(r * 0.35, r * 0.35, Math.max(2 * S, r * 0.12), 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(212, 175, 55, 0.6)';
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawGeometricCorner(ctx, x, y, size, S = 1) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)';
+        ctx.lineWidth = 1 * S;
+        for (let i = 0; i < 4; i++) {
+          ctx.beginPath();
+          ctx.moveTo(size / 2, 0);
+          ctx.lineTo(size, size / 2);
+          ctx.lineTo(size / 2, size);
+          ctx.lineTo(0, size / 2);
+          ctx.closePath();
+          ctx.stroke();
+          ctx.translate(size / 2, size / 2);
+          ctx.rotate(Math.PI / 4);
+          ctx.translate(-size / 2, -size / 2);
+        }
+        ctx.restore();
+      }
+
+      // Decorative Frame Drawing (around screen or text box)
+      function getResponsiveTextFrameLayout({
+        canvasWidth,
+        canvasHeight,
+        contentTop,
+        contentBottom,
+        contentWidth,
+        scale,
+        minWidthRatio = 0.56,
+        maxWidthRatio = 0.88,
+        safeTopRatio = 0.14,
+        safeBottomRatio = 0.92,
+      }) {
+        const padding = Math.max(20 * scale, Math.min(65 * scale, canvasWidth * 0.045));
+        const frameWidth = Math.min(
+          canvasWidth * maxWidthRatio,
+          Math.max(contentWidth + padding * 2, canvasWidth * minWidthRatio),
+        );
+        const frameX = (canvasWidth - frameWidth) / 2;
+        const safeTop = Math.max(12 * scale, canvasHeight * safeTopRatio);
+        const safeBottom = Math.min(canvasHeight - 12 * scale, canvasHeight * safeBottomRatio);
+        const rawTop = contentTop - padding;
+        const rawBottom = contentBottom + padding;
+        let offsetY = 0;
+        if (rawTop < safeTop) offsetY += safeTop - rawTop;
+        if (rawBottom + offsetY > safeBottom) offsetY += safeBottom - (rawBottom + offsetY);
+        const frameY = rawTop + offsetY;
+        const frameHeight = Math.max(1, rawBottom + offsetY - frameY);
+        return { frameX, frameY, frameWidth, frameHeight, offsetY, padding };
+      }
+
+      function drawIslamicFrame(ctx, x, y, width, height, style, S = 1) {
+        if (!style || style === 'none') return;
+        ctx.save();
+        const F = Math.max(0.5, Math.min(2.4, width / 1080));
+        const cornerSize = Math.min(width, height) * 0.1;
+        const goldColor = 'rgba(212, 175, 55, 0.65)';
+        const goldLight = 'rgba(212, 175, 55, 0.35)';
+
+        switch (style) {
+          case 'simple':
+            ctx.strokeStyle = goldColor;
+            ctx.lineWidth = 2 * F;
+            ctx.strokeRect(x, y, width, height);
+            ctx.strokeStyle = goldLight;
+            ctx.lineWidth = 1 * F;
+            ctx.strokeRect(x + 6 * F, y + 6 * F, width - 12 * F, height - 12 * F);
+            break;
+
+          case 'ornate':
+            ctx.strokeStyle = goldColor;
+            ctx.lineWidth = 3 * F;
+            safeRoundRect(ctx, x, y, width, height, 10 * F);
+            ctx.stroke();
+
+            drawCornerOrnament(ctx, x, y, cornerSize, 0, F);
+            drawCornerOrnament(ctx, x + width, y, cornerSize, 90, F);
+            drawCornerOrnament(ctx, x + width, y + height, cornerSize, 180, F);
+            drawCornerOrnament(ctx, x, y + height, cornerSize, 270, F);
+
+            drawSideDecoration(ctx, x + width / 2, y, cornerSize * 0.6, F);
+            drawSideDecoration(ctx, x + width / 2, y + height, cornerSize * 0.6, F);
+            break;
+
+          case 'golden':
+            ctx.shadowColor = 'rgba(212, 175, 55, 0.5)';
+            ctx.shadowBlur = 15 * F;
+            ctx.strokeStyle = goldColor;
+            ctx.lineWidth = 4 * F;
+            safeRoundRect(ctx, x, y, width, height, 15 * F);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            ctx.strokeStyle = goldLight;
+            ctx.lineWidth = 2 * F;
+            ctx.setLineDash([10 * F, 5 * F]);
+            safeRoundRect(ctx, x + 10 * F, y + 10 * F, width - 20 * F, height - 20 * F, 10 * F);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            drawGoldenCorner(ctx, x, y, cornerSize, false, false, F);
+            drawGoldenCorner(ctx, x + width, y, cornerSize, true, false, F);
+            drawGoldenCorner(ctx, x + width, y + height, cornerSize, true, true, F);
+            drawGoldenCorner(ctx, x, y + height, cornerSize, false, true, F);
+            break;
+
+          case 'geometric':
+            ctx.strokeStyle = goldColor;
+            ctx.lineWidth = 2 * F;
+            ctx.strokeRect(x, y, width, height);
+
+            drawGeometricCorner(ctx, x, y, cornerSize, F);
+            drawGeometricCorner(ctx, x + width - cornerSize, y, cornerSize, F);
+            drawGeometricCorner(ctx, x + width - cornerSize, y + height - cornerSize, cornerSize, F);
+            drawGeometricCorner(ctx, x, y + height - cornerSize, cornerSize, F);
+
+            ctx.beginPath();
+            ctx.moveTo(x + cornerSize, y + cornerSize / 2);
+            ctx.lineTo(x + width - cornerSize, y + cornerSize / 2);
+            ctx.moveTo(x + cornerSize, y + height - cornerSize / 2);
+            ctx.lineTo(x + width - cornerSize, y + height - cornerSize / 2);
+            ctx.strokeStyle = goldLight;
+            ctx.stroke();
+            break;
+
+          case 'modern':
+            ctx.strokeStyle = 'rgba(245, 245, 245, 0.68)';
+            ctx.lineWidth = Math.max(1, 2 * F);
+            const cLen = Math.min(width, height) * 0.14;
+            ctx.beginPath();
+            ctx.moveTo(x, y + cLen); ctx.lineTo(x, y); ctx.lineTo(x + cLen, y);
+            ctx.moveTo(x + width - cLen, y); ctx.lineTo(x + width, y); ctx.lineTo(x + width, y + cLen);
+            ctx.moveTo(x, y + height - cLen); ctx.lineTo(x, y + height); ctx.lineTo(x + cLen, y + height);
+            ctx.moveTo(x + width - cLen, y + height); ctx.lineTo(x + width, y + height); ctx.lineTo(x + width, y + height - cLen);
+            ctx.stroke();
+            break;
+
+          case 'minimal':
+            ctx.strokeStyle = 'rgba(232, 214, 157, 0.72)';
+            ctx.lineWidth = Math.max(1, 1.5 * F);
+            ctx.strokeRect(x, y, width, height);
+            ctx.strokeStyle = 'rgba(232, 214, 157, 0.28)';
+            ctx.lineWidth = Math.max(0.75, 0.75 * F);
+            ctx.strokeRect(x + 7 * F, y + 7 * F, width - 14 * F, height - 14 * F);
+            break;
+        }
+        ctx.restore();
+      }
+
+      // Full-Screen Video Decorative Border (Outer 9:16 perimeter)
+      function drawFullScreenBorder(ctx, width, height, style, colorScheme, S = 1) {
+        if (!style || style === 'none') return;
+        ctx.save();
+        const palettes = {
+          gold: { primary: '#D4AF37', secondary: '#FFE082', glow: 'rgba(212, 175, 55, 0.35)' },
+          emerald: { primary: '#10B981', secondary: '#6EE7B7', glow: 'rgba(16, 185, 129, 0.35)' },
+          silver: { primary: '#D1D5DB', secondary: '#F9FAFB', glow: 'rgba(209, 213, 219, 0.35)' },
+          white: { primary: '#FFFFFF', secondary: '#E5E7EB', glow: 'rgba(255, 255, 255, 0.30)' }
+        };
+        const pal = palettes[colorScheme || 'gold'] || palettes.gold;
+        const margin = 26 * S;
+        const w = width - margin * 2;
+        const h = height - margin * 2;
+        const x = margin;
+        const y = margin;
+
+        if (style === 'goldenTrim') {
+          ctx.strokeStyle = pal.primary;
+          ctx.lineWidth = 3 * S;
+          ctx.shadowColor = pal.glow;
+          ctx.shadowBlur = 8 * S;
+          ctx.strokeRect(x, y, w, h);
+          ctx.shadowBlur = 0;
+          ctx.strokeStyle = pal.secondary;
+            ctx.lineWidth = 1 * F;
+          ctx.strokeRect(x + 8 * S, y + 8 * S, w - 16 * S, h - 16 * S);
+        } else if (style === 'islamicCorners') {
+          ctx.strokeStyle = pal.primary;
+          ctx.lineWidth = 2 * S;
+          ctx.shadowColor = pal.glow;
+          ctx.shadowBlur = 6 * S;
+          const cLen = 75 * S;
+          ctx.beginPath();
+          ctx.moveTo(x + cLen, y); ctx.lineTo(x + w - cLen, y);
+          ctx.moveTo(x + cLen, y + h); ctx.lineTo(x + w - cLen, y + h);
+          ctx.moveTo(x, y + cLen); ctx.lineTo(x, y + h - cLen);
+          ctx.moveTo(x + w, y + cLen); ctx.lineTo(x + w, y + h - cLen);
+          ctx.stroke();
+
+          const drawCorner = (cx, cy, rot) => {
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate((rot * Math.PI) / 180);
+            ctx.strokeStyle = pal.secondary;
+            ctx.lineWidth = 2 * S;
+            ctx.beginPath();
+            ctx.moveTo(0, cLen); ctx.lineTo(0, 0); ctx.lineTo(cLen, 0);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(12 * S, cLen - 15 * S);
+            ctx.quadraticCurveTo(12 * S, 12 * S, cLen - 15 * S, 12 * S);
+            ctx.stroke();
+            ctx.fillStyle = pal.primary;
+            ctx.beginPath();
+            ctx.arc(18 * S, 18 * S, 3.5 * S, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          };
+          drawCorner(x, y, 0);
+          drawCorner(x + w, y, 90);
+          drawCorner(x + w, y + h, 180);
+          drawCorner(x, y + h, 270);
+        } else if (style === 'doubleCinema') {
+          ctx.strokeStyle = pal.primary;
+          ctx.lineWidth = 3.5 * S;
+          ctx.strokeRect(x, y, w, h);
+          ctx.strokeStyle = pal.secondary;
+          ctx.lineWidth = 1.5 * S;
+          ctx.strokeRect(x + 12 * S, y + 12 * S, w - 24 * S, h - 24 * S);
+        } else if (style === 'royalCrest') {
+          ctx.strokeStyle = pal.primary;
+          ctx.lineWidth = 2.5 * S;
+          ctx.strokeRect(x, y, w, h);
+          const topCx = width / 2;
+          const crestW = 90 * S;
+          ctx.fillStyle = 'rgba(10, 10, 10, 0.9)';
+          ctx.fillRect(topCx - crestW / 2, y - 6 * S, crestW, 12 * S);
+          ctx.strokeStyle = pal.secondary;
+          ctx.lineWidth = 1.5 * S;
+          ctx.beginPath();
+          ctx.moveTo(topCx - crestW / 2, y); ctx.lineTo(topCx - 15 * S, y - 10 * S);
+          ctx.lineTo(topCx, y - 18 * S); ctx.lineTo(topCx + 15 * S, y - 10 * S); ctx.lineTo(topCx + crestW / 2, y);
+          ctx.stroke();
+          ctx.fillStyle = pal.primary;
+          ctx.beginPath();
+          ctx.arc(topCx, y - 18 * S, 3.5 * S, 0, Math.PI * 2);
+          ctx.fill();
+
+          const btmY = y + h;
+          ctx.fillStyle = 'rgba(10, 10, 10, 0.9)';
+          ctx.fillRect(topCx - crestW / 2, btmY - 6 * S, crestW, 12 * S);
+          ctx.strokeStyle = pal.secondary;
+          ctx.lineWidth = 1.5 * S;
+          ctx.beginPath();
+          ctx.moveTo(topCx - crestW / 2, btmY); ctx.lineTo(topCx - 15 * S, btmY + 10 * S);
+          ctx.lineTo(topCx, btmY + 18 * S); ctx.lineTo(topCx + 15 * S, btmY + 10 * S); ctx.lineTo(topCx + crestW / 2, btmY);
+          ctx.stroke();
+          ctx.fillStyle = pal.primary;
+          ctx.beginPath();
+          ctx.arc(topCx, btmY + 18 * S, 3.5 * S, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (style === 'subtleVignette') {
+          ctx.strokeStyle = 'rgba(212, 175, 55, 0.45)';
+          ctx.lineWidth = 1.5 * S;
+          ctx.strokeRect(x, y, w, h);
+        }
+        ctx.restore();
+      }
+
+      // Text wrapping for RTL Arabic
+      function wrapArabicText(ctx, words, maxWidth, spaceWidth) {
+        const lines = [];
+        let currentLine = [];
+        let currentWidth = 0;
+
+        for (let i = 0; i < words.length; i++) {
+          const w = words[i];
+          const wWidth = ctx.measureText(w).width;
+          const needed = currentLine.length === 0 ? wWidth : currentWidth + spaceWidth + wWidth;
+
+          if (needed <= maxWidth || currentLine.length === 0) {
+            currentLine.push(w);
+            currentWidth = needed;
+          } else {
+            lines.push(currentLine);
+            currentLine = [w];
+            currentWidth = wWidth;
+          }
+        }
+        if (currentLine.length > 0) {
+          lines.push(currentLine);
+        }
+        return lines;
+      }
+
+      // Helper to preload an image returning a promise with safety timeout
+      function preloadImage(url) {
+        return new Promise((resolve) => {
+          if (!url) return resolve(null);
+          const img = new Image();
+          let settled = false;
+          const timer = setTimeout(() => {
+            if (!settled) {
+              settled = true;
+              resolve(null);
+            }
+          }, 8000);
+          img.onload = () => {
+            if (!settled) {
+              settled = true;
+              clearTimeout(timer);
+              resolve(img);
+            }
+          };
+          img.onerror = () => {
+            if (!settled) {
+              settled = true;
+              clearTimeout(timer);
+              resolve(null);
+            }
+          };
+          img.src = url;
+          if (img.complete && img.naturalWidth > 0) {
+            settled = true;
+            clearTimeout(timer);
+            resolve(img);
+          }
+        });
+      }
+
+      // Memory-bounded ring-cache for extracted video frames
+      const frameImgCache = new Map();
+
+      async function getFrameImage(url) {
+        if (!url) return null;
+        if (frameImgCache.has(url)) return frameImgCache.get(url);
+        const img = await preloadImage(url);
+        if (img) {
+          if (frameImgCache.size > 30) {
+            const oldestKey = frameImgCache.keys().next().value;
+            frameImgCache.delete(oldestKey);
+          }
+          frameImgCache.set(url, img);
+        }
+        return img;
+      }
+
+      function prefetchNextFrames(currentFrameNum, maxFrameNum, pattern) {
+        for (let i = 1; i <= 5; i++) {
+          const nextNum = currentFrameNum + i;
+          if (nextNum <= maxFrameNum) {
+            const nextUrl = pattern.replace('%05d', String(nextNum).padStart(5, '0'));
+            if (!frameImgCache.has(nextUrl)) {
+              getFrameImage(nextUrl);
+            }
+          }
+        }
+      }
+
+      // Cover-fit: draw image filling canvas without distortion or black bars
+      function drawImageCoverWithMotion(ctx, img, cw, ch, scale, panX, panY) {
+        if (!img || !img.complete || !img.naturalWidth) return;
+        const imgRatio = img.naturalWidth / img.naturalHeight;
+        const canvasRatio = cw / ch;
+        let sw = img.naturalWidth, sh = img.naturalHeight, sx = 0, sy = 0;
+        if (imgRatio > canvasRatio) {
+          sw = img.naturalHeight * canvasRatio;
+          sx = (img.naturalWidth - sw) / 2;
+        } else {
+          sh = img.naturalWidth / canvasRatio;
+          sy = (img.naturalHeight - sh) / 2;
+        }
+        ctx.save();
+        ctx.translate(cw / 2, ch / 2);
+        ctx.scale(scale, scale);
+        ctx.translate(-cw / 2 + panX, -ch / 2 + panY);
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch);
+        ctx.restore();
+      }
+
+      // ── Exposed Render Controller ─────────────────────────────────────────
+      window.__RENDER_CONTROLLER__ = {
+        async initScene(manifest) {
+          currentManifest = manifest;
+          canvas.width = manifest.outputDimensions.width;
+          canvas.height = manifest.outputDimensions.height;
+
+          // Await web font readiness
+          if (document.fonts && document.fonts.ready) {
+            try { await document.fonts.ready; } catch(e) {}
+          }
+
+          const bg = manifest.background || {};
+          slideshowImages = [];
+          bgImage = null;
+          bgFramesPattern = bg.framesPattern || null;
+          lastValidVideoFrame = null;
+          frameImgCache.clear();
+
+          // 1. If video frame sequence exists, pre-buffer the first 6 frames into memory
+          if (bgFramesPattern) {
+            const initialPreloads = [];
+            for (let f = 1; f <= 6; f++) {
+              const fUrl = bgFramesPattern.replace('%05d', String(f).padStart(5, '0'));
+              initialPreloads.push(getFrameImage(fUrl));
+            }
+            await Promise.all(initialPreloads);
+          }
+
+          // 2. Preload Slideshow Images
+          if (bg.type === 'slideshow' && bg.slideImages && bg.slideImages.length > 0) {
+            const loaded = await Promise.all(bg.slideImages.map(u => preloadImage(u)));
+            slideshowImages = loaded.filter(img => img !== null);
+          }
+
+          // 3. Preload Primary Image or Video Thumbnail Fallback
+          const primaryImageUrl = bg.thumbnail || (bg.url && !bg.url.endsWith('.mp4') ? bg.url : null) || bg.url;
+          if (primaryImageUrl && !primaryImageUrl.includes('%05d')) {
+            bgImage = await preloadImage(primaryImageUrl);
+          }
+
+          // 4. Preload Custom / AI Logo Watermark Image
+          if (manifest.displaySettings && manifest.displaySettings.logoWatermarkUrl) {
+            try {
+              logoWatermarkImage = await preloadImage(manifest.displaySettings.logoWatermarkUrl);
+            } catch (e) {
+              logoWatermarkImage = null;
+            }
+          } else {
+            logoWatermarkImage = null;
+          }
+
+          isReady = true;
+          return true;
+        },
+
+        async renderFrame(frameIndex, frameTimeSeconds) {
+          if (!currentManifest) return;
+
+          const W = canvas.width;
+          const H = canvas.height;
+          const S = W / 1080; // Reference scaling against 1080p
+          const manifest = currentManifest;
+          const displaySettings = manifest.displaySettings || {};
+          const typography = manifest.typography || {};
+          const timingMap = manifest.timingMap;
+          const allAyahs = manifest.canonicalAyahRange.ayahs || [];
+
+          // Calculate effective timeline time in milliseconds (handling rangeMs offset from audio slicing)
+          const rangeOffsetMs = (manifest.audio.rangeMs && manifest.audio.rangeMs.from > 0) ? manifest.audio.rangeMs.from : 0;
+          const firstWordStart = (timingMap && timingMap.words && timingMap.words.length > 0) ? timingMap.words[0].startMs : 0;
+          const isTimingMapAbsolute = firstWordStart >= (rangeOffsetMs * 0.7) && rangeOffsetMs > 2000;
+          const lookupTimeMs = isTimingMapAbsolute ? (rangeOffsetMs + frameTimeSeconds * 1000) : (frameTimeSeconds * 1000);
+
+          // 1. Clear Canvas Frame
+          ctx.clearRect(0, 0, W, H);
+          ctx.fillStyle = '#040D12';
+          ctx.fillRect(0, 0, W, H);
+
+          // 2. Render Dynamic Background Layer
+          let backgroundDrawn = false;
+
+          // Case 1: Authentic video background playback using synchronized extracted frame sequence
+          if (bgFramesPattern) {
+            const frameNum = frameIndex + 1;
+            const frameUrl = bgFramesPattern.replace('%05d', String(frameNum).padStart(5, '0'));
+            const vFrame = await getFrameImage(frameUrl);
+            if (vFrame && vFrame.complete && vFrame.naturalWidth > 0) {
+              lastValidVideoFrame = vFrame;
+              ctx.drawImage(vFrame, 0, 0, W, H);
+              backgroundDrawn = true;
+              const totalEstFrames = Math.ceil((manifest.audio.durationSeconds || 1) * (manifest.fps || 30));
+              prefetchNextFrames(frameNum, totalEstFrames, bgFramesPattern);
+            } else if (lastValidVideoFrame && lastValidVideoFrame.complete && lastValidVideoFrame.naturalWidth > 0) {
+              ctx.drawImage(lastValidVideoFrame, 0, 0, W, H);
+              backgroundDrawn = true;
+            }
+          }
+
+          // Case 2: Slideshow cross-fade with smooth continuous Ken Burns motion (ONLY if not drawn by video frames)
+          if (!backgroundDrawn && slideshowImages.length > 0) {
+            const slideDuration = 5.0; // 5 seconds per slide
+            const transDuration = 1.2; // 1.2s smooth cross-fade
+            const totalSlideTime = slideDuration + transDuration;
+            const cycleDuration = totalSlideTime * slideshowImages.length;
+            const cyclePos = frameTimeSeconds % cycleDuration;
+
+            const slideIdx = Math.floor(cyclePos / totalSlideTime) % slideshowImages.length;
+            const nextSlideIdx = (slideIdx + 1) % slideshowImages.length;
+            const timeInSlide = cyclePos % totalSlideTime;
+
+            const currImg = slideshowImages[slideIdx];
+            const nextImg = slideshowImages[nextSlideIdx];
+
+            const motionSpeed = manifest.background.motionSpeed || 3;
+            const t = frameTimeSeconds * (motionSpeed / 3);
+
+            // Continuous per-slide Ken Burns with golden-ratio phase offset
+            const phase1 = slideIdx * 1.618;
+            const scale1 = 1.06 + Math.sin(t * 0.2 + phase1) * 0.03;
+            const panX1 = Math.sin(t * 0.12 + phase1) * (14 * S);
+            const panY1 = Math.cos(t * 0.1 + phase1) * (12 * S);
+            drawImageCoverWithMotion(ctx, currImg, W, H, scale1, panX1, panY1);
+
+            // Dynamic transitions: crossfade, slideLeft, slideRight, slideUp, zoomThrough, wipe, mixed
+            if (timeInSlide > slideDuration && nextImg) {
+              const fadeProgress = (timeInSlide - slideDuration) / transDuration;
+              const smoothFade = fadeProgress * fadeProgress * (3 - 2 * fadeProgress);
+
+              let trans = displaySettings.slideshowTransition || 'crossfade';
+              if (trans === 'mixed') {
+                const choices = ['crossfade', 'slideLeft', 'slideRight', 'slideUp', 'zoomThrough', 'wipe'];
+                trans = choices[slideIdx % choices.length];
+              }
+
+              const phase2 = nextSlideIdx * 1.618;
+              let scale2 = 1.06 + Math.sin(t * 0.2 + phase2) * 0.03;
+              let panX2 = Math.sin(t * 0.12 + phase2) * (14 * S);
+              let panY2 = Math.cos(t * 0.1 + phase2) * (12 * S);
+
+              ctx.save();
+              if (trans === 'slideLeft') {
+                ctx.translate((1 - smoothFade) * W, 0);
+              } else if (trans === 'slideRight') {
+                ctx.translate((smoothFade - 1) * W, 0);
+              } else if (trans === 'slideUp') {
+                ctx.translate(0, (1 - smoothFade) * H);
+              } else if (trans === 'zoomThrough') {
+                scale2 *= (0.8 + smoothFade * 0.2);
+                ctx.globalAlpha = smoothFade;
+              } else if (trans === 'wipe') {
+                ctx.beginPath();
+                ctx.rect(0, 0, W * smoothFade, H);
+                ctx.clip();
+              } else {
+                ctx.globalAlpha = smoothFade;
+              }
+              drawImageCoverWithMotion(ctx, nextImg, W, H, scale2, panX2, panY2);
+              ctx.restore();
+            }
+            backgroundDrawn = true;
+          }
+
+          // Case 3: Master Image or Fallback Background with majestic Ken Burns motion (ONLY if not drawn by video or slideshow)
+          if (!backgroundDrawn && bgImage && bgImage.complete && bgImage.naturalWidth > 0) {
+            const motionSpeed = manifest.background.motionSpeed || 3;
+            const t = frameTimeSeconds * (motionSpeed / 3);
+            const scale = 1.06 + Math.sin(t * 0.2) * 0.03;
+            const panX = Math.sin(t * 0.12) * (14 * S);
+            const panY = Math.cos(t * 0.1) * (12 * S);
+            drawImageCoverWithMotion(ctx, bgImage, W, H, scale, panX, panY);
+            backgroundDrawn = true;
+          }
+
+          // Case 4: Elegant Radiant Islamic Gradient Fallback
+          if (!backgroundDrawn) {
+            const grad = ctx.createLinearGradient(0, 0, W, H);
+            grad.addColorStop(0, '#06202B');
+            grad.addColorStop(0.4, '#0A394C');
+            grad.addColorStop(0.75, '#072431');
+            grad.addColorStop(1, '#020D14');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+          }
+
+          // 3. Dark Backdrop & Delicate Top/Bottom Gradient Contrast for Crisp Typography
+          const overlayAlpha = manifest.background.overlayOpacity ?? 0.35;
+          ctx.fillStyle = `rgba(0, 0, 0, ${overlayAlpha})`;
+          ctx.fillRect(0, 0, W, H);
+
+          const topGrad = ctx.createLinearGradient(0, 0, 0, H * 0.22);
+          topGrad.addColorStop(0, 'rgba(0, 0, 0, 0.55)');
+          topGrad.addColorStop(1, 'transparent');
+          ctx.fillStyle = topGrad;
+          ctx.fillRect(0, 0, W, H * 0.22);
+
+          const botGrad = ctx.createLinearGradient(0, H * 0.78, 0, H);
+          botGrad.addColorStop(0, 'transparent');
+          botGrad.addColorStop(1, 'rgba(0, 0, 0, 0.55)');
+          ctx.fillStyle = botGrad;
+          ctx.fillRect(0, H * 0.78, W, H * 0.22);
+
+          // Cinematic visual direction layer shared with the browser preview.
+          // It is deterministic so cloud renders remain frame-stable.
+          const visualDesign = displaySettings.visualDesign || 'dawn';
+          const palette = visualDesign === 'moonlit'
+            ? { core: 'rgba(112, 175, 255, 0.16)', mid: 'rgba(74, 125, 205, 0.07)', veil: 'rgba(4, 10, 30, 0.28)', mark: 'rgba(157, 199, 255, 0.34)' }
+            : visualDesign === 'editorial'
+              ? { core: 'rgba(194, 226, 184, 0.14)', mid: 'rgba(71, 150, 132, 0.07)', veil: 'rgba(4, 18, 19, 0.25)', mark: 'rgba(179, 225, 187, 0.30)' }
+              : { core: 'rgba(255, 206, 128, 0.14)', mid: 'rgba(136, 158, 196, 0.06)', veil: 'rgba(6, 14, 28, 0.24)', mark: 'rgba(242, 194, 112, 0.32)' };
+          const atmosphere = ctx.createRadialGradient(W * 0.52, H * 0.30, 0, W * 0.52, H * 0.30, H * 0.72);
+          atmosphere.addColorStop(0, palette.core);
+          atmosphere.addColorStop(0.32, palette.mid);
+          atmosphere.addColorStop(1, 'rgba(6, 14, 28, 0)');
+          ctx.fillStyle = atmosphere;
+          ctx.fillRect(0, 0, W, H);
+          const focusVeil = ctx.createLinearGradient(0, H * 0.34, 0, H * 0.80);
+          focusVeil.addColorStop(0, 'rgba(5, 13, 28, 0)');
+          focusVeil.addColorStop(0.58, 'rgba(5, 13, 28, 0.08)');
+          focusVeil.addColorStop(1, palette.veil);
+          ctx.fillStyle = focusVeil;
+          ctx.fillRect(0, 0, W, H);
+          ctx.save();
+          ctx.globalAlpha = 0.8;
+          ctx.strokeStyle = palette.mark;
+          ctx.lineWidth = Math.max(1, 1.5 * S);
+          if (visualDesign === 'moonlit') {
+            const cx = W * 0.78, cy = H * 0.16, r = Math.max(18 * S, W * 0.035);
+            ctx.beginPath(); ctx.arc(cx, cy, r, 0.35 * Math.PI, 1.65 * Math.PI); ctx.stroke();
+            ctx.beginPath(); ctx.arc(cx + r * 0.34, cy - r * 0.18, r * 0.92, 0.45 * Math.PI, 1.55 * Math.PI); ctx.stroke();
+          } else if (visualDesign === 'editorial') {
+            const inset = W * 0.075, top = H * 0.27, bottom = H * 0.75;
+            ctx.setLineDash([5 * S, 9 * S]); ctx.strokeRect(inset, top, W - inset * 2, bottom - top); ctx.setLineDash([]);
+          } else {
+            const cx = W / 2, top = H * 0.055, w = W * 0.34, h = H * 0.19;
+            ctx.beginPath(); ctx.moveTo(cx - w, top + h); ctx.lineTo(cx - w, top + h * 0.48);
+            ctx.quadraticCurveTo(cx, top - h * 0.2, cx + w, top + h * 0.48); ctx.lineTo(cx + w, top + h); ctx.stroke();
+          }
+          ctx.restore();
+
+          // 4. Full-Screen Video Perimeter Border (Screen Frame)
+          if (displaySettings.screenBorderStyle && displaySettings.screenBorderStyle !== 'none') {
+            drawFullScreenBorder(ctx, W, H, displaySettings.screenBorderStyle, displaySettings.screenBorderColor, S);
+          }
+
+          // 5. Surah Name Banner / Header
+          const pos = displaySettings.surahNamePosition || 'top';
+          const headerLayout = getResponsiveHeaderLayout({
+            W, H, S,
+            showSurahName: Boolean(displaySettings.showSurahName),
+            showReciterName: Boolean(displaySettings.showReciterName),
+            position: pos,
+            nameStyle: displaySettings.surahNameStyle,
+            reciterStyle: displaySettings.reciterNameStyle,
+            fontSize: Number(displaySettings.fontSize || 28),
+          });
+          const bannerY = headerLayout.titleY;
+          const bannerX = headerLayout.titleX;
+
+          if (displaySettings.showSurahName) {
+            ctx.save();
+            const nameStyle = displaySettings.surahNameStyle || 'classic';
+
+            if (nameStyle === 'banner') {
+              const bw = Math.min(520 * S, W * 0.8), bh = 88 * S;
+              const grad = ctx.createLinearGradient(bannerX - bw / 2, bannerY, bannerX + bw / 2, bannerY);
+              grad.addColorStop(0, 'rgba(212, 175, 55, 0)');
+              grad.addColorStop(0.2, 'rgba(212, 175, 55, 0.28)');
+              grad.addColorStop(0.5, 'rgba(212, 175, 55, 0.42)');
+              grad.addColorStop(0.8, 'rgba(212, 175, 55, 0.28)');
+              grad.addColorStop(1, 'rgba(212, 175, 55, 0)');
+              ctx.fillStyle = grad;
+              ctx.fillRect(bannerX - bw / 2, bannerY - bh / 2, bw, bh);
+              ctx.strokeStyle = 'rgba(212, 175, 55, 0.65)';
+              ctx.lineWidth = 2 * S;
+              ctx.beginPath();
+              ctx.moveTo(bannerX - bw / 2 + 36 * S, bannerY - bh / 2);
+              ctx.lineTo(bannerX + bw / 2 - 36 * S, bannerY - bh / 2);
+              ctx.moveTo(bannerX - bw / 2 + 36 * S, bannerY + bh / 2);
+              ctx.lineTo(bannerX + bw / 2 - 36 * S, bannerY + bh / 2);
+              ctx.stroke();
+            } else if (nameStyle === 'circle') {
+              const radius = 76 * S;
+              ctx.beginPath();
+              ctx.arc(bannerX, bannerY, radius, 0, Math.PI * 2);
+              ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+              ctx.fill();
+              ctx.strokeStyle = 'rgba(212, 175, 55, 0.7)';
+              ctx.lineWidth = 3 * S;
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.arc(bannerX, bannerY, radius - 8 * S, 0, Math.PI * 2);
+              ctx.strokeStyle = 'rgba(212, 175, 55, 0.35)';
+              ctx.lineWidth = 1 * S;
+              ctx.stroke();
+            } else if (nameStyle === 'diamond') {
+              const ds = 78 * S;
+              ctx.beginPath();
+              ctx.moveTo(bannerX, bannerY - ds);
+              ctx.lineTo(bannerX + ds * 1.8, bannerY);
+              ctx.lineTo(bannerX, bannerY + ds);
+              ctx.lineTo(bannerX - ds * 1.8, bannerY);
+              ctx.closePath();
+              ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+              ctx.fill();
+              ctx.strokeStyle = 'rgba(212, 175, 55, 0.7)';
+              ctx.lineWidth = 2.5 * S;
+              ctx.stroke();
+            } else if (nameStyle === 'ribbon') {
+              const rw = Math.min(460 * S, W * 0.78), rh = 76 * S;
+              const rx = bannerX - rw / 2;
+              ctx.beginPath();
+              ctx.moveTo(rx + 22 * S, bannerY - rh / 2);
+              ctx.lineTo(rx + rw - 22 * S, bannerY - rh / 2);
+              ctx.lineTo(rx + rw, bannerY);
+              ctx.lineTo(rx + rw - 22 * S, bannerY + rh / 2);
+              ctx.lineTo(rx + 22 * S, bannerY + rh / 2);
+              ctx.lineTo(rx, bannerY);
+              ctx.closePath();
+              ctx.fillStyle = 'rgba(212, 175, 55, 0.22)';
+              ctx.fill();
+              ctx.strokeStyle = 'rgba(212, 175, 55, 0.75)';
+              ctx.lineWidth = 2.5 * S;
+              ctx.stroke();
+            } else if (nameStyle === 'calligraphy') {
+              ctx.fillStyle = 'rgba(212, 175, 55, 0.65)';
+              [-110, -70, 70, 110].forEach(dx => {
+                ctx.beginPath();
+                ctx.arc(bannerX + dx * S, bannerY - 34 * S, 3.5 * S, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(bannerX + dx * S, bannerY + 34 * S, 3.5 * S, 0, Math.PI * 2);
+                ctx.fill();
+              });
+            } else if (nameStyle === 'modern') {
+              const mw = Math.min(460 * S, W * 0.72), mh = 76 * S;
+              ctx.fillStyle = 'rgba(10, 25, 35, 0.65)';
+              safeRoundRect(ctx, bannerX - mw / 2, bannerY - mh / 2, mw, mh, 38 * S);
+              ctx.fill();
+              ctx.strokeStyle = '#FFD700';
+              ctx.lineWidth = 2 * S;
+              ctx.stroke();
+            } else if (nameStyle === 'ornate') {
+              const ow = Math.min(480 * S, W * 0.75), oh = 82 * S;
+              ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+              ctx.fillRect(bannerX - ow / 2, bannerY - oh / 2, ow, oh);
+              ctx.strokeStyle = '#D4AF37';
+              ctx.lineWidth = 2.5 * S;
+              ctx.strokeRect(bannerX - ow / 2, bannerY - oh / 2, ow, oh);
+              const ins = 7 * S;
+              ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)';
+              ctx.lineWidth = 1 * S;
+              ctx.strokeRect(bannerX - ow / 2 + ins, bannerY - oh / 2 + ins, ow - ins * 2, oh - ins * 2);
+            } else if (nameStyle === 'minimal') {
+              ctx.strokeStyle = 'rgba(212, 175, 55, 0.75)';
+              ctx.lineWidth = 2 * S;
+              ctx.beginPath();
+              ctx.moveTo(bannerX - 130 * S, bannerY + 30 * S);
+              ctx.lineTo(bannerX + 130 * S, bannerY + 30 * S);
+              ctx.stroke();
+            } else {
+              // classic (Default) - Double-bordered rounded badge
+              const badgeWidth = Math.min(380 * S, W * 0.72);
+              const badgeHeight = 96 * S;
+              ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+              safeRoundRect(ctx, bannerX - badgeWidth / 2, bannerY - badgeHeight / 2, badgeWidth, badgeHeight, 48 * S);
+              ctx.fill();
+              ctx.strokeStyle = 'rgba(212, 175, 55, 0.55)';
+              ctx.lineWidth = 3 * S;
+              ctx.stroke();
+              ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
+              ctx.lineWidth = 1 * S;
+              safeRoundRect(ctx, bannerX - (badgeWidth - 12 * S) / 2, bannerY - (badgeHeight - 12 * S) / 2, badgeWidth - 12 * S, badgeHeight - 12 * S, 42 * S);
+              ctx.stroke();
+            }
+
+            const rawName = manifest.canonicalAyahRange?.surahName || manifest.surah?.name || '';
+            const cleanName = rawName.replace(/^سُ?ورَ?ةُ?\s+/i, '').trim();
+            const titleText = cleanName ? `سُورَةُ ${cleanName}` : (rawName || 'القرآن الكريم');
+
+            ctx.font = `bold ${Math.round(36 * S)}px "Amiri", "Scheherazade New", serif`;
+            ctx.fillStyle = '#D4AF37';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+            ctx.shadowBlur = 10 * S;
+            ctx.fillText(titleText, bannerX, bannerY);
+            ctx.restore();
+          }
+
+          // 5b. Subtitle / Reciter Name (Independent of showSurahName)
+          const reciterRaw = manifest.reciter?.name || manifest.canonicalAyahRange?.reciterName || '';
+          let headerBottomY = bannerY;
+          if (displaySettings.showReciterName && reciterRaw) {
+            ctx.save();
+            let reciterX = headerLayout.reciterX;
+            let reciterY = headerLayout.reciterY;
+
+            headerBottomY = reciterY;
+
+            const reciterStyle = displaySettings.reciterNameStyle || 'simple';
+            const cleanReciter = reciterRaw.replace(/^بصوت\s+/i, '').trim();
+            const reciterText = `بصوت ${cleanReciter}`;
+
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            if (reciterStyle === 'badge') {
+              ctx.font = `${Math.round(22 * S)}px "Amiri", "Noto Naskh Arabic", sans-serif`;
+              const tw = ctx.measureText(reciterText).width;
+              const bw = tw + 48 * S, bh = 40 * S;
+              ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+              safeRoundRect(ctx, reciterX - bw / 2, reciterY - bh / 2, bw, bh, 20 * S);
+              ctx.fill();
+              ctx.strokeStyle = 'rgba(212, 175, 55, 0.55)';
+              ctx.lineWidth = 1.5 * S;
+              ctx.stroke();
+              ctx.fillStyle = '#FFFFFF';
+              ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+              ctx.shadowBlur = 4 * S;
+            } else if (reciterStyle === 'glow') {
+              ctx.font = `${Math.round(24 * S)}px "Amiri", "Noto Naskh Arabic", sans-serif`;
+              ctx.fillStyle = '#FFD700';
+              ctx.shadowColor = '#D4AF37';
+              ctx.shadowBlur = 16 * S;
+            } else if (reciterStyle === 'elegant') {
+              ctx.font = `italic bold ${Math.round(25 * S)}px "Amiri", "Scheherazade New", serif`;
+              ctx.fillStyle = '#D4AF37';
+              ctx.shadowColor = 'rgba(212, 175, 55, 0.45)';
+              ctx.shadowBlur = 8 * S;
+            } else if (reciterStyle === 'pill') {
+              ctx.font = `${Math.round(22 * S)}px "Amiri", "Noto Naskh Arabic", sans-serif`;
+              const tw = ctx.measureText(reciterText).width;
+              const bw = tw + 40 * S, bh = 38 * S;
+              ctx.fillStyle = 'rgba(10, 25, 35, 0.7)';
+              safeRoundRect(ctx, reciterX - bw / 2, reciterY - bh / 2, bw, bh, 19 * S);
+              ctx.fill();
+              ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+              ctx.lineWidth = 1.5 * S;
+              ctx.stroke();
+              ctx.fillStyle = '#FFFFFF';
+            } else if (reciterStyle === 'gold') {
+              ctx.font = `bold ${Math.round(22 * S)}px "Amiri", "Noto Naskh Arabic", sans-serif`;
+              const tw = ctx.measureText(reciterText).width;
+              const bw = tw + 36 * S, bh = 38 * S;
+              ctx.fillStyle = '#D4AF37';
+              safeRoundRect(ctx, reciterX - bw / 2, reciterY - bh / 2, bw, bh, 10 * S);
+              ctx.fill();
+              ctx.fillStyle = '#040D12';
+              ctx.shadowBlur = 0;
+            } else if (reciterStyle === 'bordered') {
+              ctx.font = `${Math.round(22 * S)}px "Amiri", "Noto Naskh Arabic", sans-serif`;
+              const tw = ctx.measureText(reciterText).width;
+              const bw = tw + 36 * S, bh = 38 * S;
+              ctx.strokeStyle = '#D4AF37';
+              ctx.lineWidth = 2 * S;
+              safeRoundRect(ctx, reciterX - bw / 2, reciterY - bh / 2, bw, bh, 8 * S);
+              ctx.stroke();
+              ctx.fillStyle = '#FFD700';
+            } else if (reciterStyle === 'tag') {
+              ctx.font = `bold ${Math.round(21 * S)}px "Amiri", "Noto Naskh Arabic", sans-serif`;
+              const tw = ctx.measureText(reciterText).width;
+              const pw = 48 * S, ph = 38 * S;
+              const tx = reciterX - (tw + pw) / 2;
+              ctx.fillStyle = 'rgba(212, 175, 55, 0.22)';
+              ctx.beginPath();
+              ctx.moveTo(tx + 16 * S, reciterY - ph / 2);
+              ctx.lineTo(tx + tw + pw, reciterY - ph / 2);
+              ctx.lineTo(tx + tw + pw, reciterY + ph / 2);
+              ctx.lineTo(tx + 16 * S, reciterY + ph / 2);
+              ctx.lineTo(tx, reciterY);
+              ctx.closePath();
+              ctx.fill();
+              ctx.strokeStyle = 'rgba(212, 175, 55, 0.65)';
+              ctx.lineWidth = 1.5 * S;
+              ctx.stroke();
+              ctx.fillStyle = '#FFFFFF';
+              reciterX += 6 * S;
+            } else {
+              // simple
+              ctx.font = `${Math.round(23 * S)}px "Amiri", "Noto Naskh Arabic", sans-serif`;
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+              ctx.shadowColor = 'rgba(0, 0, 0, 0.75)';
+              ctx.shadowBlur = 6 * S;
+            }
+
+            ctx.fillText(reciterText, reciterX, reciterY);
+            ctx.restore();
+          }
+
+          // 5c. Decorative separator ornament line under header
+          if ((displaySettings.showSurahName || (displaySettings.showReciterName && reciterRaw)) && pos !== 'bottom') {
+            ctx.save();
+            const sepY = headerLayout.separatorY;
+            const sepX = displaySettings.showReciterName && reciterRaw ? headerLayout.reciterX : headerLayout.titleX;
+            const lineHalf = 110 * S;
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)';
+            ctx.lineWidth = 1.5 * S;
+            ctx.beginPath();
+            ctx.moveTo(sepX - lineHalf, sepY);
+            ctx.lineTo(sepX - 14 * S, sepY);
+            ctx.moveTo(sepX + 14 * S, sepY);
+            ctx.lineTo(sepX + lineHalf, sepY);
+            ctx.stroke();
+
+            // Center gold diamond
+            ctx.fillStyle = '#D4AF37';
+            ctx.beginPath();
+            ctx.moveTo(sepX, sepY - 5 * S);
+            ctx.lineTo(sepX + 6 * S, sepY);
+            ctx.lineTo(sepX, sepY + 5 * S);
+            ctx.lineTo(sepX - 6 * S, sepY);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+          }
+
+          // 6. Active Ayah Selection & Timeline Synchronization
+          let activeAyahIndex = 0;
+          let currentAyahStartSec = 0;
+          let currentAyahEndSec = manifest.audio.durationSeconds;
+
+          // Method A: Exact EveryAyah timestamps
+          if (manifest.audio.everyAyahTimestamps && manifest.audio.everyAyahTimestamps.length > 0) {
+            const ts = manifest.audio.everyAyahTimestamps;
+            for (let i = ts.length - 1; i >= 0; i--) {
+              const fromSec = ts[i].from > 1000 ? ts[i].from / 1000 : ts[i].from;
+              if (frameTimeSeconds >= fromSec) {
+                activeAyahIndex = i;
+                currentAyahStartSec = fromSec;
+                currentAyahEndSec = ts[i].to > 1000 ? ts[i].to / 1000 : ts[i].to;
+                break;
+              }
+            }
+          }
+          // Method B: TimingMap words with canonicalWordKey using lookupTimeMs
+          else if (timingMap && timingMap.words && timingMap.words.length > 0) {
+            const words = timingMap.words;
+            let foundWord = null;
+            for (let i = words.length - 1; i >= 0; i--) {
+              if (lookupTimeMs >= words[i].startMs) {
+                foundWord = words[i];
+                break;
+              }
+            }
+            if (foundWord && foundWord.canonicalWordKey) {
+              const parts = foundWord.canonicalWordKey.split(':');
+              if (parts.length >= 2) {
+                const ayahNum = parseInt(parts[1], 10);
+                const foundIdx = allAyahs.findIndex(a => a.numberInSurah === ayahNum);
+                if (foundIdx !== -1) {
+                  activeAyahIndex = foundIdx;
+                }
+              }
+            }
+
+            // Bound currentAyahStartSec and currentAyahEndSec based on timing map words
+            const activeAyahObj = allAyahs[activeAyahIndex] || allAyahs[0];
+            const ayahWordsInMap = words.filter(w => {
+              if (!w.canonicalWordKey) return false;
+              const p = w.canonicalWordKey.split(':');
+              return parseInt(p[1], 10) === activeAyahObj.numberInSurah;
+            });
+            if (ayahWordsInMap.length > 0) {
+              const firstMs = ayahWordsInMap[0].startMs;
+              const lastMs = ayahWordsInMap[ayahWordsInMap.length - 1].endMs;
+              currentAyahStartSec = Math.max(0, (firstMs - (isTimingMapAbsolute ? rangeOffsetMs : 0)) / 1000);
+              currentAyahEndSec = Math.min(manifest.audio.durationSeconds, (lastMs - (isTimingMapAbsolute ? rangeOffsetMs : 0)) / 1000);
+            }
+          }
+          // Method C: Fallback proportional duration across verses
+          else if (allAyahs.length > 1) {
+            const totalDur = Math.max(manifest.audio.durationSeconds, 1);
+            const fraction = Math.min(Math.max(frameTimeSeconds / totalDur, 0), 0.999);
+            activeAyahIndex = Math.floor(fraction * allAyahs.length);
+            const ayahSlice = totalDur / allAyahs.length;
+            currentAyahStartSec = activeAyahIndex * ayahSlice;
+            currentAyahEndSec = (activeAyahIndex + 1) * ayahSlice;
+          }
+
+          const activeAyah = allAyahs[activeAyahIndex] || allAyahs[0];
+          const activeAyahDurationSec = Math.max(currentAyahEndSec - currentAyahStartSec, 0.5);
+          const timeInAyahSec = Math.max(frameTimeSeconds - currentAyahStartSec, 0);
+
+          // 7. Word-Level Highlighting Resolution
+          const ayahWords = (activeAyah.text || '').split(' ').filter(Boolean);
+          let activeWordIndexInAyah = null;
+          let activeWordProgress = 0;
+
+          // Case A: Aligned TimingMap has explicit words
+          if (timingMap && timingMap.words && timingMap.words.length > 0) {
+            const words = timingMap.words;
+            let activeWord = null;
+
+            // Binary search active word
+            let low = 0;
+            let high = words.length - 1;
+            while (low <= high) {
+              const mid = Math.floor((low + high) / 2);
+              const w = words[mid];
+              if (lookupTimeMs >= w.startMs && lookupTimeMs < w.endMs) {
+                activeWord = w;
+                const dur = Math.max(w.endMs - w.startMs, 1);
+                activeWordProgress = Math.min(Math.max((lookupTimeMs - w.startMs) / dur, 0), 1);
+                break;
+              } else if (lookupTimeMs < w.startMs) {
+                high = mid - 1;
+              } else {
+                low = mid + 1;
+              }
+            }
+
+            // Waqf-holding during pauses
+            if (!activeWord && lookupTimeMs >= words[0].startMs) {
+              for (let i = words.length - 1; i >= 0; i--) {
+                if (lookupTimeMs >= words[i].endMs) {
+                  activeWord = words[i];
+                  activeWordProgress = 1.0;
+                  break;
+                }
+              }
+            }
+
+            if (activeWord && activeWord.canonicalWordKey) {
+              const parts = activeWord.canonicalWordKey.split(':');
+              const wAyahNum = parseInt(parts[1], 10);
+              const wIndex1Based = parseInt(parts[2], 10);
+              if (wAyahNum === activeAyah.numberInSurah) {
+                activeWordIndexInAyah = wIndex1Based - 1;
+              } else if (wAyahNum < activeAyah.numberInSurah) {
+                // If activeWord was held from previous ayah, but screen has transitioned to new ayah,
+                // start on the first word of the new verse so it glows immediately
+                activeWordIndexInAyah = 0;
+                activeWordProgress = 0.25;
+              }
+            } else if (activeWord && typeof activeWord.displayWordIndex === 'number') {
+              activeWordIndexInAyah = activeWord.displayWordIndex % Math.max(ayahWords.length, 1);
+            }
+          }
+
+          // Case B: Unaligned EveryAyah mode or Fallback mode -> compute phonetic Tajweed pacing
+          if (activeWordIndexInAyah === null && ayahWords.length > 0) {
+            const weights = ayahWords.map((w, idx) => computeWordPhoneticWeight(w, idx === ayahWords.length - 1));
+            const sumWeights = weights.reduce((acc, v) => acc + v, 0);
+
+            // Intro silence (~4% of ayah) and outro pause (~10%)
+            const introMs = Math.min(activeAyahDurationSec * 1000 * 0.04, 250);
+            const outroMs = Math.min(activeAyahDurationSec * 1000 * 0.10, 800);
+            const speechDurMs = Math.max(activeAyahDurationSec * 1000 - introMs - outroMs, ayahWords.length * 180);
+
+            const elapsedAyahMs = timeInAyahSec * 1000;
+            let currentOffset = introMs;
+
+            if (elapsedAyahMs < introMs) {
+              // During intro onset of the verse, highlight word 0 with subtle progress so glow is visible on transition!
+              activeWordIndexInAyah = 0;
+              activeWordProgress = Math.min(Math.max(elapsedAyahMs / Math.max(introMs, 1), 0), 0.35);
+            } else {
+              for (let i = 0; i < ayahWords.length; i++) {
+                const wordShare = weights[i] / sumWeights;
+                const wDur = Math.round(speechDurMs * wordShare);
+                const wStart = currentOffset;
+                const wEnd = (i === ayahWords.length - 1) ? Math.round(wStart + wDur + outroMs * 0.5) : Math.round(wStart + wDur);
+
+                if (elapsedAyahMs >= wStart && elapsedAyahMs < wEnd) {
+                  activeWordIndexInAyah = i;
+                  activeWordProgress = Math.min(Math.max((elapsedAyahMs - wStart) / Math.max(wEnd - wStart, 1), 0), 1);
+                  break;
+                } else if (i === ayahWords.length - 1 && elapsedAyahMs >= wEnd) {
+                  activeWordIndexInAyah = i;
+                  activeWordProgress = 1.0;
+                }
+                currentOffset = wEnd;
+              }
+            }
+          }
+
+          // 8. Verse Display Modes & Chunks (full, twoWords, threeTwo, wordByWord)
+          const verseMode = displaySettings.verseDisplayMode || 'full';
+          let displayWords = ayahWords;
+          let chunkStartWordIdx = 0;
+
+          if (verseMode === 'wordByWord') {
+            const wIdx = activeWordIndexInAyah != null ? Math.min(Math.max(activeWordIndexInAyah, 0), ayahWords.length - 1) : 0;
+            displayWords = ayahWords[wIdx] ? [ayahWords[wIdx]] : ayahWords.slice(0, 1);
+            chunkStartWordIdx = wIdx;
+          } else if (verseMode === 'twoWords') {
+            const chunkSize = 2;
+            const cIdx = activeWordIndexInAyah != null ? Math.floor(activeWordIndexInAyah / chunkSize) : 0;
+            chunkStartWordIdx = cIdx * chunkSize;
+            displayWords = ayahWords.slice(chunkStartWordIdx, chunkStartWordIdx + chunkSize);
+          } else if (verseMode === 'threeTwo') {
+            const pattern = [3, 2];
+            let pos = 0, pIdx = 0;
+            const chunks = [];
+            const starts = [];
+            while (pos < ayahWords.length) {
+              const sz = pattern[pIdx % pattern.length];
+              starts.push(pos);
+              chunks.push(ayahWords.slice(pos, pos + sz));
+              pos += sz;
+              pIdx++;
+            }
+            let cIdx = 0;
+            if (activeWordIndexInAyah != null) {
+              let p = 0;
+              for (let k = 0; k < chunks.length; k++) {
+                if (activeWordIndexInAyah < p + chunks[k].length) { cIdx = k; break; }
+                p += chunks[k].length;
+              }
+            }
+            displayWords = chunks[cIdx] || ayahWords.slice(0, 3);
+            chunkStartWordIdx = starts[cIdx] || 0;
+          }
+
+          // 9. Render Quranic Ayah Text with Entrance Transitions
+          if (displaySettings.showAyahText !== false && activeAyah) {
+            ctx.save();
+
+            // Smooth entrance motion for the first 500ms of the verse
+            let transType = displaySettings.ayahTransition || 'fade';
+            if (transType === 'random') {
+              const transChoices = ['fade', 'slide', 'zoom', 'rise', 'rotate', 'cinematic', 'elastic', 'blur'];
+              transType = transChoices[activeAyahIndex % transChoices.length];
+            }
+            const enterDuration = 0.5;
+            const enterProgress = Math.min(timeInAyahSec / enterDuration, 1.0);
+            const easedEnter = 1 - Math.pow(1 - enterProgress, 3);
+
+            if (transType === 'none') {
+              // Direct display
+            } else if (transType === 'fade' || transType === 'blur') {
+              ctx.globalAlpha = easedEnter;
+            } else if (transType === 'slide') {
+              ctx.translate(0, (1 - easedEnter) * 50 * S);
+              ctx.globalAlpha = easedEnter;
+            } else if (transType === 'zoom') {
+              const s = 0.88 + easedEnter * 0.12;
+              ctx.translate(W / 2 * (1 - s), H * 0.52 * (1 - s));
+              ctx.scale(s, s);
+              ctx.globalAlpha = easedEnter;
+            } else if (transType === 'rise') {
+              ctx.translate(0, (1 - easedEnter) * 70 * S);
+              ctx.globalAlpha = easedEnter;
+            } else if (transType === 'rotate') {
+              const rotAngle = (1 - easedEnter) * 0.04;
+              ctx.translate(W / 2, H * 0.52);
+              ctx.rotate(rotAngle);
+              ctx.translate(-W / 2, -H * 0.52);
+              ctx.globalAlpha = easedEnter;
+            } else if (transType === 'cinematic') {
+              const s = 0.94 + easedEnter * 0.06;
+              ctx.translate(W / 2 * (1 - s), H * 0.52 * (1 - s));
+              ctx.scale(s, s);
+              ctx.globalAlpha = Math.min(easedEnter * 1.1, 1.0);
+            } else if (transType === 'elastic') {
+              const p = enterProgress;
+              const elasticEase = p === 1 ? 1 : -Math.pow(2, 10 * (p - 1)) * Math.sin((p - 1.1) * 5 * Math.PI);
+              const clampedS = 0.86 + Math.min(Math.max(elasticEase, 0), 1.15) * 0.14;
+              ctx.translate(W / 2 * (1 - clampedS), H * 0.52 * (1 - clampedS));
+              ctx.scale(clampedS, clampedS);
+              ctx.globalAlpha = easedEnter;
+            }
+
+            const fontFamily = resolveFontFamily(typography.fontFamily);
+            const modeScales = { wordByWord: 2.7, twoWords: 2.5, threeTwo: 2.3, full: 1.9 };
+            const fontScale = modeScales[verseMode] || 1.9;
+            const baseFontSize = (typography.fontSize || 28) * fontScale * S;
+            let effectiveFontSize = baseFontSize;
+            let lineHeight = baseFontSize * (verseMode === 'full' ? 2.3 : 1.8);
+
+            ctx.font = `normal ${Math.round(baseFontSize)}px "${fontFamily}", "Amiri", serif`;
+            ctx.direction = 'rtl';
+            ctx.textAlign = 'right';
+
+            let spaceWidth = ctx.measureText(' ').width;
+            const hasTextFrame = displaySettings.frameStyle && displaySettings.frameStyle !== 'none';
+            const textFrameMargin = hasTextFrame ? 85 * S : 0;
+            const maxLineWidth = Math.max(W * 0.82 - textFrameMargin, 260 * S);
+            let lines = wrapArabicText(ctx, displayWords, maxLineWidth, spaceWidth);
+            let totalTextHeight = lines.length * lineHeight;
+
+            // Match the browser's responsive frame fitting rule. This prevents
+            // the cloud render from using a larger font than the frame was
+            // measured against, which was most visible on landscape 16:9.
+            const framePaddingEstimate = Math.max(20 * S, Math.min(65 * S, W * 0.045));
+            const badgeFootprint = displaySettings.showAyahNumber !== false
+              ? ((verseMode === 'full' ? 36 : 28) + (verseMode === 'full' ? 40 : 24) + 16) * S
+              : 16 * S;
+            const hasTopHeader = (displaySettings.showSurahName || displaySettings.showReciterName) && pos !== 'bottom';
+            const hasBottomHeader = (displaySettings.showSurahName || displaySettings.showReciterName) && pos === 'bottom';
+            const verseSafeTop = hasTopHeader ? headerLayout.separatorY + 28 * S : H * 0.14;
+            const verseSafeBottom = hasBottomHeader ? headerLayout.separatorY - 28 * S : H * 0.88;
+            const maxAllowedHeight = Math.max(
+              lineHeight,
+              verseSafeBottom - verseSafeTop - (hasTextFrame ? framePaddingEstimate * 2 : 0) - badgeFootprint,
+            );
+            if (totalTextHeight > maxAllowedHeight && lines.length > 1) {
+              const scaleDown = Math.max(0.52, Math.min(1, maxAllowedHeight / totalTextHeight));
+              effectiveFontSize = baseFontSize * scaleDown;
+              lineHeight *= scaleDown;
+              ctx.font = `normal ${Math.round(effectiveFontSize)}px "${fontFamily}", "Amiri", serif`;
+              spaceWidth = ctx.measureText(' ').width;
+              lines = wrapArabicText(ctx, displayWords, maxLineWidth, spaceWidth);
+              totalTextHeight = lines.length * lineHeight;
+            }
+            const ayahY = (verseSafeTop + verseSafeBottom) / 2;
+            let startY = ayahY - totalTextHeight / 2;
+
+            const measuredLineWidth = Math.max(
+              ...lines.map((line) => line.reduce((sum, word) => sum + ctx.measureText(word).width, 0) + Math.max(line.length - 1, 0) * spaceWidth),
+              maxLineWidth * 0.58,
+            );
+            const badgeSize = (verseMode !== 'full' ? 28 : 36) * S;
+            const badgeGap = (verseMode !== 'full' ? 24 : 40) * S;
+            let badgeY = displaySettings.showAyahNumber !== false
+              ? Math.max(Math.min(startY + totalTextHeight + badgeGap, H * 0.88), startY + totalTextHeight + 16 * S)
+              : 0;
+
+            const verseTop = startY - lineHeight / 2;
+            const verseBottom = startY + totalTextHeight + lineHeight / 2 + badgeFootprint;
+            let headerOffset = 0;
+            if (verseTop < verseSafeTop) headerOffset += verseSafeTop - verseTop;
+            if (verseBottom + headerOffset > verseSafeBottom) headerOffset += verseSafeBottom - (verseBottom + headerOffset);
+            startY += headerOffset;
+            if (displaySettings.showAyahNumber !== false) badgeY += headerOffset;
+
+            // Draw the frame inside the same entrance transform as the verse and
+            // include the ayah badge in its bounds so all three stay together.
+            if (hasTextFrame) {
+              const contentTop = startY - lineHeight / 2;
+              const contentBottom = displaySettings.showAyahNumber !== false
+                ? badgeY + badgeSize
+                : startY + totalTextHeight + lineHeight / 2;
+              const frameLayout = getResponsiveTextFrameLayout({
+                canvasWidth: W,
+                canvasHeight: H,
+                contentTop,
+                contentBottom,
+                contentWidth: measuredLineWidth,
+                scale: S,
+                safeTopRatio: (displaySettings.showSurahName || displaySettings.showReciterName) && pos !== 'bottom'
+                  ? Math.min(0.72, Math.max(0.14, (headerLayout.separatorY + 20 * S) / H))
+                  : 0.14,
+                safeBottomRatio: (displaySettings.showSurahName || displaySettings.showReciterName) && pos === 'bottom'
+                  ? Math.max(0.28, Math.min(0.92, (headerLayout.separatorY - 20 * S) / H))
+                  : 0.92,
+              });
+              // Keep the frame, verse, and ayah badge locked together.
+              const fittedStartY = startY + frameLayout.offsetY;
+              startY = fittedStartY;
+              if (displaySettings.showAyahNumber !== false) badgeY += frameLayout.offsetY;
+              drawIslamicFrame(ctx, frameLayout.frameX, frameLayout.frameY, frameLayout.frameWidth, frameLayout.frameHeight, displaySettings.frameStyle, S);
+            }
+
+            let wordCounterInChunk = 0;
+
+            lines.forEach((lineWords, lineIdx) => {
+              const lineTextWidth = lineWords.reduce((sum, w) => sum + ctx.measureText(w).width, 0) +
+                Math.max(lineWords.length - 1, 0) * spaceWidth;
+              let cursorX = W / 2 + lineTextWidth / 2;
+              const y = startY + lineIdx * lineHeight + lineHeight / 2;
+
+              lineWords.forEach((w) => {
+                const wWidth = ctx.measureText(w).width;
+                const globalWordIdx = chunkStartWordIdx + wordCounterInChunk;
+                const hlStyle = displaySettings.highlightStyle ?? 'glow';
+                const glowStyle = displaySettings.glowStyle || 'golden';
+                const isHighlighted = (hlStyle !== 'none') &&
+                  (activeWordIndexInAyah !== null && globalWordIdx === activeWordIndexInAyah);
+
+                ctx.save();
+                if (isHighlighted) {
+                  const pulse = 0.35 + Math.sin(Math.PI * activeWordProgress) * 0.65;
+                  let glowColor = '#FFD700';
+                  let textColor = '#FFF2A8';
+                  let glowBlur = (24 + pulse * 28) * S;
+                  let auraRgba = `rgba(255, 215, 0, ${0.25 + pulse * 0.25})`;
+
+                  if (glowStyle === 'soft') {
+                    glowColor = '#FFF5D6';
+                    textColor = '#FFFFFF';
+                    glowBlur = (20 + pulse * 22) * S;
+                    auraRgba = `rgba(255, 250, 235, ${0.18 + pulse * 0.18})`;
+                  } else if (glowStyle === 'neon') {
+                    glowColor = '#00FFFF';
+                    textColor = '#E0FFFF';
+                    glowBlur = (26 + pulse * 30) * S;
+                    auraRgba = `rgba(0, 255, 255, ${0.22 + pulse * 0.22})`;
+                  } else if (glowStyle === 'pulse') {
+                    glowColor = '#FFB800';
+                    textColor = '#FFF8DB';
+                    glowBlur = (28 + pulse * 38) * S;
+                    auraRgba = `rgba(255, 184, 0, ${0.28 + pulse * 0.32})`;
+                  } else if (glowStyle === 'emerald') {
+                    glowColor = '#10B981';
+                    textColor = '#D1FAE5';
+                    glowBlur = (24 + pulse * 30) * S;
+                    auraRgba = `rgba(16, 185, 129, ${0.24 + pulse * 0.26})`;
+                  } else if (glowStyle === 'royal') {
+                    glowColor = '#A855F7';
+                    textColor = '#F3E8FF';
+                    glowBlur = (24 + pulse * 30) * S;
+                    auraRgba = `rgba(168, 85, 247, ${0.24 + pulse * 0.26})`;
+                  }
+
+                  if (hlStyle === 'glow') {
+                    // Ambient glow backdrop gradient
+                    const gPadX = 24 * S;
+                    const gPadY = 14 * S;
+                    const gGrad = ctx.createRadialGradient(cursorX - wWidth / 2, y, 0, cursorX - wWidth / 2, y, wWidth / 2 + gPadX);
+                    gGrad.addColorStop(0, auraRgba);
+                    gGrad.addColorStop(0.65, auraRgba.replace(/[\d\.]+\)$/, `${0.08 + pulse * 0.08})`));
+                    gGrad.addColorStop(1, 'transparent');
+                    ctx.fillStyle = gGrad;
+                    ctx.fillRect(cursorX - wWidth - gPadX, y - baseFontSize * 0.85 - gPadY, wWidth + gPadX * 2, baseFontSize * 1.6 + gPadY * 2);
+
+                    // First pass text with glow
+                    ctx.fillStyle = textColor;
+                    ctx.shadowColor = glowColor;
+                    ctx.shadowBlur = glowBlur;
+                    ctx.fillText(w, cursorX, y);
+
+                    // Second pass for intense radiant bloom
+                    ctx.shadowBlur = glowBlur * 0.5;
+                    ctx.fillText(w, cursorX, y);
+                  } else if (hlStyle === 'solid') {
+                    const padX = 14 * S;
+                    const padY = 8 * S;
+                    ctx.fillStyle = glowStyle === 'emerald' ? 'rgba(16, 185, 129, 0.35)' :
+                                    glowStyle === 'neon' ? 'rgba(0, 255, 255, 0.30)' :
+                                    glowStyle === 'royal' ? 'rgba(168, 85, 247, 0.35)' :
+                                    glowStyle === 'soft' ? 'rgba(255, 255, 255, 0.28)' :
+                                    glowStyle === 'pulse' ? 'rgba(255, 184, 0, 0.35)' :
+                                    'rgba(212, 175, 55, 0.35)';
+                    if (ctx.roundRect) {
+                      ctx.beginPath();
+                      ctx.roundRect(cursorX - wWidth - padX, y - baseFontSize * 0.75 - padY, wWidth + padX * 2, baseFontSize * 1.3 + padY * 2, 12 * S);
+                      ctx.fill();
+                    } else {
+                      ctx.fillRect(cursorX - wWidth - padX, y - baseFontSize * 0.75 - padY, wWidth + padX * 2, baseFontSize * 1.3 + padY * 2);
+                    }
+                    ctx.fillStyle = textColor;
+                    ctx.fillText(w, cursorX, y);
+                  } else if (hlStyle === 'underline') {
+                    ctx.strokeStyle = glowColor;
+                    ctx.lineWidth = 3.5 * S;
+                    ctx.beginPath();
+                    ctx.moveTo(cursorX - wWidth, y + baseFontSize * 0.55);
+                    ctx.lineTo(cursorX, y + baseFontSize * 0.55);
+                    ctx.stroke();
+                    ctx.fillStyle = textColor;
+                    ctx.fillText(w, cursorX, y);
+                  } else {
+                    ctx.fillStyle = textColor;
+                    ctx.shadowColor = glowColor;
+                    ctx.shadowBlur = 14 * S;
+                    ctx.fillText(w, cursorX, y);
+                  }
+                } else {
+                  // Non-highlighted word with customizable textShadowStyle
+                  const shadowStyle = displaySettings.textShadowStyle || 'soft';
+                  if (shadowStyle === 'none') {
+                    ctx.shadowColor = 'transparent';
+                    ctx.shadowBlur = 0;
+                  } else if (shadowStyle === 'strong') {
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+                    ctx.shadowBlur = 16 * S;
+                    ctx.shadowOffsetX = 2 * S;
+                    ctx.shadowOffsetY = 2 * S;
+                  } else if (shadowStyle === 'glow') {
+                    ctx.shadowColor = 'rgba(212, 175, 55, 0.55)';
+                    ctx.shadowBlur = 16 * S;
+                  } else if (shadowStyle === '3d' || shadowStyle === 'double') {
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+                    ctx.shadowBlur = 6 * S;
+                    ctx.shadowOffsetX = 3 * S;
+                    ctx.shadowOffsetY = 4 * S;
+                  } else if (shadowStyle === 'outline') {
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.95)';
+                    ctx.lineWidth = 3.5 * S;
+                    ctx.strokeText(w, cursorX, y);
+                    ctx.shadowColor = 'transparent';
+                    ctx.shadowBlur = 0;
+                  } else {
+                    // Soft
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.75)';
+                    ctx.shadowBlur = 8 * S;
+                    ctx.shadowOffsetX = 1 * S;
+                    ctx.shadowOffsetY = 1 * S;
+                  }
+                  ctx.fillStyle = typography.textColor || '#FFFFFF';
+                  ctx.fillText(w, cursorX, y);
+                }
+
+                ctx.restore();
+
+                cursorX -= (wWidth + spaceWidth);
+                wordCounterInChunk++;
+              });
+            });
+
+            // 10. Ayah Rosette Number Badge
+            if (displaySettings.showAyahNumber !== false) {
+              drawAyahBadge(
+                ctx,
+                W / 2,
+                badgeY,
+                activeAyah.numberInSurah,
+                badgeSize,
+                displaySettings.ayahNumberStyle,
+                displaySettings.ayahNumberColor
+              );
+            }
+
+            ctx.restore(); // End verse entrance transition transform
+          }
+
+          // 11. Sleek Audio Timeline Progress Indicator at Bottom
+          const audioTotalDur = Math.max(manifest.audio.durationSeconds, 1);
+          const timelineProgress = Math.min(Math.max(frameTimeSeconds / audioTotalDur, 0), 1);
+          const barWidth = W * 0.65;
+          const barHeight = 4 * S;
+          const barX = (W - barWidth) / 2;
+          const barY = H - 55 * S;
+
+          // Track background
+          ctx.save();
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(barX, barY, barWidth, barHeight, 2 * S);
+          else ctx.fillRect(barX, barY, barWidth, barHeight);
+          ctx.fill();
+
+          // Active progress fill
+          ctx.fillStyle = '#D4AF37';
+          ctx.shadowColor = '#FFD700';
+          ctx.shadowBlur = 6 * S;
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(barX, barY, barWidth * timelineProgress, barHeight, 2 * S);
+          else ctx.fillRect(barX, barY, barWidth * timelineProgress, barHeight);
+          ctx.fill();
+          ctx.restore();
+
+          // 12. Branding & Watermark (Dual Logo & Social Support)
+          // 12.A: Circular / Custom Logo Watermark (Gold Medallion)
+          const brandingLayout = getResponsiveBrandingLayout({
+            W, H, S,
+            logoPosition: displaySettings.logoWatermarkPosition || 'topRight',
+            logoSize: displaySettings.logoWatermarkSize || 85,
+            socialPosition: displaySettings.socialWatermarkPosition || displaySettings.watermarkPosition || 'bottomCenter',
+            socialSize: displaySettings.socialWatermarkSize || 18,
+            headerActive: Boolean(displaySettings.showSurahName || displaySettings.showReciterName),
+            headerPosition: displaySettings.surahNamePosition || 'top',
+            headerSeparatorY: headerLayout.separatorY,
+            frameActive: Boolean(displaySettings.frameStyle && displaySettings.frameStyle !== 'none'),
+          });
+          if (displaySettings.logoWatermarkEnabled !== false) {
+            ctx.save();
+            const lPos = displaySettings.logoWatermarkPosition || 'topRight';
+            const lSize = (displaySettings.logoWatermarkSize || 85) * S;
+            const lOpacity = displaySettings.logoWatermarkOpacity != null ? displaySettings.logoWatermarkOpacity : 0.95;
+            const lx = brandingLayout.logoX;
+            const ly = brandingLayout.logoY;
+
+            ctx.globalAlpha = lOpacity;
+            const radius = brandingLayout.logoRadius;
+
+            if (logoWatermarkImage && logoWatermarkImage.complete && logoWatermarkImage.naturalWidth > 0) {
+              ctx.save();
+              ctx.beginPath();
+              ctx.arc(lx, ly, radius, 0, Math.PI * 2);
+              ctx.clip();
+              ctx.drawImage(logoWatermarkImage, lx - radius, ly - radius, lSize, lSize);
+              ctx.restore();
+
+              // Outer golden ring around custom/AI logo
+              const borderGrad = ctx.createLinearGradient(lx - radius, ly - radius, lx + radius, ly + radius);
+              borderGrad.addColorStop(0, '#FFE082');
+              borderGrad.addColorStop(0.35, '#D4AF37');
+              borderGrad.addColorStop(0.7, '#FFF8E1');
+              borderGrad.addColorStop(1, '#8C6B1B');
+
+              ctx.strokeStyle = borderGrad;
+              ctx.lineWidth = 2.5 * S;
+              ctx.beginPath();
+              ctx.arc(lx, ly, radius, 0, Math.PI * 2);
+              ctx.stroke();
+
+              const imageBrand = (displaySettings.logoBrandName || '').trim() || 'آيات قرآنية';
+              const imageSubtitle = (displaySettings.logoSubtitle || '').trim() || 'تلاوات خاشعة';
+              ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+              ctx.fillStyle = 'rgba(4,13,18,0.68)'; ctx.beginPath();
+              ctx.roundRect(lx - radius * 0.78, ly - radius * 0.38, radius * 1.56, radius * 0.72, radius * 0.18); ctx.fill();
+              let imageBrandSize = Math.max(9 * S, radius * 0.24);
+              ctx.font = `bold ${imageBrandSize}px "Amiri", serif`;
+              while (ctx.measureText(imageBrand).width > radius * 1.42 && imageBrandSize > 7 * S) {
+                imageBrandSize -= 1 * S; ctx.font = `bold ${imageBrandSize}px "Amiri", serif`;
+              }
+              ctx.fillStyle = '#FFF1B8'; ctx.shadowColor = 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 5 * S;
+              ctx.fillText(imageBrand, lx, ly - radius * 0.08);
+              ctx.font = `600 ${Math.max(7 * S, radius * 0.14)}px "Cairo", sans-serif`;
+              ctx.fillStyle = '#FFFFFF';
+              ctx.fillText(imageSubtitle, lx, ly + radius * 0.28);
+            } else {
+              const logoPreset = displaySettings.logoWatermarkPreset || 'goldCalligraphy';
+              const drawSealPath = (inset = 0) => {
+                const r = Math.max(1, radius - inset);
+                ctx.beginPath();
+                if (logoPreset === 'geometricEmblem') {
+                  ctx.roundRect(lx - r, ly - r, r * 2, r * 2, r * 0.24);
+                } else if (logoPreset === 'glassMonogram') {
+                  ctx.roundRect(lx - r * 0.96, ly - r * 0.82, r * 1.92, r * 1.64, r * 0.32);
+                } else if (logoPreset === 'circularMedallion') {
+                  for (let i = 0; i < 8; i += 1) {
+                    const a = (i * Math.PI) / 4 - Math.PI / 8;
+                    const px = lx + Math.cos(a) * r;
+                    const py = ly + Math.sin(a) * r;
+                    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                  }
+                  ctx.closePath();
+                } else ctx.arc(lx, ly, r, 0, Math.PI * 2);
+              };
+              const grad = logoPreset === 'glassMonogram'
+                ? ctx.createLinearGradient(lx - radius, ly - radius, lx + radius, ly + radius)
+                : ctx.createRadialGradient(lx, ly, 0, lx, ly, radius);
+              if (logoPreset === 'glassMonogram') {
+                grad.addColorStop(0, 'rgba(195,231,239,0.72)'); grad.addColorStop(0.42, 'rgba(22,58,72,0.82)'); grad.addColorStop(1, 'rgba(4,13,18,0.92)');
+              } else {
+                grad.addColorStop(0, 'rgba(35, 26, 10, 0.85)'); grad.addColorStop(0.7, 'rgba(20, 15, 5, 0.9)'); grad.addColorStop(1, 'rgba(10, 8, 2, 0.95)');
+              }
+
+              drawSealPath();
+              ctx.fillStyle = grad;
+              ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+              ctx.shadowBlur = 12 * S;
+              ctx.fill();
+
+              const borderGrad = ctx.createLinearGradient(lx - radius, ly - radius, lx + radius, ly + radius);
+              borderGrad.addColorStop(0, '#FFE082');
+              borderGrad.addColorStop(0.35, '#D4AF37');
+              borderGrad.addColorStop(0.7, '#FFF8E1');
+              borderGrad.addColorStop(1, '#8C6B1B');
+
+              ctx.strokeStyle = borderGrad;
+              ctx.lineWidth = 2.5 * S;
+              ctx.stroke();
+
+              drawSealPath(radius * 0.14);
+              ctx.strokeStyle = 'rgba(255, 224, 130, 0.6)';
+              ctx.lineWidth = 1 * S;
+              ctx.stroke();
+
+              ctx.save(); ctx.fillStyle = '#FFE082'; ctx.strokeStyle = 'rgba(255,224,130,0.85)'; ctx.lineWidth = 1.2 * S;
+              const ornamentCount = logoPreset === 'circularMedallion' ? 8 : 4;
+              for (let i = 0; i < ornamentCount; i += 1) {
+                const a = (i / ornamentCount) * Math.PI * 2 - Math.PI / 2;
+                const ox = lx + Math.cos(a) * radius * 0.92;
+                const oy = ly + Math.sin(a) * radius * 0.92;
+                ctx.beginPath(); ctx.arc(ox, oy, Math.max(1.8 * S, radius * 0.035), 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+              }
+              if (logoPreset === 'circularMedallion') {
+                ctx.strokeStyle = 'rgba(255,240,170,0.55)'; ctx.lineWidth = 1.2 * S;
+                for (let i = 0; i < 12; i += 1) {
+                  const a = (i / 12) * Math.PI * 2;
+                  ctx.beginPath();
+                  ctx.moveTo(lx + Math.cos(a) * radius * 0.52, ly + Math.sin(a) * radius * 0.52);
+                  ctx.lineTo(lx + Math.cos(a) * radius * 0.78, ly + Math.sin(a) * radius * 0.78);
+                  ctx.stroke();
+                }
+              }
+              ctx.restore();
+
+              const brandText = (displaySettings.logoBrandName || '').trim() || 'آيات قرآنية';
+              const subText = (displaySettings.logoSubtitle || '').trim() || 'تلاوات خاشعة';
+
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              let brandFontSize = Math.max(9 * S, Math.round(radius * (brandText.length > 12 ? 0.28 : brandText.length > 7 ? 0.36 : 0.44)));
+              ctx.font = `bold ${brandFontSize}px "Amiri", "Noto Naskh Arabic", serif`;
+              while (ctx.measureText(brandText).width > radius * 1.42 && brandFontSize > 7 * S) {
+                brandFontSize -= 1 * S; ctx.font = `bold ${brandFontSize}px "Amiri", "Noto Naskh Arabic", serif`;
+              }
+              ctx.fillStyle = '#FFE082';
+              ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+              ctx.shadowBlur = 4 * S;
+              ctx.fillText(brandText, lx, ly - radius * 0.18);
+
+              const subFontSize = Math.max(8 * S, Math.round(radius * 0.24));
+              ctx.font = `600 ${subFontSize}px "Cairo", sans-serif`;
+              ctx.fillStyle = 'rgba(255, 248, 225, 0.85)';
+              ctx.shadowBlur = 2 * S;
+              ctx.fillText(subText, lx, ly + radius * 0.32);
+            }
+            ctx.restore();
+          }
+
+          // 12.B: Social Media Handle Watermark (Only if enabled and handle provided)
+          const socHandle = (displaySettings.socialHandle || displaySettings.watermarkText || '').trim()
+            || (displaySettings.socialWatermarkEnabled ? '@QuranReels' : '');
+          if (displaySettings.socialWatermarkEnabled && socHandle) {
+            ctx.save();
+            const sPos = displaySettings.socialWatermarkPosition || displaySettings.watermarkPosition || 'bottomCenter';
+            const sSize = (displaySettings.socialWatermarkSize || 18) * S;
+            const sOpacity = displaySettings.socialWatermarkOpacity != null ? displaySettings.socialWatermarkOpacity : 0.85;
+
+            ctx.globalAlpha = sOpacity;
+            ctx.font = `600 ${Math.round(sSize)}px "Cairo", sans-serif`;
+            ctx.fillStyle = '#E5C07B';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+            ctx.shadowBlur = 6 * S;
+
+            let sx = brandingLayout.socialX;
+            let sy = brandingLayout.socialY;
+            let align = 'center';
+
+            if (sPos === 'bottomLeft') {
+              align = 'left';
+            } else if (sPos === 'bottomRight') {
+              align = 'right';
+            }
+            if (sPos === 'topCenter') sy = padding + sSize;
+
+            ctx.textAlign = align;
+            ctx.textBaseline = 'bottom';
+
+            const platform = displaySettings.socialPlatform || 'facebook';
+            let icon = 'ⓕ ';
+            if (platform === 'instagram') icon = '📸 ';
+            else if (platform === 'tiktok') icon = '♪ ';
+            else if (platform === 'youtube') icon = '▶ ';
+            else if (platform === 'x') icon = '𝕏 ';
+            else if (platform === 'custom') icon = '';
+
+            const socialLabel = `${icon}${socHandle}`;
+            const socialWidth = ctx.measureText(socialLabel).width;
+            const pillHeight = Math.max(30 * S, sSize + 14 * S);
+            const pillWidth = socialWidth + 28 * S;
+            const pillX = align === 'left' ? sx - 14 * S : align === 'right' ? sx - pillWidth + 14 * S : sx - pillWidth / 2;
+            const pillY = sPos === 'topCenter' ? sy - sSize - 10 * S : sy - pillHeight + 5 * S;
+            ctx.fillStyle = 'rgba(4, 13, 18, 0.72)'; ctx.shadowBlur = 12 * S; ctx.beginPath();
+            if (ctx.roundRect) ctx.roundRect(pillX, pillY, pillWidth, pillHeight, pillHeight / 2); else ctx.rect(pillX, pillY, pillWidth, pillHeight);
+            ctx.fill(); ctx.strokeStyle = 'rgba(212, 175, 55, 0.65)'; ctx.lineWidth = 1.2 * S; ctx.stroke();
+            ctx.fillStyle = '#FFF1B8'; ctx.shadowBlur = 6 * S;
+            ctx.fillText(socialLabel, sx, sy);
+            ctx.restore();
+          }
+
+          return true;
+        },
+
+        isSceneReady() {
+          return isReady;
+        }
+      };
+    })();
+  </script>
+</body>
+</html>

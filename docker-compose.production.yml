@@ -1,0 +1,29 @@
+services:
+  api:
+    build: .
+    command: npm run server
+    env_file: .env
+    environment:
+      RENDER_QUEUE_DRIVER: bullmq
+    depends_on: [redis]
+    deploy:
+      replicas: 2
+
+  worker:
+    build: .
+    command: npm run worker
+    env_file: .env
+    environment:
+      RENDER_QUEUE_DRIVER: bullmq
+      RENDER_WORKER_CONCURRENCY: 2
+    depends_on: [redis]
+    deploy:
+      replicas: 2
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes: [redis-data:/data]
+
+volumes:
+  redis-data:

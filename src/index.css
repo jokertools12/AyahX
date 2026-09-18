@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;500;600;700;800&family=El+Messiri:wght@400;500;600;700&family=Katibeh&family=Lalezar&family=Lateef:wght@200;300;400;500;600;700;800&family=Mada:wght@200;300;400;500;600;700;800;900&family=Marhey:wght@400;500;600;700&family=Mirza:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Rakkas&family=Reem+Kufi:wght@400;500;600;700&family=Scheherazade+New:wght@400;500;600;700&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Quran Reels Design System - Modern Islamic Theme */
+
+@layer base {
+  :root {
+    /* Main colors - Teal/Emerald Islamic theme */
+    --background: 180 25% 98%;
+    --foreground: 180 50% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 180 50% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 180 50% 10%;
+
+    /* Primary - Deep Teal */
+    --primary: 170 60% 35%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Soft Gold */
+    --secondary: 45 70% 90%;
+    --secondary-foreground: 45 80% 25%;
+
+    /* Muted */
+    --muted: 180 20% 94%;
+    --muted-foreground: 180 15% 45%;
+
+    /* Accent - Gold */
+    --accent: 45 85% 55%;
+    --accent-foreground: 45 90% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 180 20% 88%;
+    --input: 180 20% 88%;
+    --ring: 170 60% 35%;
+
+    --radius: 0.75rem;
+
+    /* Custom colors for Quran theme */
+    --quran-gold: 45 85% 55%;
+    --quran-emerald: 160 60% 40%;
+    --quran-teal: 170 60% 35%;
+    --quran-navy: 200 70% 20%;
+    --quran-cream: 40 40% 95%;
+
+    /* Gradient colors */
+    --gradient-start: 170 60% 35%;
+    --gradient-end: 160 60% 40%;
+
+    --sidebar-background: 180 25% 97%;
+    --sidebar-foreground: 180 50% 10%;
+    --sidebar-primary: 170 60% 35%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 45 85% 55%;
+    --sidebar-accent-foreground: 45 90% 15%;
+    --sidebar-border: 180 20% 88%;
+    --sidebar-ring: 170 60% 35%;
+  }
+
+  .dark {
+    --background: 200 50% 8%;
+    --foreground: 180 20% 95%;
+
+    --card: 200 45% 12%;
+    --card-foreground: 180 20% 95%;
+
+    --popover: 200 45% 12%;
+    --popover-foreground: 180 20% 95%;
+
+    /* Primary - Brighter Teal for dark mode */
+    --primary: 170 65% 50%;
+    --primary-foreground: 200 50% 8%;
+
+    /* Secondary - Warmer Gold */
+    --secondary: 45 60% 25%;
+    --secondary-foreground: 45 80% 85%;
+
+    /* Muted */
+    --muted: 200 40% 18%;
+    --muted-foreground: 180 15% 60%;
+
+    /* Accent - Gold */
+    --accent: 45 75% 50%;
+    --accent-foreground: 45 90% 10%;
+
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 40% 20%;
+    --input: 200 40% 20%;
+    --ring: 170 65% 50%;
+
+    /* Custom colors for dark mode */
+    --quran-gold: 45 75% 50%;
+    --quran-emerald: 160 55% 45%;
+    --quran-teal: 170 65% 50%;
+    --quran-navy: 200 60% 15%;
+    --quran-cream: 40 30% 90%;
+
+    --gradient-start: 170 65% 50%;
+    --gradient-end: 160 55% 45%;
+
+    --sidebar-background: 200 45% 10%;
+    --sidebar-foreground: 180 20% 95%;
+    --sidebar-primary: 170 65% 50%;
+    --sidebar-primary-foreground: 200 50% 8%;
+    --sidebar-accent: 45 75% 50%;
+    --sidebar-accent-foreground: 45 90% 10%;
+    --sidebar-border: 200 40% 20%;
+    --sidebar-ring: 170 65% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    direction: rtl;
+  }
+
+  body {
+    @apply bg-background text-foreground font-cairo;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Arabic Quran text styling */
+  .font-quran {
+    font-family: 'Amiri', serif;
+    font-feature-settings: "liga" 1;
+  }
+
+  /* Suppress Microsoft Edge and browser native reveal/clear buttons on password inputs */
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
+}
+
+@layer utilities {
+  /* Custom gradient utilities */
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--gradient-start)), hsl(var(--gradient-end)));
+  }
+
+  .gradient-gold {
+    background: linear-gradient(135deg, hsl(var(--quran-gold)), hsl(45 90% 45%));
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(var(--quran-gold)), hsl(var(--quran-emerald)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Decorative Islamic pattern overlay */
+  .islamic-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30L30 0z' fill='%23fff' fill-opacity='0.03'/%3E%3C/svg%3E");
+  }
+
+  /* Smooth scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.5);
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.7);
+  }
+
+  /* Text shadow for video overlay */
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .text-shadow-strong {
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { 
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Verse highlight animation */
+  .verse-highlight {
+    animation: verseGlow 0.3s ease-out;
+  }
+
+  @keyframes verseGlow {
+    0% { 
+      background-color: hsl(var(--quran-gold) / 0.4);
+      transform: scale(1.02);
+    }
+    100% { 
+      background-color: transparent;
+      transform: scale(1);
+    }
+  }
+}
