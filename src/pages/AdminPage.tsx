@@ -603,7 +603,7 @@ export default function AdminPage() {
                       </div>
                       <CardTitle className="text-xl">محرك الريندر السحابي وإدارة مساحة التخزين</CardTitle>
                       <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs">
-                        Puppeteer + Native FFmpeg
+                        ⚡ FFmpeg ASS + 🎨 Skia Rust Canvas (Zero Chromium)
                       </Badge>
                     </div>
                     <CardDescription>
@@ -708,9 +708,9 @@ export default function AdminPage() {
                   <div className="flex items-start gap-2.5 p-3 rounded-lg bg-muted/40 border border-border/40">
                     <Clock className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold block">حذف ملفات الفيديو بعد ساعة واحدة (1 Hour Retention)</span>
+                      <span className="font-semibold block">حفظ ملفات الفيديو لمدة 48 ساعة (48 Hours Retention)</span>
                       <span className="text-xs text-muted-foreground leading-relaxed">
-                        يتم تفريغ مساحة القرص ومسح ملفات MP4 والملفات المؤقتة بعد ساعة واحدة من اكتمال الريندر أو فشله لحماية سعة القرص.
+                        يتم الاحتفاظ بملفات MP4 في مكتبة المستخدم لمدة 48 ساعة للتحميل، ثم تُفرغ مساحة القرص تلقائياً لحماية الاستضافة من الامتلاء.
                       </span>
                     </div>
                   </div>

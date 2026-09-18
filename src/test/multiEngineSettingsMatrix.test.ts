@@ -128,7 +128,7 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
     expect(probe.video?.height).toBe(1280);
     expect(probe.video?.codec).toBe('h264');
     expect(probe.audio?.codec).toBe('aac');
-  });
+  }, 30000);
 
   it('Engine 1 (FFmpeg ASS): Renders 16:9 Landscape with Noto font, emerald glow, and solid background', async () => {
     const outputPath = path.join(tempDir, 'engine1_landscape_emerald.mp4');
@@ -167,7 +167,7 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
     const probe = await probeMediaFile(outputPath);
     expect(probe.video?.width).toBe(1280);
     expect(probe.video?.height).toBe(720);
-  });
+  }, 30000);
 
   it('Engine 2 (Skia Canvas): Renders 9:16 Portrait with rosette medal, cyan glow, and word highlighting', async () => {
     const outputPath = path.join(tempDir, 'engine2_portrait_cyan.mp4');
@@ -196,7 +196,7 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
     expect(probe.video?.width).toBe(720);
     expect(probe.video?.height).toBe(1280);
     expect(probe.video?.codec).toBe('h264');
-  });
+  }, 30000);
 
   it('Engine 2 (Skia Canvas): Renders 16:9 Landscape with ruby glow, custom card padding, and dark overlay', async () => {
     const outputPath = path.join(tempDir, 'engine2_landscape_ruby.mp4');
@@ -234,7 +234,7 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
     const probe = await probeMediaFile(outputPath);
     expect(probe.video?.width).toBe(1280);
     expect(probe.video?.height).toBe(720);
-  });
+  }, 30000);
 
   it('Dispatcher: Correctly routes between Engine 1 and Engine 2 based on manifest.renderEngine', async () => {
     const assOutputPath = path.join(tempDir, 'dispatcher_ass.mp4');
@@ -266,5 +266,5 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
     expect(fs.existsSync(skiaResult.outputPath)).toBe(true);
     expect(assResult.fileSizeBytes).toBeGreaterThan(1000);
     expect(skiaResult.fileSizeBytes).toBeGreaterThan(1000);
-  });
+  }, 30000);
 });

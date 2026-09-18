@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   Heart, Share2, BookOpen, Loader2,
   MessageCircle, Send, User, Trash2, Reply, ArrowRight,
-  Mic, Clock, Copy,
+  Mic, Clock, Copy, Download, Zap, Sparkles, Clock3,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { ErrorState } from '@/components/ErrorState';
@@ -233,11 +233,58 @@ export default function VideoDetailPage() {
                 </div>
                 <Badge variant="secondary">{video.aspect_ratio}</Badge>
                 <Badge variant="outline">{video.background_type}</Badge>
+                {(video as any).render_engine === 'ffmpeg_ass' && (
+                  <Badge className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-xs">
+                    ⚡ FFmpeg ASS (صاروخي)
+                  </Badge>
+                )}
+                {(video as any).render_engine === 'skia_canvas' && (
+                  <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20 text-xs">
+                    🎨 Skia Rust (فاخر)
+                  </Badge>
+                )}
                 <span className="text-xs text-muted-foreground flex items-center gap-1">
                   <Clock className="h-3 w-3" />
                   {timeAgo(video.created_at)}
                 </span>
               </div>
+
+              {/* 48-Hour Retention Countdown & Download */}
+              {(() => {
+                const hasExpiry = Boolean((video as any).expires_at);
+                const remainingHours = hasExpiry
+                  ? Math.max(0, Math.ceil((new Date((video as any).expires_at).getTime() - Date.now()) / (1000 * 60 * 60)))
+                  : null;
+                const isExpired = hasExpiry && (remainingHours === 0 || !video.video_url);
+
+                return (
+                  <div className="mb-4">
+                    {hasExpiry && (
+                      <div className="p-3 rounded-lg border flex items-center justify-between text-xs bg-muted/40 mb-3">
+                        <div className="flex items-center gap-2">
+                          <Clock3 className={`h-4 w-4 ${isExpired ? 'text-destructive' : 'text-primary'}`} />
+                          <span>
+                            {isExpired
+                              ? 'انتهت صلاحية التحميل المباشر (48 ساعة)'
+                              : `متاح للتحميل بالمكتبة: متبقي ${remainingHours} ساعة`}
+                          </span>
+                        </div>
+                        <Badge variant={isExpired ? 'destructive' : 'secondary'} className="text-[10px]">
+                          {isExpired ? 'منتهي الصلاحية' : 'صالح 48 ساعة'}
+                        </Badge>
+                      </div>
+                    )}
+                    {video.video_url && !isExpired && (
+                      <a href={video.video_url} download className="block">
+                        <Button className="w-full gap-2 gradient-primary text-primary-foreground font-semibold">
+                          <Download className="h-4 w-4" />
+                          تحميل الفيديو مباشرة (MP4)
+                        </Button>
+                      </a>
+                    )}
+                  </div>
+                );
+              })()}
 
               {/* Actions */}
               <div className="flex gap-3 mb-2">

@@ -17,7 +17,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 export default function UserSettingsPage() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
-  const { subscription, isPremium, dailyUsage } = useSubscription();
+  const { subscription, isPremium, dailyUsage, entitlements } = useSubscription();
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
@@ -381,13 +381,14 @@ export default function UserSettingsPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Video className="h-5 w-5" />
-                  استخدام اليوم
+                  استخدام اليوم وحصص المحركات
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                {/* Browser Engine */}
                 <div className="space-y-1.5">
                   <div className="flex justify-between text-sm">
-                    <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-primary" />محرك المتصفح الفوري</span>
+                    <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-emerald-500" />محرك المتصفح الفوري (Browser Canvas)</span>
                     <span className="font-bold text-emerald-500">
                       {dailyUsage.browserRenderLimit === null
                         ? 'غير محدود في عضويتك'
@@ -404,17 +405,52 @@ export default function UserSettingsPage() {
                   </p>
                 </div>
 
-                <div className="space-y-2 pt-2 border-t border-border/40">
+                {/* Engine 1: FFmpeg ASS */}
+                <div className="space-y-1.5 pt-2 border-t border-border/40">
                   <div className="flex justify-between text-sm">
-                    <span className="flex items-center gap-1.5"><Cpu className="h-4 w-4 text-primary" />محرك السيرفر السحابي</span>
-                    <span className="font-bold">
-                      {dailyUsage.cloudRenderCount} / {dailyUsage.cloudRenderLimit}
-                    </span>
+                    <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-amber-500" />محرك FFmpeg ASS الصاروخي (2-5 ثوانٍ)</span>
+                    <Badge variant="outline" className="text-[11px] bg-amber-500/10 text-amber-500 border-amber-500/20">
+                      {entitlements.ffmpegAssDailyLimit} فيديو / يوم
+                    </Badge>
                   </div>
-                  <Progress value={Math.min(100, ((dailyUsage.cloudRenderCount / dailyUsage.cloudRenderLimit) * 100))} className="h-2" />
                   <p className="text-[11px] text-muted-foreground">
-                    متبقي لديك {dailyUsage.cloudRenderRemaining} ريندر سحابي عالي الدقة اليوم (يتجدد يومياً).
+                    تلوين ذهبي دقيق بالمللي ثانية ومحرك C++ بدون انتظار.
                   </p>
+                </div>
+
+                {/* Engine 2: Skia Rust */}
+                <div className="space-y-1.5 pt-2 border-t border-border/40">
+                  <div className="flex justify-between text-sm">
+                    <span className="flex items-center gap-1.5"><Sparkles className="h-4 w-4 text-blue-500" />محرك Skia Rust الفاخر (الميداليات الفيكتورية)</span>
+                    <Badge variant="outline" className="text-[11px] bg-blue-500/10 text-blue-500 border-blue-500/20">
+                      {entitlements.skiaCanvasDailyLimit} فيديو / يوم
+                    </Badge>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">
+                    رسم فيكتوري فائق النعومة وبادجات ثلاثية الأبعاد وزجاجية.
+                  </p>
+                </div>
+
+                {/* Engine 3: Background Cloud Render */}
+                <div className="space-y-1.5 pt-2 border-t border-border/40">
+                  <div className="flex justify-between text-sm">
+                    <span className="flex items-center gap-1.5"><Cpu className="h-4 w-4 text-primary" />الريندر السحابي في الخلفية (Queue & Save)</span>
+                    <Badge variant="outline" className="text-[11px] bg-primary/10 text-primary border-primary/20">
+                      {entitlements.backgroundAsyncDailyLimit} فيديو / يوم
+                    </Badge>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">
+                    أطلق الريندر وغادر فوراً، وسيقوم السيرفر بحفظ الفيديو بمكتبتك مع إشعار تلقائي.
+                  </p>
+                </div>
+
+                {/* 48-Hour Retention Banner */}
+                <div className="p-3 rounded-lg bg-primary/5 border border-primary/15 flex items-start gap-2.5 text-xs text-muted-foreground">
+                  <Clock3 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-semibold text-foreground block">صلاحية حفظ الفيديوهات: 48 ساعة</span>
+                    <span>تظل فيديوهات السيرفر متاحة للتحميل المباشر بصيغة MP4 لمدة 48 ساعة في مكتبتك لحماية سعة القرص.</span>
+                  </div>
                 </div>
               </CardContent>
             </Card>

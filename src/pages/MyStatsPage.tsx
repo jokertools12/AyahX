@@ -15,7 +15,7 @@ import {
 } from 'recharts';
 import {
   Video, Star, Calendar, Crown, TrendingUp, BookOpen,
-  Loader2, BarChart3, Heart, Mic, Clock, Music,
+  Loader2, BarChart3, Heart, Mic, Clock, Music, Zap, Sparkles, Clock3, HardDrive,
 } from 'lucide-react';
 import { ErrorState } from '@/components/ErrorState';
 
@@ -27,7 +27,7 @@ interface VideoRecord {
 
 export default function MyStatsPage() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
-  const { isPremium, dailyUsage, subscription } = useSubscription();
+  const { isPremium, dailyUsage, subscription, entitlements } = useSubscription();
   const [videos, setVideos] = useState<VideoRecord[]>([]);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
@@ -178,29 +178,60 @@ export default function MyStatsPage() {
         {/* Membership info */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-8">
           <Card className={isPremium ? 'border-primary/50 bg-primary/5' : ''}>
-            <CardContent className="p-4 flex items-center justify-between flex-wrap gap-4">
-              <div className="flex items-center gap-3">
-                <Crown className={`h-6 w-6 ${isPremium ? 'text-primary' : 'text-muted-foreground'}`} />
-                <div>
-                  <p className="font-bold">{isPremium ? 'عضوية مميزة' : 'خطة مجانية'}</p>
-                  {memberSince && <p className="text-xs text-muted-foreground">عضو منذ {memberSince}</p>}
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="text-left">
-                  <p className="text-sm text-muted-foreground">الحصة اليومية</p>
-                  <Progress value={dailyUsage.browserRenderLimit === null ? 0 : (dailyUsage.browserRenderCount / dailyUsage.browserRenderLimit) * 100} className="w-32 h-2" />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {dailyUsage.browserRenderLimit === null
-                      ? 'Browser Canvas غير محدود'
-                      : `${dailyUsage.browserRenderCount} / ${dailyUsage.browserRenderLimit} Browser Canvas`}
-                  </p>
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
+                <div className="flex items-center gap-3">
+                  <Crown className={`h-6 w-6 ${isPremium ? 'text-primary' : 'text-muted-foreground'}`} />
+                  <div>
+                    <p className="font-bold text-base">{isPremium ? 'عضوية مميزة ✨' : 'خطة مجانية'}</p>
+                    {memberSince && <p className="text-xs text-muted-foreground">عضو منذ {memberSince}</p>}
+                  </div>
                 </div>
                 {!isPremium && (
                   <Button asChild size="sm" className="gradient-primary text-primary-foreground">
-                    <Link to="/pricing"><Crown className="h-4 w-4 ml-1" />ترقية</Link>
+                    <Link to="/pricing"><Crown className="h-4 w-4 ml-1" />ترقية للباقة المميزة</Link>
                   </Button>
                 )}
+              </div>
+
+              {/* Multi-Engine Quotas Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-border/40 text-xs">
+                <div className="p-2.5 rounded-lg bg-muted/40 border border-border/40">
+                  <span className="text-muted-foreground flex items-center gap-1 mb-1">
+                    <Zap className="h-3.5 w-3.5 text-emerald-500" />
+                    المتصفح الفوري
+                  </span>
+                  <span className="font-bold text-sm">
+                    {dailyUsage.browserRenderLimit === null ? 'غير محدود' : `${dailyUsage.browserRenderLimit}/يوم`}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-lg bg-muted/40 border border-border/40">
+                  <span className="text-muted-foreground flex items-center gap-1 mb-1">
+                    <Zap className="h-3.5 w-3.5 text-amber-500" />
+                    FFmpeg ASS الصاروخي
+                  </span>
+                  <span className="font-bold text-sm">
+                    {entitlements.ffmpegAssDailyLimit} فيديو/يوم
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-lg bg-muted/40 border border-border/40">
+                  <span className="text-muted-foreground flex items-center gap-1 mb-1">
+                    <Sparkles className="h-3.5 w-3.5 text-blue-500" />
+                    Skia Rust الفاخر
+                  </span>
+                  <span className="font-bold text-sm">
+                    {entitlements.skiaCanvasDailyLimit} فيديو/يوم
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-lg bg-muted/40 border border-border/40">
+                  <span className="text-muted-foreground flex items-center gap-1 mb-1">
+                    <Clock3 className="h-3.5 w-3.5 text-primary" />
+                    حفظ المكتبة
+                  </span>
+                  <span className="font-bold text-sm">
+                    صالح 48 ساعة
+                  </span>
+                </div>
               </div>
             </CardContent>
           </Card>

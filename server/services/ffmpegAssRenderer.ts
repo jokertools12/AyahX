@@ -372,32 +372,15 @@ export async function renderFfmpegAssVideo(
             ffmpegProc.kill('SIGKILL');
           }
         } catch {}
-
-        const cleanupAndReject = () => {
-          for (let i = 0; i < 8; i++) {
-            try {
-              if (fs.existsSync(outputPath)) {
-                fs.unlinkSync(outputPath);
-              }
-              break;
-            } catch {}
-          }
-          reject(new Error('Render cancelled by user (تم إلغاء عملية الريندر).'));
-        };
-
-        if (ffmpegProc && !ffmpegProc.killed) {
-          ffmpegProc.once('close', () => {
-            setTimeout(cleanupAndReject, 30);
-          });
-          setTimeout(cleanupAndReject, 120);
-        } else {
-          cleanupAndReject();
-        }
       };
 
       if (signal) {
         if (signal.aborted) {
           onAbort();
+          try {
+            if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+          } catch {}
+          reject(new Error('Render cancelled by user (تم إلغاء عملية الريندر).'));
           return;
         }
         signal.addEventListener('abort', onAbort, { once: true });
@@ -418,9 +401,19 @@ export async function renderFfmpegAssVideo(
         }
       });
 
-      ffmpegProc.on('close', (code: number) => {
+      ffmpegProc.on('close', async (code: number) => {
         if (signal) signal.removeEventListener('abort', onAbort);
         if (signal?.aborted) {
+          for (let i = 0; i < 15; i++) {
+            try {
+              if (fs.existsSync(outputPath)) {
+                fs.unlinkSync(outputPath);
+              }
+              break;
+            } catch {
+              await new Promise((r) => setTimeout(r, 40));
+            }
+          }
           reject(new Error('Render cancelled by user (تم إلغاء عملية الريندر).'));
           return;
         }
@@ -462,8 +455,15 @@ export async function renderFfmpegAssVideo(
     };
   } catch (err) {
     if (signal?.aborted || (err instanceof Error && /cancel|abort|الغاء/i.test(err.message))) {
-      if (fs.existsSync(outputPath)) {
-        try { fs.unlinkSync(outputPath); } catch {}
+      for (let i = 0; i < 15; i++) {
+        try {
+          if (fs.existsSync(outputPath)) {
+            fs.unlinkSync(outputPath);
+          }
+          break;
+        } catch {
+          await new Promise((r) => setTimeout(r, 40));
+        }
       }
     }
     throw err;

@@ -75,11 +75,16 @@ export default function PrivacyPolicyPage() {
                   <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                     <Eye className="h-5 w-5" />
                   </div>
-                  <h2 className="text-xl font-bold">3. خصوصية المعالجة والريندر على جهازك</h2>
+                  <h2 className="text-xl font-bold">3. خصوصية المعالجة وسياسة حفظ وتخزين الفيديوهات</h2>
                 </div>
                 <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
-                  تتميز منصة قرآن ريلز بأن عمليات توليد وتركيب الفيديو وتوليد الإطارات (HTML5 Canvas & Web Audio API) تتم بالكامل داخل متصفحك محلياً على جهازك، مما يضمن سرعة فائقة وعدم رفع وسائطك الخاصة أو فيديوهاتك المصدرية إلى خوادم خارجية إلا إذا اخترت نشرها كفيديو عام في قسم "اكتشف".
+                  تتميز منصة قرآن ريلز بدعم بنية هجينة مرنة تجمع بين الأمان والسرعة:
                 </p>
+                <ul className="list-disc list-inside text-muted-foreground space-y-1.5 text-sm md:text-base mr-2">
+                  <li><strong>المعالجة المحلية عبر المتصفح:</strong> تتم معظم عمليات المعاينة والتقاط الإطارات محلياً على جهازك دون إرسال وسائطك الخاصة إلى أي خوادم خارجية.</li>
+                  <li><strong>المعالجة السحابية الفائقة (FFmpeg ASS & Skia Rust):</strong> عند اختيار الريندر فائق السرعة أو الريندر في الخلفية، تُعالج المقاطع في بيئة سحابية معزولة وآمنة.</li>
+                  <li><strong>سياسة الاحتفاظ بالملفات (48 ساعة):</strong> تُحفظ ملفات الفيديو الناتجة على السيرفر لمدة 48 ساعة فقط لإتاحة تحميلها ومشاركتها، ثم يقوم نظام التنظيف التلقائي بحذف ملفات MP4 المؤقتة نهائياً لتوفير المساحة وحماية خصوصية المحتوى، مع بقاء بيانات مشروعك محفوظة في مكتبتك لإعادة تصديره في أي وقت.</li>
+                </ul>
               </CardContent>
             </Card>
 
