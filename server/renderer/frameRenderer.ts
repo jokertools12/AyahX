@@ -160,9 +160,16 @@ export class DeterministicFrameRenderer {
     );
 
     // Capture direct frame screenshot
+    const configuredQuality = Number.parseInt(process.env.RENDER_JPEG_QUALITY || '90', 10);
+    const screenshotQuality = Number.isFinite(configuredQuality)
+      ? Math.max(70, Math.min(100, configuredQuality))
+      : 90;
     const screenshot = await this.page.screenshot({
       type: 'jpeg',
-      quality: 95,
+      quality: screenshotQuality,
+      // Chromium's optimized JPEG path materially reduces per-frame CPU time
+      // while preserving the deterministic pixels used by the final encoder.
+      optimizeForSpeed: process.env.RENDER_SCREENSHOT_OPTIMIZE !== 'false',
       clip: { x: 0, y: 0, width, height },
     });
 

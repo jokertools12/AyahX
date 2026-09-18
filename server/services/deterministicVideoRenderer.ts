@@ -254,10 +254,9 @@ async function prepareAudioTrack(manifest: RenderManifest, scratchDir: string): 
   // Case 1: Multiple EveryAyah URLs -> Download each and concatenate via native FFmpeg
   if (manifest.audio.everyAyahUrls && manifest.audio.everyAyahUrls.length > 1) {
     logger.info(`Concatenating ${manifest.audio.everyAyahUrls.length} EveryAyah audio parts on server...`);
-    const partPaths: string[] = [];
-
-    for (let i = 0; i < manifest.audio.everyAyahUrls.length; i++) {
-      const url = manifest.audio.everyAyahUrls[i];
+    // These files are independent. Download/copy them in parallel so the
+    // render does not pay one network round-trip per ayah before encoding.
+    const partPaths = await Promise.all(manifest.audio.everyAyahUrls.map(async (url, i) => {
       const partPath = path.join(scratchDir, `ayah_part_${i}.mp3`);
 
       if (url.startsWith('http://') || url.startsWith('https://')) {
@@ -273,8 +272,9 @@ async function prepareAudioTrack(manifest: RenderManifest, scratchDir: string): 
         throw new Error(`EveryAyah audio part not accessible: ${url}`);
       }
 
-      partPaths.push(partPath);
-    }
+      logger.debug(`Downloaded EveryAyah part ${i + 1}/${manifest.audio.everyAyahUrls!.length}`);
+      return partPath;
+    }));
 
     // Write concat file list (forward slashes required for Windows FFmpeg concat demuxer)
     const concatListPath = path.join(scratchDir, 'concat_list.txt');
@@ -611,13 +611,17 @@ export async function renderDeterministicVideo(
     const { width, height } = manifest.outputDimensions;
     const qualityPreset = manifest.qualityPreset || 'high';
     const qualityProfile = QUALITY_ENCODING_PROFILES[qualityPreset] || QUALITY_ENCODING_PROFILES.high;
+    const requestedPreset = process.env.RENDER_FFMPEG_PRESET;
+    const ffmpegPreset = requestedPreset && /^(ultrafast|superfast|veryfast|faster|fast|medium|slow|slower|veryslow|placebo)$/.test(requestedPreset)
+      ? requestedPreset
+      : qualityProfile.preset;
     const audioBitrate = manifest.audioBitrate || qualityProfile.audioBitrate;
     // See the browser encoder profile: 96 kHz avoids the native AAC
     // per-frame cap that otherwise reduces a requested 320 kbps stream.
     const audioSampleRate = audioBitrate === '320k' ? '96000' : '44100';
 
     logger.info(
-      `Starting deterministic render [${randomId}]: ${totalFrames} frames (${manifest.audio.durationSeconds.toFixed(1)}s at ${fps} fps), resolution: ${width}x${height}, preset: ${qualityPreset} (crf: ${qualityProfile.crf}, preset: ${qualityProfile.preset})`
+      `Starting deterministic render [${randomId}]: ${totalFrames} frames (${manifest.audio.durationSeconds.toFixed(1)}s at ${fps} fps), resolution: ${width}x${height}, preset: ${qualityPreset} (crf: ${qualityProfile.crf}, encoder: ${ffmpegPreset})`
     );
 
     onProgress?.(3, 0, totalFrames, 'تهيئة محرك الريندر والترميز...');
@@ -639,7 +643,8 @@ export async function renderDeterministicVideo(
       '-c:v', 'libx264',
       '-profile:v', qualityProfile.profile,
       '-level:v', qualityProfile.level,
-      '-preset', qualityProfile.preset,
+      '-preset', ffmpegPreset,
+      '-threads', process.env.RENDER_FFMPEG_THREADS || '0',
       '-crf', qualityProfile.crf,
       '-maxrate', qualityProfile.maxrate,
       '-bufsize', qualityProfile.bufsize,

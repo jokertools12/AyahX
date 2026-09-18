@@ -316,9 +316,11 @@ export class RenderJobQueue {
   /**
    * Triggers the queue worker loop
    */
-  public triggerProcessor(jobId?: string): void {
+  public triggerProcessor(jobId?: string, priority = 0): void {
     if (config.queue.driver === 'bullmq') {
-      if (jobId) enqueueRenderJob(jobId).catch((error) => logger.error(`Failed to enqueue render job [${jobId}] in Redis:`, error));
+      if (jobId) {
+        enqueueRenderJob(jobId, priority).catch((error) => logger.error(`Failed to enqueue render job [${jobId}] in Redis:`, error));
+      }
       return;
     }
     if (this.isProcessing) return;
