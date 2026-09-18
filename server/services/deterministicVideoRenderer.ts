@@ -7,6 +7,7 @@ import { spawn } from 'child_process';
 import ffmpegPath from 'ffmpeg-static';
 import { RenderManifest } from '../models/renderManifest';
 import { DeterministicFrameRenderer } from '../renderer/frameRenderer';
+import { availableCpuCores } from './renderCapacity';
 import { probeMediaFile, validateProbeAgainstSpec, MediaProbeResult } from './mediaProbeService';
 import { logger } from '../logger';
 
@@ -644,7 +645,13 @@ export async function renderDeterministicVideo(
       '-profile:v', qualityProfile.profile,
       '-level:v', qualityProfile.level,
       '-preset', ffmpegPreset,
-      '-threads', process.env.RENDER_FFMPEG_THREADS || '0',
+      // `0` makes x264 inspect the host CPU count and can spawn dozens of
+      // threads inside a small Railway container. Auto-select the cgroup CPU
+      // capacity instead so FFmpeg cannot starve Chromium or other jobs.
+      '-threads', (() => {
+        const configuredThreads = Number.parseInt(process.env.RENDER_FFMPEG_THREADS || '', 10);
+        return String(Number.isFinite(configuredThreads) && configuredThreads > 0 ? configuredThreads : availableCpuCores());
+      })(),
       '-crf', qualityProfile.crf,
       '-maxrate', qualityProfile.maxrate,
       '-bufsize', qualityProfile.bufsize,

@@ -36,10 +36,11 @@ export async function enqueueRenderJob(jobId: string, priority = 0): Promise<Job
 export function startRenderWorker(processJob: (jobId: string) => Promise<void>): Worker {
   const maxConcurrency = resolveConcurrencySetting(process.env.RENDER_MAX_CONCURRENCY, config.queue.workerConcurrency);
   let activeJobs = 0;
-  let lastReportedConcurrency = config.queue.workerConcurrency;
+  const initialConcurrency = getRenderCapacity(0, maxConcurrency).targetConcurrency;
+  let lastReportedConcurrency = initialConcurrency;
   const worker = new Worker(RENDER_QUEUE_NAME, async (job) => {
     await processJob(String(job.data.jobId));
-  }, { connection: getConnection(), concurrency: config.queue.workerConcurrency, lockDuration: 15 * 60 * 1000 });
+  }, { connection: getConnection(), concurrency: initialConcurrency, lockDuration: 15 * 60 * 1000 });
   const refreshConcurrency = () => {
     const capacity = getRenderCapacity(activeJobs, maxConcurrency);
     const nextConcurrency = Math.max(activeJobs, capacity.targetConcurrency);
@@ -69,7 +70,7 @@ export function startRenderWorker(processJob: (jobId: string) => Promise<void>):
   worker.on('error', (error) => logger.error('BullMQ render worker error:', error));
   logger.info(
     `BullMQ render worker ${config.queue.workerId} started with dynamic concurrency ` +
-    `${config.queue.workerConcurrency} (max ${maxConcurrency})`,
+    `${initialConcurrency} (max ${maxConcurrency})`,
   );
   return worker;
 }

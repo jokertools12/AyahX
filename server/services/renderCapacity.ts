@@ -2,8 +2,11 @@ import fs from 'fs';
 import os from 'os';
 
 const MB = 1024 * 1024;
-const DEFAULT_MEMORY_PER_JOB_MB = 300;
-const DEFAULT_MEMORY_RESERVE_MB = 180;
+// A 1080p Chromium page plus FFmpeg can briefly exceed 400MB. Reserve a
+// conservative slot so the worker never starts a second render that would
+// cause Chromium to be OOM-killed on a 1GB container.
+const DEFAULT_MEMORY_PER_JOB_MB = 500;
+const DEFAULT_MEMORY_RESERVE_MB = 300;
 const DEFAULT_MAX_CONCURRENCY = 16;
 
 function readCgroupMemoryLimit(): number | null {
