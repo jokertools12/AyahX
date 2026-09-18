@@ -141,6 +141,14 @@ describe('Plan entitlement contract', () => {
     expect(validateRenderEntitlements('yearly', premiumManifest).valid).toBe(true);
   });
 
+  it('treats Idea 3 as its own full-fidelity engine quota instead of a background flag', () => {
+    const free = validateRenderEntitlements('free', makeManifest({ renderEngine: 'browser_cloud' }));
+    expect(free.valid).toBe(false);
+    expect(free.violations).toContain('محرك المتصفح السحابي الكامل متاح للعضوية المميزة فقط');
+
+    expect(validateRenderEntitlements('monthly', makeManifest({ renderEngine: 'browser_cloud' })).valid).toBe(true);
+  });
+
   it('uses one approved Arabic/Ottoman font catalog for the premium UI and cloud renderer', () => {
     expect(ARABIC_FONT_CATALOG).toHaveLength(16);
     expect(ARABIC_FONT_CATALOG).toContain('"Katibeh", serif');

@@ -1884,16 +1884,12 @@ export default function PreviewPage() {
   const handleStartExport = async () => {
     const engine = exportSettings.renderEngine || 'browser';
     if (engine === 'browser') {
-      if (exportSettings.backgroundAsync) {
-        toast.error('الريندر في الخلفية يعمل مع محرك FFmpeg أو Skia فقط. اختر أحدهما أولاً.');
-        return;
-      }
       await handleLegacyBrowserRecording();
     } else {
-      const started = await handleServerExport({ backgroundAsync: exportSettings.backgroundAsync === true });
-      if (started && exportSettings.backgroundAsync) {
-        toast.success('تم إطلاق الإنتاج في الخلفية. يمكنك مغادرة الصفحة وسيُحفظ الفيديو في المكتبة عند الجاهزية.');
-      }
+      // Every non-local engine is submitted independently. Idea 3 is already
+      // an asynchronous cloud engine; it must never silently switch to Idea 1
+      // or Idea 2 through a background flag.
+      await handleServerExport({ backgroundAsync: false });
     }
   };
 

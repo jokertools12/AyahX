@@ -42,7 +42,7 @@ export interface ClientManifestParams {
   displaySettings: any;
   userId?: string;
   idempotencyKey?: string;
-  renderEngine?: 'browser' | 'ffmpeg_ass' | 'skia_canvas';
+  renderEngine?: 'browser' | 'ffmpeg_ass' | 'skia_canvas' | 'browser_cloud';
   backgroundAsync?: boolean;
 }
 

@@ -35,6 +35,9 @@ export interface DailyUsage {
   skiaCanvasRenderCount: number;
   skiaCanvasRenderLimit: number;
   skiaCanvasRenderRemaining: number;
+  browserCloudRenderCount: number;
+  browserCloudRenderLimit: number;
+  browserCloudRenderRemaining: number;
   backgroundAsyncRenderCount: number;
   backgroundAsyncRenderLimit: number;
   backgroundAsyncRenderRemaining: number;
@@ -58,6 +61,9 @@ const FREE_USAGE: DailyUsage = {
   skiaCanvasRenderCount: 0,
   skiaCanvasRenderLimit: 2,
   skiaCanvasRenderRemaining: 2,
+  browserCloudRenderCount: 0,
+  browserCloudRenderLimit: 0,
+  browserCloudRenderRemaining: 0,
   backgroundAsyncRenderCount: 0,
   backgroundAsyncRenderLimit: 0,
   backgroundAsyncRenderRemaining: 0,
@@ -81,6 +87,9 @@ function usageFromApi(data: {
   skiaCanvasRenderCount?: number;
   skiaCanvasRenderLimit?: number;
   skiaCanvasRenderRemaining?: number;
+  browserCloudRenderCount?: number;
+  browserCloudRenderLimit?: number;
+  browserCloudRenderRemaining?: number;
   backgroundAsyncRenderCount?: number;
   backgroundAsyncRenderLimit?: number;
   backgroundAsyncRenderRemaining?: number;
@@ -96,6 +105,8 @@ function usageFromApi(data: {
   const ffmpegAssRenderLimit = Number(data.ffmpegAssRenderLimit ?? entitlements.ffmpegAssDailyLimit);
   const skiaCanvasRenderCount = Number(data.skiaCanvasRenderCount ?? 0);
   const skiaCanvasRenderLimit = Number(data.skiaCanvasRenderLimit ?? entitlements.skiaCanvasDailyLimit);
+  const browserCloudRenderCount = Number(data.browserCloudRenderCount ?? 0);
+  const browserCloudRenderLimit = Number(data.browserCloudRenderLimit ?? entitlements.backgroundAsyncDailyLimit);
   const backgroundAsyncRenderCount = Number(data.backgroundAsyncRenderCount ?? 0);
   const backgroundAsyncRenderLimit = Number(data.backgroundAsyncRenderLimit ?? entitlements.backgroundAsyncDailyLimit);
 
@@ -117,6 +128,9 @@ function usageFromApi(data: {
     skiaCanvasRenderCount,
     skiaCanvasRenderLimit,
     skiaCanvasRenderRemaining: Number(data.skiaCanvasRenderRemaining ?? Math.max(skiaCanvasRenderLimit - skiaCanvasRenderCount, 0)),
+    browserCloudRenderCount,
+    browserCloudRenderLimit,
+    browserCloudRenderRemaining: Number(data.browserCloudRenderRemaining ?? Math.max(browserCloudRenderLimit - browserCloudRenderCount, 0)),
     backgroundAsyncRenderCount,
     backgroundAsyncRenderLimit,
     backgroundAsyncRenderRemaining: Number(data.backgroundAsyncRenderRemaining ?? Math.max(backgroundAsyncRenderLimit - backgroundAsyncRenderCount, 0)),

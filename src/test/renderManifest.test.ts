@@ -113,6 +113,16 @@ describe('RenderManifest Specification & Validation', () => {
     expect(res.manifest?.backgroundAsync).toBe(true);
   });
 
+  it('accepts the independent full-fidelity Browser Cloud engine', () => {
+    const res = validateRenderManifest({
+      ...sampleValidManifest,
+      renderEngine: 'browser_cloud',
+      backgroundAsync: false,
+    });
+    expect(res.valid).toBe(true);
+    expect(res.manifest?.renderEngine).toBe('browser_cloud');
+  });
+
   it('rejects manifest with missing required fields', () => {
     const invalid = { ...sampleValidManifest, audio: undefined };
     const res = validateRenderManifest(invalid);

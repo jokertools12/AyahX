@@ -110,7 +110,7 @@ export const FREE_BACKGROUND_ASSET_URLS: Readonly<Record<string, string>> = {
   'nature-8': 'https://images.unsplash.com/photo-1491002052546-bf38f186af56',
 };
 
-export const RENDER_ENGINES = ['browser', 'ffmpeg_ass', 'skia_canvas'] as const;
+export const RENDER_ENGINES = ['browser', 'ffmpeg_ass', 'skia_canvas', 'browser_cloud'] as const;
 export type RenderEngineType = (typeof RENDER_ENGINES)[number];
 
 export type PremiumFeature =
@@ -138,7 +138,7 @@ export interface PlanEntitlements {
   ffmpegAssDailyLimit: number;
   /** Idea 2: Native Skia / Rust Canvas frame-by-frame studio daily limit */
   skiaCanvasDailyLimit: number;
-  /** Idea 3: Asynchronous background rendering with notification daily limit */
+  /** Idea 3: Full-fidelity cloud browser rendering daily limit */
   backgroundAsyncDailyLimit: number;
   allowedQualities: readonly ExportQuality[];
   allowedFps: readonly ExportFps[];
@@ -335,6 +335,9 @@ export function validateRenderEntitlements(
     violations.push('محرك FFmpeg ASS غير متاح في خطتك');
   } else if (manifest.renderEngine === 'skia_canvas' && entitlements.skiaCanvasDailyLimit <= 0) {
     violations.push('محرك Skia Canvas غير متاح في خطتك');
+  } else if (manifest.renderEngine === 'browser_cloud'
+    && (!entitlements.features.backgroundAsync || entitlements.backgroundAsyncDailyLimit <= 0)) {
+    violations.push('محرك المتصفح السحابي الكامل متاح للعضوية المميزة فقط');
   }
 
   if (manifest.backgroundAsync === true

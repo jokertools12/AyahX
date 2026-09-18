@@ -249,7 +249,46 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
     expect(probe.video?.height).toBe(720);
   }, 30000);
 
-  it('Dispatcher: Correctly routes between Engine 1 and Engine 2 based on manifest.renderEngine', async () => {
+  it('Engine 3 (Browser Cloud): Renders the full browser scene independently with solid color, headers, badges and word timing', async () => {
+    const outputPath = path.join(tempDir, 'engine3_browser_cloud_full_fidelity.mp4');
+    const manifest: RenderManifest = {
+      ...getBaseManifest(),
+      renderEngine: 'browser_cloud',
+      outputDimensions: { width: 720, height: 1280 },
+      background: {
+        ...getBaseManifest().background,
+        type: 'color',
+        url: '#162B3A',
+        overlayOpacity: 0.25,
+      },
+      displaySettings: {
+        ...getBaseManifest().displaySettings,
+        visualDesign: 'moonlit',
+        frameStyle: 'ornate',
+        screenBorderStyle: 'doubleCinema',
+        showSurahName: true,
+        showReciterName: true,
+        showAyahNumber: true,
+        highlightStyle: 'glow',
+      },
+    };
+
+    const result = await renderDeterministicVideo({
+      manifest,
+      audioFilePath: sampleAudioPath,
+      outputPath,
+    });
+
+    expect(fs.existsSync(outputPath)).toBe(true);
+    expect(result.fileSizeBytes).toBeGreaterThan(1000);
+    const probe = await probeMediaFile(outputPath);
+    expect(probe.video?.width).toBe(720);
+    expect(probe.video?.height).toBe(1280);
+    expect(probe.video?.codec).toBe('h264');
+    expect(probe.audio?.codec).toBe('aac');
+  }, 60000);
+
+  it('Dispatcher: Correctly routes each independent engine based on manifest.renderEngine', async () => {
     const assOutputPath = path.join(tempDir, 'dispatcher_ass.mp4');
     const skiaOutputPath = path.join(tempDir, 'dispatcher_skia.mp4');
 
@@ -261,6 +300,11 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
     const skiaManifest = {
       ...getBaseManifest(),
       renderEngine: 'skia_canvas' as const,
+    };
+
+    const browserCloudManifest = {
+      ...getBaseManifest(),
+      renderEngine: 'browser_cloud' as const,
     };
 
     const assResult = await renderDeterministicVideo({
@@ -275,9 +319,18 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
       outputPath: skiaOutputPath,
     });
 
+    const browserCloudOutputPath = path.join(tempDir, 'dispatcher_browser_cloud.mp4');
+    const browserCloudResult = await renderDeterministicVideo({
+      manifest: browserCloudManifest,
+      audioFilePath: sampleAudioPath,
+      outputPath: browserCloudOutputPath,
+    });
+
     expect(fs.existsSync(assResult.outputPath)).toBe(true);
     expect(fs.existsSync(skiaResult.outputPath)).toBe(true);
     expect(assResult.fileSizeBytes).toBeGreaterThan(1000);
     expect(skiaResult.fileSizeBytes).toBeGreaterThan(1000);
+    expect(fs.existsSync(browserCloudResult.outputPath)).toBe(true);
+    expect(browserCloudResult.fileSizeBytes).toBeGreaterThan(1000);
   }, 30000);
 });

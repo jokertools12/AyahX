@@ -402,7 +402,13 @@ export default function LibraryPage() {
                     <div className="flex flex-wrap items-center gap-1.5 mb-3">
                       {video.render_engine && (
                         <Badge variant="outline" className="text-[11px] py-0.5 border-primary/30 text-primary bg-primary/5">
-                          {video.render_engine === 'ffmpeg_ass' ? '⚡ FFmpeg ASS' : video.render_engine === 'skia_canvas' ? '🎨 Skia Rust' : '🌐 Browser'}
+                          {video.render_engine === 'ffmpeg_ass'
+                            ? '⚡ FFmpeg ASS'
+                            : video.render_engine === 'skia_canvas'
+                            ? '🎨 Skia Rust'
+                            : video.render_engine === 'browser_cloud'
+                            ? '🌐 Browser Cloud'
+                            : '🌐 Browser'}
                         </Badge>
                       )}
 

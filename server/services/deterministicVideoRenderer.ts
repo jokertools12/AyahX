@@ -7,6 +7,7 @@ import { spawn } from 'child_process';
 import { RenderManifest } from '../models/renderManifest';
 import { renderFfmpegAssVideo } from './ffmpegAssRenderer';
 import { renderSkiaCanvasVideo } from './skiaCanvasRenderer';
+import { renderBrowserCloudVideo } from './browserCloudRenderer';
 import { getFfmpegBinary, getFfmpegResourceArgs } from './ffmpegBinary';
 import { availableCpuCores } from './renderCapacity';
 import { probeMediaFile, validateProbeAgainstSpec, MediaProbeResult } from './mediaProbeService';
@@ -676,10 +677,9 @@ export const QUALITY_ENCODING_PROFILES: Record<string, QualityEncodingProfile> =
 
 /**
  * Executes full deterministic server-side video rendering.
- * Routes dynamically to either:
- * - Engine 1: Native FFmpeg + ASS Subtitles (Ultra-fast, millisecond word highlights, 2-5 sec execution)
- * - Engine 2: Native Skia/Rust Canvas (Vector badges, custom ornaments, frame-by-frame precision)
- * Zero Chromium, zero dropped frames, 100% stable on Railway!
+ * Each engine has an independent dispatch/quota path. All three server paths
+ * share the browser harness as the visual contract so backgrounds, typography,
+ * word timing, frames and watermarks cannot diverge from the preview.
  */
 export async function renderDeterministicVideo(
   options: DeterministicRenderOptions
@@ -688,10 +688,19 @@ export async function renderDeterministicVideo(
   const engine = manifest.renderEngine || manifest.displaySettings?.renderEngine || 'ffmpeg_ass';
 
   if (engine === 'skia_canvas') {
-    logger.info('🎬 Dispatching render to Engine 2: Native Skia/Rust Canvas Renderer');
+    logger.info('🎬 Dispatching render to Engine 2: Independent Canvas full-fidelity Renderer');
     return renderSkiaCanvasVideo(options);
   }
 
-  logger.info('⚡ Dispatching render to Engine 1: Rocket-Fast Native FFmpeg + ASS Subtitles Renderer');
+  if (engine === 'browser_cloud') {
+    logger.info('🌐 Dispatching render to Engine 3: Full-Fidelity Browser Cloud Renderer');
+    return renderBrowserCloudVideo(options);
+  }
+
+  if (engine === 'browser') {
+    throw new Error('Browser Canvas is a local renderer and cannot run as a cloud render job.');
+  }
+
+  logger.info('⚡ Dispatching render to Engine 1: Independent FFmpeg full-fidelity Renderer');
   return renderFfmpegAssVideo(options);
 }

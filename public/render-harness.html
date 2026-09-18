@@ -788,7 +788,14 @@
           const displaySettings = manifest.displaySettings || {};
           const typography = manifest.typography || {};
           const timingMap = manifest.timingMap;
-          const allAyahs = manifest.canonicalAyahRange.ayahs || [];
+          const allAyahs = (manifest.canonicalAyahRange && Array.isArray(manifest.canonicalAyahRange.ayahs)
+            ? manifest.canonicalAyahRange.ayahs
+            : Array.isArray(manifest.ayahTimings)
+            ? manifest.ayahTimings.map(a => ({
+              numberInSurah: a.ayahNumber,
+              text: a.text || (Array.isArray(a.words) ? a.words.map(w => w.displayToken || w.text || '').join(' ') : ''),
+            }))
+            : []);
 
           // Calculate effective timeline time in milliseconds (handling rangeMs offset from audio slicing)
           const rangeOffsetMs = (manifest.audio.rangeMs && manifest.audio.rangeMs.from > 0) ? manifest.audio.rangeMs.from : 0;
@@ -893,6 +900,17 @@
             const panX = Math.sin(t * 0.12) * (14 * S);
             const panY = Math.cos(t * 0.1) * (12 * S);
             drawImageCoverWithMotion(ctx, bgImage, W, H, scale, panX, panY);
+            backgroundDrawn = true;
+          }
+
+          // Solid-color backgrounds are a first-class browser-preview setting.
+          // Do this before the gradient fallback so cloud renders preserve the
+          // exact selected color instead of silently replacing it.
+          if (!backgroundDrawn && manifest.background?.type === 'color'
+            && typeof manifest.background.url === 'string'
+            && /^#[0-9a-fA-F]{3,8}$/.test(manifest.background.url)) {
+            ctx.fillStyle = manifest.background.url;
+            ctx.fillRect(0, 0, W, H);
             backgroundDrawn = true;
           }
 

@@ -45,6 +45,7 @@ export interface TodayCloudRenderUsage {
   total: number;
   ffmpegAss: number;
   skiaCanvas: number;
+  browserCloud: number;
   backgroundAsync: number;
 }
 
@@ -55,6 +56,7 @@ export async function getTodayCloudRenderUsage(userId: string): Promise<TodayClo
        COUNT(*) AS total,
        SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = 'ffmpeg_ass' THEN 1 ELSE 0 END) AS ffmpeg_ass,
        SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = 'skia_canvas' THEN 1 ELSE 0 END) AS skia_canvas,
+       SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = 'browser_cloud' THEN 1 ELSE 0 END) AS browser_cloud,
        SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.backgroundAsync')), 'false') = 'true' THEN 1 ELSE 0 END) AS background_async
      FROM render_jobs
      WHERE user_id = ? AND created_at >= CURDATE()` ,
@@ -65,6 +67,7 @@ export async function getTodayCloudRenderUsage(userId: string): Promise<TodayClo
     total: Number(row.total || 0),
     ffmpegAss: Number(row.ffmpeg_ass || 0),
     skiaCanvas: Number(row.skia_canvas || 0),
+    browserCloud: Number(row.browser_cloud || 0),
     backgroundAsync: Number(row.background_async || 0),
   };
 }

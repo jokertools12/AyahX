@@ -480,6 +480,9 @@ export const api = {
         skiaCanvasRenderCount?: number;
         skiaCanvasRenderLimit?: number;
         skiaCanvasRenderRemaining?: number;
+        browserCloudRenderCount?: number;
+        browserCloudRenderLimit?: number;
+        browserCloudRenderRemaining?: number;
         backgroundAsyncRenderCount?: number;
         backgroundAsyncRenderLimit?: number;
         backgroundAsyncRenderRemaining?: number;

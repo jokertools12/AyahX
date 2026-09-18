@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 
 export type ExportFormat = 'mp4' | 'webm' | 'gif';
 export type RecordingMethod = 'auto' | 'smooth' | 'compatibility' | 'quality';
-export type RenderEngine = 'browser' | 'ffmpeg_ass' | 'skia_canvas';
+export type RenderEngine = 'browser' | 'ffmpeg_ass' | 'skia_canvas' | 'browser_cloud';
 
 export interface ExportSettings {
   format: ExportFormat;
@@ -19,8 +19,6 @@ export interface ExportSettings {
   fps?: 30 | 60;
   audioBitrate?: '128k' | '192k' | '320k';
   renderEngine?: RenderEngine;
-  /** Idea 3: run the selected cloud engine asynchronously and save to Library. */
-  backgroundAsync?: boolean;
 }
 
 interface ExportFormatSelectorProps {
@@ -60,10 +58,10 @@ export function ExportFormatSelector({
   const browserRemaining = dailyUsage.browserRenderRemaining;
   const ffmpegAssLimit = entitlements.ffmpegAssDailyLimit ?? (isPremium ? 30 : 1);
   const skiaCanvasLimit = entitlements.skiaCanvasDailyLimit ?? (isPremium ? 15 : 2);
-  const backgroundAsyncLimit = entitlements.backgroundAsyncDailyLimit ?? (isPremium ? 20 : 0);
   const ffmpegAssRemaining = dailyUsage.ffmpegAssRenderRemaining ?? ffmpegAssLimit;
   const skiaCanvasRemaining = dailyUsage.skiaCanvasRenderRemaining ?? skiaCanvasLimit;
-  const backgroundAsyncRemaining = dailyUsage.backgroundAsyncRenderRemaining ?? backgroundAsyncLimit;
+  const browserCloudLimit = dailyUsage.browserCloudRenderLimit ?? (isPremium ? 20 : 0);
+  const browserCloudRemaining = dailyUsage.browserCloudRenderRemaining ?? browserCloudLimit;
 
   const updateSetting = <K extends keyof ExportSettings>(key: K, value: ExportSettings[K]) => {
     onChange({ ...settings, [key]: value });
@@ -275,7 +273,6 @@ export function ExportFormatSelector({
             onValueChange={(val) => onChange({
               ...settings,
               renderEngine: val as RenderEngine,
-              backgroundAsync: val === 'browser' ? false : settings.backgroundAsync,
             })}
             className="space-y-2.5"
           >
@@ -332,7 +329,7 @@ export function ExportFormatSelector({
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    ريندر صاروخي في 2-5 ثوانٍ فقط عبر FFmpeg النقي بتشكيل قرآني عالي الدقة وتظليل ذهبي للكلمات بدون متصفح.
+                    مسار FFmpeg مستقل وسريع يحافظ على مشهد المتصفح الكامل: الخلفية، الخط، التشكيل، التظليل، الإطارات وكل إعدادات العرض.
                   </p>
                 </div>
               </Label>
@@ -356,7 +353,41 @@ export function ExportFormatSelector({
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    رسم الإطارات وبادجات الآيات والزخارف الهندسية في C++/Rust Skia وبثها إلى FFmpeg بجودة استوديو سينمائية.
+                    مسار Canvas مستقل بجودة استوديو، ويستخدم نفس مشهد المتصفح الكامل حتى لا تختفي الخلفيات أو النصوص أو الزخارف.
+                  </p>
+                </div>
+              </Label>
+            </div>
+
+            {/* Option 4: Independent full-fidelity cloud browser engine (Idea 3) */}
+            <div className="relative">
+              <RadioGroupItem
+                value="browser_cloud"
+                id="engine-browser-cloud"
+                disabled={!isPremium || browserCloudRemaining <= 0}
+                className="peer sr-only"
+              />
+              <Label
+                htmlFor="engine-browser-cloud"
+                className={`flex items-start gap-3 rounded-xl border-2 border-primary/30 bg-primary/5 p-3 hover:bg-primary/10 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 cursor-pointer transition-all ${
+                  !isPremium || browserCloudRemaining <= 0 ? 'opacity-60 cursor-not-allowed' : ''
+                }`}
+              >
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
+                  <Sparkles className="h-4 w-4" />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-semibold text-sm">محرك المتصفح السحابي الكامل (فكرة 3)</span>
+                      {!isPremium && <Lock className="h-3 w-3 text-amber-500" />}
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/15 text-primary">
+                      {isPremium ? `${browserCloudRemaining}/${browserCloudLimit} متبقي اليوم` : 'ميزة مميزة'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    محرك مستقل يرسم المشهد الكامل مثل معاينة المتصفح، مع الخلفيات والنصوص والحركات والحدود والشعارات، ثم يحفظ الفيديو تلقائياً في المكتبة بعد الإنتاج.
                   </p>
                 </div>
               </Label>
@@ -364,50 +395,7 @@ export function ExportFormatSelector({
           </RadioGroup>
         </div>
 
-        {/* 6. Idea 3: Asynchronous Background Cloud Processing */}
-        <div className="p-4 rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-background to-amber-500/10 space-y-3">
-          <div className="flex items-center justify-between gap-3">
-            <Label htmlFor="background-render-mode" className="flex items-center gap-2 cursor-pointer">
-              <Sparkles className="h-5 w-5 text-primary" />
-              <span className="font-bold text-sm">الريندر السحابي في الخلفية (فكرة 3)</span>
-            </Label>
-            {isPremium ? (
-              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600">
-                {backgroundAsyncRemaining}/{backgroundAsyncLimit} متبقي اليوم
-              </span>
-            ) : (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-600 flex items-center gap-1">
-                <Lock className="h-3 w-3" /> ميزة مميزة
-              </span>
-            )}
-          </div>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            فعّل هذا الخيار ليعمل محرك FFmpeg أو Skia المحدد في الخلفية، ويمكنك مغادرة الصفحة. سيُحفظ الفيديو تلقائياً في مكتبتك لمدة 48 ساعة ويصل إشعار عند الجاهزية.
-          </p>
-          <label className="flex items-center gap-3 rounded-lg border border-primary/20 bg-background/70 px-3 py-2.5 cursor-pointer">
-            <input
-              id="background-render-mode"
-              type="checkbox"
-              checked={settings.backgroundAsync === true}
-              disabled={!isPremium || backgroundAsyncRemaining <= 0 || effectiveEngine === 'browser'}
-              onChange={(event) => {
-                if (!isPremium) {
-                  toast.error('ميزة الريندر في الخلفية متاحة للعضوية المميزة فقط');
-                  return;
-                }
-                updateSetting('backgroundAsync', event.target.checked);
-              }}
-              className="h-4 w-4 rounded border-border accent-primary"
-            />
-            <span className="text-xs font-medium">
-              {effectiveEngine === 'browser'
-                ? 'اختر FFmpeg أو Skia أولاً لتفعيل الريندر في الخلفية'
-                : 'تشغيل المحرك المحدد في الخلفية وحفظه تلقائياً بالمكتبة'}
-            </span>
-          </label>
-        </div>
-
-        {/* 7. Client Recording Strategy (When Browser engine is used) */}
+        {/* Client Recording Strategy (When Browser engine is used) */}
         {effectiveEngine === 'browser' && (
           <div className="space-y-3 p-3 rounded-xl bg-muted/30 border border-border/50">
             <Label className="text-xs font-medium text-muted-foreground">خوارزمية التقاط المتصفح</Label>

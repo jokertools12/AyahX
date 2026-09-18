@@ -10,6 +10,7 @@ import { probeMediaFile, validateProbeAgainstSpec } from './mediaProbeService';
 import { prepareAudioTrack, prepareBackgroundAsset, DeterministicRenderOptions, DeterministicRenderResult, extractAyahsAndWords } from './deterministicVideoRenderer';
 import { toArabicDigits } from './ffmpegAssRenderer';
 import { getFfmpegBinary, getFfmpegPreset, getFfmpegResourceArgs, getFfmpegVideoEncoderArgs } from './ffmpegBinary';
+import { renderFullFidelityVideo } from './browserCloudRenderer';
 
 // Ensure standard Arabic fonts are registered into Skia
 let fontsRegistered = false;
@@ -148,6 +149,10 @@ function drawAyahBadge(
 export async function renderSkiaCanvasVideo(
   options: DeterministicRenderOptions
 ): Promise<DeterministicRenderResult> {
+  // Engine 2 remains independently selectable and metered, but uses the
+  // canonical browser scene so its output includes every visible setting.
+  return renderFullFidelityVideo(options, { label: 'Engine 2 Skia Canvas', preset: 'fast' });
+
   const { manifest, outputPath, signal, onProgress } = options;
 
   const ffmpegPath = getFfmpegBinary();

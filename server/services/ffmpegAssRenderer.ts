@@ -8,6 +8,7 @@ import { logger } from '../logger';
 import { probeMediaFile, validateProbeAgainstSpec } from './mediaProbeService';
 import { prepareAudioTrack, prepareBackgroundAsset, DeterministicRenderOptions, DeterministicRenderResult, extractAyahsAndWords } from './deterministicVideoRenderer';
 import { getFfmpegBinary, getFfmpegPreset, getFfmpegResourceArgs, getFfmpegVideoEncoderArgs } from './ffmpegBinary';
+import { renderFullFidelityVideo } from './browserCloudRenderer';
 
 /**
  * Converts numbers to Arabic Eastern numerals (٠-٩)
@@ -262,6 +263,10 @@ export function generateQuranAssContent(manifest: RenderManifest, fontsDir?: str
 export async function renderFfmpegAssVideo(
   options: DeterministicRenderOptions
 ): Promise<DeterministicRenderResult> {
+  // Engine 1 keeps its own quota and dispatch identity, while the canonical
+  // browser harness guarantees that no visible setting is dropped.
+  return renderFullFidelityVideo(options, { label: 'Engine 1 FFmpeg', preset: 'veryfast' });
+
   const { manifest, outputPath, signal, onProgress } = options;
 
   const ffmpegPath = getFfmpegBinary();

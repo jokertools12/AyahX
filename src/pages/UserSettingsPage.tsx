@@ -431,16 +431,16 @@ export default function UserSettingsPage() {
                   </p>
                 </div>
 
-                {/* Engine 3: Background Cloud Render */}
+                {/* Engine 3: Full-Fidelity Browser Cloud Render */}
                 <div className="space-y-1.5 pt-2 border-t border-border/40">
                   <div className="flex justify-between text-sm">
-                    <span className="flex items-center gap-1.5"><Cpu className="h-4 w-4 text-primary" />الريندر السحابي في الخلفية (Queue & Save)</span>
+                    <span className="flex items-center gap-1.5"><Cpu className="h-4 w-4 text-primary" />محرك المتصفح السحابي الكامل</span>
                     <Badge variant="outline" className="text-[11px] bg-primary/10 text-primary border-primary/20">
                       {entitlements.backgroundAsyncDailyLimit} فيديو / يوم
                     </Badge>
                   </div>
                   <p className="text-[11px] text-muted-foreground">
-                    أطلق الريندر وغادر فوراً، وسيقوم السيرفر بحفظ الفيديو بمكتبتك مع إشعار تلقائي.
+                    يطابق معاينة المتصفح بكل الخلفيات والنصوص والإعدادات، ثم يحفظ الفيديو بمكتبتك مع إشعار تلقائي.
                   </p>
                 </div>
 

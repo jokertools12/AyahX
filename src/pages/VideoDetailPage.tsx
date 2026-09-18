@@ -260,6 +260,11 @@ export default function VideoDetailPage() {
                     🎨 Skia Rust (فاخر)
                   </Badge>
                 )}
+                {(video as any).render_engine === 'browser_cloud' && (
+                  <Badge className="bg-primary/10 text-primary border-primary/20 text-xs">
+                    🌐 Browser Cloud (كامل)
+                  </Badge>
+                )}
                 <span className="text-xs text-muted-foreground flex items-center gap-1">
                   <Clock className="h-3 w-3" />
                   {timeAgo(video.created_at)}

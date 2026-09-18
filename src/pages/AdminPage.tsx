@@ -603,7 +603,7 @@ export default function AdminPage() {
                       </div>
                       <CardTitle className="text-xl">محرك الريندر السحابي وإدارة مساحة التخزين</CardTitle>
                       <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs">
-                        ⚡ FFmpeg ASS + 🎨 Skia Rust Canvas (Zero Chromium)
+                        ⚡ FFmpeg + 🎨 Canvas + 🌐 Browser Cloud (full-fidelity)
                       </Badge>
                     </div>
                     <CardDescription>
