@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Layout } from '@/components/Layout';
 import { useAuth } from '@/hooks/useAuth';
 import { api, SavedVideo, VideoComment } from '@/lib/api';
+import { downloadSavedVideo } from '@/lib/download';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,6 +33,7 @@ export default function VideoDetailPage() {
   const [commentText, setCommentText] = useState('');
   const [replyingTo, setReplyingTo] = useState<{ id: string; name: string } | null>(null);
   const [submittingComment, setSubmittingComment] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const loadVideo = useCallback(async () => {
     if (!videoId) return;
@@ -88,6 +90,21 @@ export default function VideoDetailPage() {
       setLikesCount(res.likesCount);
     } catch {
       toast.error('فشل تحديث الإعجاب');
+    }
+  };
+
+  const handleDownload = async () => {
+    if (!video?.video_url || isDownloading) return;
+
+    setIsDownloading(true);
+    try {
+      await downloadSavedVideo(video.video_url, `quran_${video.surah_number || 'reel'}.mp4`);
+      toast.success('تم بدء تحميل الفيديو بنجاح.');
+    } catch (err: any) {
+      console.error('Video detail download error:', err);
+      toast.error(err?.message || 'تعذر تحميل الفيديو، يرجى المحاولة مرة أخرى.');
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -275,12 +292,10 @@ export default function VideoDetailPage() {
                       </div>
                     )}
                     {video.video_url && !isExpired && (
-                      <a href={video.video_url} download className="block">
-                        <Button className="w-full gap-2 gradient-primary text-primary-foreground font-semibold">
-                          <Download className="h-4 w-4" />
-                          تحميل الفيديو مباشرة (MP4)
-                        </Button>
-                      </a>
+                      <Button onClick={() => { void handleDownload(); }} disabled={isDownloading} className="w-full gap-2 gradient-primary text-primary-foreground font-semibold">
+                        {isDownloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+                        {isDownloading ? 'جاري تجهيز التحميل...' : 'تحميل الفيديو مباشرة (MP4)'}
+                      </Button>
                     )}
                   </div>
                 );

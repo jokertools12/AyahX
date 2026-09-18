@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
+import { downloadSavedVideo } from '@/lib/download';
 import { ErrorState } from '@/components/ErrorState';
 import {
   Select,
@@ -69,6 +70,7 @@ export default function LibraryPage() {
   const [editingName, setEditingName] = useState('');
   const [savingRename, setSavingRename] = useState(false);
   const [duplicatingId, setDuplicatingId] = useState<string | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const fetchVideos = useCallback(async () => {
     if (!user) return;
@@ -188,6 +190,21 @@ export default function LibraryPage() {
   const handleRecreate = (video: SavedVideo) => {
     toast.info('جاري فتح المعاينة لإعادة إنشاء الفيديو...');
     handleOpenInPreview(video);
+  };
+
+  const handleDownload = async (video: SavedVideo) => {
+    if (!video.video_url || downloadingId) return;
+
+    setDownloadingId(video.id);
+    try {
+      await downloadSavedVideo(video.video_url, `quran_${video.surah_number || 'reel'}.mp4`);
+      toast.success('تم بدء تحميل الفيديو بنجاح.');
+    } catch (err: any) {
+      console.error('Library video download error:', err);
+      toast.error(err?.message || 'تعذر تحميل الفيديو، يرجى المحاولة مرة أخرى.');
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -430,13 +447,12 @@ export default function LibraryPage() {
                     {/* Direct MP4 Download Button (if ready and valid) */}
                     {video.video_url && (!video.expires_at || new Date(video.expires_at).getTime() > Date.now()) ? (
                       <Button
-                        asChild
+                        onClick={() => { void handleDownload(video); }}
+                        disabled={downloadingId === video.id}
                         className="w-full gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm mb-2 h-9"
                       >
-                        <a href={video.video_url} download={`quran_${video.surah_number || 'reel'}.mp4`} target="_blank" rel="noopener noreferrer">
-                          <Download className="h-4 w-4" />
-                          تحميل الفيديو مباشرة (MP4)
-                        </a>
+                        {downloadingId === video.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+                        {downloadingId === video.id ? 'جاري تجهيز التحميل...' : 'تحميل الفيديو مباشرة (MP4)'}
                       </Button>
                     ) : video.expires_at && new Date(video.expires_at).getTime() <= Date.now() ? (
                       <Button
