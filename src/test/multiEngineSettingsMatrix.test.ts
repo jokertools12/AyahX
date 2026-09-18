@@ -8,7 +8,7 @@ import { renderFfmpegAssVideo } from '../../server/services/ffmpegAssRenderer';
 import { renderSkiaCanvasVideo } from '../../server/services/skiaCanvasRenderer';
 import { renderDeterministicVideo } from '../../server/services/deterministicVideoRenderer';
 import { probeMediaFile } from '../../server/services/mediaProbeService';
-import type { RenderManifest } from '../../shared/renderManifest';
+import type { RenderManifest } from '../../server/models/renderManifest';
 
 describe('Multi-Engine Settings Matrix & Verification Test', () => {
   let tempDir: string;

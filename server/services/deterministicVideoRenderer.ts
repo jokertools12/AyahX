@@ -15,6 +15,7 @@ import { logger } from '../logger';
 export interface DeterministicRenderOptions {
   manifest: RenderManifest;
   outputPath: string;
+  audioFilePath?: string;
   signal?: AbortSignal;
   onProgress?: (progressPercent: number, currentFrame: number, totalFrames: number, stage?: string) => void;
 }
@@ -48,6 +49,8 @@ export function extractAyahsAndWords(manifest: RenderManifest): {
   ayahs: ExtractedAyah[];
   words: ExtractedWord[];
 } {
+  const manifestAny = manifest as any;
+
   // 1. Resolve Ayahs
   let ayahs: ExtractedAyah[] = [];
   if (manifest.canonicalAyahRange?.ayahs && manifest.canonicalAyahRange.ayahs.length > 0) {
@@ -55,10 +58,10 @@ export function extractAyahsAndWords(manifest: RenderManifest): {
       numberInSurah: a.numberInSurah,
       text: a.text || '',
     }));
-  } else if (manifest.ayahTimings && manifest.ayahTimings.length > 0) {
-    ayahs = manifest.ayahTimings.map((at) => ({
+  } else if (manifestAny.ayahTimings && manifestAny.ayahTimings.length > 0) {
+    ayahs = manifestAny.ayahTimings.map((at: any) => ({
       numberInSurah: at.ayahNumber,
-      text: (at as any).text || at.words?.map((w) => w.displayToken || w.text).join(' ') || '',
+      text: at.text || at.words?.map((w: any) => w.displayToken || w.text).join(' ') || '',
     }));
   } else {
     const start = manifest.canonicalAyahRange?.startAyah || 1;
@@ -66,7 +69,7 @@ export function extractAyahsAndWords(manifest: RenderManifest): {
     for (let num = start; num <= end; num++) {
       ayahs.push({
         numberInSurah: num,
-        text: (manifest as any).verseText || '',
+        text: manifestAny.verseText || '',
       });
     }
   }
@@ -81,10 +84,10 @@ export function extractAyahsAndWords(manifest: RenderManifest): {
       endMs: w.endMs,
       text: (w as any).text,
     }));
-  } else if (manifest.ayahTimings && manifest.ayahTimings.length > 0) {
-    for (const at of manifest.ayahTimings) {
+  } else if (manifestAny.ayahTimings && manifestAny.ayahTimings.length > 0) {
+    for (const at of manifestAny.ayahTimings) {
       if (at.words && at.words.length > 0) {
-        at.words.forEach((w, idx) => {
+        at.words.forEach((w: any, idx: number) => {
           words.push({
             canonicalWordKey: `${manifest.canonicalAyahRange?.surahNumber || 1}:${at.ayahNumber}:${idx + 1}`,
             displayToken: w.displayToken || w.text || '',
