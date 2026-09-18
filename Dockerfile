@@ -7,10 +7,12 @@ RUN npm run build
 
 FROM node:20-bookworm-slim
 WORKDIR /app
-ENV NODE_ENV=production
 RUN apt-get update && apt-get install -y --no-install-recommends chromium ffmpeg ca-certificates fonts-noto-core fonts-noto-extra && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app/package*.json ./
-RUN npm ci
+# The runtime entrypoints use tsx. Keep the locked dev toolchain in the
+# runtime image; NODE_ENV is set only after npm ci so npm does not omit it.
+RUN npm ci --include=dev
+ENV NODE_ENV=production
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/public ./public
 COPY --from=build /app/server ./server
