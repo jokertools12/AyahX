@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { DeleteObjectCommand, GetObjectCommand, HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { config } from '../config';
 
 let client: S3Client | null = null;
@@ -33,15 +32,6 @@ export async function uploadRender(localPath: string, userId: string, jobId: str
     Bucket: config.storage.bucket!, Key: key, Body: fs.createReadStream(localPath), ContentType: 'video/mp4',
   }));
   return `s3://${config.storage.bucket}/${key}`;
-}
-
-export async function signedRenderDownload(storagePath: string, filename: string): Promise<{ url: string; size: number | null }> {
-  const key = objectKeyFromPath(storagePath);
-  const head = await getClient().send(new HeadObjectCommand({ Bucket: config.storage.bucket!, Key: key }));
-  const url = await getSignedUrl(getClient(), new GetObjectCommand({
-    Bucket: config.storage.bucket!, Key: key, ResponseContentType: 'video/mp4', ResponseContentDisposition: `attachment; filename="${filename.replace(/"/g, '')}"`,
-  }), { expiresIn: 900 });
-  return { url, size: head.ContentLength ?? null };
 }
 
 /**
