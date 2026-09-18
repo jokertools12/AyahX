@@ -1,11 +1,11 @@
-FROM node:20-bookworm-slim AS build
+FROM node:22-bookworm-slim AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM node:20-bookworm-slim
+FROM node:22-bookworm-slim
 WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends chromium ffmpeg ca-certificates fonts-noto-core fonts-noto-extra && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app/package*.json ./
