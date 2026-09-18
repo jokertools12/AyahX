@@ -2530,7 +2530,6 @@ export default function PreviewPage() {
                     <div className="flex items-center justify-between text-xs text-muted-foreground">
                       <span className="font-semibold text-foreground">{Math.round(serverRenderJob.progress)}% مكتمل</span>
                       <span>
-                        المحرك: {serverRenderJob.engine === 'skia_canvas' ? 'Skia Canvas' : serverRenderJob.engine === 'browser_cloud' || serverRenderJob.engine === 'browser' ? 'Browser Cloud' : 'FFmpeg ASS'} ·{' '}
                         {serverRenderJob.status === 'queued' ? (
                           <span className="text-amber-500 font-medium">⏳ جاري تخصيص وحدة إنتاج تلقائياً</span>
                         ) : (

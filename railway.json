@@ -5,7 +5,7 @@
     "dockerfilePath": "Dockerfile"
   },
   "deploy": {
-    "startCommand": "npm run railway:start",
+    "startCommand": "npm run server",
     "preDeployCommand": "npm run db:setup",
     "preDeployTimeout": 300,
     "healthcheckPath": "/api/health/ready",

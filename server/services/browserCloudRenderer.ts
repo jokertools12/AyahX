@@ -21,8 +21,9 @@ import { logger } from '../logger';
  * The browser preview and this renderer share public/render-harness.html. The
  * harness produces the exact scene (background motion, Arabic typography,
  * word timing, borders, badges, headers and watermarks); FFmpeg is only the
- * final MP4 muxer. Idea 3 has its own dispatch, queue, and memory profile;
- * native engines do not enter this renderer.
+ * final MP4 muxer. Idea 3 has its own dispatch and quota; the shared frame
+ * contract is also used by the other independent encoders so every selection
+ * remains visually identical to the preview.
  */
 
 function cloneManifest(manifest: RenderManifest): RenderManifest {

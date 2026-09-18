@@ -139,48 +139,10 @@ function toFileUri(absPath: string): string {
   return normalized.startsWith('/') ? `file://${normalized}` : `file:///${normalized}`;
 }
 
-/**
- * Render manifests may contain ordinary paths, file:// URLs, or remote URLs.
- * Native renderers must never pass a file:// URL to fs or loadImage because
- * that silently turns a valid prepared asset into a missing background.
- */
-export function resolveLocalAssetPath(value?: string | null): string | null {
-  if (!value) return null;
-  if (value.startsWith('file://')) {
-    try {
-      return url.fileURLToPath(value);
-    } catch {
-      return decodeURIComponent(value.replace(/^file:\/\//, '').replace(/^\//, ''));
-    }
-  }
-  return value;
-}
-
-export function resolveLocalAssetPattern(value?: string | null): string | null {
-  const resolved = resolveLocalAssetPath(value);
-  return resolved ? resolved.replace(/\\/g, '/') : null;
-}
-
 function positiveEnvInt(name: string, fallback: number, min: number, max: number): number {
   const parsed = Number.parseInt(process.env[name] || '', 10);
   if (!Number.isFinite(parsed)) return fallback;
   return Math.max(min, Math.min(max, parsed));
-}
-
-async function fetchWithTimeout(input: string, init: RequestInit = {}, timeoutMs = 10_000): Promise<Response> {
-  // Promise.race keeps this compatible with Vitest/jsdom and Node's undici,
-  // whose AbortSignal implementations are not interchangeable.
-  let timer: ReturnType<typeof setTimeout> | null = null;
-  try {
-    return await Promise.race([
-      fetch(input, init),
-      new Promise<Response>((_, reject) => {
-        timer = setTimeout(() => reject(new Error(`Timed out fetching background asset after ${timeoutMs}ms`)), timeoutMs);
-      }),
-    ]);
-  } finally {
-    if (timer) clearTimeout(timer);
-  }
 }
 
 /**
@@ -229,17 +191,14 @@ export async function prepareBackgroundAsset(manifest: RenderManifest, scratchDi
       const localPath = path.join(scratchDir, `slide_${i}.jpg`);
       try {
         if (imgUrl.startsWith('http://') || imgUrl.startsWith('https://')) {
-          const res = await fetchWithTimeout(imgUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+          const res = await fetch(imgUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } });
           if (res.ok) {
             const buf = await res.arrayBuffer();
             await fs.promises.writeFile(localPath, Buffer.from(buf));
             localSlidePaths.push(toFileUri(localPath));
           }
-        } else {
-          const localImgPath = resolveLocalAssetPath(imgUrl);
-          if (localImgPath && fs.existsSync(localImgPath)) {
-            localSlidePaths.push(toFileUri(localImgPath));
-          }
+        } else if (fs.existsSync(imgUrl)) {
+          localSlidePaths.push(toFileUri(imgUrl));
         }
       } catch (err: any) {
         logger.warn(`Failed to preload slide image [${i}]: ${err.message}`);
@@ -267,7 +226,7 @@ export async function prepareBackgroundAsset(manifest: RenderManifest, scratchDi
       } else if (bg.url.startsWith('http://') || bg.url.startsWith('https://')) {
         localVideoPath = path.join(scratchDir, 'bg_video_input.mp4');
         logger.info(`Downloading video background preset for local render: ${bg.url}`);
-        const vRes = await fetchWithTimeout(bg.url, { headers: { 'User-Agent': 'Mozilla/5.0' } }, 10_000);
+        const vRes = await fetch(bg.url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
         if (vRes.ok) {
           const vBuf = await vRes.arrayBuffer();
           await fs.promises.writeFile(localVideoPath, Buffer.from(vBuf));
@@ -331,7 +290,7 @@ export async function prepareBackgroundAsset(manifest: RenderManifest, scratchDi
     try {
       if (targetUrl.startsWith('http://') || targetUrl.startsWith('https://')) {
         logger.info(`Fetching background asset for local render: ${targetUrl}`);
-        const res = await fetchWithTimeout(targetUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+        const res = await fetch(targetUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } });
         if (res.ok) {
           const buf = await res.arrayBuffer();
           await fs.promises.writeFile(localBgPath, Buffer.from(buf));
@@ -718,8 +677,9 @@ export const QUALITY_ENCODING_PROFILES: Record<string, QualityEncodingProfile> =
 
 /**
  * Executes full deterministic server-side video rendering.
- * Each engine has an independent dispatch and resource pool. Engine 1 and
- * Engine 2 stay fully native; only Engine 3 is allowed to start Chromium.
+ * Each engine has an independent dispatch/quota path. All three server paths
+ * share the browser harness as the visual contract so backgrounds, typography,
+ * word timing, frames and watermarks cannot diverge from the preview.
  */
 export async function renderDeterministicVideo(
   options: DeterministicRenderOptions

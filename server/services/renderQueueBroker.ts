@@ -2,29 +2,12 @@ import { Queue, Worker, JobsOptions, Job } from 'bullmq';
 import IORedis from 'ioredis';
 import { config } from '../config';
 import { logger } from '../logger';
-import {
-  capacityPollIntervalMs,
-  getRenderCapacity,
-  getRenderMemoryProfile,
-  resolveConcurrencySetting,
-  resolveRenderWorkerEngine,
-  RenderWorkerEngine,
-} from './renderCapacity';
+import { capacityPollIntervalMs, getRenderCapacity, resolveConcurrencySetting } from './renderCapacity';
 
-export type RenderQueueEngine = RenderWorkerEngine;
-
-export const RENDER_QUEUE_NAMES: Record<RenderQueueEngine, string> = {
-  ffmpeg_ass: 'quran-render-ffmpeg-v1',
-  skia_canvas: 'quran-render-skia-v1',
-  browser_cloud: 'quran-render-browser-v1',
-};
+export const RENDER_QUEUE_NAME = 'quran-render-v1';
 
 let connection: IORedis | null = null;
-const queues: Partial<Record<RenderQueueEngine, Queue>> = {};
-
-export function resolveRenderQueueEngine(value: unknown): RenderQueueEngine {
-  return resolveRenderWorkerEngine(typeof value === 'string' ? value : undefined);
-}
+let queue: Queue | null = null;
 
 function getConnection(): IORedis {
   if (!config.queue.redisUrl) throw new Error('REDIS_URL is required when RENDER_QUEUE_DRIVER=bullmq');
@@ -35,84 +18,41 @@ function getConnection(): IORedis {
   return connection;
 }
 
-export function getRenderQueue(engine: RenderQueueEngine = 'ffmpeg_ass'): Queue {
-  const existing = queues[engine];
-  if (existing) return existing;
-
-  const queue = new Queue(RENDER_QUEUE_NAMES[engine], {
-    connection: getConnection(),
-    defaultJobOptions: {
-      attempts: 3,
-      backoff: { type: 'exponential', delay: 15_000 },
-      removeOnComplete: { age: 86_400, count: 10_000 },
-      removeOnFail: { age: 604_800, count: 10_000 },
-    },
-  });
-  queues[engine] = queue;
+export function getRenderQueue(): Queue {
+  if (!queue) queue = new Queue(RENDER_QUEUE_NAME, { connection: getConnection(), defaultJobOptions: {
+    attempts: 3,
+    backoff: { type: 'exponential', delay: 15_000 },
+    removeOnComplete: { age: 86_400, count: 10_000 },
+    removeOnFail: { age: 604_800, count: 10_000 },
+  } });
   return queue;
 }
 
-export async function enqueueRenderJob(
-  jobId: string,
-  engine: RenderQueueEngine = 'ffmpeg_ass',
-  priority = 0,
-): Promise<Job> {
+export async function enqueueRenderJob(jobId: string, priority = 0): Promise<Job> {
   const options: JobsOptions = { jobId, priority, attempts: 3 };
-  return getRenderQueue(engine).add('render', { jobId, engine }, options);
+  return getRenderQueue().add('render', { jobId }, options);
 }
 
-function engineMaxConcurrency(engine: RenderQueueEngine): number {
-  const prefix = engine === 'ffmpeg_ass' ? 'FFMPEG' : engine === 'skia_canvas' ? 'SKIA' : 'BROWSER';
-  return resolveConcurrencySetting(
-    process.env[`${prefix}_RENDER_MAX_CONCURRENCY`] || process.env.RENDER_MAX_CONCURRENCY,
-    config.queue.workerConcurrency,
-  );
-}
-
-export function startRenderWorker(
-  processJob: (jobId: string, engine: RenderQueueEngine) => Promise<void>,
-  requestedEngine?: RenderQueueEngine,
-): Worker {
-  const engine = resolveRenderQueueEngine(requestedEngine || process.env.RENDER_WORKER_ENGINE);
-  const maxConcurrency = engineMaxConcurrency(engine);
+export function startRenderWorker(processJob: (jobId: string) => Promise<void>): Worker {
+  const maxConcurrency = resolveConcurrencySetting(process.env.RENDER_MAX_CONCURRENCY, config.queue.workerConcurrency);
   let activeJobs = 0;
-  const initialCapacity = getRenderCapacity(0, maxConcurrency, engine);
-  const initialConcurrency = initialCapacity.targetConcurrency;
+  const initialConcurrency = getRenderCapacity(0, maxConcurrency).targetConcurrency;
   let lastReportedConcurrency = initialConcurrency;
-  const profile = getRenderMemoryProfile(engine);
-
-  const worker = new Worker(
-    RENDER_QUEUE_NAMES[engine],
-    async (job) => {
-      const jobEngine = resolveRenderQueueEngine(job.data?.engine || engine);
-      if (jobEngine !== engine) {
-        throw new Error(`Render queue engine mismatch: worker=${engine}, job=${jobEngine}`);
-      }
-      await processJob(String(job.data.jobId), jobEngine);
-    },
-    {
-      connection: getConnection(),
-      concurrency: initialConcurrency,
-      lockDuration: 30 * 60 * 1000,
-      stalledInterval: 30 * 1000,
-    },
-  );
-
+  const worker = new Worker(RENDER_QUEUE_NAME, async (job) => {
+    await processJob(String(job.data.jobId));
+  }, { connection: getConnection(), concurrency: initialConcurrency, lockDuration: 15 * 60 * 1000 });
   const refreshConcurrency = () => {
-    const capacity = getRenderCapacity(activeJobs, maxConcurrency, engine);
+    const capacity = getRenderCapacity(activeJobs, maxConcurrency);
     const nextConcurrency = Math.max(activeJobs, capacity.targetConcurrency);
     if (worker.concurrency !== nextConcurrency) worker.concurrency = nextConcurrency;
     if (nextConcurrency !== lastReportedConcurrency) {
       lastReportedConcurrency = nextConcurrency;
       logger.info(
-        `Render capacity adjusted: engine=${engine}, concurrency=${nextConcurrency}, active=${activeJobs}, ` +
-        `cpu=${capacity.cpuCores}, memoryAvailableMb=${Math.round(capacity.availableBytes / (1024 * 1024))}, ` +
-        `memoryPerJobMb=${Math.round(capacity.memoryPerJobBytes / (1024 * 1024))}, ` +
-        `memoryReserveMb=${Math.round(capacity.memoryReserveBytes / (1024 * 1024))}`,
+        `Render capacity adjusted: concurrency=${nextConcurrency}, active=${activeJobs}, ` +
+        `cpu=${capacity.cpuCores}, memoryAvailableMb=${Math.round(capacity.availableBytes / (1024 * 1024))}`,
       );
     }
   };
-
   const capacityTimer = setInterval(refreshConcurrency, capacityPollIntervalMs());
   capacityTimer.unref?.();
   worker.on('active', () => {
@@ -126,20 +66,18 @@ export function startRenderWorker(
   worker.on('completed', onJobFinished);
   worker.on('failed', onJobFinished);
   worker.on('closing', () => clearInterval(capacityTimer));
-  worker.on('failed', (job, error) => logger.error(`BullMQ ${engine} render job failed [${job?.id}]`, error));
-  worker.on('error', (error) => logger.error(`BullMQ ${engine} render worker error:`, error));
+  worker.on('failed', (job, error) => logger.error(`BullMQ render job failed [${job?.id}]`, error));
+  worker.on('error', (error) => logger.error('BullMQ render worker error:', error));
   logger.info(
-    `BullMQ ${engine} render worker ${config.queue.workerId} started with dynamic concurrency ` +
-    `${initialConcurrency} (max ${maxConcurrency}), ` +
-    `memoryPerJobMb=${profile.memoryPerJobMb}, memoryReserveMb=${profile.memoryReserveMb}, ` +
-    `queue=${RENDER_QUEUE_NAMES[engine]}`,
+    `BullMQ render worker ${config.queue.workerId} started with dynamic concurrency ` +
+    `${initialConcurrency} (max ${maxConcurrency})`,
   );
   return worker;
 }
 
 export async function closeRenderQueue(): Promise<void> {
-  await Promise.all(Object.values(queues).filter(Boolean).map((queue) => queue!.close()));
+  await queue?.close();
   await connection?.quit();
-  for (const engine of Object.keys(queues) as RenderQueueEngine[]) delete queues[engine];
+  queue = null;
   connection = null;
 }

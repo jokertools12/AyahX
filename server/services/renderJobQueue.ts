@@ -7,27 +7,10 @@ import { validateManifestAssets } from './assetCatalogResolver';
 import { renderDeterministicVideo } from './deterministicVideoRenderer';
 import { logger } from '../logger';
 import { config } from '../config';
-import { enqueueRenderJob, resolveRenderQueueEngine, RenderQueueEngine, startRenderWorker } from './renderQueueBroker';
+import { enqueueRenderJob, startRenderWorker } from './renderQueueBroker';
 import { deleteStoredRender, isObjectStoragePath, uploadRender } from './objectStorage';
 import { recordRenderAudit, renderDurationSeconds } from './renderObservability';
 import { resolveConcurrencySetting } from './renderCapacity';
-
-function queueEngineForManifest(manifest: RenderManifest | string | unknown): RenderQueueEngine {
-  let value: unknown = manifest;
-  if (typeof manifest === 'string') {
-    try { value = JSON.parse(manifest); } catch { value = undefined; }
-  }
-  const selected = typeof value === 'object' && value !== null
-    ? (value as any).renderEngine || (value as any).displaySettings?.renderEngine
-    : undefined;
-  // The legacy `browser` name is the same isolated Browser Cloud pool. It is
-  // normalized here so it can never fall through to a native worker.
-  return selected === 'skia_canvas'
-    ? 'skia_canvas'
-    : selected === 'browser' || selected === 'browser_cloud'
-    ? 'browser_cloud'
-    : 'ffmpeg_ass';
-}
 
 export interface RenderJobRow {
   id: string;
@@ -146,13 +129,7 @@ export class RenderJobQueue {
       await Promise.all(stateUpdates);
       if (requeuedIds.length > 0) {
         if (config.queue.driver === 'bullmq') {
-          const recoveredRows = await query<Array<{ id: string; manifest: RenderManifest | string }>>(
-            `SELECT id, manifest FROM render_jobs WHERE id IN (${requeuedIds.map(() => '?').join(',')})`,
-            requeuedIds,
-          );
-          for (const recovered of recoveredRows) {
-            this.triggerProcessor(recovered.id, 0, queueEngineForManifest(recovered.manifest));
-          }
+          for (const jobId of requeuedIds) this.triggerProcessor(jobId);
         } else {
           this.triggerProcessor();
         }
@@ -258,7 +235,7 @@ export class RenderJobQueue {
     void recordRenderAudit(jobId, userId, 'queued');
 
     // Kick processor asynchronously
-    this.triggerProcessor(jobId, 0, queueEngineForManifest(manifest));
+    this.triggerProcessor(jobId);
 
     const created = await this.getJobById(jobId, userId);
     if (!created) {
@@ -366,17 +343,17 @@ export class RenderJobQueue {
     // BullMQ requires the durable job id to be re-added explicitly. Calling
     // the processor without an id is a no-op in BullMQ mode, which made a
     // manual retry appear successful while never reaching the worker.
-    this.triggerProcessor(jobId, 0, queueEngineForManifest(job.manifest));
+    this.triggerProcessor(jobId);
     return this.getJobById(jobId, userId, isAdmin);
   }
 
   /**
    * Triggers the queue worker loop
    */
-  public triggerProcessor(jobId?: string, priority = 0, engine?: RenderQueueEngine): void {
+  public triggerProcessor(jobId?: string, priority = 0): void {
     if (config.queue.driver === 'bullmq') {
       if (jobId) {
-        enqueueRenderJob(jobId, engine || 'ffmpeg_ass', priority).catch((error) => logger.error(`Failed to enqueue render job [${jobId}] in Redis:`, error));
+        enqueueRenderJob(jobId, priority).catch((error) => logger.error(`Failed to enqueue render job [${jobId}] in Redis:`, error));
       }
       return;
     }
@@ -387,7 +364,7 @@ export class RenderJobQueue {
   }
 
   /** Called by the dedicated BullMQ process after the durable queue grants a job. */
-  public async processExternalJob(jobId: string, workerEngine?: RenderQueueEngine): Promise<void> {
+  public async processExternalJob(jobId: string): Promise<void> {
     const leased: any = await query(
       "UPDATE render_jobs SET status = 'running', stage = 'بدء معالجة المشهد', started_at = NOW() WHERE id = ? AND status = 'queued'",
       [jobId],
@@ -395,14 +372,6 @@ export class RenderJobQueue {
     if (!leased?.affectedRows) return;
     const job = await this.getJobById(jobId, undefined, true);
     if (!job) return;
-    const jobEngine = queueEngineForManifest(job.manifest);
-    if (workerEngine && jobEngine !== workerEngine) {
-      await query(
-        "UPDATE render_jobs SET status = 'queued', stage = 'تمت إعادة توجيه المهمة إلى مسار المحرك الصحيح' WHERE id = ? AND status = 'running'",
-        [jobId],
-      );
-      throw new Error(`Render engine mismatch: job=${jobEngine}, worker=${workerEngine}`);
-    }
     await this.executeJob(job);
 
     // executeJob deliberately catches render errors so it can persist the
@@ -418,21 +387,6 @@ export class RenderJobQueue {
     if (state[0]?.status === 'queued') {
       throw new Error('Render job requeued after transient infrastructure failure');
     }
-  }
-
-  /**
-   * Re-adds durable queued rows that are missing from Redis after a temporary
-   * Redis outage or worker restart. BullMQ de-duplicates by the MySQL job id.
-   */
-  public async reconcileQueuedJobs(): Promise<void> {
-    if (config.queue.driver !== 'bullmq') return;
-    const rows = await query<Array<{ id: string; manifest: RenderManifest | string }>>(
-      "SELECT id, manifest FROM render_jobs WHERE status = 'queued' ORDER BY created_at ASC LIMIT 200",
-    );
-    await Promise.all(rows.map((row) => new Promise<void>((resolve) => {
-      this.triggerProcessor(row.id, 0, queueEngineForManifest(row.manifest));
-      resolve();
-    })));
   }
 
   /**
@@ -682,6 +636,5 @@ export const renderJobQueue = new RenderJobQueue();
 // `npm run worker` (or a separate container) to consume the Redis queue.
 export function startDedicatedRenderWorker(): void {
   if (config.queue.driver !== 'bullmq') return;
-  const engine = resolveRenderQueueEngine(process.env.RENDER_WORKER_ENGINE);
-  startRenderWorker((jobId, queuedEngine) => renderJobQueue.processExternalJob(jobId, queuedEngine), engine);
+  startRenderWorker((jobId) => renderJobQueue.processExternalJob(jobId));
 }
