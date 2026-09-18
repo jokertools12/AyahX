@@ -2,8 +2,8 @@ import fs from 'fs';
 import os from 'os';
 
 const MB = 1024 * 1024;
-const DEFAULT_MEMORY_PER_JOB_MB = 320;
-const DEFAULT_MEMORY_RESERVE_MB = 220;
+const DEFAULT_MEMORY_PER_JOB_MB = 300;
+const DEFAULT_MEMORY_RESERVE_MB = 180;
 const DEFAULT_MAX_CONCURRENCY = 16;
 
 function readCgroupMemoryLimit(): number | null {
