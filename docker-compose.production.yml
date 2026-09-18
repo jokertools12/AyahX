@@ -9,16 +9,41 @@ services:
     deploy:
       replicas: 2
 
-  worker:
+  worker-ffmpeg:
     build: .
     command: npm run worker
     env_file: .env
     environment:
       RENDER_QUEUE_DRIVER: bullmq
-      RENDER_WORKER_CONCURRENCY: 2
+      RENDER_WORKER_ENGINE: ffmpeg_ass
+      FFMPEG_RENDER_MAX_CONCURRENCY: auto
     depends_on: [redis]
     deploy:
       replicas: 2
+
+  worker-skia:
+    build: .
+    command: npm run worker
+    env_file: .env
+    environment:
+      RENDER_QUEUE_DRIVER: bullmq
+      RENDER_WORKER_ENGINE: skia_canvas
+      SKIA_RENDER_MAX_CONCURRENCY: auto
+    depends_on: [redis]
+    deploy:
+      replicas: 2
+
+  worker-browser:
+    build: .
+    command: npm run worker
+    env_file: .env
+    environment:
+      RENDER_QUEUE_DRIVER: bullmq
+      RENDER_WORKER_ENGINE: browser_cloud
+      BROWSER_RENDER_MAX_CONCURRENCY: 1
+    depends_on: [redis]
+    deploy:
+      replicas: 1
 
   redis:
     image: redis:7-alpine

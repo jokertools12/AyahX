@@ -7,6 +7,11 @@ async function main() {
   await ensureRenderJobsTable();
   await renderJobQueue.recoverStaleJobs();
   startDedicatedRenderWorker();
+  await renderJobQueue.reconcileQueuedJobs();
+  const reconcileTimer = setInterval(() => {
+    renderJobQueue.reconcileQueuedJobs().catch((error) => logger.warn('Render queue reconciliation failed:', error));
+  }, 15_000);
+  reconcileTimer.unref?.();
 }
 
 main().catch((error) => {

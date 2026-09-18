@@ -5,6 +5,7 @@ export type ServerJobStatus = 'idle' | 'submitting' | 'queued' | 'running' | 'su
 
 export interface ServerRenderJobState {
   jobId: string | null;
+  engine?: string | null;
   status: ServerJobStatus;
   progress: number;
   stage: string;
@@ -15,9 +16,31 @@ export interface ServerRenderJobState {
   videoBlob: Blob | null;
 }
 
+const ACTIVE_RENDER_STORAGE_KEY = 'ayahx-active-render-job-v1';
+
+function persistActiveRenderJob(jobId: string): void {
+  try {
+    localStorage.setItem(ACTIVE_RENDER_STORAGE_KEY, JSON.stringify({ jobId, savedAt: Date.now() }));
+  } catch {
+    // Server-side recovery still works when browser storage is unavailable.
+  }
+}
+
+function clearPersistedRenderJob(jobId?: string): void {
+  try {
+    const raw = localStorage.getItem(ACTIVE_RENDER_STORAGE_KEY);
+    if (!jobId || !raw || JSON.parse(raw)?.jobId === jobId) {
+      localStorage.removeItem(ACTIVE_RENDER_STORAGE_KEY);
+    }
+  } catch {
+    try { localStorage.removeItem(ACTIVE_RENDER_STORAGE_KEY); } catch { /* ignore */ }
+  }
+}
+
 export function useServerRenderJob() {
   const [state, setState] = useState<ServerRenderJobState>({
     jobId: null,
+    engine: null,
     status: 'idle',
     progress: 0,
     stage: '',
@@ -41,10 +64,12 @@ export function useServerRenderJob() {
 
   const reset = useCallback(() => {
     stopPolling();
+    clearPersistedRenderJob();
     activeJobIdRef.current = null;
     consecutiveErrorsRef.current = 0;
     setState({
       jobId: null,
+      engine: null,
       status: 'idle',
       progress: 0,
       stage: '',
@@ -110,6 +135,7 @@ export function useServerRenderJob() {
             }));
           } else if (currentStatus === 'cancelled') {
             stopPolling();
+            clearPersistedRenderJob(updatedJob.id);
             setState((prev) => ({
               ...prev,
               status: 'cancelled',
@@ -135,16 +161,14 @@ export function useServerRenderJob() {
         } catch (pollErr: any) {
           console.warn('Render poll error:', pollErr);
           consecutiveErrorsRef.current++;
-          if (consecutiveErrorsRef.current >= 4) {
-            stopPolling();
-            setState((prev) => ({
-              ...prev,
-              status: 'failed',
-              stage: 'انقطع الاتصال بمهمة الريندر',
-              error: 'تعذر متابعة حالة الريندر (قد تم إلغاء المهمة أو انتهت صلاحيتها). يمكنك بدء مهمة جديدة.',
-              isRendering: false,
-            }));
-          }
+          // A transient API/Redis/network failure is not a render failure.
+          // Keep the durable job ID and continue polling through a restart.
+          setState((prev) => ({
+            ...prev,
+            stage: `جاري إعادة الاتصال بخدمة الإنتاج... (${consecutiveErrorsRef.current})`,
+            error: null,
+            isRendering: true,
+          }));
         }
       }, 1200);
     },
@@ -159,6 +183,72 @@ export function useServerRenderJob() {
     if (!token) return;
 
     try {
+      // Restore the exact job created in this browser before asking for the
+      // user's generic recent job. This survives refreshes and avoids showing
+      // a different export from another tab/account session.
+      try {
+        const raw = localStorage.getItem(ACTIVE_RENDER_STORAGE_KEY);
+        const saved = raw ? JSON.parse(raw) : null;
+        if (saved?.jobId && Date.now() - Number(saved.savedAt || 0) < 48 * 60 * 60 * 1000) {
+          const restored = (await api.renderJobs.getJob(saved.jobId)).job;
+          activeJobIdRef.current = restored.id;
+          const progress = restored.status === 'succeeded'
+            ? 100
+            : Math.min(100, Math.max(0, Number(restored.progress) || 0));
+          if (restored.status === 'queued' || restored.status === 'running') {
+            setState({
+              jobId: restored.id,
+              engine: restored.manifest?.renderEngine || null,
+              status: restored.status,
+              progress,
+              stage: restored.stage || 'جاري استعادة مهمة الإنتاج...',
+              error: null,
+              outputFilename: restored.output_filename || null,
+              isRendering: true,
+              isCompleted: false,
+              videoBlob: null,
+            });
+            startPolling(restored.id);
+            return;
+          }
+          if (restored.status === 'succeeded') {
+            setState({
+              jobId: restored.id,
+              engine: restored.manifest?.renderEngine || null,
+              status: 'succeeded',
+              progress: 100,
+              stage: 'فيديو جاهز للتحميل بعد استعادة الصفحة',
+              error: null,
+              outputFilename: restored.output_filename || null,
+              isRendering: false,
+              isCompleted: true,
+              videoBlob: null,
+            });
+            return;
+          }
+          if (restored.status === 'failed' || restored.status === 'cancelled') {
+            setState((prev) => ({
+              ...prev,
+              jobId: restored.id,
+              engine: restored.manifest?.renderEngine || null,
+              status: restored.status,
+              stage: restored.stage || 'انتهت مهمة الإنتاج',
+              error: restored.error_message || null,
+              outputFilename: restored.output_filename || null,
+              isRendering: false,
+              isCompleted: false,
+            }));
+            return;
+          }
+        } else if (saved?.jobId) {
+          clearPersistedRenderJob(saved.jobId);
+        }
+      } catch (restoreError: any) {
+        if (restoreError?.status === 404 || restoreError?.status === 410) {
+          clearPersistedRenderJob();
+        }
+      }
+
       const res = await api.renderJobs.getActiveJob();
       if (res.hasActiveJob && res.job) {
         const job = res.job;
@@ -166,6 +256,7 @@ export function useServerRenderJob() {
         const progress = Math.min(100, Math.max(0, Number(job.progress) || 0));
         setState({
           jobId: job.id,
+          engine: job.manifest?.renderEngine || null,
           status: job.status,
           progress,
           stage:
@@ -185,6 +276,7 @@ export function useServerRenderJob() {
         activeJobIdRef.current = rJob.id;
         setState({
           jobId: rJob.id,
+          engine: rJob.manifest?.renderEngine || null,
           status: 'succeeded',
           progress: 100,
           stage: 'فيديو سابق جاهز للتحميل (تم إنتاجه بنجاح)',
@@ -224,6 +316,7 @@ export function useServerRenderJob() {
       stopPolling();
       setState({
         jobId: null,
+        engine: manifest?.renderEngine || null,
         status: 'submitting',
         progress: 0,
         stage: 'جاري إرسال أمر الريندر إلى الخادم...',
@@ -241,6 +334,7 @@ export function useServerRenderJob() {
         });
         const jobId = job.id;
         activeJobIdRef.current = jobId;
+        persistActiveRenderJob(jobId);
 
         setState((prev) => ({
           ...prev,
@@ -257,6 +351,7 @@ export function useServerRenderJob() {
         const message = err.message || 'فشل بدء عملية الريندر على الخادم';
         setState({
           jobId: null,
+          engine: manifest?.renderEngine || null,
           status: 'failed',
           progress: 0,
           stage: 'فشل الإرسال',
@@ -278,7 +373,9 @@ export function useServerRenderJob() {
   const cancelRender = useCallback(async () => {
     if (!activeJobIdRef.current) return;
     try {
-      await api.renderJobs.cancelJob(activeJobIdRef.current);
+      const jobId = activeJobIdRef.current;
+      await api.renderJobs.cancelJob(jobId);
+      clearPersistedRenderJob(jobId);
       stopPolling();
       setState((prev) => ({
         ...prev,
@@ -311,6 +408,7 @@ export function useServerRenderJob() {
     try {
       const { job } = await api.renderJobs.retryJob(activeJobIdRef.current);
       activeJobIdRef.current = job.id;
+      persistActiveRenderJob(job.id);
       setState((prev) => ({
         ...prev,
         jobId: job.id,
@@ -336,6 +434,7 @@ export function useServerRenderJob() {
       if (!activeJobIdRef.current) return;
       try {
         const blob = state.videoBlob || (await api.renderJobs.downloadVideo(activeJobIdRef.current));
+        if (!state.videoBlob) setState((prev) => ({ ...prev, videoBlob: blob }));
         const filename = customFilename || state.outputFilename || 'quran-reel.mp4';
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');

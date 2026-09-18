@@ -2,12 +2,22 @@ import fs from 'fs';
 import os from 'os';
 
 const MB = 1024 * 1024;
-// A 1080p Chromium page plus FFmpeg can briefly exceed 400MB. Reserve a
-// conservative slot so the worker never starts a second render that would
-// cause Chromium to be OOM-killed on a 1GB container.
-const DEFAULT_MEMORY_PER_JOB_MB = 500;
-const DEFAULT_MEMORY_RESERVE_MB = 300;
-const DEFAULT_MAX_CONCURRENCY = 16;
+export type RenderWorkerEngine = 'ffmpeg_ass' | 'skia_canvas' | 'browser_cloud';
+
+const DEFAULT_MAX_CONCURRENCY = 32;
+
+const MEMORY_PROFILES: Record<RenderWorkerEngine, {
+  envPrefix: string;
+  memoryPerJobMb: number;
+  memoryReserveMb: number;
+}> = {
+  // These native paths do not launch Chromium. The values are intentionally
+  // conservative defaults and can be tightened after Railway peak metrics.
+  ffmpeg_ass: { envPrefix: 'FFMPEG', memoryPerJobMb: 128, memoryReserveMb: 256 },
+  skia_canvas: { envPrefix: 'SKIA', memoryPerJobMb: 256, memoryReserveMb: 256 },
+  // Chromium + FFmpeg remains isolated in its own worker pool.
+  browser_cloud: { envPrefix: 'BROWSER', memoryPerJobMb: 650, memoryReserveMb: 350 },
+};
 
 function readCgroupMemoryLimit(): number | null {
   const candidates = ['/sys/fs/cgroup/memory.max', '/sys/fs/cgroup/memory/memory.limit_in_bytes'];
@@ -24,11 +34,38 @@ function readCgroupMemoryLimit(): number | null {
   return null;
 }
 
+function readCgroupCpuLimit(): number | null {
+  try {
+    const raw = fs.readFileSync('/sys/fs/cgroup/cpu.max', 'utf8').trim().split(/\s+/);
+    if (raw.length >= 2 && raw[0] !== 'max') {
+      const quota = Number(raw[0]);
+      const period = Number(raw[1]);
+      if (Number.isFinite(quota) && Number.isFinite(period) && quota > 0 && period > 0) {
+        return Math.max(0.1, quota / period);
+      }
+    }
+  } catch {
+    // cgroup v1 and non-Linux hosts use the legacy files/fallback below.
+  }
+
+  try {
+    const quota = Number(fs.readFileSync('/sys/fs/cgroup/cpu/cpu.cfs_quota_us', 'utf8').trim());
+    const period = Number(fs.readFileSync('/sys/fs/cgroup/cpu/cpu.cfs_period_us', 'utf8').trim());
+    if (quota > 0 && period > 0) return Math.max(0.1, quota / period);
+  } catch {
+    // The worker may run outside Linux cgroups.
+  }
+
+  return null;
+}
+
 export function availableCpuCores(): number {
   const parallelism = typeof os.availableParallelism === 'function'
     ? os.availableParallelism()
     : os.cpus().length;
-  return Math.max(1, parallelism || 1);
+  const hostCores = Math.max(1, parallelism || 1);
+  const cgroupCores = readCgroupCpuLimit();
+  return Math.max(1, Math.floor(Math.min(hostCores, cgroupCores || hostCores)));
 }
 
 /** Parses a positive concurrency setting. `auto` deliberately resolves to the host CPU capacity. */
@@ -44,7 +81,24 @@ function positiveEnvNumber(name: string, fallback: number): number {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
 
+export function resolveRenderWorkerEngine(value?: string): RenderWorkerEngine {
+  if (value === 'ffmpeg_ass' || value === 'skia_canvas' || value === 'browser_cloud') return value;
+  return 'browser_cloud';
+}
+
+export function getRenderMemoryProfile(engine: RenderWorkerEngine = resolveRenderWorkerEngine(process.env.RENDER_WORKER_ENGINE)): {
+  memoryPerJobMb: number;
+  memoryReserveMb: number;
+} {
+  const profile = MEMORY_PROFILES[engine];
+  return {
+    memoryPerJobMb: positiveEnvNumber(`${profile.envPrefix}_RENDER_MEMORY_PER_JOB_MB`, profile.memoryPerJobMb),
+    memoryReserveMb: positiveEnvNumber(`${profile.envPrefix}_RENDER_MEMORY_RESERVE_MB`, profile.memoryReserveMb),
+  };
+}
+
 export interface RenderCapacitySnapshot {
+  engine: RenderWorkerEngine;
   cpuCores: number;
   memoryLimitBytes: number;
   estimatedUsedBytes: number;
@@ -61,11 +115,16 @@ export interface RenderCapacitySnapshot {
  * active job in addition to the Node worker RSS. Existing jobs are never
  * stopped when capacity falls; only admission of the next job is throttled.
  */
-export function getRenderCapacity(activeJobs: number, configuredMax?: number): RenderCapacitySnapshot {
+export function getRenderCapacity(
+  activeJobs: number,
+  configuredMax?: number,
+  engine: RenderWorkerEngine = resolveRenderWorkerEngine(process.env.RENDER_WORKER_ENGINE),
+): RenderCapacitySnapshot {
   const cpuCores = availableCpuCores();
   const memoryLimitBytes = readCgroupMemoryLimit() || os.totalmem();
-  const memoryPerJobBytes = positiveEnvNumber('RENDER_MEMORY_PER_JOB_MB', DEFAULT_MEMORY_PER_JOB_MB) * MB;
-  const memoryReserveBytes = positiveEnvNumber('RENDER_MEMORY_RESERVE_MB', DEFAULT_MEMORY_RESERVE_MB) * MB;
+  const profile = getRenderMemoryProfile(engine);
+  const memoryPerJobBytes = profile.memoryPerJobMb * MB;
+  const memoryReserveBytes = profile.memoryReserveMb * MB;
   const nodeRssBytes = process.memoryUsage().rss;
   const normalizedActiveJobs = Math.max(0, activeJobs);
   const estimatedUsedBytes = nodeRssBytes + normalizedActiveJobs * memoryPerJobBytes;
@@ -80,6 +139,7 @@ export function getRenderCapacity(activeJobs: number, configuredMax?: number): R
   );
 
   return {
+    engine,
     cpuCores,
     memoryLimitBytes,
     estimatedUsedBytes,

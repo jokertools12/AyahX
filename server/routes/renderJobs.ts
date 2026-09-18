@@ -232,10 +232,14 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       throw new Error('تعذر إنشاء مهمة الريندر');
     }
     if (!queued.existing) {
-      // BullMQ uses a lower numeric value as a higher priority. Premium
-      // subscribers get the fast lane, while free jobs remain fairly served
-      // by the worker pool instead of being blocked behind one user's render.
-      renderJobQueue.triggerProcessor(queued.jobId, entitlements.features.priorityCloudQueue ? 1 : 10);
+      // Route the durable job to the selected engine's isolated queue. A
+      // priority value must never move a job between engine pools.
+      const queueEngine = selectedEngine === 'skia_canvas'
+        ? 'skia_canvas'
+        : selectedEngine === 'browser' || selectedEngine === 'browser_cloud'
+        ? 'browser_cloud'
+        : 'ffmpeg_ass';
+      renderJobQueue.triggerProcessor(queued.jobId, 0, queueEngine);
       void recordRenderAudit(queued.jobId, userId, 'accepted', { plan });
     }
     const usage = await getTodayCloudRenderUsage(userId);

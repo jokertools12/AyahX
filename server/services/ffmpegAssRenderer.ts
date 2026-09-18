@@ -6,9 +6,8 @@ import { spawn } from 'child_process';
 import { RenderManifest } from '../models/renderManifest';
 import { logger } from '../logger';
 import { probeMediaFile, validateProbeAgainstSpec } from './mediaProbeService';
-import { prepareAudioTrack, prepareBackgroundAsset, DeterministicRenderOptions, DeterministicRenderResult, extractAyahsAndWords } from './deterministicVideoRenderer';
+import { prepareAudioTrack, prepareBackgroundAsset, resolveLocalAssetPath, resolveLocalAssetPattern, DeterministicRenderOptions, DeterministicRenderResult, extractAyahsAndWords } from './deterministicVideoRenderer';
 import { getFfmpegBinary, getFfmpegPreset, getFfmpegResourceArgs, getFfmpegVideoEncoderArgs } from './ffmpegBinary';
-import { renderFullFidelityVideo } from './browserCloudRenderer';
 
 /**
  * Converts numbers to Arabic Eastern numerals (٠-٩)
@@ -263,10 +262,6 @@ export function generateQuranAssContent(manifest: RenderManifest, fontsDir?: str
 export async function renderFfmpegAssVideo(
   options: DeterministicRenderOptions
 ): Promise<DeterministicRenderResult> {
-  // Engine 1 keeps its own quota and dispatch identity, while the canonical
-  // browser harness guarantees that no visible setting is dropped.
-  return renderFullFidelityVideo(options, { label: 'Engine 1 FFmpeg', preset: 'veryfast' });
-
   const { manifest, outputPath, signal, onProgress } = options;
 
   const ffmpegPath = getFfmpegBinary();
@@ -324,17 +319,32 @@ export async function renderFfmpegAssVideo(
       : 0.42;
     const filterComplex = `[0:v]scale=${width}:${height}:force_original_aspect_ratio=increase,crop=${width}:${height},drawbox=x=0:y=0:w=iw:h=ih:color=black@${overlayAlpha.toFixed(2)}:t=fill,ass='${escapedAssPath}':fontsdir='${escapedFontsDir}',fps=${fps}[v]`;
 
-    let bgSourceFile = bg.url;
-    // If background was prepared into scratch directory
-    const matchedPrepared = fs.readdirSync(scratchDir).find((f) => f.startsWith('bg_source'));
-    if (matchedPrepared) {
-      bgSourceFile = path.join(scratchDir, matchedPrepared);
-    }
+    const bgSourceFile = resolveLocalAssetPath(bg.url);
+    const preparedFramePattern = resolveLocalAssetPattern((bg as any).framesPattern);
+    const preparedSlides = (bg.slideImages || [])
+      .map((slide) => resolveLocalAssetPath(slide))
+      .filter((slide): slide is string => Boolean(slide && fs.existsSync(slide)));
 
-    if (isVideoBg && fs.existsSync(bgSourceFile)) {
-      bgInputArgs = ['-stream_loop', '-1', '-i', bgSourceFile];
-    } else if (fs.existsSync(bgSourceFile)) {
-      bgInputArgs = ['-loop', '1', '-i', bgSourceFile];
+    if (isVideoBg && preparedFramePattern && fs.existsSync(preparedFramePattern.replace(/%0\d+d/, '00001'))) {
+      // Video backgrounds are decoded once during preparation. Feeding the
+      // extracted sequence keeps this engine native and avoids Chromium while
+      // preserving motion, duration, and the selected output FPS.
+      bgInputArgs = ['-framerate', fps.toString(), '-start_number', '1', '-i', preparedFramePattern];
+    } else if (bg.type === 'slideshow' && preparedSlides.length > 0) {
+      // The concat demuxer gives native engines the same slide timing without
+      // loading a browser page. The final repeated frame prevents the last
+      // slide from disappearing one frame early.
+      const slideListPath = path.join(scratchDir, 'slideshow.txt');
+      const slideDuration = Math.max(0.25, manifest.audio.durationSeconds / preparedSlides.length);
+      const concatLines = preparedSlides.map((slide) => `file '${slide.replace(/'/g, "'\\''")}'\nduration ${slideDuration.toFixed(3)}`);
+      concatLines.push(`file '${preparedSlides[preparedSlides.length - 1].replace(/'/g, "'\\''")}'`);
+      await fs.promises.writeFile(slideListPath, concatLines.join('\n'), 'utf8');
+      bgInputArgs = ['-f', 'concat', '-safe', '0', '-i', slideListPath];
+    } else if (bgSourceFile && fs.existsSync(bgSourceFile)) {
+      const isRasterFallback = /\.(?:png|jpe?g|webp)$/i.test(bgSourceFile);
+      bgInputArgs = isVideoBg && !isRasterFallback
+        ? ['-stream_loop', '-1', '-i', bgSourceFile]
+        : ['-loop', '1', '-i', bgSourceFile];
     } else {
       // Fallback or explicit solid elegant background if source file not on disk
       const solidColor = (bg.type === 'color' && bg.url && bg.url.startsWith('#')) ? bg.url : '#0B1519';
@@ -364,6 +374,10 @@ export async function renderFfmpegAssVideo(
       '-ar', '44100',
       '-ac', '2',
       '-shortest',
+      // Bound looping image/video inputs to the manifest clock. This is
+      // essential for remote/video fallbacks: an endless input must never
+      // keep FFmpeg alive after the audio has completed.
+      '-t', manifest.audio.durationSeconds.toFixed(3),
       '-movflags', '+faststart',
       outputPath,
     ];

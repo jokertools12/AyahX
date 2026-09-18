@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { availableCpuCores, getRenderCapacity, resolveConcurrencySetting } from '../../server/services/renderCapacity';
+import { availableCpuCores, getRenderCapacity, getRenderMemoryProfile, resolveConcurrencySetting } from '../../server/services/renderCapacity';
 
 describe('Adaptive render capacity', () => {
   it('resolves auto and invalid settings to a safe positive CPU-based value', () => {
@@ -18,5 +18,12 @@ describe('Adaptive render capacity', () => {
   it('does not lower concurrency below jobs already running', () => {
     const capacity = getRenderCapacity(3, 1);
     expect(capacity.targetConcurrency).toBeGreaterThanOrEqual(3);
+  });
+
+  it('keeps independent memory profiles for each render engine', () => {
+    expect(getRenderMemoryProfile('ffmpeg_ass')).toEqual({ memoryPerJobMb: 128, memoryReserveMb: 256 });
+    expect(getRenderMemoryProfile('skia_canvas')).toEqual({ memoryPerJobMb: 256, memoryReserveMb: 256 });
+    expect(getRenderMemoryProfile('browser_cloud')).toEqual({ memoryPerJobMb: 650, memoryReserveMb: 350 });
+    expect(getRenderCapacity(0, 8, 'browser_cloud').engine).toBe('browser_cloud');
   });
 });
