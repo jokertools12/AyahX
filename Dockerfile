@@ -7,7 +7,7 @@ RUN npm run build
 
 FROM node:22-bookworm-slim
 WORKDIR /app
-RUN apt-get update && apt-get install -y --no-install-recommends chromium ffmpeg ca-certificates fonts-noto-core fonts-noto-extra && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg ca-certificates fonts-noto-core fonts-noto-extra && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app/package*.json ./
 # The runtime entrypoints use tsx. Keep the locked dev toolchain in the
 # runtime image; NODE_ENV is set only after npm ci so npm does not omit it.
@@ -19,5 +19,6 @@ COPY --from=build /app/server ./server
 COPY --from=build /app/shared ./shared
 # Required by the Railway API service's pre-deploy schema migration.
 COPY --from=build /app/database ./database
-ENV CHROME_BIN=/usr/bin/chromium
+ENV FFMPEG_PATH=/usr/bin/ffmpeg
 CMD ["npm", "run", "server"]
+

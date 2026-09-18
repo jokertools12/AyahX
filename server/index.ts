@@ -19,6 +19,11 @@ import adminRouter from './routes/admin';
 import servicesRouter from './routes/services';
 import renderJobsRouter from './routes/renderJobs';
 import quranRouter from './routes/quran';
+import videoTranscodeRouter from './routes/videoTranscode';
+
+
+
+
 import { ensureRenderJobsTable } from './db/migrations/addRenderJobsTable';
 import { ensurePlanEntitlementSchema } from './db/migrations/ensurePlanEntitlementSchema';
 import { ensureSettingsTable } from './services/settingsService';
@@ -83,8 +88,13 @@ app.use((_req, res, next) => {
   next();
 });
 
+app.use(express.raw({
+  type: ['video/webm', 'video/mp4', 'application/octet-stream'],
+  limit: '200mb',
+}));
 app.use(express.json({ limit: '60mb' }));
 app.use(express.urlencoded({ extended: true, limit: '60mb' }));
+
 
 // Global JWT authentication middleware
 app.use(authenticateToken);
@@ -161,7 +171,9 @@ app.get('/internal/metrics', async (_req, res) => {
 // Mount Application Routers
 // ==============================================================================
 app.use('/api/auth', authRouter);
+app.use('/api/videos', videoTranscodeRouter);
 app.use('/api/videos', videosRouter);
+
 app.use('/api/users', usersRouter);
 app.use('/api/subscriptions', subscriptionsRouter);
 app.use('/api/achievements', achievementsRouter);

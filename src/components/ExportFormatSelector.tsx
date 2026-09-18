@@ -257,129 +257,41 @@ export function ExportFormatSelector({
         </div>
 
         {/* 5. Render Engine Choice */}
+        {/* 5. Production Engine Showcase */}
         <div className="space-y-3 pt-2 border-t border-border/40">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium flex items-center gap-2">
-              <Cpu className="h-4 w-4 text-primary" />
-              نمط الريندر (محرك المعالجة)
+              <Zap className="h-4 w-4 text-primary" />
+              محرك الإنتاج والتصدير
             </Label>
-            {isPremium ? (
-              <span className="text-xs text-emerald-500 font-medium flex items-center gap-1">
-                <ShieldCheck className="h-3.5 w-3.5" />
-                رصيد السيرفر: {serverRemaining}/{serverLimit} اليوم
-              </span>
-            ) : canUseServerRender ? (
-              <span className="text-xs text-primary font-medium flex items-center gap-1">
-                <Sparkles className="h-3.5 w-3.5" />
-                متبقي {serverRemaining} تجربة سحابية اليوم
-              </span>
-            ) : (
-              <span className="text-xs text-amber-500 font-medium flex items-center gap-1">
-                <Lock className="h-3.5 w-3.5" />
-                استنفدت حصة السيرفر (1/1 اليوم)
-              </span>
-            )}
+            <span className="text-xs text-emerald-500 font-medium flex items-center gap-1 bg-emerald-500/10 px-2.5 py-0.5 rounded-full">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              فوري • بدون أي طوابير
+            </span>
           </div>
 
-          <RadioGroup
-            value={effectiveEngine}
-            onValueChange={(val) => {
-              if (val === 'server') {
-                if (!canUseServerRender) {
-                  if (!isPremium) {
-                    toast.error('لقد استنفدت تجربتك السحابية المجانية اليوم (1/1). يتبقى لك رصيد Browser Canvas اليوم أو يمكنك الترقية ✨');
-                  } else {
-                    toast.error(`لقد استنفدت حصتك اليومية من الريندر السحابي (${serverLimit}/${serverLimit}). محرك المتصفح ما زال غير محدود في عضويتك.`);
-                  }
-                  return;
-                }
-              }
-              updateSetting('renderEngine', val as RenderEngine);
-            }}
-            className="space-y-2.5"
-          >
-            {/* Server Headless Option */}
-            <div className="relative">
-              <RadioGroupItem
-                value="server"
-                id="engine-server"
-                disabled={!canUseServerRender}
-                className="peer sr-only"
-              />
-              <Label
-                htmlFor="engine-server"
-                className={`flex items-start gap-3 rounded-xl border-2 border-muted p-3.5 hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer transition-all ${
-                  !canUseServerRender ? 'opacity-60 cursor-not-allowed bg-muted/10' : ''
-                }`}
-                onClick={() => {
-                  if (!canUseServerRender) {
-                    if (!isPremium) {
-                      toast.error('لقد استنفدت تجربتك السحابية المجانية اليوم (1/1). استخدم Browser Canvas ضمن حصته اليومية أو قم بالترقية ✨');
-                    } else {
-                      toast.error(`لقد استنفدت حصتك اليومية من الريندر السحابي (${serverLimit} فيديو). يمكنك استخدام محرك المتصفح الفوري.`);
-                    }
-                  }
-                }}
-              >
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
-                  <Sparkles className="h-4 w-4" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-sm">محرك السيرفر السحابي (Cloud Puppeteer Master)</span>
-                      {!canUseServerRender && <Lock className="h-3.5 w-3.5 text-amber-500" />}
-                    </div>
-                    {isPremium ? (
-                      <span className="text-[10px] bg-emerald-500/15 text-emerald-500 font-bold px-2 py-0.5 rounded-full">
-                        {serverRemaining > 0 ? `متبقي ${serverRemaining}/${serverLimit}` : 'انتهت الحصة'}
-                      </span>
-                    ) : canUseServerRender ? (
-                      <span className="text-[10px] bg-primary/15 text-primary font-bold px-2 py-0.5 rounded-full">
-                        هدية تجربة (1/1 اليوم)
-                      </span>
-                    ) : (
-                      <span className="text-[10px] bg-amber-500/15 text-amber-500 font-bold px-2 py-0.5 rounded-full">
-                        استُهلكت اليوم (1/1)
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    معالجة حسابية مستقلة في السيرفر بمعدل إطارات ثابت 100% بدون أي ضغط على جهازك وبأعلى دقة نقاء سينمائية.
-                  </p>
-                </div>
-              </Label>
+          <div className="p-3.5 rounded-xl border border-primary/30 bg-primary/5 flex items-start gap-3">
+            <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
+              <Sparkles className="h-5 w-5" />
             </div>
-
-            {/* Browser Canvas Option */}
-            <div className="relative">
-              <RadioGroupItem value="browser" id="engine-browser" className="peer sr-only" />
-              <Label
-                htmlFor="engine-browser"
-                className="flex items-start gap-3 rounded-xl border-2 border-muted p-3.5 hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer transition-all"
-              >
-                <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-foreground shrink-0 mt-0.5">
-                  <Zap className="h-4 w-4" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-sm">محرك المتصفح الفوري (Browser Instant Canvas)</span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                      browserLimit === null ? 'bg-emerald-500/15 text-emerald-600' : 'bg-primary/15 text-primary'
-                    }`}>
-                      {browserLimit === null ? 'غير محدود في عضويتك' : `متبقي ${browserRemaining ?? 0}/${browserLimit} اليوم`}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    {browserLimit === null
-                      ? 'تسجيل محلي فوري داخل المتصفح، غير محدود ولا يتأثر بطابور المعالجة السحابية.'
-                      : 'تسجيل محلي فوري داخل المتصفح. الخطة المجانية تشمل 5 عمليات إنشاء يومياً، وتتجدد تلقائياً كل يوم.'}
-                  </p>
-                </div>
-              </Label>
+            <div className="flex-1 space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-sm text-foreground">
+                  محرك الإنتاج الهجين فائق السرعة (Zero-Queue High-Speed Engine)
+                </span>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                  browserLimit === null ? 'bg-emerald-500/15 text-emerald-600' : 'bg-primary/15 text-primary'
+                }`}>
+                  {browserLimit === null ? 'غير محدود في عضويتك' : `متبقي ${browserRemaining ?? 0}/${browserLimit} اليوم`}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                ريندر مباشر فائق السلاسة على كرت الشاشة مع تلميع وترميز MP4 ستوديو بـ FFmpeg في ثوانٍ معدودة بدون أي انتظار في طابور.
+              </p>
             </div>
-          </RadioGroup>
+          </div>
         </div>
+
 
         {/* 6. Client Recording Strategy (When Browser engine is used) */}
         {effectiveEngine === 'browser' && (

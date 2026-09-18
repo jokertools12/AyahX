@@ -1875,12 +1875,9 @@ export default function PreviewPage() {
   };
 
   const handleStartExport = async () => {
-    if (exportSettings.renderEngine === 'server') {
-      await handleServerExport();
-    } else {
-      await handleLegacyBrowserRecording();
-    }
+    await handleLegacyBrowserRecording();
   };
+
 
   // ── Filename helpers ────────────────────────────────────────────────────────
   const toSafeFilename = useCallback((input: string) => {
@@ -2603,17 +2600,17 @@ export default function PreviewPage() {
                     </div>
                     <Progress value={videoRecorder.progress} className="h-2" />
                     <p className="text-xs text-muted-foreground text-center">
-                      {Math.round(videoRecorder.progress)}% مكتمل (تسجيل محلي)
+                      {Math.round(videoRecorder.progress)}% مكتمل • ريندر فائق الدقة (30/60fps)
                     </p>
                   </div>
                 ) : videoRecorder.videoBlob ? (
-                  /* 2b. Legacy Browser Recording Completed State */
+                  /* 2b. Video Recording Completed State */
                   <div className="space-y-3">
                     {videoRecorder.isConverting ? (
                       <div className="space-y-3">
                         <div className="flex items-center gap-2 text-primary">
                           <Loader2 className="h-5 w-5 animate-spin" />
-                          <span className="font-medium">جاري تجهيز الفيديو...</span>
+                          <span className="font-medium">{videoRecorder.stage || 'جاري تجهيز وتلميع الفيديو...'}</span>
                         </div>
                         <Progress value={videoRecorder.convertProgress} className="h-2" />
                       </div>
@@ -2621,8 +2618,9 @@ export default function PreviewPage() {
                       <>
                         <div className="flex items-center justify-center gap-2 text-primary p-3 rounded-lg bg-primary/10">
                           <Check className="h-5 w-5" />
-                          <span className="font-medium">تم إنشاء الفيديو بنجاح (تسجيل محلي)!</span>
+                          <span className="font-medium">تم إنشاء وتلميع الفيديو بنجاح (MP4)!</span>
                         </div>
+
 
                         {(() => {
                           const baseFilename = toSafeFilename(
@@ -2751,9 +2749,8 @@ export default function PreviewPage() {
                     ) : (
                       <>
                         <Video className="h-5 w-5" />
-                        {exportSettings.renderEngine !== 'server'
-                          ? 'تصدير سريع من المتصفح (WebM Canvas)'
-                          : 'تصدير فائق الدقة بالخادم (MP4 Studio Master)'}
+                        تصدير وإنتاج الفيديو (MP4 عالي الدقة)
+
                       </>
                     )}
                   </Button>

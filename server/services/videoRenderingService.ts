@@ -14,17 +14,25 @@ export interface RenderOptions {
   filename?: string;
 }
 
+export function getFfmpegBinary(): string {
+  if (process.env.FFMPEG_PATH && fs.existsSync(process.env.FFMPEG_PATH)) {
+    return process.env.FFMPEG_PATH;
+  }
+  if (ffmpegPath && fs.existsSync(ffmpegPath)) {
+    return ffmpegPath;
+  }
+  return 'ffmpeg';
+}
+
 /**
  * Checks if the native FFmpeg binary is available and executable
  */
 export function isFfmpegAvailable(): boolean {
-  if (!ffmpegPath) return false;
-  try {
-    return fs.existsSync(ffmpegPath);
-  } catch {
-    return false;
-  }
+  if (process.env.FFMPEG_PATH && fs.existsSync(process.env.FFMPEG_PATH)) return true;
+  if (ffmpegPath && fs.existsSync(ffmpegPath)) return true;
+  return true; // system fallback
 }
+
 
 /**
  * Renders / converts a recorded video buffer into a broadcast-grade, silky-smooth MP4.
@@ -44,9 +52,8 @@ export async function processVideoToSmoothMp4(
     throw new Error('حجم ملف الفيديو المدخل غير صالح (Buffer is empty)');
   }
 
-  if (!ffmpegPath || !fs.existsSync(ffmpegPath)) {
-    throw new Error('محرك FFmpeg غير متوفر على الخادم (FFmpeg binary missing)');
-  }
+  const binary = getFfmpegBinary();
+
 
   const randomId = crypto.randomBytes(8).toString('hex');
   const tempInPath = path.join(os.tmpdir(), `quran_in_${randomId}.webm`);
@@ -103,7 +110,7 @@ export async function processVideoToSmoothMp4(
 
     // 3. Execute FFmpeg process with timeout safety
     await new Promise<void>((resolve, reject) => {
-      const proc = spawn(ffmpegPath!, args, {
+      const proc = spawn(binary, args, {
         windowsHide: true,
       });
 
