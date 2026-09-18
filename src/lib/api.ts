@@ -778,7 +778,6 @@ export const api = {
         hasActiveJob: boolean;
         job?: any;
         recentJob?: any;
-        queuePosition?: number;
       }>('/api/render-jobs/active');
     },
 
@@ -789,7 +788,7 @@ export const api = {
     },
 
     async getJob(id: string) {
-      return request<{ job: any; queuePosition?: number }>(`/api/render-jobs/${id}`);
+      return request<{ job: any }>(`/api/render-jobs/${id}`);
     },
 
     async cancelJob(id: string) {

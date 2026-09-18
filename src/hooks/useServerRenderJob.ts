@@ -13,7 +13,6 @@ export interface ServerRenderJobState {
   isRendering: boolean;
   isCompleted: boolean;
   videoBlob: Blob | null;
-  queuePosition: number | null;
 }
 
 export function useServerRenderJob() {
@@ -27,7 +26,6 @@ export function useServerRenderJob() {
     isRendering: false,
     isCompleted: false,
     videoBlob: null,
-    queuePosition: null,
   });
 
   const pollIntervalRef = useRef<any>(null);
@@ -55,7 +53,6 @@ export function useServerRenderJob() {
       isRendering: false,
       isCompleted: false,
       videoBlob: null,
-      queuePosition: null,
     });
   }, [stopPolling]);
 
@@ -75,7 +72,7 @@ export function useServerRenderJob() {
             return;
           }
 
-          const { job: updatedJob, queuePosition } = await api.renderJobs.getJob(activeJobIdRef.current);
+          const { job: updatedJob } = await api.renderJobs.getJob(activeJobIdRef.current);
           consecutiveErrorsRef.current = 0; // reset error counter on success
           const currentStatus: ServerJobStatus = updatedJob.status;
           const currentProgress = Math.min(100, Math.max(0, Number(updatedJob.progress) || 0));
@@ -100,7 +97,6 @@ export function useServerRenderJob() {
               isRendering: false,
               isCompleted: true,
               videoBlob: downloadedBlob,
-              queuePosition: null,
             });
           } else if (currentStatus === 'failed') {
             stopPolling();
@@ -111,7 +107,6 @@ export function useServerRenderJob() {
               error: updatedJob.error_message || 'حدث خطأ غير متوقع أثناء معالجة الفيديو',
               isRendering: false,
               isCompleted: false,
-              queuePosition: null,
             }));
           } else if (currentStatus === 'cancelled') {
             stopPolling();
@@ -121,7 +116,6 @@ export function useServerRenderJob() {
               stage: 'تم إلغاء المهمة',
               isRendering: false,
               isCompleted: false,
-              queuePosition: null,
             }));
           } else {
             // queued or running
@@ -132,11 +126,10 @@ export function useServerRenderJob() {
               stage:
                 updatedJob.stage ||
                 (currentStatus === 'queued'
-                  ? 'في قائمة الانتظار - جاري انتظار اكتمال المهام السابقة...'
+                  ? 'جاري تخصيص وحدة إنتاج تلقائياً...'
                   : 'جاري معالجة الفيديو وتوليد الإطارات...'),
               isRendering: true,
               isCompleted: false,
-              queuePosition: currentStatus === 'queued' ? (queuePosition ?? null) : null,
             }));
           }
         } catch (pollErr: any) {
@@ -178,14 +171,13 @@ export function useServerRenderJob() {
           stage:
             job.stage ||
             (job.status === 'queued'
-              ? 'في قائمة الانتظار - جاري انتظار اكتمال المهام السابقة...'
+              ? 'جاري تخصيص وحدة إنتاج تلقائياً...'
               : 'جاري معالجة الفيديو وتوليد الإطارات...'),
           error: null,
           outputFilename: job.output_filename || null,
           isRendering: true,
           isCompleted: false,
           videoBlob: null,
-          queuePosition: res.queuePosition ?? null,
         });
         startPolling(job.id);
       } else if (res.recentJob) {
@@ -201,7 +193,6 @@ export function useServerRenderJob() {
           isRendering: false,
           isCompleted: true,
           videoBlob: null,
-          queuePosition: null,
         });
       }
     } catch (e) {
@@ -220,7 +211,9 @@ export function useServerRenderJob() {
 
   /**
    * Starts a new server-side deterministic render job.
-   * By default, passes replaceActive: true to safely clear any previously queued or stale jobs.
+   * Existing exports are preserved unless the caller explicitly chooses to
+   * replace one. This prevents an accidental second click from cancelling a
+   * healthy render.
    */
   const startServerRender = useCallback(
     async (
@@ -239,12 +232,11 @@ export function useServerRenderJob() {
         isRendering: true,
         isCompleted: false,
         videoBlob: null,
-        queuePosition: null,
       });
 
       try {
         const { job } = await api.renderJobs.createJob(manifest, idempotencyKey, {
-          replaceActive: options?.replaceActive ?? true,
+          replaceActive: options?.replaceActive ?? false,
         });
         const jobId = job.id;
         activeJobIdRef.current = jobId;
@@ -254,7 +246,7 @@ export function useServerRenderJob() {
           jobId,
           status: job.status,
           progress: Number(job.progress) || 0,
-          stage: job.stage || 'في قائمة الانتظار',
+          stage: job.stage || 'جاري تخصيص وحدة إنتاج تلقائياً...',
         }));
 
         startPolling(jobId);
@@ -272,7 +264,6 @@ export function useServerRenderJob() {
           isRendering: false,
           isCompleted: false,
           videoBlob: null,
-          queuePosition: null,
         });
         throw err;
       }
@@ -324,12 +315,11 @@ export function useServerRenderJob() {
         jobId: job.id,
         status: job.status,
         progress: Number(job.progress) || 0,
-        stage: job.stage || 'تمت إعادة المهمة إلى الطابور',
+        stage: job.stage || 'جاري إعادة تشغيل الإنتاج...',
         error: null,
         isRendering: true,
         isCompleted: false,
         videoBlob: null,
-        queuePosition: null,
       }));
       startPolling(job.id);
     } catch (err: any) {

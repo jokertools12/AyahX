@@ -102,23 +102,36 @@ export class RenderJobQueue {
           : "SELECT id, retry_count, max_retries FROM render_jobs WHERE status = 'running'"
       );
 
+      const requeuedIds: string[] = [];
+      const stateUpdates: Promise<unknown>[] = [];
       for (const job of staleJobs) {
         // This process still owns the worker; a quiet render can legitimately
         // spend several minutes inside Chromium/FFmpeg between progress ticks.
         if (onlyStale && this.activeJobAbortControllers.has(job.id)) continue;
         if (job.retry_count < job.max_retries) {
           logger.info(`Re-queueing stale render job [${job.id}] after restart...`);
-          await query(
-            "UPDATE render_jobs SET status = 'queued', stage = 'إعادة المحاولة بعد إعادة تشغيل الخادم', retry_count = retry_count + 1 WHERE id = ?",
+          stateUpdates.push(query(
+            "UPDATE render_jobs SET status = 'queued', stage = 'جاري استعادة الإنتاج تلقائياً', retry_count = retry_count + 1 WHERE id = ?",
             [job.id]
-          );
-          this.triggerProcessor(job.id);
+          ));
+          requeuedIds.push(job.id);
         } else {
           logger.warn(`Marking non-retryable stale render job [${job.id}] as failed.`);
-          await query(
+          stateUpdates.push(query(
             "UPDATE render_jobs SET status = 'failed', stage = 'فشل', error_code = 'WORKER_TERMINATED', error_message = 'تم إيقاف عملية الريندر بسبب إعادة تشغيل الخادم' WHERE id = ?",
             [job.id]
-          );
+          ));
+        }
+      }
+      // Reclaim all orphaned rows in parallel, then wake the scheduler once.
+      // Sequential updates could hold up worker startup behind a large batch
+      // of abandoned jobs and made recovery look like another render queue.
+      await Promise.all(stateUpdates);
+      if (requeuedIds.length > 0) {
+        if (config.queue.driver === 'bullmq') {
+          for (const jobId of requeuedIds) this.triggerProcessor(jobId);
+        } else {
+          this.triggerProcessor();
         }
       }
     } catch (err) {
@@ -134,11 +147,18 @@ export class RenderJobQueue {
     try {
       const expiredJobs = await query<RenderJobRow[]>(
         `SELECT id, output_path FROM render_jobs 
-         WHERE (expires_at IS NOT NULL AND expires_at < NOW())
-            OR (status IN ('failed', 'cancelled') AND created_at < DATE_SUB(NOW(), INTERVAL 30 MINUTE))`
+         WHERE output_path IS NOT NULL AND (
+           (expires_at IS NOT NULL AND expires_at < NOW())
+           OR (status IN ('failed', 'cancelled') AND created_at < DATE_SUB(NOW(), INTERVAL 30 MINUTE))
+         )
+         ORDER BY COALESCE(expires_at, created_at) ASC
+         LIMIT 100`
       );
 
-      for (const job of expiredJobs) {
+      // Cleanup is intentionally bounded and parallel. A sequential delete +
+      // UPDATE for every old artifact can delay worker recovery for seconds
+      // when a busy installation has accumulated many failed jobs.
+      await Promise.all(expiredJobs.map(async (job) => {
         if (job.output_path && fs.existsSync(job.output_path)) {
           try {
             await fs.promises.unlink(job.output_path);
@@ -153,7 +173,7 @@ export class RenderJobQueue {
           "UPDATE render_jobs SET output_path = NULL, stage = 'تم مسح الملف المؤقت لانتهاء الصلاحية' WHERE id = ? AND output_path IS NOT NULL",
           [job.id]
         );
-      }
+      }));
     } catch (err) {
       logger.error('Failed running garbage collector on expired renders:', err);
     }
@@ -197,7 +217,7 @@ export class RenderJobQueue {
     await query(
       `INSERT INTO render_jobs (
         id, user_id, idempotency_key, status, progress, stage, manifest, max_retries
-      ) VALUES (?, ?, ?, 'queued', 0.00, 'في قائمة الانتظار', ?, 1)`,
+      ) VALUES (?, ?, ?, 'queued', 0.00, 'جاري تخصيص موارد الإنتاج', ?, 1)`,
       [jobId, userId, idempotencyKey || null, manifestJson]
     );
 
@@ -301,7 +321,7 @@ export class RenderJobQueue {
     }
 
     const result: any = await query(
-      `UPDATE render_jobs SET status = 'queued', progress = 0, stage = 'إعادة المحاولة في الطابور',
+      `UPDATE render_jobs SET status = 'queued', progress = 0, stage = 'جاري إعادة تشغيل الإنتاج',
         error_code = NULL, error_message = NULL, output_path = NULL, output_filename = NULL,
         output_size_bytes = NULL, duration_seconds = NULL, metadata = NULL, completed_at = NULL,
         expires_at = NULL, retry_count = 0
@@ -525,7 +545,7 @@ export class RenderJobQueue {
 
       if (isTransient && job.retry_count < job.max_retries) {
         await query(
-          "UPDATE render_jobs SET status = 'queued', stage = 'إعادة المحاولة بعد خطأ مؤقت', retry_count = retry_count + 1 WHERE id = ? AND status = 'running'",
+          "UPDATE render_jobs SET status = 'queued', stage = 'جاري استعادة الإنتاج تلقائياً', retry_count = retry_count + 1 WHERE id = ? AND status = 'running'",
           [jobId]
         );
         // The DB worker can enqueue directly. BullMQ uses the current job's

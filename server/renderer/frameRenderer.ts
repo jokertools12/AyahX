@@ -11,6 +11,23 @@ export interface FrameRendererOptions {
   onProgress?: (renderedFrames: number, totalFrames: number) => void;
 }
 
+const DEFAULT_PROTOCOL_TIMEOUT_MS = 300_000;
+const DEFAULT_FRAME_OPERATION_TIMEOUT_MS = 45_000;
+
+function positiveEnvInt(name: string, fallback: number, min: number, max: number): number {
+  const parsed = Number.parseInt(process.env[name] || '', 10);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.max(min, Math.min(max, parsed));
+}
+
+function protocolTimeoutMs(): number {
+  return positiveEnvInt('RENDER_PROTOCOL_TIMEOUT_MS', DEFAULT_PROTOCOL_TIMEOUT_MS, 30_000, 900_000);
+}
+
+function frameOperationTimeoutMs(): number {
+  return positiveEnvInt('RENDER_FRAME_OPERATION_TIMEOUT_MS', DEFAULT_FRAME_OPERATION_TIMEOUT_MS, 5_000, 180_000);
+}
+
 /**
  * Discovers a working Chrome/Chromium executable across Windows, Linux, and custom configurations
  */
@@ -74,6 +91,27 @@ export class DeterministicFrameRenderer {
   }
 
   /**
+   * A renderer operation must have an application-level deadline. Puppeteer's
+   * protocol timeout only controls CDP's callback registry; if Chromium is
+   * under memory pressure it can remain alive but stop answering. The caller
+   * can then recycle this isolated browser and continue the same frame.
+   */
+  private async withOperationTimeout<T>(operation: Promise<T>, label: string): Promise<T> {
+    const timeout = frameOperationTimeoutMs();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      return await Promise.race([
+        operation,
+        new Promise<T>((_, reject) => {
+          timer = setTimeout(() => reject(new Error(`Chromium ${label} timed out after ${timeout}ms`)), timeout);
+        }),
+      ]);
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
+  }
+
+  /**
    * Initializes the headless Chromium instance and renders the offline scene harness
    */
   public async init(): Promise<void> {
@@ -85,6 +123,9 @@ export class DeterministicFrameRenderer {
     this.browser = await puppeteer.launch({
       executablePath,
       headless: true,
+      // Keep CDP itself patient while the application-level deadline above
+      // gives us a deterministic recovery path for a wedged renderer.
+      protocolTimeout: protocolTimeoutMs(),
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -106,6 +147,8 @@ export class DeterministicFrameRenderer {
 
     this.page = await this.browser.newPage();
     await this.page.setViewport({ width, height, deviceScaleFactor: 1 });
+    this.page.setDefaultTimeout(frameOperationTimeoutMs());
+    this.page.setDefaultNavigationTimeout(30_000);
 
     this.page.on('console', (msg) => {
       const text = msg.text();
@@ -132,11 +175,11 @@ export class DeterministicFrameRenderer {
     await this.page.goto(fileUrl, { waitUntil: 'load', timeout: 30000 });
 
     // Initialize scene with manifest
-    const initSuccess = await this.page.evaluate(async (m) => {
+    const initSuccess = await this.withOperationTimeout(this.page.evaluate(async (m) => {
       const controller = (window as any).__RENDER_CONTROLLER__;
       if (!controller) return false;
       return await controller.initScene(m);
-    }, this.manifest);
+    }, this.manifest), 'scene initialization');
 
     if (!initSuccess) {
       throw new Error('Failed to initialize scene inside render harness.');
@@ -156,27 +199,35 @@ export class DeterministicFrameRenderer {
     const { width, height } = this.manifest.outputDimensions;
 
     // Render frame at exact timestamp inside harness
-    await this.page.evaluate(
+    await this.withOperationTimeout(this.page.evaluate(
       async (idx, sec) => {
         await (window as any).__RENDER_CONTROLLER__.renderFrame(idx, sec);
       },
       frameIndex,
       frameTimeSeconds
-    );
+    ), `frame ${frameIndex} drawing`);
 
     // Capture direct frame screenshot
     const configuredQuality = Number.parseInt(process.env.RENDER_JPEG_QUALITY || '90', 10);
     const screenshotQuality = Number.isFinite(configuredQuality)
       ? Math.max(70, Math.min(100, configuredQuality))
       : 90;
-    const screenshot = await this.page.screenshot({
+    const screenshot = await this.withOperationTimeout(this.page.screenshot({
       type: 'jpeg',
       quality: screenshotQuality,
       // Chromium's optimized JPEG path materially reduces per-frame CPU time
       // while preserving the deterministic pixels used by the final encoder.
       optimizeForSpeed: process.env.RENDER_SCREENSHOT_OPTIMIZE !== 'false',
+      // Keep Chromium's compositor-surface capture as the default. In
+      // headless mode view capture can race the canvas paint and return a
+      // stale frame; callers may explicitly opt into view capture when they
+      // have verified it for their Chromium build.
+      ...(process.env.RENDER_SCREENSHOT_FROM_SURFACE === 'false'
+        ? { fromSurface: false }
+        : { fromSurface: true }),
+      captureBeyondViewport: false,
       clip: { x: 0, y: 0, width, height },
-    });
+    }), `frame ${frameIndex} screenshot`);
 
     return screenshot as Buffer;
   }
@@ -189,13 +240,37 @@ export class DeterministicFrameRenderer {
     this.isClosed = true;
 
     try {
-      if (this.page) {
-        await this.page.close().catch(() => {});
-        this.page = null;
-      }
-      if (this.browser) {
-        await this.browser.close().catch(() => {});
-        this.browser = null;
+      const page = this.page;
+      const browser = this.browser;
+      this.page = null;
+      this.browser = null;
+      const closeWithDeadline = async (
+        operation: Promise<void>,
+        timeoutMs: number,
+        onTimeout?: () => void,
+      ) => {
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        const completed = await Promise.race([
+          operation.then(() => true).catch(() => true),
+          new Promise<boolean>((resolve) => {
+            timer = setTimeout(() => resolve(false), timeoutMs);
+          }),
+        ]);
+        if (timer) clearTimeout(timer);
+        if (!completed) onTimeout?.();
+      };
+      if (page) await closeWithDeadline(page.close(), 5_000);
+      if (browser) {
+        const browserProcess = browser.process();
+        await closeWithDeadline(browser.close(), 8_000, () => {
+          // A wedged CDP session can otherwise leave a Chromium child holding
+          // the worker's memory until the container is OOM-killed.
+          try {
+            if (browserProcess && !browserProcess.killed) browserProcess.kill('SIGKILL');
+          } catch {
+            // The process may have exited between the timeout and kill.
+          }
+        });
       }
     } catch (err) {
       logger.warn('Error during frame renderer cleanup:', err);

@@ -1463,8 +1463,10 @@ export default function PreviewPage() {
         userId: user?.id,
       });
 
-      toast.info('بدء إدراج مهمة الريندر في طابور الخادم...');
-      await serverRenderJob.startServerRender(manifest, undefined, { replaceActive: true });
+      toast.info('بدأ تجهيز الفيديو تلقائياً وسيُوزّع على وحدة الإنتاج المتاحة...');
+      // Keep an existing export alive. A second click must never cancel a
+      // healthy render; the explicit cancel action is the user's choice.
+      await serverRenderJob.startServerRender(manifest, undefined, { replaceActive: false });
       refetchUsage();
     } catch (err: any) {
       console.error('Server render job failed to start:', err);
@@ -2517,7 +2519,7 @@ export default function PreviewPage() {
                       <span className="font-semibold text-foreground">{Math.round(serverRenderJob.progress)}% مكتمل</span>
                       <span>
                         {serverRenderJob.status === 'queued' ? (
-                          <span className="text-amber-500 font-medium">⏳ في طابور الانتظار{serverRenderJob.queuePosition ? ` · ترتيب تقريبي: ${serverRenderJob.queuePosition}` : ''}</span>
+                          <span className="text-amber-500 font-medium">⏳ جاري تخصيص وحدة إنتاج تلقائياً</span>
                         ) : (
                           '⚡ ريندر سيرفر فائق الدقة (30fps CFR)'
                         )}

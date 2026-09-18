@@ -15,7 +15,7 @@ import { recordRenderAudit } from '../services/renderObservability';
 
 const router = Router();
 
-// 1. Submit and Enqueue a New Render Job with Strict Quota & Active-Job Guards
+// 1. Submit a New Render Job with Strict Quota & Active-Job Guards
 router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user!.id;
@@ -77,7 +77,7 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
 
     // 1. Guard against queue flooding or handle replaceActive
     const activeJobs = await query<any[]>(
-      "SELECT id, status, created_at, started_at FROM render_jobs WHERE user_id = ? AND status IN ('queued', 'running')",
+      "SELECT id, status, created_at, started_at, updated_at FROM render_jobs WHERE user_id = ? AND status IN ('queued', 'running')",
       [userId]
     );
 
@@ -88,10 +88,12 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
           await renderJobQueue.cancelJob(aj.id, userId);
         }
       } else {
-        // Auto-cancel any stale jobs older than 15 minutes to prevent blocking
+        // Only reclaim a job when its lease/heartbeat has truly stopped. A
+        // long 4K export can legitimately run for more than fifteen minutes;
+        // using started_at here used to cancel healthy exports mid-render.
         const isStale = activeJobs.some((aj) => {
-          const startTime = aj.started_at ? new Date(aj.started_at).getTime() : new Date(aj.created_at).getTime();
-          return Date.now() - startTime > 15 * 60 * 1000;
+          const leaseTime = aj.updated_at || aj.started_at || aj.created_at;
+          return Date.now() - new Date(leaseTime).getTime() > 12 * 60 * 1000;
         });
 
         if (isStale) {
@@ -167,7 +169,7 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       await conn.query(
         `INSERT INTO render_jobs (
           id, user_id, idempotency_key, status, progress, stage, manifest, max_retries
-        ) VALUES (?, ?, ?, 'queued', 0.00, 'في قائمة الانتظار', ?, 1)`,
+        ) VALUES (?, ?, ?, 'queued', 0.00, 'جاري تخصيص موارد الإنتاج', ?, 1)`,
         [jobId, userId, idempotencyKey || null, JSON.stringify(manifestValidation.manifest)],
       );
 
@@ -190,7 +192,7 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       : queued.serverRenderCount;
 
     return res.status(201).json({
-      message: queued.existing ? 'مهمة الريندر موجودة بالفعل' : 'تم إدراج مهمة الريندر بنجاح',
+      message: queued.existing ? 'مهمة الريندر موجودة بالفعل' : 'تم قبول مهمة الريندر وبدء تجهيزها',
       job,
       serverRenderLimit: entitlements.cloudDailyLimit,
       serverRenderCount,
@@ -215,7 +217,7 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       });
     }
     logger.error('Enqueue render job error:', err);
-    return res.status(400).json({ error: err.message || 'فشل إدراج مهمة الريندر' });
+    return res.status(400).json({ error: err.message || 'فشل تجهيز مهمة الريندر' });
   }
 });
 
@@ -233,11 +235,6 @@ router.get('/active', requireAuth, async (req: AuthenticatedRequest, res: Respon
 
     if (activeRows.length > 0) {
       const job = activeRows[0];
-      const [queuePosition] = await query<Array<{ position: number }>>(
-        `SELECT COUNT(*) + 1 AS position FROM render_jobs
-         WHERE status = 'queued' AND created_at < ?`,
-        [job.created_at],
-      );
       if (typeof job.manifest === 'string') {
         try {
           job.manifest = JSON.parse(job.manifest);
@@ -247,7 +244,7 @@ router.get('/active', requireAuth, async (req: AuthenticatedRequest, res: Respon
         }
       }
       job.progress = Number(job.progress) || 0;
-      return res.json({ hasActiveJob: true, job, queuePosition: job.status === 'queued' ? Number(queuePosition?.position || 1) : 0 });
+      return res.json({ hasActiveJob: true, job });
     }
 
     // Check for recently completed job within last hour
@@ -309,7 +306,7 @@ router.post('/:id/retry', requireAuth, async (req: AuthenticatedRequest, res: Re
     if (!job) {
       return res.status(409).json({ error: 'لا يمكن إعادة المحاولة لهذه المهمة؛ يجب أن تكون فاشلة أو ملغاة.' });
     }
-    return res.status(202).json({ message: 'تمت إعادة المهمة إلى طابور الريندر', job });
+    return res.status(202).json({ message: 'تمت إعادة تشغيل مهمة الريندر تلقائياً', job });
   } catch (err: any) {
     logger.error('Retry render job error:', err);
     return res.status(500).json({ error: 'فشل إعادة محاولة مهمة الريندر' });
@@ -328,15 +325,10 @@ router.get('/:id', requireAuth, async (req: AuthenticatedRequest, res: Response)
       return res.status(404).json({ error: 'مهمة الريندر غير موجودة أو غير مصرح بالوصول إليها' });
     }
 
-    let queuePosition = 0;
-    if (job.status === 'queued') {
-      const [positionRow] = await query<Array<{ position: number }>>(
-        "SELECT COUNT(*) + 1 AS position FROM render_jobs WHERE status = 'queued' AND created_at < ?",
-        [job.created_at],
-      );
-      queuePosition = Number(positionRow?.position || 1);
-    }
-    return res.json({ job, queuePosition });
+    // Do not calculate a queue rank on every client poll. It adds a database
+    // scan under load and creates a misleading user-facing promise: jobs are
+    // dispatched by available worker capacity, not by a static position.
+    return res.json({ job });
   } catch (err: any) {
     logger.error('Get render job error:', err);
     return res.status(500).json({ error: 'فشل استرجاع حالة مهمة الريندر' });

@@ -60,6 +60,35 @@ function toFileUri(absPath: string): string {
   return normalized.startsWith('/') ? `file://${normalized}` : `file:///${normalized}`;
 }
 
+function positiveEnvInt(name: string, fallback: number, min: number, max: number): number {
+  const parsed = Number.parseInt(process.env[name] || '', 10);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.max(min, Math.min(max, parsed));
+}
+
+/**
+ * Chromium's compositor can retain surfaces after thousands of screenshots.
+ * Recreating the browser at a bounded frame boundary releases that memory
+ * without restarting FFmpeg or duplicating already-written frames.
+ */
+function browserFrameBatchSize(width: number, height: number): number {
+  const configured = Number.parseInt(process.env.RENDER_BROWSER_FRAME_BATCH_SIZE || '', 10);
+  if (Number.isFinite(configured) && configured > 0) return Math.max(30, Math.min(600, configured));
+  const pixels = width * height;
+  if (pixels >= 3_000_000) return 45;
+  if (pixels >= 1_500_000) return 90;
+  return 180;
+}
+
+function frameRecoveryAttempts(): number {
+  return positiveEnvInt('RENDER_FRAME_RECOVERY_ATTEMPTS', 2, 0, 5);
+}
+
+function isRecoverableFrameError(error: unknown): boolean {
+  const message = String((error as any)?.message || error || '');
+  return /target closed|protocol error|timed out|session closed|connection closed|browser.*closed|page.*closed/i.test(message);
+}
+
 /**
  * Preloads background images or video thumbnails into local scratch directory
  * and rewrites the manifest background URLs to local file:// paths for 100% deterministic,
@@ -704,17 +733,48 @@ export async function renderDeterministicVideo(
 
     // 3. Initialize Headless Chromium Frame Renderer
     onProgress?.(5, 0, totalFrames, 'بدء محرك الرسم وتجهيز المشهد...');
-    frameRenderer = new DeterministicFrameRenderer(manifest);
-    await frameRenderer.init();
+    const frameBatchSize = browserFrameBatchSize(width, height);
+    const maxFrameRecoveryAttempts = frameRecoveryAttempts();
+
+    const initializeFrameRenderer = async (reason: string) => {
+      frameRenderer = new DeterministicFrameRenderer(manifest);
+      await frameRenderer.init();
+      if (reason) logger.info(`Chromium frame renderer initialized (${reason}).`);
+    };
+
+    await initializeFrameRenderer('initial');
 
     // 4. Render and Stream Each Frame Sequentially
+    let framesSinceBrowserRestart = 0;
     for (let frameIndex = 0; frameIndex < totalFrames; frameIndex++) {
       if (signal?.aborted) {
         throw new Error('Render cancelled by user.');
       }
 
       const frameTimeSeconds = frameIndex / fps;
-      const frameBuffer = await frameRenderer.renderFrameBuffer(frameIndex, frameTimeSeconds);
+      let frameBuffer: Buffer | null = null;
+      let recoveryAttempt = 0;
+      while (!frameBuffer) {
+        try {
+          if (!frameRenderer) await initializeFrameRenderer(`recovery for frame ${frameIndex}`);
+          frameBuffer = await frameRenderer!.renderFrameBuffer(frameIndex, frameTimeSeconds);
+        } catch (frameError) {
+          if (signal?.aborted) throw new Error('Render cancelled by user.');
+          if (!isRecoverableFrameError(frameError) || recoveryAttempt >= maxFrameRecoveryAttempts) {
+            throw frameError;
+          }
+
+          recoveryAttempt += 1;
+          logger.warn(
+            `Recovering Chromium after frame ${frameIndex} failure ` +
+            `(attempt ${recoveryAttempt}/${maxFrameRecoveryAttempts}): ${String((frameError as any)?.message || frameError)}`,
+          );
+          const failedRenderer = frameRenderer;
+          frameRenderer = null;
+          await failedRenderer?.close().catch(() => {});
+          await initializeFrameRenderer(`recovery for frame ${frameIndex}`);
+        }
+      }
 
       // Write frame into FFmpeg stdin with backpressure support
       const canWriteMore = ffmpegProc.stdin.write(frameBuffer);
@@ -725,6 +785,16 @@ export async function renderDeterministicVideo(
       // Progress reporting (5 - 96%)
       const progressPercent = Math.min(96, Math.max(5, Math.round(5 + ((frameIndex + 1) / totalFrames) * 91)));
       onProgress?.(progressPercent, frameIndex + 1, totalFrames, `توليد الإطارات (${frameIndex + 1}/${totalFrames})`);
+
+      framesSinceBrowserRestart += 1;
+      if (framesSinceBrowserRestart >= frameBatchSize && frameIndex + 1 < totalFrames) {
+        logger.info(`Recycling Chromium after ${framesSinceBrowserRestart} frames to keep memory bounded.`);
+        const previousRenderer = frameRenderer;
+        frameRenderer = null;
+        await previousRenderer?.close().catch(() => {});
+        framesSinceBrowserRestart = 0;
+        await initializeFrameRenderer(`scheduled recycle at frame ${frameIndex + 1}`);
+      }
     }
 
     // End stdin pipe to signal FFmpeg to finish encoding
