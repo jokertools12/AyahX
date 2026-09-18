@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
-import ffprobeStatic from 'ffprobe-static';
 import fs from 'fs';
 import { logger } from '../logger';
+import { getFfprobeBinary } from './ffmpegBinary';
 
 export interface VideoStreamInfo {
   codec: string;
@@ -40,8 +40,8 @@ export async function probeMediaFile(filePath: string): Promise<MediaProbeResult
     throw new Error(`Media file does not exist at path: ${filePath}`);
   }
 
-  const ffprobePath = ffprobeStatic.path;
-  if (!ffprobePath || !fs.existsSync(ffprobePath)) {
+  const ffprobePath = getFfprobeBinary();
+  if (!ffprobePath || (ffprobePath.includes('/') && !fs.existsSync(ffprobePath))) {
     throw new Error(`ffprobe executable not found at: ${ffprobePath}`);
   }
 

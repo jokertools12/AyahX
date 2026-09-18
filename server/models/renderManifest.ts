@@ -3,6 +3,8 @@ import { z } from 'zod';
 export const RenderManifestSchema = z.object({
   schemaVersion: z.literal('1.0.0'),
   rendererVersion: z.literal('1.0.0'),
+  renderEngine: z.enum(['browser', 'ffmpeg_ass', 'skia_canvas']).default('ffmpeg_ass'),
+  backgroundAsync: z.boolean().default(false),
   revision: z.string().min(1).max(128),
   aspectRatio: z.enum(['9:16', '16:9']),
   outputDimensions: z.object({

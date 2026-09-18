@@ -219,7 +219,7 @@ export function useServerRenderJob() {
     async (
       manifest: any,
       idempotencyKey?: string,
-      options?: { replaceActive?: boolean }
+      options?: { replaceActive?: boolean; backgroundAsync?: boolean }
     ): Promise<string> => {
       stopPolling();
       setState({
@@ -237,6 +237,7 @@ export function useServerRenderJob() {
       try {
         const { job } = await api.renderJobs.createJob(manifest, idempotencyKey, {
           replaceActive: options?.replaceActive ?? false,
+          backgroundAsync: options?.backgroundAsync ?? false,
         });
         const jobId = job.id;
         activeJobIdRef.current = jobId;

@@ -1277,7 +1277,7 @@ export default function PreviewPage() {
   };
 
   // ── Video recording ─────────────────────────────────────────────────────────
-  const handleServerExport = async () => {
+  const handleServerExport = async (options?: { backgroundAsync?: boolean }) => {
     if (!isAuthenticated || !user) {
       toast.error('سجّل الدخول أولاً لاستخدام الريندر السحابي وحفظ حصتك اليومية.');
       navigate('/auth');
@@ -1430,6 +1430,7 @@ export default function PreviewPage() {
         audioBitrate: exportSettingsForPlan.audioBitrate ?? '192k',
         motionSpeed: exportSettingsForPlan.motionSpeed,
         renderEngine: (exportSettings.renderEngine as any) || 'ffmpeg_ass',
+        backgroundAsync: options?.backgroundAsync ?? false,
         surah: { number: surahNumber, name: surah?.name || 'الفاتحة' },
         ayahRange: { start: startAyah, end: endAyah },
         ayahs,
@@ -1467,7 +1468,10 @@ export default function PreviewPage() {
       toast.info('بدأ تجهيز الفيديو تلقائياً وسيُوزّع على وحدة الإنتاج المتاحة...');
       // Keep an existing export alive. A second click must never cancel a
       // healthy render; the explicit cancel action is the user's choice.
-      await serverRenderJob.startServerRender(manifest, undefined, { replaceActive: false });
+      await serverRenderJob.startServerRender(manifest, undefined, {
+        replaceActive: false,
+        backgroundAsync: options?.backgroundAsync ?? false,
+      });
       refetchUsage();
     } catch (err: any) {
       console.error('Server render job failed to start:', err);
@@ -1886,7 +1890,7 @@ export default function PreviewPage() {
 
   const handleTriggerBackgroundRender = async () => {
     try {
-      await handleServerExport();
+      await handleServerExport({ backgroundAsync: true });
       toast.success('تم إطلاق مهمة الريندر في الخلفية بنجاح! سيتم حفظ الفيديو تلقائياً في مكتبتك لمدة 48 ساعة ويمكنك مغادرة الصفحة الآن وسيصلك إشعار فور الجاهزية.');
     } catch (err: any) {
       console.error('Failed background export trigger:', err);

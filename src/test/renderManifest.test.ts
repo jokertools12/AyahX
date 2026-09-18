@@ -102,6 +102,17 @@ describe('RenderManifest Specification & Validation', () => {
     expect(res.manifest?.displaySettings.visualDesign).toBe('moonlit');
   });
 
+  it('preserves the selected native engine and background-processing flag', () => {
+    const res = validateRenderManifest({
+      ...sampleValidManifest,
+      renderEngine: 'skia_canvas',
+      backgroundAsync: true,
+    });
+    expect(res.valid).toBe(true);
+    expect(res.manifest?.renderEngine).toBe('skia_canvas');
+    expect(res.manifest?.backgroundAsync).toBe(true);
+  });
+
   it('rejects manifest with missing required fields', () => {
     const invalid = { ...sampleValidManifest, audio: undefined };
     const res = validateRenderManifest(invalid);

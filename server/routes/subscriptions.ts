@@ -6,6 +6,7 @@ import { getPlanEntitlements, isPremiumPlan } from '../../shared/planEntitlement
 import {
   getActivePlanForUser,
   getTodayCloudRenderCount,
+  getTodayCloudRenderUsage,
   syncExpiredSubscriptions,
 } from '../services/subscriptionService';
 import { SUBSCRIPTION_CATALOG, isCheckoutPlan, isWalletMethod } from '../../shared/subscriptionCatalog';
@@ -69,6 +70,7 @@ router.get('/usage', requireAuth, async (req: AuthenticatedRequest, res: Respons
     const serverRenderCount = await getTodayCloudRenderCount(userId);
     const serverRenderLimit = entitlements.cloudDailyLimit;
     const serverRenderRemaining = Math.max(0, serverRenderLimit - serverRenderCount);
+    const cloudUsage = await getTodayCloudRenderUsage(userId);
 
     return res.json({
       plan,
@@ -85,6 +87,15 @@ router.get('/usage', requireAuth, async (req: AuthenticatedRequest, res: Respons
       serverRenderLimit,
       serverRenderCount,
       serverRenderRemaining,
+      ffmpegAssRenderCount: cloudUsage.ffmpegAss,
+      ffmpegAssRenderLimit: entitlements.ffmpegAssDailyLimit,
+      ffmpegAssRenderRemaining: Math.max(0, entitlements.ffmpegAssDailyLimit - cloudUsage.ffmpegAss),
+      skiaCanvasRenderCount: cloudUsage.skiaCanvas,
+      skiaCanvasRenderLimit: entitlements.skiaCanvasDailyLimit,
+      skiaCanvasRenderRemaining: Math.max(0, entitlements.skiaCanvasDailyLimit - cloudUsage.skiaCanvas),
+      backgroundAsyncRenderCount: cloudUsage.backgroundAsync,
+      backgroundAsyncRenderLimit: entitlements.backgroundAsyncDailyLimit,
+      backgroundAsyncRenderRemaining: Math.max(0, entitlements.backgroundAsyncDailyLimit - cloudUsage.backgroundAsync),
     });
   } catch (err: any) {
     console.error('Fetch usage error:', err);

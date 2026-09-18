@@ -3,13 +3,13 @@ import path from 'path';
 import os from 'os';
 import crypto from 'crypto';
 import { spawn } from 'child_process';
-import ffmpegPath from 'ffmpeg-static';
 import { createCanvas, loadImage, GlobalFonts, Image } from '@napi-rs/canvas';
 import { RenderManifest } from '../models/renderManifest';
 import { logger } from '../logger';
 import { probeMediaFile, validateProbeAgainstSpec } from './mediaProbeService';
 import { prepareAudioTrack, prepareBackgroundAsset, DeterministicRenderOptions, DeterministicRenderResult, extractAyahsAndWords } from './deterministicVideoRenderer';
 import { toArabicDigits } from './ffmpegAssRenderer';
+import { getFfmpegBinary, getFfmpegPreset, getFfmpegResourceArgs } from './ffmpegBinary';
 
 // Ensure standard Arabic fonts are registered into Skia
 let fontsRegistered = false;
@@ -150,7 +150,8 @@ export async function renderSkiaCanvasVideo(
 ): Promise<DeterministicRenderResult> {
   const { manifest, outputPath, signal, onProgress } = options;
 
-  if (!ffmpegPath || !fs.existsSync(ffmpegPath)) {
+  const ffmpegPath = getFfmpegBinary();
+  if (!ffmpegPath || (path.isAbsolute(ffmpegPath) && !fs.existsSync(ffmpegPath))) {
     throw new Error('Native FFmpeg executable is missing on server.');
   }
 
@@ -201,6 +202,7 @@ export async function renderSkiaCanvasVideo(
     // Spawn FFmpeg in rawvideo pipe mode
     const ffmpegArgs = [
       '-y',
+      ...getFfmpegResourceArgs(),
       '-f', 'rawvideo',
       '-pix_fmt', 'rgba',
       '-s', `${width}x${height}`,
@@ -208,7 +210,7 @@ export async function renderSkiaCanvasVideo(
       '-i', '-',
       '-i', audioTrackPath,
       '-c:v', 'libx264',
-      '-preset', 'fast',
+      '-preset', getFfmpegPreset('fast'),
       '-crf', '19',
       '-pix_fmt', 'yuv420p',
       '-c:a', 'aac',
@@ -222,19 +224,32 @@ export async function renderSkiaCanvasVideo(
 
     logger.info(`Starting Skia Canvas render [${randomId}]: ${width}x${height} @ ${fps}fps (${totalFrames} frames)`);
 
-    ffmpegProc = spawn(ffmpegPath!, ffmpegArgs, { windowsHide: true });
+    ffmpegProc = spawn(ffmpegPath, ffmpegArgs, { windowsHide: true });
     let ffmpegStderr = '';
     ffmpegProc.stderr.on('data', (d: Buffer) => {
       ffmpegStderr += d.toString();
     });
 
     const ffmpegExitPromise = new Promise<void>((resolve, reject) => {
-      ffmpegProc.on('close', (code: number) => {
+      ffmpegProc.on('close', (code: number | null, exitSignal: NodeJS.Signals | null) => {
         if (code === 0) resolve();
-        else reject(new Error(`FFmpeg pipe closed with code ${code}: ${ffmpegStderr.slice(-500)}`));
+        else {
+          const termination = code === null ? `signal ${exitSignal || 'unknown'}` : `code ${code}`;
+          reject(new Error(`FFmpeg pipe closed with ${termination}: ${ffmpegStderr.slice(-1000)}`));
+        }
       });
       ffmpegProc.on('error', (err: any) => reject(new Error(`FFmpeg spawn error: ${err.message}`)));
     });
+
+    const onAbort = () => {
+      if (ffmpegProc && !ffmpegProc.killed) {
+        try { ffmpegProc.kill('SIGKILL'); } catch { /* process may already be closed */ }
+      }
+    };
+    if (signal) {
+      if (signal.aborted) onAbort();
+      else signal.addEventListener('abort', onAbort, { once: true });
+    }
 
     const canvas = createCanvas(width, height);
     const ctx = canvas.getContext('2d');
@@ -553,6 +568,8 @@ export async function renderSkiaCanvasVideo(
 
     await ffmpegExitPromise;
 
+    signal?.removeEventListener('abort', onAbort);
+
     onProgress?.(99, totalFrames, totalFrames, 'التحقق من سلامة الفيديو...');
     const probe = await probeMediaFile(outputPath);
     const validation = validateProbeAgainstSpec(probe, fps);
@@ -573,7 +590,9 @@ export async function renderSkiaCanvasVideo(
   } catch (err) {
     if (signal?.aborted || (err instanceof Error && /cancel|abort|الغاء/i.test(err.message))) {
       if (fs.existsSync(outputPath)) {
-        try { fs.unlinkSync(outputPath); } catch {}
+        try { fs.unlinkSync(outputPath); } catch {
+          // The failed FFmpeg process may still hold the output handle.
+        }
       }
     }
     throw err;

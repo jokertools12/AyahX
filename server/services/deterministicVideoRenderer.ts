@@ -4,10 +4,10 @@ import os from 'os';
 import crypto from 'crypto';
 import url from 'url';
 import { spawn } from 'child_process';
-import ffmpegPath from 'ffmpeg-static';
 import { RenderManifest } from '../models/renderManifest';
 import { renderFfmpegAssVideo } from './ffmpegAssRenderer';
 import { renderSkiaCanvasVideo } from './skiaCanvasRenderer';
+import { getFfmpegBinary, getFfmpegResourceArgs } from './ffmpegBinary';
 import { availableCpuCores } from './renderCapacity';
 import { probeMediaFile, validateProbeAgainstSpec, MediaProbeResult } from './mediaProbeService';
 import { logger } from '../logger';
@@ -108,10 +108,11 @@ export function extractAyahsAndWords(manifest: RenderManifest): {
  */
 function runFfmpegCommand(args: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
+    const ffmpegPath = getFfmpegBinary();
     if (!ffmpegPath) {
       return reject(new Error('FFmpeg binary not found'));
     }
-    const proc = spawn(ffmpegPath, args, { windowsHide: true });
+    const proc = spawn(ffmpegPath, [...getFfmpegResourceArgs(), ...args], { windowsHide: true });
     let stderr = '';
     proc.stderr.on('data', (d: Buffer) => {
       stderr += d.toString();
@@ -326,6 +327,7 @@ export interface AudioMetricsResult {
 
 export async function detectAudioMetrics(filePath: string): Promise<AudioMetricsResult> {
   return new Promise((resolve) => {
+    const ffmpegPath = getFfmpegBinary();
     if (!ffmpegPath) {
       return resolve({ maxVolumeDb: -7, meanVolumeDb: -20, isMono: false });
     }

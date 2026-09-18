@@ -474,6 +474,15 @@ export const api = {
         serverRenderLimit?: number;
         serverRenderCount?: number;
         serverRenderRemaining?: number;
+        ffmpegAssRenderCount?: number;
+        ffmpegAssRenderLimit?: number;
+        ffmpegAssRenderRemaining?: number;
+        skiaCanvasRenderCount?: number;
+        skiaCanvasRenderLimit?: number;
+        skiaCanvasRenderRemaining?: number;
+        backgroundAsyncRenderCount?: number;
+        backgroundAsyncRenderLimit?: number;
+        backgroundAsyncRenderRemaining?: number;
       }>('/api/subscriptions/usage');
     },
 
@@ -762,13 +771,14 @@ export const api = {
   },
 
   renderJobs: {
-    async createJob(manifest: any, idempotencyKey?: string, options?: { replaceActive?: boolean }) {
+    async createJob(manifest: any, idempotencyKey?: string, options?: { replaceActive?: boolean; backgroundAsync?: boolean }) {
       return request<{ message: string; job: any }>('/api/render-jobs', {
         method: 'POST',
         body: JSON.stringify({
           manifest,
           idempotencyKey,
           replaceActive: options?.replaceActive,
+          backgroundAsync: options?.backgroundAsync,
         }),
       });
     },

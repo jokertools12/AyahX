@@ -63,6 +63,9 @@ export function ExportFormatSelector({
   const ffmpegAssLimit = entitlements.ffmpegAssDailyLimit ?? (isPremium ? 30 : 1);
   const skiaCanvasLimit = entitlements.skiaCanvasDailyLimit ?? (isPremium ? 15 : 2);
   const backgroundAsyncLimit = entitlements.backgroundAsyncDailyLimit ?? (isPremium ? 20 : 0);
+  const ffmpegAssRemaining = dailyUsage.ffmpegAssRenderRemaining ?? ffmpegAssLimit;
+  const skiaCanvasRemaining = dailyUsage.skiaCanvasRenderRemaining ?? skiaCanvasLimit;
+  const backgroundAsyncRemaining = dailyUsage.backgroundAsyncRenderRemaining ?? backgroundAsyncLimit;
 
   const updateSetting = <K extends keyof ExportSettings>(key: K, value: ExportSettings[K]) => {
     onChange({ ...settings, [key]: value });
@@ -323,7 +326,7 @@ export function ExportFormatSelector({
                       )}
                     </div>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-600">
-                      {ffmpegAssLimit} فيديو / يوم
+                      {ffmpegAssRemaining}/{ffmpegAssLimit} متبقي اليوم
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
@@ -347,7 +350,7 @@ export function ExportFormatSelector({
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-sm">محرك استوديو Skia Canvas (فكرة 2)</span>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600">
-                      {skiaCanvasLimit} فيديو / يوم
+                      {skiaCanvasRemaining}/{skiaCanvasLimit} متبقي اليوم
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
@@ -369,7 +372,7 @@ export function ExportFormatSelector({
               </div>
               {isPremium ? (
                 <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600">
-                  {backgroundAsyncLimit} فيديو / يوم
+                  {backgroundAsyncRemaining}/{backgroundAsyncLimit} متبقي اليوم
                 </span>
               ) : (
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-600 flex items-center gap-1">
@@ -383,7 +386,7 @@ export function ExportFormatSelector({
             <Button
               type="button"
               variant="default"
-              disabled={!isPremium || isBackgroundRendering}
+              disabled={!isPremium || isBackgroundRendering || backgroundAsyncRemaining <= 0}
               onClick={() => {
                 if (!isPremium) {
                   toast.error('ميزة الريندر في الخلفية متاحة للعضوية المميزة فقط');
@@ -401,7 +404,11 @@ export function ExportFormatSelector({
               ) : (
                 <>
                   <Zap className="h-4 w-4" />
-                  {isPremium ? 'بدء الريندر في الخلفية وحفظه بالمكتبة 🚀' : 'الترقية للعضوية المميزة لتفعيل الريندر في الخلفية 👑'}
+                  {!isPremium
+                    ? 'الترقية للعضوية المميزة لتفعيل الريندر في الخلفية 👑'
+                    : backgroundAsyncRemaining <= 0
+                    ? 'استُنفدت حصة الريندر الخلفي اليوم'
+                    : 'بدء الريندر في الخلفية وحفظه بالمكتبة 🚀'}
                 </>
               )}
             </Button>

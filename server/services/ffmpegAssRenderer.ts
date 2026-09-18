@@ -3,11 +3,11 @@ import path from 'path';
 import os from 'os';
 import crypto from 'crypto';
 import { spawn } from 'child_process';
-import ffmpegPath from 'ffmpeg-static';
 import { RenderManifest } from '../models/renderManifest';
 import { logger } from '../logger';
 import { probeMediaFile, validateProbeAgainstSpec } from './mediaProbeService';
 import { prepareAudioTrack, prepareBackgroundAsset, DeterministicRenderOptions, DeterministicRenderResult, extractAyahsAndWords } from './deterministicVideoRenderer';
+import { getFfmpegBinary, getFfmpegPreset, getFfmpegResourceArgs } from './ffmpegBinary';
 
 /**
  * Converts numbers to Arabic Eastern numerals (٠-٩)
@@ -264,7 +264,8 @@ export async function renderFfmpegAssVideo(
 ): Promise<DeterministicRenderResult> {
   const { manifest, outputPath, signal, onProgress } = options;
 
-  if (!ffmpegPath || !fs.existsSync(ffmpegPath)) {
+  const ffmpegPath = getFfmpegBinary();
+  if (!ffmpegPath || (path.isAbsolute(ffmpegPath) && !fs.existsSync(ffmpegPath))) {
     throw new Error('Native FFmpeg executable is missing on server.');
   }
 
@@ -316,7 +317,7 @@ export async function renderFfmpegAssVideo(
     const overlayAlpha = typeof manifest.background?.overlayOpacity === 'number'
       ? Math.max(0.0, Math.min(0.95, manifest.background.overlayOpacity))
       : 0.42;
-    const filterComplex = `[0:v]scale=${width}:${height}:force_original_aspect_ratio=increase,crop=${width}:${height},drawbox=x=0:y=0:w=iw:h=ih:color=black@${overlayAlpha.toFixed(2)}:t=fill,ass='${escapedAssPath}':fontsdir='${escapedFontsDir}'[v]`;
+    const filterComplex = `[0:v]scale=${width}:${height}:force_original_aspect_ratio=increase,crop=${width}:${height},drawbox=x=0:y=0:w=iw:h=ih:color=black@${overlayAlpha.toFixed(2)}:t=fill,ass='${escapedAssPath}':fontsdir='${escapedFontsDir}',fps=${fps}[v]`;
 
     let bgSourceFile = bg.url;
     // If background was prepared into scratch directory
@@ -342,13 +343,14 @@ export async function renderFfmpegAssVideo(
     onProgress?.(25, 0, totalFrames, 'بدء الريندر الصاروخي عبر FFmpeg ASS...');
     const ffmpegArgs = [
       '-y',
+      ...getFfmpegResourceArgs(),
       ...bgInputArgs,
       '-i', audioTrackPath,
       '-filter_complex', filterComplex,
       '-map', '[v]',
       '-map', '1:a',
       '-c:v', 'libx264',
-      '-preset', 'veryfast',
+      '-preset', getFfmpegPreset('veryfast'),
       '-crf', '19',
       '-pix_fmt', 'yuv420p',
       '-c:a', 'aac',
@@ -363,7 +365,7 @@ export async function renderFfmpegAssVideo(
     logger.info(`Starting FFmpeg ASS render [${randomId}]: ${width}x${height} @ ${fps}fps`);
 
     await new Promise<void>((resolve, reject) => {
-      ffmpegProc = spawn(ffmpegPath!, ffmpegArgs, { windowsHide: true });
+      ffmpegProc = spawn(ffmpegPath, ffmpegArgs, { windowsHide: true });
       let stderr = '';
 
       const onAbort = () => {
@@ -371,7 +373,9 @@ export async function renderFfmpegAssVideo(
           if (ffmpegProc && !ffmpegProc.killed) {
             ffmpegProc.kill('SIGKILL');
           }
-        } catch {}
+        } catch {
+          // FFmpeg may have exited between the state check and kill call.
+        }
       };
 
       if (signal) {
@@ -379,7 +383,9 @@ export async function renderFfmpegAssVideo(
           onAbort();
           try {
             if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
-          } catch {}
+          } catch {
+            // The output may not exist yet or may still be held by FFmpeg.
+          }
           reject(new Error('Render cancelled by user (تم إلغاء عملية الريندر).'));
           return;
         }
@@ -401,7 +407,7 @@ export async function renderFfmpegAssVideo(
         }
       });
 
-      ffmpegProc.on('close', async (code: number) => {
+      ffmpegProc.on('close', async (code: number | null, exitSignal: NodeJS.Signals | null) => {
         if (signal) signal.removeEventListener('abort', onAbort);
         if (signal?.aborted) {
           for (let i = 0; i < 15; i++) {
@@ -420,7 +426,8 @@ export async function renderFfmpegAssVideo(
         if (code === 0) {
           resolve();
         } else {
-          reject(new Error(`FFmpeg ASS Render failed [code ${code}]: ${stderr.slice(-600)}`));
+          const termination = code === null ? `signal ${exitSignal || 'unknown'}` : `code ${code}`;
+          reject(new Error(`FFmpeg ASS Render failed [${termination}]: ${stderr.slice(-1200)}`));
         }
       });
 

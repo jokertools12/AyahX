@@ -288,6 +288,8 @@ export function getQualityDimensions(
 }
 
 export interface RenderEntitlementCandidate {
+  renderEngine?: unknown;
+  backgroundAsync?: unknown;
   qualityPreset?: unknown;
   fps?: unknown;
   outputDimensions?: { width?: unknown; height?: unknown };
@@ -324,6 +326,21 @@ export function validateRenderEntitlements(
   const quality = manifest.qualityPreset as ExportQuality;
   const fps = Number(manifest.fps);
   const audioBitrate = (manifest.audioBitrate || '192k') as AudioBitrate;
+
+  // Browser Canvas is rendered locally. Native cloud engines have independent
+  // allowances; the API performs the atomic daily counter check separately.
+  if (manifest.renderEngine === 'browser') {
+    violations.push('محرك المتصفح يعمل محلياً ولا يمكن إرساله إلى الريندر السحابي');
+  } else if (manifest.renderEngine === 'ffmpeg_ass' && entitlements.ffmpegAssDailyLimit <= 0) {
+    violations.push('محرك FFmpeg ASS غير متاح في خطتك');
+  } else if (manifest.renderEngine === 'skia_canvas' && entitlements.skiaCanvasDailyLimit <= 0) {
+    violations.push('محرك Skia Canvas غير متاح في خطتك');
+  }
+
+  if (manifest.backgroundAsync === true
+    && (!entitlements.features.backgroundAsync || entitlements.backgroundAsyncDailyLimit <= 0)) {
+    violations.push('الريندر في الخلفية متاح للعضوية المميزة فقط');
+  }
 
   if (!entitlements.allowedQualities.includes(quality)) {
     violations.push('دقة التصدير المختارة غير متاحة في خطتك');

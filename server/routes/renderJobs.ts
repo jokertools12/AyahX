@@ -9,7 +9,7 @@ import { logger } from '../logger';
 import { validateRenderManifest } from '../models/renderManifest';
 import { validateManifestAssets } from '../services/assetCatalogResolver';
 import { getPlanEntitlements, validateRenderEntitlements } from '../../shared/planEntitlements';
-import { getActivePlanForUser, getTodayCloudRenderCount, syncExpiredSubscriptions } from '../services/subscriptionService';
+import { getActivePlanForUser, getTodayCloudRenderUsage, syncExpiredSubscriptions } from '../services/subscriptionService';
 import { isObjectStoragePath, signedRenderDownload } from '../services/objectStorage';
 import { recordRenderAudit } from '../services/renderObservability';
 
@@ -19,7 +19,7 @@ const router = Router();
 router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user!.id;
-    const { manifest, idempotencyKey, renderEngine } = req.body;
+    const { manifest, idempotencyKey, renderEngine, backgroundAsync } = req.body;
 
     if (!manifest) {
       return res.status(400).json({ error: 'بيانات أمر الريندر (RenderManifest) مطلوبة' });
@@ -37,6 +37,11 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
     }
     if (renderEngine && ['browser', 'ffmpeg_ass', 'skia_canvas'].includes(renderEngine)) {
       (manifestValidation.manifest as any).renderEngine = renderEngine;
+    } else if (renderEngine !== undefined) {
+      return res.status(400).json({ error: 'محرك الريندر المحدد غير صالح' });
+    }
+    if (typeof backgroundAsync === 'boolean') {
+      (manifestValidation.manifest as any).backgroundAsync = backgroundAsync;
     }
     const assetValidation = validateManifestAssets(manifestValidation.manifest);
     if (!assetValidation.safe) {
@@ -55,6 +60,11 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       });
     }
 
+    const selectedEngine = manifestValidation.manifest.renderEngine;
+    const engineLimit = selectedEngine === 'skia_canvas'
+      ? entitlements.skiaCanvasDailyLimit
+      : entitlements.ffmpegAssDailyLimit;
+
     // A retry of the same request must be a true no-op. In particular, it
     // must not cancel a currently running job when the caller sent
     // replaceActive along with an idempotency key.
@@ -66,13 +76,14 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       if (existingRows.length > 0) {
         const job = await renderJobQueue.getJobById(existingRows[0].id, userId);
         if (job) {
-          const serverRenderCount = await getTodayCloudRenderCount(userId);
+          const usage = await getTodayCloudRenderUsage(userId);
+          const serverRenderCount = selectedEngine === 'skia_canvas' ? usage.skiaCanvas : usage.ffmpegAss;
           return res.status(200).json({
             message: 'مهمة الريندر موجودة بالفعل',
             job,
-            serverRenderLimit: entitlements.cloudDailyLimit,
+            serverRenderLimit: engineLimit,
             serverRenderCount,
-            serverRenderRemaining: Math.max(0, entitlements.cloudDailyLimit - serverRenderCount),
+            serverRenderRemaining: Math.max(0, engineLimit - serverRenderCount),
           });
         }
       }
@@ -155,12 +166,36 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
         'SELECT count FROM daily_cloud_render_usage WHERE user_id = ? AND date = CURDATE() FOR UPDATE',
         [userId],
       );
+      const [engineUsageRows] = await conn.query<any[]>(
+        `SELECT
+           SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = 'ffmpeg_ass' THEN 1 ELSE 0 END) AS ffmpeg_ass,
+           SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = 'skia_canvas' THEN 1 ELSE 0 END) AS skia_canvas,
+           SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.backgroundAsync')), 'false') = 'true' THEN 1 ELSE 0 END) AS background_async
+         FROM render_jobs
+         WHERE user_id = ? AND created_at >= CURDATE()` ,
+        [userId],
+      );
       const serverRenderCount = Number(usageRows[0]?.count || 0);
-      if (serverRenderCount >= entitlements.cloudDailyLimit) {
-        const quotaError: any = new Error('CLOUD_QUOTA_EXCEEDED');
-        quotaError.serverRenderCount = serverRenderCount;
-        quotaError.serverRenderLimit = entitlements.cloudDailyLimit;
+      const engineUsage = engineUsageRows[0] || {};
+      const selectedEngineCount = selectedEngine === 'skia_canvas'
+        ? Number(engineUsage.skia_canvas || 0)
+        : Number(engineUsage.ffmpeg_ass || 0);
+      if (selectedEngineCount >= engineLimit) {
+        const quotaError: any = new Error('ENGINE_QUOTA_EXCEEDED');
+        quotaError.engine = selectedEngine;
+        quotaError.serverRenderCount = selectedEngineCount;
+        quotaError.serverRenderLimit = engineLimit;
         throw quotaError;
+      }
+
+      if (manifestValidation.manifest.backgroundAsync === true) {
+        const backgroundCount = Number(engineUsage.background_async || 0);
+        if (backgroundCount >= entitlements.backgroundAsyncDailyLimit) {
+          const quotaError: any = new Error('BACKGROUND_QUOTA_EXCEEDED');
+          quotaError.serverRenderCount = backgroundCount;
+          quotaError.serverRenderLimit = entitlements.backgroundAsyncDailyLimit;
+          throw quotaError;
+        }
       }
 
       await conn.query(
@@ -190,16 +225,17 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       renderJobQueue.triggerProcessor(queued.jobId, entitlements.features.priorityCloudQueue ? 1 : 10);
       void recordRenderAudit(queued.jobId, userId, 'accepted', { plan });
     }
-    const serverRenderCount = queued.existing
-      ? await getTodayCloudRenderCount(userId)
-      : queued.serverRenderCount;
+    const usage = await getTodayCloudRenderUsage(userId);
+    const serverRenderCount = selectedEngine === 'skia_canvas' ? usage.skiaCanvas : usage.ffmpegAss;
 
     return res.status(201).json({
       message: queued.existing ? 'مهمة الريندر موجودة بالفعل' : 'تم قبول مهمة الريندر وبدء تجهيزها',
       job,
-      serverRenderLimit: entitlements.cloudDailyLimit,
+      serverRenderLimit: engineLimit,
       serverRenderCount,
-      serverRenderRemaining: Math.max(0, entitlements.cloudDailyLimit - serverRenderCount),
+      serverRenderRemaining: Math.max(0, engineLimit - serverRenderCount),
+      cloudRenderCount: usage.total,
+      backgroundRenderCount: usage.backgroundAsync,
     });
   } catch (err: any) {
     if (err.message === 'IDEMPOTENCY_KEY_COLLISION') {
@@ -211,10 +247,13 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
         activeJobId: err.activeJobId,
       });
     }
-    if (err.message === 'CLOUD_QUOTA_EXCEEDED') {
+    if (err.message === 'ENGINE_QUOTA_EXCEEDED' || err.message === 'BACKGROUND_QUOTA_EXCEEDED') {
       return res.status(403).json({
-        error: `لقد استنفدت حصتك اليومية من الريندر السحابي (${err.serverRenderLimit} فيديو يومياً). يمكنك استخدام محرك المتصفح وفق حد خطتك، أو العودة غداً للمزيد.`,
+        error: err.message === 'BACKGROUND_QUOTA_EXCEEDED'
+          ? `لقد استنفدت حصتك اليومية من الريندر في الخلفية (${err.serverRenderLimit} فيديو يومياً).`
+          : `لقد استنفدت حصتك اليومية لمحرك ${err.engine === 'skia_canvas' ? 'Skia Canvas' : 'FFmpeg ASS'} (${err.serverRenderLimit} فيديو يومياً).`,
         quotaExceeded: true,
+        engine: err.engine,
         serverRenderLimit: err.serverRenderLimit,
         serverRenderCount: err.serverRenderCount,
       });

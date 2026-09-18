@@ -547,7 +547,7 @@ export class RenderJobQueue {
         const aspectRatio = manifest.aspectRatio || '9:16';
         const bgType = manifest.background?.type || 'image';
         const engineType = (manifest as any).renderEngine || manifest.displaySettings?.renderEngine || 'ffmpeg_ass';
-        const videoDownloadUrl = `/api/renders/${jobId}/download`;
+        const videoDownloadUrl = `/api/render-jobs/${jobId}/download`;
 
         await query(
           `INSERT INTO saved_videos (

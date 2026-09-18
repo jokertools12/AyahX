@@ -29,6 +29,15 @@ export interface DailyUsage {
   serverRenderCount: number;
   serverRenderLimit: number;
   serverRenderRemaining: number;
+  ffmpegAssRenderCount: number;
+  ffmpegAssRenderLimit: number;
+  ffmpegAssRenderRemaining: number;
+  skiaCanvasRenderCount: number;
+  skiaCanvasRenderLimit: number;
+  skiaCanvasRenderRemaining: number;
+  backgroundAsyncRenderCount: number;
+  backgroundAsyncRenderLimit: number;
+  backgroundAsyncRenderRemaining: number;
 }
 
 const FREE_USAGE: DailyUsage = {
@@ -43,6 +52,15 @@ const FREE_USAGE: DailyUsage = {
   serverRenderCount: 0,
   serverRenderLimit: 1,
   serverRenderRemaining: 1,
+  ffmpegAssRenderCount: 0,
+  ffmpegAssRenderLimit: 1,
+  ffmpegAssRenderRemaining: 1,
+  skiaCanvasRenderCount: 0,
+  skiaCanvasRenderLimit: 2,
+  skiaCanvasRenderRemaining: 2,
+  backgroundAsyncRenderCount: 0,
+  backgroundAsyncRenderLimit: 0,
+  backgroundAsyncRenderRemaining: 0,
 };
 
 function usageFromApi(data: {
@@ -57,6 +75,15 @@ function usageFromApi(data: {
   serverRenderCount?: number;
   serverRenderLimit?: number;
   serverRenderRemaining?: number;
+  ffmpegAssRenderCount?: number;
+  ffmpegAssRenderLimit?: number;
+  ffmpegAssRenderRemaining?: number;
+  skiaCanvasRenderCount?: number;
+  skiaCanvasRenderLimit?: number;
+  skiaCanvasRenderRemaining?: number;
+  backgroundAsyncRenderCount?: number;
+  backgroundAsyncRenderLimit?: number;
+  backgroundAsyncRenderRemaining?: number;
 }, entitlements: PlanEntitlements): DailyUsage {
   const browserRenderCount = Number(data.browserRenderCount ?? data.count ?? 0);
   const browserRenderLimit = data.browserRenderLimit ?? data.limit ?? entitlements.browserDailyLimit;
@@ -65,6 +92,12 @@ function usageFromApi(data: {
   const cloudRenderCount = Number(data.cloudRenderCount ?? data.serverRenderCount ?? 0);
   const cloudRenderLimit = Number(data.cloudRenderLimit ?? data.serverRenderLimit ?? entitlements.cloudDailyLimit);
   const cloudRenderRemaining = Number(data.cloudRenderRemaining ?? data.serverRenderRemaining ?? Math.max(cloudRenderLimit - cloudRenderCount, 0));
+  const ffmpegAssRenderCount = Number(data.ffmpegAssRenderCount ?? 0);
+  const ffmpegAssRenderLimit = Number(data.ffmpegAssRenderLimit ?? entitlements.ffmpegAssDailyLimit);
+  const skiaCanvasRenderCount = Number(data.skiaCanvasRenderCount ?? 0);
+  const skiaCanvasRenderLimit = Number(data.skiaCanvasRenderLimit ?? entitlements.skiaCanvasDailyLimit);
+  const backgroundAsyncRenderCount = Number(data.backgroundAsyncRenderCount ?? 0);
+  const backgroundAsyncRenderLimit = Number(data.backgroundAsyncRenderLimit ?? entitlements.backgroundAsyncDailyLimit);
 
   return {
     browserRenderCount,
@@ -78,6 +111,15 @@ function usageFromApi(data: {
     serverRenderCount: cloudRenderCount,
     serverRenderLimit: cloudRenderLimit,
     serverRenderRemaining: cloudRenderRemaining,
+    ffmpegAssRenderCount,
+    ffmpegAssRenderLimit,
+    ffmpegAssRenderRemaining: Number(data.ffmpegAssRenderRemaining ?? Math.max(ffmpegAssRenderLimit - ffmpegAssRenderCount, 0)),
+    skiaCanvasRenderCount,
+    skiaCanvasRenderLimit,
+    skiaCanvasRenderRemaining: Number(data.skiaCanvasRenderRemaining ?? Math.max(skiaCanvasRenderLimit - skiaCanvasRenderCount, 0)),
+    backgroundAsyncRenderCount,
+    backgroundAsyncRenderLimit,
+    backgroundAsyncRenderRemaining: Number(data.backgroundAsyncRenderRemaining ?? Math.max(backgroundAsyncRenderLimit - backgroundAsyncRenderCount, 0)),
   };
 }
 
