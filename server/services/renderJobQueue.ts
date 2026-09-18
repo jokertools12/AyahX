@@ -310,7 +310,10 @@ export class RenderJobQueue {
     );
     if (!result?.affectedRows) return null;
     void recordRenderAudit(jobId, job.user_id, 'manual_retry');
-    this.triggerProcessor();
+    // BullMQ requires the durable job id to be re-added explicitly. Calling
+    // the processor without an id is a no-op in BullMQ mode, which made a
+    // manual retry appear successful while never reaching the worker.
+    this.triggerProcessor(jobId);
     return this.getJobById(jobId, userId, isAdmin);
   }
 
@@ -340,6 +343,20 @@ export class RenderJobQueue {
     const job = await this.getJobById(jobId, undefined, true);
     if (!job) return;
     await this.executeJob(job);
+
+    // executeJob deliberately catches render errors so it can persist the
+    // durable state. When a transient infrastructure failure moved the job
+    // back to `queued`, propagate a failure to BullMQ so its existing job
+    // attempt/backoff machinery retries the same id. Re-adding the id while
+    // the current BullMQ attempt is active is ignored by BullMQ, so this
+    // explicit signal is required for a real retry.
+    const state = await query<{ status: RenderJobRow['status'] }[]>(
+      'SELECT status FROM render_jobs WHERE id = ? LIMIT 1',
+      [jobId],
+    );
+    if (state[0]?.status === 'queued') {
+      throw new Error('Render job requeued after transient infrastructure failure');
+    }
   }
 
   /**
@@ -511,7 +528,10 @@ export class RenderJobQueue {
           "UPDATE render_jobs SET status = 'queued', stage = 'إعادة المحاولة بعد خطأ مؤقت', retry_count = retry_count + 1 WHERE id = ? AND status = 'running'",
           [jobId]
         );
-        this.triggerProcessor(jobId);
+        // The DB worker can enqueue directly. BullMQ uses the current job's
+        // attempts/backoff lifecycle; processExternalJob observes `queued`
+        // and throws after this method returns so the same BullMQ job retries.
+        if (config.queue.driver !== 'bullmq') this.triggerProcessor(jobId);
       } else {
         await query(
           `UPDATE render_jobs SET 
