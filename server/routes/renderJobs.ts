@@ -19,7 +19,7 @@ const router = Router();
 router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user!.id;
-    const { manifest, idempotencyKey } = req.body;
+    const { manifest, idempotencyKey, renderEngine } = req.body;
 
     if (!manifest) {
       return res.status(400).json({ error: 'بيانات أمر الريندر (RenderManifest) مطلوبة' });
@@ -34,6 +34,9 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
     const manifestValidation = validateRenderManifest(manifest);
     if (!manifestValidation.valid || !manifestValidation.manifest) {
       return res.status(400).json({ error: `خطأ في بيانات أمر الريندر: ${manifestValidation.errors?.join(', ')}` });
+    }
+    if (renderEngine && ['browser', 'ffmpeg_ass', 'skia_canvas'].includes(renderEngine)) {
+      (manifestValidation.manifest as any).renderEngine = renderEngine;
     }
     const assetValidation = validateManifestAssets(manifestValidation.manifest);
     if (!assetValidation.safe) {
@@ -368,7 +371,7 @@ router.get('/:id/download', requireAuth, async (req: AuthenticatedRequest, res: 
 
     if (job.status !== 'succeeded' || !job.output_path || (!isObjectStoragePath(job.output_path) && !fs.existsSync(job.output_path))) {
       return res.status(410).json({
-        error: 'انتهت صلاحية ملف الفيديو (يتم الاحتفاظ بالفيديو لمدة ساعة واحدة لتوفير مساحة السيرفر). يمكنك إعادة ريندر الفيديو بسهولة في أي وقت.',
+        error: 'انتهت صلاحية تحميل ملف الفيديو (فترة الحفظ 48 ساعة لحماية مساحة السيرفر). يمكنك إعادة إنتاج الفيديو بسهولة بنقرة واحدة في أي وقت.',
       });
     }
 

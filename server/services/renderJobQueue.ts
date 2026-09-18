@@ -173,7 +173,17 @@ export class RenderJobQueue {
           "UPDATE render_jobs SET output_path = NULL, stage = 'تم مسح الملف المؤقت لانتهاء الصلاحية' WHERE id = ? AND output_path IS NOT NULL",
           [job.id]
         );
+        await query(
+          "UPDATE saved_videos SET video_url = NULL WHERE id = ?",
+          [job.id]
+        ).catch(() => {});
       }));
+
+      // Sweep expired saved_videos rows to remove download link and protect server disk
+      await query(
+        `UPDATE saved_videos SET video_url = NULL 
+         WHERE expires_at IS NOT NULL AND expires_at < NOW() AND video_url IS NOT NULL`
+      ).catch(() => {});
     } catch (err) {
       logger.error('Failed running garbage collector on expired renders:', err);
     }
@@ -491,7 +501,7 @@ export class RenderJobQueue {
         ? await uploadRender(outputPath, job.user_id, jobId)
         : outputPath;
 
-      // Mark Job Succeeded (Expires in 1 hour on shared hosting to protect remaining disk space)
+      // Mark Job Succeeded (Retains for 48 hours to protect server disk space)
       const completionUpdate: any = await query(
         `UPDATE render_jobs SET 
           status = 'succeeded',
@@ -503,7 +513,7 @@ export class RenderJobQueue {
           duration_seconds = ?,
           metadata = ?,
           completed_at = NOW(),
-          expires_at = DATE_ADD(NOW(), INTERVAL 1 HOUR)
+          expires_at = DATE_ADD(NOW(), INTERVAL 48 HOUR)
         WHERE id = ? AND status = 'running'`,
         [
           storedOutputPath,
@@ -526,6 +536,55 @@ export class RenderJobQueue {
         renderDurationSeconds.observe((Date.now() - startedAt) / 1000);
         void recordRenderAudit(jobId, job.user_id, 'succeeded', { durationSeconds: (Date.now() - startedAt) / 1000 });
         logger.info(`Render job [${jobId}] succeeded and is ready for download.`);
+
+        // Idea 3: Automatically save completed background video to user's saved_videos library
+        const surahNumber = manifest.canonicalAyahRange?.surahNumber || 1;
+        const surahName = manifest.canonicalAyahRange?.surahName || 'سورة';
+        const startAyah = manifest.canonicalAyahRange?.startAyah || 1;
+        const endAyah = manifest.canonicalAyahRange?.endAyah || 1;
+        const reciterId = manifest.reciter?.id || 'default';
+        const reciterName = manifest.reciter?.name || 'القارئ';
+        const aspectRatio = manifest.aspectRatio || '9:16';
+        const bgType = manifest.background?.type || 'image';
+        const engineType = (manifest as any).renderEngine || manifest.displaySettings?.renderEngine || 'ffmpeg_ass';
+        const videoDownloadUrl = `/api/renders/${jobId}/download`;
+
+        await query(
+          `INSERT INTO saved_videos (
+            id, user_id, surah_name, surah_number, start_ayah, end_ayah,
+            reciter_id, reciter_name, video_url, thumbnail_url,
+            aspect_ratio, background_type, is_public, expires_at, render_engine
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, DATE_ADD(NOW(), INTERVAL 48 HOUR), ?)
+          ON DUPLICATE KEY UPDATE
+            video_url = VALUES(video_url),
+            expires_at = VALUES(expires_at),
+            render_engine = VALUES(render_engine)`,
+          [
+            jobId,
+            job.user_id,
+            surahName,
+            surahNumber,
+            startAyah,
+            endAyah,
+            reciterId,
+            reciterName,
+            videoDownloadUrl,
+            null,
+            aspectRatio,
+            bgType,
+            engineType,
+          ]
+        ).catch((saveErr) => logger.warn(`Failed auto-saving background render [${jobId}] to saved_videos:`, saveErr));
+
+        // Idea 3: Send instant user notification
+        const notifId = crypto.randomUUID();
+        const notifTitle = 'اكتمل إنتاج الفيديو بنجاح 🎬';
+        const notifMsg = `فيديو سورة ${surahName} (الآيات ${startAyah}-${endAyah}) جاهز الآن في مكتبتك للتحميل والمشاهدة. متاح للتحميل لمدة 48 ساعة.`;
+        await query(
+          `INSERT INTO notifications (id, user_id, title, message, type, is_read)
+           VALUES (?, ?, ?, ?, 'video', FALSE)`,
+          [notifId, job.user_id, notifTitle, notifMsg]
+        ).catch((notifErr) => logger.warn(`Failed creating notification for render job [${jobId}]:`, notifErr));
       }
     } catch (err: any) {
       if (abortController.signal.aborted) {

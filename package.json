@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "tsx server/index.ts",
     "dev": "vite",
     "server": "tsx server/index.ts",
     "worker": "tsx server/worker.ts",

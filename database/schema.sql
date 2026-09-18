@@ -56,6 +56,8 @@ CREATE TABLE IF NOT EXISTS `saved_videos` (
   `background_type` VARCHAR(50) NOT NULL DEFAULT 'color',
   `is_public` BOOLEAN NOT NULL DEFAULT FALSE,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `expires_at` TIMESTAMP NULL DEFAULT NULL,
+  `render_engine` VARCHAR(50) NOT NULL DEFAULT 'browser',
   PRIMARY KEY (`id`),
   INDEX `idx_saved_videos_user` (`user_id`),
   INDEX `idx_saved_videos_public` (`is_public`),

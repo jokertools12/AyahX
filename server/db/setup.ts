@@ -29,6 +29,8 @@ async function applySchemaUpgrades(connection: mysql.Connection, database: strin
   // Keep the checkout record compatible with both a fresh and an upgraded DB.
   await ensureColumn(connection, database, 'payment_requests', 'currency', "CHAR(3) NOT NULL DEFAULT 'EGP' AFTER amount");
   await ensureColumn(connection, database, 'payment_requests', 'transfer_reference', 'VARCHAR(100) DEFAULT NULL AFTER phone_number');
+  await ensureColumn(connection, database, 'saved_videos', 'expires_at', 'TIMESTAMP NULL DEFAULT NULL AFTER created_at');
+  await ensureColumn(connection, database, 'saved_videos', 'render_engine', "VARCHAR(50) NOT NULL DEFAULT 'browser' AFTER expires_at");
 }
 
 async function setupDatabase() {

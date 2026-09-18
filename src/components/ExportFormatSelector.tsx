@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 
 export type ExportFormat = 'mp4' | 'webm' | 'gif';
 export type RecordingMethod = 'auto' | 'smooth' | 'compatibility' | 'quality';
-export type RenderEngine = 'server' | 'browser';
+export type RenderEngine = 'browser' | 'ffmpeg_ass' | 'skia_canvas';
 
 export interface ExportSettings {
   format: ExportFormat;
@@ -29,6 +29,8 @@ interface ExportFormatSelectorProps {
   mp4Blob: Blob | null;
   isConverting: boolean;
   isRecording: boolean;
+  onTriggerBackgroundRender?: () => void;
+  isBackgroundRendering?: boolean;
 }
 
 const FORMAT_OPTIONS: { id: ExportFormat; label: string; description: string; icon: typeof FileVideo }[] = [
@@ -51,14 +53,16 @@ export function ExportFormatSelector({
   mp4Blob,
   isConverting,
   isRecording,
+  onTriggerBackgroundRender,
+  isBackgroundRendering = false,
 }: ExportFormatSelectorProps) {
   const { isPremium, entitlements, dailyUsage } = useSubscription();
 
-  const serverLimit = dailyUsage.cloudRenderLimit;
-  const serverRemaining = dailyUsage.cloudRenderRemaining;
   const browserLimit = dailyUsage.browserRenderLimit;
   const browserRemaining = dailyUsage.browserRenderRemaining;
-  const canUseServerRender = serverRemaining > 0;
+  const ffmpegAssLimit = entitlements.ffmpegAssDailyLimit ?? (isPremium ? 30 : 1);
+  const skiaCanvasLimit = entitlements.skiaCanvasDailyLimit ?? (isPremium ? 15 : 2);
+  const backgroundAsyncLimit = entitlements.backgroundAsyncDailyLimit ?? (isPremium ? 20 : 0);
 
   const updateSetting = <K extends keyof ExportSettings>(key: K, value: ExportSettings[K]) => {
     onChange({ ...settings, [key]: value });
@@ -71,7 +75,6 @@ export function ExportFormatSelector({
     return false;
   };
 
-  // Browser Canvas is the safe default; cloud is an explicit quota-consuming choice.
   const effectiveEngine = settings.renderEngine || 'browser';
 
   return (
@@ -256,44 +259,156 @@ export function ExportFormatSelector({
           )}
         </div>
 
-        {/* 5. Render Engine Choice */}
-        {/* 5. Production Engine Showcase */}
+        {/* 5. Production Engine Choice - The 3 Architectures */}
         <div className="space-y-3 pt-2 border-t border-border/40">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium flex items-center gap-2">
               <Zap className="h-4 w-4 text-primary" />
-              محرك الإنتاج والتصدير
+              اختيار محرك الإنتاج والريندر
             </Label>
-            <span className="text-xs text-emerald-500 font-medium flex items-center gap-1 bg-emerald-500/10 px-2.5 py-0.5 rounded-full">
-              <ShieldCheck className="h-3.5 w-3.5" />
-              فوري • بدون أي طوابير
-            </span>
+            <span className="text-xs text-muted-foreground">خيارات ذكية حسب نوع الإنتاج</span>
           </div>
 
-          <div className="p-3.5 rounded-xl border border-primary/30 bg-primary/5 flex items-start gap-3">
-            <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
-              <Sparkles className="h-5 w-5" />
+          <RadioGroup
+            value={effectiveEngine}
+            onValueChange={(val) => updateSetting('renderEngine', val as RenderEngine)}
+            className="space-y-2.5"
+          >
+            {/* Option 1: Browser Hybrid Engine */}
+            <div className="relative">
+              <RadioGroupItem value="browser" id="engine-browser" className="peer sr-only" />
+              <Label
+                htmlFor="engine-browser"
+                className="flex items-start gap-3 rounded-xl border-2 border-muted p-3 hover:bg-muted/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-all"
+              >
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
+                  <Cpu className="h-4 w-4" />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-sm">محرك المتصفح الفوري الهجين</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/15 text-primary">
+                      {browserLimit === null ? 'غير محدود' : `${browserRemaining ?? 0}/${browserLimit} اليوم`}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    معالجة فورية على جهازك مع ترميز MP4 وتلميع الصوت بسيرفر FFmpeg بدون انتظار.
+                  </p>
+                </div>
+              </Label>
             </div>
-            <div className="flex-1 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold text-sm text-foreground">
-                  محرك الإنتاج الهجين فائق السرعة (Zero-Queue High-Speed Engine)
-                </span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                  browserLimit === null ? 'bg-emerald-500/15 text-emerald-600' : 'bg-primary/15 text-primary'
-                }`}>
-                  {browserLimit === null ? 'غير محدود في عضويتك' : `متبقي ${browserRemaining ?? 0}/${browserLimit} اليوم`}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                ريندر مباشر فائق السلاسة على كرت الشاشة مع تلميع وترميز MP4 ستوديو بـ FFmpeg في ثوانٍ معدودة بدون أي انتظار في طابور.
-              </p>
+
+            {/* Option 2: Native FFmpeg ASS Superfast Engine (Idea 1) */}
+            <div className="relative">
+              <RadioGroupItem value="ffmpeg_ass" id="engine-ffmpeg-ass" className="peer sr-only" />
+              <Label
+                htmlFor="engine-ffmpeg-ass"
+                className="flex items-start gap-3 rounded-xl border-2 border-muted p-3 hover:bg-muted/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-all"
+              >
+                <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 shrink-0 mt-0.5">
+                  <Zap className="h-4 w-4" />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-semibold text-sm">محرك FFmpeg الصاروخي (فكرة 1)</span>
+                      {isPremium ? (
+                        <span className="text-[10px] bg-amber-500/15 text-amber-600 px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                          <Sparkles className="h-3 w-3" /> مميز
+                        </span>
+                      ) : (
+                        <span className="text-[10px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded">
+                          تجربة يومية
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-600">
+                      {ffmpegAssLimit} فيديو / يوم
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    ريندر صاروخي في 2-5 ثوانٍ فقط عبر FFmpeg النقي بتشكيل قرآني عالي الدقة وتظليل ذهبي للكلمات بدون متصفح.
+                  </p>
+                </div>
+              </Label>
             </div>
-          </div>
+
+            {/* Option 3: Skia/Rust Canvas Engine (Idea 2) */}
+            <div className="relative">
+              <RadioGroupItem value="skia_canvas" id="engine-skia-canvas" className="peer sr-only" />
+              <Label
+                htmlFor="engine-skia-canvas"
+                className="flex items-start gap-3 rounded-xl border-2 border-muted p-3 hover:bg-muted/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-all"
+              >
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0 mt-0.5">
+                  <Film className="h-4 w-4" />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-sm">محرك استوديو Skia Canvas (فكرة 2)</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600">
+                      {skiaCanvasLimit} فيديو / يوم
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    رسم الإطارات وبادجات الآيات والزخارف الهندسية في C++/Rust Skia وبثها إلى FFmpeg بجودة استوديو سينمائية.
+                  </p>
+                </div>
+              </Label>
+            </div>
+          </RadioGroup>
         </div>
 
+        {/* 6. Idea 3: Asynchronous Background Cloud Processing Card */}
+        {onTriggerBackgroundRender && (
+          <div className="p-4 rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-background to-amber-500/10 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-primary" />
+                <span className="font-bold text-sm">الريندر السحابي في الخلفية (فكرة 3)</span>
+              </div>
+              {isPremium ? (
+                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600">
+                  {backgroundAsyncLimit} فيديو / يوم
+                </span>
+              ) : (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-600 flex items-center gap-1">
+                  <Lock className="h-3 w-3" /> ميزة مميزة
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              أطلق أمر الريندر وأغلق الصفحة! سيقوم السيرفر بإنتاج الفيديو وحفظه تلقائياً في مكتبتك (صالح للتحميل لمدة 48 ساعة) مع إرسال إشعار فوري عند الجاهزية.
+            </p>
+            <Button
+              type="button"
+              variant="default"
+              disabled={!isPremium || isBackgroundRendering}
+              onClick={() => {
+                if (!isPremium) {
+                  toast.error('ميزة الريندر في الخلفية متاحة للعضوية المميزة فقط');
+                  return;
+                }
+                onTriggerBackgroundRender();
+              }}
+              className="w-full gap-2 gradient-primary text-primary-foreground font-semibold text-xs shadow-sm"
+            >
+              {isBackgroundRendering ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  جاري إرسال المهمة للسيرفر...
+                </>
+              ) : (
+                <>
+                  <Zap className="h-4 w-4" />
+                  {isPremium ? 'بدء الريندر في الخلفية وحفظه بالمكتبة 🚀' : 'الترقية للعضوية المميزة لتفعيل الريندر في الخلفية 👑'}
+                </>
+              )}
+            </Button>
+          </div>
+        )}
 
-        {/* 6. Client Recording Strategy (When Browser engine is used) */}
+        {/* 7. Client Recording Strategy (When Browser engine is used) */}
         {effectiveEngine === 'browser' && (
           <div className="space-y-3 p-3 rounded-xl bg-muted/30 border border-border/50">
             <Label className="text-xs font-medium text-muted-foreground">خوارزمية التقاط المتصفح</Label>

@@ -42,6 +42,7 @@ export interface ClientManifestParams {
   displaySettings: any;
   userId?: string;
   idempotencyKey?: string;
+  renderEngine?: 'ffmpeg_ass' | 'skia_canvas' | 'browser_hybrid';
 }
 
 /**
@@ -54,6 +55,7 @@ export function buildClientRenderManifest(params: ClientManifestParams): any {
   return {
     schemaVersion: '1.0.0',
     rendererVersion: '1.0.0',
+    renderEngine: params.renderEngine || 'ffmpeg_ass',
     revision,
     aspectRatio: params.aspectRatio,
     outputDimensions: dimensions,

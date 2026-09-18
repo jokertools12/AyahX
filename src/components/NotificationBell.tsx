@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Bell, Check, CheckCheck, Trash2, Info, CheckCircle, XCircle, AlertTriangle, Crown, Award, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -29,6 +30,7 @@ const typeIcon = (type: string) => {
 };
 
 export function NotificationBell() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
@@ -75,6 +77,16 @@ export function NotificationBell() {
     // Treat as mark as read in UI
     markAsRead(id);
     setNotifications(prev => prev.filter(n => n.id !== id));
+  };
+
+  const handleNotificationClick = (n: Notification) => {
+    if (!n.is_read) {
+      markAsRead(n.id);
+    }
+    setOpen(false);
+    if (n.type === 'video') {
+      navigate('/library');
+    }
   };
 
   const timeAgo = (dateStr: string) => {
@@ -133,8 +145,11 @@ export function NotificationBell() {
                   className={`flex gap-3 px-4 py-3 border-b border-border/50 hover:bg-muted/50 transition-colors ${!n.is_read ? 'bg-primary/5' : ''}`}
                 >
                   <div className="mt-0.5">{typeIcon(n.type)}</div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium leading-tight">{n.title}</p>
+                  <div 
+                    className="flex-1 min-w-0 cursor-pointer"
+                    onClick={() => handleNotificationClick(n)}
+                  >
+                    <p className="text-sm font-medium leading-tight hover:text-primary transition-colors">{n.title}</p>
                     <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{n.message}</p>
                     <p className="text-[10px] text-muted-foreground/60 mt-1">{timeAgo(n.created_at)}</p>
                   </div>

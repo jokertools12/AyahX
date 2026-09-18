@@ -1429,6 +1429,7 @@ export default function PreviewPage() {
         fps: exportSettingsForPlan.fps ?? 30,
         audioBitrate: exportSettingsForPlan.audioBitrate ?? '192k',
         motionSpeed: exportSettingsForPlan.motionSpeed,
+        renderEngine: (exportSettings.renderEngine as any) || 'ffmpeg_ass',
         surah: { number: surahNumber, name: surah?.name || 'الفاتحة' },
         ayahRange: { start: startAyah, end: endAyah },
         ayahs,
@@ -1875,7 +1876,21 @@ export default function PreviewPage() {
   };
 
   const handleStartExport = async () => {
-    await handleLegacyBrowserRecording();
+    const engine = exportSettings.renderEngine || 'browser';
+    if (engine === 'browser') {
+      await handleLegacyBrowserRecording();
+    } else {
+      await handleServerExport();
+    }
+  };
+
+  const handleTriggerBackgroundRender = async () => {
+    try {
+      await handleServerExport();
+      toast.success('تم إطلاق مهمة الريندر في الخلفية بنجاح! سيتم حفظ الفيديو تلقائياً في مكتبتك لمدة 48 ساعة ويمكنك مغادرة الصفحة الآن وسيصلك إشعار فور الجاهزية.');
+    } catch (err: any) {
+      console.error('Failed background export trigger:', err);
+    }
   };
 
 
@@ -2465,6 +2480,8 @@ export default function PreviewPage() {
                     mp4Blob={videoRecorder.mp4Blob}
                     isConverting={videoRecorder.isConverting}
                     isRecording={videoRecorder.isRecording}
+                    onTriggerBackgroundRender={handleTriggerBackgroundRender}
+                    isBackgroundRendering={serverRenderJob.status === 'submitting'}
                   />
                   <MotionSpeedControl
                     speed={exportSettings.motionSpeed}

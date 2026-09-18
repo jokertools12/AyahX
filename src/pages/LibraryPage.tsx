@@ -30,7 +30,12 @@ import {
   Edit3,
   Check,
   X,
+  Download,
+  Clock,
+  AlertCircle,
+  Sparkles,
 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
 interface SavedVideo {
@@ -46,6 +51,8 @@ interface SavedVideo {
   created_at: string;
   video_url?: string;
   thumbnail_url?: string;
+  expires_at?: string;
+  render_engine?: string;
 }
 
 type SortType = 'latest' | 'oldest' | 'surah' | 'reciter';
@@ -239,6 +246,17 @@ export default function LibraryPage() {
           </Button>
         </motion.div>
 
+        {/* 48-Hour Retention Info Banner */}
+        <div className="p-3.5 rounded-xl border border-primary/20 bg-primary/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-muted-foreground mb-6">
+          <div className="flex items-center gap-2 text-foreground font-medium">
+            <Clock className="h-4 w-4 text-primary shrink-0" />
+            <span>مدة صلاحية تحميل ملفات الفيديو السحابية: <strong className="text-primary font-bold">48 ساعة (يومان)</strong> للحفاظ على مساحة وأداء السيرفر.</span>
+          </div>
+          <span className="text-[11px] text-muted-foreground">
+            تظل تصاميمك وإعداداتك محفوظة دائماً، ويمكنك إعادة تصدير أي فيديو مجدداً في أي وقت.
+          </span>
+        </div>
+
         {/* Search and Sort */}
         {videos.length > 0 && (
           <motion.div
@@ -363,11 +381,73 @@ export default function LibraryPage() {
                       </p>
                     </div>
 
+                    {/* Engine badge & 48-Hour Retention Timer */}
+                    <div className="flex flex-wrap items-center gap-1.5 mb-3">
+                      {video.render_engine && (
+                        <Badge variant="outline" className="text-[11px] py-0.5 border-primary/30 text-primary bg-primary/5">
+                          {video.render_engine === 'ffmpeg_ass' ? '⚡ FFmpeg ASS' : video.render_engine === 'skia_canvas' ? '🎨 Skia Rust' : '🌐 Browser'}
+                        </Badge>
+                      )}
+
+                      {(() => {
+                        if (!video.expires_at) return null;
+                        const diffMs = new Date(video.expires_at).getTime() - Date.now();
+                        const remainingHours = Math.ceil(diffMs / (1000 * 60 * 60));
+
+                        if (diffMs <= 0 || !video.video_url) {
+                          return (
+                            <Badge variant="destructive" className="text-[10px] py-0.5 bg-destructive/15 text-destructive border-destructive/20 gap-1 font-normal">
+                              <AlertCircle className="h-3 w-3" />
+                              انتهت صلاحية التحميل (48 ساعة)
+                            </Badge>
+                          );
+                        }
+
+                        if (remainingHours <= 12) {
+                          return (
+                            <Badge variant="outline" className="text-[10px] py-0.5 border-amber-500/40 text-amber-600 dark:text-amber-400 bg-amber-500/10 gap-1 font-normal">
+                              <Clock className="h-3 w-3 text-amber-500 animate-pulse" />
+                              متبقي {remainingHours} ساعة للتحميل
+                            </Badge>
+                          );
+                        }
+
+                        return (
+                          <Badge variant="outline" className="text-[10px] py-0.5 border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 gap-1 font-normal">
+                            <Clock className="h-3 w-3 text-emerald-500" />
+                            متاح للتحميل: {remainingHours} س متبقية
+                          </Badge>
+                        );
+                      })()}
+                    </div>
+
                     {/* Date */}
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                      <Calendar className="h-4 w-4" aria-hidden="true" />
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+                      <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
                       <span>{formatDate(video.created_at)}</span>
                     </div>
+
+                    {/* Direct MP4 Download Button (if ready and valid) */}
+                    {video.video_url && (!video.expires_at || new Date(video.expires_at).getTime() > Date.now()) ? (
+                      <Button
+                        asChild
+                        className="w-full gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm mb-2 h-9"
+                      >
+                        <a href={video.video_url} download={`quran_${video.surah_number || 'reel'}.mp4`} target="_blank" rel="noopener noreferrer">
+                          <Download className="h-4 w-4" />
+                          تحميل الفيديو مباشرة (MP4)
+                        </a>
+                      </Button>
+                    ) : video.expires_at && new Date(video.expires_at).getTime() <= Date.now() ? (
+                      <Button
+                        onClick={() => handleRecreate(video)}
+                        variant="secondary"
+                        className="w-full gap-2 text-xs mb-2 h-9 border border-border"
+                      >
+                        <RotateCcw className="h-4 w-4 text-primary" />
+                        إعادة إنشاء وتحميل فوري
+                      </Button>
+                    ) : null}
 
                     {/* Actions */}
                     <div className="flex gap-2">

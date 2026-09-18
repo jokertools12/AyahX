@@ -110,6 +110,9 @@ export const FREE_BACKGROUND_ASSET_URLS: Readonly<Record<string, string>> = {
   'nature-8': 'https://images.unsplash.com/photo-1491002052546-bf38f186af56',
 };
 
+export const RENDER_ENGINES = ['browser', 'ffmpeg_ass', 'skia_canvas'] as const;
+export type RenderEngineType = (typeof RENDER_ENGINES)[number];
+
 export type PremiumFeature =
   | 'pexelsVideos'
   | 'aiBackgrounds'
@@ -122,13 +125,21 @@ export type PremiumFeature =
   | 'premiumTemplates'
   | 'prioritySupport'
   | 'priorityCloudQueue'
-  | 'customBackgrounds';
+  | 'customBackgrounds'
+  | 'ffmpegAss'
+  | 'backgroundAsync';
 
 export interface PlanEntitlements {
   plan: SubscriptionPlan;
   /** null means unlimited. */
   browserDailyLimit: number | null;
   cloudDailyLimit: number;
+  /** Idea 1: Native FFmpeg ASS superfast renderer daily limit */
+  ffmpegAssDailyLimit: number;
+  /** Idea 2: Native Skia / Rust Canvas frame-by-frame studio daily limit */
+  skiaCanvasDailyLimit: number;
+  /** Idea 3: Asynchronous background rendering with notification daily limit */
+  backgroundAsyncDailyLimit: number;
   allowedQualities: readonly ExportQuality[];
   allowedFps: readonly ExportFps[];
   allowedAudioBitrates: readonly AudioBitrate[];
@@ -148,6 +159,8 @@ const FREE_FEATURES: Readonly<Record<PremiumFeature, boolean>> = {
   prioritySupport: false,
   priorityCloudQueue: false,
   customBackgrounds: false,
+  ffmpegAss: false,
+  backgroundAsync: false,
 };
 
 const PREMIUM_FEATURES: Readonly<Record<PremiumFeature, boolean>> = {
@@ -163,6 +176,8 @@ const PREMIUM_FEATURES: Readonly<Record<PremiumFeature, boolean>> = {
   prioritySupport: true,
   priorityCloudQueue: true,
   customBackgrounds: true,
+  ffmpegAss: true,
+  backgroundAsync: true,
 };
 
 export const PLAN_ENTITLEMENTS: Readonly<Record<SubscriptionPlan, PlanEntitlements>> = {
@@ -170,6 +185,9 @@ export const PLAN_ENTITLEMENTS: Readonly<Record<SubscriptionPlan, PlanEntitlemen
     plan: 'free',
     browserDailyLimit: 5,
     cloudDailyLimit: 1,
+    ffmpegAssDailyLimit: 1,
+    skiaCanvasDailyLimit: 2,
+    backgroundAsyncDailyLimit: 0,
     allowedQualities: ['medium', 'high'],
     allowedFps: [30],
     allowedAudioBitrates: ['192k'],
@@ -179,6 +197,9 @@ export const PLAN_ENTITLEMENTS: Readonly<Record<SubscriptionPlan, PlanEntitlemen
     plan: 'monthly',
     browserDailyLimit: null,
     cloudDailyLimit: 15,
+    ffmpegAssDailyLimit: 30,
+    skiaCanvasDailyLimit: 15,
+    backgroundAsyncDailyLimit: 20,
     allowedQualities: ['medium', 'high', 'ultra'],
     allowedFps: [30, 60],
     allowedAudioBitrates: ['128k', '192k', '320k'],
@@ -188,6 +209,9 @@ export const PLAN_ENTITLEMENTS: Readonly<Record<SubscriptionPlan, PlanEntitlemen
     plan: 'yearly',
     browserDailyLimit: null,
     cloudDailyLimit: 25,
+    ffmpegAssDailyLimit: 60,
+    skiaCanvasDailyLimit: 30,
+    backgroundAsyncDailyLimit: 50,
     allowedQualities: ['medium', 'high', 'ultra'],
     allowedFps: [30, 60],
     allowedAudioBitrates: ['128k', '192k', '320k'],

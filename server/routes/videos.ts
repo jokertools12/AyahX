@@ -208,13 +208,15 @@ router.post('/', requireAuth, videoCreationLimiter, async (req: AuthenticatedReq
     const cleanReciterName = typeof reciter_name === 'string' ? reciter_name.trim().slice(0, 100) : (isIbtahalat ? 'منشد' : 'قارئ');
     const cleanReciterId = typeof reciter_id === 'string' ? reciter_id.trim().slice(0, 100) : (isIbtahalat ? 'ibtahalat' : 'default');
 
+    const renderEngine = typeof req.body.render_engine === 'string' ? req.body.render_engine : 'browser';
+
     const id = crypto.randomUUID();
     await query(
       `INSERT INTO saved_videos (
         id, user_id, surah_name, surah_number, start_ayah, end_ayah,
         reciter_id, reciter_name, video_url, thumbnail_url,
-        aspect_ratio, background_type, is_public
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        aspect_ratio, background_type, is_public, expires_at, render_engine
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL 48 HOUR), ?)`,
       [
         id,
         userId,
@@ -229,6 +231,7 @@ router.post('/', requireAuth, videoCreationLimiter, async (req: AuthenticatedReq
         validRatio,
         background_type || 'color',
         is_public === true || is_public === 1 ? 1 : 0,
+        renderEngine,
       ],
     );
 
