@@ -7,7 +7,7 @@ import ffmpegPath from 'ffmpeg-static';
 import { RenderManifest } from '../models/renderManifest';
 import { logger } from '../logger';
 import { probeMediaFile, validateProbeAgainstSpec } from './mediaProbeService';
-import { prepareAudioTrack, prepareBackgroundAsset, DeterministicRenderOptions, DeterministicRenderResult } from './deterministicVideoRenderer';
+import { prepareAudioTrack, prepareBackgroundAsset, DeterministicRenderOptions, DeterministicRenderResult, extractAyahsAndWords } from './deterministicVideoRenderer';
 
 /**
  * Converts numbers to Arabic Eastern numerals (٠-٩)
@@ -48,6 +48,27 @@ export function toAssColor(hex: string, alphaHex = '00'): string {
 }
 
 /**
+ * Resolves ASS color & border codes for each glow style
+ */
+export function resolveAssGlowColors(glowStyle?: string): { color: string; border: string } {
+  switch (glowStyle) {
+    case 'emerald':
+      return { color: '&H0078C850&', border: '&H00578B2E&' };
+    case 'neon':
+    case 'cyan':
+      return { color: '&H00F8BD38&', border: '&H00C78402&' };
+    case 'pure_white':
+    case 'white':
+      return { color: '&H00FFFFFF&', border: '&H00E0E0E0&' };
+    case 'ruby':
+      return { color: '&H007171F8&', border: '&H002626DC&' };
+    case 'golden':
+    default:
+      return { color: '&H0037AFD4&', border: '&H00D4AF37&' };
+  }
+}
+
+/**
  * Generates SubStation Alpha (.ass) subtitle file content for the Quran reel.
  * Implements:
  * 1. Exact Right-to-Left (RTL) Arabic typography
@@ -58,22 +79,33 @@ export function toAssColor(hex: string, alphaHex = '00'): string {
 export function generateQuranAssContent(manifest: RenderManifest, fontsDir?: string): string {
   const { width, height } = manifest.outputDimensions;
   const isPortrait = height >= width;
-  const baseFontSize = Math.round(isPortrait ? height * 0.038 : height * 0.055);
+
+  // Responsive font scaling respecting user preferences
+  const fontScale = (manifest.typography?.fontSize && manifest.typography.fontSize > 0)
+    ? manifest.typography.fontSize / 28
+    : 1.0;
+  const baseFontSize = Math.round((isPortrait ? height * 0.038 : height * 0.055) * fontScale);
   const headerFontSize = Math.round(baseFontSize * 0.65);
   const reciterFontSize = Math.round(baseFontSize * 0.52);
 
-  const fontName = 'Amiri';
+  const fontName = (manifest.typography?.fontFamily && manifest.typography.fontFamily.toLowerCase().includes('noto'))
+    ? 'Noto Naskh Arabic'
+    : 'Amiri';
   const headerFont = 'Noto Naskh Arabic';
 
-  // Primary text color: White with soft outline
-  const normalTextColor = '&H00FFFFFF&';
-  // Highlight text color: Gilded Quran Gold (&H0037AFD4 in BGR)
-  const activeGoldColor = '&H0037AFD4&';
-  const activeGlowBorder = '&H00D4AF37&';
+  // Primary text color respecting user customization
+  const normalTextColor = manifest.typography?.textColor
+    ? toAssColor(manifest.typography.textColor)
+    : '&H00FFFFFF&';
+
+  // Highlight glow color mapping
+  const glowColors = resolveAssGlowColors(manifest.displaySettings?.glowStyle);
+  const activeGoldColor = glowColors.color;
+  const activeGlowBorder = glowColors.border;
   const shadowColor = '&H90000000&';
   const borderColor = '&H00000000&';
 
-  const marginV = Math.round(height * 0.22);
+  const marginV = Math.round(height * (isPortrait ? 0.22 : 0.16));
   const marginLR = Math.round(width * 0.08);
 
   const lines: string[] = [
@@ -103,115 +135,120 @@ export function generateQuranAssContent(manifest: RenderManifest, fontsDir?: str
   const totalDuration = manifest.audio.durationSeconds || 30;
 
   // 1. Top Header: Surah Name and Reciter Name
-  if (manifest.displaySettings.showSurahName) {
+  if (manifest.displaySettings?.showSurahName) {
     const surahText = `سُورَةُ ${manifest.canonicalAyahRange.surahName.replace(/^سورة\s+/, '')}`;
     lines.push(`Dialogue: 0,0:00:00.00,${formatAssTimestamp(totalDuration)},SurahTitle,,0,0,0,,${surahText}`);
   }
 
-  if (manifest.displaySettings.showReciterName) {
+  if (manifest.displaySettings?.showReciterName) {
     const reciterText = `تلاوة: ${manifest.reciter.name}`;
     lines.push(`Dialogue: 0,0:00:00.00,${formatAssTimestamp(totalDuration)},ReciterTitle,,0,0,0,,${reciterText}`);
   }
 
-  // 2. Ayahs and Word Timings
-  const ayahs = manifest.canonicalAyahRange.ayahs;
-  const words = manifest.timingMap?.words || [];
+  // 2. Ayahs and Word Timings (if Ayah text is enabled)
+  const showAyahText = manifest.displaySettings?.showAyahText !== false;
+  const showAyahNumber = manifest.displaySettings?.showAyahNumber !== false;
+  const doWordHighlight = manifest.displaySettings?.highlightStyle !== 'none';
 
-  // Group words by verse
-  const ayahWordGroups = new Map<number, typeof words>();
-  for (const w of words) {
-    const match = w.canonicalWordKey?.match(/^(\d+):(\d+):/);
-    const ayahNum = match ? parseInt(match[2], 10) : ayahs[0]?.numberInSurah;
-    if (!ayahWordGroups.has(ayahNum)) {
-      ayahWordGroups.set(ayahNum, []);
-    }
-    ayahWordGroups.get(ayahNum)!.push(w);
-  }
+  if (showAyahText) {
+    const { ayahs, words } = extractAyahsAndWords(manifest);
 
-  // Compute timing ranges for each Ayah
-  let previousEnd = 0;
-  for (let i = 0; i < ayahs.length; i++) {
-    const ayah = ayahs[i];
-    const ayahWords = ayahWordGroups.get(ayah.numberInSurah) || [];
-    
-    let ayahStartSec = previousEnd;
-    let ayahEndSec = totalDuration;
-
-    if (ayahWords.length > 0) {
-      const firstWordStart = ayahWords[0].startMs / 1000;
-      const lastWordEnd = (ayahWords[ayahWords.length - 1].endMs ?? ayahWords[ayahWords.length - 1].startMs + 600) / 1000;
-      ayahStartSec = Math.max(0, firstWordStart);
-      ayahEndSec = Math.min(totalDuration, lastWordEnd + 0.8);
-      // Give a clean transition boundary between ayahs
-      if (i < ayahs.length - 1) {
-        const nextAyahWords = ayahWordGroups.get(ayahs[i + 1].numberInSurah);
-        if (nextAyahWords && nextAyahWords.length > 0) {
-          ayahEndSec = Math.min(ayahEndSec, nextAyahWords[0].startMs / 1000);
-        }
+    // Group words by verse
+    const ayahWordGroups = new Map<number, typeof words>();
+    for (const w of words) {
+      const match = w.canonicalWordKey?.match(/^(\d+):(\d+):/);
+      const ayahNum = match ? parseInt(match[2], 10) : ayahs[0]?.numberInSurah;
+      if (!ayahWordGroups.has(ayahNum)) {
+        ayahWordGroups.set(ayahNum, []);
       }
-    } else {
-      // If words are not timestamped, divide total duration evenly
-      const durationPerAyah = totalDuration / ayahs.length;
-      ayahStartSec = i * durationPerAyah;
-      ayahEndSec = (i + 1) * durationPerAyah;
+      ayahWordGroups.get(ayahNum)!.push(w);
     }
 
-    previousEnd = ayahEndSec;
+    // Compute timing ranges for each Ayah
+    let previousEnd = 0;
+    for (let i = 0; i < ayahs.length; i++) {
+      const ayah = ayahs[i];
+      const ayahWords = ayahWordGroups.get(ayah.numberInSurah) || [];
+      
+      let ayahStartSec = previousEnd;
+      let ayahEndSec = totalDuration;
 
-    const ayahBracket = ` ﴿${toArabicDigits(ayah.numberInSurah)}﴾`;
-    const fullTokens = ayahWords.length > 0 ? ayahWords.map((w) => w.displayToken) : ayah.text.split(/\s+/);
-
-    if (ayahWords.length === 0) {
-      // Simple display without word highlights
-      const startStr = formatAssTimestamp(ayahStartSec);
-      const endStr = formatAssTimestamp(ayahEndSec);
-      lines.push(`Dialogue: 1,${startStr},${endStr},QuranMain,,0,0,0,,${ayah.text}${ayahBracket}`);
-      continue;
-    }
-
-    // Pre-verse pause: Show entire verse with neutral text before first word activates
-    if (ayahWords[0].startMs / 1000 > ayahStartSec + 0.05) {
-      const startStr = formatAssTimestamp(ayahStartSec);
-      const endStr = formatAssTimestamp(ayahWords[0].startMs / 1000);
-      const fullText = fullTokens.join(' ') + ayahBracket;
-      lines.push(`Dialogue: 1,${startStr},${endStr},QuranMain,,0,0,0,,${fullText}`);
-    }
-
-    // Word-by-word highlights
-    for (let wIndex = 0; wIndex < ayahWords.length; wIndex++) {
-      const word = ayahWords[wIndex];
-      const wordStart = word.startMs / 1000;
-      const nextWord = ayahWords[wIndex + 1];
-      const wordEnd = nextWord ? nextWord.startMs / 1000 : Math.min(ayahEndSec, (word.endMs ?? word.startMs + 600) / 1000);
-
-      if (wordEnd <= wordStart) continue;
-
-      const startStr = formatAssTimestamp(wordStart);
-      const endStr = formatAssTimestamp(wordEnd);
-
-      // Build text with active word tagged with gold color
-      const formattedParts: string[] = [];
-      for (let k = 0; k < fullTokens.length; k++) {
-        if (k === wIndex) {
-          // Highlight active word with golden color and extra glow
-          formattedParts.push(`{\\c${activeGoldColor}\\3c${activeGlowBorder}\\bord4}${fullTokens[k]}{\\rQuranMain}`);
-        } else {
-          formattedParts.push(fullTokens[k]);
+      if (ayahWords.length > 0) {
+        const firstWordStart = ayahWords[0].startMs / 1000;
+        const lastWordEnd = (ayahWords[ayahWords.length - 1].endMs ?? ayahWords[ayahWords.length - 1].startMs + 600) / 1000;
+        ayahStartSec = Math.max(0, firstWordStart);
+        ayahEndSec = Math.min(totalDuration, lastWordEnd + 0.8);
+        // Give a clean transition boundary between ayahs
+        if (i < ayahs.length - 1) {
+          const nextAyahWords = ayahWordGroups.get(ayahs[i + 1].numberInSurah);
+          if (nextAyahWords && nextAyahWords.length > 0) {
+            ayahEndSec = Math.min(ayahEndSec, nextAyahWords[0].startMs / 1000);
+          }
         }
+      } else {
+        // If words are not timestamped, divide total duration evenly
+        const durationPerAyah = totalDuration / ayahs.length;
+        ayahStartSec = i * durationPerAyah;
+        ayahEndSec = (i + 1) * durationPerAyah;
       }
 
-      const lineText = formattedParts.join(' ') + ayahBracket;
-      lines.push(`Dialogue: 1,${startStr},${endStr},QuranMain,,0,0,0,,${lineText}`);
-    }
+      previousEnd = ayahEndSec;
 
-    // Post-verse pause: Show full neutral verse until ayahEndSec
-    const lastWord = ayahWords[ayahWords.length - 1];
-    const lastWordEnd = (lastWord.endMs ?? lastWord.startMs + 600) / 1000;
-    if (ayahEndSec > lastWordEnd + 0.05) {
-      const startStr = formatAssTimestamp(lastWordEnd);
-      const endStr = formatAssTimestamp(ayahEndSec);
-      const fullText = fullTokens.join(' ') + ayahBracket;
-      lines.push(`Dialogue: 1,${startStr},${endStr},QuranMain,,0,0,0,,${fullText}`);
+      const ayahBracket = showAyahNumber ? ` ﴿${toArabicDigits(ayah.numberInSurah)}﴾` : '';
+      const fullTokens = ayahWords.length > 0 ? ayahWords.map((w) => w.displayToken) : ayah.text.split(/\s+/);
+
+      if (ayahWords.length === 0 || !doWordHighlight) {
+        // Display full verse cleanly without per-word jump
+        const startStr = formatAssTimestamp(ayahStartSec);
+        const endStr = formatAssTimestamp(ayahEndSec);
+        lines.push(`Dialogue: 1,${startStr},${endStr},QuranMain,,0,0,0,,${ayah.text}${ayahBracket}`);
+        continue;
+      }
+
+      // Pre-verse pause: Show entire verse with neutral text before first word activates
+      if (ayahWords[0].startMs / 1000 > ayahStartSec + 0.05) {
+        const startStr = formatAssTimestamp(ayahStartSec);
+        const endStr = formatAssTimestamp(ayahWords[0].startMs / 1000);
+        const fullText = fullTokens.join(' ') + ayahBracket;
+        lines.push(`Dialogue: 1,${startStr},${endStr},QuranMain,,0,0,0,,${fullText}`);
+      }
+
+      // Word-by-word highlights
+      for (let wIndex = 0; wIndex < ayahWords.length; wIndex++) {
+        const word = ayahWords[wIndex];
+        const wordStart = word.startMs / 1000;
+        const nextWord = ayahWords[wIndex + 1];
+        const wordEnd = nextWord ? nextWord.startMs / 1000 : Math.min(ayahEndSec, (word.endMs ?? word.startMs + 600) / 1000);
+
+        if (wordEnd <= wordStart) continue;
+
+        const startStr = formatAssTimestamp(wordStart);
+        const endStr = formatAssTimestamp(wordEnd);
+
+        // Build text with active word tagged with gold color
+        const formattedParts: string[] = [];
+        for (let k = 0; k < fullTokens.length; k++) {
+          if (k === wIndex) {
+            // Highlight active word with golden color and extra glow
+            formattedParts.push(`{\\c${activeGoldColor}\\3c${activeGlowBorder}\\bord4}${fullTokens[k]}{\\rQuranMain}`);
+          } else {
+            formattedParts.push(fullTokens[k]);
+          }
+        }
+
+        const lineText = formattedParts.join(' ') + ayahBracket;
+        lines.push(`Dialogue: 1,${startStr},${endStr},QuranMain,,0,0,0,,${lineText}`);
+      }
+
+      // Post-verse pause: Show full neutral verse until ayahEndSec
+      const lastWord = ayahWords[ayahWords.length - 1];
+      const lastWordEnd = (lastWord.endMs ?? lastWord.startMs + 600) / 1000;
+      if (ayahEndSec > lastWordEnd + 0.05) {
+        const startStr = formatAssTimestamp(lastWordEnd);
+        const endStr = formatAssTimestamp(ayahEndSec);
+        const fullText = fullTokens.join(' ') + ayahBracket;
+        lines.push(`Dialogue: 1,${startStr},${endStr},QuranMain,,0,0,0,,${fullText}`);
+      }
     }
   }
 
@@ -275,8 +312,11 @@ export async function renderFfmpegAssVideo(
     const escapedAssPath = assFilePath.replace(/\\/g, '/').replace(/:/g, '\\:');
     const escapedFontsDir = fontsDir.replace(/\\/g, '/').replace(/:/g, '\\:');
 
-    // Video filter: Scale background, add soft dark overlay for high contrast, and overlay ASS subtitles
-    const filterComplex = `[0:v]scale=${width}:${height}:force_original_aspect_ratio=increase,crop=${width}:${height},drawbox=x=0:y=0:w=iw:h=ih:color=black@0.42:t=fill,ass='${escapedAssPath}':fontsdir='${escapedFontsDir}'[v]`;
+    // Video filter: Scale background, add dynamic dark overlay for high contrast, and overlay ASS subtitles
+    const overlayAlpha = typeof manifest.background?.overlayOpacity === 'number'
+      ? Math.max(0.0, Math.min(0.95, manifest.background.overlayOpacity))
+      : 0.42;
+    const filterComplex = `[0:v]scale=${width}:${height}:force_original_aspect_ratio=increase,crop=${width}:${height},drawbox=x=0:y=0:w=iw:h=ih:color=black@${overlayAlpha.toFixed(2)}:t=fill,ass='${escapedAssPath}':fontsdir='${escapedFontsDir}'[v]`;
 
     let bgSourceFile = bg.url;
     // If background was prepared into scratch directory
@@ -290,10 +330,11 @@ export async function renderFfmpegAssVideo(
     } else if (fs.existsSync(bgSourceFile)) {
       bgInputArgs = ['-loop', '1', '-i', bgSourceFile];
     } else {
-      // Fallback to solid elegant dark background if source file not on disk
+      // Fallback or explicit solid elegant background if source file not on disk
+      const solidColor = (bg.type === 'color' && bg.url && bg.url.startsWith('#')) ? bg.url : '#0B1519';
       bgInputArgs = [
         '-f', 'lavfi',
-        '-i', `color=c=#0B1519:s=${width}x${height}:r=${fps}`,
+        '-i', `color=c=${solidColor}:s=${width}x${height}:r=${fps}`,
       ];
     }
 

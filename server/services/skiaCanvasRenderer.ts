@@ -8,7 +8,7 @@ import { createCanvas, loadImage, GlobalFonts, Image } from '@napi-rs/canvas';
 import { RenderManifest } from '../models/renderManifest';
 import { logger } from '../logger';
 import { probeMediaFile, validateProbeAgainstSpec } from './mediaProbeService';
-import { prepareAudioTrack, prepareBackgroundAsset, DeterministicRenderOptions, DeterministicRenderResult } from './deterministicVideoRenderer';
+import { prepareAudioTrack, prepareBackgroundAsset, DeterministicRenderOptions, DeterministicRenderResult, extractAyahsAndWords } from './deterministicVideoRenderer';
 import { toArabicDigits } from './ffmpegAssRenderer';
 
 // Ensure standard Arabic fonts are registered into Skia
@@ -240,8 +240,7 @@ export async function renderSkiaCanvasVideo(
     const ctx = canvas.getContext('2d');
 
     // Pre-calculate ayahs & word timelines
-    const ayahs = manifest.canonicalAyahRange.ayahs;
-    const words = manifest.timingMap?.words || [];
+    const { ayahs, words } = extractAyahsAndWords(manifest);
     const totalDuration = manifest.audio.durationSeconds;
 
     const ayahWordGroups = new Map<number, typeof words>();
@@ -287,8 +286,32 @@ export async function renderSkiaCanvasVideo(
     }
 
     const isPortrait = height >= width;
-    const baseFontSize = Math.round(isPortrait ? height * 0.038 : height * 0.052);
+    const fontScale = (manifest.typography?.fontSize && manifest.typography.fontSize > 0)
+      ? manifest.typography.fontSize / 28
+      : 1.0;
+    const baseFontSize = Math.round((isPortrait ? height * 0.038 : height * 0.052) * fontScale);
     const badgeSize = Math.round(baseFontSize * 0.85);
+    const fontName = (manifest.typography?.fontFamily && manifest.typography.fontFamily.toLowerCase().includes('noto'))
+      ? '"Noto Naskh Arabic", "Amiri", serif'
+      : '"Amiri", "Noto Naskh Arabic", serif';
+    const defaultTextColor = manifest.typography?.textColor || '#FFFFFF';
+
+    const resolveSkiaGlow = (glowStyle?: string) => {
+      switch (glowStyle) {
+        case 'emerald': return { activeText: '#34D399', glowColor: '#10B981' };
+        case 'neon':
+        case 'cyan': return { activeText: '#38BDF8', glowColor: '#0284C7' };
+        case 'pure_white':
+        case 'white': return { activeText: '#FFFFFF', glowColor: '#CBD5E1' };
+        case 'ruby': return { activeText: '#F87171', glowColor: '#DC2626' };
+        case 'golden':
+        default: return { activeText: '#F5D061', glowColor: '#D4AF37' };
+      }
+    };
+    const skiaGlow = resolveSkiaGlow(manifest.displaySettings?.glowStyle);
+    const showAyahText = manifest.displaySettings?.showAyahText !== false;
+    const showAyahNumber = manifest.displaySettings?.showAyahNumber !== false;
+    const doWordHighlight = manifest.displaySettings?.highlightStyle !== 'none';
 
     // Frame rendering loop with backpressure control
     for (let frameIndex = 0; frameIndex < totalFrames; frameIndex++) {
@@ -318,12 +341,15 @@ export async function renderSkiaCanvasVideo(
         ctx.fillRect(0, 0, width, height);
       }
 
-      // Dark readability overlay
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
+      // Dark readability overlay (respects user overlayOpacity slider)
+      const overlayAlpha = typeof manifest.background?.overlayOpacity === 'number'
+        ? Math.max(0.0, Math.min(0.95, manifest.background.overlayOpacity))
+        : 0.42;
+      ctx.fillStyle = `rgba(0, 0, 0, ${overlayAlpha.toFixed(2)})`;
       ctx.fillRect(0, 0, width, height);
 
       // 2. Top Header (Surah name pill & reciter)
-      if (manifest.displaySettings.showSurahName) {
+      if (manifest.displaySettings?.showSurahName) {
         const surahTitle = `سُورَةُ ${manifest.canonicalAyahRange.surahName.replace(/^سورة\s+/, '')}`;
         ctx.save();
         ctx.font = `bold ${Math.round(baseFontSize * 0.68)}px "Noto Naskh Arabic", "Amiri", serif`;
@@ -350,7 +376,7 @@ export async function renderSkiaCanvasVideo(
         ctx.restore();
       }
 
-      if (manifest.displaySettings.showReciterName) {
+      if (manifest.displaySettings?.showReciterName) {
         const reciterTitle = `تلاوة: ${manifest.reciter.name}`;
         ctx.save();
         ctx.font = `${Math.round(baseFontSize * 0.48)}px "Noto Naskh Arabic", "Amiri", serif`;
@@ -362,10 +388,10 @@ export async function renderSkiaCanvasVideo(
         ctx.restore();
       }
 
-      // 3. Find current active Ayah
+      // 3. Find current active Ayah and render if enabled
       const activeTimeline = ayahTimelines.find((at) => t >= at.startSec && t <= at.endSec) || ayahTimelines[0];
 
-      if (activeTimeline) {
+      if (showAyahText && activeTimeline) {
         const { ayah, words: ayahWords } = activeTimeline;
         const tokens = ayahWords.length > 0 ? ayahWords.map((w) => w.displayToken) : ayah.text.split(/\s+/);
 
@@ -382,12 +408,12 @@ export async function renderSkiaCanvasVideo(
           }
         }
 
-        // Draw Quran text card
+        // Draw Quran text card with responsive padding
         ctx.save();
-        const cardMarginX = Math.round(width * 0.08);
+        const cardMarginX = Math.round(width * (isPortrait ? 0.08 : 0.16));
         const cardW = width - cardMarginX * 2;
-        const cardY = Math.round(height * 0.32);
-        const cardH = Math.round(height * 0.36);
+        const cardY = Math.round(height * (isPortrait ? 0.28 : 0.20));
+        const cardH = Math.round(height * (isPortrait ? 0.42 : 0.56));
 
         // Glassmorphic backdrop
         ctx.fillStyle = 'rgba(8, 16, 22, 0.55)';
@@ -399,7 +425,7 @@ export async function renderSkiaCanvasVideo(
         ctx.stroke();
 
         // Measure and wrap lines
-        ctx.font = `bold ${baseFontSize}px "Amiri", "Noto Naskh Arabic", serif`;
+        ctx.font = `bold ${baseFontSize}px ${fontName}`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
@@ -425,7 +451,7 @@ export async function renderSkiaCanvasVideo(
 
         const lineHeight = baseFontSize * 1.7;
         const totalTextH = linesArr.length * lineHeight;
-        const startY = cardY + (cardH - totalTextH) / 2 + lineHeight / 2;
+        const startY = cardY + (cardH - totalTextH) / 2 + lineHeight / 2 - (showAyahNumber ? badgeSize * 0.5 : 0);
 
         // Draw each line RTL
         for (let li = 0; li < linesArr.length; li++) {
@@ -444,18 +470,18 @@ export async function renderSkiaCanvasVideo(
             const tokenW = ctx.measureText(tokenWithSpace).width;
             const itemX = curX - tokenW / 2;
 
-            if (item.idx === activeWordIdx) {
-              // Active highlight word: Glowing Quran Gold
+            if (doWordHighlight && item.idx === activeWordIdx) {
+              // Active highlight word with customized glow
               ctx.save();
-              ctx.fillStyle = '#F5D061';
-              ctx.shadowColor = '#D4AF37';
+              ctx.fillStyle = skiaGlow.activeText;
+              ctx.shadowColor = skiaGlow.glowColor;
               ctx.shadowBlur = 18;
               ctx.fillText(item.token, itemX, lineY);
               ctx.restore();
             } else {
-              // Inactive word: Crisp white with dark shadow
+              // Inactive word with user chosen textColor
               ctx.save();
-              ctx.fillStyle = '#FFFFFF';
+              ctx.fillStyle = defaultTextColor;
               ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
               ctx.shadowBlur = 4;
               ctx.fillText(item.token, itemX, lineY);
@@ -466,16 +492,18 @@ export async function renderSkiaCanvasVideo(
           }
         }
 
-        // Draw Ayah Rosette Badge at bottom center of card
-        drawAyahBadge(
-          ctx,
-          width / 2,
-          cardY + cardH - badgeSize * 1.1,
-          ayah.numberInSurah,
-          badgeSize,
-          manifest.displaySettings.ayahNumberStyle || 'quran3d',
-          'gold'
-        );
+        // Draw Ayah Rosette Badge at bottom center of card (if enabled)
+        if (showAyahNumber) {
+          drawAyahBadge(
+            ctx,
+            width / 2,
+            cardY + cardH - badgeSize * 1.15,
+            ayah.numberInSurah,
+            badgeSize,
+            manifest.displaySettings?.ayahNumberStyle || 'quran3d',
+            manifest.displaySettings?.ayahNumberColor || 'gold'
+          );
+        }
 
         ctx.restore();
       }

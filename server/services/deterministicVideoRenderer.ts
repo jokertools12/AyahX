@@ -27,6 +27,79 @@ export interface DeterministicRenderResult {
   probe: MediaProbeResult;
 }
 
+export interface ExtractedAyah {
+  numberInSurah: number;
+  text: string;
+}
+
+export interface ExtractedWord {
+  canonicalWordKey: string;
+  displayToken: string;
+  startMs: number;
+  endMs: number;
+  text?: string;
+}
+
+/**
+ * Robustly normalizes and extracts ayahs and word-level timestamps from any manifest variant
+ * (supports canonicalAyahRange.ayahs, ayahTimings, or bare verse text).
+ */
+export function extractAyahsAndWords(manifest: RenderManifest): {
+  ayahs: ExtractedAyah[];
+  words: ExtractedWord[];
+} {
+  // 1. Resolve Ayahs
+  let ayahs: ExtractedAyah[] = [];
+  if (manifest.canonicalAyahRange?.ayahs && manifest.canonicalAyahRange.ayahs.length > 0) {
+    ayahs = manifest.canonicalAyahRange.ayahs.map((a) => ({
+      numberInSurah: a.numberInSurah,
+      text: a.text || '',
+    }));
+  } else if (manifest.ayahTimings && manifest.ayahTimings.length > 0) {
+    ayahs = manifest.ayahTimings.map((at) => ({
+      numberInSurah: at.ayahNumber,
+      text: (at as any).text || at.words?.map((w) => w.displayToken || w.text).join(' ') || '',
+    }));
+  } else {
+    const start = manifest.canonicalAyahRange?.startAyah || 1;
+    const end = manifest.canonicalAyahRange?.endAyah || start;
+    for (let num = start; num <= end; num++) {
+      ayahs.push({
+        numberInSurah: num,
+        text: (manifest as any).verseText || '',
+      });
+    }
+  }
+
+  // 2. Resolve Words
+  let words: ExtractedWord[] = [];
+  if (manifest.timingMap?.words && manifest.timingMap.words.length > 0) {
+    words = manifest.timingMap.words.map((w) => ({
+      canonicalWordKey: w.canonicalWordKey || `${manifest.canonicalAyahRange?.surahNumber || 1}:${ayahs[0]?.numberInSurah || 1}:1`,
+      displayToken: w.displayToken || (w as any).text || '',
+      startMs: w.startMs,
+      endMs: w.endMs,
+      text: (w as any).text,
+    }));
+  } else if (manifest.ayahTimings && manifest.ayahTimings.length > 0) {
+    for (const at of manifest.ayahTimings) {
+      if (at.words && at.words.length > 0) {
+        at.words.forEach((w, idx) => {
+          words.push({
+            canonicalWordKey: `${manifest.canonicalAyahRange?.surahNumber || 1}:${at.ayahNumber}:${idx + 1}`,
+            displayToken: w.displayToken || w.text || '',
+            startMs: w.startMs,
+            endMs: w.endMs,
+            text: w.text,
+          });
+        });
+      }
+    }
+  }
+
+  return { ayahs, words };
+}
+
 /**
  * Runs a standalone FFmpeg command asynchronously with proper error logging
  */
@@ -350,7 +423,7 @@ export async function prepareAudioTrack(manifest: RenderManifest, scratchDir: st
   // Case 2 & 3: Single audio URL (with optional rangeMs slicing)
   const rawAudioPath = path.join(scratchDir, 'raw_audio_input.mp3');
   const audioObj = manifest.audio as Record<string, unknown>;
-  const rawTarget = audioObj.audioUrl ?? audioObj.localAudioPath ?? audioObj.sourceUrl;
+  const rawTarget = audioObj.audioUrl ?? audioObj.localAudioPath ?? audioObj.sourceUrl ?? audioObj.url ?? audioObj.path;
   let targetUrl = typeof rawTarget === 'string' ? rawTarget : '';
 
   // Final sanity check: if somehow targetUrl is blob but everyAyahUrls is present
