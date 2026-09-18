@@ -2,6 +2,7 @@ import mysql from 'mysql2/promise';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
+import { closePool } from '../db';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
@@ -71,6 +72,10 @@ async function setupDatabase() {
     process.exit(1);
   } finally {
     await connection.end();
+    // optimizeIndexes uses the shared application pool. Close it as well so
+    // the one-shot Railway pre-deploy command can terminate cleanly instead
+    // of waiting for the platform timeout with an open MySQL socket.
+    await closePool().catch(() => {});
   }
 }
 
