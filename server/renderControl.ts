@@ -3,18 +3,24 @@ import { ensureRenderJobsTable } from './db/migrations/addRenderJobsTable';
 import { logger } from './logger';
 import { renderJobQueue } from './services/renderJobQueue';
 
+const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+async function waitForLeader(lockName: string) {
+  while (true) {
+    const connection = await acquireMysqlAdvisoryLock(lockName);
+    if (connection) return connection;
+    logger.warn('Render control leader is still draining elsewhere; retrying the advisory lock in 5 seconds.');
+    await delay(5_000);
+  }
+}
+
 /**
  * Durable control-plane process. It does not render media; it only repairs
  * the MySQL -> BullMQ handoff and reclaims leases after worker loss.
  */
 async function main(): Promise<void> {
   const lockName = process.env.RENDER_CONTROL_LEADER_LOCK || 'ayahx-render-control-leader-v1';
-  const leaderConnection = await acquireMysqlAdvisoryLock(lockName);
-  if (!leaderConnection) {
-    logger.warn(`Render control is already active elsewhere; exiting without starting duplicate reconciliation.`);
-    await closePool().catch(() => {});
-    return;
-  }
+  const leaderConnection = await waitForLeader(lockName);
   await ensureRenderJobsTable();
   await renderJobQueue.recoverStaleJobs(true);
   await renderJobQueue.reconcileQueuedJobs();
