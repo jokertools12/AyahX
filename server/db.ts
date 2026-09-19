@@ -36,6 +36,31 @@ export async function transaction<T>(callback: (conn: PoolConnection) => Promise
 }
 
 /**
+ * InnoDB can briefly deadlock when many new render jobs insert different
+ * values into the same unique secondary index at once. The whole transaction
+ * is rolled back before this helper retries, so no quota increment or job row
+ * can be applied twice.
+ */
+export async function transactionWithRetry<T>(
+  callback: (conn: PoolConnection) => Promise<T>,
+  maxAttempts = 5,
+): Promise<T> {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= Math.max(1, maxAttempts); attempt += 1) {
+    try {
+      return await transaction(callback);
+    } catch (error: any) {
+      lastError = error;
+      const retryable = error?.code === 'ER_LOCK_DEADLOCK' || error?.code === 'ER_LOCK_WAIT_TIMEOUT' || error?.errno === 1213 || error?.errno === 1205;
+      if (!retryable || attempt >= maxAttempts) throw error;
+      const delayMs = Math.min(250, 25 * 2 ** (attempt - 1)) + Math.floor(Math.random() * 25);
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+  }
+  throw lastError;
+}
+
+/**
  * Acquires a MySQL advisory lock for singleton control-plane work. The
  * connection must remain open for the lifetime of the lock; MySQL releases it
  * automatically if the process or connection disappears.

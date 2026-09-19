@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { AuthenticatedRequest, requireAuth } from '../middleware/auth';
 import { renderJobQueue } from '../services/renderJobQueue';
-import { query, transaction } from '../db';
+import { query, transactionWithRetry } from '../db';
 import { logger } from '../logger';
 import { validateRenderManifest } from '../models/renderManifest';
 import { validateManifestAssets } from '../services/assetCatalogResolver';
@@ -164,7 +164,7 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
 
     // 2. Atomic daily cloud quota. The per-user/day counter serializes requests
     // from multiple tabs and claims a slot exactly once for every accepted job.
-    const queued = await transaction(async (conn) => {
+    const queued = await transactionWithRetry(async (conn) => {
       await conn.query(
         `INSERT INTO daily_cloud_render_usage (id, user_id, date, count)
          VALUES (UUID(), ?, CURDATE(), 0)
