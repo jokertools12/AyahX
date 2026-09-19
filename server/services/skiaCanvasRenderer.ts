@@ -7,10 +7,9 @@ import { createCanvas, loadImage, GlobalFonts, Image } from '@napi-rs/canvas';
 import { RenderManifest } from '../models/renderManifest';
 import { logger } from '../logger';
 import { probeMediaFile, validateProbeAgainstSpec } from './mediaProbeService';
-import { prepareAudioTrack, prepareBackgroundAsset, DeterministicRenderOptions, DeterministicRenderResult, extractAyahsAndWords } from './deterministicVideoRenderer';
+import { prepareAudioTrack, prepareBackgroundAsset, resolveLocalAssetPath, resolveLocalAssetPattern, DeterministicRenderOptions, DeterministicRenderResult, extractAyahsAndWords } from './deterministicVideoRenderer';
 import { toArabicDigits } from './ffmpegAssRenderer';
 import { getFfmpegBinary, getFfmpegPreset, getFfmpegResourceArgs, getFfmpegVideoEncoderArgs } from './ffmpegBinary';
-import { renderFullFidelityVideo } from './browserCloudRenderer';
 
 // Ensure standard Arabic fonts are registered into Skia
 let fontsRegistered = false;
@@ -149,10 +148,6 @@ function drawAyahBadge(
 export async function renderSkiaCanvasVideo(
   options: DeterministicRenderOptions
 ): Promise<DeterministicRenderResult> {
-  // Engine 2 remains independently selectable and metered, but uses the
-  // canonical browser scene so its output includes every visible setting.
-  return renderFullFidelityVideo(options, { label: 'Engine 2 Skia Canvas', preset: 'fast' });
-
   const { manifest, outputPath, signal, onProgress } = options;
 
   const ffmpegPath = getFfmpegBinary();
@@ -189,18 +184,24 @@ export async function renderSkiaCanvasVideo(
     const totalFrames = Math.max(1, Math.ceil(manifest.audio.durationSeconds * fps));
     const audioBitrate = manifest.audioBitrate || '192k';
 
-    // Load background image if available
+    // Load prepared local assets. Unlike the browser renderer, Skia receives
+    // file:// URLs from the shared preparation step, so normalize them before
+    // touching the filesystem. Video/slideshow frames are swapped natively in
+    // the canvas loop below.
     let bgImage: Image | null = null;
-    let bgSourcePath = manifest.background.url;
-    const matchedPrepared = fs.readdirSync(scratchDir).find((f) => f.startsWith('bg_source'));
-    if (matchedPrepared) {
-      bgSourcePath = path.join(scratchDir, matchedPrepared);
-    }
-    if (fs.existsSync(bgSourcePath) && !manifest.background.url.endsWith('.mp4')) {
+    let bgImagePath: string | null = resolveLocalAssetPath(manifest.background.url);
+    const bgFramePattern = resolveLocalAssetPattern((manifest.background as any).framesPattern);
+    const bgSlidePaths = (manifest.background.slideImages || [])
+      .map((slide) => resolveLocalAssetPath(slide))
+      .filter((slide): slide is string => Boolean(slide && fs.existsSync(slide)));
+    let activeBackgroundIndex = -1;
+
+    if (manifest.background.type !== 'color' && bgImagePath && fs.existsSync(bgImagePath) && !bgImagePath.endsWith('.mp4')) {
       try {
-        bgImage = await loadImage(bgSourcePath);
+        bgImage = await loadImage(bgImagePath);
+        activeBackgroundIndex = 0;
       } catch (err: any) {
-        logger.warn('Could not load background image into Skia, will use gradient:', err.message);
+        logger.warn('Could not load background image into Skia, will use a generated background:', err.message);
       }
     }
 
@@ -351,6 +352,32 @@ export async function renderSkiaCanvasVideo(
       const t = frameIndex / fps;
 
       // 1. Draw Background
+      if (manifest.background.type === 'slideshow' && bgSlidePaths.length > 0) {
+        const slideIndex = Math.min(
+          bgSlidePaths.length - 1,
+          Math.floor((t / Math.max(totalDuration, 0.001)) * bgSlidePaths.length),
+        );
+        if (slideIndex !== activeBackgroundIndex) {
+          try {
+            bgImage = await loadImage(bgSlidePaths[slideIndex]);
+            activeBackgroundIndex = slideIndex;
+          } catch (err: any) {
+            logger.warn(`Could not load slideshow frame ${slideIndex} into Skia:`, err.message);
+          }
+        }
+      } else if (manifest.background.type === 'video' && bgFramePattern) {
+        const frameNumber = Math.max(1, Math.floor(t * fps) + 1);
+        const framePath = bgFramePattern.replace(/%0\d+d/, frameNumber.toString().padStart(5, '0'));
+        if (frameNumber !== activeBackgroundIndex && fs.existsSync(framePath)) {
+          try {
+            bgImage = await loadImage(framePath);
+            activeBackgroundIndex = frameNumber;
+          } catch (err: any) {
+            logger.warn(`Could not load video background frame ${frameNumber} into Skia:`, err.message);
+          }
+        }
+      }
+
       if (bgImage) {
         // Subtle Ken Burns slow zoom
         const zoom = 1.0 + 0.06 * (frameIndex / totalFrames);
@@ -359,8 +386,12 @@ export async function renderSkiaCanvasVideo(
         const offsetX = (width - drawW) / 2;
         const offsetY = (height - drawH) / 2;
         ctx.drawImage(bgImage, offsetX, offsetY, drawW, drawH);
+      } else if (manifest.background.type === 'color' && /^#[0-9a-f]{3,8}$/i.test(manifest.background.url)) {
+        ctx.fillStyle = manifest.background.url;
+        ctx.fillRect(0, 0, width, height);
       } else {
-        // Deep elegant Islamic emerald/midnight gradient
+        // Deep elegant Islamic emerald/midnight gradient when an optional
+        // remote asset cannot be loaded or is not present.
         const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
         bgGrad.addColorStop(0, '#040E14');
         bgGrad.addColorStop(0.5, '#081C24');

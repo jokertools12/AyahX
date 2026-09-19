@@ -1,0 +1,48 @@
+import { closePool } from './db';
+import { ensureRenderJobsTable } from './db/migrations/addRenderJobsTable';
+import { logger } from './logger';
+import { renderJobQueue } from './services/renderJobQueue';
+
+/**
+ * Durable control-plane process. It does not render media; it only repairs
+ * the MySQL -> BullMQ handoff and reclaims leases after worker loss.
+ */
+async function main(): Promise<void> {
+  await ensureRenderJobsTable();
+  await renderJobQueue.recoverStaleJobs(true);
+  await renderJobQueue.reconcileQueuedJobs();
+
+  const reconcileTimer = setInterval(() => {
+    renderJobQueue.reconcileQueuedJobs().catch((error) => {
+      logger.warn('Render control reconciliation failed:', error);
+    });
+  }, 15_000);
+  const recoveryTimer = setInterval(() => {
+    renderJobQueue.recoverStaleJobs(true).catch((error) => {
+      logger.warn('Render control recovery failed:', error);
+    });
+  }, 30_000);
+  const cleanupTimer = setInterval(() => {
+    renderJobQueue.cleanupExpiredRenders().catch((error) => {
+      logger.warn('Render control cleanup failed:', error);
+    });
+  }, 30 * 60_000);
+
+  const shutdown = async (signal: string) => {
+    logger.info('Render control received ' + signal + '; shutting down.');
+    clearInterval(reconcileTimer);
+    clearInterval(recoveryTimer);
+    clearInterval(cleanupTimer);
+    renderJobQueue.shutdown();
+    await closePool().catch(() => {});
+    process.exit(0);
+  };
+  process.once('SIGTERM', () => void shutdown('SIGTERM'));
+  process.once('SIGINT', () => void shutdown('SIGINT'));
+}
+
+main().catch(async (error) => {
+  logger.error('Render control failed to start:', error);
+  await closePool().catch(() => {});
+  process.exitCode = 1;
+});

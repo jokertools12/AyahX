@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest';
 import { renderJobQueue } from '../../server/services/renderJobQueue';
 import { ensureRenderJobsTable } from '../../server/db/migrations/addRenderJobsTable';
 import { query } from '../../server/db';
@@ -86,6 +86,15 @@ describe('Durable Render Job System & Queue', () => {
   afterAll(async () => {
     await query('DELETE FROM render_jobs WHERE user_id IN (?, ?)', [testUserId1, testUserId2]);
     await query('DELETE FROM users WHERE id IN (?, ?)', [testUserId1, testUserId2]);
+  });
+
+  afterEach(async () => {
+    const activeRows = await query<Array<{ id: string }>>(
+      "SELECT id FROM render_jobs WHERE user_id IN (?, ?) AND status IN ('queued', 'running')",
+      [testUserId1, testUserId2],
+    );
+    await Promise.all(activeRows.map((row) => renderJobQueue.cancelJob(row.id, undefined, true)));
+    await query('DELETE FROM render_jobs WHERE user_id IN (?, ?)', [testUserId1, testUserId2]);
   });
 
   it('enqueues a valid job and sets initial state to queued', async () => {

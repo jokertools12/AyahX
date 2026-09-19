@@ -61,6 +61,19 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
     }
 
     const selectedEngine = manifestValidation.manifest.renderEngine;
+    const queueEngine = selectedEngine === 'skia_canvas'
+      ? 'skia_canvas'
+      : selectedEngine === 'browser' || selectedEngine === 'browser_cloud'
+      ? 'browser_cloud'
+      : 'ffmpeg_ass';
+    const engineEnabled = process.env[`ENGINE_${queueEngine === 'ffmpeg_ass' ? 'FFMPEG' : queueEngine === 'skia_canvas' ? 'SKIA' : 'BROWSER'}_ENABLED`] !== 'false';
+    if (!engineEnabled) {
+      return res.status(503).json({
+        error: 'المحرك المختار غير متاح مؤقتًا. اختر محركًا آخر ثم أعد المحاولة.',
+        engine: queueEngine,
+        engineUnavailable: true,
+      });
+    }
     const engineLimit = selectedEngine === 'skia_canvas'
       ? entitlements.skiaCanvasDailyLimit
       : selectedEngine === 'browser_cloud'
@@ -97,6 +110,20 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
           });
         }
       }
+    }
+
+    const maxBacklog = Math.max(1, Number(process.env.RENDER_MAX_BACKLOG || 2000));
+    const backlogRows = await query<Array<{ count: number }>>(
+      "SELECT COUNT(*) AS count FROM render_jobs WHERE status = 'queued' AND COALESCE(engine, JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = ?",
+      [queueEngine],
+    );
+    if (Number(backlogRows[0]?.count || 0) >= maxBacklog) {
+      res.setHeader('Retry-After', '30');
+      return res.status(429).json({
+        error: 'طابور المحرك المختار ممتلئ مؤقتًا. حاول بعد قليل أو اختر محركًا آخر.',
+        engine: queueEngine,
+        backlogFull: true,
+      });
     }
 
     // 1. Guard against queue flooding or handle replaceActive
@@ -219,9 +246,9 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       const jobId = crypto.randomUUID();
       await conn.query(
         `INSERT INTO render_jobs (
-          id, user_id, idempotency_key, status, progress, stage, manifest, max_retries
-        ) VALUES (?, ?, ?, 'queued', 0.00, 'جاري تخصيص موارد الإنتاج', ?, 1)`,
-        [jobId, userId, idempotencyKey || null, JSON.stringify(manifestValidation.manifest)],
+          id, user_id, idempotency_key, engine, active_user_id, enqueue_state, status, progress, stage, manifest, max_retries
+        ) VALUES (?, ?, ?, ?, ?, 'pending', 'queued', 0.00, 'جاري تخصيص موارد الإنتاج', ?, 2)`,
+        [jobId, userId, idempotencyKey || null, queueEngine, userId, JSON.stringify(manifestValidation.manifest)],
       );
 
       return { jobId, existing: false, serverRenderCount: serverRenderCount + 1 };
@@ -232,18 +259,20 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       throw new Error('تعذر إنشاء مهمة الريندر');
     }
     if (!queued.existing) {
-      // BullMQ uses a lower numeric value as a higher priority. Premium
-      // subscribers get the fast lane, while free jobs remain fairly served
-      // by the worker pool instead of being blocked behind one user's render.
-      renderJobQueue.triggerProcessor(queued.jobId, entitlements.features.priorityCloudQueue ? 1 : 10);
+      // Route the durable job to the selected engine's isolated queue. A
+      // priority value must never move a job between engine pools.
+      renderJobQueue.triggerProcessor(queued.jobId, 0, queueEngine);
       void recordRenderAudit(queued.jobId, userId, 'accepted', { plan });
     }
     const usage = await getTodayCloudRenderUsage(userId);
     const serverRenderCount = usageForEngine(usage);
 
-    return res.status(201).json({
+    const queue = await renderJobQueue.getQueueInfo(job);
+    return res.status(queued.existing ? 200 : 202).json({
+      accepted: true,
       message: queued.existing ? 'مهمة الريندر موجودة بالفعل' : 'تم قبول مهمة الريندر وبدء تجهيزها',
       job,
+      queue,
       serverRenderLimit: engineLimit,
       serverRenderCount,
       serverRenderRemaining: Math.max(0, engineLimit - serverRenderCount),
@@ -380,10 +409,10 @@ router.get('/:id', requireAuth, async (req: AuthenticatedRequest, res: Response)
       return res.status(404).json({ error: 'مهمة الريندر غير موجودة أو غير مصرح بالوصول إليها' });
     }
 
-    // Do not calculate a queue rank on every client poll. It adds a database
-    // scan under load and creates a misleading user-facing promise: jobs are
-    // dispatched by available worker capacity, not by a static position.
-    return res.json({ job });
+    const queue = job.status === 'queued' || job.status === 'running'
+      ? await renderJobQueue.getQueueInfo(job)
+      : undefined;
+    return res.json({ job, queue });
   } catch (err: any) {
     logger.error('Get render job error:', err);
     return res.status(500).json({ error: 'فشل استرجاع حالة مهمة الريندر' });

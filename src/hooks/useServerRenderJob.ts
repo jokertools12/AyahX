@@ -15,6 +15,8 @@ export interface ServerRenderJobState {
   videoBlob: Blob | null;
 }
 
+const PERSISTED_JOB_KEY = 'ayahx:active-render-job:v2';
+
 export function useServerRenderJob() {
   const [state, setState] = useState<ServerRenderJobState>({
     jobId: null,
@@ -28,7 +30,7 @@ export function useServerRenderJob() {
     videoBlob: null,
   });
 
-  const pollIntervalRef = useRef<any>(null);
+  const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const activeJobIdRef = useRef<string | null>(null);
   const consecutiveErrorsRef = useRef<number>(0);
 
@@ -43,6 +45,7 @@ export function useServerRenderJob() {
     stopPolling();
     activeJobIdRef.current = null;
     consecutiveErrorsRef.current = 0;
+    try { window.localStorage.removeItem(PERSISTED_JOB_KEY); } catch { /* storage can be unavailable */ }
     setState({
       jobId: null,
       status: 'idle',
@@ -98,6 +101,7 @@ export function useServerRenderJob() {
               isCompleted: true,
               videoBlob: downloadedBlob,
             });
+            try { window.localStorage.setItem(PERSISTED_JOB_KEY, updatedJob.id); } catch { /* optional persistence */ }
           } else if (currentStatus === 'failed') {
             stopPolling();
             setState((prev) => ({
@@ -108,6 +112,7 @@ export function useServerRenderJob() {
               isRendering: false,
               isCompleted: false,
             }));
+            try { window.localStorage.setItem(PERSISTED_JOB_KEY, updatedJob.id); } catch { /* optional persistence */ }
           } else if (currentStatus === 'cancelled') {
             stopPolling();
             setState((prev) => ({
@@ -117,6 +122,7 @@ export function useServerRenderJob() {
               isRendering: false,
               isCompleted: false,
             }));
+            try { window.localStorage.removeItem(PERSISTED_JOB_KEY); } catch { /* optional persistence */ }
           } else {
             // queued or running
             setState((prev) => ({
@@ -135,16 +141,14 @@ export function useServerRenderJob() {
         } catch (pollErr: any) {
           console.warn('Render poll error:', pollErr);
           consecutiveErrorsRef.current++;
-          if (consecutiveErrorsRef.current >= 4) {
-            stopPolling();
-            setState((prev) => ({
-              ...prev,
-              status: 'failed',
-              stage: 'انقطع الاتصال بمهمة الريندر',
-              error: 'تعذر متابعة حالة الريندر (قد تم إلغاء المهمة أو انتهت صلاحيتها). يمكنك بدء مهمة جديدة.',
-              isRendering: false,
-            }));
-          }
+          // A polling outage is not a render failure. Keep the durable job
+          // alive and let the next request recover it after a short backoff.
+          setState((prev) => ({
+            ...prev,
+            stage: 'الاتصال بالخادم مؤقتاً غير متاح؛ ما زال الإنتاج محفوظاً ويجري استعادته...',
+            error: null,
+            isRendering: true,
+          }));
         }
       }, 1200);
     },
@@ -163,6 +167,7 @@ export function useServerRenderJob() {
       if (res.hasActiveJob && res.job) {
         const job = res.job;
         activeJobIdRef.current = job.id;
+        try { window.localStorage.setItem(PERSISTED_JOB_KEY, job.id); } catch { /* optional persistence */ }
         const progress = Math.min(100, Math.max(0, Number(job.progress) || 0));
         setState({
           jobId: job.id,
@@ -183,6 +188,7 @@ export function useServerRenderJob() {
       } else if (res.recentJob) {
         const rJob = res.recentJob;
         activeJobIdRef.current = rJob.id;
+        try { window.localStorage.setItem(PERSISTED_JOB_KEY, rJob.id); } catch { /* optional persistence */ }
         setState({
           jobId: rJob.id,
           status: 'succeeded',
@@ -198,6 +204,21 @@ export function useServerRenderJob() {
     } catch (e) {
       // Non-critical background check
       console.warn('Failed checking active render job on mount:', e);
+      try {
+        const persistedJobId = window.localStorage.getItem(PERSISTED_JOB_KEY);
+        if (persistedJobId) {
+          activeJobIdRef.current = persistedJobId;
+          setState((prev) => ({
+            ...prev,
+            jobId: persistedJobId,
+            status: 'running',
+            stage: 'جاري استعادة حالة الإنتاج بعد انقطاع الاتصال...',
+            error: null,
+            isRendering: true,
+          }));
+          startPolling(persistedJobId);
+        }
+      } catch { /* optional persistence */ }
     }
   }, [startPolling]);
 
@@ -241,6 +262,7 @@ export function useServerRenderJob() {
         });
         const jobId = job.id;
         activeJobIdRef.current = jobId;
+        try { window.localStorage.setItem(PERSISTED_JOB_KEY, jobId); } catch { /* optional persistence */ }
 
         setState((prev) => ({
           ...prev,
@@ -286,6 +308,7 @@ export function useServerRenderJob() {
         stage: 'تم إلغاء المهمة',
         isRendering: false,
       }));
+      try { window.localStorage.removeItem(PERSISTED_JOB_KEY); } catch { /* optional persistence */ }
     } catch (err) {
       console.error('Failed to cancel render job:', err);
     }
@@ -311,6 +334,7 @@ export function useServerRenderJob() {
     try {
       const { job } = await api.renderJobs.retryJob(activeJobIdRef.current);
       activeJobIdRef.current = job.id;
+      try { window.localStorage.setItem(PERSISTED_JOB_KEY, job.id); } catch { /* optional persistence */ }
       setState((prev) => ({
         ...prev,
         jobId: job.id,

@@ -775,7 +775,19 @@ export const api = {
 
   renderJobs: {
     async createJob(manifest: any, idempotencyKey?: string, options?: { replaceActive?: boolean; backgroundAsync?: boolean }) {
-      return request<{ message: string; job: any }>('/api/render-jobs', {
+      return request<{
+        accepted: boolean;
+        message: string;
+        job: any;
+        queue?: {
+          engine: 'ffmpeg_ass' | 'skia_canvas' | 'browser_cloud';
+          position: number;
+          waiting: number;
+          active: number;
+          slotsTotal: number;
+          etaSeconds: number;
+        };
+      }>('/api/render-jobs', {
         method: 'POST',
         body: JSON.stringify({
           manifest,
@@ -801,7 +813,7 @@ export const api = {
     },
 
     async getJob(id: string) {
-      return request<{ job: any }>(`/api/render-jobs/${id}`);
+      return request<{ job: any; queue?: any }>(`/api/render-jobs/${id}`);
     },
 
     async cancelJob(id: string) {

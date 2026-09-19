@@ -255,6 +255,8 @@ CREATE TABLE IF NOT EXISTS `render_jobs` (
   `id` VARCHAR(36) NOT NULL,
   `user_id` VARCHAR(36) NOT NULL,
   `idempotency_key` VARCHAR(128) DEFAULT NULL,
+  `engine` VARCHAR(32) NOT NULL DEFAULT 'ffmpeg_ass',
+  `enqueue_state` VARCHAR(16) NOT NULL DEFAULT 'pending',
   `status` ENUM('queued', 'running', 'succeeded', 'failed', 'cancelled') NOT NULL DEFAULT 'queued',
   `progress` DECIMAL(5, 2) NOT NULL DEFAULT 0.00,
   `stage` VARCHAR(100) NOT NULL DEFAULT 'queued',
@@ -270,13 +272,18 @@ CREATE TABLE IF NOT EXISTS `render_jobs` (
   `max_retries` INT NOT NULL DEFAULT 1,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `heartbeat_at` TIMESTAMP NULL DEFAULT NULL,
+  `worker_id` VARCHAR(128) DEFAULT NULL,
+  `active_user_id` VARCHAR(36) DEFAULT NULL,
   `started_at` TIMESTAMP NULL DEFAULT NULL,
   `completed_at` TIMESTAMP NULL DEFAULT NULL,
   `expires_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_render_jobs_idempotency` (`idempotency_key`),
+  UNIQUE KEY `uq_render_jobs_one_active_user` (`active_user_id`),
   INDEX `idx_render_jobs_user` (`user_id`, `created_at` DESC),
   INDEX `idx_render_jobs_status` (`status`, `created_at` ASC),
+  INDEX `idx_render_jobs_engine_state` (`engine`, `status`, `created_at` ASC),
   CONSTRAINT `fk_render_jobs_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

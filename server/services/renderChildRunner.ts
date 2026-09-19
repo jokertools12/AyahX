@@ -1,0 +1,63 @@
+import path from 'path';
+import { ChildProcess, spawn } from 'child_process';
+import { RenderQueueEngine } from './renderQueueBroker';
+import { logger } from '../logger';
+import { renderJobTimeoutMs } from './renderCapacity';
+
+const children = new Map<string, ChildProcess>();
+
+function childCommand(jobId: string, engine: RenderQueueEngine): { command: string; args: string[] } {
+  const tsxCli = path.resolve(process.cwd(), 'node_modules/tsx/dist/cli.mjs');
+  return { command: process.execPath, args: [tsxCli, path.resolve(process.cwd(), 'server/renderChild.ts'), jobId, engine] };
+}
+
+/** Executes one render in an isolated child process. The BullMQ supervisor
+ * remains responsive and a bad FFmpeg/Chromium process cannot take its queue
+ * consumer down with it. */
+export function runRenderJobInChild(jobId: string, engine: RenderQueueEngine): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const { command, args } = childCommand(jobId, engine);
+    const child = spawn(command, args, {
+      cwd: process.cwd(),
+      env: process.env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      windowsHide: true,
+    });
+    children.set(jobId, child);
+    let stderr = '';
+    let timedOut = false;
+    const timeout = setTimeout(() => {
+      timedOut = true;
+      logger.error('[render-child:' + jobId + '] exceeded its ' + renderJobTimeoutMs(engine) + 'ms deadline; terminating it.');
+      try { child.kill('SIGTERM'); } catch { /* already exited */ }
+    }, renderJobTimeoutMs(engine));
+    child.stdout?.on('data', (data: Buffer) => logger.info(`[render-child:${jobId}] ${data.toString().trim()}`));
+    child.stderr?.on('data', (data: Buffer) => { stderr += data.toString(); });
+    child.once('error', (error) => {
+      clearTimeout(timeout);
+      children.delete(jobId);
+      reject(error);
+    });
+    child.once('exit', (code, signal) => {
+      clearTimeout(timeout);
+      children.delete(jobId);
+      if (code === 0 && !timedOut) resolve();
+      else reject(new Error(`Render child exited with ${signal ? `signal ${signal}` : `code ${code}`}: ${stderr.slice(-1200)}`));
+    });
+  });
+}
+
+export function stopRenderChild(jobId: string): void {
+  const child = children.get(jobId);
+  if (!child) return;
+  try { child.kill('SIGTERM'); } catch { /* already exited */ }
+  setTimeout(() => {
+    if (!child.killed) {
+      try { child.kill('SIGKILL'); } catch { /* already exited */ }
+    }
+  }, 10_000).unref?.();
+}
+
+export function stopAllRenderChildren(): void {
+  for (const jobId of children.keys()) stopRenderChild(jobId);
+}

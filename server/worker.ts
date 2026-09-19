@@ -2,11 +2,17 @@ import { closePool } from './db';
 import { ensureRenderJobsTable } from './db/migrations/addRenderJobsTable';
 import { renderJobQueue, startDedicatedRenderWorker } from './services/renderJobQueue';
 import { logger } from './logger';
+import { stopAllRenderChildren } from './services/renderChildRunner';
 
 async function main() {
   await ensureRenderJobsTable();
   await renderJobQueue.recoverStaleJobs();
   startDedicatedRenderWorker();
+  await renderJobQueue.reconcileQueuedJobs();
+  const reconcileTimer = setInterval(() => {
+    renderJobQueue.reconcileQueuedJobs().catch((error) => logger.warn('Render queue reconciliation failed:', error));
+  }, 15_000);
+  reconcileTimer.unref?.();
 }
 
 main().catch((error) => {
@@ -17,6 +23,7 @@ main().catch((error) => {
 async function shutdown(signal: string) {
   logger.info(`Render worker received ${signal}; shutting down gracefully.`);
   renderJobQueue.shutdown();
+  stopAllRenderChildren();
   await closePool().catch(() => {});
   process.exit(0);
 }
