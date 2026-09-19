@@ -32,6 +32,13 @@ The profile is scaled for output pixels, FPS, duration, and animated
 backgrounds. An observed cgroup OOM halves the worker concurrency for five
 minutes, then reopens capacity only after three safe readings.
 
+`render-control` stores the current replica and slot estimate in
+`render_engine_capacity`. The Railway autoscaler reads durable MySQL queue
+counts and independently scales only the engine whose own work exceeds its
+slots. It never moves a job between engines or lets Browser Cloud consume
+native-worker capacity. Prometheus exposes replicas, total/used slots, queue
+depth, p50/p95/max wait, oldest waiting age, and classified failures.
+
 ## Delivery and recovery
 
 `render-control` reconciles queued MySQL rows every 15 seconds, reclaims a

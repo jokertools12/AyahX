@@ -129,6 +129,16 @@ export async function ensureRenderJobsTable(): Promise<void> {
       'INDEX idx_render_audit_user (user_id, created_at)',
       ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci',
     ].join(' '));
+    await query([
+      'CREATE TABLE IF NOT EXISTS render_engine_capacity (',
+      'engine VARCHAR(32) NOT NULL PRIMARY KEY,',
+      'replicas INT NOT NULL,',
+      'slots_per_replica INT NOT NULL,',
+      'waiting_jobs INT NOT NULL DEFAULT 0,',
+      'active_jobs INT NOT NULL DEFAULT 0,',
+      'updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+      ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci',
+    ].join(' '));
     logger.info('Database migration: verified render_jobs table readiness.');
   } catch (err: any) {
     logger.error('Database migration: failed to ensure render_jobs table:', err);

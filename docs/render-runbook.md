@@ -32,8 +32,13 @@ the checked-in `tsx` entrypoint. During a rollout, leave the old v1 service
 running until its queue is empty; v2 has already been proven with synthetic
 parallel jobs. Never point an old worker at a v2 queue.
 
-The autoscaler is deliberately disabled until a staging run proves the
-Railway API token scope and scale-down drain behavior. Fixed replicas are safer
-than a scaler that can kill an active export. Enable it only with an explicit
-`RAILWAY_AUTOSCALER_ENABLED=true`, a least-privilege token, and a tested
-`MAX_REPLICAS`.
+When enabled, the autoscaler runs only on `render-control`, never on API or
+workers. It uses a Railway project token scoped to the production environment
+and changes only the service belonging to the saturated engine. Scale-up is
+immediate; scale-down waits for the idle window, requires zero active jobs, and
+removes a single replica at a time. If the token or service ids are missing,
+control falls back to fixed replicas without affecting rendering.
+
+Required production variables are `RAILWAY_ENVIRONMENT_ID`, one
+`*_RENDER_SERVICE_ID` per worker, `*_RENDER_SLOTS_PER_REPLICA`, min/max replica
+limits, `RAILWAY_AUTOSCALER_TOKEN`, and `RAILWAY_AUTOSCALER_ENABLED=true`.

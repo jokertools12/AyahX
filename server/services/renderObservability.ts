@@ -14,6 +14,24 @@ export const renderEngineQueueDepth = new client.Gauge({
 export const renderEngineActiveJobs = new client.Gauge({
   name: 'quran_render_engine_active_jobs', help: 'Running render jobs by isolated engine', labelNames: ['engine'], registers: [register],
 });
+export const renderEngineReplicas = new client.Gauge({
+  name: 'quran_render_engine_replicas', help: 'Configured Railway replicas by isolated engine', labelNames: ['engine'], registers: [register],
+});
+export const renderEngineSlotsTotal = new client.Gauge({
+  name: 'quran_render_engine_slots_total', help: 'Admission slots by isolated engine', labelNames: ['engine'], registers: [register],
+});
+export const renderEngineSlotsUsed = new client.Gauge({
+  name: 'quran_render_engine_slots_used', help: 'Active admission slots by isolated engine', labelNames: ['engine'], registers: [register],
+});
+export const renderEngineQueueWaitSeconds = new client.Gauge({
+  name: 'quran_render_engine_queue_wait_seconds', help: 'Queued wait-time quantiles by isolated engine', labelNames: ['engine', 'quantile'], registers: [register],
+});
+export const renderEngineOldestWaitingSeconds = new client.Gauge({
+  name: 'quran_render_engine_oldest_waiting_seconds', help: 'Oldest queued render age by isolated engine', labelNames: ['engine'], registers: [register],
+});
+export const renderFailuresTotal = new client.Counter({
+  name: 'quran_render_failures_total', help: 'Render failures by engine and classified code', labelNames: ['engine', 'code'], registers: [register],
+});
 
 const ENGINES: RenderWorkerEngine[] = ['ffmpeg_ass', 'skia_canvas', 'browser_cloud'];
 
@@ -28,6 +46,9 @@ export async function recordRenderAudit(jobId: string, userId: string, event: st
     [jobId, userId, event, JSON.stringify(details)],
   ).catch(() => {});
   renderJobsTotal.inc({ event, plan: String(details.plan || 'unknown') });
+  if (event === 'failed') {
+    renderFailuresTotal.inc({ engine: normalizeEngine(String(details.engine || '')), code: String(details.errorCode || 'UNKNOWN') });
+  }
 }
 
 export async function refreshRenderMetrics(): Promise<void> {
@@ -36,6 +57,11 @@ export async function refreshRenderMetrics(): Promise<void> {
   );
   renderEngineQueueDepth.reset();
   renderEngineActiveJobs.reset();
+  renderEngineReplicas.reset();
+  renderEngineSlotsTotal.reset();
+  renderEngineSlotsUsed.reset();
+  renderEngineQueueWaitSeconds.reset();
+  renderEngineOldestWaitingSeconds.reset();
   let queued = 0;
   const queuedByEngine = new Map<RenderWorkerEngine, number>();
   const activeByEngine = new Map<RenderWorkerEngine, number>();
@@ -53,7 +79,33 @@ export async function refreshRenderMetrics(): Promise<void> {
     renderEngineQueueDepth.set({ engine }, queuedByEngine.get(engine) || 0);
     renderEngineActiveJobs.set({ engine }, activeByEngine.get(engine) || 0);
   }
+  const waitRows = await query<Array<{ engine: string | null; wait_seconds: number }>>(
+    "SELECT COALESCE(engine, JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') AS engine, TIMESTAMPDIFF(SECOND, created_at, NOW()) AS wait_seconds FROM render_jobs WHERE status = 'queued' ORDER BY created_at ASC LIMIT 10000",
+  ).catch(() => []);
+  const waitsByEngine = new Map<RenderWorkerEngine, number[]>();
+  for (const engine of ENGINES) waitsByEngine.set(engine, []);
+  for (const row of waitRows) waitsByEngine.get(normalizeEngine(row.engine))!.push(Math.max(0, Number(row.wait_seconds || 0)));
+
+  const capacityRows = await query<Array<{ engine: string; replicas: number; slots_per_replica: number }>>(
+    'SELECT engine, replicas, slots_per_replica FROM render_engine_capacity',
+  ).catch(() => []);
+  const capacityByEngine = new Map(capacityRows.map((row) => [normalizeEngine(row.engine), row]));
   renderQueueDepth.set(queued);
+  for (const engine of ENGINES) {
+    const capacity = capacityByEngine.get(engine);
+    const replicas = Math.max(1, Number(capacity?.replicas || process.env[`${engine === 'ffmpeg_ass' ? 'FFMPEG' : engine === 'skia_canvas' ? 'SKIA' : 'BROWSER'}_RENDER_REPLICAS`] || 1));
+    const slotsPerReplica = Math.max(1, Number(capacity?.slots_per_replica || (engine === 'ffmpeg_ass' ? 3 : 2)));
+    const waits = waitsByEngine.get(engine) || [];
+    const sorted = [...waits].sort((a, b) => a - b);
+    const quantile = (q: number) => sorted.length ? sorted[Math.min(sorted.length - 1, Math.floor(q * sorted.length))] : 0;
+    renderEngineReplicas.set({ engine }, replicas);
+    renderEngineSlotsTotal.set({ engine }, replicas * slotsPerReplica);
+    renderEngineSlotsUsed.set({ engine }, Math.min(replicas * slotsPerReplica, activeByEngine.get(engine) || 0));
+    renderEngineQueueWaitSeconds.set({ engine, quantile: 'p50' }, quantile(0.5));
+    renderEngineQueueWaitSeconds.set({ engine, quantile: 'p95' }, quantile(0.95));
+    renderEngineQueueWaitSeconds.set({ engine, quantile: 'max' }, sorted.length ? sorted[sorted.length - 1] : 0);
+    renderEngineOldestWaitingSeconds.set({ engine }, sorted.length ? sorted[sorted.length - 1] : 0);
+  }
 }
 
 export async function prometheusMetrics(): Promise<string> {

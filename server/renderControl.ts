@@ -2,6 +2,7 @@ import { acquireMysqlAdvisoryLock, closePool, releaseMysqlAdvisoryLock } from '.
 import { ensureRenderJobsTable } from './db/migrations/addRenderJobsTable';
 import { logger } from './logger';
 import { renderJobQueue } from './services/renderJobQueue';
+import { renderAutoscalerIntervalMs, runRenderAutoscalerTick } from './services/renderAutoscaler';
 
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
@@ -24,6 +25,7 @@ async function main(): Promise<void> {
   await ensureRenderJobsTable();
   await renderJobQueue.recoverStaleJobs(true);
   await renderJobQueue.reconcileQueuedJobs();
+  await runRenderAutoscalerTick().catch((error) => logger.warn('Render autoscaler initial check failed:', error));
 
   const reconcileTimer = setInterval(() => {
     renderJobQueue.reconcileQueuedJobs().catch((error) => {
@@ -40,12 +42,17 @@ async function main(): Promise<void> {
       logger.warn('Render control cleanup failed:', error);
     });
   }, 30 * 60_000);
+  const autoscalerTimer = setInterval(() => {
+    runRenderAutoscalerTick().catch((error) => logger.warn('Render autoscaler check failed:', error));
+  }, renderAutoscalerIntervalMs());
+  autoscalerTimer.unref?.();
 
   const shutdown = async (signal: string) => {
     logger.info('Render control received ' + signal + '; shutting down.');
     clearInterval(reconcileTimer);
     clearInterval(recoveryTimer);
     clearInterval(cleanupTimer);
+    clearInterval(autoscalerTimer);
     renderJobQueue.shutdown();
     await releaseMysqlAdvisoryLock(leaderConnection, lockName).catch(() => {});
     await closePool().catch(() => {});

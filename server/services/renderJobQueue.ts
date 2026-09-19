@@ -10,7 +10,7 @@ import { config } from '../config';
 import { enqueueRenderJob, resolveRenderQueueEngine, RenderQueueEngine, startRenderWorker } from './renderQueueBroker';
 import { deleteStoredRender, isObjectStoragePath, uploadRender } from './objectStorage';
 import { recordRenderAudit, renderDurationSeconds } from './renderObservability';
-import { estimateRenderJobProfile, getRenderCapacity, resolveConcurrencySetting } from './renderCapacity';
+import { estimateRenderJobProfile, resolveConcurrencySetting } from './renderCapacity';
 import { runRenderJobInChild, stopRenderChild } from './renderChildRunner';
 
 function queueEngineForManifest(manifest: RenderManifest | string | unknown): RenderQueueEngine {
@@ -76,10 +76,16 @@ export interface RenderQueueInfo {
 
 type RenderFailureCode = 'USER_INPUT' | 'ASSET' | 'ENGINE' | 'OOM_SUSPECTED' | 'TIMEOUT' | 'STORAGE' | 'WORKER_TERMINATED' | 'RENDER_FAILED';
 
-function classifyRenderFailure(message: string): { code: RenderFailureCode; transient: boolean } {
+export function classifyRenderFailure(message: string): { code: RenderFailureCode; transient: boolean } {
   const normalized = message.toLowerCase();
   if (/out of memory|enomem|sigkill|oom|memory limit/.test(normalized)) return { code: 'OOM_SUSPECTED', transient: true };
   if (/timeout|deadline|timed out/.test(normalized)) return { code: 'TIMEOUT', transient: true };
+  // A permanent 4xx/missing asset must not be retried until all attempts are
+  // consumed. This was the source of noisy retries for stale Qur'an audio
+  // URLs, even though the render engine itself was healthy.
+  if (/\b(?:http|status|response)\s*4\d\d\b|\b404\b|not found|asset (?:is )?not accessible|failed to download.*\b4\d\d\b/.test(normalized)) {
+    return { code: 'ASSET', transient: false };
+  }
   if (/download|network|fetch|econn|asset|audio|background|ssrf/.test(normalized)) return { code: 'ASSET', transient: true };
   if (/upload|object storage|s3|bucket|stream stored/.test(normalized)) return { code: 'STORAGE', transient: true };
   if (/invalid|unsupported|manifest|font|dimensions|duration|url|source/.test(normalized)) return { code: 'USER_INPUT', transient: false };
@@ -374,16 +380,19 @@ export class RenderJobQueue {
         manifest = {};
       }
     }
-    const profileCapacity = getRenderCapacity(0, undefined, engine, {
-      width: manifest?.outputDimensions?.width,
-      height: manifest?.outputDimensions?.height,
-      fps: manifest?.fps,
-      durationSeconds: manifest?.audio?.durationSeconds,
-      backgroundType: manifest?.background?.type,
-    }).targetConcurrency;
-    const replicaEstimate = Math.max(1, Number(process.env[`${engine === 'ffmpeg_ass' ? 'FFMPEG' : engine === 'skia_canvas' ? 'SKIA' : 'BROWSER'}_RENDER_REPLICAS`] || 1));
-    const slotsTotal = Math.max(1, profileCapacity * replicaEstimate);
     const prefix = engine === 'ffmpeg_ass' ? 'FFMPEG' : engine === 'skia_canvas' ? 'SKIA' : 'BROWSER';
+    // The API container has a deliberately small cgroup, so its local memory
+    // capacity must never be used to estimate worker slots. render-control
+    // persists the actual independent worker replica count instead.
+    const capacityRows = await query<Array<{ replicas: number; slots_per_replica: number }>>(
+      'SELECT replicas, slots_per_replica FROM render_engine_capacity WHERE engine = ? LIMIT 1',
+      [engine],
+    ).catch(() => []);
+    const fallbackReplicas = Math.max(1, Number(process.env[`${prefix}_RENDER_REPLICAS`] || 2));
+    const fallbackSlots = engine === 'ffmpeg_ass' ? 3 : 2;
+    const replicaEstimate = Math.max(1, Number(capacityRows[0]?.replicas || fallbackReplicas));
+    const slotsPerReplica = Math.max(1, Number(capacityRows[0]?.slots_per_replica || process.env[`${prefix}_RENDER_SLOTS_PER_REPLICA`] || fallbackSlots));
+    const slotsTotal = Math.max(1, slotsPerReplica * replicaEstimate);
     const estimated = estimateRenderJobProfile(engine, {
       width: manifest?.outputDimensions?.width,
       height: manifest?.outputDimensions?.height,
@@ -687,7 +696,7 @@ export class RenderJobQueue {
       }, 10 * 1000);
       heartbeat.unref?.();
       logger.info(`Starting execution of render job [${jobId}]...`);
-      void recordRenderAudit(jobId, job.user_id, 'started', { workerId: config.queue.workerId });
+      void recordRenderAudit(jobId, job.user_id, 'started', { workerId: config.queue.workerId, engine: queueEngineForManifest(manifest) });
 
       // Progress reporting hook
       const onProgress = async (percent: number, curFrame: number, totalFrames: number, stage?: string) => {
@@ -815,7 +824,6 @@ export class RenderJobQueue {
       }
 
       logger.error(`Render job [${jobId}] failed:`, err);
-      void recordRenderAudit(jobId, job.user_id, 'failed', { message: err.message || 'unknown' });
       const errorMessage = String(err?.message || err || '');
       // Chromium/FFmpeg can be terminated by a transient container pressure
       // event. Requeue the same durable job (without charging a new slot) so
@@ -823,6 +831,11 @@ export class RenderJobQueue {
       // permanent failure for a recoverable infrastructure error.
       const failure = classifyRenderFailure(errorMessage);
       const isTransient = failure.transient;
+      void recordRenderAudit(jobId, job.user_id, 'failed', {
+        message: errorMessage || 'unknown',
+        errorCode: failure.code,
+        engine: queueEngineForManifest(job.manifest),
+      });
 
       if (isTransient && job.retry_count < job.max_retries) {
         await query(
