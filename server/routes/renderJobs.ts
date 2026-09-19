@@ -186,17 +186,6 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
     // 2. Atomic daily cloud quota. The per-user/day counter serializes requests
     // from multiple tabs and claims a slot exactly once for every accepted job.
     const queued = await transactionWithRetry(async (conn) => {
-      await conn.query(
-        `INSERT INTO daily_cloud_render_usage (id, user_id, date, count)
-         VALUES (UUID(), ?, CURDATE(), 0)
-         ON DUPLICATE KEY UPDATE id = id`,
-        [userId],
-      );
-      const [dailyRows] = await conn.query<any[]>(
-        'SELECT id, count FROM daily_cloud_render_usage WHERE user_id = ? AND date = CURDATE() FOR UPDATE',
-        [userId],
-      );
-
       if (idempotencyKey) {
         const [existingRows] = await conn.query<any[]>(
           'SELECT id, user_id FROM render_jobs WHERE idempotency_key = ? LIMIT 1 FOR UPDATE',
@@ -240,44 +229,47 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
         }
       }
 
-      const [engineUsageRows] = await conn.query<any[]>(
-        `SELECT
-           SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = 'ffmpeg_ass' THEN 1 ELSE 0 END) AS ffmpeg_ass,
-           SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = 'skia_canvas' THEN 1 ELSE 0 END) AS skia_canvas,
-           SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = 'browser_cloud' THEN 1 ELSE 0 END) AS browser_cloud,
-           SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.backgroundAsync')), 'false') = 'true' THEN 1 ELSE 0 END) AS background_async
-         FROM render_jobs
-         WHERE user_id = ? AND created_at >= CURDATE()` ,
-        [userId],
+      // Fast, indexed per-user/day/engine admission counter. The previous
+      // JSON aggregation over render_jobs made every new user compete for the
+      // same large table during a burst. Conditional upsert is both atomic
+      // and lock-local to this user's counter row.
+      const backgroundIncrement = manifestValidation.manifest.backgroundAsync === true && selectedEngine !== 'browser_cloud' ? 1 : 0;
+      const [counterResult] = await conn.query<any>(
+        `INSERT INTO daily_render_engine_usage (id, user_id, date, engine, count, background_count)
+         VALUES (UUID(), ?, CURDATE(), ?, 1, ?)
+         ON DUPLICATE KEY UPDATE
+           background_count = IF(count < ? AND (VALUES(background_count) = 0 OR background_count < ?), background_count + VALUES(background_count), background_count),
+           count = IF(count < ? AND (VALUES(background_count) = 0 OR background_count - VALUES(background_count) < ?), count + 1, count)`,
+        [userId, queueEngine, backgroundIncrement, engineLimit, entitlements.backgroundAsyncDailyLimit, engineLimit, entitlements.backgroundAsyncDailyLimit],
       );
-      const serverRenderCount = Number(dailyRows[0]?.count || 0);
-      const engineUsage = engineUsageRows[0] || {};
-      const selectedEngineCount = selectedEngine === 'skia_canvas'
-        ? Number(engineUsage.skia_canvas || 0)
-        : selectedEngine === 'browser_cloud'
-        ? Number(engineUsage.browser_cloud || 0)
-        : Number(engineUsage.ffmpeg_ass || 0);
-      if (selectedEngineCount >= engineLimit) {
+      if (Number(counterResult?.affectedRows || 0) === 0) {
+        const [counterRows] = await conn.query<any[]>(
+          'SELECT count, background_count FROM daily_render_engine_usage WHERE user_id = ? AND date = CURDATE() AND engine = ? LIMIT 1',
+          [userId, queueEngine],
+        );
+        const current = counterRows[0] || {};
+        if (backgroundIncrement && Number(current.background_count || 0) >= entitlements.backgroundAsyncDailyLimit) {
+          const quotaError: any = new Error('BACKGROUND_QUOTA_EXCEEDED');
+          quotaError.serverRenderCount = Number(current.background_count || 0);
+          quotaError.serverRenderLimit = entitlements.backgroundAsyncDailyLimit;
+          throw quotaError;
+        }
         const quotaError: any = new Error('ENGINE_QUOTA_EXCEEDED');
         quotaError.engine = selectedEngine;
-        quotaError.serverRenderCount = selectedEngineCount;
+        quotaError.serverRenderCount = Number(current.count || 0);
         quotaError.serverRenderLimit = engineLimit;
         throw quotaError;
       }
 
-      if (manifestValidation.manifest.backgroundAsync === true && selectedEngine !== 'browser_cloud') {
-        const backgroundCount = Number(engineUsage.background_async || 0);
-        if (backgroundCount >= entitlements.backgroundAsyncDailyLimit) {
-          const quotaError: any = new Error('BACKGROUND_QUOTA_EXCEEDED');
-          quotaError.serverRenderCount = backgroundCount;
-          quotaError.serverRenderLimit = entitlements.backgroundAsyncDailyLimit;
-          throw quotaError;
-        }
-      }
-
       await conn.query(
-        'UPDATE daily_cloud_render_usage SET count = count + 1 WHERE user_id = ? AND date = CURDATE()',
+        `INSERT INTO daily_cloud_render_usage (id, user_id, date, count)
+         VALUES (UUID(), ?, CURDATE(), 1)
+         ON DUPLICATE KEY UPDATE count = count + 1`,
         [userId],
+      );
+      const [counterRows] = await conn.query<any[]>(
+        'SELECT count FROM daily_render_engine_usage WHERE user_id = ? AND date = CURDATE() AND engine = ? LIMIT 1',
+        [userId, queueEngine],
       );
 
       const jobId = crypto.randomUUID();
@@ -291,14 +283,7 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       return {
         jobId,
         existing: false,
-        serverRenderCount: serverRenderCount + 1,
-        usage: {
-          total: serverRenderCount + 1,
-          ffmpegAss: Number(engineUsage.ffmpeg_ass || 0) + (selectedEngine === 'ffmpeg_ass' ? 1 : 0),
-          skiaCanvas: Number(engineUsage.skia_canvas || 0) + (selectedEngine === 'skia_canvas' ? 1 : 0),
-          browserCloud: Number(engineUsage.browser_cloud || 0) + (selectedEngine === 'browser_cloud' ? 1 : 0),
-          backgroundAsync: Number(engineUsage.background_async || 0) + (manifestValidation.manifest.backgroundAsync === true ? 1 : 0),
-        },
+        serverRenderCount: Number(counterRows[0]?.count || 1),
       };
     });
 
@@ -339,13 +324,8 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       renderJobQueue.triggerProcessor(queued.jobId, 0, queueEngine);
       void recordRenderAudit(queued.jobId, userId, 'accepted', { plan });
     }
-    const usage = queued.existing
-      ? await getTodayCloudRenderUsage(userId)
-      : queued.usage;
-    const serverRenderCount = usageForEngine(usage);
     const queue = await renderJobQueue.getQueueInfo(job);
-
-    return res.status(queued.existing ? 200 : 202).json({
+    const response: Record<string, unknown> = {
       accepted: true,
       message: queued.existing ? 'مهمة الريندر موجودة بالفعل' : 'تم قبول مهمة الريندر وبدء تجهيزها',
       job,
@@ -354,11 +334,23 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       // request during a burst.
       queue,
       serverRenderLimit: engineLimit,
-      serverRenderCount,
-      serverRenderRemaining: Math.max(0, engineLimit - serverRenderCount),
-      cloudRenderCount: usage.total,
-      backgroundRenderCount: usage.backgroundAsync,
-    });
+    };
+    if (queued.existing) {
+      const usage = await getTodayCloudRenderUsage(userId);
+      const serverRenderCount = usageForEngine(usage);
+      Object.assign(response, {
+        serverRenderCount,
+        serverRenderRemaining: Math.max(0, engineLimit - serverRenderCount),
+        cloudRenderCount: usage.total,
+        backgroundRenderCount: usage.backgroundAsync,
+      });
+    } else {
+      Object.assign(response, {
+        serverRenderCount: queued.serverRenderCount,
+        serverRenderRemaining: Math.max(0, engineLimit - queued.serverRenderCount),
+      });
+    }
+    return res.status(queued.existing ? 200 : 202).json(response);
   } catch (err: any) {
     if (err.message === 'IDEMPOTENCY_KEY_COLLISION') {
       return res.status(409).json({ error: 'مفتاح منع التكرار مستخدم بالفعل. أعد المحاولة.' });

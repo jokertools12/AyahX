@@ -175,6 +175,21 @@ CREATE TABLE IF NOT EXISTS `daily_cloud_render_usage` (
   CONSTRAINT `fk_cloud_render_usage_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- 10c. Indexed per-engine/day counters used by render admission.
+CREATE TABLE IF NOT EXISTS `daily_render_engine_usage` (
+  `id` VARCHAR(36) NOT NULL,
+  `user_id` VARCHAR(36) NOT NULL,
+  `date` DATE NOT NULL,
+  `engine` VARCHAR(32) NOT NULL,
+  `count` INT NOT NULL DEFAULT 0,
+  `background_count` INT NOT NULL DEFAULT 0,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_daily_render_engine_usage` (`user_id`, `date`, `engine`),
+  INDEX `idx_daily_render_engine_date` (`date`, `engine`),
+  CONSTRAINT `fk_daily_render_engine_usage_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- 11. Achievements Catalog
 CREATE TABLE IF NOT EXISTS `achievements` (
   `id` VARCHAR(36) NOT NULL,

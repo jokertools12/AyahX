@@ -139,6 +139,37 @@ export async function ensureRenderJobsTable(): Promise<void> {
       'updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
       ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci',
     ].join(' '));
+    await query([
+      'CREATE TABLE IF NOT EXISTS daily_render_engine_usage (',
+      'id VARCHAR(36) NOT NULL,',
+      'user_id VARCHAR(36) NOT NULL,',
+      'date DATE NOT NULL,',
+      'engine VARCHAR(32) NOT NULL,',
+      'count INT NOT NULL DEFAULT 0,',
+      'background_count INT NOT NULL DEFAULT 0,',
+      'created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,',
+      'PRIMARY KEY (id),',
+      'UNIQUE KEY uq_daily_render_engine_usage (user_id, date, engine),',
+      'INDEX idx_daily_render_engine_date (date, engine),',
+      'CONSTRAINT fk_daily_render_engine_usage_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
+      ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci',
+    ].join(' '));
+    // Existing current-day jobs must count before the new O(1) counter is
+    // used for admission. GREATEST keeps this startup-safe across API/worker
+    // replicas that run the migration concurrently.
+    await query(
+      `INSERT INTO daily_render_engine_usage (id, user_id, date, engine, count, background_count)
+       SELECT UUID(), user_id, CURDATE(),
+              CASE WHEN engine IN ('skia_canvas', 'browser_cloud') THEN engine ELSE 'ffmpeg_ass' END,
+              COUNT(*),
+              SUM(CASE WHEN JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.backgroundAsync')) = 'true' THEN 1 ELSE 0 END)
+       FROM render_jobs
+       WHERE created_at >= CURDATE()
+       GROUP BY user_id, CASE WHEN engine IN ('skia_canvas', 'browser_cloud') THEN engine ELSE 'ffmpeg_ass' END
+       ON DUPLICATE KEY UPDATE
+         count = GREATEST(count, VALUES(count)),
+         background_count = GREATEST(background_count, VALUES(background_count))`,
+    );
     logger.info('Database migration: verified render_jobs table readiness.');
   } catch (err: any) {
     logger.error('Database migration: failed to ensure render_jobs table:', err);

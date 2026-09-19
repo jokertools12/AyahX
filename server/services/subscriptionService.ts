@@ -53,6 +53,16 @@ export interface TodayCloudRenderUsage {
 export async function getTodayCloudRenderUsage(userId: string): Promise<TodayCloudRenderUsage> {
   const rows = await query<Array<Record<string, number | string | null>>>(
     `SELECT
+       COALESCE(SUM(count), 0) AS total,
+       COALESCE(SUM(CASE WHEN engine = 'ffmpeg_ass' THEN count ELSE 0 END), 0) AS ffmpeg_ass,
+       COALESCE(SUM(CASE WHEN engine = 'skia_canvas' THEN count ELSE 0 END), 0) AS skia_canvas,
+       COALESCE(SUM(CASE WHEN engine = 'browser_cloud' THEN count ELSE 0 END), 0) AS browser_cloud,
+       COALESCE(SUM(background_count), 0) AS background_async
+     FROM daily_render_engine_usage
+     WHERE user_id = ? AND date = CURDATE()`,
+    [userId],
+  ).catch(async () => query<Array<Record<string, number | string | null>>>(
+    `SELECT
        COUNT(*) AS total,
        SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = 'ffmpeg_ass' THEN 1 ELSE 0 END) AS ffmpeg_ass,
        SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = 'skia_canvas' THEN 1 ELSE 0 END) AS skia_canvas,
@@ -61,7 +71,7 @@ export async function getTodayCloudRenderUsage(userId: string): Promise<TodayClo
      FROM render_jobs
      WHERE user_id = ? AND created_at >= CURDATE()` ,
     [userId],
-  );
+  ));
   const row = rows[0] || {};
   return {
     total: Number(row.total || 0),
