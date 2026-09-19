@@ -11,6 +11,15 @@ export interface RenderJobProfile {
   memoryPerJobMb: number;
   cpuPerJob: number;
   memoryReserveMb: number;
+  estimatedSeconds?: number;
+}
+
+export interface RenderWorkload {
+  width?: number;
+  height?: number;
+  fps?: number;
+  durationSeconds?: number;
+  backgroundType?: string;
 }
 
 const DEFAULT_PROFILES: Record<RenderWorkerEngine, RenderJobProfile> = {
@@ -93,6 +102,31 @@ export function getRenderJobProfile(engine: RenderWorkerEngine = resolveRenderWo
   };
 }
 
+/**
+ * Returns a conservative demand estimate for one manifest. The worker-level
+ * profile remains the admission floor, while this estimate lets queue/bench
+ * tooling explain why a 4K or animated-background job consumes more capacity.
+ */
+export function estimateRenderJobProfile(
+  engine: RenderWorkerEngine,
+  workload: RenderWorkload = {},
+): RenderJobProfile {
+  const base = getRenderJobProfile(engine);
+  const pixels = Math.max(360 * 360, Number(workload.width || 720) * Number(workload.height || 1280));
+  const baselinePixels = 720 * 1280;
+  const pixelFactor = Math.min(3, Math.max(1, Math.sqrt(pixels / baselinePixels)));
+  const fpsFactor = Number(workload.fps || 30) >= 60 ? 1.15 : 1;
+  const duration = Math.max(0, Number(workload.durationSeconds || 0));
+  const durationFactor = duration > 300 ? 1.3 : duration > 120 ? 1.15 : 1;
+  const backgroundFactor = workload.backgroundType === 'video' || workload.backgroundType === 'slideshow' ? 1.25 : 1;
+  return {
+    memoryPerJobMb: Math.ceil(base.memoryPerJobMb * Math.min(3, pixelFactor * durationFactor)),
+    cpuPerJob: Number((base.cpuPerJob * pixelFactor * fpsFactor * backgroundFactor).toFixed(2)),
+    memoryReserveMb: base.memoryReserveMb,
+    estimatedSeconds: Math.ceil(Math.max(15, duration * (engine === 'browser_cloud' ? 1.4 : 0.8))),
+  };
+}
+
 export function getRenderMemoryProfile(engine: RenderWorkerEngine = resolveRenderWorkerEngine(process.env.RENDER_WORKER_ENGINE)) {
   const profile = getRenderJobProfile(engine);
   return { memoryPerJobMb: profile.memoryPerJobMb, memoryReserveMb: profile.memoryReserveMb };
@@ -112,6 +146,21 @@ export function readOomKillCount(): number {
     const match = raw.match(/^oom_kill\s+(\d+)/m);
     return match ? Number(match[1]) : 0;
   } catch { return 0; }
+}
+
+/** Cgroup aggregate CPU is the only portable way to measure child FFmpeg and
+ * Chromium CPU alongside the Node supervisor in a container. */
+export function readCgroupCpuUsageMicros(): number | null {
+  try {
+    const raw = fs.readFileSync('/sys/fs/cgroup/cpu.stat', 'utf8');
+    const usage = raw.match(/^usage_usec\s+(\d+)/m);
+    if (usage) return Number(usage[1]);
+  } catch { /* cgroup v2 is unavailable on local desktops */ }
+  try {
+    const raw = fs.readFileSync('/sys/fs/cgroup/cpuacct/cpuacct.usage', 'utf8').trim();
+    const nanoseconds = Number(raw);
+    return Number.isFinite(nanoseconds) ? Math.floor(nanoseconds / 1000) : null;
+  } catch { return null; }
 }
 
 export interface RenderCapacitySnapshot {
@@ -135,8 +184,9 @@ export function getRenderCapacity(
   activeJobs: number,
   configuredMax?: number,
   engine: RenderWorkerEngine = resolveRenderWorkerEngine(process.env.RENDER_WORKER_ENGINE),
+  workload?: RenderWorkload,
 ): RenderCapacitySnapshot {
-  const profile = getRenderJobProfile(engine);
+  const profile = workload ? estimateRenderJobProfile(engine, workload) : getRenderJobProfile(engine);
   const cpuCores = Math.max(1, Math.floor(readCgroupCpuLimit() || availableCpuCores()));
   const memoryLimitBytes = readCgroupMemoryLimit() || os.totalmem();
   const currentMemoryBytes = readCurrentMemoryBytes();

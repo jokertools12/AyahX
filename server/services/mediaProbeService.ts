@@ -133,7 +133,11 @@ export async function probeMediaFile(filePath: string): Promise<MediaProbeResult
 /**
  * Validates that a rendered MP4 file satisfies the strict broadcast production specifications
  */
-export function validateProbeAgainstSpec(probe: MediaProbeResult, expectedFps: number = 30): { valid: boolean; errors: string[] } {
+export function validateProbeAgainstSpec(
+  probe: MediaProbeResult,
+  expectedFps: number = 30,
+  expectedDurationSeconds?: number,
+): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
 
   // Container must be MP4
@@ -174,6 +178,9 @@ export function validateProbeAgainstSpec(probe: MediaProbeResult, expectedFps: n
   // Duration check
   if (probe.durationSeconds <= 0.2) {
     errors.push(`Media duration is invalid or zero: ${probe.durationSeconds}s`);
+  } else if (typeof expectedDurationSeconds === 'number' && expectedDurationSeconds > 0
+    && Math.abs(probe.durationSeconds - expectedDurationSeconds) > 0.2) {
+    errors.push(`Duration mismatch: expected ~${expectedDurationSeconds}s, got ${probe.durationSeconds}s`);
   }
 
   return {

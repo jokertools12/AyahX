@@ -646,7 +646,7 @@ export async function renderSkiaCanvasVideo(
 
     onProgress?.(99, totalFrames, totalFrames, 'التحقق من سلامة الفيديو...');
     const probe = await probeMediaFile(outputPath);
-    const validation = validateProbeAgainstSpec(probe, fps);
+    const validation = validateProbeAgainstSpec(probe, fps, manifest.audio.durationSeconds);
     if (!validation.valid) {
       throw new Error(`Rendered Skia video failed probe validation: ${validation.errors.join(', ')}`);
     }

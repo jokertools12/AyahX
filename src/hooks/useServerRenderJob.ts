@@ -13,6 +13,9 @@ export interface ServerRenderJobState {
   isRendering: boolean;
   isCompleted: boolean;
   videoBlob: Blob | null;
+  engine: 'ffmpeg_ass' | 'skia_canvas' | 'browser_cloud' | null;
+  queuePosition: number;
+  etaSeconds: number;
 }
 
 const PERSISTED_JOB_KEY = 'ayahx:active-render-job:v2';
@@ -28,6 +31,9 @@ export function useServerRenderJob() {
     isRendering: false,
     isCompleted: false,
     videoBlob: null,
+    engine: null,
+    queuePosition: 0,
+    etaSeconds: 0,
   });
 
   const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -56,6 +62,9 @@ export function useServerRenderJob() {
       isRendering: false,
       isCompleted: false,
       videoBlob: null,
+      engine: null,
+      queuePosition: 0,
+      etaSeconds: 0,
     });
   }, [stopPolling]);
 
@@ -75,7 +84,7 @@ export function useServerRenderJob() {
             return;
           }
 
-          const { job: updatedJob } = await api.renderJobs.getJob(activeJobIdRef.current);
+          const { job: updatedJob, queue } = await api.renderJobs.getJob(activeJobIdRef.current);
           consecutiveErrorsRef.current = 0; // reset error counter on success
           const currentStatus: ServerJobStatus = updatedJob.status;
           const currentProgress = Math.min(100, Math.max(0, Number(updatedJob.progress) || 0));
@@ -100,6 +109,9 @@ export function useServerRenderJob() {
               isRendering: false,
               isCompleted: true,
               videoBlob: downloadedBlob,
+              engine: updatedJob.engine || null,
+              queuePosition: 0,
+              etaSeconds: 0,
             });
             try { window.localStorage.setItem(PERSISTED_JOB_KEY, updatedJob.id); } catch { /* optional persistence */ }
           } else if (currentStatus === 'failed') {
@@ -111,6 +123,9 @@ export function useServerRenderJob() {
               error: updatedJob.error_message || 'حدث خطأ غير متوقع أثناء معالجة الفيديو',
               isRendering: false,
               isCompleted: false,
+              engine: updatedJob.engine || prev.engine,
+              queuePosition: 0,
+              etaSeconds: 0,
             }));
             try { window.localStorage.setItem(PERSISTED_JOB_KEY, updatedJob.id); } catch { /* optional persistence */ }
           } else if (currentStatus === 'cancelled') {
@@ -121,6 +136,9 @@ export function useServerRenderJob() {
               stage: 'تم إلغاء المهمة',
               isRendering: false,
               isCompleted: false,
+              engine: updatedJob.engine || prev.engine,
+              queuePosition: 0,
+              etaSeconds: 0,
             }));
             try { window.localStorage.removeItem(PERSISTED_JOB_KEY); } catch { /* optional persistence */ }
           } else {
@@ -136,6 +154,9 @@ export function useServerRenderJob() {
                   : 'جاري معالجة الفيديو وتوليد الإطارات...'),
               isRendering: true,
               isCompleted: false,
+              engine: updatedJob.engine || prev.engine,
+              queuePosition: Number(queue?.position || 0),
+              etaSeconds: Number(queue?.etaSeconds || 0),
             }));
           }
         } catch (pollErr: any) {
@@ -183,6 +204,9 @@ export function useServerRenderJob() {
           isRendering: true,
           isCompleted: false,
           videoBlob: null,
+          engine: job.engine || null,
+          queuePosition: 0,
+          etaSeconds: 0,
         });
         startPolling(job.id);
       } else if (res.recentJob) {
@@ -199,6 +223,9 @@ export function useServerRenderJob() {
           isRendering: false,
           isCompleted: true,
           videoBlob: null,
+          engine: rJob.engine || null,
+          queuePosition: 0,
+          etaSeconds: 0,
         });
       }
     } catch (e) {
@@ -215,6 +242,7 @@ export function useServerRenderJob() {
             stage: 'جاري استعادة حالة الإنتاج بعد انقطاع الاتصال...',
             error: null,
             isRendering: true,
+            engine: prev.engine,
           }));
           startPolling(persistedJobId);
         }
@@ -253,6 +281,9 @@ export function useServerRenderJob() {
         isRendering: true,
         isCompleted: false,
         videoBlob: null,
+        engine: null,
+        queuePosition: 0,
+        etaSeconds: 0,
       });
 
       try {
@@ -270,6 +301,9 @@ export function useServerRenderJob() {
           status: job.status,
           progress: Number(job.progress) || 0,
           stage: job.stage || 'جاري تخصيص وحدة إنتاج تلقائياً...',
+          engine: job.engine || manifest.renderEngine || null,
+          queuePosition: 0,
+          etaSeconds: 0,
         }));
 
         startPolling(jobId);
@@ -307,6 +341,7 @@ export function useServerRenderJob() {
         status: 'cancelled',
         stage: 'تم إلغاء المهمة',
         isRendering: false,
+        engine: prev.engine,
       }));
       try { window.localStorage.removeItem(PERSISTED_JOB_KEY); } catch { /* optional persistence */ }
     } catch (err) {
@@ -345,6 +380,9 @@ export function useServerRenderJob() {
         isRendering: true,
         isCompleted: false,
         videoBlob: null,
+        engine: job.engine || prev.engine,
+        queuePosition: 0,
+        etaSeconds: 0,
       }));
       startPolling(job.id);
     } catch (err: any) {

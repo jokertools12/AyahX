@@ -10,7 +10,7 @@ import { config } from '../config';
 import { enqueueRenderJob, resolveRenderQueueEngine, RenderQueueEngine, startRenderWorker } from './renderQueueBroker';
 import { deleteStoredRender, isObjectStoragePath, uploadRender } from './objectStorage';
 import { recordRenderAudit, renderDurationSeconds } from './renderObservability';
-import { getRenderCapacity, resolveConcurrencySetting } from './renderCapacity';
+import { estimateRenderJobProfile, getRenderCapacity, resolveConcurrencySetting } from './renderCapacity';
 import { runRenderJobInChild, stopRenderChild } from './renderChildRunner';
 
 function queueEngineForManifest(manifest: RenderManifest | string | unknown): RenderQueueEngine {
@@ -72,6 +72,19 @@ export interface RenderQueueInfo {
   active: number;
   slotsTotal: number;
   etaSeconds: number;
+}
+
+type RenderFailureCode = 'USER_INPUT' | 'ASSET' | 'ENGINE' | 'OOM_SUSPECTED' | 'TIMEOUT' | 'STORAGE' | 'WORKER_TERMINATED' | 'RENDER_FAILED';
+
+function classifyRenderFailure(message: string): { code: RenderFailureCode; transient: boolean } {
+  const normalized = message.toLowerCase();
+  if (/out of memory|enomem|sigkill|oom|memory limit/.test(normalized)) return { code: 'OOM_SUSPECTED', transient: true };
+  if (/timeout|deadline|timed out/.test(normalized)) return { code: 'TIMEOUT', transient: true };
+  if (/download|network|fetch|econn|asset|audio|background|ssrf/.test(normalized)) return { code: 'ASSET', transient: true };
+  if (/upload|object storage|s3|bucket|stream stored/.test(normalized)) return { code: 'STORAGE', transient: true };
+  if (/invalid|unsupported|manifest|font|dimensions|duration|url|source/.test(normalized)) return { code: 'USER_INPUT', transient: false };
+  if (/chromium|browser|ffmpeg|skia|canvas|probe|codec|protocol|target closed|epipe/.test(normalized)) return { code: 'ENGINE', transient: true };
+  return { code: 'RENDER_FAILED', transient: false };
 }
 
 export class RenderJobQueue {
@@ -353,10 +366,25 @@ export class RenderJobQueue {
     const snapshot = this.queueSnapshot;
     const waiting = snapshot.waiting[engine];
     const active = snapshot.active[engine];
-    const profileCapacity = getRenderCapacity(0, undefined, engine).targetConcurrency;
+    const manifest = typeof job.manifest === 'string' ? JSON.parse(job.manifest) : job.manifest;
+    const profileCapacity = getRenderCapacity(0, undefined, engine, {
+      width: manifest?.outputDimensions?.width,
+      height: manifest?.outputDimensions?.height,
+      fps: manifest?.fps,
+      durationSeconds: manifest?.audio?.durationSeconds,
+      backgroundType: manifest?.background?.type,
+    }).targetConcurrency;
     const replicaEstimate = Math.max(1, Number(process.env[`${engine === 'ffmpeg_ass' ? 'FFMPEG' : engine === 'skia_canvas' ? 'SKIA' : 'BROWSER'}_RENDER_REPLICAS`] || 1));
     const slotsTotal = Math.max(1, profileCapacity * replicaEstimate);
-    const p50 = Math.max(1, Number(process.env[`${engine.toUpperCase()}_RENDER_P50_SECONDS`] || 60));
+    const prefix = engine === 'ffmpeg_ass' ? 'FFMPEG' : engine === 'skia_canvas' ? 'SKIA' : 'BROWSER';
+    const estimated = estimateRenderJobProfile(engine, {
+      width: manifest?.outputDimensions?.width,
+      height: manifest?.outputDimensions?.height,
+      fps: manifest?.fps,
+      durationSeconds: manifest?.audio?.durationSeconds,
+      backgroundType: manifest?.background?.type,
+    }).estimatedSeconds || 60;
+    const p50 = Math.max(1, Number(process.env[`${prefix}_RENDER_P50_SECONDS`] || estimated));
     const position = job.status === 'queued' ? Math.max(1, snapshot.positions.get(job.id) || 1) : 0;
     return { engine, position, waiting, active, slotsTotal, etaSeconds: position ? Math.ceil(position / slotsTotal) * p50 : 0 };
   }
@@ -495,15 +523,16 @@ export class RenderJobQueue {
     const row = rows[0];
     if (!row) return;
     const message = String((error as any)?.message || error || 'render child stopped');
+    const failure = classifyRenderFailure(message);
     if (row.retry_count < row.max_retries) {
       await query(
-        "UPDATE render_jobs SET status = 'queued', active_user_id = user_id, enqueue_state = 'pending', stage = 'جاري استعادة الإنتاج تلقائياً', error_code = 'RENDER_CHILD_RESTART', error_message = ?, retry_count = retry_count + 1 WHERE id = ? AND status = 'running'",
-        [message.slice(-1000), jobId],
+        "UPDATE render_jobs SET status = 'queued', active_user_id = user_id, enqueue_state = 'pending', stage = 'جاري استعادة الإنتاج تلقائياً', error_code = ?, error_message = ?, retry_count = retry_count + 1 WHERE id = ? AND status = 'running'",
+        [failure.code === 'RENDER_FAILED' ? 'WORKER_TERMINATED' : failure.code, message.slice(-1000), jobId],
       );
     } else {
       await query(
-        "UPDATE render_jobs SET status = 'failed', active_user_id = NULL, enqueue_state = 'failed', stage = 'فشل الريندر', error_code = 'RENDER_CHILD_STOPPED', error_message = ?, completed_at = NOW() WHERE id = ? AND status = 'running'",
-        [message.slice(-1000), jobId],
+        "UPDATE render_jobs SET status = 'failed', active_user_id = NULL, enqueue_state = 'failed', stage = 'فشل الريندر', error_code = ?, error_message = ?, completed_at = NOW() WHERE id = ? AND status = 'running'",
+        [failure.code === 'RENDER_FAILED' ? 'WORKER_TERMINATED' : failure.code, message.slice(-1000), jobId],
       );
     }
   }
@@ -603,10 +632,21 @@ export class RenderJobQueue {
       const outputFilename = `quran_reel_${manifest.canonicalAyahRange.surahNumber}_${manifest.canonicalAyahRange.startAyah}-${manifest.canonicalAyahRange.endAyah}_${jobId.substring(0, 8)}.mp4`;
       const outputPath = path.join(userStorageDir, outputFilename);
       heartbeat = setInterval(() => {
-        query("UPDATE render_jobs SET updated_at = NOW(), heartbeat_at = NOW() WHERE id = ? AND status = 'running'", [jobId]).catch((err) => {
-          logger.warn(`Could not refresh render-job lease [${jobId}]:`, err);
-        });
-      }, 30 * 1000);
+        if (abortController.signal.aborted) return;
+        query("UPDATE render_jobs SET updated_at = NOW(), heartbeat_at = NOW() WHERE id = ? AND status = 'running'", [jobId])
+          .then((result: any) => {
+            // Cancellation is allowed to arrive through a different API
+            // replica. The child must observe the durable state and stop even
+            // though that replica cannot see our local ChildProcess object.
+            if (!result?.affectedRows && !abortController.signal.aborted) {
+              logger.info(`Render job [${jobId}] lease ended remotely; aborting its isolated child.`);
+              abortController.abort();
+            }
+          })
+          .catch((err) => {
+            logger.warn(`Could not refresh render-job lease [${jobId}]:`, err);
+          });
+      }, 10 * 1000);
       heartbeat.unref?.();
       logger.info(`Starting execution of render job [${jobId}]...`);
       void recordRenderAudit(jobId, job.user_id, 'started', { workerId: config.queue.workerId });
@@ -736,7 +776,8 @@ export class RenderJobQueue {
       // event. Requeue the same durable job (without charging a new slot) so
       // it is retried after capacity is available instead of exposing a
       // permanent failure for a recoverable infrastructure error.
-      const isTransient = /network|timeout|target closed|protocol error|ffmpeg process failed|ffmpeg input pipe|epipe|out of memory|enomem|sigkill/i.test(errorMessage);
+      const failure = classifyRenderFailure(errorMessage);
+      const isTransient = failure.transient;
 
       if (isTransient && job.retry_count < job.max_retries) {
         await query(
@@ -754,11 +795,11 @@ export class RenderJobQueue {
             active_user_id = NULL,
             enqueue_state = 'failed',
             stage = 'فشل الريندر',
-            error_code = 'RENDER_FAILED',
+            error_code = ?,
             error_message = ?,
             completed_at = NOW()
         WHERE id = ? AND status = 'running'`,
-          [errorMessage || 'حدث خطأ غير متوقع أثناء معالجة الفيديو', jobId]
+          [failure.code, errorMessage || 'حدث خطأ غير متوقع أثناء معالجة الفيديو', jobId]
         );
       }
     } finally {

@@ -465,7 +465,7 @@ export async function renderFfmpegAssVideo(
 
     // 4. Validate Output with ffprobe
     const probe = await probeMediaFile(outputPath);
-    const validation = validateProbeAgainstSpec(probe, fps);
+    const validation = validateProbeAgainstSpec(probe, fps, manifest.audio.durationSeconds);
     if (!validation.valid) {
       throw new Error(`Rendered ASS video failed probe validation: ${validation.errors.join(', ')}`);
     }

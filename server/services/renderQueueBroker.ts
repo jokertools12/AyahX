@@ -6,6 +6,7 @@ import {
   capacityPollIntervalMs,
   getRenderCapacity,
   getRenderMemoryProfile,
+  readOomKillCount,
   resolveConcurrencySetting,
   resolveRenderWorkerEngine,
   RenderWorkerEngine,
@@ -83,6 +84,9 @@ export function startRenderWorker(
   const initialCapacity = getRenderCapacity(0, maxConcurrency, engine);
   const initialConcurrency = initialCapacity.targetConcurrency;
   let lastReportedConcurrency = initialConcurrency;
+  let lastOomKillCount = readOomKillCount();
+  let reducedUntil = 0;
+  let safeReads = 0;
   const profile = getRenderMemoryProfile(engine);
 
   const worker = new Worker(
@@ -106,7 +110,25 @@ export function startRenderWorker(
 
   const refreshConcurrency = () => {
     const capacity = getRenderCapacity(activeJobs, maxConcurrency, engine);
-    const nextConcurrency = Math.max(activeJobs, capacity.targetConcurrency);
+    const oomKillCount = readOomKillCount();
+    if (oomKillCount > lastOomKillCount) {
+      lastOomKillCount = oomKillCount;
+      reducedUntil = Date.now() + 5 * 60_000;
+      safeReads = 0;
+      logger.error(`Render capacity reduced after cgroup OOM signal: engine=${engine}, oomKills=${oomKillCount}`);
+    }
+    let desiredConcurrency = capacity.targetConcurrency;
+    if (Date.now() < reducedUntil) {
+      desiredConcurrency = Math.max(1, Math.floor(desiredConcurrency / 2));
+    } else if (desiredConcurrency > lastReportedConcurrency) {
+      // Hysteresis prevents a fluctuating memory.current value from opening
+      // several slots immediately after a short-lived render finishes.
+      safeReads += 1;
+      if (safeReads < 3) desiredConcurrency = lastReportedConcurrency;
+    } else {
+      safeReads = 0;
+    }
+    const nextConcurrency = Math.max(activeJobs, desiredConcurrency);
     if (worker.concurrency !== nextConcurrency) worker.concurrency = nextConcurrency;
     if (nextConcurrency !== lastReportedConcurrency) {
       lastReportedConcurrency = nextConcurrency;

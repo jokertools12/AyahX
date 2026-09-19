@@ -11,6 +11,40 @@ function childCommand(jobId: string, engine: RenderQueueEngine): { command: stri
   return { command: process.execPath, args: [tsxCli, path.resolve(process.cwd(), 'server/renderChild.ts'), jobId, engine] };
 }
 
+function terminateProcessTree(child: ChildProcess): void {
+  if (child.exitCode !== null || child.signalCode !== null) return;
+  try {
+    if (process.platform === 'win32' && child.pid) {
+      // Railway runs Linux, but keeping the Windows path makes local
+      // cancellation deterministic too.
+      spawn('taskkill', ['/pid', String(child.pid), '/t', '/f'], { windowsHide: true, stdio: 'ignore' });
+    } else if (child.pid) {
+      // The child is detached on POSIX, so a negative pid addresses the whole
+      // process group (tsx -> renderer -> ffmpeg/chromium), not only tsx.
+      process.kill(-child.pid, 'SIGTERM');
+    } else {
+      child.kill('SIGTERM');
+    }
+  } catch {
+    try { child.kill('SIGTERM'); } catch { /* already exited */ }
+  }
+}
+
+function forceTerminateProcessTree(child: ChildProcess): void {
+  if (child.exitCode !== null || child.signalCode !== null) return;
+  try {
+    if (process.platform === 'win32' && child.pid) {
+      spawn('taskkill', ['/pid', String(child.pid), '/t', '/f'], { windowsHide: true, stdio: 'ignore' });
+    } else if (child.pid) {
+      process.kill(-child.pid, 'SIGKILL');
+    } else {
+      child.kill('SIGKILL');
+    }
+  } catch {
+    try { child.kill('SIGKILL'); } catch { /* already exited */ }
+  }
+}
+
 /** Executes one render in an isolated child process. The BullMQ supervisor
  * remains responsive and a bad FFmpeg/Chromium process cannot take its queue
  * consumer down with it. */
@@ -22,6 +56,7 @@ export function runRenderJobInChild(jobId: string, engine: RenderQueueEngine): P
       env: process.env,
       stdio: ['ignore', 'pipe', 'pipe'],
       windowsHide: true,
+      detached: process.platform !== 'win32',
     });
     children.set(jobId, child);
     let stderr = '';
@@ -29,7 +64,8 @@ export function runRenderJobInChild(jobId: string, engine: RenderQueueEngine): P
     const timeout = setTimeout(() => {
       timedOut = true;
       logger.error('[render-child:' + jobId + '] exceeded its ' + renderJobTimeoutMs(engine) + 'ms deadline; terminating it.');
-      try { child.kill('SIGTERM'); } catch { /* already exited */ }
+      terminateProcessTree(child);
+      setTimeout(() => forceTerminateProcessTree(child), 10_000).unref?.();
     }, renderJobTimeoutMs(engine));
     child.stdout?.on('data', (data: Buffer) => logger.info(`[render-child:${jobId}] ${data.toString().trim()}`));
     child.stderr?.on('data', (data: Buffer) => { stderr += data.toString(); });
@@ -50,11 +86,9 @@ export function runRenderJobInChild(jobId: string, engine: RenderQueueEngine): P
 export function stopRenderChild(jobId: string): void {
   const child = children.get(jobId);
   if (!child) return;
-  try { child.kill('SIGTERM'); } catch { /* already exited */ }
+  terminateProcessTree(child);
   setTimeout(() => {
-    if (!child.killed) {
-      try { child.kill('SIGKILL'); } catch { /* already exited */ }
-    }
+    forceTerminateProcessTree(child);
   }, 10_000).unref?.();
 }
 

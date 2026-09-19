@@ -180,7 +180,7 @@ export async function renderFullFidelityVideo(
 
     onProgress?.(98, totalFrames, totalFrames, `التحقق من سلامة فيديو ${config.label} النهائي...`);
     const probe = await probeMediaFile(outputPath);
-    const validation = validateProbeAgainstSpec(probe, fps);
+    const validation = validateProbeAgainstSpec(probe, fps, manifest.audio.durationSeconds);
     if (!validation.valid) {
       throw new Error(`${config.label} video failed probe validation: ${validation.errors.join(', ')}`);
     }

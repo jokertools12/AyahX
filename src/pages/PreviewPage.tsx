@@ -161,6 +161,13 @@ function getAudioCacheKey(url: string): string {
   return `transcription_cache_${Math.abs(hash).toString(36)}`;
 }
 
+function renderEngineLabel(engine: string | null | undefined): string {
+  if (engine === 'ffmpeg_ass') return 'FFmpeg ASS — فكرة 1';
+  if (engine === 'skia_canvas') return 'Skia Canvas — فكرة 2';
+  if (engine === 'browser_cloud') return 'Browser Cloud — فكرة 3';
+  return 'محرك الإنتاج المحدد';
+}
+
 export default function PreviewPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -2525,15 +2532,25 @@ export default function PreviewPage() {
                       </div>
                     </div>
 
+                    <div className="flex flex-wrap items-center gap-2 text-[11px] text-muted-foreground">
+                      <Badge variant="secondary">{renderEngineLabel(serverRenderJob.engine)}</Badge>
+                      {serverRenderJob.status === 'queued' && serverRenderJob.queuePosition > 0 && (
+                        <span>
+                          الموضع {serverRenderJob.queuePosition}
+                          {serverRenderJob.etaSeconds > 0 ? ` · تقدير البدء ${serverRenderJob.etaSeconds}ث` : ''}
+                        </span>
+                      )}
+                    </div>
+
                     <Progress value={serverRenderJob.progress} className="h-2.5 transition-all duration-300" />
 
                     <div className="flex items-center justify-between text-xs text-muted-foreground">
                       <span className="font-semibold text-foreground">{Math.round(serverRenderJob.progress)}% مكتمل</span>
                       <span>
                         {serverRenderJob.status === 'queued' ? (
-                          <span className="text-amber-500 font-medium">⏳ جاري تخصيص وحدة إنتاج تلقائياً</span>
+                          <span className="text-amber-500 font-medium">⏳ جاري تخصيص وحدة {renderEngineLabel(serverRenderJob.engine)}</span>
                         ) : (
-                          '⚡ ريندر سيرفر فائق الدقة (30fps CFR)'
+                          `⚡ ${renderEngineLabel(serverRenderJob.engine)} · ريندر MP4 فائق الدقة`
                         )}
                       </span>
                     </div>
@@ -2558,7 +2575,7 @@ export default function PreviewPage() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-center gap-2 text-emerald-500 p-3 rounded-lg bg-emerald-500/10">
                       <CheckCircle2 className="h-5 w-5" />
-                      <span className="font-medium text-sm">تم إنشاء وتدقيق الفيديو بنجاح (H.264 MP4)!</span>
+                      <span className="font-medium text-sm">تم إنشاء وتدقيق الفيديو بنجاح عبر {renderEngineLabel(serverRenderJob.engine)} (H.264 MP4)!</span>
                     </div>
 
                     <Button

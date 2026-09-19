@@ -1,7 +1,7 @@
 services:
   api:
     build: .
-    command: npm run server
+    command: node node_modules/tsx/dist/cli.mjs server/index.ts
     env_file: .env
     environment:
       RENDER_QUEUE_DRIVER: bullmq
@@ -11,7 +11,7 @@ services:
 
   worker-ffmpeg:
     build: .
-    command: npm run worker
+    command: node node_modules/tsx/dist/cli.mjs server/worker.ts
     env_file: .env
     environment:
       RENDER_QUEUE_DRIVER: bullmq
@@ -23,7 +23,7 @@ services:
 
   worker-skia:
     build: .
-    command: npm run worker
+    command: node node_modules/tsx/dist/cli.mjs server/worker.ts
     env_file: .env
     environment:
       RENDER_QUEUE_DRIVER: bullmq
@@ -35,7 +35,7 @@ services:
 
   worker-browser:
     build: .
-    command: npm run worker
+    command: node node_modules/tsx/dist/cli.mjs server/worker.ts
     env_file: .env
     environment:
       RENDER_QUEUE_DRIVER: bullmq
