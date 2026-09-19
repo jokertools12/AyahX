@@ -74,6 +74,20 @@ export interface RenderQueueInfo {
   etaSeconds: number;
 }
 
+function fallbackQueueInfo(engine: RenderQueueEngine, status: RenderJobRow['status']): RenderQueueInfo {
+  const prefix = engine === 'ffmpeg_ass' ? 'FFMPEG' : engine === 'skia_canvas' ? 'SKIA' : 'BROWSER';
+  const slotsPerReplica = Math.max(1, Number(process.env[`${prefix}_RENDER_SLOTS_PER_REPLICA`] || (engine === 'ffmpeg_ass' ? 3 : 2)));
+  const replicas = Math.max(1, Number(process.env[`${prefix}_RENDER_REPLICAS`] || 2));
+  return {
+    engine,
+    position: status === 'queued' ? 1 : 0,
+    waiting: 0,
+    active: 0,
+    slotsTotal: replicas * slotsPerReplica,
+    etaSeconds: 0,
+  };
+}
+
 type RenderFailureCode = 'USER_INPUT' | 'ASSET' | 'ENGINE' | 'OOM_SUSPECTED' | 'TIMEOUT' | 'STORAGE' | 'WORKER_TERMINATED' | 'RENDER_FAILED';
 
 export function classifyRenderFailure(message: string): { code: RenderFailureCode; transient: boolean } {
@@ -407,10 +421,15 @@ export class RenderJobQueue {
           this.queueSnapshotRefresh = null;
         });
       }
-      await this.queueSnapshotRefresh;
+      try {
+        await this.queueSnapshotRefresh;
+      } catch (error) {
+        logger.warn('Could not refresh render queue snapshot; returning a safe fallback:', error);
+        return fallbackQueueInfo(engine, job.status);
+      }
     }
     const snapshot = this.queueSnapshot;
-    if (!snapshot) throw new Error('Queue snapshot unavailable');
+    if (!snapshot) return fallbackQueueInfo(engine, job.status);
     const waiting = snapshot.waiting[engine];
     const active = snapshot.active[engine];
     let manifest: any = job.manifest;
