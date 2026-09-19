@@ -37,13 +37,14 @@ export async function transaction<T>(callback: (conn: PoolConnection) => Promise
 
 /**
  * InnoDB can briefly deadlock when many new render jobs insert different
- * values into the same unique secondary index at once. The whole transaction
+ * values into shared unique secondary indexes at once. The whole transaction
  * is rolled back before this helper retries, so no quota increment or job row
- * can be applied twice.
+ * can be applied twice. The retry budget is intentionally high enough for a
+ * 1000-user admission burst while the backoff remains bounded.
  */
 export async function transactionWithRetry<T>(
   callback: (conn: PoolConnection) => Promise<T>,
-  maxAttempts = 5,
+  maxAttempts = 12,
 ): Promise<T> {
   let lastError: unknown;
   for (let attempt = 1; attempt <= Math.max(1, maxAttempts); attempt += 1) {
@@ -51,9 +52,19 @@ export async function transactionWithRetry<T>(
       return await transaction(callback);
     } catch (error: any) {
       lastError = error;
-      const retryable = error?.code === 'ER_LOCK_DEADLOCK' || error?.code === 'ER_LOCK_WAIT_TIMEOUT' || error?.errno === 1213 || error?.errno === 1205;
+      const message = String(error?.message || '').toLowerCase();
+      const retryable = error?.code === 'ER_LOCK_DEADLOCK'
+        || error?.code === 'ER_LOCK_WAIT_TIMEOUT'
+        || error?.errno === 1213
+        || error?.errno === 1205
+        || error?.sqlState === '40001'
+        || message.includes('deadlock')
+        || message.includes('lock wait timeout');
       if (!retryable || attempt >= maxAttempts) throw error;
-      const delayMs = Math.min(250, 25 * 2 ** (attempt - 1)) + Math.floor(Math.random() * 25);
+      // A high-concurrency admission burst can produce several overlapping
+      // deadlock victims. Exponential backoff with full jitter prevents the
+      // same requests from colliding again on every retry.
+      const delayMs = Math.min(2_000, 50 * 2 ** (attempt - 1)) + Math.floor(Math.random() * 150);
       await new Promise((resolve) => setTimeout(resolve, delayMs));
     }
   }

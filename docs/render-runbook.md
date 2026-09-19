@@ -53,6 +53,14 @@ in that staging API service. Production keeps the default of 20 attempts per
 15 minutes and derives limiter identity from Express's trusted Railway proxy,
 never directly from a client-supplied `X-Forwarded-For` value.
 
+`npm run load:staging-renders` is the guarded end-to-end alternative. It only
+accepts a hostname containing `staging` plus the explicit confirmation value
+`CREATE_STAGING_RENDER_LOAD_ACCOUNTS`; it creates disposable staging accounts,
+grants a staging-only yearly test subscription, sends the requested count to
+the selected isolated engines, waits for all durable jobs, and ffprobes one
+downloaded H.264/AAC/yuv420p artifact per engine. Supply the temporary MySQL
+tunnel details through `STAGING_LOAD_DB_*`; it refuses production URLs.
+
 Set `RENDER_ALERT_WEBHOOK_URL` only on `render-control` to receive threshold
 alerts for queue p95/oldest age, OOMs, failure rate, and MAX_REPLICAS. The
 webhook is optional and never blocks a render or changes queue state.
