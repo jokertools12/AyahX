@@ -366,7 +366,14 @@ export class RenderJobQueue {
     const snapshot = this.queueSnapshot;
     const waiting = snapshot.waiting[engine];
     const active = snapshot.active[engine];
-    const manifest = typeof job.manifest === 'string' ? JSON.parse(job.manifest) : job.manifest;
+    let manifest: any = job.manifest;
+    if (typeof job.manifest === 'string') {
+      try {
+        manifest = JSON.parse(job.manifest);
+      } catch {
+        manifest = {};
+      }
+    }
     const profileCapacity = getRenderCapacity(0, undefined, engine, {
       width: manifest?.outputDimensions?.width,
       height: manifest?.outputDimensions?.height,
@@ -481,7 +488,7 @@ export class RenderJobQueue {
   }
 
   /** Called by the dedicated BullMQ process after the durable queue grants a job. */
-  public async processExternalJob(jobId: string, workerEngine?: RenderQueueEngine): Promise<void> {
+  public async processExternalJob(jobId: string, workerEngine?: RenderQueueEngine, shutdownSignal?: AbortSignal): Promise<void> {
     const leased: any = await query(
       "UPDATE render_jobs SET status = 'running', active_user_id = user_id, enqueue_state = 'running', stage = 'بدء معالجة المشهد', started_at = NOW(), heartbeat_at = NOW(), worker_id = ? WHERE id = ? AND status = 'queued'",
       [config.queue.workerId, jobId],
@@ -497,7 +504,7 @@ export class RenderJobQueue {
       );
       throw new Error(`Render engine mismatch: job=${jobEngine}, worker=${workerEngine}`);
     }
-    await this.executeJob(job);
+    await this.executeJob(job, shutdownSignal);
 
     // executeJob deliberately catches render errors so it can persist the
     // durable state. When a transient infrastructure failure moved the job
@@ -534,6 +541,32 @@ export class RenderJobQueue {
         "UPDATE render_jobs SET status = 'failed', active_user_id = NULL, enqueue_state = 'failed', stage = 'فشل الريندر', error_code = ?, error_message = ?, completed_at = NOW() WHERE id = ? AND status = 'running'",
         [failure.code === 'RENDER_FAILED' ? 'WORKER_TERMINATED' : failure.code, message.slice(-1000), jobId],
       );
+    }
+  }
+
+  /**
+   * Releases work owned by a draining worker after its Railway grace period.
+   * Only rows still leased by that exact worker are touched, so a child that
+   * already completed or was reclaimed by the control-plane is never moved
+   * backwards.
+   */
+  public async releaseDrainingWorkerJobs(workerId: string): Promise<void> {
+    const rows = await query<Array<{ id: string; retry_count: number; max_retries: number }>>(
+      "SELECT id, retry_count, max_retries FROM render_jobs WHERE status = 'running' AND worker_id = ?",
+      [workerId],
+    );
+    for (const row of rows) {
+      if (row.retry_count < row.max_retries) {
+        await query(
+          "UPDATE render_jobs SET status = 'queued', active_user_id = user_id, enqueue_state = 'pending', stage = 'جاري استعادة الإنتاج بعد تحديث الخدمة', worker_id = NULL, heartbeat_at = NULL, retry_count = retry_count + 1 WHERE id = ? AND status = 'running' AND worker_id = ?",
+          [row.id, workerId],
+        );
+      } else {
+        await query(
+          "UPDATE render_jobs SET status = 'failed', active_user_id = NULL, enqueue_state = 'failed', stage = 'فشل الريندر', error_code = 'WORKER_TERMINATED', error_message = 'انتهت مهلة تصريف العامل أثناء تحديث الخدمة', completed_at = NOW() WHERE id = ? AND status = 'running' AND worker_id = ?",
+          [row.id, workerId],
+        );
+      }
     }
   }
 
@@ -618,9 +651,14 @@ export class RenderJobQueue {
   /**
    * Executes a leased render job to completion
    */
-  private async executeJob(job: RenderJobRow): Promise<void> {
+  private async executeJob(job: RenderJobRow, shutdownSignal?: AbortSignal): Promise<void> {
     const jobId = job.id;
     const abortController = new AbortController();
+    const abortForShutdown = () => abortController.abort();
+    if (shutdownSignal) {
+      if (shutdownSignal.aborted) abortForShutdown();
+      else shutdownSignal.addEventListener('abort', abortForShutdown, { once: true });
+    }
     const startedAt = Date.now();
     this.activeJobAbortControllers.set(jobId, abortController);
     let heartbeat: ReturnType<typeof setInterval> | null = null;
@@ -765,6 +803,13 @@ export class RenderJobQueue {
     } catch (err: any) {
       if (abortController.signal.aborted) {
         logger.info(`Render job [${jobId}] was aborted.`);
+        // A user cancellation has already changed the durable status. A
+        // deployment-drain cancellation has not, so safely hand the job back
+        // to the independent queue before this child exits.
+        await query(
+          "UPDATE render_jobs SET status = 'queued', active_user_id = user_id, enqueue_state = 'pending', stage = 'جاري استعادة الإنتاج بعد تحديث الخدمة', retry_count = retry_count + 1 WHERE id = ? AND status = 'running' AND retry_count < max_retries",
+          [jobId],
+        ).catch((releaseError) => logger.warn(`Could not release aborted render job [${jobId}]:`, releaseError));
         void recordRenderAudit(jobId, job.user_id, 'aborted');
         return;
       }
@@ -805,6 +850,7 @@ export class RenderJobQueue {
     } finally {
       if (heartbeat) clearInterval(heartbeat);
       this.activeJobAbortControllers.delete(jobId);
+      if (shutdownSignal) shutdownSignal.removeEventListener('abort', abortForShutdown);
     }
   }
 }
@@ -813,12 +859,12 @@ export const renderJobQueue = new RenderJobQueue();
 
 // In production the API process does not run Chromium. Start this module with
 // `npm run worker` (or a separate container) to consume the Redis queue.
-export function startDedicatedRenderWorker(): void {
-  if (config.queue.driver !== 'bullmq') return;
+export function startDedicatedRenderWorker() {
+  if (config.queue.driver !== 'bullmq') return null;
   const engine = resolveRenderQueueEngine(process.env.RENDER_WORKER_ENGINE);
   // The BullMQ process is a supervisor. Actual rendering runs in a child so
   // Chromium/FFmpeg crashes are isolated from the queue connection.
-  startRenderWorker(async (jobId, queuedEngine) => {
+  return startRenderWorker(async (jobId, queuedEngine) => {
     try {
       await runRenderJobInChild(jobId, queuedEngine);
     } catch (error) {

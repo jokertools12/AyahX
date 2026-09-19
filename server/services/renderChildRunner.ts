@@ -6,6 +6,8 @@ import { renderJobTimeoutMs } from './renderCapacity';
 
 const children = new Map<string, ChildProcess>();
 
+const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
 function childCommand(jobId: string, engine: RenderQueueEngine): { command: string; args: string[] } {
   const tsxCli = path.resolve(process.cwd(), 'node_modules/tsx/dist/cli.mjs');
   return { command: process.execPath, args: [tsxCli, path.resolve(process.cwd(), 'server/renderChild.ts'), jobId, engine] };
@@ -94,4 +96,18 @@ export function stopRenderChild(jobId: string): void {
 
 export function stopAllRenderChildren(): void {
   for (const jobId of children.keys()) stopRenderChild(jobId);
+}
+
+export function activeRenderChildCount(): number {
+  return children.size;
+}
+
+/** Waits for children to finish naturally during a Railway deployment drain.
+ * The caller decides when to terminate/requeue the remainder. */
+export async function waitForRenderChildren(timeoutMs: number): Promise<boolean> {
+  const deadline = Date.now() + Math.max(0, timeoutMs);
+  while (children.size > 0 && Date.now() < deadline) {
+    await delay(Math.min(500, Math.max(1, deadline - Date.now())));
+  }
+  return children.size === 0;
 }

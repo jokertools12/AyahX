@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { estimateRenderJobProfile } from '../../server/services/renderCapacity';
 import { RENDER_QUEUE_NAMES } from '../../server/services/renderQueueBroker';
+import { getRenderEngine, listRenderEngines } from '../../server/services/renderEngineRegistry';
 
 describe('Render v2 isolation contract', () => {
   it('keeps one versioned queue per engine', () => {
@@ -10,6 +11,14 @@ describe('Render v2 isolation contract', () => {
     expect(RENDER_QUEUE_NAMES.ffmpeg_ass).toBe('quran-render-ffmpeg-v2');
     expect(RENDER_QUEUE_NAMES.skia_canvas).toBe('quran-render-skia-v2');
     expect(RENDER_QUEUE_NAMES.browser_cloud).toBe('quran-render-browser-v2');
+  });
+
+  it('exposes an explicit engine contract and reserves Chromium for Browser Cloud', () => {
+    const engines = listRenderEngines();
+    expect(engines.map((engine) => engine.id).sort()).toEqual(['browser_cloud', 'ffmpeg_ass', 'skia_canvas'].sort());
+    expect(getRenderEngine('ffmpeg_ass').usesChromium).toBe(false);
+    expect(getRenderEngine('skia_canvas').usesChromium).toBe(false);
+    expect(getRenderEngine('browser_cloud').usesChromium).toBe(true);
   });
 
   it('ships a native worker image without Chromium and a browser image with it', () => {

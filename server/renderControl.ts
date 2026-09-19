@@ -1,4 +1,4 @@
-import { closePool } from './db';
+import { acquireMysqlAdvisoryLock, closePool, releaseMysqlAdvisoryLock } from './db';
 import { ensureRenderJobsTable } from './db/migrations/addRenderJobsTable';
 import { logger } from './logger';
 import { renderJobQueue } from './services/renderJobQueue';
@@ -8,6 +8,13 @@ import { renderJobQueue } from './services/renderJobQueue';
  * the MySQL -> BullMQ handoff and reclaims leases after worker loss.
  */
 async function main(): Promise<void> {
+  const lockName = process.env.RENDER_CONTROL_LEADER_LOCK || 'ayahx-render-control-leader-v1';
+  const leaderConnection = await acquireMysqlAdvisoryLock(lockName);
+  if (!leaderConnection) {
+    logger.warn(`Render control is already active elsewhere; exiting without starting duplicate reconciliation.`);
+    await closePool().catch(() => {});
+    return;
+  }
   await ensureRenderJobsTable();
   await renderJobQueue.recoverStaleJobs(true);
   await renderJobQueue.reconcileQueuedJobs();
@@ -34,6 +41,7 @@ async function main(): Promise<void> {
     clearInterval(recoveryTimer);
     clearInterval(cleanupTimer);
     renderJobQueue.shutdown();
+    await releaseMysqlAdvisoryLock(leaderConnection, lockName).catch(() => {});
     await closePool().catch(() => {});
     process.exit(0);
   };

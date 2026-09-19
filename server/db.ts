@@ -36,6 +36,34 @@ export async function transaction<T>(callback: (conn: PoolConnection) => Promise
 }
 
 /**
+ * Acquires a MySQL advisory lock for singleton control-plane work. The
+ * connection must remain open for the lifetime of the lock; MySQL releases it
+ * automatically if the process or connection disappears.
+ */
+export async function acquireMysqlAdvisoryLock(lockName: string): Promise<PoolConnection | null> {
+  const conn = await pool.getConnection();
+  try {
+    const [rows] = await conn.query<any[]>('SELECT GET_LOCK(?, 0) AS acquired', [lockName]);
+    if (Number(rows[0]?.acquired) !== 1) {
+      conn.release();
+      return null;
+    }
+    return conn;
+  } catch (error) {
+    conn.release();
+    throw error;
+  }
+}
+
+export async function releaseMysqlAdvisoryLock(conn: PoolConnection, lockName: string): Promise<void> {
+  try {
+    await conn.query('SELECT RELEASE_LOCK(?)', [lockName]);
+  } finally {
+    conn.release();
+  }
+}
+
+/**
  * Pings the database to verify active connection pool readiness and measure round-trip latency.
  */
 export async function pingDatabase(): Promise<{ ok: boolean; latencyMs: number; error?: string }> {

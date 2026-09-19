@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage';
 import { config } from '../config';
 
 let client: S3Client | null = null;
@@ -28,9 +29,16 @@ export function objectKeyFromPath(value: string): string {
 
 export async function uploadRender(localPath: string, userId: string, jobId: string): Promise<string> {
   const key = `renders/${userId}/${jobId}.mp4`;
-  await getClient().send(new PutObjectCommand({
-    Bucket: config.storage.bucket!, Key: key, Body: fs.createReadStream(localPath), ContentType: 'video/mp4',
-  }));
+  // Upload streams large MP4s as bounded multipart parts while retaining a
+  // single request for small files. This avoids buffering a whole render in
+  // the API process and leaves no partial object marked as a successful job.
+  await new Upload({
+    client: getClient(),
+    params: { Bucket: config.storage.bucket!, Key: key, Body: fs.createReadStream(localPath), ContentType: 'video/mp4' },
+    partSize: 8 * 1024 * 1024,
+    queueSize: 2,
+    leavePartsOnError: false,
+  }).done();
   return `s3://${config.storage.bucket}/${key}`;
 }
 

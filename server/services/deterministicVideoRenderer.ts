@@ -5,9 +5,7 @@ import crypto from 'crypto';
 import url from 'url';
 import { spawn } from 'child_process';
 import { RenderManifest } from '../models/renderManifest';
-import { renderFfmpegAssVideo } from './ffmpegAssRenderer';
-import { renderSkiaCanvasVideo } from './skiaCanvasRenderer';
-import { renderBrowserCloudVideo } from './browserCloudRenderer';
+import { getRenderEngine } from './renderEngineRegistry';
 import { getFfmpegBinary, getFfmpegResourceArgs } from './ffmpegBinary';
 import { availableCpuCores } from './renderCapacity';
 import { probeMediaFile, validateProbeAgainstSpec, MediaProbeResult } from './mediaProbeService';
@@ -727,20 +725,16 @@ export async function renderDeterministicVideo(
   const manifest = options.manifest as any;
   const engine = manifest.renderEngine || manifest.displaySettings?.renderEngine || 'ffmpeg_ass';
 
-  if (engine === 'skia_canvas') {
-    logger.info('🎬 Dispatching render to Engine 2: Independent Canvas full-fidelity Renderer');
-    return renderSkiaCanvasVideo(options);
-  }
-
-  if (engine === 'browser_cloud') {
-    logger.info('🌐 Dispatching render to Engine 3: Full-Fidelity Browser Cloud Renderer');
-    return renderBrowserCloudVideo(options);
-  }
-
   if (engine === 'browser') {
     throw new Error('Browser Canvas is a local renderer and cannot run as a cloud render job.');
   }
-
-  logger.info('⚡ Dispatching render to Engine 1: Independent FFmpeg full-fidelity Renderer');
-  return renderFfmpegAssVideo(options);
+  const selected = getRenderEngine(engine);
+  logger.info(
+    selected.id === 'browser_cloud'
+      ? '🌐 Dispatching render to Engine 3: Full-Fidelity Browser Cloud Renderer'
+      : selected.id === 'skia_canvas'
+      ? '🎬 Dispatching render to Engine 2: Independent Canvas full-fidelity Renderer'
+      : '⚡ Dispatching render to Engine 1: Independent FFmpeg full-fidelity Renderer',
+  );
+  return selected.render(options);
 }

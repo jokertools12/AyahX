@@ -9,7 +9,16 @@ async function main() {
   const engine = resolveRenderQueueEngine(process.argv[3]);
   if (!jobId) throw new Error('Render child requires a job id');
   await ensureRenderJobsTable();
-  await renderJobQueue.processExternalJob(jobId, engine);
+  const controller = new AbortController();
+  const abort = () => controller.abort();
+  process.once('SIGTERM', abort);
+  process.once('SIGINT', abort);
+  try {
+    await renderJobQueue.processExternalJob(jobId, engine, controller.signal);
+  } finally {
+    process.removeListener('SIGTERM', abort);
+    process.removeListener('SIGINT', abort);
+  }
 }
 
 main().then(async () => {
@@ -19,4 +28,3 @@ main().then(async () => {
   await closePool().catch(() => {});
   process.exitCode = 1;
 });
-

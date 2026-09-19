@@ -7,7 +7,9 @@ RUN npm run build
 
 FROM node:22-bookworm-slim
 WORKDIR /app
-RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg chromium ca-certificates fonts-noto-core fonts-noto-extra fonts-hosny-amiri && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg chromium ca-certificates fonts-noto-core fonts-noto-extra fonts-hosny-amiri fontconfig libass9 libharfbuzz0b && rm -rf /var/lib/apt/lists/*
+COPY scripts/verify-render-runtime.sh /usr/local/bin/verify-render-runtime
+RUN chmod +x /usr/local/bin/verify-render-runtime && /usr/local/bin/verify-render-runtime
 COPY --from=build /app/package*.json ./
 # The runtime entrypoints use tsx. Keep the locked dev toolchain in the
 # runtime image; NODE_ENV is set only after npm ci so npm does not omit it.
