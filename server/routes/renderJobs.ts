@@ -302,10 +302,37 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       };
     });
 
-    const job = await renderJobQueue.getJobById(queued.jobId, userId);
-    if (!job) {
-      throw new Error('تعذر إنشاء مهمة الريندر');
-    }
+    // The transaction already has every field needed by the immediate 202
+    // response. Avoid a second MySQL round-trip for a brand-new job; durable
+    // status polling remains the authoritative read after the response.
+    const job = queued.existing
+      ? await renderJobQueue.getJobById(queued.jobId, userId)
+      : ({
+        id: queued.jobId,
+        user_id: userId,
+        idempotency_key: idempotencyKey || null,
+        engine: queueEngine,
+        enqueue_state: 'pending',
+        status: 'queued',
+        progress: 0,
+        stage: 'جاري تخصيص موارد الإنتاج',
+        manifest: manifestValidation.manifest,
+        output_path: null,
+        output_filename: null,
+        output_size_bytes: null,
+        duration_seconds: null,
+        metadata: null,
+        error_code: null,
+        error_message: null,
+        retry_count: 0,
+        max_retries: 2,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        started_at: null,
+        completed_at: null,
+        expires_at: null,
+      } as any);
+    if (!job) throw new Error('تعذر إنشاء مهمة الريندر');
     if (!queued.existing) {
       // Route the durable job to the selected engine's isolated queue. A
       // priority value must never move a job between engine pools.
