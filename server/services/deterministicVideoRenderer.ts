@@ -10,6 +10,7 @@ import { getFfmpegBinary, getFfmpegResourceArgs } from './ffmpegBinary';
 import { availableCpuCores } from './renderCapacity';
 import { probeMediaFile, validateProbeAgainstSpec, MediaProbeResult } from './mediaProbeService';
 import { logger } from '../logger';
+import { renderSimulationEnabled, simulateRender } from './renderSimulator';
 
 export interface DeterministicRenderOptions {
   manifest: RenderManifest;
@@ -727,6 +728,9 @@ export async function renderDeterministicVideo(
 
   if (engine === 'browser') {
     throw new Error('Browser Canvas is a local renderer and cannot run as a cloud render job.');
+  }
+  if (renderSimulationEnabled()) {
+    return simulateRender(options);
   }
   const selected = getRenderEngine(engine);
   logger.info(

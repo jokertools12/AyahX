@@ -9,8 +9,8 @@ import { logger } from '../logger';
 import { config } from '../config';
 import { enqueueRenderJob, resolveRenderQueueEngine, RenderQueueEngine, startRenderWorker } from './renderQueueBroker';
 import { deleteStoredRender, isObjectStoragePath, uploadRender } from './objectStorage';
-import { recordRenderAudit, renderDurationSeconds } from './renderObservability';
-import { estimateRenderJobProfile, resolveConcurrencySetting } from './renderCapacity';
+import { recordRenderAudit, recordRenderResources, renderDurationSeconds } from './renderObservability';
+import { estimateRenderJobProfile, readCgroupCpuUsageMicros, readMemoryPeakBytes, readOomKillCount, resolveConcurrencySetting } from './renderCapacity';
 import { runRenderJobInChild, stopRenderChild } from './renderChildRunner';
 
 function queueEngineForManifest(manifest: RenderManifest | string | unknown): RenderQueueEngine {
@@ -102,7 +102,7 @@ export class RenderJobQueue {
   private queueSnapshot: { at: number; positions: Map<string, number>; waiting: Record<RenderQueueEngine, number>; active: Record<RenderQueueEngine, number> } | null = null;
 
   constructor() {
-    this.maxConcurrency = resolveConcurrencySetting(process.env.MAX_CONCURRENT_RENDERS, config.queue.workerConcurrency);
+    this.maxConcurrency = resolveConcurrencySetting(undefined, config.queue.workerConcurrency);
     this.storageDir = path.resolve(process.cwd(), process.env.RENDER_STORAGE_DIR || 'uploads/renders');
     if (!fs.existsSync(this.storageDir)) {
       fs.mkdirSync(this.storageDir, { recursive: true });
@@ -669,6 +669,9 @@ export class RenderJobQueue {
       else shutdownSignal.addEventListener('abort', abortForShutdown, { once: true });
     }
     const startedAt = Date.now();
+    const resourceCpuBefore = readCgroupCpuUsageMicros();
+    const resourcePeakBefore = readMemoryPeakBytes();
+    const resourceOomBefore = readOomKillCount();
     this.activeJobAbortControllers.set(jobId, abortController);
     let heartbeat: ReturnType<typeof setInterval> | null = null;
 
@@ -715,6 +718,16 @@ export class RenderJobQueue {
         signal: abortController.signal,
         onProgress,
       });
+      const resourceCpuAfter = readCgroupCpuUsageMicros();
+      const resourcePeakAfter = readMemoryPeakBytes();
+      const resourceOomAfter = readOomKillCount();
+      const engine = queueEngineForManifest(manifest);
+      const resources = {
+        cpuSeconds: resourceCpuBefore !== null && resourceCpuAfter !== null ? Math.max(0, (resourceCpuAfter - resourceCpuBefore) / 1_000_000) : null,
+        peakMemoryBytes: Math.max(resourcePeakBefore, resourcePeakAfter),
+        oomKills: Math.max(0, resourceOomAfter - resourceOomBefore),
+      };
+      recordRenderResources(engine, resources);
 
       // Upload to shared object storage before publishing success so every API
       // instance can serve the artifact after the worker's local disk is gone.
@@ -743,7 +756,7 @@ export class RenderJobQueue {
           outputFilename,
           renderResult.fileSizeBytes,
           renderResult.durationSeconds,
-          JSON.stringify(renderResult.probe),
+          JSON.stringify({ ...renderResult.probe, resources }),
           jobId,
         ]
       );
@@ -757,7 +770,7 @@ export class RenderJobQueue {
       } else {
         if (config.storage.driver === 's3') await fs.promises.unlink(outputPath).catch(() => {});
         renderDurationSeconds.observe((Date.now() - startedAt) / 1000);
-        void recordRenderAudit(jobId, job.user_id, 'succeeded', { durationSeconds: (Date.now() - startedAt) / 1000 });
+        void recordRenderAudit(jobId, job.user_id, 'succeeded', { durationSeconds: (Date.now() - startedAt) / 1000, engine, resources });
         logger.info(`Render job [${jobId}] succeeded and is ready for download.`);
 
         // Idea 3: Automatically save completed background video to user's saved_videos library
@@ -831,10 +844,19 @@ export class RenderJobQueue {
       // permanent failure for a recoverable infrastructure error.
       const failure = classifyRenderFailure(errorMessage);
       const isTransient = failure.transient;
+      const failureEngine = queueEngineForManifest(job.manifest);
+      const failureCpuAfter = readCgroupCpuUsageMicros();
+      const failureResources = {
+        cpuSeconds: resourceCpuBefore !== null && failureCpuAfter !== null ? Math.max(0, (failureCpuAfter - resourceCpuBefore) / 1_000_000) : null,
+        peakMemoryBytes: Math.max(resourcePeakBefore, readMemoryPeakBytes()),
+        oomKills: Math.max(0, readOomKillCount() - resourceOomBefore),
+      };
+      recordRenderResources(failureEngine, failureResources);
       void recordRenderAudit(jobId, job.user_id, 'failed', {
         message: errorMessage || 'unknown',
         errorCode: failure.code,
-        engine: queueEngineForManifest(job.manifest),
+        engine: failureEngine,
+        resources: failureResources,
       });
 
       if (isTransient && job.retry_count < job.max_retries) {

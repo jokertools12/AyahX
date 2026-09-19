@@ -10,7 +10,9 @@ services:
       replicas: 2
 
   worker-ffmpeg:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.worker-lite
     command: node node_modules/tsx/dist/cli.mjs server/worker.ts
     env_file: .env
     environment:
@@ -22,7 +24,9 @@ services:
       replicas: 2
 
   worker-skia:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.worker-lite
     command: node node_modules/tsx/dist/cli.mjs server/worker.ts
     env_file: .env
     environment:
@@ -34,13 +38,27 @@ services:
       replicas: 2
 
   worker-browser:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.worker-browser
     command: node node_modules/tsx/dist/cli.mjs server/worker.ts
     env_file: .env
     environment:
       RENDER_QUEUE_DRIVER: bullmq
       RENDER_WORKER_ENGINE: browser_cloud
-      BROWSER_RENDER_MAX_CONCURRENCY: 1
+      BROWSER_RENDER_MAX_CONCURRENCY: auto
+    depends_on: [redis]
+    deploy:
+      replicas: 2
+
+  render-control:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker-lite
+    command: node node_modules/tsx/dist/cli.mjs server/renderControl.ts
+    env_file: .env
+    environment:
+      RENDER_QUEUE_DRIVER: bullmq
     depends_on: [redis]
     deploy:
       replicas: 1

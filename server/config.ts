@@ -78,9 +78,10 @@ export const config: AppConfig = {
   queue: {
     driver: process.env.RENDER_QUEUE_DRIVER === 'bullmq' ? 'bullmq' : 'database',
     redisUrl: process.env.REDIS_URL || undefined,
-    workerConcurrency: resolveConcurrencySetting(
-      process.env.RENDER_WORKER_CONCURRENCY || process.env.MAX_CONCURRENT_RENDERS,
-    ),
+    // BullMQ workers use the per-engine cgroup governor in renderQueueBroker.
+    // Keep this only as a local database-driver fallback; do not read the
+    // retired global concurrency knobs in production.
+    workerConcurrency: resolveConcurrencySetting(undefined),
     workerId: process.env.RENDER_WORKER_ID || `${process.pid}-${Math.random().toString(36).slice(2, 8)}`,
   },
   storage: {

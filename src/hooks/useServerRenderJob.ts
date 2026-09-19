@@ -36,14 +36,15 @@ export function useServerRenderJob() {
     etaSeconds: 0,
   });
 
-  const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const pollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const activeJobIdRef = useRef<string | null>(null);
   const consecutiveErrorsRef = useRef<number>(0);
+  const successfulPollsRef = useRef<number>(0);
 
   const stopPolling = useCallback(() => {
-    if (pollIntervalRef.current) {
-      clearInterval(pollIntervalRef.current);
-      pollIntervalRef.current = null;
+    if (pollTimerRef.current) {
+      clearTimeout(pollTimerRef.current);
+      pollTimerRef.current = null;
     }
   }, []);
 
@@ -51,6 +52,7 @@ export function useServerRenderJob() {
     stopPolling();
     activeJobIdRef.current = null;
     consecutiveErrorsRef.current = 0;
+    successfulPollsRef.current = 0;
     try { window.localStorage.removeItem(PERSISTED_JOB_KEY); } catch { /* storage can be unavailable */ }
     setState({
       jobId: null,
@@ -76,8 +78,25 @@ export function useServerRenderJob() {
       stopPolling();
       activeJobIdRef.current = jobId;
       consecutiveErrorsRef.current = 0;
+      successfulPollsRef.current = 0;
+      let terminal = false;
 
-      pollIntervalRef.current = setInterval(async () => {
+      const scheduleNext = () => {
+        if (terminal || !activeJobIdRef.current) return;
+        const hidden = typeof document !== 'undefined' && document.hidden;
+        const failedAttempts = consecutiveErrorsRef.current;
+        const baseDelay = hidden
+          ? 15_000
+          : failedAttempts > 0
+          ? Math.min(5 * 60_000, 1_200 * 2 ** Math.min(8, failedAttempts - 1))
+          : Math.min(5_000, 1_200 + successfulPollsRef.current * 380);
+        // De-synchronize users who started at the same second without making
+        // the progress display feel sluggish.
+        const jitter = hidden ? 0 : Math.round(baseDelay * ((Math.random() - 0.5) * 0.2));
+        pollTimerRef.current = setTimeout(() => void poll(), Math.max(500, baseDelay + jitter));
+      };
+
+      const poll = async () => {
         try {
           if (!activeJobIdRef.current) {
             stopPolling();
@@ -86,10 +105,12 @@ export function useServerRenderJob() {
 
           const { job: updatedJob, queue } = await api.renderJobs.getJob(activeJobIdRef.current);
           consecutiveErrorsRef.current = 0; // reset error counter on success
+          successfulPollsRef.current = Math.min(10, successfulPollsRef.current + 1);
           const currentStatus: ServerJobStatus = updatedJob.status;
           const currentProgress = Math.min(100, Math.max(0, Number(updatedJob.progress) || 0));
 
           if (currentStatus === 'succeeded') {
+            terminal = true;
             stopPolling();
             // Automatically attempt to fetch the ready MP4 blob
             let downloadedBlob: Blob | null = null;
@@ -115,6 +136,7 @@ export function useServerRenderJob() {
             });
             try { window.localStorage.setItem(PERSISTED_JOB_KEY, updatedJob.id); } catch { /* optional persistence */ }
           } else if (currentStatus === 'failed') {
+            terminal = true;
             stopPolling();
             setState((prev) => ({
               ...prev,
@@ -129,6 +151,7 @@ export function useServerRenderJob() {
             }));
             try { window.localStorage.setItem(PERSISTED_JOB_KEY, updatedJob.id); } catch { /* optional persistence */ }
           } else if (currentStatus === 'cancelled') {
+            terminal = true;
             stopPolling();
             setState((prev) => ({
               ...prev,
@@ -162,6 +185,7 @@ export function useServerRenderJob() {
         } catch (pollErr: any) {
           console.warn('Render poll error:', pollErr);
           consecutiveErrorsRef.current++;
+          successfulPollsRef.current = 0;
           // A polling outage is not a render failure. Keep the durable job
           // alive and let the next request recover it after a short backoff.
           setState((prev) => ({
@@ -171,7 +195,10 @@ export function useServerRenderJob() {
             isRendering: true,
           }));
         }
-      }, 1200);
+        scheduleNext();
+      };
+
+      void poll();
     },
     [stopPolling]
   );
@@ -287,7 +314,7 @@ export function useServerRenderJob() {
       });
 
       try {
-        const { job } = await api.renderJobs.createJob(manifest, idempotencyKey, {
+        const { job, queue } = await api.renderJobs.createJob(manifest, idempotencyKey, {
           replaceActive: options?.replaceActive ?? false,
           backgroundAsync: options?.backgroundAsync ?? false,
         });
@@ -302,8 +329,8 @@ export function useServerRenderJob() {
           progress: Number(job.progress) || 0,
           stage: job.stage || 'جاري تخصيص وحدة إنتاج تلقائياً...',
           engine: job.engine || manifest.renderEngine || null,
-          queuePosition: 0,
-          etaSeconds: 0,
+          queuePosition: Number(queue?.position || 0),
+          etaSeconds: Number(queue?.etaSeconds || 0),
         }));
 
         startPolling(jobId);
@@ -321,6 +348,9 @@ export function useServerRenderJob() {
           isRendering: false,
           isCompleted: false,
           videoBlob: null,
+          engine: null,
+          queuePosition: 0,
+          etaSeconds: 0,
         });
         throw err;
       }

@@ -42,3 +42,13 @@ control falls back to fixed replicas without affecting rendering.
 Required production variables are `RAILWAY_ENVIRONMENT_ID`, one
 `*_RENDER_SERVICE_ID` per worker, `*_RENDER_SLOTS_PER_REPLICA`, min/max replica
 limits, `RAILWAY_AUTOSCALER_TOKEN`, and `RAILWAY_AUTOSCALER_ENABLED=true`.
+
+For staging admission/load tests, set `RENDER_SIMULATE=1` only on the staging
+workers. The child process then simulates engine delay, CPU and bounded memory,
+creates a tiny valid H.264/AAC fixture, and still exercises ffprobe, upload,
+durable completion and download. Use `npm run load:render-submissions` with
+100, 500, or 1000 staging tokens; never enable the simulator on production.
+
+Set `RENDER_ALERT_WEBHOOK_URL` only on `render-control` to receive threshold
+alerts for queue p95/oldest age, OOMs, failure rate, and MAX_REPLICAS. The
+webhook is optional and never blocks a render or changes queue state.

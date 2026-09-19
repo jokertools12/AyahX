@@ -32,6 +32,15 @@ export const renderEngineOldestWaitingSeconds = new client.Gauge({
 export const renderFailuresTotal = new client.Counter({
   name: 'quran_render_failures_total', help: 'Render failures by engine and classified code', labelNames: ['engine', 'code'], registers: [register],
 });
+export const renderOomEventsTotal = new client.Counter({
+  name: 'quran_render_oom_events_total', help: 'Observed cgroup OOM events by engine', labelNames: ['engine'], registers: [register],
+});
+export const renderJobCpuSeconds = new client.Histogram({
+  name: 'quran_render_job_cpu_seconds', help: 'Observed cgroup CPU time per completed render', labelNames: ['engine'], buckets: [0.1, 1, 5, 15, 30, 60, 180, 600], registers: [register],
+});
+export const renderJobPeakMemoryBytes = new client.Histogram({
+  name: 'quran_render_job_peak_memory_bytes', help: 'Observed cgroup peak memory per completed render', labelNames: ['engine'], buckets: [64e6, 128e6, 256e6, 512e6, 1e9, 2e9, 4e9, 8e9], registers: [register],
+});
 
 const ENGINES: RenderWorkerEngine[] = ['ffmpeg_ass', 'skia_canvas', 'browser_cloud'];
 
@@ -49,6 +58,12 @@ export async function recordRenderAudit(jobId: string, userId: string, event: st
   if (event === 'failed') {
     renderFailuresTotal.inc({ engine: normalizeEngine(String(details.engine || '')), code: String(details.errorCode || 'UNKNOWN') });
   }
+}
+
+export function recordRenderResources(engine: RenderWorkerEngine, resources: { cpuSeconds?: number | null; peakMemoryBytes?: number | null; oomKills?: number }): void {
+  if (resources.cpuSeconds != null && Number.isFinite(resources.cpuSeconds)) renderJobCpuSeconds.observe({ engine }, Math.max(0, resources.cpuSeconds));
+  if (resources.peakMemoryBytes != null && Number.isFinite(resources.peakMemoryBytes)) renderJobPeakMemoryBytes.observe({ engine }, Math.max(0, resources.peakMemoryBytes));
+  if (Number(resources.oomKills || 0) > 0) renderOomEventsTotal.inc({ engine }, Number(resources.oomKills));
 }
 
 export async function refreshRenderMetrics(): Promise<void> {

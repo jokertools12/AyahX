@@ -5,7 +5,6 @@ import path from 'path';
 import { query, transaction } from '../db';
 import { AuthenticatedRequest, requireAdmin } from '../middleware/auth';
 import { renderJobQueue } from '../services/renderJobQueue';
-import { resolveConcurrencySetting } from '../services/renderCapacity';
 import { SUBSCRIPTION_CATALOG, isCheckoutPlan } from '../../shared/subscriptionCatalog';
 
 const router = Router();
@@ -488,7 +487,21 @@ router.get('/render-stats', async (_req: AuthenticatedRequest, res: Response) =>
     const storageDir = path.resolve(process.cwd(), process.env.RENDER_STORAGE_DIR || 'uploads/renders');
     const diskBytes = getDirSizeBytes(storageDir);
     const diskUsageMb = Math.round((diskBytes / (1024 * 1024)) * 100) / 100;
-    const maxConcurrency = resolveConcurrencySetting(process.env.RENDER_MAX_CONCURRENCY || process.env.MAX_CONCURRENT_RENDERS);
+    const engineCapacity = await query<any[]>(
+      'SELECT engine, replicas, slots_per_replica, waiting_jobs, active_jobs, updated_at FROM render_engine_capacity ORDER BY engine',
+    ).catch(() => []);
+    const queueByEngine = await query<any[]>(
+      `SELECT engine,
+              SUM(status = 'queued') AS waiting,
+              SUM(status = 'running') AS active,
+              MAX(CASE WHEN status = 'queued' THEN TIMESTAMPDIFF(SECOND, created_at, NOW()) ELSE 0 END) AS oldestWaitingSeconds,
+              SUM(status = 'failed' AND updated_at >= DATE_SUB(NOW(), INTERVAL 15 MINUTE)) AS failures15m,
+              SUM(status IN ('failed', 'succeeded') AND updated_at >= DATE_SUB(NOW(), INTERVAL 15 MINUTE)) AS terminal15m
+       FROM render_jobs
+       GROUP BY engine
+       ORDER BY engine`,
+    ).catch(() => []);
+    const maxConcurrency = engineCapacity.reduce((sum, row) => sum + Number(row.replicas || 0) * Number(row.slots_per_replica || 0), 0);
 
     return res.json({
       queued: Number(counts?.queued || 0),
@@ -496,7 +509,9 @@ router.get('/render-stats', async (_req: AuthenticatedRequest, res: Response) =>
       succeededToday: Number(counts?.succeededToday || 0),
       failedToday: Number(counts?.failedToday || 0),
       maxConcurrency,
-      retentionHours: 1,
+      engineCapacity,
+      queueByEngine,
+      retentionHours: 48,
       diskUsageMb,
       storageDir,
     });

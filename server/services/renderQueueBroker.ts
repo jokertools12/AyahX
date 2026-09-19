@@ -69,7 +69,7 @@ export async function enqueueRenderJob(
 function engineMaxConcurrency(engine: RenderQueueEngine): number {
   const prefix = engine === 'ffmpeg_ass' ? 'FFMPEG' : engine === 'skia_canvas' ? 'SKIA' : 'BROWSER';
   return resolveConcurrencySetting(
-    process.env[`${prefix}_RENDER_MAX_CONCURRENCY`] || process.env.RENDER_MAX_CONCURRENCY,
+    process.env[`${prefix}_RENDER_MAX_CONCURRENCY`],
     config.queue.workerConcurrency,
   );
 }
