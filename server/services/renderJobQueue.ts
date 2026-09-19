@@ -436,7 +436,12 @@ export class RenderJobQueue {
     }).estimatedSeconds || 60;
     const prefix = engine === 'ffmpeg_ass' ? 'FFMPEG' : engine === 'skia_canvas' ? 'SKIA' : 'BROWSER';
     const p50 = Math.max(1, Number(process.env[`${prefix}_RENDER_P50_SECONDS`] || estimated));
-    const position = job.status === 'queued' ? Math.max(1, snapshot.positions.get(job.id) || 1) : 0;
+    // A job committed just after the shared snapshot is not present yet. Its
+    // next poll will have an exact position; returning the observed tail now
+    // is a truthful upper-bound rather than incorrectly claiming position 1.
+    const position = job.status === 'queued'
+      ? Math.max(1, snapshot.positions.get(job.id) || waiting + 1)
+      : 0;
     return { engine, position, waiting, active, slotsTotal, etaSeconds: position ? Math.ceil(position / slotsTotal) * p50 : 0 };
   }
 
@@ -762,7 +767,7 @@ export class RenderJobQueue {
         peakMemoryBytes: Math.max(resourcePeakBefore, resourcePeakAfter),
         oomKills: Math.max(0, resourceOomAfter - resourceOomBefore),
       };
-      recordRenderResources(engine, resources);
+      if (process.env.RENDER_CHILD_PROCESS !== '1') recordRenderResources(engine, resources);
 
       // Upload to shared object storage before publishing success so every API
       // instance can serve the artifact after the worker's local disk is gone.
@@ -886,7 +891,7 @@ export class RenderJobQueue {
         peakMemoryBytes: Math.max(resourcePeakBefore, readMemoryPeakBytes()),
         oomKills: Math.max(0, readOomKillCount() - resourceOomBefore),
       };
-      recordRenderResources(failureEngine, failureResources);
+      if (process.env.RENDER_CHILD_PROCESS !== '1') recordRenderResources(failureEngine, failureResources);
       void recordRenderAudit(jobId, job.user_id, 'failed', {
         message: errorMessage || 'unknown',
         errorCode: failure.code,
@@ -936,8 +941,18 @@ export function startDedicatedRenderWorker() {
   // Chromium/FFmpeg crashes are isolated from the queue connection.
   return startRenderWorker(async (jobId, queuedEngine) => {
     try {
-      await runRenderJobInChild(jobId, queuedEngine);
+      const resources = await runRenderJobInChild(jobId, queuedEngine);
+      recordRenderResources(queuedEngine, resources);
+      await query(
+        `UPDATE render_jobs
+         SET metadata = JSON_SET(CASE WHEN JSON_VALID(metadata) THEN metadata ELSE JSON_OBJECT() END,
+                                  '$.resources', CAST(? AS JSON))
+         WHERE id = ? AND status = 'succeeded'`,
+        [JSON.stringify(resources), jobId],
+      ).catch((error) => logger.warn(`Could not persist child resource sample [${jobId}]:`, error));
     } catch (error) {
+      const resources = (error as any)?.renderResources;
+      if (resources) recordRenderResources(queuedEngine, resources);
       await renderJobQueue.recoverChildFailure(jobId, error).catch((recoveryError) => {
         logger.error('Failed to recover crashed render child [' + jobId + ']:', recoveryError);
       });

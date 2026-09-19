@@ -3,7 +3,7 @@ import { ensureRenderJobsTable } from './db/migrations/addRenderJobsTable';
 import { logger } from './logger';
 import { renderJobQueue } from './services/renderJobQueue';
 import { renderAutoscalerIntervalMs, runRenderAutoscalerTick } from './services/renderAutoscaler';
-import { runRenderAlertTick } from './services/renderAlerts';
+import { closeRenderAlertProbe, runRenderAlertTick } from './services/renderAlerts';
 
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
@@ -61,6 +61,7 @@ async function main(): Promise<void> {
     clearInterval(autoscalerTimer);
     clearInterval(alertTimer);
     renderJobQueue.shutdown();
+    await closeRenderAlertProbe().catch(() => {});
     await releaseMysqlAdvisoryLock(leaderConnection, lockName).catch(() => {});
     await closePool().catch(() => {});
     process.exit(0);

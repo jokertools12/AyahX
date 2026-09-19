@@ -316,13 +316,16 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       ? await getTodayCloudRenderUsage(userId)
       : queued.usage;
     const serverRenderCount = usageForEngine(usage);
+    const queue = await renderJobQueue.getQueueInfo(job);
 
     return res.status(queued.existing ? 200 : 202).json({
       accepted: true,
       message: queued.existing ? 'مهمة الريندر موجودة بالفعل' : 'تم قبول مهمة الريندر وبدء تجهيزها',
       job,
-      // Queue position is filled by the first status poll. Avoiding a full
-      // queue scan here keeps admission latency bounded during bursts.
+      // getQueueInfo serves one shared snapshot per API process, so this
+      // preserves the immediate queue contract without a database scan per
+      // request during a burst.
+      queue,
       serverRenderLimit: engineLimit,
       serverRenderCount,
       serverRenderRemaining: Math.max(0, engineLimit - serverRenderCount),
@@ -462,7 +465,12 @@ router.get('/:id', requireAuth, async (req: AuthenticatedRequest, res: Response)
     const queue = job.status === 'queued' || job.status === 'running'
       ? await renderJobQueue.getQueueInfo(job)
       : undefined;
-    return res.json({ job, queue });
+    const payload = { job, queue };
+    const etag = `"${crypto.createHash('sha256').update(JSON.stringify(payload)).digest('base64url')}"`;
+    res.setHeader('ETag', etag);
+    res.setHeader('Cache-Control', 'private, no-cache');
+    if (req.headers['if-none-match'] === etag) return res.status(304).end();
+    return res.json(payload);
   } catch (err: any) {
     logger.error('Get render job error:', err);
     return res.status(500).json({ error: 'فشل استرجاع حالة مهمة الريندر' });

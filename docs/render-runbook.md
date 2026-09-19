@@ -66,5 +66,12 @@ database/object-storage variables. The cleanup is independently guarded and
 only targets the isolated staging bucket.
 
 Set `RENDER_ALERT_WEBHOOK_URL` only on `render-control` to receive threshold
-alerts for queue p95/oldest age, OOMs, failure rate, and MAX_REPLICAS. The
-webhook is optional and never blocks a render or changes queue state.
+alerts for queue p95/oldest age, OOMs, failure rate, MAX_REPLICAS, Redis memory
+over 70%, and MySQL pool usage over 80%. Set `REDIS_MEMORY_LIMIT_MB` when the
+Redis service does not expose a `maxmemory` value. The webhook is optional and
+never blocks a render or changes queue state.
+
+The load runner uses `STAGING_LOAD_FETCH_TIMEOUT_MS` (default 30 seconds) and
+prints `registered` and `admitted` phase markers. A temporary
+`STAGING_LOAD_HOLD_AFTER_ADMISSION_MS` pause can be used when testing a worker
+restart during active processing; unset both values for normal tests.

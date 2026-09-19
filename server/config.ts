@@ -65,7 +65,7 @@ export const config: AppConfig = {
     user: process.env.MYSQL_USER || 'root',
     password: process.env.MYSQL_PASSWORD || '',
     database: process.env.MYSQL_DATABASE || 'quran_reels',
-    connectionLimit: 15,
+    connectionLimit: Math.max(2, parseInt(process.env.MYSQL_POOL_SIZE || '15', 10)),
   },
   ai: {
     geminiApiKey: process.env.GEMINI_API_KEY || undefined,

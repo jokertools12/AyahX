@@ -1,9 +1,18 @@
 import { query } from '../db';
+import { pool } from '../db';
 import { logger } from '../logger';
 import type { RenderWorkerEngine } from './renderCapacity';
+import IORedis from 'ioredis';
 
 const ENGINES: RenderWorkerEngine[] = ['ffmpeg_ass', 'skia_canvas', 'browser_cloud'];
 const lastSentAt = new Map<string, number>();
+let redisProbe: IORedis | null = null;
+
+export async function closeRenderAlertProbe(): Promise<void> {
+  const probe = redisProbe;
+  redisProbe = null;
+  await probe?.quit().catch(() => probe?.disconnect());
+}
 
 function positiveInt(value: string | undefined, fallback: number): number {
   const parsed = Number.parseInt(value || '', 10);
@@ -33,9 +42,38 @@ async function sendAlert(key: string, message: string): Promise<void> {
   }
 }
 
+async function checkInfrastructurePressure(): Promise<void> {
+  const internalPool: any = (pool as any).pool || pool;
+  const openConnections = Number(internalPool?._allConnections?.length || 0);
+  const poolLimit = Number(internalPool?.config?.connectionLimit || process.env.MYSQL_POOL_SIZE || 15);
+  if (poolLimit > 0 && openConnections / poolLimit > 0.8) {
+    await sendAlert('mysql-connections>80%', `MySQL pool is using ${openConnections}/${poolLimit} connections`);
+  }
+
+  const redisUrl = process.env.REDIS_URL?.trim();
+  if (!redisUrl) return;
+  if (!redisProbe) {
+    redisProbe = new IORedis(redisUrl, { maxRetriesPerRequest: 1, enableReadyCheck: true });
+    redisProbe.on('error', (error) => logger.warn('Render alert Redis probe error:', error));
+  }
+  try {
+    const info = await redisProbe.info('memory');
+    const used = Number(info.match(/^used_memory:(\d+)/m)?.[1] || 0);
+    const configuredMax = Number(info.match(/^maxmemory:(\d+)/m)?.[1] || 0);
+    const envMax = Number(process.env.REDIS_MEMORY_LIMIT_MB || 0) * 1024 * 1024;
+    const max = configuredMax > 0 ? configuredMax : envMax;
+    if (max > 0 && used / max > 0.7) {
+      await sendAlert('redis-memory>70%', `Redis memory is ${(used / max * 100).toFixed(1)}% (${Math.round(used / 1048576)}MiB/${Math.round(max / 1048576)}MiB)`);
+    }
+  } catch (error) {
+    logger.warn('Could not inspect Redis memory for render alerts:', error);
+  }
+}
+
 /** Best-effort threshold checks. Missing webhook configuration is a no-op. */
 export async function runRenderAlertTick(): Promise<void> {
   if (!process.env.RENDER_ALERT_WEBHOOK_URL) return;
+  await checkInfrastructurePressure();
   const rows = await query<Array<{ engine: string | null; wait_seconds: number }>>(
     "SELECT COALESCE(engine, JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') AS engine, TIMESTAMPDIFF(SECOND, created_at, NOW()) AS wait_seconds FROM render_jobs WHERE status = 'queued' ORDER BY created_at ASC LIMIT 10000",
   ).catch(() => []);

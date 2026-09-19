@@ -129,6 +129,7 @@ let cachedMeUser: User | null = null;
 let getMePromise: Promise<{ user: User | null }> | null = null;
 let cachedFavorites: { surahs: number[]; reciters: string[]; performers: string[] } | null = null;
 let getFavoritesPromise: Promise<{ surahs: number[]; reciters: string[]; performers: string[] }> | null = null;
+const etagResponseCache = new Map<string, { etag: string; data: unknown }>();
 
 export function invalidateFavoritesCache() {
   cachedFavorites = null;
@@ -151,7 +152,7 @@ export function notifyAuthListeners(user: User | null) {
   authListeners.forEach((l) => l(user));
 }
 
-async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+async function request<T>(endpoint: string, options: RequestInit = {}, useEtagCache = false): Promise<T> {
   const token = getAuthToken();
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -161,6 +162,10 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
+  const etagCache = useEtagCache && (!options.method || options.method.toUpperCase() === 'GET')
+    ? etagResponseCache.get(endpoint)
+    : undefined;
+  if (etagCache) headers['If-None-Match'] = etagCache.etag;
 
   // Abort controller with 30s timeout to prevent indefinitely hung network requests
   const controller = new AbortController();
@@ -173,6 +178,8 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
       signal: options.signal || controller.signal,
     });
     clearTimeout(timeoutId);
+
+    if (response.status === 304 && etagCache) return etagCache.data as T;
 
     const contentType = response.headers.get('content-type');
     let data: any = null;
@@ -201,6 +208,9 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
       throw new Error(errorMsg);
     }
 
+    if (useEtagCache && response.headers.get('etag')) {
+      etagResponseCache.set(endpoint, { etag: response.headers.get('etag')!, data });
+    }
     return data as T;
   } catch (err: any) {
     clearTimeout(timeoutId);
@@ -813,7 +823,7 @@ export const api = {
     },
 
     async getJob(id: string) {
-      return request<{ job: any; queue?: any }>(`/api/render-jobs/${id}`);
+      return request<{ job: any; queue?: any }>(`/api/render-jobs/${id}`, {}, true);
     },
 
     async cancelJob(id: string) {

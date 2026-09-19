@@ -36,10 +36,10 @@ export const renderOomEventsTotal = new client.Counter({
   name: 'quran_render_oom_events_total', help: 'Observed cgroup OOM events by engine', labelNames: ['engine'], registers: [register],
 });
 export const renderJobCpuSeconds = new client.Histogram({
-  name: 'quran_render_job_cpu_seconds', help: 'Observed cgroup CPU time per completed render', labelNames: ['engine'], buckets: [0.1, 1, 5, 15, 30, 60, 180, 600], registers: [register],
+  name: 'quran_render_job_cpu_seconds', help: 'Observed isolated render-child CPU time per completed render', labelNames: ['engine'], buckets: [0.1, 1, 5, 15, 30, 60, 180, 600], registers: [register],
 });
 export const renderJobPeakMemoryBytes = new client.Histogram({
-  name: 'quran_render_job_peak_memory_bytes', help: 'Observed cgroup peak memory per completed render', labelNames: ['engine'], buckets: [64e6, 128e6, 256e6, 512e6, 1e9, 2e9, 4e9, 8e9], registers: [register],
+  name: 'quran_render_job_peak_memory_bytes', help: 'Observed isolated render-child resident peak per completed render', labelNames: ['engine'], buckets: [64e6, 128e6, 256e6, 512e6, 1e9, 2e9, 4e9, 8e9], registers: [register],
 });
 
 const ENGINES: RenderWorkerEngine[] = ['ffmpeg_ass', 'skia_canvas', 'browser_cloud'];
