@@ -166,6 +166,70 @@ function positiveEnvInt(name: string, fallback: number, min: number, max: number
   return Math.max(min, Math.min(max, parsed));
 }
 
+const assetCacheRoot = path.join(os.tmpdir(), 'ayahx-render-assets-v1');
+
+function assetCacheLimitBytes(): number {
+  const megabytes = positiveEnvInt('RENDER_ASSET_CACHE_MB', 2048, 0, 16_384);
+  return megabytes * 1024 * 1024;
+}
+
+function assetCachePath(assetUrl: string, extension: string): string {
+  const hash = crypto.createHash('sha256').update(assetUrl).digest('hex');
+  return path.join(assetCacheRoot, `${hash}${extension}`);
+}
+
+async function pruneAssetCache(excludePath?: string): Promise<void> {
+  const limit = assetCacheLimitBytes();
+  if (!limit) return;
+  try {
+    await fs.promises.mkdir(assetCacheRoot, { recursive: true });
+    const entries = await fs.promises.readdir(assetCacheRoot);
+    const files = await Promise.all(entries.map(async (name) => {
+      const filePath = path.join(assetCacheRoot, name);
+      try {
+        const stat = await fs.promises.stat(filePath);
+        return stat.isFile() ? { filePath, size: stat.size, mtimeMs: stat.mtimeMs } : null;
+      } catch { return null; }
+    }));
+    const candidates = files.filter((file): file is { filePath: string; size: number; mtimeMs: number } => Boolean(file));
+    let total = candidates.reduce((sum, file) => sum + file.size, 0);
+    for (const file of candidates.sort((a, b) => a.mtimeMs - b.mtimeMs)) {
+      if (total <= limit || file.filePath === excludePath) continue;
+      await fs.promises.unlink(file.filePath).catch(() => {});
+      total -= file.size;
+    }
+  } catch (error) {
+    logger.debug('Asset cache maintenance skipped:', error);
+  }
+}
+
+async function cacheRemoteAsset(assetUrl: string, extension: string, timeoutMs = 10_000): Promise<string> {
+  const limit = assetCacheLimitBytes();
+  if (!limit) throw new Error('Asset cache disabled');
+  await fs.promises.mkdir(assetCacheRoot, { recursive: true });
+  const target = assetCachePath(assetUrl, extension);
+  try {
+    const stat = await fs.promises.stat(target);
+    if (stat.isFile() && stat.size > 0) {
+      const now = new Date();
+      await fs.promises.utimes(target, now, now).catch(() => {});
+      return target;
+    }
+  } catch { /* cache miss */ }
+
+  const response = await fetchWithTimeout(assetUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } }, timeoutMs);
+  if (!response.ok) throw new Error(`Asset download failed: HTTP ${response.status}`);
+  const temporary = `${target}.${process.pid}.${crypto.randomUUID()}.tmp`;
+  await fs.promises.writeFile(temporary, Buffer.from(await response.arrayBuffer()));
+  try {
+    await fs.promises.rename(temporary, target);
+  } catch {
+    await fs.promises.unlink(temporary).catch(() => {});
+  }
+  await pruneAssetCache(target);
+  return target;
+}
+
 async function fetchWithTimeout(input: string, init: RequestInit = {}, timeoutMs = 10_000): Promise<Response> {
   // Promise.race keeps this compatible with Vitest/jsdom and Node's undici,
   // whose AbortSignal implementations are not interchangeable.
@@ -266,11 +330,17 @@ export async function prepareBackgroundAsset(manifest: RenderManifest, scratchDi
       } else if (bg.url.startsWith('http://') || bg.url.startsWith('https://')) {
         localVideoPath = path.join(scratchDir, 'bg_video_input.mp4');
         logger.info(`Downloading video background preset for local render: ${bg.url}`);
-        const vRes = await fetchWithTimeout(bg.url, { headers: { 'User-Agent': 'Mozilla/5.0' } }, 10_000);
-        if (vRes.ok) {
-          const vBuf = await vRes.arrayBuffer();
-          await fs.promises.writeFile(localVideoPath, Buffer.from(vBuf));
-          logger.info(`Video background downloaded (${(vBuf.byteLength / (1024 * 1024)).toFixed(2)} MB)`);
+        try {
+          const cachedPath = await cacheRemoteAsset(bg.url, '.mp4');
+          await fs.promises.copyFile(cachedPath, localVideoPath);
+          logger.info('Video background served from the local asset cache.');
+        } catch {
+          const vRes = await fetchWithTimeout(bg.url, { headers: { 'User-Agent': 'Mozilla/5.0' } }, 10_000);
+          if (vRes.ok) {
+            const vBuf = await vRes.arrayBuffer();
+            await fs.promises.writeFile(localVideoPath, Buffer.from(vBuf));
+            logger.info(`Video background downloaded (${(vBuf.byteLength / (1024 * 1024)).toFixed(2)} MB)`);
+          }
         }
       }
 
@@ -330,14 +400,23 @@ export async function prepareBackgroundAsset(manifest: RenderManifest, scratchDi
     try {
       if (targetUrl.startsWith('http://') || targetUrl.startsWith('https://')) {
         logger.info(`Fetching background asset for local render: ${targetUrl}`);
-        const res = await fetchWithTimeout(targetUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-        if (res.ok) {
-          const buf = await res.arrayBuffer();
-          await fs.promises.writeFile(localBgPath, Buffer.from(buf));
+        try {
+          const cachedPath = await cacheRemoteAsset(targetUrl, '.img');
+          await fs.promises.copyFile(cachedPath, localBgPath);
           const localFileUrl = toFileUri(localBgPath);
           bg.thumbnail = localFileUrl;
           bg.url = localFileUrl;
-          logger.info(`Preloaded local background image (${(buf.byteLength / 1024).toFixed(1)} KB) to: ${localBgPath}`);
+          logger.info(`Preloaded local background image from asset cache to: ${localBgPath}`);
+        } catch {
+          const res = await fetchWithTimeout(targetUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+          if (res.ok) {
+            const buf = await res.arrayBuffer();
+            await fs.promises.writeFile(localBgPath, Buffer.from(buf));
+            const localFileUrl = toFileUri(localBgPath);
+            bg.thumbnail = localFileUrl;
+            bg.url = localFileUrl;
+            logger.info(`Preloaded local background image (${(buf.byteLength / 1024).toFixed(1)} KB) to: ${localBgPath}`);
+          }
         }
       } else if (targetUrl.startsWith('data:image/')) {
         const base64Data = targetUrl.split(';base64,').pop();
@@ -410,12 +489,17 @@ export async function prepareAudioTrack(manifest: RenderManifest, scratchDir: st
       const partPath = path.join(scratchDir, `ayah_part_${i}.mp3`);
 
       if (url.startsWith('http://') || url.startsWith('https://')) {
-        const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error(`Failed to download ayah part [${i + 1}] from ${url}: HTTP ${res.status}`);
+        try {
+          const cachedPath = await cacheRemoteAsset(url, '.mp3');
+          await fs.promises.copyFile(cachedPath, partPath);
+        } catch {
+          const res = await fetch(url);
+          if (!res.ok) {
+            throw new Error(`Failed to download ayah part [${i + 1}] from ${url}: HTTP ${res.status}`);
+          }
+          const arrayBuf = await res.arrayBuffer();
+          await fs.promises.writeFile(partPath, Buffer.from(arrayBuf));
         }
-        const arrayBuf = await res.arrayBuffer();
-        await fs.promises.writeFile(partPath, Buffer.from(arrayBuf));
       } else if (fs.existsSync(url)) {
         await fs.promises.copyFile(url, partPath);
       } else {
@@ -479,12 +563,17 @@ export async function prepareAudioTrack(manifest: RenderManifest, scratchDir: st
 
   if (targetUrl.startsWith('http://') || targetUrl.startsWith('https://')) {
     logger.info(`Fetching recitation audio track from: ${targetUrl}`);
-    const res = await fetch(targetUrl);
-    if (!res.ok) {
-      throw new Error(`Failed to download recitation audio: HTTP ${res.status} ${res.statusText}`);
+    try {
+      const cachedPath = await cacheRemoteAsset(targetUrl, '.mp3');
+      await fs.promises.copyFile(cachedPath, rawAudioPath);
+    } catch {
+      const res = await fetch(targetUrl);
+      if (!res.ok) {
+        throw new Error(`Failed to download recitation audio: HTTP ${res.status} ${res.statusText}`);
+      }
+      const arrayBuf = await res.arrayBuffer();
+      await fs.promises.writeFile(rawAudioPath, Buffer.from(arrayBuf));
     }
-    const arrayBuf = await res.arrayBuffer();
-    await fs.promises.writeFile(rawAudioPath, Buffer.from(arrayBuf));
   } else if (fs.existsSync(targetUrl)) {
     await fs.promises.copyFile(targetUrl, rawAudioPath);
   } else {

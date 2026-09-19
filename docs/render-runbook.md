@@ -14,6 +14,11 @@ Read `error_code` first. `USER_INPUT` and `ASSET` need a corrected manifest;
 `TIMEOUT`, `ENGINE`, `STORAGE`, and `OOM_SUSPECTED` are eligible for bounded
 automatic retry. A failed MP4 is never published as `succeeded`.
 
+Workers keep a bounded local LRU cache for repeated remote audio and
+background assets (`RENDER_ASSET_CACHE_MB`). It is disposable performance
+state only: a cache miss downloads the asset again, and losing the cache never
+loses a durable render job.
+
 For `OOM_SUSPECTED`, keep the worker online: the governor reduces concurrency
 without taking down unrelated engine pools. Inspect cgroup memory and
 `quran_render_jobs_total` before changing profile values.
