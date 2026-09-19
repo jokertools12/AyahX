@@ -48,6 +48,10 @@ workers. The child process then simulates engine delay, CPU and bounded memory,
 creates a tiny valid H.264/AAC fixture, and still exercises ffprobe, upload,
 durable completion and download. Use `npm run load:render-submissions` with
 100, 500, or 1000 staging tokens; never enable the simulator on production.
+For a disposable staging account pool, `AUTH_RATE_LIMIT_MAX` may be raised only
+in that staging API service. Production keeps the default of 20 attempts per
+15 minutes and derives limiter identity from Express's trusted Railway proxy,
+never directly from a client-supplied `X-Forwarded-For` value.
 
 Set `RENDER_ALERT_WEBHOOK_URL` only on `render-control` to receive threshold
 alerts for queue p95/oldest age, OOMs, failure rate, and MAX_REPLICAS. The

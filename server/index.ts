@@ -33,6 +33,12 @@ import { prometheusMetrics } from './services/renderObservability';
 const app = express();
 let isShuttingDown = false;
 
+// Railway terminates TLS before the app. Trust exactly that proxy hop so
+// req.ip is the real client address without trusting client-supplied headers
+// on direct connections. Development remains unproxied by default.
+const configuredProxyHops = Number.parseInt(process.env.TRUST_PROXY_HOPS || '', 10);
+app.set('trust proxy', config.isProd ? (Number.isFinite(configuredProxyHops) && configuredProxyHops >= 1 ? configuredProxyHops : 1) : false);
+
 // 1. Disable X-Powered-By to prevent framework information disclosure
 app.disable('x-powered-by');
 

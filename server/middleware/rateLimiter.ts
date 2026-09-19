@@ -2,6 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 import IORedis from 'ioredis';
 
 let redis: IORedis | null = null;
+
+function positiveIntegerEnv(name: string, fallback: number, maximum = 100_000): number {
+  const value = Number.parseInt(process.env[name] || '', 10);
+  return Number.isFinite(value) && value > 0 && value <= maximum ? value : fallback;
+}
+
 function sharedLimiterRedis(): IORedis | null {
   if (!process.env.REDIS_URL || process.env.NODE_ENV !== 'production') return null;
   if (!redis) redis = new IORedis(process.env.REDIS_URL, { maxRetriesPerRequest: 1 });
@@ -43,10 +49,10 @@ export function createRateLimiter(options: RateLimitOptions) {
   return async (req: Request, res: Response, next: NextFunction) => {
     // Extract client identifier: prioritize authenticated user ID, fallback to client IP
     const user = (req as Request & { user?: { id?: string } }).user;
-    const forwarded = req.headers['x-forwarded-for'];
-    const ip = typeof forwarded === 'string'
-      ? forwarded.split(',')[0].trim()
-      : req.socket.remoteAddress || 'unknown-client';
+    // `req.ip` is computed by Express using the application's explicit
+    // `trust proxy` policy. Reading X-Forwarded-For here directly allowed a
+    // caller to invent a new limiter identity for every request.
+    const ip = req.ip || req.socket.remoteAddress || 'unknown-client';
     const clientKey = user?.id ? `user:${user.id}` : ip;
 
     // In local development, provide generous allowance for localhost testing
@@ -118,7 +124,7 @@ export function createRateLimiter(options: RateLimitOptions) {
 // Pre-configured rate limiters
 export const authRateLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // 20 attempts per 15 minutes
+  max: positiveIntegerEnv('AUTH_RATE_LIMIT_MAX', 20), // 20 attempts per 15 minutes
   message: 'تم تجاوز عدد محاولات تسجيل الدخول المسموح بها، يرجى الانتظار 15 دقيقة.',
 });
 

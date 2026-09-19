@@ -46,6 +46,7 @@ describe('Performance, Scalability & Caching Rules (Session 5 Audit)', () => {
       for (let i = 0; i < 12000; i++) {
         const req: any = {
           headers: { 'x-forwarded-for': `192.168.${Math.floor(i / 256)}.${i % 256}` },
+          ip: `192.168.${Math.floor(i / 256)}.${i % 256}`,
           socket: {},
         };
         limiter(req, mockRes() as any, () => {});
@@ -55,10 +56,30 @@ describe('Performance, Scalability & Caching Rules (Session 5 Audit)', () => {
       let nextCalled = false;
       const testReq: any = {
         headers: { 'x-forwarded-for': '10.0.0.1' },
+        ip: '10.0.0.1',
         socket: {},
       };
       limiter(testReq, mockRes() as any, () => { nextCalled = true; });
       expect(nextCalled).toBe(true);
+    });
+
+    it('uses Express-provided request IP instead of an arbitrary forwarding header', () => {
+      const limiter = createRateLimiter({ windowMs: 60 * 1000, max: 1 });
+      const response = () => ({ setHeader: () => {}, status: () => ({ json: () => {} }) }) as any;
+      const trustedRequest: any = {
+        ip: '198.51.100.41',
+        headers: { 'x-forwarded-for': '198.51.100.41' },
+        socket: { remoteAddress: '10.0.0.5' },
+      };
+      let firstAllowed = false;
+      limiter(trustedRequest, response(), () => { firstAllowed = true; });
+      expect(firstAllowed).toBe(true);
+
+      // An attacker cannot reset the bucket merely by changing this header;
+      // Express has already resolved the client address into req.ip.
+      let spoofedAllowed = false;
+      limiter({ ...trustedRequest, headers: { 'x-forwarded-for': '203.0.113.200' } }, response(), () => { spoofedAllowed = true; });
+      expect(spoofedAllowed).toBe(false);
     });
   });
 
