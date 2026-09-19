@@ -55,6 +55,11 @@ async function jsonResponse(response: Response): Promise<any> {
   try { return text ? JSON.parse(text) : {}; } catch { return { raw: text.slice(0, 500) }; }
 }
 
+async function fetchWithTimeout(input: string | URL, init: RequestInit, timeoutMs: number): Promise<Response> {
+  const signal = AbortSignal.timeout(timeoutMs);
+  return fetch(input, { ...init, signal });
+}
+
 function loadManifest(engine: Engine, revision: string): Record<string, unknown> {
   return {
     schemaVersion: '1.0.0',
@@ -131,6 +136,7 @@ async function main(): Promise<void> {
   const submissionConcurrency = envPositiveInteger('STAGING_LOAD_SUBMISSION_CONCURRENCY', count, 1_000);
   const pollingConcurrency = envPositiveInteger('STAGING_LOAD_POLL_CONCURRENCY', 80, 300);
   const deadlineSeconds = envPositiveInteger('STAGING_LOAD_DEADLINE_SECONDS', 300, 1_800);
+  const fetchTimeoutMs = envPositiveInteger('STAGING_LOAD_FETCH_TIMEOUT_MS', 30_000, 120_000);
   const selectedEngines = (process.env.STAGING_LOAD_ENGINES || ENGINES.join(','))
     .split(',').map((value) => value.trim()).filter((value): value is Engine => (ENGINES as string[]).includes(value));
   if (!selectedEngines.length) throw new Error('STAGING_LOAD_ENGINES must include at least one supported engine');
@@ -141,20 +147,25 @@ async function main(): Promise<void> {
   const registrationStarted = performance.now();
   await runPool(Array.from({ length: count }), registrationConcurrency, async (_value, index) => {
     const email = `render-load-${runId}-${index}@staging.ayahx.invalid`;
-    const response = await fetch(`${baseUrl}/api/auth/register`, {
-      method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ email, password: `Load-${runId}-${index}-A9!`, displayName: `Load ${index}` }),
-    });
-    const body = await jsonResponse(response);
-    if (response.status !== 201 || !body?.token || !body?.user?.id) {
-      registrationErrors.push({ status: response.status, error: body?.error || body?.raw || 'invalid registration response' });
-      return;
+    try {
+      const response = await fetchWithTimeout(`${baseUrl}/api/auth/register`, {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email, password: `Load-${runId}-${index}-A9!`, displayName: `Load ${index}` }),
+      }, fetchTimeoutMs);
+      const body = await jsonResponse(response);
+      if (response.status !== 201 || !body?.token || !body?.user?.id) {
+        registrationErrors.push({ status: response.status, error: body?.error || body?.raw || 'invalid registration response' });
+        return;
+      }
+      accounts.push({ id: body.user.id, token: body.token });
+    } catch (error) {
+      registrationErrors.push({ status: 0, error: error instanceof Error ? error.message : String(error) });
     }
-    accounts.push({ id: body.user.id, token: body.token });
   });
   if (registrationErrors.length || accounts.length !== count) {
     throw new Error(`Account pool creation failed: created=${accounts.length}/${count}, firstError=${JSON.stringify(registrationErrors[0] || null)}`);
   }
+  console.log(JSON.stringify({ phase: 'registered', runId, count: accounts.length }));
   await upgradeStagingAccounts(accounts);
 
   const jobs: SubmittedJob[] = [];
@@ -165,22 +176,32 @@ async function main(): Promise<void> {
   await runPool(accounts, submissionConcurrency, async (account, index) => {
     const engine = selectedEngines[index % selectedEngines.length];
     const started = performance.now();
-    const response = await fetch(`${baseUrl}/api/render-jobs`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', authorization: `Bearer ${account.token}` },
-      body: JSON.stringify({ manifest: loadManifest(engine, `${runId}-${index}`), renderEngine: engine, idempotencyKey: `staging-load-${runId}-${index}` }),
-    });
-    admissions.push(performance.now() - started);
-    const body = await jsonResponse(response);
-    if (response.status !== 202 || !body?.job?.id) {
-      submissionErrors.push({ engine, status: response.status, error: body?.error || body?.raw || 'invalid render response' });
-      return;
+    try {
+      const response = await fetchWithTimeout(`${baseUrl}/api/render-jobs`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', authorization: `Bearer ${account.token}` },
+        body: JSON.stringify({ manifest: loadManifest(engine, `${runId}-${index}`), renderEngine: engine, idempotencyKey: `staging-load-${runId}-${index}` }),
+      }, fetchTimeoutMs);
+      admissions.push(performance.now() - started);
+      const body = await jsonResponse(response);
+      if (response.status !== 202 || !body?.job?.id) {
+        submissionErrors.push({ engine, status: response.status, error: body?.error || body?.raw || 'invalid render response' });
+        return;
+      }
+      perEngineAdmissions[engine]++;
+      jobs.push({ ...account, engine, id: body.job.id });
+    } catch (error) {
+      admissions.push(performance.now() - started);
+      submissionErrors.push({ engine, status: 0, error: error instanceof Error ? error.message : String(error) });
     }
-    perEngineAdmissions[engine]++;
-    jobs.push({ ...account, engine, id: body.job.id });
   });
   if (submissionErrors.length || jobs.length !== count) {
     throw new Error(`Render admission failed: accepted=${jobs.length}/${count}, firstError=${JSON.stringify(submissionErrors[0] || null)}`);
+  }
+  console.log(JSON.stringify({ phase: 'admitted', runId, count: jobs.length }));
+  const holdAfterAdmissionMs = Number.parseInt(process.env.STAGING_LOAD_HOLD_AFTER_ADMISSION_MS || '0', 10);
+  if (Number.isFinite(holdAfterAdmissionMs) && holdAfterAdmissionMs > 0) {
+    await new Promise((resolve) => setTimeout(resolve, Math.min(holdAfterAdmissionMs, 300_000)));
   }
 
   const terminal = new Map<string, { status: string; downloadUrl?: string }>();
@@ -188,10 +209,15 @@ async function main(): Promise<void> {
   while (terminal.size < jobs.length && Date.now() < deadline) {
     const pending = jobs.filter((job) => !terminal.has(job.id));
     await runPool(pending, pollingConcurrency, async (job) => {
-      const response = await fetch(`${baseUrl}/api/render-jobs/${job.id}`, { headers: { authorization: `Bearer ${job.token}` } });
-      const body = await jsonResponse(response);
-      const status = body?.job?.status;
-      if (response.ok && ['succeeded', 'failed', 'cancelled'].includes(status)) terminal.set(job.id, { status, downloadUrl: body?.job?.downloadUrl });
+      try {
+        const response = await fetchWithTimeout(`${baseUrl}/api/render-jobs/${job.id}`, { headers: { authorization: `Bearer ${job.token}` } }, fetchTimeoutMs);
+        const body = await jsonResponse(response);
+        const status = body?.job?.status;
+        if (response.ok && ['succeeded', 'failed', 'cancelled'].includes(status)) terminal.set(job.id, { status, downloadUrl: body?.job?.downloadUrl });
+      } catch {
+        // A temporary poll timeout must not turn a durable render into a
+        // client-side failure. The next pass will retry the same job ID.
+      }
     });
     if (terminal.size < jobs.length) await new Promise((resolve) => setTimeout(resolve, 1_000));
   }
@@ -215,7 +241,7 @@ async function main(): Promise<void> {
     for (const engine of selectedEngines) {
       const sample = jobs.find((job) => job.engine === engine && terminal.get(job.id)?.status === 'succeeded');
       if (!sample) throw new Error(`${engine} has no successful job to download and inspect`);
-      const download = await fetch(`${baseUrl}/api/render-jobs/${sample.id}/download`, { headers: { authorization: `Bearer ${sample.token}` } });
+      const download = await fetchWithTimeout(`${baseUrl}/api/render-jobs/${sample.id}/download`, { headers: { authorization: `Bearer ${sample.token}` } }, fetchTimeoutMs);
       if (!download.ok) throw new Error(`${engine} artifact download returned HTTP ${download.status}`);
       const filePath = path.join(tempDir, `${engine}.mp4`);
       fs.writeFileSync(filePath, Buffer.from(await download.arrayBuffer()));

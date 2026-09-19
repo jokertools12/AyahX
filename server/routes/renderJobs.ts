@@ -9,11 +9,52 @@ import { logger } from '../logger';
 import { validateRenderManifest } from '../models/renderManifest';
 import { validateManifestAssets } from '../services/assetCatalogResolver';
 import { getPlanEntitlements, validateRenderEntitlements } from '../../shared/planEntitlements';
-import { getActivePlanForUser, getTodayCloudRenderUsage, syncExpiredSubscriptions } from '../services/subscriptionService';
+import { getActivePlanForUser, getTodayCloudRenderUsage } from '../services/subscriptionService';
 import { isObjectStoragePath, streamStoredRender } from '../services/objectStorage';
 import { recordRenderAudit } from '../services/renderObservability';
 
 const router = Router();
+
+type QueueBacklogSnapshot = {
+  at: number;
+  counts: Record<'ffmpeg_ass' | 'skia_canvas' | 'browser_cloud', number>;
+};
+
+let queueBacklogSnapshot: QueueBacklogSnapshot | null = null;
+let queueBacklogRefresh: Promise<QueueBacklogSnapshot> | null = null;
+
+/**
+ * Admission protection must not turn into one full-table query per request.
+ * A one-second, shared snapshot is deliberately a soft guard: the durable
+ * job transaction remains the source of truth and can safely absorb a burst.
+ */
+async function getQueueBacklogSnapshot(): Promise<QueueBacklogSnapshot> {
+  if (queueBacklogSnapshot && Date.now() - queueBacklogSnapshot.at < 1_000) return queueBacklogSnapshot;
+  if (queueBacklogRefresh) return queueBacklogRefresh;
+  queueBacklogRefresh = (async () => {
+    const rows = await query<Array<{ engine: string | null; count: number | string }>>(
+      `SELECT COALESCE(engine, JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') AS engine,
+              COUNT(*) AS count
+       FROM render_jobs
+       WHERE status = 'queued'
+       GROUP BY COALESCE(engine, JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass')`,
+    );
+    const counts: QueueBacklogSnapshot['counts'] = { ffmpeg_ass: 0, skia_canvas: 0, browser_cloud: 0 };
+    for (const row of rows) {
+      const engine = row.engine === 'skia_canvas'
+        ? 'skia_canvas'
+        : row.engine === 'browser' || row.engine === 'browser_cloud'
+        ? 'browser_cloud'
+        : 'ffmpeg_ass';
+      counts[engine] += Number(row.count || 0);
+    }
+    queueBacklogSnapshot = { at: Date.now(), counts };
+    return queueBacklogSnapshot;
+  })().finally(() => {
+    queueBacklogRefresh = null;
+  });
+  return queueBacklogRefresh;
+}
 
 // 1. Submit a New Render Job with Strict Quota & Active-Job Guards
 router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
@@ -48,7 +89,9 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       return res.status(400).json({ error: `فشل التحقق الأمني من وسائط الريندر: ${assetValidation.reason}` });
     }
 
-    await syncExpiredSubscriptions(userId);
+    // getActivePlanForUser already excludes expired subscriptions. Avoid a
+    // write query on every admission request; the subscription maintenance
+    // worker remains responsible for transitioning stale rows.
     const plan = await getActivePlanForUser(userId);
     const entitlements = getPlanEntitlements(plan);
     const entitlementValidation = validateRenderEntitlements(plan, manifestValidation.manifest);
@@ -88,36 +131,9 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
         : usage.ffmpegAss
     );
 
-    // A retry of the same request must be a true no-op. In particular, it
-    // must not cancel a currently running job when the caller sent
-    // replaceActive along with an idempotency key.
-    if (idempotencyKey) {
-      const existingRows = await query<Array<{ id: string }>>(
-        'SELECT id FROM render_jobs WHERE idempotency_key = ? AND user_id = ? LIMIT 1',
-        [idempotencyKey, userId],
-      );
-      if (existingRows.length > 0) {
-        const job = await renderJobQueue.getJobById(existingRows[0].id, userId);
-        if (job) {
-          const usage = await getTodayCloudRenderUsage(userId);
-          const serverRenderCount = usageForEngine(usage);
-          return res.status(200).json({
-            message: 'مهمة الريندر موجودة بالفعل',
-            job,
-            serverRenderLimit: engineLimit,
-            serverRenderCount,
-            serverRenderRemaining: Math.max(0, engineLimit - serverRenderCount),
-          });
-        }
-      }
-    }
-
     const maxBacklog = Math.max(1, Number(process.env.RENDER_MAX_BACKLOG || 2000));
-    const backlogRows = await query<Array<{ count: number }>>(
-      "SELECT COUNT(*) AS count FROM render_jobs WHERE status = 'queued' AND COALESCE(engine, JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = ?",
-      [queueEngine],
-    );
-    if (Number(backlogRows[0]?.count || 0) >= maxBacklog) {
+    const backlog = await getQueueBacklogSnapshot();
+    if (backlog.counts[queueEngine] >= maxBacklog) {
       res.setHeader('Retry-After', '30');
       return res.status(429).json({
         error: 'طابور المحرك المختار ممتلئ مؤقتًا. حاول بعد قليل أو اختر محركًا آخر.',
@@ -127,10 +143,15 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
     }
 
     // 1. Guard against queue flooding or handle replaceActive
-    const activeJobs = await query<any[]>(
-      "SELECT id, status, created_at, started_at, updated_at FROM render_jobs WHERE user_id = ? AND status IN ('queued', 'running')",
-      [userId]
-    );
+    // The transaction below performs the race-safe active-job check. The
+    // preflight read is only needed for explicit replaceActive semantics;
+    // normal admissions avoid a redundant per-user query under burst load.
+    const activeJobs = req.body.replaceActive
+      ? await query<any[]>(
+        "SELECT id, status, created_at, started_at, updated_at FROM render_jobs WHERE user_id = ? AND status IN ('queued', 'running')",
+        [userId],
+      )
+      : [];
 
     if (activeJobs.length > 0) {
       if (req.body.replaceActive) {
@@ -171,7 +192,7 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
          ON DUPLICATE KEY UPDATE id = id`,
         [userId],
       );
-      await conn.query(
+      const [dailyRows] = await conn.query<any[]>(
         'SELECT id, count FROM daily_cloud_render_usage WHERE user_id = ? AND date = CURDATE() FOR UPDATE',
         [userId],
       );
@@ -190,19 +211,35 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       }
 
       const [activeRows] = await conn.query<any[]>(
-        "SELECT id FROM render_jobs WHERE user_id = ? AND status IN ('queued', 'running') FOR UPDATE",
+        "SELECT id, created_at, started_at, updated_at FROM render_jobs WHERE user_id = ? AND status IN ('queued', 'running') FOR UPDATE",
         [userId],
       );
       if (activeRows.length > 0) {
-        const activeError: any = new Error('ACTIVE_RENDER_EXISTS');
-        activeError.activeJobId = activeRows[0].id;
-        throw activeError;
+        const staleActiveIds = activeRows
+          .filter((activeJob) => {
+            const leaseTime = activeJob.updated_at || activeJob.started_at || activeJob.created_at;
+            return Date.now() - new Date(leaseTime).getTime() > 12 * 60 * 1000;
+          })
+          .map((activeJob) => activeJob.id);
+        if (staleActiveIds.length === activeRows.length) {
+          // Preserve the former stale-job escape hatch, but execute it under
+          // the same lock as the admission check so a concurrent tab cannot
+          // overwrite or double-charge the replacement request.
+          await conn.query(
+            `UPDATE render_jobs
+             SET status = 'cancelled', active_user_id = NULL, enqueue_state = 'cancelled',
+                 stage = 'تم إلغاء مهمة خاملة تلقائياً', completed_at = NOW()
+             WHERE id IN (${staleActiveIds.map(() => '?').join(',')})
+               AND status IN ('queued', 'running')`,
+            staleActiveIds,
+          );
+        } else {
+          const activeError: any = new Error('ACTIVE_RENDER_EXISTS');
+          activeError.activeJobId = activeRows[0].id;
+          throw activeError;
+        }
       }
 
-      const [usageRows] = await conn.query<any[]>(
-        'SELECT count FROM daily_cloud_render_usage WHERE user_id = ? AND date = CURDATE() FOR UPDATE',
-        [userId],
-      );
       const [engineUsageRows] = await conn.query<any[]>(
         `SELECT
            SUM(CASE WHEN COALESCE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') = 'ffmpeg_ass' THEN 1 ELSE 0 END) AS ffmpeg_ass,
@@ -213,7 +250,7 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
          WHERE user_id = ? AND created_at >= CURDATE()` ,
         [userId],
       );
-      const serverRenderCount = Number(usageRows[0]?.count || 0);
+      const serverRenderCount = Number(dailyRows[0]?.count || 0);
       const engineUsage = engineUsageRows[0] || {};
       const selectedEngineCount = selectedEngine === 'skia_canvas'
         ? Number(engineUsage.skia_canvas || 0)
@@ -251,7 +288,18 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
         [jobId, userId, idempotencyKey || null, queueEngine, userId, JSON.stringify(manifestValidation.manifest)],
       );
 
-      return { jobId, existing: false, serverRenderCount: serverRenderCount + 1 };
+      return {
+        jobId,
+        existing: false,
+        serverRenderCount: serverRenderCount + 1,
+        usage: {
+          total: serverRenderCount + 1,
+          ffmpegAss: Number(engineUsage.ffmpeg_ass || 0) + (selectedEngine === 'ffmpeg_ass' ? 1 : 0),
+          skiaCanvas: Number(engineUsage.skia_canvas || 0) + (selectedEngine === 'skia_canvas' ? 1 : 0),
+          browserCloud: Number(engineUsage.browser_cloud || 0) + (selectedEngine === 'browser_cloud' ? 1 : 0),
+          backgroundAsync: Number(engineUsage.background_async || 0) + (manifestValidation.manifest.backgroundAsync === true ? 1 : 0),
+        },
+      };
     });
 
     const job = await renderJobQueue.getJobById(queued.jobId, userId);
@@ -264,15 +312,17 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       renderJobQueue.triggerProcessor(queued.jobId, 0, queueEngine);
       void recordRenderAudit(queued.jobId, userId, 'accepted', { plan });
     }
-    const usage = await getTodayCloudRenderUsage(userId);
+    const usage = queued.existing
+      ? await getTodayCloudRenderUsage(userId)
+      : queued.usage;
     const serverRenderCount = usageForEngine(usage);
 
-    const queue = await renderJobQueue.getQueueInfo(job);
     return res.status(queued.existing ? 200 : 202).json({
       accepted: true,
       message: queued.existing ? 'مهمة الريندر موجودة بالفعل' : 'تم قبول مهمة الريندر وبدء تجهيزها',
       job,
-      queue,
+      // Queue position is filled by the first status poll. Avoiding a full
+      // queue scan here keeps admission latency bounded during bursts.
       serverRenderLimit: engineLimit,
       serverRenderCount,
       serverRenderRemaining: Math.max(0, engineLimit - serverRenderCount),

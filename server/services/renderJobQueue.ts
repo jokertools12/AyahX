@@ -99,7 +99,14 @@ export class RenderJobQueue {
   private activeJobsCount = 0;
   private activeJobAbortControllers: Map<string, AbortController> = new Map();
   private storageDir: string;
-  private queueSnapshot: { at: number; positions: Map<string, number>; waiting: Record<RenderQueueEngine, number>; active: Record<RenderQueueEngine, number> } | null = null;
+  private queueSnapshot: {
+    at: number;
+    positions: Map<string, number>;
+    waiting: Record<RenderQueueEngine, number>;
+    active: Record<RenderQueueEngine, number>;
+    capacity: Record<RenderQueueEngine, { replicas: number; slotsPerReplica: number }>;
+  } | null = null;
+  private queueSnapshotRefresh: Promise<void> | null = null;
 
   constructor() {
     this.maxConcurrency = resolveConcurrencySetting(undefined, config.queue.workerConcurrency);
@@ -352,24 +359,58 @@ export class RenderJobQueue {
   public async getQueueInfo(job: RenderJobRow): Promise<RenderQueueInfo> {
     const engine = queueEngineForManifest(job.manifest);
     if (!this.queueSnapshot || Date.now() - this.queueSnapshot.at > 4_000) {
-      const rows = await query<Array<{ id: string; engine: RenderQueueEngine | null; status: RenderJobRow['status'] }>>(
-        `SELECT id, engine, status FROM render_jobs
-         WHERE status IN ('queued', 'running')
-         ORDER BY engine ASC, created_at ASC LIMIT 2000`,
-      );
-      const positions = new Map<string, number>();
-      const waiting: Record<RenderQueueEngine, number> = { ffmpeg_ass: 0, skia_canvas: 0, browser_cloud: 0 };
-      const active: Record<RenderQueueEngine, number> = { ffmpeg_ass: 0, skia_canvas: 0, browser_cloud: 0 };
-      for (const row of rows) {
-        const rowEngine = resolveRenderQueueEngine(row.engine);
-        if (row.status === 'queued') {
-          waiting[rowEngine] += 1;
-          positions.set(row.id, waiting[rowEngine]);
-        } else active[rowEngine] += 1;
+      if (!this.queueSnapshotRefresh) {
+        this.queueSnapshotRefresh = (async () => {
+          const [rows, capacityRows] = await Promise.all([
+            query<Array<{ id: string; engine: RenderQueueEngine | null; status: RenderJobRow['status'] }>>(
+              `SELECT id, engine, status FROM render_jobs
+               WHERE status IN ('queued', 'running')
+               ORDER BY engine ASC, created_at ASC LIMIT 2000`,
+            ),
+            query<Array<{ engine: RenderQueueEngine; replicas: number; slots_per_replica: number }>>(
+              'SELECT engine, replicas, slots_per_replica FROM render_engine_capacity',
+            ).catch(() => []),
+          ]);
+          const positions = new Map<string, number>();
+          const waiting: Record<RenderQueueEngine, number> = { ffmpeg_ass: 0, skia_canvas: 0, browser_cloud: 0 };
+          const active: Record<RenderQueueEngine, number> = { ffmpeg_ass: 0, skia_canvas: 0, browser_cloud: 0 };
+          for (const row of rows) {
+            const rowEngine = resolveRenderQueueEngine(row.engine);
+            if (row.status === 'queued') {
+              waiting[rowEngine] += 1;
+              positions.set(row.id, waiting[rowEngine]);
+            } else active[rowEngine] += 1;
+          }
+          const capacity: Record<RenderQueueEngine, { replicas: number; slotsPerReplica: number }> = {
+            ffmpeg_ass: {
+              replicas: Math.max(1, Number(process.env.FFMPEG_RENDER_REPLICAS || 2)),
+              slotsPerReplica: Math.max(1, Number(process.env.FFMPEG_RENDER_SLOTS_PER_REPLICA || 3)),
+            },
+            skia_canvas: {
+              replicas: Math.max(1, Number(process.env.SKIA_RENDER_REPLICAS || 2)),
+              slotsPerReplica: Math.max(1, Number(process.env.SKIA_RENDER_SLOTS_PER_REPLICA || 2)),
+            },
+            browser_cloud: {
+              replicas: Math.max(1, Number(process.env.BROWSER_RENDER_REPLICAS || 2)),
+              slotsPerReplica: Math.max(1, Number(process.env.BROWSER_RENDER_SLOTS_PER_REPLICA || 2)),
+            },
+          };
+          for (const row of capacityRows) {
+            const rowEngine = resolveRenderQueueEngine(row.engine);
+            capacity[rowEngine] = {
+              replicas: Math.max(1, Number(row.replicas || capacity[rowEngine].replicas)),
+              slotsPerReplica: Math.max(1, Number(row.slots_per_replica || capacity[rowEngine].slotsPerReplica)),
+            };
+          }
+          this.queueSnapshot = { at: Date.now(), positions, waiting, active, capacity };
+        })().finally(() => {
+          this.queueSnapshotRefresh = null;
+        });
       }
-      this.queueSnapshot = { at: Date.now(), positions, waiting, active };
+      await this.queueSnapshotRefresh;
     }
     const snapshot = this.queueSnapshot;
+    if (!snapshot) throw new Error('Queue snapshot unavailable');
     const waiting = snapshot.waiting[engine];
     const active = snapshot.active[engine];
     let manifest: any = job.manifest;
@@ -380,18 +421,11 @@ export class RenderJobQueue {
         manifest = {};
       }
     }
-    const prefix = engine === 'ffmpeg_ass' ? 'FFMPEG' : engine === 'skia_canvas' ? 'SKIA' : 'BROWSER';
     // The API container has a deliberately small cgroup, so its local memory
     // capacity must never be used to estimate worker slots. render-control
     // persists the actual independent worker replica count instead.
-    const capacityRows = await query<Array<{ replicas: number; slots_per_replica: number }>>(
-      'SELECT replicas, slots_per_replica FROM render_engine_capacity WHERE engine = ? LIMIT 1',
-      [engine],
-    ).catch(() => []);
-    const fallbackReplicas = Math.max(1, Number(process.env[`${prefix}_RENDER_REPLICAS`] || 2));
-    const fallbackSlots = engine === 'ffmpeg_ass' ? 3 : 2;
-    const replicaEstimate = Math.max(1, Number(capacityRows[0]?.replicas || fallbackReplicas));
-    const slotsPerReplica = Math.max(1, Number(capacityRows[0]?.slots_per_replica || process.env[`${prefix}_RENDER_SLOTS_PER_REPLICA`] || fallbackSlots));
+    const replicaEstimate = snapshot.capacity[engine].replicas;
+    const slotsPerReplica = snapshot.capacity[engine].slotsPerReplica;
     const slotsTotal = Math.max(1, slotsPerReplica * replicaEstimate);
     const estimated = estimateRenderJobProfile(engine, {
       width: manifest?.outputDimensions?.width,
@@ -400,6 +434,7 @@ export class RenderJobQueue {
       durationSeconds: manifest?.audio?.durationSeconds,
       backgroundType: manifest?.background?.type,
     }).estimatedSeconds || 60;
+    const prefix = engine === 'ffmpeg_ass' ? 'FFMPEG' : engine === 'skia_canvas' ? 'SKIA' : 'BROWSER';
     const p50 = Math.max(1, Number(process.env[`${prefix}_RENDER_P50_SECONDS`] || estimated));
     const position = job.status === 'queued' ? Math.max(1, snapshot.positions.get(job.id) || 1) : 0;
     return { engine, position, waiting, active, slotsTotal, etaSeconds: position ? Math.ceil(position / slotsTotal) * p50 : 0 };
