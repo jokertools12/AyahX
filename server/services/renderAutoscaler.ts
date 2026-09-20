@@ -124,7 +124,7 @@ async function updateReplicas(serviceId: string, replicas: number): Promise<void
 
 async function currentQueueCounts(): Promise<Record<RenderWorkerEngine, QueueCounts>> {
   const rows = await query<Array<{ engine: string | null; status: 'queued' | 'running'; count: number }>>(
-    "SELECT COALESCE(engine, JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') AS engine, status, COUNT(*) AS count FROM render_jobs WHERE status IN ('queued', 'running') GROUP BY engine, status",
+    "SELECT COALESCE(engine, JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') AS engine, status, COUNT(*) AS count FROM render_jobs WHERE status IN ('queued', 'running') GROUP BY COALESCE(engine, JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass'), status",
   );
   const counts = Object.fromEntries(ENGINES.map((engine) => [engine, { waiting: 0, active: 0 }])) as Record<RenderWorkerEngine, QueueCounts>;
   for (const row of rows) {

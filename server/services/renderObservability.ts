@@ -68,7 +68,7 @@ export function recordRenderResources(engine: RenderWorkerEngine, resources: { c
 
 export async function refreshRenderMetrics(): Promise<void> {
   const rows = await query<Array<{ engine: string | null; status: string; count: number }>>(
-    "SELECT COALESCE(engine, JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') AS engine, status, COUNT(*) AS count FROM render_jobs WHERE status IN ('queued', 'running') GROUP BY engine, status",
+    "SELECT COALESCE(engine, JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass') AS engine, status, COUNT(*) AS count FROM render_jobs WHERE status IN ('queued', 'running') GROUP BY COALESCE(engine, JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.renderEngine')), 'ffmpeg_ass'), status",
   );
   renderEngineQueueDepth.reset();
   renderEngineActiveJobs.reset();
