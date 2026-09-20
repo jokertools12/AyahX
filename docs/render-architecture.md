@@ -36,7 +36,10 @@ minutes, then reopens capacity only after three safe readings.
 `render_engine_capacity`. The Railway autoscaler reads durable MySQL queue
 counts and independently scales only the engine whose own work exceeds its
 slots. It never moves a job between engines or lets Browser Cloud consume
-native-worker capacity. Prometheus exposes replicas, total/used slots, queue
+native-worker capacity. On Hobby, the autoscaler is capped at five replicas
+per service, matching the active plan limit; the feature stays disabled until
+a scoped Railway project token is provisioned. Prometheus exposes replicas,
+total/used slots, queue
 depth, p50/p95/max wait, oldest waiting age, classified failures, and
 per-child CPU/RSS samples. Worker cgroup measurements remain separate and are
 used only by the capacity governor, so concurrent jobs do not contaminate the

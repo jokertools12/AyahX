@@ -77,7 +77,7 @@ function configFor(engine: RenderWorkerEngine): EngineScaleConfig {
     minReplicas: positiveInt(process.env[`${prefix}_RENDER_MIN_REPLICAS`], 2),
     maxReplicas: Math.max(
       positiveInt(process.env[`${prefix}_RENDER_MIN_REPLICAS`], 2),
-      positiveInt(process.env[`${prefix}_RENDER_MAX_REPLICAS`], 6),
+      positiveInt(process.env[`${prefix}_RENDER_MAX_REPLICAS`], 5),
     ),
   };
 }
