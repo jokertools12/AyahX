@@ -37,8 +37,10 @@ minutes, then reopens capacity only after three safe readings.
 counts and independently scales only the engine whose own work exceeds its
 slots. It never moves a job between engines or lets Browser Cloud consume
 native-worker capacity. On Hobby, the autoscaler is capped at five replicas
-per service, matching the active plan limit; the feature stays disabled until
-a scoped Railway project token is provisioned. Prometheus exposes replicas,
+per service, matching the active plan limit. Railway production and staging
+use separate environment-scoped project tokens stored only as sealed
+`render-control` variables; local development keeps the feature disabled by
+default. Prometheus exposes replicas,
 total/used slots, queue
 depth, p50/p95/max wait, oldest waiting age, classified failures, and
 per-child CPU/RSS samples. Worker cgroup measurements remain separate and are

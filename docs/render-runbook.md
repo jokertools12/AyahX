@@ -42,7 +42,9 @@ workers. It uses a Railway project token scoped to the production environment
 and changes only the service belonging to the saturated engine. Scale-up is
 immediate; scale-down waits for the idle window, requires zero active jobs, and
 removes a single replica at a time. If the token or service ids are missing,
-control falls back to fixed replicas without affecting rendering.
+control falls back to fixed replicas without affecting rendering. Deployed
+Railway environments use separate environment-scoped project tokens; never
+copy either token into Git, local `.env` files, logs, or frontend variables.
 
 Required production variables are `RAILWAY_ENVIRONMENT_ID`, one
 `*_RENDER_SERVICE_ID` per worker, `*_RENDER_SLOTS_PER_REPLICA`, min/max replica
