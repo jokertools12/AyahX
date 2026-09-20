@@ -1,5 +1,4 @@
 import { closePool } from './db';
-import { ensureRenderJobsTable } from './db/migrations/addRenderJobsTable';
 import { renderJobQueue } from './services/renderJobQueue';
 import { resolveRenderQueueEngine } from './services/renderQueueBroker';
 import { logger } from './logger';
@@ -8,7 +7,9 @@ async function main() {
   const jobId = process.argv[2];
   const engine = resolveRenderQueueEngine(process.argv[3]);
   if (!jobId) throw new Error('Render child requires a job id');
-  await ensureRenderJobsTable();
+  // The dedicated worker performs the schema check once before it starts
+  // accepting BullMQ jobs. Re-running the DDL from every isolated child made
+  // large bursts contend on MySQL metadata locks and could deadlock a job.
   const controller = new AbortController();
   const abort = () => controller.abort();
   process.once('SIGTERM', abort);
