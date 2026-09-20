@@ -67,8 +67,16 @@ export async function simulateRender(options: DeterministicRenderOptions): Promi
     backgroundType: manifest.background.type,
   });
   const durationSeconds = Math.max(0.3, Number(manifest.audio.durationSeconds || 1));
-  const simulatedMs = Math.max(0, Math.min(60_000, Number(process.env.RENDER_SIMULATE_MS || Math.round((profile.estimatedSeconds || durationSeconds) * 10))));
-  const memoryMb = Math.max(0, Math.min(4096, Number(process.env.RENDER_SIMULATE_MEMORY_MB || Math.min(64, profile.memoryPerJobMb))));
+  const configuredDelayMs = process.env.RENDER_SIMULATE_MS || process.env.RENDER_SIMULATE_DELAY_MS;
+  const parsedDelayMs = Number(configuredDelayMs);
+  const simulatedMs = Math.max(0, Math.min(60_000, Number.isFinite(parsedDelayMs)
+    ? parsedDelayMs
+    : Math.round((Number(profile.estimatedSeconds) || durationSeconds) * 10)));
+  const defaultMemoryMb = Number(profile.memoryPerJobMb);
+  const parsedMemoryMb = Number(process.env.RENDER_SIMULATE_MEMORY_MB);
+  const memoryMb = Math.max(0, Math.min(4096, Number.isFinite(parsedMemoryMb)
+    ? parsedMemoryMb
+    : (Number.isFinite(defaultMemoryMb) ? Math.min(64, defaultMemoryMb) : 64)));
   const memory = memoryMb > 0 ? Buffer.alloc(memoryMb * 1024 * 1024, 0) : null;
   logger.warn(`Render simulator enabled for staging: engine=${engine}, delayMs=${simulatedMs}, memoryMb=${memoryMb}`);
   const started = Date.now();
@@ -78,7 +86,10 @@ export async function simulateRender(options: DeterministicRenderOptions): Promi
   }, 500);
   progressTimer.unref?.();
   try {
-    const cpuMs = Math.max(0, Math.min(5_000, Number(process.env.RENDER_SIMULATE_CPU_MS || Math.min(250, simulatedMs / 4))));
+    const configuredCpuMs = process.env.RENDER_SIMULATE_CPU_MS
+      || (process.env.RENDER_SIMULATE_CPU_SECONDS ? String(Number(process.env.RENDER_SIMULATE_CPU_SECONDS) * 1000) : undefined);
+    const parsedCpuMs = Number(configuredCpuMs);
+    const cpuMs = Math.max(0, Math.min(5_000, Number.isFinite(parsedCpuMs) ? parsedCpuMs : Math.min(250, simulatedMs / 4)));
     const cpuStarted = Date.now();
     while (Date.now() - cpuStarted < cpuMs) {
       Math.sqrt(Math.random() * 1_000_000);
