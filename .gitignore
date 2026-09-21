@@ -17,6 +17,7 @@ dist-ssr
 .env.*
 !.env.example
 uploads/renders/
+/qa-output/
 
 # Locally generated audio QA artifacts in the repository root.
 /*.mp3
@@ -35,4 +36,3 @@ uploads/renders/
 .agent
 .autoclaw
 .clinerules
-

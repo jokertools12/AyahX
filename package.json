@@ -13,6 +13,7 @@
     "render:control": "tsx server/renderControl.ts",
     "render:control:direct": "node node_modules/tsx/dist/cli.mjs server/renderControl.ts",
     "bench:render": "tsx scripts/bench-render.ts",
+    "qa:render-engines": "tsx scripts/render-engine-visual-qa.ts",
     "load:render-submissions": "tsx scripts/load-render-submissions.ts",
     "simulate:render-submissions": "tsx scripts/load-render-submissions.ts",
     "load:staging-renders": "tsx scripts/staging-render-load.ts",

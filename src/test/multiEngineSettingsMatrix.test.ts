@@ -13,6 +13,7 @@ import type { RenderManifest } from '../../server/models/renderManifest';
 describe('Multi-Engine Settings Matrix & Verification Test', () => {
   let tempDir: string;
   let sampleAudioPath: string;
+  let sampleImagePath: string;
 
   beforeAll(async () => {
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'engine_matrix_test_'));
@@ -26,6 +27,11 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
       '-ar', '44100',
       sampleAudioPath,
     ]);
+    sampleImagePath = path.join(tempDir, 'background.png');
+    fs.writeFileSync(sampleImagePath, Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL9JQAAAABJRU5ErkJggg==',
+      'base64',
+    ));
   });
 
   afterAll(() => {
@@ -288,6 +294,88 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
     expect(probe.video?.codec).toBe('h264');
     expect(probe.audio?.codec).toBe('aac');
   }, 60000);
+
+  it('All engines: Preserve the full preview scene settings independently', async () => {
+    const richSettings = {
+      ...getBaseManifest().displaySettings,
+      visualDesign: 'moonlit' as const,
+      frameStyle: 'ornate' as const,
+      screenBorderStyle: 'goldenTrim' as const,
+      screenBorderColor: 'gold' as const,
+      surahNamePosition: 'top' as const,
+      surahNameStyle: 'ornate' as const,
+      reciterNameStyle: 'pill' as const,
+      verseDisplayMode: 'full' as const,
+      ayahTransition: 'cinematic' as const,
+      textShadowStyle: 'glow' as const,
+      watermarkEnabled: true,
+      watermarkText: '@AyaX',
+      watermarkPosition: 'bottomRight' as const,
+      socialWatermarkEnabled: true,
+      socialPlatform: 'youtube' as const,
+      socialHandle: '@AyaX',
+      socialWatermarkPosition: 'bottomCenter' as const,
+      socialWatermarkSize: 18,
+      socialWatermarkOpacity: 0.9,
+    };
+    const engines = [
+      { name: 'ffmpeg', renderEngine: 'ffmpeg_ass' as const, render: renderFfmpegAssVideo },
+      { name: 'skia', renderEngine: 'skia_canvas' as const, render: renderSkiaCanvasVideo },
+      { name: 'browser', renderEngine: 'browser_cloud' as const, render: renderDeterministicVideo },
+    ];
+
+    for (const engine of engines) {
+      const outputPath = path.join(tempDir, `full_scene_${engine.name}.mp4`);
+      const result = await engine.render({
+        manifest: {
+          ...getBaseManifest(),
+          renderEngine: engine.renderEngine,
+          displaySettings: richSettings,
+        } as RenderManifest,
+        audioFilePath: sampleAudioPath,
+        outputPath,
+      });
+      const probe = await probeMediaFile(outputPath);
+      expect(result.fileSizeBytes).toBeGreaterThan(1000);
+      expect(probe.video?.width).toBe(720);
+      expect(probe.video?.height).toBe(1280);
+      expect(probe.video?.codec).toBe('h264');
+      expect(probe.audio?.codec).toBe('aac');
+      expect(probe.durationSeconds).toBeGreaterThanOrEqual(0.9);
+    }
+  }, 90000);
+
+  it('All engines: Render local image and slideshow backgrounds without blank frames', async () => {
+    const engines = [
+      { name: 'ffmpeg', renderEngine: 'ffmpeg_ass' as const, render: renderFfmpegAssVideo },
+      { name: 'skia', renderEngine: 'skia_canvas' as const, render: renderSkiaCanvasVideo },
+      { name: 'browser', renderEngine: 'browser_cloud' as const, render: renderDeterministicVideo },
+    ];
+    const backgrounds = [
+      { type: 'image' as const, url: sampleImagePath, thumbnail: sampleImagePath },
+      { type: 'slideshow' as const, url: sampleImagePath, thumbnail: sampleImagePath, slideImages: [sampleImagePath, sampleImagePath] },
+    ];
+
+    for (const engine of engines) {
+      for (const [backgroundIndex, background] of backgrounds.entries()) {
+        const outputPath = path.join(tempDir, `background_${engine.name}_${backgroundIndex}.mp4`);
+        const result = await engine.render({
+          manifest: {
+            ...getBaseManifest(),
+            renderEngine: engine.renderEngine,
+            background: {
+              ...getBaseManifest().background,
+              ...background,
+            },
+          } as RenderManifest,
+          audioFilePath: sampleAudioPath,
+          outputPath,
+        });
+        expect(result.fileSizeBytes).toBeGreaterThan(1000);
+        expect((await probeMediaFile(outputPath)).durationSeconds).toBeGreaterThanOrEqual(0.9);
+      }
+    }
+  }, 120000);
 
   it('Dispatcher: Correctly routes each independent engine based on manifest.renderEngine', async () => {
     const assOutputPath = path.join(tempDir, 'dispatcher_ass.mp4');
