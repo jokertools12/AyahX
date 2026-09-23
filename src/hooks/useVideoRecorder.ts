@@ -182,7 +182,9 @@ export function useVideoRecorder() {
           if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
         };
 
-        const startTime = Date.now();
+        // The recording clock starts at the same moment as MediaRecorder so
+        // any play() scheduling delay cannot shorten the captured duration.
+        let startTime = Date.now();
         let progressIntervalId: number | null = null;
         let lastProgressStep = -1;
 
@@ -252,8 +254,11 @@ export function useVideoRecorder() {
           }, 150);
         };
 
-        // Synchronize audio playback start and media recorder start
+        // Start the recorder before asking the media element to play.  This
+        // prevents the first audio samples from preceding the first video
+        // frame, while the captured audio clock still drives completion.
         const beginRecording = () => {
+          startTime = Date.now();
           mediaRecorder.start(chunkIntervalMs);
 
           // Throttled progress — update every 500ms to reduce React re-renders
@@ -289,11 +294,10 @@ export function useVideoRecorder() {
         };
 
         if (audioElement) {
+          beginRecording();
           audioElement.play()
-            .then(() => beginRecording())
             .catch((err) => {
-              console.warn('Audio play warning, starting recorder directly:', err);
-              beginRecording();
+              console.warn('Audio play warning; recording continues without playback:', err);
             });
         } else {
           beginRecording();
