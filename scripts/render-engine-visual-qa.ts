@@ -6,6 +6,7 @@ import ffmpegPath from 'ffmpeg-static';
 import { renderFfmpegAssVideo } from '../server/services/ffmpegAssRenderer';
 import { renderSkiaCanvasVideo } from '../server/services/skiaCanvasRenderer';
 import { renderDeterministicVideo } from '../server/services/deterministicVideoRenderer';
+import { probeMediaFile } from '../server/services/mediaProbeService';
 
 const outputDir = path.resolve(process.cwd(), 'qa-output/render-engines');
 fs.rmSync(outputDir, { recursive: true, force: true });
@@ -56,6 +57,17 @@ const engines = [
   ['browser', 'browser_cloud', renderDeterministicVideo],
 ] as const;
 
+const rendered: { name: string; videoPath: string; framePath: string }[] = [];
+
+function measureSsim(leftPath: string, rightPath: string): number | null {
+  const result = spawnSync(ffmpegPath!, [
+    '-i', leftPath, '-i', rightPath, '-lavfi', 'ssim', '-f', 'null', '-',
+  ], { encoding: 'utf8' });
+  const output = `${result.stdout || ''}\n${result.stderr || ''}`;
+  const match = output.match(/All:([0-9.]+)/);
+  return match ? Number(match[1]) : null;
+}
+
 try {
   for (const [name, renderEngine, render] of engines) {
     const outputPath = path.join(outputDir, `${name}.mp4`);
@@ -65,8 +77,83 @@ try {
       '-y', '-ss', '0.8', '-i', outputPath, '-frames:v', '1', '-q:v', '2', framePath,
     ], { encoding: 'utf8' });
     if (extraction.status !== 0) throw new Error(`Could not extract ${name} QA frame: ${extraction.stderr}`);
+    rendered.push({ name, videoPath: outputPath, framePath });
     console.log(JSON.stringify({ engine: name, video: outputPath, frame: framePath }));
   }
+
+  // Keep one visual artifact and objective pairwise parity metrics alongside
+  // the three independently encoded MP4s.
+  const comparisonPath = path.join(outputDir, 'comparison.jpg');
+  const sheet = spawnSync(ffmpegPath!, [
+    '-y', '-i', rendered[0].framePath, '-i', rendered[1].framePath, '-i', rendered[2].framePath,
+    '-filter_complex', 'hstack=inputs=3', '-frames:v', '1', comparisonPath,
+  ], { encoding: 'utf8' });
+  if (sheet.status !== 0) throw new Error(`Could not create engine comparison sheet: ${sheet.stderr}`);
+
+  const metrics: Record<string, number | null> = {};
+  for (let i = 0; i < rendered.length; i += 1) {
+    const probe = await probeMediaFile(rendered[i].videoPath);
+    if (!probe.video || probe.video.width !== 720 || probe.video.height !== 1280 || probe.video.codec !== 'h264') {
+      throw new Error(`Invalid ${rendered[i].name} QA output: ${JSON.stringify(probe.video)}`);
+    }
+    for (let j = i + 1; j < rendered.length; j += 1) {
+      metrics[`${rendered[i].name}_vs_${rendered[j].name}`] = measureSsim(rendered[i].framePath, rendered[j].framePath);
+    }
+  }
+  if (Object.values(metrics).some((value) => value === null || value < 0.95)) {
+    throw new Error(`Engine visual parity is below threshold: ${JSON.stringify(metrics)}`);
+  }
+  console.log(JSON.stringify({ comparison: comparisonPath, ssim: metrics }));
+
+  // Ibtahalat uses the same scene shell and output clock, but replaces Quran
+  // word spans with timed lyric lines. Keep it in this three-engine gate so a
+  // browser-preview-only overlay cannot drift from FFmpeg or Skia output.
+  const lyricsManifest: any = {
+    ...baseManifest,
+    revision: 'visual-qa-lyrics',
+    contentKind: 'lyrics',
+    lyrics: [
+      { text: 'يا رب صل على النبي', start: 0, end: 0.5 },
+      { text: 'خير الأنام محمد', start: 0.5, end: 1.0 },
+      { text: 'واجعل لنا في القلب نورا', start: 1.0, end: 1.6 },
+    ],
+    displaySettings: {
+      ...baseManifest.displaySettings,
+      lyricsDisplayStyle: 'scroll',
+      showAyahText: true,
+    },
+  };
+  const renderedLyrics: { name: string; videoPath: string; framePath: string }[] = [];
+  for (const [name, renderEngine, render] of engines) {
+    const outputPath = path.join(outputDir, `lyrics-${name}.mp4`);
+    await render({ manifest: { ...lyricsManifest, renderEngine }, audioFilePath: audioPath, outputPath });
+    const framePath = path.join(outputDir, `lyrics-${name}-frame.jpg`);
+    const extraction = spawnSync(ffmpegPath!, [
+      '-y', '-ss', '0.8', '-i', outputPath, '-frames:v', '1', '-q:v', '2', framePath,
+    ], { encoding: 'utf8' });
+    if (extraction.status !== 0) throw new Error(`Could not extract lyrics ${name} QA frame: ${extraction.stderr}`);
+    renderedLyrics.push({ name, videoPath: outputPath, framePath });
+  }
+  const lyricsComparisonPath = path.join(outputDir, 'lyrics-comparison.jpg');
+  const lyricsSheet = spawnSync(ffmpegPath!, [
+    '-y', '-i', renderedLyrics[0].framePath, '-i', renderedLyrics[1].framePath, '-i', renderedLyrics[2].framePath,
+    '-filter_complex', 'hstack=inputs=3', '-frames:v', '1', lyricsComparisonPath,
+  ], { encoding: 'utf8' });
+  if (lyricsSheet.status !== 0) throw new Error(`Could not create lyrics comparison sheet: ${lyricsSheet.stderr}`);
+  const lyricsMetrics: Record<string, number | null> = {};
+  for (let i = 0; i < renderedLyrics.length; i += 1) {
+    const probe = await probeMediaFile(renderedLyrics[i].videoPath);
+    if (!probe.video || probe.video.width !== 720 || probe.video.height !== 1280 || probe.video.codec !== 'h264') {
+      throw new Error(`Invalid lyrics ${renderedLyrics[i].name} QA output: ${JSON.stringify(probe.video)}`);
+    }
+    for (let j = i + 1; j < renderedLyrics.length; j += 1) {
+      lyricsMetrics[`${renderedLyrics[i].name}_vs_${renderedLyrics[j].name}`] = measureSsim(renderedLyrics[i].framePath, renderedLyrics[j].framePath);
+    }
+  }
+  if (Object.values(lyricsMetrics).some((value) => value === null || value < 0.95)) {
+    throw new Error(`Lyrics engine visual parity is below threshold: ${JSON.stringify(lyricsMetrics)}`);
+  }
+  console.log(JSON.stringify({ lyricsComparison: lyricsComparisonPath, lyricsSsim: lyricsMetrics }));
 } finally {
   fs.rmSync(audioPath, { force: true });
 }

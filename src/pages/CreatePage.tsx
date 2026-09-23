@@ -7,7 +7,6 @@ import { ReciterCard } from '@/components/ReciterCard';
 import { AyahDisplay } from '@/components/AyahDisplay';
 import { BackgroundSelector } from '@/components/BackgroundSelector';
 import { TextSettingsPanel, TextSettings } from '@/components/TextSettingsPanel';
-import { VideoPreview } from '@/components/VideoPreview';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

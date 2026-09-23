@@ -60,6 +60,12 @@ export function getH264BroadcastArgs(fps: number = 30, audioBitrate: string = '1
   '-c:v', 'libx264',
   '-profile:v', 'high',
   '-level:v', safeFps === 60 ? '4.2' : '4.1',
+  // Canvas MediaRecorder WebM is tagged full-range (pc). Convert levels
+  // explicitly before marking the broadcast MP4 as video-range (tv); merely
+  // changing the pixel format makes local exports visibly darker than the
+  // shared Browser Cloud scene.
+  '-vf', 'scale=in_range=pc:out_range=tv,format=yuv420p',
+  '-color_range', 'tv',
   '-pix_fmt', 'yuv420p',
   '-preset', 'veryfast',
   '-crf', '20',
@@ -87,6 +93,9 @@ export function getMpeg4FallbackArgs(fps: number = 30, audioBitrate: string = '1
   return [
   '-c:v', 'mpeg4',
   '-q:v', '4',
+  '-vf', 'scale=in_range=pc:out_range=tv,format=yuv420p',
+  '-color_range', 'tv',
+  '-pix_fmt', 'yuv420p',
   '-r', safeFps.toString(),
   '-max_muxing_queue_size', '1024',
   '-c:a', 'aac',

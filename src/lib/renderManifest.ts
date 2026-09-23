@@ -23,6 +23,9 @@ export interface ClientManifestParams {
     everyAyahTimestamps?: { from: number; to: number }[];
   };
   audioEffects?: AudioEffects;
+  /** Quran verses and timed Ibtahalat lyric lines share the same scene shell. */
+  contentKind?: 'quran' | 'lyrics';
+  lyrics?: Array<{ text: string; start: number; end: number }>;
   background: {
     id: string;
     type: 'video' | 'image' | 'slideshow' | 'color';
@@ -84,10 +87,23 @@ export function buildClientRenderManifest(params: ClientManifestParams): any {
       })),
     },
 
+    contentKind: params.contentKind || 'quran',
+    lyrics: params.lyrics?.map((line) => ({
+      text: line.text,
+      start: Math.max(0, line.start),
+      end: Math.max(line.end, line.start + 0.01),
+    })),
+
     timingMap: {
       mapId: params.timingMap.mapId,
+      // Preserve the origin and composition clock. The scene uses these fields
+      // to distinguish absolute Quran Foundation timestamps from a sliced or
+      // concatenated audio timeline without a fragile numeric heuristic.
+      sourceId: params.timingMap.sourceId,
+      sourceMethod: params.timingMap.sourceMethod,
       audioContentHash: params.timingMap.audioContentHash,
       validationStatus: params.timingMap.validationStatus,
+      compositionOffsets: params.timingMap.compositionOffsets,
       words: (params.timingMap?.words || []).map((w, idx, arr) => {
         const nextStart = arr[idx + 1]?.startMs;
         const fallbackEnd = typeof nextStart === 'number' && nextStart > (w.startMs || 0)

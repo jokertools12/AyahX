@@ -36,10 +36,38 @@ export const RenderManifestSchema = z.object({
     ).min(1),
   }),
 
+  // Ibtahalat reuses the exact scene shell but provides time-bounded lyric
+  // lines rather than Quran word spans. Keeping this in the manifest makes
+  // Browser Hybrid, FFmpeg, Skia, and Browser Cloud render the same mode.
+  contentKind: z.enum(['quran', 'lyrics']).default('quran'),
+  lyrics: z.array(
+    z.object({
+      text: z.string().min(1).max(1000),
+      start: z.number().min(0),
+      end: z.number().min(0),
+    }).refine((line) => line.end > line.start, {
+      message: 'lyric end must be greater than start',
+    })
+  ).optional(),
+
   timingMap: z.object({
     mapId: z.string().min(1),
+    // The browser preview and native scene workers use this explicit metadata
+    // to resolve whether word offsets belong to the full source recitation or
+    // to a local sliced timeline.
+    sourceId: z.string().min(1).optional(),
+    sourceMethod: z.string().min(1).optional(),
     audioContentHash: z.string().min(8),
-    validationStatus: z.enum(['approved', 'needs_review', 'rejected']),
+    validationStatus: z.enum(['approved', 'low_confidence', 'needs_review', 'rejected']),
+    compositionOffsets: z.array(
+      z.object({
+        ayahNumber: z.number().int().min(1),
+        startMs: z.number().min(0),
+        endMs: z.number().min(0),
+      }).refine((offset) => offset.endMs > offset.startMs, {
+        message: 'composition offset endMs must be greater than startMs',
+      })
+    ).optional(),
     words: z.array(
       z.object({
         canonicalWordKey: z.string(),

@@ -26,13 +26,22 @@
 
   <script>
     (function() {
-      const canvas = document.getElementById('render-canvas');
+      // The scene controller is a factory so the visible preview canvas and
+      // the full-resolution local recorder can execute the same scene source.
+      // The native workers still use the default controller below through the
+      // original singleton API.
+      function createRenderController(targetCanvas) {
+      const canvas = targetCanvas;
+      if (!canvas) throw new Error('Render harness canvas is missing.');
       const ctx = canvas.getContext('2d', { alpha: false });
 
       let currentManifest = null;
       let bgImage = null;
       let bgFramesPattern = null;
       let lastValidVideoFrame = null;
+      let bgVideo = null;
+      let videoBackgroundStatus = 'not-requested';
+      let lastDirectVideoRequestSeconds = null;
       let slideshowImages = [];
       let logoWatermarkImage = null;
       let isReady = false;
@@ -642,6 +651,10 @@
         return new Promise((resolve) => {
           if (!url) return resolve(null);
           const img = new Image();
+          // Keep remote imagery capture-safe when the origin opts into CORS.
+          // If the source does not expose CORS, the caller can still use its
+          // thumbnail/fallback without poisoning a recording canvas.
+          if (/^https?:\/\//i.test(url)) img.crossOrigin = 'anonymous';
           let settled = false;
           const timer = setTimeout(() => {
             if (!settled) {
@@ -670,6 +683,103 @@
             resolve(img);
           }
         });
+      }
+
+      // Browser-only direct video background. Server renderers provide an
+      // extracted framesPattern instead; this path exists only for the live
+      // hybrid preview/recorder and uses the same requested frame clock.
+      function preloadVideo(url) {
+        return new Promise((resolve) => {
+          if (!url || typeof document.createElement !== 'function') return resolve(null);
+          const video = document.createElement('video');
+          video.muted = true;
+          video.playsInline = true;
+          video.preload = 'auto';
+          if (/^https?:\/\//i.test(url)) video.crossOrigin = 'anonymous';
+          let settled = false;
+          const timer = setTimeout(() => {
+            if (!settled) { settled = true; resolve(null); }
+          }, 10000);
+          const finish = (value) => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timer);
+            resolve(value);
+          };
+          video.onloadeddata = () => {
+            // Probe the actual pixels. A successful network load is not
+            // enough: a non-CORS source would make captureStream fail later.
+            try {
+              const probeCanvas = document.createElement('canvas');
+              probeCanvas.width = 2;
+              probeCanvas.height = 2;
+              const probeCtx = probeCanvas.getContext('2d');
+              if (!probeCtx) return finish(null);
+              probeCtx.drawImage(video, 0, 0, 2, 2);
+              probeCanvas.toDataURL();
+              finish(video);
+            } catch {
+              finish(null);
+            }
+          };
+          video.onerror = () => finish(null);
+          video.src = url;
+          video.load();
+        });
+      }
+
+      function seekVideo(video, timeSeconds) {
+        return new Promise((resolve) => {
+          if (!video || !Number.isFinite(video.duration) || video.duration <= 0) return resolve(false);
+          const target = ((timeSeconds % video.duration) + video.duration) % video.duration;
+          if (Math.abs(video.currentTime - target) < 0.02 && video.readyState >= 2) return resolve(true);
+          let settled = false;
+          const finish = (value) => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timer);
+            video.removeEventListener('seeked', onSeeked);
+            video.removeEventListener('error', onError);
+            resolve(value);
+          };
+          const onSeeked = () => finish(true);
+          const onError = () => finish(false);
+          const timer = setTimeout(() => finish(false), 1500);
+          video.addEventListener('seeked', onSeeked, { once: true });
+          video.addEventListener('error', onError, { once: true });
+          try { video.currentTime = target; } catch { finish(false); }
+        });
+      }
+
+      // During local capture the scene clock advances at the audio rate while
+      // a per-frame seek can take hundreds of milliseconds. Once requests are
+      // monotonic, let the muted video decode continuously and correct only
+      // meaningful drift; paused/scrubbed requests still seek exactly.
+      async function syncDirectVideo(video, timeSeconds) {
+        if (!video || !Number.isFinite(video.duration) || video.duration <= 0) return false;
+        const duration = video.duration;
+        const target = ((timeSeconds % duration) + duration) % duration;
+        const previous = lastDirectVideoRequestSeconds;
+        const monotonic = previous !== null && timeSeconds >= previous && (timeSeconds - previous) <= 0.25;
+        lastDirectVideoRequestSeconds = timeSeconds;
+
+        if (monotonic && video.readyState >= 2) {
+          const rawDiff = Math.abs(video.currentTime - target);
+          const drift = Math.min(rawDiff, Math.max(0, duration - rawDiff));
+          if (drift <= 0.18) {
+            if (video.paused) {
+              try { await video.play(); } catch { /* muted autoplay may be unavailable */ }
+            }
+            return true;
+          }
+        }
+
+        if (!video.paused) video.pause();
+        const sought = await seekVideo(video, timeSeconds);
+        if (sought && monotonic) {
+          try { await video.play(); } catch { /* best effort; draw the sought frame */ }
+        }
+        return sought;
       }
 
       // Memory-bounded ring-cache for extracted video frames
@@ -723,7 +833,7 @@
       }
 
       // ── Exposed Render Controller ─────────────────────────────────────────
-      window.__RENDER_CONTROLLER__ = {
+      return {
         async initScene(manifest) {
           currentManifest = manifest;
           canvas.width = manifest.outputDimensions.width;
@@ -739,6 +849,9 @@
           bgImage = null;
           bgFramesPattern = bg.framesPattern || null;
           lastValidVideoFrame = null;
+          bgVideo = null;
+          videoBackgroundStatus = bg.type === 'video' ? 'loading' : 'not-requested';
+          lastDirectVideoRequestSeconds = null;
           frameImgCache.clear();
 
           // 1. If video frame sequence exists, pre-buffer the first 6 frames into memory
@@ -758,9 +871,23 @@
           }
 
           // 3. Preload Primary Image or Video Thumbnail Fallback
-          const primaryImageUrl = bg.thumbnail || (bg.url && !bg.url.endsWith('.mp4') ? bg.url : null) || bg.url;
+          // A video URL is not an image fallback. Trying to decode it through
+          // Image first adds a 10s timeout in Chromium and can make the live
+          // preview appear frozen before the direct-media path starts.
+          const primaryImageUrl = bg.thumbnail || (bg.type !== 'video' && bg.url ? bg.url : null);
           if (primaryImageUrl && !primaryImageUrl.includes('%05d')) {
             bgImage = await preloadImage(primaryImageUrl);
+          }
+
+          // Native scene execution has no DOM video. Browser controllers use
+          // direct video only when the server has not supplied extracted
+          // frames; this preserves one scene contract without asking workers
+          // to emulate browser media APIs.
+          if (bg.type === 'video' && !bgFramesPattern && bg.url && typeof document.createElement === 'function') {
+            bgVideo = await preloadVideo(bg.url);
+            videoBackgroundStatus = bgVideo ? 'direct' : 'fallback';
+          } else if (bg.type === 'video' && bgFramesPattern) {
+            videoBackgroundStatus = 'frames';
           }
 
           // 4. Preload Custom / AI Logo Watermark Image
@@ -797,10 +924,23 @@
             }))
             : []);
 
-          // Calculate effective timeline time in milliseconds (handling rangeMs offset from audio slicing)
+          // Calculate effective timeline time in milliseconds (handling rangeMs offset from audio slicing).
+          // Quran Foundation maps are positions in the full recitation file;
+          // EveryAyah and forced-alignment maps are local to their composed
+          // audio. Source metadata is the canonical distinction, not a
+          // numerical guess based on the first word.
           const rangeOffsetMs = (manifest.audio.rangeMs && manifest.audio.rangeMs.from > 0) ? manifest.audio.rangeMs.from : 0;
-          const firstWordStart = (timingMap && timingMap.words && timingMap.words.length > 0) ? timingMap.words[0].startMs : 0;
-          const isTimingMapAbsolute = firstWordStart >= (rangeOffsetMs * 0.7) && rangeOffsetMs > 2000;
+          const timingMapSource = String((timingMap && (timingMap.sourceId || timingMap.sourceMethod)) || '');
+          const isQuranFoundationMap = timingMapSource === 'quran_foundation' || timingMapSource === 'quran_foundation_segments';
+          const firstCompositionOffset = timingMap && Array.isArray(timingMap.compositionOffsets)
+            ? timingMap.compositionOffsets[0]
+            : null;
+          const compositionMatchesAudioRange = Boolean(
+            firstCompositionOffset &&
+            Number.isFinite(firstCompositionOffset.startMs) &&
+            Math.abs(firstCompositionOffset.startMs - rangeOffsetMs) <= 250
+          );
+          const isTimingMapAbsolute = rangeOffsetMs > 0 && (isQuranFoundationMap || compositionMatchesAudioRange);
           const lookupTimeMs = isTimingMapAbsolute ? (rangeOffsetMs + frameTimeSeconds * 1000) : (frameTimeSeconds * 1000);
 
           // 1. Clear Canvas Frame
@@ -824,6 +964,17 @@
               prefetchNextFrames(frameNum, totalEstFrames, bgFramesPattern);
             } else if (lastValidVideoFrame && lastValidVideoFrame.complete && lastValidVideoFrame.naturalWidth > 0) {
               ctx.drawImage(lastValidVideoFrame, 0, 0, W, H);
+              backgroundDrawn = true;
+            }
+          }
+
+          // Direct browser video is sampled at the same explicit frame time
+          // passed to every scene controller. This keeps paused preview,
+          // playback and local capture on one deterministic visual clock.
+          if (!backgroundDrawn && bgVideo) {
+            const videoFrameReady = await syncDirectVideo(bgVideo, frameTimeSeconds);
+            if (videoFrameReady && bgVideo.readyState >= 2) {
+              ctx.drawImage(bgVideo, 0, 0, W, H);
               backgroundDrawn = true;
             }
           }
@@ -1263,7 +1414,8 @@
           let currentAyahEndSec = manifest.audio.durationSeconds;
 
           // Method A: Exact EveryAyah timestamps
-          if (manifest.audio.everyAyahTimestamps && manifest.audio.everyAyahTimestamps.length > 0) {
+          const hasEveryAyahTimeline = Boolean(manifest.audio.everyAyahTimestamps && manifest.audio.everyAyahTimestamps.length > 0);
+          if (hasEveryAyahTimeline) {
             const ts = manifest.audio.everyAyahTimestamps;
             for (let i = ts.length - 1; i >= 0; i--) {
               const fromSec = ts[i].from > 1000 ? ts[i].from / 1000 : ts[i].from;
@@ -1275,8 +1427,28 @@
               }
             }
           }
-          // Method B: TimingMap words with canonicalWordKey using lookupTimeMs
-          else if (timingMap && timingMap.words && timingMap.words.length > 0) {
+          // Method B: Canonical verse ranges stay valid even if one damaged
+          // upstream word span is absent. They also prevent early ayah changes
+          // while the reciter is still holding the previous verse.
+          const compositionOffsets = !hasEveryAyahTimeline && timingMap && Array.isArray(timingMap.compositionOffsets)
+            ? timingMap.compositionOffsets.filter(offset => (
+              offset && Number.isFinite(offset.startMs) && Number.isFinite(offset.endMs) && offset.endMs > offset.startMs
+            ))
+            : [];
+          let activeCompositionOffset = null;
+          for (let i = compositionOffsets.length - 1; i >= 0; i--) {
+            const offset = compositionOffsets[i];
+            if (lookupTimeMs >= offset.startMs && lookupTimeMs < offset.endMs) {
+              activeCompositionOffset = offset;
+              const foundIdx = allAyahs.findIndex(a => a.numberInSurah === offset.ayahNumber);
+              if (foundIdx !== -1) activeAyahIndex = foundIdx;
+              currentAyahStartSec = Math.max(0, (offset.startMs - (isTimingMapAbsolute ? rangeOffsetMs : 0)) / 1000);
+              currentAyahEndSec = Math.min(manifest.audio.durationSeconds, (offset.endMs - (isTimingMapAbsolute ? rangeOffsetMs : 0)) / 1000);
+              break;
+            }
+          }
+          // Method C: TimingMap words with canonicalWordKey using lookupTimeMs.
+          if (!hasEveryAyahTimeline && !activeCompositionOffset && timingMap && timingMap.words && timingMap.words.length > 0) {
             const words = timingMap.words;
             let foundWord = null;
             for (let i = words.length - 1; i >= 0; i--) {
@@ -1310,8 +1482,8 @@
               currentAyahEndSec = Math.min(manifest.audio.durationSeconds, (lastMs - (isTimingMapAbsolute ? rangeOffsetMs : 0)) / 1000);
             }
           }
-          // Method C: Fallback proportional duration across verses
-          else if (allAyahs.length > 1) {
+          // Method D: Fallback proportional duration across verses
+          else if (!hasEveryAyahTimeline && allAyahs.length > 1) {
             const totalDur = Math.max(manifest.audio.durationSeconds, 1);
             const fraction = Math.min(Math.max(frameTimeSeconds / totalDur, 0), 0.999);
             activeAyahIndex = Math.floor(fraction * allAyahs.length);
@@ -1417,7 +1589,157 @@
             }
           }
 
+          // Timed Ibtahalat lyrics are part of the scene contract, not a
+          // React-only overlay. They intentionally bypass Quran word/chunk
+          // rendering while preserving the same headers, frame, timeline,
+          // branding, and output clock used by every renderer.
+          const lyricLines = manifest.contentKind === 'lyrics' && Array.isArray(manifest.lyrics)
+            ? manifest.lyrics.filter(line => line && typeof line.text === 'string' && line.text.trim())
+            : null;
+          let activeLyricsIndex = 0;
+          if (lyricLines && lyricLines.length > 0) {
+            for (let i = lyricLines.length - 1; i >= 0; i--) {
+              if (frameTimeSeconds >= Number(lyricLines[i].start || 0)) {
+                activeLyricsIndex = i;
+                break;
+              }
+            }
+          }
+
+          if (lyricLines && lyricLines.length > 0 && displaySettings.showAyahText !== false) {
+            const lyricStyle = displaySettings.lyricsDisplayStyle || 'scroll';
+            const fontFamily = resolveFontFamily(typography.fontFamily);
+            const baseLyricSize = Math.max(14 * S, (Number(typography.fontSize || 28) * 1.6 * S));
+            const lyricLineHeight = baseLyricSize * 2.2;
+            const centerY = H * 0.52;
+            const maxTextWidth = W * 0.82;
+            const fitLyricSize = (line, requestedSize) => {
+              let size = requestedSize;
+              ctx.font = `bold ${Math.round(size)}px "${fontFamily}", "Amiri", serif`;
+              while (ctx.measureText(line).width > maxTextWidth && size > 14 * S) {
+                size -= 1 * S;
+                ctx.font = `bold ${Math.round(size)}px "${fontFamily}", "Amiri", serif`;
+              }
+              return size;
+            };
+            const drawLyricLine = (line, x, y, requestedSize, isCurrent, alpha = 1) => {
+              const size = fitLyricSize(line, requestedSize);
+              ctx.save();
+              ctx.globalAlpha = alpha;
+              ctx.direction = 'rtl';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.font = `${isCurrent ? 'bold ' : ''}${Math.round(size)}px "${fontFamily}", "Amiri", serif`;
+              if (isCurrent) {
+                const pulse = 0.6 + Math.sin(frameTimeSeconds * 2.5) * 0.4;
+                const glowStyle = displaySettings.glowStyle || 'golden';
+                const glowColor = glowStyle === 'neon' ? '#00FFFF'
+                  : glowStyle === 'emerald' ? '#10B981'
+                    : glowStyle === 'royal' ? '#A855F7'
+                      : glowStyle === 'soft' ? '#FFFFFF' : '#FFD700';
+                const textColor = glowStyle === 'neon' ? '#DFFFFF'
+                  : glowStyle === 'emerald' ? '#D1FAE5'
+                    : glowStyle === 'royal' ? '#F3E8FF'
+                      : glowStyle === 'soft' ? '#FFFFFF' : '#FFD700';
+                const width = ctx.measureText(line).width;
+                const pad = 24 * S;
+                const gradient = ctx.createLinearGradient(x - width / 2 - pad, y, x + width / 2 + pad, y);
+                gradient.addColorStop(0, 'rgba(212, 175, 55, 0)');
+                gradient.addColorStop(0.5, `rgba(212, 175, 55, ${0.10 + pulse * 0.10})`);
+                gradient.addColorStop(1, 'rgba(212, 175, 55, 0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(x - width / 2 - pad, y - size * 0.72, width + pad * 2, size * 1.45);
+                if (displaySettings.glowStyle === 'none') {
+                  ctx.fillStyle = typography.textColor || '#FFFFFF';
+                  ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+                  ctx.shadowBlur = 5 * S;
+                } else {
+                  ctx.fillStyle = textColor;
+                  ctx.shadowColor = glowColor;
+                  ctx.shadowBlur = (18 + pulse * 18) * S;
+                }
+                ctx.fillText(line, x, y);
+                if (displaySettings.glowStyle !== 'none') {
+                  ctx.shadowBlur *= 0.45;
+                  ctx.fillText(line, x, y);
+                }
+              } else {
+                ctx.fillStyle = typography.textColor || '#FFFFFF';
+                ctx.shadowColor = `rgba(0, 0, 0, ${(typography.shadowIntensity ?? 0.5) * 0.7})`;
+                ctx.shadowBlur = 5 * S;
+                ctx.fillText(line, x, y);
+              }
+              ctx.restore();
+            };
+
+            let visibleStart = activeLyricsIndex;
+            let visibleEnd = activeLyricsIndex + 1;
+            let visibleLines = [lyricLines[activeLyricsIndex].text];
+            if (lyricStyle === 'scroll') {
+              const maxVisible = Math.min(7, lyricLines.length);
+              const half = Math.floor(maxVisible / 2);
+              visibleStart = Math.max(0, activeLyricsIndex - half);
+              visibleEnd = Math.min(lyricLines.length, visibleStart + maxVisible);
+              if (visibleEnd - visibleStart < maxVisible) visibleStart = Math.max(0, visibleEnd - maxVisible);
+              visibleLines = lyricLines.slice(visibleStart, visibleEnd).map(line => line.text);
+            } else if (lyricStyle === 'karaoke') {
+              visibleStart = Math.max(0, Math.min(activeLyricsIndex - 1, lyricLines.length - 3));
+              visibleEnd = Math.min(lyricLines.length, visibleStart + 3);
+              visibleLines = lyricLines.slice(visibleStart, visibleEnd).map(line => line.text);
+            } else if (lyricStyle === 'fade' || lyricStyle === 'single') {
+              visibleLines = [lyricLines[activeLyricsIndex].text];
+            }
+
+            ctx.font = `bold ${Math.round(baseLyricSize)}px "${fontFamily}", "Amiri", serif`;
+            const widest = Math.max(W * 0.56, ...visibleLines.map(line => Math.min(ctx.measureText(line).width, maxTextWidth)));
+            const visibleHeight = lyricStyle === 'single' || lyricStyle === 'fade'
+              ? baseLyricSize * 1.8
+              : Math.max(lyricLineHeight, visibleLines.length * lyricLineHeight);
+            let lyricTop = centerY - visibleHeight / 2;
+            const lyricFrame = getResponsiveTextFrameLayout({
+              canvasWidth: W,
+              canvasHeight: H,
+              contentTop: lyricTop,
+              contentBottom: lyricTop + visibleHeight,
+              contentWidth: widest,
+              scale: S,
+              safeTopRatio: 0.14,
+              safeBottomRatio: 0.88,
+            });
+            lyricTop += lyricFrame.offsetY;
+            if (displaySettings.frameStyle && displaySettings.frameStyle !== 'none') {
+              drawIslamicFrame(ctx, lyricFrame.frameX, lyricFrame.frameY, lyricFrame.frameWidth, lyricFrame.frameHeight, displaySettings.frameStyle, S);
+            }
+
+            if (lyricStyle === 'single' || lyricStyle === 'fade') {
+              const line = lyricLines[activeLyricsIndex].text;
+              let alpha = 1;
+              if (lyricStyle === 'fade') {
+                const lineDuration = Math.max(Number(lyricLines[activeLyricsIndex].end || 0) - Number(lyricLines[activeLyricsIndex].start || 0), 0.1);
+                const local = Math.max(0, Math.min(1, (frameTimeSeconds - Number(lyricLines[activeLyricsIndex].start || 0)) / lineDuration));
+                alpha = Math.min(1, Math.max(0.2, local < 0.15 ? local / 0.15 : local > 0.85 ? (1 - local) / 0.15 : 1));
+              }
+              drawLyricLine(line, W / 2, lyricTop + visibleHeight / 2, baseLyricSize * (lyricStyle === 'single' ? 1.3 : 1.2), true, alpha);
+              if (lyricStyle === 'single') {
+                ctx.save();
+                ctx.font = `${Math.round(14 * S)}px "${fontFamily}", sans-serif`;
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+                ctx.textAlign = 'center';
+                ctx.fillText(`${activeLyricsIndex + 1} / ${lyricLines.length}`, W / 2, lyricTop + visibleHeight / 2 + baseLyricSize * 1.35);
+                ctx.restore();
+              }
+            } else {
+              const startY = lyricTop + lyricLineHeight / 2;
+              for (let i = visibleStart; i < visibleEnd; i++) {
+                const distance = Math.abs(i - activeLyricsIndex);
+                drawLyricLine(lyricLines[i].text, W / 2, startY + (i - visibleStart) * lyricLineHeight,
+                  baseLyricSize, i === activeLyricsIndex, i === activeLyricsIndex ? 1 : Math.max(0.22, 0.72 - distance * 0.16));
+              }
+            }
+          }
+
           // 8. Verse Display Modes & Chunks (full, twoWords, threeTwo, wordByWord)
+          if (!lyricLines) {
           const verseMode = displaySettings.verseDisplayMode || 'full';
           let displayWords = ayahWords;
           let chunkStartWordIdx = 0;
@@ -1757,6 +2079,7 @@
 
             ctx.restore(); // End verse entrance transition transform
           }
+          }
 
           // 11. Sleek Audio Timeline Progress Indicator at Bottom
           const audioTotalDur = Math.max(manifest.audio.durationSeconds, 1);
@@ -1993,8 +2316,17 @@
 
         isSceneReady() {
           return isReady;
+        },
+
+        getVideoBackgroundStatus() {
+          return videoBackgroundStatus;
         }
       };
+      }
+
+      const defaultCanvas = document.getElementById('render-canvas');
+      window.__CREATE_RENDER_CONTROLLER__ = createRenderController;
+      window.__RENDER_CONTROLLER__ = defaultCanvas ? createRenderController(defaultCanvas) : null;
     })();
   </script>
 </body>

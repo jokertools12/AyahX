@@ -4,7 +4,7 @@ import { getTrackById, ibtahalatTracks } from '@/data/ibtahalat';
 import { transcribeFullAudio } from '@/lib/chunkedTranscribe';
 import { motion } from 'framer-motion';
 import { Layout } from '@/components/Layout';
-import { VideoPreview, VideoPreviewRef, FrameSyncOverride } from '@/components/VideoPreview';
+import { FullFidelityVideoPreview as VideoPreview, FullFidelityVideoPreviewRef as VideoPreviewRef } from '@/components/FullFidelityVideoPreview';
 import { AudioEffectsPanel } from '@/components/AudioEffectsPanel';
 import { DisplaySettingsPanel, DisplaySettings } from '@/components/DisplaySettingsPanel';
 import { CustomBackgroundUploader } from '@/components/CustomBackgroundUploader';
@@ -446,6 +446,137 @@ export default function PreviewPage() {
   useEffect(() => {
     durationRef.current = duration;
   }, [duration]);
+
+  /**
+   * One browser scene manifest drives both the visible preview and the local
+   * Browser Hybrid recorder. It mirrors the manifest submitted to the three
+   * server engines so visual settings cannot disappear only on the client.
+   */
+  const fullFidelitySceneManifest = useMemo(() => {
+    const isTrimmed = trimEnabled && trimEnd > trimStart;
+    const qfBaseOffsetMs = playbackMode === 'qf' && rangeMs ? rangeMs.from : 0;
+    const effectiveRangeMs = isTrimmed
+      ? { from: Math.round(qfBaseOffsetMs + trimStart * 1000), to: Math.round(qfBaseOffsetMs + trimEnd * 1000) }
+      : rangeMs;
+    const effectiveDuration = Math.max(
+      isTrimmed
+        ? trimEnd - trimStart
+        : rangeMs
+          ? (rangeMs.to - rangeMs.from) / 1000
+          : duration > 0
+            ? duration
+            : currentIbtTrack?.duration
+              ? parseDurationToSeconds(currentIbtTrack.duration)
+              : 0.5,
+      0.5,
+    );
+    const timingMap: TimingMap = activeTimingMap || {
+      schemaVersion: '1.0.0',
+      mapId: `preview_${surahNumber}_${startAyah}_${endAyah}`,
+      reciterId: isIbtahalatMode ? 'ibtahalat' : (reciter?.id || 'reciter'),
+      sourceId: 'preview-fallback',
+      sourceUrlOrImmutableAssetId: audioUrl || ibtAudioUrl || '',
+      audioContentHash: `preview_${isIbtahalatMode ? ibtTrackId || 'track' : reciter?.id || 'reciter'}_${surahNumber}_${startAyah}`,
+      decodedDurationMs: effectiveDuration * 1000,
+      sampleRate: 44100,
+      channels: 2,
+      audioProcessingVersion: 'v1',
+      surahNumber: Math.max(1, surahNumber),
+      ayahRange: { from: Math.max(1, startAyah), to: Math.max(startAyah, endAyah) },
+      quranTextVersion: 'uthmani',
+      segmentationVersion: 'v1',
+      alignerVersion: 'v1',
+      sourceMethod: 'forced_alignment',
+      validationStatus: 'needs_review',
+      createdAt: 'preview',
+      words: [],
+      gaps: [],
+    };
+    const resolvedEveryAyahUrls = everyAyahUrls.length > 0
+      ? everyAyahUrls
+      : playbackMode === 'everyayah' && reciter?.everyAyahSubfolder
+        ? Array.from({ length: Math.max(1, endAyah - startAyah + 1) }, (_, index) => getEveryAyahUrl(reciter, surahNumber, startAyah + index))
+        : undefined;
+    const visibleBackgroundType = permittedCustomBackground
+      ? customBackgroundType
+      : background?.type === 'animated' || (background?.slideImages && background.slideImages.length > 1)
+        ? 'slideshow'
+        : background?.type === 'video'
+          ? 'video'
+          : background?.type === 'color'
+            ? 'color'
+          : 'image';
+    const visibleBackgroundUrl = permittedCustomBackground || background?.url || '';
+    const visibleBackgroundThumbnail = permittedCustomBackground && customBackgroundType === 'image'
+      ? permittedCustomBackground
+      : background?.thumbnail || (visibleBackgroundType === 'image' ? visibleBackgroundUrl : undefined);
+    const sceneDisplaySettings = isIbtahalatMode
+      ? { ...displaySettings, showAyahNumber: false }
+      : displaySettings;
+
+    return buildClientRenderManifest({
+      aspectRatio,
+      quality: exportSettings.quality,
+      fps: exportSettings.fps ?? 30,
+      audioBitrate: exportSettings.audioBitrate ?? '192k',
+      motionSpeed: exportSettings.motionSpeed,
+      renderEngine: 'browser',
+      surah: {
+        number: Math.max(1, surahNumber),
+        name: isIbtahalatMode ? (ibtTrackTitle || 'ابتهال') : (surah?.name || 'الفاتحة'),
+      },
+      ayahRange: { start: Math.max(1, startAyah), end: Math.max(startAyah, endAyah) },
+      ayahs: ayahs.length > 0 ? ayahs : [{ numberInSurah: 1, text: isIbtahalatMode ? (ibtTrackTitle || 'ابتهال') : 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ' }],
+      reciter: {
+        id: isIbtahalatMode ? 'ibtahalat' : (reciter?.id || 'mishary_alafasy'),
+        name: isIbtahalatMode ? (ibtPerformerName || 'منشد') : (reciter?.name || 'مشاري العفاسي'),
+        quranFoundationId: reciter?.quranFoundationId,
+        everyAyahSubfolder: reciter?.everyAyahSubfolder,
+      },
+      timingMap,
+      contentKind: isIbtahalatMode ? 'lyrics' : 'quran',
+      lyrics: isIbtahalatMode ? transcribedLines : undefined,
+      audio: {
+        sourceMode: isIbtahalatMode ? 'single_url' : playbackMode === 'qf' ? 'qf' : playbackMode === 'everyayah' ? 'everyayah' : 'single_url',
+        audioUrl: audioUrl || ibtAudioUrl || resolvedEveryAyahUrls?.[0] || '',
+        audioContentHash: timingMap.audioContentHash,
+        durationSeconds: effectiveDuration,
+        rangeMs: effectiveRangeMs,
+        everyAyahUrls: resolvedEveryAyahUrls,
+        everyAyahTimestamps,
+      },
+      audioEffects: audioEffects.effects,
+      background: {
+        id: permittedCustomBackground ? 'custom-background' : (background?.id || 'default_bg'),
+        type: visibleBackgroundType as 'video' | 'image' | 'slideshow' | 'color',
+        url: visibleBackgroundUrl,
+        thumbnail: visibleBackgroundThumbnail,
+        category: background?.category,
+        slideImages: permittedCustomBackground ? undefined : background?.slideImages,
+        motionSpeed: exportSettings.motionSpeed,
+      },
+      textSettings,
+      displaySettings: sceneDisplaySettings,
+      userId: user?.id,
+      idempotencyKey: `preview-${isIbtahalatMode ? ibtTrackId || 'track' : `${surahNumber}-${startAyah}-${endAyah}`}`,
+    });
+  }, [
+    activeTimingMap, aspectRatio, audioEffects.effects, audioUrl, ayahs, background, currentIbtTrack?.duration,
+    customBackgroundType, displaySettings, duration, endAyah, everyAyahTimestamps, everyAyahUrls, exportSettings,
+    ibtAudioUrl, ibtPerformerName, ibtTrackId, ibtTrackTitle, isIbtahalatMode, permittedCustomBackground,
+    playbackMode, rangeMs, reciter, startAyah, surah?.name, surahNumber, textSettings, transcribedLines,
+    trimEnabled, trimEnd, trimStart, user?.id,
+  ]);
+
+  const getFullFidelityFrameTime = useCallback(() => {
+    const audioTime = audioRef.current?.currentTime || 0;
+    if (trimEnabled && trimEnd > trimStart) {
+      const qfBase = playbackMode === 'qf' && rangeMs ? rangeMs.from / 1000 : 0;
+      return Math.max(0, audioTime - qfBase - trimStart);
+    }
+    if (rangeMs) return Math.max(0, audioTime - rangeMs.from / 1000);
+    return Math.max(0, audioTime);
+  }, [playbackMode, rangeMs, trimEnabled, trimEnd, trimStart]);
 
   const transcribingAudioUrlRef = useRef<string | null>(null);
   const transcriptionDoneUrlRef = useRef<string | null>(null);
@@ -1448,6 +1579,8 @@ export default function PreviewPage() {
           everyAyahSubfolder: reciter?.everyAyahSubfolder,
         },
         timingMap: resolvedTimingMap,
+        contentKind: isIbtahalatMode ? 'lyrics' : 'quran',
+        lyrics: isIbtahalatMode ? transcribedLines : undefined,
         audio: {
           sourceMode: playbackMode === 'qf' ? 'qf' : playbackMode === 'everyayah' ? 'everyayah' : 'single_url',
           audioUrl: resolvedAudioUrl || '',
@@ -1547,10 +1680,12 @@ export default function PreviewPage() {
       let recordingDuration: number;
       let recordingStartAt = 0;
 
-      // Ibtahalat trim mode
-      if (isIbtahalatMode && trimEnabled && trimEnd > trimStart) {
+      // Any trimmed source (Quran or Ibtahalat) is represented by the same
+      // local scene clock. Quran Foundation audio remains absolute at the
+      // audio element, while the harness receives a zero-based frame time.
+      if (trimEnabled && trimEnd > trimStart) {
         recordingDuration = trimEnd - trimStart;
-        recordingStartAt = trimStart;
+        recordingStartAt = (playbackMode === 'qf' && rangeMs ? rangeMs.from / 1000 : 0) + trimStart;
       } else if (playbackMode === 'everyayah') {
         recordingDuration = audio && audio.duration > 0 ? audio.duration : 60;
         recordingStartAt = 0;
@@ -1669,114 +1804,18 @@ export default function PreviewPage() {
           let stopped = false;
           let isDrawing = false;
 
-          const computeFrameSync = (nowSec: number): FrameSyncOverride => {
-            const currentAyahsList = ayahsRef.current.length > 0 ? ayahsRef.current : ayahs;
-            if (!currentAyahsList || currentAyahsList.length === 0) return {};
-
-            // Helper to get local word index and progress for any active verse
-            const resolveWordForAyah = (ayahObj: { numberInSurah: number; text: string }, startSec: number, endSec: number) => {
-              const ayahWords = (ayahObj.text || '').split(' ').filter(Boolean);
-              if (activeTimingMapRef.current && activeTimingMapRef.current.words && activeTimingMapRef.current.words.length > 0) {
-                const res = resolveActiveWordAtTime(activeTimingMapRef.current, nowSec * 1000);
-                if (res.ayahNumber != null) {
-                  if (res.ayahNumber === ayahObj.numberInSurah) {
-                    const idx = res.wordIndexInAyah ?? 0;
-                    return { wordIndex: Math.min(Math.max(idx, 0), Math.max(ayahWords.length - 1, 0)), progress: res.wordProgress };
-                  }
-                } else if (res.activeWordIndex != null) {
-                  return { wordIndex: Math.min(Math.max(res.activeWordIndex, 0), Math.max(ayahWords.length - 1, 0)), progress: res.wordProgress };
-                }
-              }
-              // Approximate fallback
-              if (ayahWords.length > 0) {
-                const dur = Math.max(endSec - startSec, 0.5);
-                const elapsed = Math.max(nowSec - startSec, 0);
-                const ratio = Math.min(elapsed / dur, 1);
-                const wIdx = Math.min(Math.floor(ratio * ayahWords.length), ayahWords.length - 1);
-                const perWord = 1 / ayahWords.length;
-                const prog = Math.min(Math.max((ratio - wIdx * perWord) / Math.max(perWord, 0.0001), 0), 1);
-                return { wordIndex: wIdx, progress: prog };
-              }
-              return { wordIndex: 0, progress: 0 };
-            };
-
-            // 1. QF Mode (exact word timestamps in milliseconds with waqf-holding)
-            if (playbackMode === 'qf' && ayahTimings.length > 0) {
-              const nowMs = nowSec * 1000;
-              for (let aIdx = ayahTimings.length - 1; aIdx >= 0; aIdx--) {
-                const t = ayahTimings[aIdx];
-                if (!t) continue;
-                if (nowMs >= t.timestamp_from) {
-                  const ayahObj = currentAyahsList[aIdx] || currentAyahsList[0];
-                  const wordSync = resolveWordForAyah(ayahObj, t.timestamp_from / 1000, t.timestamp_to / 1000);
-                  return {
-                    currentAyah: ayahObj,
-                    currentAyahWords: (ayahObj.text || '').split(' ').filter(Boolean),
-                    highlightedWordIndex: wordSync.wordIndex,
-                    highlightWordProgress: wordSync.progress,
-                  };
-                }
-              }
-            }
-
-            // 2. EveryAyah Mode (authentic multi-ayah playback)
-            if (playbackMode === 'everyayah' && everyAyahTimestamps.length > 0) {
-              for (let aIdx = everyAyahTimestamps.length - 1; aIdx >= 0; aIdx--) {
-                const ts = everyAyahTimestamps[aIdx];
-                if (nowSec >= ts.from) {
-                  const ayahObj = currentAyahsList[aIdx] || currentAyahsList[0];
-                  const wordSync = resolveWordForAyah(ayahObj, ts.from, ts.to);
-                  return {
-                    currentAyah: ayahObj,
-                    currentAyahWords: (ayahObj.text || '').split(' ').filter(Boolean),
-                    highlightedWordIndex: wordSync.wordIndex,
-                    highlightWordProgress: wordSync.progress,
-                  };
-                }
-              }
-            }
-
-            // 3. Ibtahalat Mode (transcribed lines)
-            if (isIbtahalatMode) {
-              const tLines = transcribedLinesRef.current;
-              if (tLines.length > 0) {
-                let foundIdx = 0;
-                for (let lIdx = tLines.length - 1; lIdx >= 0; lIdx--) {
-                  if (nowSec >= tLines[lIdx].start) { foundIdx = lIdx; break; }
-                }
-                return { currentLyricsIndex: foundIdx };
-              }
-            }
-
-            // 4. Fallback Mode (proportional estimation)
-            if (rangeMs) {
-              const estStartSec = rangeMs.from / 1000;
-              const estEndSec = rangeMs.to / 1000;
-              const totalSec = Math.max(estEndSec - estStartSec, 0.001);
-              const relativeSec = Math.max(nowSec - estStartSec, 0);
-              const ratio = Math.min(Math.max(relativeSec / totalSec, 0), 1);
-              const ayahsCount = currentAyahsList.length;
-              const idx = Math.min(Math.floor(ratio * ayahsCount), ayahsCount - 1);
-              const ayahObj = currentAyahsList[idx] || currentAyahsList[0];
-              return {
-                currentAyah: ayahObj,
-                currentAyahWords: (ayahObj.text || '').split(' ').filter(Boolean),
-              };
-            }
-
-            return {};
-          };
-
-          const drawIsolatedFrame = () => {
+          const drawIsolatedFrame = async () => {
             if (isDrawing || stopped) return;
             isDrawing = true;
             try {
               const livePreviewApi = videoPreviewRef.current;
               const draw = livePreviewApi?.drawFrame ?? previewApi.drawFrame;
-              // Ground-truth audio clock position for sub-frame synchronization
+              // Ground-truth audio clock position for sub-frame synchronization.
+              // The frame itself is now resolved by the shared render-harness,
+              // exactly as it is for all three server engines.
               const currentAudioSec = audio ? audio.currentTime : recordingStartAt;
-              const syncOverride = computeFrameSync(currentAudioSec);
-              draw(recordingCanvas, attempt.renderMode, syncOverride);
+              const frameTimeSeconds = Math.max(0, Math.min(recordingDuration, currentAudioSec - recordingStartAt));
+              await draw(recordingCanvas, attempt.renderMode, frameTimeSeconds);
               // Push frame to capture stream
               videoRecorder.requestFrame();
 
@@ -1800,21 +1839,8 @@ export default function PreviewPage() {
             rafId = requestAnimationFrame(renderIsolatedFrame);
             if (now - lastFrameTime < frameInterval) return;
             lastFrameTime = now;
-            drawIsolatedFrame();
+            void drawIsolatedFrame();
           };
-
-          // Dual-clock watchdog heartbeat: ensures frames continue even if tab is backgrounded
-          watchdogTimerId = window.setInterval(() => {
-            if (stopped) return;
-            const now = performance.now();
-            if (now - lastFrameTime >= frameInterval * 1.35) {
-              lastFrameTime = now;
-              drawIsolatedFrame();
-            }
-          }, Math.round(frameInterval / 2));
-
-          drawIsolatedFrame();
-          rafId = requestAnimationFrame(renderIsolatedFrame);
 
           stopIsolatedLoop = () => {
             stopped = true;
@@ -1828,14 +1854,31 @@ export default function PreviewPage() {
             }
           };
 
-          // Warm up isolated canvas before captureStream starts
-          await new Promise((resolve) => setTimeout(resolve, 100));
-          drawIsolatedFrame();
-
+          // Establish the exact source position before the first scene frame.
+          // The render loop starts only after this warm-up, so a stale preview
+          // clock can never become frame zero of the recording.
           if (audio) {
             audio.pause();
             audio.currentTime = recordingStartAt;
           }
+
+          // Warm up isolated canvas before captureStream starts
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          await drawIsolatedFrame();
+
+          // Dual-clock watchdog heartbeat: ensures frames continue even if tab
+          // is backgrounded. It intentionally begins after the warm-up frame.
+          watchdogTimerId = window.setInterval(() => {
+            if (stopped) return;
+            const now = performance.now();
+            if (now - lastFrameTime >= frameInterval * 1.35) {
+              lastFrameTime = now;
+              void drawIsolatedFrame();
+            }
+          }, Math.round(frameInterval / 2));
+
+          lastFrameTime = 0;
+          rafId = requestAnimationFrame(renderIsolatedFrame);
 
           toast.info(
             exportSettingsForPlan.recordingMethod === 'auto'
@@ -2053,6 +2096,8 @@ export default function PreviewPage() {
               currentLyricsIndex={currentAyahIndex}
               audioProgress={duration > 0 ? currentTime / duration : 0}
               isPremium={isPremium}
+              sceneManifest={fullFidelitySceneManifest}
+              getFrameTimeSeconds={getFullFidelityFrameTime}
             />
 
 
