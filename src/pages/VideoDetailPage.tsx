@@ -257,7 +257,7 @@ export default function VideoDetailPage() {
                 )}
                 {(video as any).render_engine === 'skia_canvas' && (
                   <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/20 text-xs">
-                    🎨 Skia Rust (فاخر)
+                    الإنتاج السحابي — Skia
                   </Badge>
                 )}
                 {(video as any).render_engine === 'browser_cloud' && (

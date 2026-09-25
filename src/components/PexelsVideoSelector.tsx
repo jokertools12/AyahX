@@ -138,7 +138,7 @@ export function PexelsVideoSelector({ onSelect }: PexelsVideoSelectorProps) {
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 
                 {/* Play indicator */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/30">

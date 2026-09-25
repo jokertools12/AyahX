@@ -117,7 +117,7 @@ export function CustomBackgroundUploader({ onUpload, currentBackground, currentB
                 className="w-full h-full object-cover"
               />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             <div className="absolute top-2 left-2 p-1 rounded-full bg-primary text-primary-foreground">
               <Check className="h-4 w-4" />
             </div>

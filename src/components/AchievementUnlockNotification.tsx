@@ -41,7 +41,8 @@ export function AchievementUnlockOverlay() {
             <div className="relative overflow-hidden rounded-2xl border border-primary/40 bg-card shadow-2xl shadow-primary/30">
               {/* Animated background glow */}
               <motion.div
-                className="absolute inset-0 bg-gradient-to-br from-primary/15 via-transparent to-primary/10"
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/15 via-transparent to-primary/10"
                 animate={{ opacity: [0.3, 0.7, 0.3] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />

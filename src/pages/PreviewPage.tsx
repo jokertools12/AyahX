@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { SettingsSection } from '@/components/SettingsSection';
 import { Badge } from '@/components/ui/badge';
 import { surahs } from '@/data/surahs';
 import { reciters, getAudioUrl, getEveryAyahUrl } from '@/data/reciters';
@@ -162,9 +163,9 @@ function getAudioCacheKey(url: string): string {
 }
 
 function renderEngineLabel(engine: string | null | undefined): string {
-  if (engine === 'ffmpeg_ass') return 'FFmpeg ASS — فكرة 1';
-  if (engine === 'skia_canvas') return 'Skia Canvas — فكرة 2';
-  if (engine === 'browser_cloud') return 'Browser Cloud — فكرة 3';
+  if (engine === 'ffmpeg_ass') return 'الإنتاج السحابي — FFmpeg';
+  if (engine === 'skia_canvas') return 'الإنتاج السحابي — Skia';
+  if (engine === 'browser_cloud') return 'الإنتاج السحابي — المتصفح';
   return 'محرك الإنتاج المحدد';
 }
 
@@ -1443,7 +1444,7 @@ export default function PreviewPage() {
     }
 
     if (permittedCustomBackground?.startsWith('blob:')) {
-      toast.error('الفيديو المرفوع من جهازك يُصدّر عبر Browser Canvas. للريندر السحابي اختر فيديو Pexels أو خلفية صور مدعومة.');
+      toast.error('لتصدير الفيديو المرفوع، اختر التسجيل على جهازك. للإنتاج السحابي اختر فيديو Pexels أو خلفية صور مدعومة.');
       return false;
     }
 
@@ -1624,7 +1625,7 @@ export default function PreviewPage() {
 
   const handleLegacyBrowserRecording = async () => {
     if (!isAuthenticated || !user) {
-      toast.error('سجّل الدخول أولاً ليُحسب رصيد Browser Canvas اليومي بأمان.');
+      toast.error('سجّل الدخول أولاً لبدء التسجيل على جهازك.');
       navigate('/auth');
       return;
     }
@@ -1655,7 +1656,7 @@ export default function PreviewPage() {
     // This endpoint is the atomic source of truth for the 5/day free allowance.
     const canCreate = await incrementUsage();
     if (!canCreate) {
-      toast.error('لقد استنفدت عمليات Browser Canvas المتاحة اليوم. الخطة المجانية تشمل 5 عمليات يومياً؛ تتجدد الحصة غداً أو يمكنك الترقية.');
+      toast.error('استخدمت جميع عمليات التسجيل المتاحة اليوم. الخطة المجانية تشمل 5 عمليات يومياً؛ تتجدد الحصة غداً أو يمكنك الترقية.');
       return;
     }
 
@@ -2017,8 +2018,8 @@ export default function PreviewPage() {
   const modeLabel = (() => {
     if (isIbtahalatMode) return null; // Ibtahalat uses direct URL, no sync warning needed
     if (playbackMode === 'qf') return null; // QF mode has full word-level sync
-    if (playbackMode === 'everyayah') return '✅ تشغيل متصل بدون تقطيع للآيات المحددة';
-    return '⚠️ يتم استخدام الملف الصوتي الكامل (تحديد مواضع الآيات تقديري)';
+    if (playbackMode === 'everyayah') return 'تلاوة الآيات المحددة';
+    return 'توقيت الآيات تقريبي لهذه التلاوة';
   })();
 
   const timingStatusBadge = (() => {
@@ -2026,7 +2027,7 @@ export default function PreviewPage() {
       return (
         <Badge variant="outline" className="text-xs gap-1 border-primary/40 text-primary bg-primary/10">
           <Sparkles className="w-3.5 h-3.5" />
-          نمط الابتهالات (تزامن الأسطر)
+          عرض الكلمات مع الصوت
         </Badge>
       );
     }
@@ -2034,14 +2035,14 @@ export default function PreviewPage() {
       return (
         <Badge variant="outline" className="text-xs gap-1.5 border-emerald-500/40 text-emerald-400 bg-emerald-500/10 py-0.5">
           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-          تزامن صوتي دقيق معتمد بالكلمة
+          تظليل الكلمات مع التلاوة
         </Badge>
       );
     }
     return (
       <Badge variant="outline" className="text-xs gap-1.5 border-amber-500/40 text-amber-400 bg-amber-500/10 py-0.5">
         <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
-        وضع مراجعة التوقيت (التزامن بالكلمة غير معتمد)
+        التزامن الدقيق للكلمات غير متاح لهذه التلاوة
       </Badge>
     );
   })();
@@ -2161,6 +2162,7 @@ export default function PreviewPage() {
                         ℹ️ جاري معالجة الكلمات وتزامنها مع الصوت
                       </p>
                     )}
+                    <SettingsSection title="أدوات الكلمات والتوقيت">
                     <div className="flex gap-2 flex-wrap">
                       <Button
                         variant="ghost"
@@ -2287,6 +2289,7 @@ export default function PreviewPage() {
                         </>
                       )}
                     </div>
+                    </SettingsSection>
                   </div>
                 )}
                 {isIbtahalatMode && isEditingTiming && transcribedLines.length > 0 && (
@@ -2367,16 +2370,66 @@ export default function PreviewPage() {
               </CardContent>
             </Card>
 
-            {/* Tabs */}
+            <Card>
+              <CardContent className="p-4 space-y-4">
+                {audioError && (
+                  <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-start gap-2">
+                    <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-destructive">تعذر تحميل الصوت</p>
+                      <p className="text-xs text-muted-foreground">قد يكون الملف غير متوفر لهذه السورة</p>
+                    </div>
+                  </div>
+                )}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-center gap-3">
+                    <Button variant="ghost" size="icon" aria-label="الآية السابقة"
+                      onClick={() => skipAyah('backward')}
+                      disabled={currentAyahIndex === 0 || audioError || (!canSkip && !isIbtahalatMode)}>
+                      <SkipForward className="h-5 w-5" />
+                    </Button>
+                    <Button variant="outline" size="icon" aria-label={isPlaying ? 'إيقاف مؤقت' : 'تشغيل المعاينة'}
+                      onClick={togglePlay} disabled={!audioLoaded || audioError} className="h-14 w-14">
+                      {!audioLoaded ? <Loader2 className="h-6 w-6 animate-spin" /> : isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
+                    </Button>
+                    <Button variant="ghost" size="icon" aria-label="الآية التالية"
+                      onClick={() => skipAyah('forward')}
+                      disabled={currentAyahIndex === ayahs.length - 1 || audioError || (!canSkip && !isIbtahalatMode)}>
+                      <SkipBack className="h-5 w-5" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={toggleMute} aria-label={isMuted ? 'تشغيل الصوت' : 'كتم الصوت'}>
+                      {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    <Progress value={progress} className="h-2" />
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>{formatTime(currentTime)}</span>
+                      <span>{formatTime(duration)}</span>
+                    </div>
+                  </div>
+                  <div className="text-center p-2 rounded-lg bg-muted/50">
+                    <p className="text-sm text-muted-foreground">
+                      {isIbtahalatMode ? 'السطر' : 'الآية'}{' '}
+                      <span className="font-bold text-foreground">{isIbtahalatMode ? currentAyahIndex + 1 : (ayahs[currentAyahIndex]?.numberInSurah || startAyah)}</span>{' '}
+                      من {ayahs.length}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <SettingsSection title="إعدادات الفيديو" description="القوالب والعرض والصوت والخلفية والجودة وقص المقطع">
+            {/* Existing tab state and settings stay mounted when closed. */}
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="w-full grid grid-cols-3 sm:grid-cols-6 gap-0.5 h-auto p-1">
+              <TabsList className="w-full grid grid-cols-3 gap-0.5 h-auto p-1">
                 <TabsTrigger value="presets" className="gap-1 text-xs px-2 py-2">
                   <Palette className="h-3.5 w-3.5" />
                   قوالب
                 </TabsTrigger>
                 <TabsTrigger value="controls" className="gap-1 text-xs px-2 py-2">
                   <Settings className="h-3.5 w-3.5" />
-                  التحكم
+                  قص المقطع
                 </TabsTrigger>
                 <TabsTrigger value="display" className="gap-1 text-xs px-2 py-2">
                   <Eye className="h-3.5 w-3.5" />
@@ -2401,78 +2454,6 @@ export default function PreviewPage() {
               </TabsContent>
 
               <TabsContent value="controls" className="mt-4">
-                <Card>
-                  <CardContent className="p-4 space-y-4">
-                    {audioError && (
-                      <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-start gap-2">
-                        <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
-                        <div>
-                          <p className="text-sm font-medium text-destructive">تعذر تحميل الصوت</p>
-                          <p className="text-xs text-muted-foreground">قد يكون الملف غير متوفر لهذه السورة</p>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-center gap-3">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                         onClick={() => skipAyah('backward')}
-                          disabled={currentAyahIndex === 0 || audioError || (!canSkip && !isIbtahalatMode)}
-                        >
-                          <SkipForward className="h-5 w-5" />
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={togglePlay}
-                          disabled={!audioLoaded || audioError}
-                          className="h-14 w-14"
-                        >
-                          {!audioLoaded ? (
-                            <Loader2 className="h-6 w-6 animate-spin" />
-                          ) : isPlaying ? (
-                            <Pause className="h-6 w-6" />
-                          ) : (
-                            <Play className="h-6 w-6" />
-                          )}
-                        </Button>
-
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => skipAyah('forward')}
-                          disabled={currentAyahIndex === ayahs.length - 1 || audioError || (!canSkip && !isIbtahalatMode)}
-                        >
-                          <SkipBack className="h-5 w-5" />
-                        </Button>
-
-                        <Button variant="ghost" size="icon" onClick={toggleMute}>
-                          {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-                        </Button>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Progress value={progress} className="h-2" />
-                        <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>{formatTime(currentTime)}</span>
-                          <span>{formatTime(duration)}</span>
-                        </div>
-                      </div>
-
-                      <div className="text-center p-2 rounded-lg bg-muted/50">
-                        <p className="text-sm text-muted-foreground">
-                          {isIbtahalatMode ? 'السطر' : 'الآية'}{' '}
-                          <span className="font-bold text-foreground">{isIbtahalatMode ? currentAyahIndex + 1 : (ayahs[currentAyahIndex]?.numberInSurah || startAyah)}</span>{' '}
-                          من {ayahs.length}
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
                 {/* Audio Trim Control */}
                 {(isIbtahalatMode || duration > 0) && (
                   <AudioTrimControl
@@ -2541,6 +2522,7 @@ export default function PreviewPage() {
                 </div>
               </TabsContent>
             </Tabs>
+            </SettingsSection>
 
             {/* Recording / Actions */}
             <Card>
@@ -2593,9 +2575,9 @@ export default function PreviewPage() {
                       <span className="font-semibold text-foreground">{Math.round(serverRenderJob.progress)}% مكتمل</span>
                       <span>
                         {serverRenderJob.status === 'queued' ? (
-                          <span className="text-amber-500 font-medium">⏳ جاري تخصيص وحدة {renderEngineLabel(serverRenderJob.engine)}</span>
+                          <span className="text-amber-500 font-medium">بانتظار بدء إنتاج الفيديو</span>
                         ) : (
-                          `⚡ ${renderEngineLabel(serverRenderJob.engine)} · ريندر MP4 فائق الدقة`
+                          `${renderEngineLabel(serverRenderJob.engine)} · إنتاج MP4`
                         )}
                       </span>
                     </div>
@@ -2620,7 +2602,7 @@ export default function PreviewPage() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-center gap-2 text-emerald-500 p-3 rounded-lg bg-emerald-500/10">
                       <CheckCircle2 className="h-5 w-5" />
-                      <span className="font-medium text-sm">تم إنشاء وتدقيق الفيديو بنجاح عبر {renderEngineLabel(serverRenderJob.engine)} (H.264 MP4)!</span>
+                      <span className="font-medium text-sm">الفيديو جاهز للتحميل — {renderEngineLabel(serverRenderJob.engine)} (MP4)</span>
                     </div>
 
                     <Button
@@ -2681,7 +2663,7 @@ export default function PreviewPage() {
                     </div>
                     <Progress value={videoRecorder.progress} className="h-2" />
                     <p className="text-xs text-muted-foreground text-center">
-                      {Math.round(videoRecorder.progress)}% مكتمل • ريندر فائق الدقة (30/60fps)
+                      {Math.round(videoRecorder.progress)}% من التسجيل مكتمل
                     </p>
                   </div>
                 ) : videoRecorder.videoBlob ? (
@@ -2691,7 +2673,7 @@ export default function PreviewPage() {
                       <div className="space-y-3">
                         <div className="flex items-center gap-2 text-primary">
                           <Loader2 className="h-5 w-5 animate-spin" />
-                          <span className="font-medium">{videoRecorder.stage || 'جاري تجهيز وتلميع الفيديو...'}</span>
+                          <span className="font-medium">{videoRecorder.stage || 'جاري تجهيز الفيديو للتحميل...'}</span>
                         </div>
                         <Progress value={videoRecorder.convertProgress} className="h-2" />
                       </div>
@@ -2699,7 +2681,7 @@ export default function PreviewPage() {
                       <>
                         <div className="flex items-center justify-center gap-2 text-primary p-3 rounded-lg bg-primary/10">
                           <Check className="h-5 w-5" />
-                          <span className="font-medium">تم إنشاء وتلميع الفيديو بنجاح (MP4)!</span>
+                          <span className="font-medium">اكتمل التسجيل. اختر صيغة التحميل.</span>
                         </div>
 
 

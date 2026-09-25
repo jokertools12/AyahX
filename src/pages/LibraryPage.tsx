@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Layout } from '@/components/Layout';
+import { SettingsSection } from '@/components/SettingsSection';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -472,7 +473,8 @@ export default function LibraryPage() {
                     ) : null}
 
                     {/* Actions */}
-                    <div className="flex gap-2">
+                    <SettingsSection title="إجراءات الفيديو">
+                    <div className="flex flex-wrap gap-2">
                       <Button
                         variant="outline"
                         size="sm"
@@ -517,6 +519,7 @@ export default function LibraryPage() {
                         <Trash2 className="h-4 w-4" aria-hidden="true" />
                       </Button>
                     </div>
+                    </SettingsSection>
                   </CardContent>
                 </Card>
               </motion.div>

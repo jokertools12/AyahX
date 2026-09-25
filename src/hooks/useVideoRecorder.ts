@@ -320,6 +320,8 @@ export function useVideoRecorder() {
     if (state.mp4Blob) return state.mp4Blob;
     const sourceVideo = videoBlobRef.current ?? state.videoBlob;
     if (!sourceVideo) return null;
+    // Use the settings captured for this recording, not current UI selections.
+    const { fps, audioBitrate } = recordingOutputRef.current;
 
     if (conversionInProgressRef.current) {
       return new Promise((resolve) => {

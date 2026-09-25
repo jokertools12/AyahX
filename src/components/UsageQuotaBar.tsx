@@ -42,8 +42,8 @@ export function UsageQuotaBar() {
       <TooltipContent side="bottom">
         <p className="text-xs">
           {isPremium
-            ? 'العضوية المميزة — Browser Canvas غير محدود'
-            : `الخطة المجانية — ${remaining ?? 0} من 5 عمليات Browser Canvas متبقية اليوم`}
+            ? 'العضوية المميزة — تسجيل غير محدود على جهازك'
+            : `الخطة المجانية — ${remaining ?? 0} من 5 عمليات تسجيل على جهازك متبقية اليوم`}
         </p>
       </TooltipContent>
     </Tooltip>

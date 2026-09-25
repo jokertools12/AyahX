@@ -23,8 +23,8 @@ const features = [
   },
   {
     icon: Cpu,
-    title: '3 محركات ريندر متطورة',
-    description: 'ريندر صاروخي في 2-5 ثوانٍ بمحرك FFmpeg ASS، رسوم فيكتورية بمحرك Skia Rust، وريندر سحابي في الخلفية مع حفظ 48 ساعة بالمكتبة',
+    title: 'ثلاث طرق للإنتاج السحابي',
+    description: 'اختر الإنتاج باستخدام FFmpeg أو Skia أو المتصفح السحابي، مع حفظ الفيديو في المكتبة لمدة 48 ساعة',
   },
   {
     icon: Sparkles,
@@ -59,8 +59,8 @@ export default function Index() {
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         {/* Background Pattern */}
-        <div className="absolute inset-0 islamic-pattern opacity-50" />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 islamic-pattern opacity-50" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
 
         <div className="container relative mx-auto px-4 py-20 md:py-32">
           <motion.div
@@ -125,12 +125,14 @@ export default function Index() {
           <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute left-10 top-1/4 h-20 w-20 rounded-full bg-quran-gold/20 blur-2xl"
+            aria-hidden="true"
+            className="pointer-events-none absolute left-10 top-1/4 h-20 w-20 rounded-full bg-quran-gold/20 blur-2xl"
           />
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute right-10 bottom-1/4 h-32 w-32 rounded-full bg-primary/20 blur-3xl"
+            aria-hidden="true"
+            className="pointer-events-none absolute right-10 bottom-1/4 h-32 w-32 rounded-full bg-primary/20 blur-3xl"
           />
         </div>
       </section>
@@ -245,7 +247,7 @@ export default function Index() {
             viewport={{ once: true }}
             className="relative overflow-hidden rounded-3xl gradient-primary p-8 md:p-16 text-center"
           >
-            <div className="absolute inset-0 islamic-pattern opacity-10" />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 islamic-pattern opacity-10" />
             <div className="relative">
               <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
                 جاهز لإنشاء مقطعك الأول؟

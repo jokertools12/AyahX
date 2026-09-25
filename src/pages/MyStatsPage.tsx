@@ -208,7 +208,7 @@ export default function MyStatsPage() {
                 <div className="p-2.5 rounded-lg bg-muted/40 border border-border/40">
                   <span className="text-muted-foreground flex items-center gap-1 mb-1">
                     <Zap className="h-3.5 w-3.5 text-amber-500" />
-                    FFmpeg ASS الصاروخي
+                    الإنتاج السحابي — FFmpeg
                   </span>
                   <span className="font-bold text-sm">
                     {entitlements.ffmpegAssDailyLimit} فيديو/يوم
@@ -217,7 +217,7 @@ export default function MyStatsPage() {
                 <div className="p-2.5 rounded-lg bg-muted/40 border border-border/40">
                   <span className="text-muted-foreground flex items-center gap-1 mb-1">
                     <Sparkles className="h-3.5 w-3.5 text-blue-500" />
-                    Skia Rust الفاخر
+                    الإنتاج السحابي — Skia
                   </span>
                   <span className="font-bold text-sm">
                     {entitlements.skiaCanvasDailyLimit} فيديو/يوم

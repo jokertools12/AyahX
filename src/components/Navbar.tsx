@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useAuth } from '@/hooks/useAuth';
-import { BookOpen, Video, Library, LogIn, LogOut, User, Music, Menu, X, Crown, Settings, Shield, CreditCard, BarChart3, Trophy, Compass, Heart, Activity } from 'lucide-react';
+import { BookOpen, Video, Library, LogIn, LogOut, User, Music, Menu, X, Crown, Settings, Shield, CreditCard, BarChart3, Trophy, Compass, Heart, Activity, ChevronDown } from 'lucide-react';
 import { useAdmin } from '@/hooks/useAdmin';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
@@ -52,8 +52,8 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
+          <div className="hidden xl:flex items-center gap-1">
+            {navLinks.slice(0, 3).map((link) => (
               <Button key={link.to} asChild variant="ghost" size="sm" className="gap-2">
                 <Link to={link.to}>
                   <link.icon className="h-4 w-4" />
@@ -61,6 +61,23 @@ export function Navbar() {
                 </Link>
               </Button>
             ))}
+            <DropdownMenu dir="rtl">
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-2">
+                  المزيد <ChevronDown className="h-4 w-4" aria-hidden="true" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-48">
+                {navLinks.slice(3).map((link) => (
+                  <DropdownMenuItem key={link.to} asChild>
+                    <Link to={link.to} className="flex items-center gap-2">
+                      <link.icon className="h-4 w-4" aria-hidden="true" />
+                      {link.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             {isAuthenticated && (
               <Button asChild variant="ghost" size="sm" className="gap-2">
                 <Link to="/library">
@@ -80,9 +97,9 @@ export function Navbar() {
             <ThemeToggle />
 
             {isAuthenticated ? (
-              <DropdownMenu>
+              <DropdownMenu dir="rtl">
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full">
+                  <Button variant="ghost" size="icon" className="rounded-full" aria-label="الحساب والإعدادات">
                     <User className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -159,7 +176,10 @@ export function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="xl:hidden"
+              aria-label={mobileOpen ? 'إغلاق قائمة التنقل' : 'فتح قائمة التنقل'}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-navigation"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -174,7 +194,8 @@ export function Navbar() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="md:hidden overflow-hidden border-t border-border/50"
+              id="mobile-navigation"
+              className="xl:hidden overflow-hidden border-t border-border/50"
             >
               <div className="py-3 space-y-1">
                 {navLinks.map((link) => (

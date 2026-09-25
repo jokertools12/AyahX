@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Layout } from '@/components/Layout';
+import { SettingsSection } from '@/components/SettingsSection';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
 import { api } from '@/lib/api';
@@ -11,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
-import { User, Crown, Video, Calendar, Mail, Edit2, Loader2, Check, History, Camera, Image, Lock, Eye, EyeOff, KeyRound, AlertCircle, Trash2, AlertTriangle, Cpu, Zap } from 'lucide-react';
+import { User, Crown, Video, Calendar, Mail, Edit2, Loader2, Check, History, Camera, Image, Lock, Eye, EyeOff, KeyRound, AlertCircle, Trash2, AlertTriangle, Cpu, Zap, Sparkles, Clock3 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 
@@ -238,6 +239,7 @@ export default function UserSettingsPage() {
             </Card>
 
             {/* Change Password Card */}
+            <SettingsSection title="تغيير كلمة المرور">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -348,6 +350,7 @@ export default function UserSettingsPage() {
             </Card>
 
             {/* Subscription Card */}
+            </SettingsSection>
             <Card className={isPremium ? 'border-primary/50 shadow-lg shadow-primary/10' : ''}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -377,6 +380,7 @@ export default function UserSettingsPage() {
             </Card>
 
             {/* Usage Card */}
+            <SettingsSection title="تفاصيل الاستخدام" description="الحصص اليومية وصلاحية الفيديوهات">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -388,7 +392,7 @@ export default function UserSettingsPage() {
                 {/* Browser Engine */}
                 <div className="space-y-1.5">
                   <div className="flex justify-between text-sm">
-                    <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-emerald-500" />محرك المتصفح الفوري (Browser Canvas)</span>
+                    <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-emerald-500" />التسجيل على جهازك</span>
                     <span className="font-bold text-emerald-500">
                       {dailyUsage.browserRenderLimit === null
                         ? 'غير محدود في عضويتك'
@@ -401,40 +405,40 @@ export default function UserSettingsPage() {
                   <p className="text-[11px] text-muted-foreground">
                     {dailyUsage.browserRenderLimit === null
                       ? 'توليد فوري ومباشر على جهازك دون حد يومي.'
-                      : `تبقى ${dailyUsage.browserRenderRemaining ?? 0} من 5 عمليات Browser Canvas اليوم.`}
+                      : `تبقى ${dailyUsage.browserRenderRemaining ?? 0} من 5 عمليات تسجيل على جهازك اليوم.`}
                   </p>
                 </div>
 
                 {/* Engine 1: FFmpeg ASS */}
                 <div className="space-y-1.5 pt-2 border-t border-border/40">
                   <div className="flex justify-between text-sm">
-                    <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-amber-500" />محرك FFmpeg ASS الصاروخي (2-5 ثوانٍ)</span>
+                    <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-amber-500" />الإنتاج السحابي — FFmpeg</span>
                     <Badge variant="outline" className="text-[11px] bg-amber-500/10 text-amber-500 border-amber-500/20">
                       {entitlements.ffmpegAssDailyLimit} فيديو / يوم
                     </Badge>
                   </div>
                   <p className="text-[11px] text-muted-foreground">
-                    تلوين ذهبي دقيق بالمللي ثانية ومحرك C++ بدون انتظار.
+                    إنتاج الفيديو على الخادم باستخدام إعدادات المشهد المختارة.
                   </p>
                 </div>
 
                 {/* Engine 2: Skia Rust */}
                 <div className="space-y-1.5 pt-2 border-t border-border/40">
                   <div className="flex justify-between text-sm">
-                    <span className="flex items-center gap-1.5"><Sparkles className="h-4 w-4 text-blue-500" />محرك Skia Rust الفاخر (الميداليات الفيكتورية)</span>
+                    <span className="flex items-center gap-1.5"><Sparkles className="h-4 w-4 text-blue-500" />الإنتاج السحابي — Skia</span>
                     <Badge variant="outline" className="text-[11px] bg-blue-500/10 text-blue-500 border-blue-500/20">
                       {entitlements.skiaCanvasDailyLimit} فيديو / يوم
                     </Badge>
                   </div>
                   <p className="text-[11px] text-muted-foreground">
-                    رسم فيكتوري فائق النعومة وبادجات ثلاثية الأبعاد وزجاجية.
+                    إنتاج الفيديو على الخادم مع النصوص والإطارات المختارة.
                   </p>
                 </div>
 
                 {/* Engine 3: Full-Fidelity Browser Cloud Render */}
                 <div className="space-y-1.5 pt-2 border-t border-border/40">
                   <div className="flex justify-between text-sm">
-                    <span className="flex items-center gap-1.5"><Cpu className="h-4 w-4 text-primary" />محرك المتصفح السحابي الكامل</span>
+                    <span className="flex items-center gap-1.5"><Cpu className="h-4 w-4 text-primary" />الإنتاج السحابي — المتصفح</span>
                     <Badge variant="outline" className="text-[11px] bg-primary/10 text-primary border-primary/20">
                       {entitlements.backgroundAsyncDailyLimit} فيديو / يوم
                     </Badge>
@@ -456,6 +460,7 @@ export default function UserSettingsPage() {
             </Card>
 
             {/* Payment History Link */}
+            </SettingsSection>
             <Card>
               <CardContent className="p-4">
                 <Button asChild variant="outline" className="w-full gap-2">
@@ -468,6 +473,7 @@ export default function UserSettingsPage() {
             </Card>
 
             {/* Danger Zone: Account Deletion */}
+            <SettingsSection title="حذف الحساب" description="إدارة حذف حسابك وبياناتك" className="border-destructive/30">
             <Card className="border-destructive/30 bg-destructive/5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-destructive">
@@ -531,6 +537,7 @@ export default function UserSettingsPage() {
                 )}
               </CardContent>
             </Card>
+            </SettingsSection>
           </div>
         </motion.div>
       </div>

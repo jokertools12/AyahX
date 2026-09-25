@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Layout } from '@/components/Layout';
+import { SettingsSection } from '@/components/SettingsSection';
 import { SurahCard } from '@/components/SurahCard';
 import { ReciterCard } from '@/components/ReciterCard';
 import { AyahDisplay } from '@/components/AyahDisplay';
@@ -520,7 +521,7 @@ export default function CreatePage() {
                 </div>
                 {step < stepLabels.length && (
                   <div
-                    className={`w-6 md:w-12 h-1 rounded ${
+                    className={`w-3 sm:w-6 md:w-12 h-1 rounded ${
                       currentStep > step ? 'bg-primary' : 'bg-muted'
                     }`}
                   />
@@ -1126,7 +1127,7 @@ export default function CreatePage() {
                     {previewLoading || apiLoading ? (
                       <div className="border border-primary/25 rounded-2xl p-8 bg-gradient-to-b from-primary/5 via-muted/30 to-background relative overflow-hidden shadow-inner">
                         {/* Shimmer effect */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/15 to-transparent -translate-x-full animate-[shimmer_1.8s_infinite]" />
+                        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-primary/15 to-transparent -translate-x-full animate-[shimmer_1.8s_infinite]" />
                         
                         <div className="flex flex-col items-center justify-center text-center space-y-4 py-8">
                           <div className="relative">
@@ -1225,7 +1226,9 @@ export default function CreatePage() {
                   </CardContent>
                 </Card>
                 {contentMode !== 'ibtahalat' && (
+                  <SettingsSection title="إعدادات النص" description="الخط والحجم واللون والظل">
                   <TextSettingsPanel settings={textSettings} onChange={setTextSettings} />
+                  </SettingsSection>
                 )}
               </div>
             </div>

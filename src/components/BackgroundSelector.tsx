@@ -71,7 +71,7 @@ export function BackgroundSelector({
             className="w-full h-full object-cover"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           
           {/* Type indicator */}
            <div className="absolute top-2 right-2 p-1.5 rounded-full bg-black/50 text-white">
@@ -178,29 +178,29 @@ export function BackgroundSelector({
   return (
     <div className="space-y-4">
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
-        <TabsList className="w-full grid grid-cols-2 sm:grid-cols-5 h-auto gap-1">
+        <TabsList className="w-full grid grid-cols-[repeat(auto-fit,minmax(min(100%,7rem),1fr))] h-auto gap-1">
           <TabsTrigger value="custom" className="gap-1 text-xs sm:text-sm">
             <Upload className="h-4 w-4" />
-            <span className="hidden sm:inline">رفع</span>
+            <span>رفع</span>
             {!canUseFeature('customBackgrounds') && <Lock className="h-3 w-3 opacity-60" />}
           </TabsTrigger>
           <TabsTrigger value="image" className="gap-1 text-xs sm:text-sm">
             <ImageIcon className="h-4 w-4" />
-            <span className="hidden sm:inline">صور</span>
+            <span>صور</span>
           </TabsTrigger>
           <TabsTrigger value="slideshow" className="gap-1 text-xs sm:text-sm">
             <Sparkles className="h-4 w-4" />
-            <span className="hidden sm:inline">متغيرة</span>
+            <span>متغيرة</span>
             {!canUseFeature('animatedBackgrounds') && <Lock className="h-3 w-3 opacity-60" />}
           </TabsTrigger>
           <TabsTrigger value="pexels" className="gap-1 text-xs sm:text-sm">
             <Video className="h-4 w-4" />
-            <span className="hidden sm:inline">فيديو</span>
+            <span>فيديو</span>
             {!canUseFeature('pexelsVideos') && <Lock className="h-3 w-3 opacity-60" />}
           </TabsTrigger>
           <TabsTrigger value="ai" className="gap-1 text-xs sm:text-sm data-[state=active]:text-purple-400">
             <Wand2 className="h-4 w-4 text-purple-400" />
-            <span className="hidden sm:inline">توليد AI</span>
+            <span>توليد AI</span>
             {!canUseFeature('aiBackgrounds') && <Lock className="h-3 w-3 opacity-60" />}
           </TabsTrigger>
         </TabsList>

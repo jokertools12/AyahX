@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Layout } from '@/components/Layout';
+import { SettingsSection } from '@/components/SettingsSection';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -163,7 +164,8 @@ export default function BrowsePage() {
             </div>
           </div>
 
-          {/* Sub-Filters */}
+          {/* Existing filters stay mounted when the group is closed. */}
+          <SettingsSection title="تصفية النتائج" description="تصنيف السور والابتهالات" className="mx-auto max-w-lg">
           <div className="flex justify-center gap-2 flex-wrap">
             {contentType !== 'ibtahalat' && (
               <>
@@ -206,6 +208,7 @@ export default function BrowsePage() {
             )}
           </div>
 
+          </SettingsSection>
           <p className="text-center text-sm text-muted-foreground">
             {totalCount} نتيجة
           </p>

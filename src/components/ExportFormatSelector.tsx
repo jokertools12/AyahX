@@ -2,6 +2,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { SettingsSection } from '@/components/SettingsSection';
 import { Download, FileVideo, Settings2, Cpu, Film, Sparkles, Zap, ShieldCheck, Lock } from 'lucide-react';
 import { ExportQuality, QUALITY_PRESETS } from '@/hooks/useVideoRecorder';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -78,8 +79,8 @@ export function ExportFormatSelector({
 
   return (
     <Card className="border-border/60 shadow-md">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center justify-between">
+      <CardHeader className="p-3 sm:p-4 pb-3">
+        <CardTitle className="text-lg flex flex-wrap items-center justify-between gap-2">
           <span className="flex items-center gap-2">
             <Settings2 className="h-5 w-5 text-primary" />
             إعدادات التصدير وجودة الريلز
@@ -89,7 +90,7 @@ export function ExportFormatSelector({
           </span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 p-3 pt-0 sm:p-4 sm:pt-0">
         {/* 1. Format Selection */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -149,7 +150,7 @@ export function ExportFormatSelector({
               }
               updateSetting('quality', value as ExportQuality);
             }}
-            className="grid grid-cols-2 gap-2"
+            className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2"
           >
             {(Object.entries(QUALITY_PRESETS) as [ExportQuality, typeof QUALITY_PRESETS[ExportQuality]][]).map(
               ([key, preset]) => {
@@ -177,6 +178,8 @@ export function ExportFormatSelector({
         </div>
 
         {/* 3. Frame Rate (FPS) */}
+        <SettingsSection title="خيارات الصوت والحركة" description="معدل الإطارات وجودة الصوت">
+        <div className="space-y-5">
         <div className="space-y-3 pt-2 border-t border-border/40">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium">معدل الإطارات (Frame Rate - FPS)</Label>
@@ -192,23 +195,23 @@ export function ExportFormatSelector({
               }
               updateSetting('fps', fpsVal);
             }}
-            className="grid grid-cols-2 gap-2"
+            className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2"
           >
             <div className="relative">
               <RadioGroupItem value="30" id="fps-30" className="peer sr-only" />
               <Label
                 htmlFor="fps-30"
-                className="flex flex-col items-center rounded-xl border-2 border-muted p-2.5 hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer text-center"
+                className="flex h-full min-w-0 flex-col items-center gap-1.5 rounded-xl border-2 border-muted p-2.5 hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer text-center leading-relaxed"
               >
                 <span className="font-semibold text-sm">30 FPS (قياسي سلس)</span>
-                <span className="text-[11px] text-muted-foreground">الأسرع والأخف حجماً</span>
+                <span className="text-[11px] leading-5 text-muted-foreground">الأسرع والأخف حجماً</span>
               </Label>
             </div>
             <div className="relative">
               <RadioGroupItem value="60" id="fps-60" disabled={!entitlements.allowedFps.includes(60)} className="peer sr-only" />
               <Label
                 htmlFor="fps-60"
-                className={`flex flex-col items-center rounded-xl border-2 border-muted p-2.5 hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer text-center ${
+                className={`flex h-full min-w-0 flex-col items-center gap-1.5 rounded-xl border-2 border-muted p-2.5 hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer text-center leading-relaxed ${
                   !entitlements.allowedFps.includes(60) ? 'opacity-60 cursor-not-allowed' : ''
                 }`}
               >
@@ -216,7 +219,7 @@ export function ExportFormatSelector({
                   <span className="font-semibold text-sm">60 FPS (سينمائي فائق)</span>
                   {!entitlements.allowedFps.includes(60) && <Lock className="h-3 w-3 text-amber-500" />}
                 </div>
-                <span className="text-[11px] text-muted-foreground">نعومة مطلقة لحركة الكلمات</span>
+                <span className="text-[11px] leading-5 text-muted-foreground">نعومة مطلقة لحركة الكلمات</span>
               </Label>
             </div>
           </RadioGroup>
@@ -236,7 +239,7 @@ export function ExportFormatSelector({
             <RadioGroup
               value={settings.audioBitrate || '192k'}
               onValueChange={(val) => updateSetting('audioBitrate', val as '128k' | '192k' | '320k')}
-              className="grid grid-cols-3 gap-2"
+              className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,6rem),1fr))] gap-2"
             >
               {[
                 { id: '128k' as const, label: '128 kbps', desc: 'قياسي متوازن' },
@@ -247,10 +250,10 @@ export function ExportFormatSelector({
                   <RadioGroupItem value={bitrate.id} id={`bitrate-${bitrate.id}`} className="peer sr-only" />
                   <Label
                     htmlFor={`bitrate-${bitrate.id}`}
-                    className="flex flex-col items-center rounded-xl border-2 border-muted p-2 hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer text-center text-xs transition-all"
+                    className="flex h-full min-w-0 flex-col items-center gap-1.5 rounded-xl border-2 border-muted p-2 hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer text-center text-xs leading-5 transition-all"
                   >
                     <span className="font-semibold">{bitrate.label}</span>
-                    <span className="text-[10px] text-muted-foreground mt-0.5">{bitrate.desc}</span>
+                    <span className="text-[10px] leading-5 text-muted-foreground">{bitrate.desc}</span>
                   </Label>
                 </div>
               ))}
@@ -259,11 +262,14 @@ export function ExportFormatSelector({
         </div>
 
         {/* 5. Production Engine Choice */}
+        </div>
+        </SettingsSection>
+        <SettingsSection title="طريقة إنتاج الفيديو" description="التسجيل على جهازك أو الإنتاج السحابي">
         <div className="space-y-3 pt-2 border-t border-border/40">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium flex items-center gap-2">
               <Zap className="h-4 w-4 text-primary" />
-              اختيار محرك الإنتاج والريندر
+              طريقة إنتاج الفيديو
             </Label>
             <span className="text-xs text-muted-foreground">خيارات ذكية حسب نوع الإنتاج</span>
           </div>
@@ -286,15 +292,15 @@ export function ExportFormatSelector({
                 <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
                   <Cpu className="h-4 w-4" />
                 </div>
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-sm">محرك المتصفح الفوري الهجين</span>
+                <div className="min-w-0 flex-1 space-y-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-semibold text-sm">التسجيل على جهازك</span>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/15 text-primary">
                       {browserLimit === null ? 'غير محدود' : `${browserRemaining ?? 0}/${browserLimit} اليوم`}
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    معالجة فورية على جهازك مع ترميز MP4 وتلميع الصوت بسيرفر FFmpeg بدون انتظار.
+                    يسجل الفيديو على جهازك ثم يجهز الملف للتحميل. أبقِ الصفحة مفتوحة أثناء التسجيل.
                   </p>
                 </div>
               </Label>
@@ -310,10 +316,10 @@ export function ExportFormatSelector({
                 <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 shrink-0 mt-0.5">
                   <Zap className="h-4 w-4" />
                 </div>
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-sm">محرك FFmpeg الصاروخي (فكرة 1)</span>
+                <div className="min-w-0 flex-1 space-y-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="font-semibold text-sm">الإنتاج السحابي — FFmpeg</span>
                       {isPremium ? (
                         <span className="text-[10px] bg-amber-500/15 text-amber-600 px-1.5 py-0.5 rounded flex items-center gap-0.5">
                           <Sparkles className="h-3 w-3" /> مميز
@@ -329,7 +335,7 @@ export function ExportFormatSelector({
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    مسار FFmpeg مستقل وسريع يحافظ على مشهد المتصفح الكامل: الخلفية، الخط، التشكيل، التظليل، الإطارات وكل إعدادات العرض.
+                    ينتج الفيديو على الخادم باستخدام FFmpeg مع إعدادات المشهد التي اخترتها.
                   </p>
                 </div>
               </Label>
@@ -345,15 +351,15 @@ export function ExportFormatSelector({
                 <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0 mt-0.5">
                   <Film className="h-4 w-4" />
                 </div>
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-sm">محرك استوديو Skia Canvas (فكرة 2)</span>
+                <div className="min-w-0 flex-1 space-y-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-semibold text-sm">الإنتاج السحابي — Skia</span>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600">
                       {skiaCanvasRemaining}/{skiaCanvasLimit} متبقي اليوم
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    مسار Canvas مستقل بجودة استوديو، ويستخدم نفس مشهد المتصفح الكامل حتى لا تختفي الخلفيات أو النصوص أو الزخارف.
+                    ينتج الفيديو على الخادم باستخدام Skia مع إعدادات المشهد التي اخترتها.
                   </p>
                 </div>
               </Label>
@@ -376,10 +382,10 @@ export function ExportFormatSelector({
                 <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
                   <Sparkles className="h-4 w-4" />
                 </div>
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0 flex-1 space-y-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-sm">محرك المتصفح السحابي الكامل (فكرة 3)</span>
+                      <span className="font-semibold text-sm">الإنتاج السحابي — المتصفح</span>
                       {!isPremium && <Lock className="h-3 w-3 text-amber-500" />}
                     </div>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/15 text-primary">
@@ -387,7 +393,7 @@ export function ExportFormatSelector({
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    محرك مستقل يرسم المشهد الكامل مثل معاينة المتصفح، مع الخلفيات والنصوص والحركات والحدود والشعارات، ثم يحفظ الفيديو تلقائياً في المكتبة بعد الإنتاج.
+                    ينتج الفيديو في متصفح على الخادم ويحفظه في المكتبة بعد اكتماله.
                   </p>
                 </div>
               </Label>
@@ -398,26 +404,27 @@ export function ExportFormatSelector({
         {/* Client Recording Strategy (When Browser engine is used) */}
         {effectiveEngine === 'browser' && (
           <div className="space-y-3 p-3 rounded-xl bg-muted/30 border border-border/50">
-            <Label className="text-xs font-medium text-muted-foreground">خوارزمية التقاط المتصفح</Label>
-            <div className="grid grid-cols-2 gap-1.5">
+            <Label className="text-xs font-medium text-muted-foreground">إعداد التسجيل على جهازك</Label>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-2">
               {RECORDING_METHOD_OPTIONS.map((method) => (
                 <Button
                   key={method.id}
                   type="button"
                   variant={settings.recordingMethod === method.id ? 'default' : 'outline'}
                   size="sm"
-                  className={`h-auto py-2 text-xs flex-col items-start text-right ${
+                  className={`h-auto min-h-20 min-w-0 w-full whitespace-normal break-words px-3 py-3 text-xs flex-col items-stretch justify-start gap-1.5 text-start ${
                     settings.recordingMethod === method.id ? 'gradient-primary' : ''
                   }`}
                   onClick={() => updateSetting('recordingMethod', method.id)}
                 >
-                  <span className="font-semibold">{method.label}</span>
-                  <span className="text-[10px] opacity-70 line-clamp-1">{method.description}</span>
+                  <span className="block min-w-0 font-semibold leading-5">{method.label}</span>
+                  <span className="block min-w-0 text-[11px] font-normal leading-5 opacity-80">{method.description}</span>
                 </Button>
               ))}
             </div>
           </div>
         )}
+        </SettingsSection>
       </CardContent>
     </Card>
   );
