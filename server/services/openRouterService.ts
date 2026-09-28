@@ -10,6 +10,7 @@ import { logger } from '../logger';
  */
 
 export const OPENROUTER_API_BASE_URL = 'https://openrouter.ai/api/v1';
+export const OPENROUTER_ZDR_ENDPOINTS_URL = `${OPENROUTER_API_BASE_URL}/endpoints/zdr`;
 
 // This is the currently selected free text model that supports the structured
 // response format used by AyahX's safe text-refinement path. Keep the choice
@@ -63,8 +64,20 @@ export interface OpenRouterSelectedModelReport {
   freeSlug: boolean;
   contextLength?: number;
   supportsStructuredOutputs: boolean;
+  zeroRetentionRequired: boolean;
+  hasZeroRetentionEndpoint: boolean;
+  supportsStructuredOutputsOnZeroRetentionEndpoint: boolean;
+  zeroRetentionProvider?: string;
+  zeroRetentionUptimeLast1d?: number;
   usableForAyahXText: boolean;
-  issues: Array<'unavailable' | 'not_free' | 'free_slug_required' | 'structured_outputs_unsupported' | 'privacy_policy_blocked'>;
+  issues: Array<
+    | 'unavailable'
+    | 'not_free'
+    | 'free_slug_required'
+    | 'structured_outputs_unsupported'
+    | 'privacy_policy_blocked'
+    | 'zdr_endpoint_unavailable'
+  >;
 }
 
 export class OpenRouterServiceError extends Error {
@@ -408,9 +421,16 @@ export async function inspectOpenRouterModels(
   }
   const start = Date.now();
   try {
-    const response = await fetch(`${OPENROUTER_API_BASE_URL}/models`, {
-      headers: { Authorization: `Bearer ${config.apiKey}` },
-    });
+    const [response, zdrResponse] = await Promise.all([
+      fetch(`${OPENROUTER_API_BASE_URL}/models`, {
+        headers: { Authorization: `Bearer ${config.apiKey}` },
+      }),
+      config.dataCollection === 'deny'
+        ? fetch(OPENROUTER_ZDR_ENDPOINTS_URL, {
+          headers: { Authorization: `Bearer ${config.apiKey}` },
+        })
+        : Promise.resolve(null),
+    ]);
     const latencyMs = Date.now() - start;
     if (!response.ok) {
       const message = await readProviderError(response, config.apiKey);
@@ -425,9 +445,25 @@ export async function inspectOpenRouterModels(
         selectedModelReports: [],
       };
     }
+    if (zdrResponse && !zdrResponse.ok) {
+      const message = await readProviderError(zdrResponse, config.apiKey);
+      return {
+        success: false,
+        message: `تعذر التحقق من نقاط نهاية Zero Data Retention في OpenRouter: ${message}`,
+        latencyMs,
+        selectedModels: config.textModels,
+        availableSelectedModels: [],
+        freeSelectedModels: [],
+        structuredOutputSelectedModels: [],
+        selectedModelReports: [],
+      };
+    }
+
     const data = await response.json().catch(() => ({})) as any;
     const catalog = (Array.isArray(data?.data) ? data.data : []) as Array<Record<string, any>>;
     const catalogById = new Map<string, Record<string, any>>(catalog.map((model) => [String(model.id), model]));
+    const zdrData = zdrResponse ? await zdrResponse.json().catch(() => ({})) as any : {};
+    const zdrEndpoints = (Array.isArray(zdrData?.data) ? zdrData.data : []) as Array<Record<string, any>>;
     const availableSelectedModels = config.textModels.filter((id) => catalogById.has(id));
     const selectedModelReports = config.textModels.map((id): OpenRouterSelectedModelReport => {
       const model = catalogById.get(id);
@@ -438,14 +474,32 @@ export async function inspectOpenRouterModels(
         ? model.supported_parameters.map((value: unknown) => String(value).toLowerCase())
         : [];
       const supportsStructuredOutputs = supportedParameters.includes('structured_outputs');
+      const zeroRetentionRequired = config.dataCollection === 'deny';
+      const modelZdrEndpoints = zeroRetentionRequired
+        ? zdrEndpoints.filter((endpoint) => String(endpoint?.model_id) === id)
+        : [];
+      const compatibleZdrEndpoint = modelZdrEndpoints.find((endpoint) => {
+        const endpointParameters = Array.isArray(endpoint?.supported_parameters)
+          ? endpoint.supported_parameters.map((value: unknown) => String(value).toLowerCase())
+          : [];
+        const endpointPricing = endpoint?.pricing || {};
+        const endpointIsFree = String(endpointPricing.prompt) === '0' && String(endpointPricing.completion) === '0';
+        return endpointParameters.includes('structured_outputs') && (!config.freeOnly || endpointIsFree);
+      });
+      const endpointParameters = Array.isArray(compatibleZdrEndpoint?.supported_parameters)
+        ? compatibleZdrEndpoint.supported_parameters.map((value: unknown) => String(value).toLowerCase())
+        : [];
+      const supportsStructuredOutputsOnZeroRetentionEndpoint = endpointParameters.includes('structured_outputs');
       const issues: OpenRouterSelectedModelReport['issues'] = [];
       if (!model) issues.push('unavailable');
       if (config.freeOnly && !free) issues.push('not_free');
       if (config.freeOnly && !freeSlug) issues.push('free_slug_required');
       if (!supportsStructuredOutputs) issues.push('structured_outputs_unsupported');
+      if (zeroRetentionRequired && !compatibleZdrEndpoint) issues.push('zdr_endpoint_unavailable');
       if (config.dataCollection === 'deny' && /^stealth\//i.test(id)) issues.push('privacy_policy_blocked');
       const usableForAyahXText = issues.length === 0;
       const contextLength = Number(model?.context_length);
+      const zeroRetentionUptimeLast1d = Number(compatibleZdrEndpoint?.uptime_last_1d);
       return {
         id,
         available: Boolean(model),
@@ -453,6 +507,13 @@ export async function inspectOpenRouterModels(
         freeSlug,
         ...(Number.isFinite(contextLength) && contextLength > 0 ? { contextLength } : {}),
         supportsStructuredOutputs,
+        zeroRetentionRequired,
+        hasZeroRetentionEndpoint: modelZdrEndpoints.length > 0,
+        supportsStructuredOutputsOnZeroRetentionEndpoint,
+        ...(typeof compatibleZdrEndpoint?.provider_name === 'string' ? { zeroRetentionProvider: compatibleZdrEndpoint.provider_name } : {}),
+        ...(Number.isFinite(zeroRetentionUptimeLast1d) && zeroRetentionUptimeLast1d >= 0
+          ? { zeroRetentionUptimeLast1d }
+          : {}),
         usableForAyahXText,
         issues,
       };
@@ -466,17 +527,20 @@ export async function inspectOpenRouterModels(
     const hasSchemaMismatch = selectedModelReports.some((report) => !report.supportsStructuredOutputs);
     const hasPriceMismatch = selectedModelReports.some((report) => config.freeOnly && (!report.free || !report.freeSlug));
     const hasPrivacyMismatch = selectedModelReports.some((report) => report.issues.includes('privacy_policy_blocked'));
+    const hasZdrMismatch = selectedModelReports.some((report) => report.issues.includes('zdr_endpoint_unavailable'));
     const message = success
-      ? `تم الاتصال. كل النماذج المحددة مجانية ومتاحة وتدعم JSON Schema: ${selectedModelReports.map((report) => report.id).join(', ')}`
+      ? catalogSuccessMessage(config.dataCollection, selectedModelReports)
       : hasUnavailable
         ? 'تم الاتصال، لكن واحدًا أو أكثر من النماذج المحددة غير موجود في الكتالوج الحالي.'
         : hasPriceMismatch
           ? 'النموذج لا يطابق قفل المجاني الحالي؛ يلزم نموذج بسعر صفر وبمعرّف ينتهي بـ :free.'
           : hasPrivacyMismatch
             ? 'النموذج غير متوافق مع سياسة منع جمع البيانات الحالية.'
-            : hasSchemaMismatch
-              ? 'النموذج متاح، لكنه لا يعلن دعم JSON Schema المطلوب لمخرجات AyahX المنظمة.'
-              : 'النماذج المحددة لا تجتاز سياسة AyahX الحالية.';
+            : hasZdrMismatch
+              ? `النموذج لا يملك نقطة${config.freeOnly ? ' مجانية' : ''} تدعم JSON Schema ضمن مسار Zero Data Retention المطلوب.`
+              : hasSchemaMismatch
+                ? 'النموذج متاح، لكنه لا يعلن دعم JSON Schema المطلوب لمخرجات AyahX المنظمة.'
+                : 'النماذج المحددة لا تجتاز سياسة AyahX الحالية.';
     return {
       success,
       message,
@@ -499,4 +563,18 @@ export async function inspectOpenRouterModels(
       selectedModelReports: [],
     };
   }
+}
+
+function catalogSuccessMessage(
+  dataCollection: OpenRouterConfig['dataCollection'],
+  reports: OpenRouterSelectedModelReport[],
+): string {
+  const models = reports.map((report) => report.id).join(', ');
+  const freeStatus = reports.every((report) => report.free)
+    ? 'كل النماذج المحددة مجانية ومتاحة وتدعم JSON Schema'
+    : 'كل النماذج المحددة متاحة وتدعم JSON Schema';
+  if (dataCollection !== 'deny') {
+    return `تم الاتصال. ${freeStatus}: ${models}`;
+  }
+  return `تم الاتصال. ${freeStatus} على نقاط Zero Data Retention: ${models}`;
 }

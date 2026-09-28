@@ -157,14 +157,24 @@ describe('OpenRouter provider gateway', () => {
       OPENROUTER_FREE_ONLY: 'true',
       OPENROUTER_DATA_COLLECTION: 'deny',
     })!;
-    const fetchMock = vi.spyOn(global, 'fetch').mockResolvedValue(response({
+    const fetchMock = vi.spyOn(global, 'fetch')
+      .mockResolvedValueOnce(response({
       data: [{
         id: 'qwen/qwen3.8-27b:free',
         context_length: 262144,
         pricing: { prompt: '0', completion: '0' },
         supported_parameters: ['structured_outputs', 'tools'],
       }],
-    }));
+      }))
+      .mockResolvedValueOnce(response({
+        data: [{
+          model_id: 'qwen/qwen3.8-27b:free',
+          provider_name: 'ModelRun',
+          pricing: { prompt: '0', completion: '0' },
+          supported_parameters: ['structured_outputs'],
+          uptime_last_1d: 96,
+        }],
+      }));
 
     const result = await inspectOpenRouterModels(config);
 
@@ -176,11 +186,98 @@ describe('OpenRouter provider gateway', () => {
       freeSlug: true,
       contextLength: 262144,
       supportsStructuredOutputs: true,
+      zeroRetentionRequired: true,
+      hasZeroRetentionEndpoint: true,
+      supportsStructuredOutputsOnZeroRetentionEndpoint: true,
+      zeroRetentionProvider: 'ModelRun',
+      zeroRetentionUptimeLast1d: 96,
       usableForAyahXText: true,
       issues: [],
     });
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(String(fetchMock.mock.calls[0][0])).toContain('/models');
+    expect(String(fetchMock.mock.calls[1][0])).toContain('/endpoints/zdr');
+    expect(result.message).toContain('Zero Data Retention');
+  });
+
+  it('fails closed when a free structured model has no matching ZDR endpoint', async () => {
+    const config = getOpenRouterConfig('or-test-secret', {
+      OPENROUTER_TEXT_MODEL: 'qwen/qwen3.8-27b:free',
+      OPENROUTER_FREE_ONLY: 'true',
+      OPENROUTER_DATA_COLLECTION: 'deny',
+    })!;
+    vi.spyOn(global, 'fetch')
+      .mockResolvedValueOnce(response({
+        data: [{
+          id: 'qwen/qwen3.8-27b:free',
+          context_length: 262144,
+          pricing: { prompt: '0', completion: '0' },
+          supported_parameters: ['structured_outputs'],
+        }],
+      }))
+      .mockResolvedValueOnce(response({ data: [] }));
+
+    const result = await inspectOpenRouterModels(config);
+
+    expect(result.success).toBe(false);
+    expect(result.selectedModelReports[0]).toMatchObject({
+      supportsStructuredOutputs: true,
+      zeroRetentionRequired: true,
+      hasZeroRetentionEndpoint: false,
+      supportsStructuredOutputsOnZeroRetentionEndpoint: false,
+      usableForAyahXText: false,
+      issues: ['zdr_endpoint_unavailable'],
+    });
+    expect(result.message).toContain('Zero Data Retention');
+  });
+
+  it('does not treat a paid ZDR endpoint as eligible under the free-only policy', async () => {
+    const config = getOpenRouterConfig('or-test-secret', {
+      OPENROUTER_TEXT_MODEL: 'qwen/qwen3.8-27b:free',
+      OPENROUTER_FREE_ONLY: 'true',
+      OPENROUTER_DATA_COLLECTION: 'deny',
+    })!;
+    vi.spyOn(global, 'fetch')
+      .mockResolvedValueOnce(response({
+        data: [{
+          id: 'qwen/qwen3.8-27b:free',
+          pricing: { prompt: '0', completion: '0' },
+          supported_parameters: ['structured_outputs'],
+        }],
+      }))
+      .mockResolvedValueOnce(response({
+        data: [{
+          model_id: 'qwen/qwen3.8-27b:free',
+          provider_name: 'PaidProvider',
+          pricing: { prompt: '0.000001', completion: '0.000002' },
+          supported_parameters: ['structured_outputs'],
+        }],
+      }));
+
+    const result = await inspectOpenRouterModels(config);
+
+    expect(result.success).toBe(false);
+    expect(result.selectedModelReports[0]).toMatchObject({
+      hasZeroRetentionEndpoint: true,
+      supportsStructuredOutputsOnZeroRetentionEndpoint: false,
+      usableForAyahXText: false,
+      issues: ['zdr_endpoint_unavailable'],
+    });
+  });
+
+  it('fails closed when OpenRouter cannot verify its ZDR endpoint catalog', async () => {
+    const config = getOpenRouterConfig('or-test-secret', {
+      OPENROUTER_DATA_COLLECTION: 'deny',
+    })!;
+    vi.spyOn(global, 'fetch')
+      .mockResolvedValueOnce(response({ data: [] }))
+      .mockResolvedValueOnce(response({ error: { message: 'catalog unavailable' } }, 503));
+
+    const result = await inspectOpenRouterModels(config);
+
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('تعذر التحقق من نقاط نهاية Zero Data Retention');
+    expect(result.selectedModelReports).toEqual([]);
   });
 
   it('runs a minimal strict-schema generation probe and returns no generated content', async () => {
@@ -245,13 +342,15 @@ describe('OpenRouter provider gateway', () => {
       OPENROUTER_FREE_ONLY: 'true',
       OPENROUTER_DATA_COLLECTION: 'deny',
     })!;
-    vi.spyOn(global, 'fetch').mockResolvedValue(response({
+    vi.spyOn(global, 'fetch')
+      .mockResolvedValueOnce(response({
       data: [
         { id: models[0], pricing: { prompt: '0', completion: '0' }, supported_parameters: ['tools'] },
         { id: models[1], pricing: { prompt: '0', completion: '0' }, supported_parameters: ['tools'] },
         { id: models[2], pricing: { prompt: '0', completion: '0' }, supported_parameters: ['response_format'] },
       ],
-    }));
+      }))
+      .mockResolvedValueOnce(response({ data: [] }));
 
     const result = await inspectOpenRouterModels(config);
 
@@ -261,6 +360,7 @@ describe('OpenRouter provider gateway', () => {
     expect(result.selectedModelReports[1].issues).toContain('structured_outputs_unsupported');
     expect(result.selectedModelReports[2].issues).toContain('free_slug_required');
     expect(result.selectedModelReports[2].issues).toContain('privacy_policy_blocked');
+    expect(result.selectedModelReports[0].issues).toContain('zdr_endpoint_unavailable');
   });
 
   it('rejects audio locally when OpenRouter is the selected text provider', async () => {

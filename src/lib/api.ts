@@ -662,8 +662,13 @@ export const api = {
           freeSlug: boolean;
           contextLength?: number;
           supportsStructuredOutputs: boolean;
+          zeroRetentionRequired: boolean;
+          hasZeroRetentionEndpoint: boolean;
+          supportsStructuredOutputsOnZeroRetentionEndpoint: boolean;
+          zeroRetentionProvider?: string;
+          zeroRetentionUptimeLast1d?: number;
           usableForAyahXText: boolean;
-          issues: string[];
+          issues: Array<string>;
         }>;
       }>('/api/admin/settings/test-openrouter', {
         method: 'POST',

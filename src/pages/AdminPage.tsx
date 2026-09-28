@@ -1083,6 +1083,13 @@ export default function AdminPage() {
                                     {report.available ? 'متاح' : 'غير متاح'} · {report.free ? 'سعره صفر' : 'مدفوع'} · {report.supportsStructuredOutputs ? 'يدعم JSON Schema' : 'لا يدعم JSON Schema'}
                                     {report.contextLength ? ` · سياق ${report.contextLength.toLocaleString()}` : ''}
                                   </p>
+                                  {report.zeroRetentionRequired && (
+                                    <p className="mt-1 opacity-80">
+                                      {report.supportsStructuredOutputsOnZeroRetentionEndpoint
+                                        ? `نقطة ZDR: ${report.zeroRetentionProvider || 'متاحة'}${Number.isFinite(report.zeroRetentionUptimeLast1d) ? ` · إتاحة 24س ${Number(report.zeroRetentionUptimeLast1d).toFixed(1)}%` : ''}`
+                                        : 'لا توجد نقطة مجانية ZDR مؤكدة تدعم JSON Schema'}
+                                    </p>
+                                  )}
                                   {report.issues?.length > 0 && <p className="mt-1 text-amber-200">{report.issues.join(' · ')}</p>}
                                 </div>
                               ))}
