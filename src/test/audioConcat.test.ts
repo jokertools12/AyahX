@@ -57,6 +57,7 @@ describe('Audio Concatenation Engine (src/lib/audioConcat.ts)', () => {
     const result = await concatenateAudioUrls([]);
     expect(result).toEqual({
       blobUrl: '',
+      audioContentHash: '',
       totalDuration: 0,
       timestamps: [],
     });

@@ -16,10 +16,12 @@ import {
 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import { Navigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { ErrorState } from '@/components/ErrorState';
+import { omitUnchangedOpenRouterSecret } from '@/lib/adminSettings';
 
 interface PaymentRequest {
   id: string;
@@ -45,7 +47,7 @@ export default function AdminPage() {
   const {
     isAdmin, loading: adminLoading, fetchPaymentRequests, approvePayment, rejectPayment,
     fetchAllUsers, fetchStats, fetchDailyVideoStats, fetchSettings, saveSettings,
-    testQuranFoundation, testGemini, testPexels, fetchRenderStats, cleanupRenderArtifacts
+    testQuranFoundation, testGemini, testOpenRouter, testPexels, fetchRenderStats, cleanupRenderArtifacts
   } = useAdmin();
 
   const [requests, setRequests] = useState<PaymentRequest[]>([]);
@@ -68,6 +70,16 @@ export default function AdminPage() {
     QF_PROD_CLIENT_ID: '',
     QF_PROD_CLIENT_SECRET: '',
     QF_ENV: 'prelive',
+    AI_PROVIDER: 'openrouter',
+    AI_IMAGE_PROVIDER: 'gemini',
+    OPENROUTER_API_KEY: '',
+    OPENROUTER_TEXT_MODEL: 'qwen/qwen3.8-27b:free',
+    OPENROUTER_TEXT_FALLBACK_MODELS: '',
+    OPENROUTER_FREE_ONLY: 'true',
+    OPENROUTER_MODEL_FALLBACKS_ENABLED: 'false',
+    OPENROUTER_ALLOW_PROVIDER_FALLBACKS: 'false',
+    OPENROUTER_DATA_COLLECTION: 'deny',
+    OPENROUTER_SITE_URL: '',
     GEMINI_API_KEY: '',
     PEXELS_API_KEY: '',
     REELS_DEFAULT_QUALITY: '1080p',
@@ -81,6 +93,11 @@ export default function AdminPage() {
   const [testingQf, setTestingQf] = useState(false);
   const [testingGemini, setTestingGemini] = useState(false);
   const [geminiTestStatus, setGeminiTestStatus] = useState<any>(null);
+  const [testingOpenRouter, setTestingOpenRouter] = useState(false);
+  const [openRouterTestStatus, setOpenRouterTestStatus] = useState<any>(null);
+  const [secretStorage, setSecretStorage] = useState<{ encryptionConfigured: boolean; storageMode: 'encrypted_database' | 'environment_only' } | null>(null);
+  const [aiRuntime, setAiRuntime] = useState<Record<string, any> | null>(null);
+  const [showOpenRouterAdvanced, setShowOpenRouterAdvanced] = useState(false);
   const [testingPexels, setTestingPexels] = useState(false);
   const [pexelsTestStatus, setPexelsTestStatus] = useState<any>(null);
 
@@ -149,8 +166,11 @@ export default function AdminPage() {
 
   const loadSettings = async () => {
     try {
-      const data = await fetchSettings();
+      const response = await fetchSettings();
+      const data = response.settings;
       setSettings(data);
+      setSecretStorage(response.secretStorage || null);
+      setAiRuntime(response.aiRuntime || null);
       const currentEnv = data.QF_ENV?.value || 'prelive';
       const initValues: Record<string, string> = {
         QF_CLIENT_ID: data.QF_CLIENT_ID?.value || '',
@@ -160,6 +180,18 @@ export default function AdminPage() {
         QF_PROD_CLIENT_ID: data.QF_PROD_CLIENT_ID?.value || (currentEnv === 'production' ? data.QF_CLIENT_ID?.value : '') || '',
         QF_PROD_CLIENT_SECRET: data.QF_PROD_CLIENT_SECRET?.value || (currentEnv === 'production' ? data.QF_CLIENT_SECRET?.value : '') || '',
         QF_ENV: currentEnv,
+        AI_PROVIDER: data.AI_PROVIDER?.value || 'openrouter',
+        AI_IMAGE_PROVIDER: data.AI_IMAGE_PROVIDER?.value || 'gemini',
+        // Secrets are write-only: keep the replacement field blank after
+        // loading and show configured state separately in the form.
+        OPENROUTER_API_KEY: '',
+        OPENROUTER_TEXT_MODEL: data.OPENROUTER_TEXT_MODEL?.value || 'qwen/qwen3.8-27b:free',
+        OPENROUTER_TEXT_FALLBACK_MODELS: data.OPENROUTER_TEXT_FALLBACK_MODELS?.value || '',
+        OPENROUTER_FREE_ONLY: data.OPENROUTER_FREE_ONLY?.value || 'true',
+        OPENROUTER_MODEL_FALLBACKS_ENABLED: data.OPENROUTER_MODEL_FALLBACKS_ENABLED?.value || 'false',
+        OPENROUTER_ALLOW_PROVIDER_FALLBACKS: data.OPENROUTER_ALLOW_PROVIDER_FALLBACKS?.value || 'false',
+        OPENROUTER_DATA_COLLECTION: data.OPENROUTER_DATA_COLLECTION?.value || 'deny',
+        OPENROUTER_SITE_URL: data.OPENROUTER_SITE_URL?.value || '',
         GEMINI_API_KEY: data.GEMINI_API_KEY?.value || '',
         PEXELS_API_KEY: data.PEXELS_API_KEY?.value || '',
         REELS_DEFAULT_QUALITY: data.REELS_DEFAULT_QUALITY?.value || '1080p',
@@ -225,13 +257,13 @@ export default function AdminPage() {
         : (editedSettings.QF_PRELIVE_CLIENT_SECRET || editedSettings.QF_CLIENT_SECRET);
 
       const payload = {
-        ...editedSettings,
+        ...omitUnchangedOpenRouterSecret(editedSettings),
         QF_CLIENT_ID: activeClientId,
         QF_CLIENT_SECRET: activeClientSecret,
       };
 
       await saveSettings(payload);
-      toast.success('تم حفظ الإعدادات والمفاتيح لكل بيئة بنجاح! 🎉');
+      toast.success('تم حفظ الإعدادات؛ الحقول السرية الفارغة لم تُغيّر قيمتها.');
       await loadSettings();
     } catch (err: any) {
       toast.error(err.message || 'فشل حفظ الإعدادات');
@@ -287,6 +319,33 @@ export default function AdminPage() {
       toast.error('فشل اختبار مفتاح Gemini');
     } finally {
       setTestingGemini(false);
+    }
+  };
+
+  const handleTestOpenRouter = async () => {
+    setTestingOpenRouter(true);
+    setOpenRouterTestStatus(null);
+    try {
+      const key = editedSettings.OPENROUTER_API_KEY;
+      const apiKey = key && !key.includes('****') ? key : undefined;
+      const settingsForTest = {
+        OPENROUTER_TEXT_MODEL: editedSettings.OPENROUTER_TEXT_MODEL,
+        OPENROUTER_TEXT_FALLBACK_MODELS: editedSettings.OPENROUTER_TEXT_FALLBACK_MODELS,
+        OPENROUTER_MODEL_FALLBACKS_ENABLED: editedSettings.OPENROUTER_MODEL_FALLBACKS_ENABLED,
+        OPENROUTER_ALLOW_PROVIDER_FALLBACKS: editedSettings.OPENROUTER_ALLOW_PROVIDER_FALLBACKS,
+        OPENROUTER_DATA_COLLECTION: editedSettings.OPENROUTER_DATA_COLLECTION,
+        OPENROUTER_FREE_ONLY: editedSettings.OPENROUTER_FREE_ONLY,
+        OPENROUTER_SITE_URL: editedSettings.OPENROUTER_SITE_URL,
+      };
+      const result = await testOpenRouter({ apiKey, settings: settingsForTest });
+      setOpenRouterTestStatus(result);
+      if (result.success) toast.success('نجح فحص الكتالوج والتوليد المنظّم الفعلي.');
+      else toast.error(result.message || 'تعذر التحقق من OpenRouter');
+    } catch (err: any) {
+      setOpenRouterTestStatus({ success: false, message: err.message || 'فشل اختبار OpenRouter' });
+      toast.error('فشل اختبار اتصال OpenRouter');
+    } finally {
+      setTestingOpenRouter(false);
     }
   };
 
@@ -403,7 +462,7 @@ export default function AdminPage() {
             </TabsTrigger>
             <TabsTrigger value="settings" className="gap-1">
               <Settings className="h-4 w-4" />
-              <span className="hidden sm:inline">إعدادات Quran Foundation</span>
+              <span className="hidden sm:inline">الربط والذكاء</span>
               <span className="sm:hidden">الإعدادات</span>
             </TabsTrigger>
           </TabsList>
@@ -781,6 +840,262 @@ export default function AdminPage() {
 
           {/* Settings Tab */}
           <TabsContent value="settings" className="space-y-6">
+            {/* OpenRouter Control Deck */}
+            <motion.section
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.38, ease: 'easeOut' }}
+            >
+              <Card className="relative overflow-hidden border-emerald-500/25 bg-[radial-gradient(ellipse_at_top_right,_hsl(var(--primary)/0.19),_transparent_52%),linear-gradient(135deg,hsl(var(--card)),hsl(var(--card)),hsl(161_35%_10%/0.55))] shadow-[0_26px_70px_-38px_rgba(16,185,129,0.7)]">
+                <div className="absolute -top-24 -left-20 h-56 w-56 rounded-full bg-emerald-400/10 blur-3xl pointer-events-none" />
+                <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-300/80 to-transparent" />
+                <CardHeader className="relative gap-5 pb-2">
+                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
+                    <div className="flex gap-4">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-300/25 bg-emerald-400/10 shadow-inner shadow-emerald-200/10">
+                        <Cpu className="h-6 w-6 text-emerald-300" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <CardTitle className="text-xl tracking-tight">مركز ذكاء AyahX</CardTitle>
+                          <Badge className={openRouterTestStatus?.success ? 'border-emerald-400/30 bg-emerald-400/15 text-emerald-200' : aiRuntime?.selectedProvider === 'openrouter' && aiRuntime?.configured ? 'border-sky-400/30 bg-sky-400/10 text-sky-200' : 'border-amber-400/30 bg-amber-400/10 text-amber-200'} variant="outline">
+                            {openRouterTestStatus?.success ? 'SMOKE TEST OK' : aiRuntime?.selectedProvider === 'openrouter' && aiRuntime?.configured ? 'OPENROUTER CONFIGURED' : 'بانتظار المفتاح'}
+                          </Badge>
+                          <Badge variant="outline" className={editedSettings.OPENROUTER_FREE_ONLY === 'true' ? 'border-sky-400/25 bg-sky-400/10 text-sky-200' : 'border-amber-400/25 bg-amber-400/10 text-amber-200'}>
+                            {editedSettings.OPENROUTER_FREE_ONLY === 'true' ? 'FREE-LOCK' : 'PAID MODE ALLOWED'}
+                          </Badge>
+                        </div>
+                        <CardDescription className="max-w-3xl leading-6">
+                          اختيار صريح للنماذج المجانية، مع سجل احتياطي مرتب داخل OpenRouter فقط. لا يوجد انتقال صامت إلى مزوّد آخر أو نموذج مدفوع.
+                        </CardDescription>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-xs lg:min-w-[280px]">
+                      <div className={`rounded-xl border px-3 py-2.5 ${secretStorage?.encryptionConfigured ? 'border-emerald-400/25 bg-emerald-400/10' : 'border-amber-400/25 bg-amber-400/10'}`}>
+                        <div className="flex items-center gap-1.5 font-semibold">
+                          <Shield className="h-3.5 w-3.5" />
+                          {secretStorage?.encryptionConfigured ? 'تشفير المفاتيح' : 'تشفير غير مضبوط'}
+                        </div>
+                        <p className="mt-1 text-[11px] text-muted-foreground">{secretStorage?.encryptionConfigured ? 'AES-256-GCM في قاعدة البيانات' : 'استخدم متغيرات Railway أولاً'}</p>
+                      </div>
+                      <div className="rounded-xl border border-border/60 bg-background/35 px-3 py-2.5">
+                        <div className="flex items-center gap-1.5 font-semibold"><Globe className="h-3.5 w-3.5" /><span>المسار</span></div>
+                        <p className="mt-1 font-mono text-[11px] text-muted-foreground">OpenRouter → API</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 border-t border-border/40 pt-4 text-xs">
+                    <span className="rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-emerald-100">1 · Qwen 3.8 27B</span>
+                    <span className="rounded-full border border-border/60 bg-background/35 px-3 py-1 text-muted-foreground">لا يوجد تحويل تلقائي</span>
+                          <span className="rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1 text-amber-200">الخيارات الأخرى لا تجتاز عقد AyahX تلقائيًا</span>
+                    <span className="rounded-full border border-border/60 bg-background/35 px-3 py-1 text-muted-foreground">نص فقط · لا إرسال صوت</span>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="relative space-y-5 pt-4">
+                  {!secretStorage?.encryptionConfigured && (
+                    <div className="flex flex-col gap-3 rounded-2xl border border-amber-400/25 bg-amber-400/8 p-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex gap-3">
+                        <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-300" />
+                        <div>
+                          <p className="font-semibold text-amber-100">قبل الحفظ من هذه الشاشة</p>
+                          <p className="mt-1 text-xs leading-5 text-muted-foreground">أضف <code className="rounded bg-background/60 px-1.5 py-0.5 text-foreground">SETTINGS_ENCRYPTION_KEY</code> في Railway، أو ضع <code className="rounded bg-background/60 px-1.5 py-0.5 text-foreground">OPENROUTER_API_KEY</code> هناك مباشرةً. لن تُحفظ الأسرار في MySQL بلا تشفير.</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1.25fr_0.75fr]">
+                    <div className="space-y-4 rounded-2xl border border-border/60 bg-background/25 p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold">هوية المزوّد</p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">OpenRouter مخصّص للنصوص؛ تبقى معالجة الصوت والمحاذاة خارج هذا الربط.</p>
+                        </div>
+                        <div className="rounded-lg bg-emerald-400/10 px-2.5 py-1 font-mono text-[11px] text-emerald-200">SERVER ONLY</div>
+                      </div>
+
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="ai-provider" className="text-xs font-medium">مزوّد النص</Label>
+                          <Select value={editedSettings.AI_PROVIDER} onValueChange={(value) => setEditedSettings(prev => ({ ...prev, AI_PROVIDER: value }))}>
+                            <SelectTrigger id="ai-provider" className="bg-background/70"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="openrouter">OpenRouter — الموصى به</SelectItem>
+                              <SelectItem value="gemini">Google Gemini — بديل صريح</SelectItem>
+                              <SelectItem value="lovable">Lovable Gateway — بديل صريح</SelectItem>
+                              <SelectItem value="openai">OpenAI — بديل صريح</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="ai-image-provider" className="text-xs font-medium">مزوّد الصور منفصل</Label>
+                          <Select value={editedSettings.AI_IMAGE_PROVIDER} onValueChange={(value) => setEditedSettings(prev => ({ ...prev, AI_IMAGE_PROVIDER: value }))}>
+                            <SelectTrigger id="ai-image-provider" className="bg-background/70"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="gemini">Gemini — صور فقط</SelectItem>
+                              <SelectItem value="openrouter">OpenRouter — يتطلب إعداد صورة صريح</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between gap-3">
+                          <Label htmlFor="openrouter-key" className="text-xs font-medium">مفتاح OpenRouter API</Label>
+                          <span className="text-[11px] text-muted-foreground">{settings.OPENROUTER_API_KEY?.value ? 'مفتاح محفوظ · لا يُعاد عرضه' : 'لم يُضبط مفتاح بعد'}</span>
+                        </div>
+                        <div className="relative">
+                          <Input
+                            id="openrouter-key"
+                            name="openrouter-api-key"
+                            type={showSecrets.OPENROUTER_API_KEY ? 'text' : 'password'}
+                            value={editedSettings.OPENROUTER_API_KEY}
+                            onChange={(e) => setEditedSettings(prev => ({ ...prev, OPENROUTER_API_KEY: e.target.value }))}
+                            placeholder={settings.OPENROUTER_API_KEY?.value ? 'اتركه فارغًا للاحتفاظ بالمفتاح الحالي' : 'sk-or-v1-…'}
+                            className="h-11 border-emerald-400/20 bg-background/80 pr-11 font-mono text-xs"
+                            dir="ltr"
+                            autoComplete="off"
+                            autoCapitalize="none"
+                            autoCorrect="off"
+                            spellCheck={false}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowSecrets(prev => ({ ...prev, OPENROUTER_API_KEY: !prev.OPENROUTER_API_KEY }))}
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                            aria-label={showSecrets.OPENROUTER_API_KEY ? 'إخفاء المفتاح' : 'إظهار المفتاح'}
+                          >
+                            {showSecrets.OPENROUTER_API_KEY ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </button>
+                        </div>
+                        <p className="text-xs leading-5 text-muted-foreground">للاستبدال، أدخل مفتاحًا جديدًا ثم احفظ. لا يُرسل الحقل الفارغ إلى الخادم، ولا تظهر قيمة المفتاح المحفوظ في المتصفح.</p>
+                      </div>
+
+                      <div className="flex flex-col gap-3 border-t border-border/50 pt-4 sm:flex-row sm:items-center sm:justify-between">
+                        <p className="max-w-md text-xs leading-5 text-muted-foreground">يفحص السعر ودعم JSON Schema، ثم يرسل اختبارًا اصطناعيًا قصيرًا بلا قرآن أو بيانات مستخدم. يستهلك طلب توليد واحدًا من حصة OpenRouter.</p>
+                        <Button onClick={handleTestOpenRouter} disabled={testingOpenRouter} variant="outline" className="border-emerald-400/30 bg-emerald-400/5 text-emerald-100 hover:bg-emerald-400/15 hover:text-emerald-50">
+                          {testingOpenRouter ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : <RefreshCw className="ml-2 h-4 w-4" />}
+                          اختبار الاستدلال الفعلي
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 rounded-2xl border border-border/60 bg-gradient-to-b from-background/65 to-background/20 p-4">
+                      <div className="flex items-center gap-2 text-sm font-semibold"><Sparkles className="h-4 w-4 text-amber-300" /> سياسة النماذج</div>
+                      <div className="space-y-2 text-xs leading-5 text-muted-foreground">
+                        <p><span className="font-semibold text-foreground">مجانية افتراضيًا:</span> يتحقق الفحص من السعر الحالي، ويشترط قفل المجاني أيضًا أن ينتهي المعرّف بـ <code className="rounded bg-background/70 px-1">:free</code>.</p>
+                        <p><span className="font-semibold text-foreground">JSON Schema:</span> يجب أن يعلن النموذج <code className="rounded bg-background/70 px-1">structured_outputs</code>؛ مجرد وضع JSON لا يكفي لعقد النصوص المنظمة.</p>
+                        <p><span className="font-semibold text-foreground">احتياطي مضبوط:</span> ينتقل إلى النموذج الاحتياطي الذي اخترته فقط عند تعطل الأساسي أو بلوغ حد الطلبات.</p>
+                        <p><span className="font-semibold text-foreground">خصوصية:</span> يمرر طلب منع جمع البيانات، ويحجب نماذج Stealth ما دام هذا الخيار مفعّلًا.</p>
+                      </div>
+                      <div className="rounded-xl border border-amber-400/20 bg-amber-400/8 p-3 text-xs leading-5 text-amber-100">
+                        هذا الربط نصّي فقط: لا يرسل ملفات صوتية إلى OpenRouter. توقيت كلمات القرآن يأتي من مزوّد المحاذاة المعتمد والمراجعة.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4 lg:grid-cols-[0.88fr_1.12fr]">
+                    <div className="space-y-3 rounded-2xl border border-border/60 bg-background/25 p-4">
+                      <div className="space-y-1"><p className="text-sm font-semibold">النموذج الأساسي</p><p className="text-xs text-muted-foreground">يُستخدم أولًا للتدقيق والنصوص المنظمة.</p></div>
+                      <Input
+                        value={editedSettings.OPENROUTER_TEXT_MODEL}
+                        onChange={(e) => setEditedSettings(prev => ({ ...prev, OPENROUTER_TEXT_MODEL: e.target.value }))}
+                        className="font-mono text-xs"
+                        dir="ltr"
+                        aria-label="نموذج OpenRouter الأساسي"
+                      />
+                    </div>
+                    <div className="space-y-3 rounded-2xl border border-border/60 bg-background/25 p-4">
+                      <div className="space-y-1"><p className="text-sm font-semibold">نماذج احتياطية اختيارية</p><p className="text-xs text-muted-foreground">معطّلة افتراضيًا؛ أضف نموذجًا بعد مراجعة مخرجاته وخصوصيته. لا يستخدم النظام <code className="rounded bg-background/70 px-1">openrouter/free</code> المتغير.</p></div>
+                      <Input
+                        value={editedSettings.OPENROUTER_TEXT_FALLBACK_MODELS}
+                        onChange={(e) => setEditedSettings(prev => ({ ...prev, OPENROUTER_TEXT_FALLBACK_MODELS: e.target.value }))}
+                        className="font-mono text-xs"
+                        dir="ltr"
+                        aria-label="نماذج OpenRouter الاحتياطية"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-border/60 bg-background/25 p-4">
+                    <p className="text-sm font-semibold">نتيجة تقييم النماذج التي أرسلتها</p>
+                    <div className="mt-2 grid gap-2 text-xs leading-5 text-muted-foreground md:grid-cols-3">
+                      <p><code className="text-foreground">Nemotron 3 Super</code> ليس احتياطيًا تلقائيًا: صفحة نقطة NVIDIA المجانية تحذّر من إرسال بيانات شخصية أو سرية.</p>
+                      <p><code className="text-foreground">Nemotron 3 Ultra:free</code> مجاني وسياقه طويل، لكن نسخته المجانية لا تدعم <code>response_format</code>؛ لذلك لا تصلح لعقد JSON Schema الحالي.</p>
+                      <p><code className="text-foreground">Ling 3.0 Flash Sante:free</code> مجاني ومتخصص طبيًا، ولا يعلن دعم المخرجات المنظمة المطلوبة.</p>
+                      <p><code className="text-foreground">Space Bunny</code> يظهر مجانيًا حاليًا لكنه بلا لاحقة <code>:free</code> ولا يفرض JSON Schema. مزوّده مجهول وتوجد إشارات خصوصية متعارضة بين صفحة النموذج ودليل المزودين؛ لذلك يحجبه قفل المجاني/الخصوصية.</p>
+                      <p>ترتيب OpenRouter المجاني يعكس الاستخدام خلال الأسبوع، لا تقييمًا لجودة النموذج أو ملاءمته لـ AyahX.</p>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-3 md:grid-cols-3">
+                    <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-border/60 bg-background/30 p-3 transition-colors hover:border-emerald-400/30">
+                      <span><span className="block text-sm font-medium">قفل المجاني</span><span className="mt-0.5 block text-[11px] text-muted-foreground">سعر $0 ومعرّف ينتهي بـ :free</span></span>
+                      <Switch checked={editedSettings.OPENROUTER_FREE_ONLY === 'true'} onCheckedChange={(checked) => setEditedSettings(prev => ({ ...prev, OPENROUTER_FREE_ONLY: String(checked) }))} />
+                    </label>
+                    <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-border/60 bg-background/30 p-3 transition-colors hover:border-emerald-400/30">
+                      <span><span className="block text-sm font-medium">تفعيل احتياطي النماذج</span><span className="mt-0.5 block text-[11px] text-muted-foreground">اختياري وبعد مراجعة النموذج</span></span>
+                      <Switch checked={editedSettings.OPENROUTER_MODEL_FALLBACKS_ENABLED === 'true'} onCheckedChange={(checked) => setEditedSettings(prev => ({ ...prev, OPENROUTER_MODEL_FALLBACKS_ENABLED: String(checked) }))} />
+                    </label>
+                    <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-border/60 bg-background/30 p-3 transition-colors hover:border-emerald-400/30">
+                      <span><span className="block text-sm font-medium">رفض جمع البيانات</span><span className="mt-0.5 block text-[11px] text-muted-foreground">تفضيل مسار الخصوصية</span></span>
+                      <Switch checked={editedSettings.OPENROUTER_DATA_COLLECTION !== 'allow'} onCheckedChange={(checked) => setEditedSettings(prev => ({ ...prev, OPENROUTER_DATA_COLLECTION: checked ? 'deny' : 'allow' }))} />
+                    </label>
+                  </div>
+
+                  <div className="border-t border-border/50 pt-4">
+                    <Button type="button" variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground" onClick={() => setShowOpenRouterAdvanced((value) => !value)}>
+                      <Sliders className="h-4 w-4" />
+                      {showOpenRouterAdvanced ? 'إخفاء الإعدادات المتقدمة' : 'إظهار الإعدادات المتقدمة'}
+                    </Button>
+                    {showOpenRouterAdvanced && (
+                      <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-3 grid gap-4 rounded-2xl border border-border/60 bg-background/20 p-4 md:grid-cols-2">
+                        <div className="space-y-2"><Label className="text-xs">رابط الموقع لتعريف التطبيق</Label><Input value={editedSettings.OPENROUTER_SITE_URL} onChange={(e) => setEditedSettings(prev => ({ ...prev, OPENROUTER_SITE_URL: e.target.value }))} placeholder="https://ayahx.example" className="font-mono text-xs" dir="ltr" /></div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <label className="flex items-center justify-between gap-2 rounded-lg border border-border/60 px-3 py-2 text-xs"><span>fallback بين المزودين</span><Switch checked={editedSettings.OPENROUTER_ALLOW_PROVIDER_FALLBACKS === 'true'} onCheckedChange={(checked) => setEditedSettings(prev => ({ ...prev, OPENROUTER_ALLOW_PROVIDER_FALLBACKS: String(checked) }))} /></label>
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
+
+                  {openRouterTestStatus && (
+                    <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className={`rounded-2xl border p-4 ${openRouterTestStatus.success ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-100' : 'border-destructive/35 bg-destructive/10 text-destructive'}`}>
+                      <div className="flex items-start gap-3">
+                        {openRouterTestStatus.success ? <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" /> : <XCircle className="mt-0.5 h-5 w-5 shrink-0" />}
+                        <div className="min-w-0">
+                          <p className="font-semibold">{openRouterTestStatus.message}</p>
+                          <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
+                            {(openRouterTestStatus.freeSelectedModels || []).map((model: string) => <span key={model} className="rounded-full border border-current/25 px-2 py-0.5 font-mono">$0 · {model}</span>)}
+                            {openRouterTestStatus.generationModel ? <span className="rounded-full border border-current/25 px-2 py-0.5 font-mono">استدلال فعلي · {openRouterTestStatus.generationModel}</span> : null}
+                            {openRouterTestStatus.generationTested === false ? <span className="rounded-full border border-current/25 px-2 py-0.5">لم يُرسل طلب توليد</span> : null}
+                            {openRouterTestStatus.generationHttpStatus ? <span className="rounded-full border border-current/25 px-2 py-0.5">HTTP {openRouterTestStatus.generationHttpStatus}</span> : null}
+                            {openRouterTestStatus.latencyMs ? <span className="rounded-full border border-current/25 px-2 py-0.5">{openRouterTestStatus.latencyMs}ms</span> : null}
+                          </div>
+                          {Array.isArray(openRouterTestStatus.selectedModelReports) && openRouterTestStatus.selectedModelReports.length > 0 && (
+                            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                              {openRouterTestStatus.selectedModelReports.map((report: any) => (
+                                <div key={report.id} className="rounded-lg border border-current/20 bg-background/20 p-2.5 text-[11px]">
+                                  <p className="break-all font-mono">{report.id}</p>
+                                  <p className="mt-1 opacity-80">
+                                    {report.available ? 'متاح' : 'غير متاح'} · {report.free ? 'سعره صفر' : 'مدفوع'} · {report.supportsStructuredOutputs ? 'يدعم JSON Schema' : 'لا يدعم JSON Schema'}
+                                    {report.contextLength ? ` · سياق ${report.contextLength.toLocaleString()}` : ''}
+                                  </p>
+                                  {report.issues?.length > 0 && <p className="mt-1 text-amber-200">{report.issues.join(' · ')}</p>}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.section>
+
             {/* Quran Foundation App Server Config */}
             <Card className="border-primary/30 shadow-lg relative overflow-hidden">
               <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-amber-500 via-primary to-emerald-500" />
@@ -1152,7 +1467,7 @@ export default function AdminPage() {
             <div className="sticky bottom-4 z-20 p-4 rounded-xl backdrop-blur-md bg-card/90 border border-primary/30 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-2">
                 <Shield className="h-5 w-5 text-primary shrink-0" />
-                <span className="text-sm font-medium">يتم حفظ المفاتيح مشفرة ومحمية في قاعدة البيانات وتفعيلها فوراً لجميع المستخدمين.</span>
+                <span className="text-sm font-medium">{secretStorage?.encryptionConfigured ? 'تُحفظ المفاتيح مشفرة ومحمية في قاعدة البيانات وتُفعّل فوراً لجميع المستخدمين.' : 'للحفظ الآمن من لوحة الإدارة، اضبط SETTINGS_ENCRYPTION_KEY أولاً في Railway؛ أو استخدم متغيرات الخدمة مباشرة.'}</span>
               </div>
               <Button
                 onClick={handleSaveSettings}

@@ -1,0 +1,9 @@
+# Install this file only in a model-serving/GPU image. The Railway control
+# image intentionally uses requirements.txt and returns MODEL_NOT_CONFIGURED
+# until a real engine is attached.
+torch>=2.3,<3
+torchaudio>=2.3,<3
+transformers>=4.45,<5
+numpy>=1.26,<3
+soundfile>=0.12,<1
+safetensors>=0.4,<1

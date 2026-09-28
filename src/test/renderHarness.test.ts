@@ -29,6 +29,27 @@ describe('Browser render harness', () => {
     expect(source).not.toContain('firstWordStart >= (rangeOffsetMs * 0.7)');
   });
 
+  it('never manufactures verse or word timing when evidence is absent', () => {
+    const source = fs.readFileSync(path.resolve(process.cwd(), 'public/render-harness.html'), 'utf8');
+    expect(source).toContain('No timing evidence. Keep a stable static verse');
+    expect(source).toContain('it cannot');
+    expect(source).toContain('manufacture a word boundary from duration');
+    expect(source).not.toContain('allowApproximateTiming');
+    expect(source).not.toContain('computeWordPhoneticWeight');
+    expect(source).not.toContain('Fallback proportional duration across verses');
+    expect(source).not.toContain('activeAyahIndex = Math.floor(fraction * allAyahs.length)');
+  });
+
+  it('shares deterministic Animate profiles with the canonical timing map contract', () => {
+    const source = fs.readFileSync(path.resolve(process.cwd(), 'public/render-harness.html'), 'utf8');
+    expect(source).toContain("'teleprompter'");
+    expect(source).toContain("'isolate'");
+    expect(source).toContain('hasTrustedWordTiming ? animationProfile : \'static\'');
+    expect(source).toContain("const verseMode = hasTrustedWordTiming ? requestedVerseMode : 'full';");
+    expect(source).toContain("hasTrustedWordTiming && animationProfile === 'teleprompter'");
+    expect(source).toContain('animationReducedMotion');
+  });
+
   it('keeps direct video and timed lyric modes inside the shared scene contract', () => {
     const source = fs.readFileSync(path.resolve(process.cwd(), 'public/render-harness.html'), 'utf8');
     expect(source).toContain('async function syncDirectVideo');

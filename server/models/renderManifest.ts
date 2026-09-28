@@ -1,5 +1,60 @@
 import { z } from 'zod';
 
+const animationProfileSchema = z.enum([
+  'static',
+  'karaoke',
+  'teleprompter',
+  'reveal',
+  'fade',
+  'spotlight',
+  'isolate',
+  'consume',
+]);
+
+const timingSubsegmentSchema = z.object({
+  occurrenceId: z.string().min(1).max(180),
+  token: z.string().max(120),
+  startMs: z.number().min(0),
+  endMs: z.number().min(0),
+  confidence: z.number().min(0).max(1),
+  flags: z.array(z.string().max(64)).optional(),
+}).refine((segment) => segment.endMs > segment.startMs, {
+  message: 'timing subsegment endMs must be greater than startMs',
+});
+
+const alignmentProvenanceSchema = z.object({
+  provider: z.enum([
+    'quran_foundation',
+    'manual',
+    'internal_ctc',
+    'quranic_universal_aligner',
+    'lafzize',
+    'verified_dataset',
+    'unknown',
+  ]),
+  providerVersion: z.string().max(128).optional(),
+  providerResultId: z.string().max(256).optional(),
+  requestedGranularity: z.enum(['word', 'letter', 'phoneme']),
+  availableGranularities: z.array(z.enum(['word', 'letter', 'phoneme'])).min(1),
+  modelId: z.string().max(256).optional(),
+  modelVersion: z.string().max(128).optional(),
+  checkpointSha256: z.string().regex(/^[a-fA-F0-9]{32,128}$/).optional(),
+  preprocessingVersion: z.string().max(128).optional(),
+  quranEdition: z.string().max(128).optional(),
+  riwayah: z.string().max(64).optional(),
+  license: z.string().max(256).optional(),
+  inputAudioSha256: z.string().max(128).optional(),
+  parentMapId: z.string().max(256).optional(),
+  createdBy: z.enum(['provider', 'manual_review', 'dataset_import']).optional(),
+}).optional();
+
+const alignmentReviewSchema = z.object({
+  status: z.enum(['unreviewed', 'needs_review', 'approved', 'rejected']),
+  reviewerId: z.string().max(128).optional(),
+  reviewedAt: z.string().max(64).optional(),
+  note: z.string().max(2000).optional(),
+}).optional();
+
 export const RenderManifestSchema = z.object({
   schemaVersion: z.literal('1.0.0'),
   rendererVersion: z.literal('1.0.0'),
@@ -12,6 +67,8 @@ export const RenderManifestSchema = z.object({
     height: z.number().int().min(360).max(3840),
   }),
   fps: z.number().int().min(15).max(60).default(30),
+  animationProfile: animationProfileSchema.default('karaoke'),
+  animationReducedMotion: z.boolean().default(false),
   qualityPreset: z.enum(['low', 'medium', 'high', 'ultra']).default('high'),
   audioBitrate: z.enum(['128k', '192k', '320k']).default('192k'),
   codecProfile: z.enum(['high-4.1', 'main-4.0', 'baseline']).default('high-4.1'),
@@ -59,6 +116,8 @@ export const RenderManifestSchema = z.object({
     sourceMethod: z.string().min(1).optional(),
     audioContentHash: z.string().min(8),
     validationStatus: z.enum(['approved', 'low_confidence', 'needs_review', 'rejected']),
+    alignment: alignmentProvenanceSchema,
+    review: alignmentReviewSchema,
     compositionOffsets: z.array(
       z.object({
         ayahNumber: z.number().int().min(1),
@@ -73,9 +132,14 @@ export const RenderManifestSchema = z.object({
         canonicalWordKey: z.string(),
         displayWordIndex: z.number().int().min(0),
         displayToken: z.string(),
+        occurrenceId: z.string().min(1).max(180).optional(),
         startMs: z.number().min(0),
-        endMs: z.number().min(0).optional(),
+        endMs: z.number().min(0),
         confidence: z.number().min(0).max(1).optional(),
+        letters: z.array(timingSubsegmentSchema).optional(),
+        phonemes: z.array(timingSubsegmentSchema).optional(),
+      }).refine((word) => word.endMs > word.startMs, {
+        message: 'timing word endMs must be greater than startMs',
       })
     ),
     gaps: z.array(
@@ -211,6 +275,48 @@ export interface ValidationResult {
   errors?: string[];
 }
 
+function validateManifestTimingIntervals(manifest: RenderManifest, errors: string[]): void {
+  const words = manifest.timingMap.words || [];
+  const occurrenceIds = new Set<string>();
+  // Quran Foundation maps can be absolute chapter-clock timestamps while the
+  // submitted audio is a clipped range. Validate against that explicit range
+  // rather than mistaking an absolute offset for an overlong word.
+  const timingWindowStart = manifest.audio.rangeMs?.from ?? 0;
+  const durationMs = manifest.audio.rangeMs?.to ?? (timingWindowStart + manifest.audio.durationSeconds * 1000);
+  let previousEnd = -1;
+  words.forEach((word, index) => {
+    const occurrenceId = word.occurrenceId || `${word.canonicalWordKey}:${index + 1}`;
+    if (occurrenceIds.has(occurrenceId)) errors.push(`timingMap.words[${index}]: duplicate occurrenceId`);
+    occurrenceIds.add(occurrenceId);
+    if (index > 0 && word.startMs < previousEnd) {
+      errors.push(`timingMap.words[${index}]: intervals overlap or are out of order`);
+    }
+    if (word.startMs < Math.max(0, timingWindowStart - 150) || word.endMs > durationMs + 150) {
+      errors.push(`timingMap.words[${index}]: interval exceeds audio duration`);
+    }
+    previousEnd = Math.max(previousEnd, word.endMs);
+    for (const kind of ['letters', 'phonemes'] as const) {
+      const segments = word[kind] || [];
+      const segmentIds = new Set<string>();
+      let segmentEnd = word.startMs;
+      for (let segmentIndex = 0; segmentIndex < segments.length; segmentIndex += 1) {
+        const segment = segments[segmentIndex];
+        if (segmentIds.has(segment.occurrenceId)) {
+          errors.push(`timingMap.words[${index}].${kind}[${segmentIndex}]: duplicate occurrenceId`);
+        }
+        segmentIds.add(segment.occurrenceId);
+        if (segment.startMs < word.startMs || segment.endMs > word.endMs || segment.startMs < segmentEnd) {
+          errors.push(`timingMap.words[${index}].${kind}[${segmentIndex}]: outside parent interval or overlapping`);
+        }
+        segmentEnd = Math.max(segmentEnd, segment.endMs);
+      }
+    }
+  });
+  for (const [index, gap] of (manifest.timingMap.gaps || []).entries()) {
+    if (gap.endMs <= gap.startMs) errors.push(`timingMap.gaps[${index}]: endMs must be greater than startMs`);
+  }
+}
+
 /**
  * Validates an incoming RenderManifest object against the schema and security rules
  */
@@ -242,20 +348,6 @@ export function validateRenderManifest(raw: unknown): ValidationResult {
     }
   }
 
-  // Auto-heal defense-in-depth: ensure all words have a non-null endMs
-  if (manifestData?.timingMap?.words && Array.isArray(manifestData.timingMap.words)) {
-    const words = manifestData.timingMap.words;
-    for (let i = 0; i < words.length; i++) {
-      const w = words[i];
-      if (w && (w.endMs === undefined || w.endMs === null || isNaN(w.endMs))) {
-        const nextStart = words[i + 1]?.startMs;
-        w.endMs = (typeof nextStart === 'number' && nextStart > w.startMs)
-          ? nextStart
-          : ((typeof w.startMs === 'number' ? w.startMs : 0) + 600);
-      }
-    }
-  }
-
   const parseResult = RenderManifestSchema.safeParse(raw);
   if (!parseResult.success) {
     const errorDetails = parseResult.error.errors.map(
@@ -267,8 +359,32 @@ export function validateRenderManifest(raw: unknown): ValidationResult {
   const manifest = parseResult.data;
   const errors: string[] = [];
 
-  // Allow approximate phonetic/proportional glow mode for reciters without approved exact word alignment
+  validateManifestTimingIntervals(manifest, errors);
 
+  // An animation map and its render audio must identify the exact same bytes.
+  // A range may be clipped from that source, but it may not swap in a second
+  // recording with superficially compatible timestamps.
+  if (manifest.timingMap.validationStatus === 'approved'
+    && manifest.timingMap.audioContentHash !== manifest.audio.audioContentHash) {
+    errors.push('timingMap audio hash must match render audio hash for approved timing.');
+  }
+
+  // An approved word map is bound to the original audio clock.  Any tempo
+  // transform changes every word boundary, so require a new reviewed map
+  // rather than rendering a visually plausible but inaccurate highlight.
+  const audioEffects = manifest.audioEffects;
+  const changesAudioClock = Boolean(audioEffects?.copyrightProtectionEnabled)
+    || (typeof audioEffects?.speedAdjust === 'number' && Math.abs(audioEffects.speedAdjust - 1) > 0.0001);
+  if (manifest.timingMap.validationStatus === 'approved' && changesAudioClock) {
+    errors.push('Approved word timing cannot be exported after an audio speed change. Re-align or disable the speed transform.');
+  }
+
+  // This legacy field previously requested audio fingerprint alteration.  It
+  // is retired: a project must use audio it is licensed to publish, and this
+  // renderer must not offer a mechanism intended to evade platform matching.
+  if (audioEffects?.copyrightProtectionEnabled) {
+    errors.push('The retired copyrightProtectionEnabled audio transform is not supported.');
+  }
 
   // Dimension sanity check
   if (manifest.aspectRatio === '9:16' && manifest.outputDimensions.width > manifest.outputDimensions.height) {

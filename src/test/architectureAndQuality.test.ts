@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import fs from 'fs';
 import path from 'path';
-import { safeParseJson, getAiConfig } from '../../server/services/aiService';
+import { safeParseJson, resolveAiConfigFromSettings } from '../../server/services/aiService';
 import { safeParseJson as reExportedParseJson } from '../../server/routes/services';
 
 describe('Architecture & Code Quality (Session 6 Audit)', () => {
@@ -36,28 +36,23 @@ describe('Architecture & Code Quality (Session 6 Audit)', () => {
       expect(safeParseJson('plain invalid string with no brackets')).toBeNull();
     });
 
-    it('resolves AI provider configuration from environment variables with correct precedence', () => {
-      const originalEnv = { ...process.env };
+    it('resolves AI provider configuration deterministically from persisted settings', () => {
+      expect(resolveAiConfigFromSettings({})).toBeNull();
 
-      try {
-        delete process.env.GEMINI_API_KEY;
-        delete process.env.LOVABLE_API_KEY;
-        delete process.env.OPENAI_API_KEY;
-        expect(getAiConfig()).toBeNull();
+      expect(resolveAiConfigFromSettings({ GEMINI_API_KEY: 'test-gemini-key' })).toEqual({
+        type: 'gemini', key: 'test-gemini-key',
+      });
 
-        process.env.GEMINI_API_KEY = 'test-gemini-key';
-        expect(getAiConfig()).toEqual({ type: 'gemini', key: 'test-gemini-key' });
+      expect(resolveAiConfigFromSettings({ LOVABLE_API_KEY: 'test-lovable-key' })).toEqual({
+        type: 'lovable', key: 'test-lovable-key',
+      });
 
-        delete process.env.GEMINI_API_KEY;
-        process.env.LOVABLE_API_KEY = 'test-lovable-key';
-        expect(getAiConfig()).toEqual({ type: 'lovable', key: 'test-lovable-key' });
+      expect(resolveAiConfigFromSettings({ OPENAI_API_KEY: 'test-openai-key' })).toEqual({
+        type: 'openai', key: 'test-openai-key',
+      });
 
-        delete process.env.LOVABLE_API_KEY;
-        process.env.OPENAI_API_KEY = 'test-openai-key';
-        expect(getAiConfig()).toEqual({ type: 'openai', key: 'test-openai-key' });
-      } finally {
-        process.env = originalEnv;
-      }
+      // An explicit provider never silently falls through to another key.
+      expect(resolveAiConfigFromSettings({ AI_PROVIDER: 'openrouter', GEMINI_API_KEY: 'legacy-key' })).toBeNull();
     });
 
     it('transcribeAudioWithAi handles audio MIME detection and successfully parses JSON response', async () => {

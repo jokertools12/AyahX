@@ -619,7 +619,7 @@ export async function prepareAudioTrack(manifest: RenderManifest, scratchDir: st
  * 1. Automatic peak headroom & volume detection to bring quiet recitations up to broadcast level
  * 2. Mono preservation (pan=stereo|c0=c0|c1=c0) preventing FFmpeg's -3dB downmix attenuation
  * 3. Multi-band EQ clarity & presence enhancement
- * 4. Copyright protection acoustic fingerprint alteration (EQ filter + subtle 2% tempo shift)
+ * 4. Stable audio clock: no fingerprint-evasion or tempo transform is applied
  * 5. Authentic Mosque acoustics reverberation (Early and late reflection matrix)
  * 6. Multi-tap geometric echo delay & feedback repetition
  * 7. Broadcast Brickwall Soft Limiter ensuring full rich volume without any clipping
@@ -656,16 +656,9 @@ export async function applyAudioEffects(
     preFilters.push('bass=g=2:f=180', 'equalizer=f=1200:t=q:w=0.7:g=2.5', 'treble=g=-1:f=8000');
   }
 
-  // 2. Copyright Protection (Acoustic fingerprint alteration matching useAudioEffects)
-  if (effects.copyrightProtectionEnabled) {
-    preFilters.push(
-      'equalizer=f=1200:t=q:w=0.7:g=1.2',
-      'treble=g=-0.8:f=8000',
-      'bass=g=0.6:f=200',
-      'atempo=1.02'
-    );
-    manifest.audio.durationSeconds = Math.max(manifest.audio.durationSeconds / 1.02, 0.5);
-  } else if (typeof effects.speedAdjust === 'number' && effects.speedAdjust !== 1.0 && effects.speedAdjust > 0.5 && effects.speedAdjust < 2.0) {
+  // 2. Optional user speed transform.  validateRenderManifest rejects this
+  // when an approved word map is present because it changes the audio clock.
+  if (typeof effects.speedAdjust === 'number' && effects.speedAdjust !== 1.0 && effects.speedAdjust > 0.5 && effects.speedAdjust < 2.0) {
     preFilters.push(`atempo=${effects.speedAdjust.toFixed(2)}`);
     manifest.audio.durationSeconds = Math.max(manifest.audio.durationSeconds / effects.speedAdjust, 0.5);
   }

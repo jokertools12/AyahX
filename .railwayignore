@@ -1,0 +1,28 @@
+# Keep local caches, dependency trees, credentials, and generated media out of
+# Railway's upload archive.  The source files for the API and alignment worker
+# remain included; Docker installs production dependencies remotely.
+node_modules/
+dist/
+.git/
+.railway/
+.agent/
+.autoclaw/
+.clinerules/
+.pytest_cache/
+**/.pytest_cache/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+services/alignment-worker/.venv/
+services/alignment-worker/checkpoints/
+services/alignment-worker/reports/
+uploads/
+qa-output/
+scratch/
+.env
+.env.*
+!.env.example
+*.mp3
+*.wav
+*.m4a
+*.mp4

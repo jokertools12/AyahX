@@ -82,21 +82,51 @@
         return (str || '').replace(/[\u064B-\u0652\u0670\u06D6-\u06ED]/g, '');
       }
 
-      // Computes phonetic Tajweed weight for a word (for smooth proportional pacing)
-      function computeWordPhoneticWeight(word, isFinal) {
-        if (!word) return 1.0;
-        let weight = 0;
-        const clean = stripTashkeel(word);
-        weight += Math.max(clean.length, 1) * 1.0;
-        const shortVowels = (word.match(/[\u064E\u064F\u0650]/g) || []).length;
-        weight += shortVowels * 0.45;
-        const shaddah = (word.match(/\u0651/g) || []).length;
-        weight += shaddah * 1.2;
-        const madd = (clean.match(/[اويىآ]/g) || []).length;
-        weight += madd * 1.5;
-        if (word.includes('\u0653') || word.includes('~')) weight += 3.0;
-        if (isFinal) weight += 3.5;
-        return Math.max(weight, 1.2);
+      // Deterministic Animate profiles. These functions intentionally mirror
+      // src/lib/animationTimeline.ts; both consume trusted timing events and
+      // never synthesize a word boundary from duration or WPM.
+      const ANIMATION_PROFILES = ['static', 'karaoke', 'teleprompter', 'reveal', 'fade', 'spotlight', 'isolate', 'consume'];
+      function normalizeAnimationProfile(value) {
+        return ANIMATION_PROFILES.indexOf(value) >= 0 ? value : 'karaoke';
+      }
+      function getAnimationState(index, activeIndex, progress, profileInput, wordCount, reducedMotion) {
+        const profile = normalizeAnimationProfile(profileInput);
+        const safeActive = Number.isFinite(activeIndex) && activeIndex >= 0 && activeIndex < wordCount ? activeIndex : null;
+        const distance = safeActive === null ? Infinity : Math.abs(index - safeActive);
+        const isActive = safeActive === index;
+        let opacity = 1;
+        let emphasis = isActive ? 1 : 0;
+        let scale = 1;
+        let translateY = 0;
+        if (profile === 'teleprompter') {
+          opacity = distance <= 2 ? Math.max(0.28, 1 - distance * 0.28) : 0.12;
+          translateY = safeActive === null ? 0 : (index - safeActive) * 2.5;
+          emphasis = isActive ? 1 : Math.max(0, 1 - distance * 0.4);
+        } else if (profile === 'reveal') {
+          opacity = safeActive === null || index <= safeActive ? 1 : 0.22;
+          emphasis = isActive ? 1 : 0;
+        } else if (profile === 'fade') {
+          opacity = safeActive === null ? 1 : (isActive ? 1 : index < safeActive ? 0.58 : 0.22);
+          emphasis = isActive ? 1 : index < (safeActive === null ? -1 : safeActive) ? 0.25 : 0;
+        } else if (profile === 'spotlight') {
+          opacity = safeActive === null ? 0.82 : (isActive ? 1 : 0.24);
+          emphasis = isActive ? 1 : 0;
+        } else if (profile === 'isolate') {
+          opacity = safeActive === null ? 0.18 : (isActive ? 1 : 0);
+          emphasis = isActive ? 1 : 0;
+        } else if (profile === 'consume') {
+          opacity = safeActive === null || index >= safeActive ? (isActive ? 1 : 0.34) : 0;
+          emphasis = isActive ? 1 : 0;
+        } else if (profile === 'static') {
+          opacity = 1;
+          emphasis = isActive ? 0.35 : 0;
+        }
+        if (isActive && profile !== 'static' && !reducedMotion) {
+          const pulse = Math.sin(Math.PI * Math.min(Math.max(progress || 0, 0), 1));
+          scale = 1 + pulse * 0.025;
+          if (profile === 'teleprompter') translateY -= pulse * 1.5;
+        }
+        return { opacity: Math.min(1, Math.max(0, opacity)), emphasis, scale, translateY, isActive };
       }
 
       // Rosette / Ayah Badge Drawing with full shape support
@@ -1482,14 +1512,13 @@
               currentAyahEndSec = Math.min(manifest.audio.durationSeconds, (lastMs - (isTimingMapAbsolute ? rangeOffsetMs : 0)) / 1000);
             }
           }
-          // Method D: Fallback proportional duration across verses
+          // Method D: No timing evidence. Keep a stable static verse rather
+          // than slicing duration across ayahs and presenting that estimate as
+          // recitation synchronization. Word animation remains disabled below.
           else if (!hasEveryAyahTimeline && allAyahs.length > 1) {
-            const totalDur = Math.max(manifest.audio.durationSeconds, 1);
-            const fraction = Math.min(Math.max(frameTimeSeconds / totalDur, 0), 0.999);
-            activeAyahIndex = Math.floor(fraction * allAyahs.length);
-            const ayahSlice = totalDur / allAyahs.length;
-            currentAyahStartSec = activeAyahIndex * ayahSlice;
-            currentAyahEndSec = (activeAyahIndex + 1) * ayahSlice;
+            activeAyahIndex = 0;
+            currentAyahStartSec = 0;
+            currentAyahEndSec = manifest.audio.durationSeconds;
           }
 
           const activeAyah = allAyahs[activeAyahIndex] || allAyahs[0];
@@ -1500,9 +1529,16 @@
           const ayahWords = (activeAyah.text || '').split(' ').filter(Boolean);
           let activeWordIndexInAyah = null;
           let activeWordProgress = 0;
+          const animationProfile = normalizeAnimationProfile(
+            manifest.animationProfile || displaySettings.animationProfile || 'karaoke'
+          );
+          const animationReducedMotion = manifest.animationReducedMotion === true || displaySettings.animationReducedMotion === true;
+          const hasTrustedWordTiming = Boolean(
+            timingMap && timingMap.validationStatus === 'approved' && timingMap.words && timingMap.words.length > 0
+          );
 
           // Case A: Aligned TimingMap has explicit words
-          if (timingMap && timingMap.words && timingMap.words.length > 0) {
+          if (hasTrustedWordTiming) {
             const words = timingMap.words;
             let activeWord = null;
 
@@ -1552,42 +1588,9 @@
             }
           }
 
-          // Case B: Unaligned EveryAyah mode or Fallback mode -> compute phonetic Tajweed pacing
-          if (activeWordIndexInAyah === null && ayahWords.length > 0) {
-            const weights = ayahWords.map((w, idx) => computeWordPhoneticWeight(w, idx === ayahWords.length - 1));
-            const sumWeights = weights.reduce((acc, v) => acc + v, 0);
-
-            // Intro silence (~4% of ayah) and outro pause (~10%)
-            const introMs = Math.min(activeAyahDurationSec * 1000 * 0.04, 250);
-            const outroMs = Math.min(activeAyahDurationSec * 1000 * 0.10, 800);
-            const speechDurMs = Math.max(activeAyahDurationSec * 1000 - introMs - outroMs, ayahWords.length * 180);
-
-            const elapsedAyahMs = timeInAyahSec * 1000;
-            let currentOffset = introMs;
-
-            if (elapsedAyahMs < introMs) {
-              // During intro onset of the verse, highlight word 0 with subtle progress so glow is visible on transition!
-              activeWordIndexInAyah = 0;
-              activeWordProgress = Math.min(Math.max(elapsedAyahMs / Math.max(introMs, 1), 0), 0.35);
-            } else {
-              for (let i = 0; i < ayahWords.length; i++) {
-                const wordShare = weights[i] / sumWeights;
-                const wDur = Math.round(speechDurMs * wordShare);
-                const wStart = currentOffset;
-                const wEnd = (i === ayahWords.length - 1) ? Math.round(wStart + wDur + outroMs * 0.5) : Math.round(wStart + wDur);
-
-                if (elapsedAyahMs >= wStart && elapsedAyahMs < wEnd) {
-                  activeWordIndexInAyah = i;
-                  activeWordProgress = Math.min(Math.max((elapsedAyahMs - wStart) / Math.max(wEnd - wStart, 1), 0), 1);
-                  break;
-                } else if (i === ayahWords.length - 1 && elapsedAyahMs >= wEnd) {
-                  activeWordIndexInAyah = i;
-                  activeWordProgress = 1.0;
-                }
-                currentOffset = wEnd;
-              }
-            }
-          }
+          // Unaligned audio deliberately has no word event. An animation
+          // profile may still choose its static presentation, but it cannot
+          // manufacture a word boundary from duration, WPM, or token shape.
 
           // Timed Ibtahalat lyrics are part of the scene contract, not a
           // React-only overlay. They intentionally bypass Quran word/chunk
@@ -1739,8 +1742,13 @@
           }
 
           // 8. Verse Display Modes & Chunks (full, twoWords, threeTwo, wordByWord)
+          // A word/chunk mode is meaningful only when the server-attested map has
+          // explicit word spans.  An unreviewed/provisional map must never fall
+          // through to the first word or a guessed chunk: render the whole ayah
+          // until an approved alignment is available.
           if (!lyricLines) {
-          const verseMode = displaySettings.verseDisplayMode || 'full';
+          const requestedVerseMode = displaySettings.verseDisplayMode || 'full';
+          const verseMode = hasTrustedWordTiming ? requestedVerseMode : 'full';
           let displayWords = ayahWords;
           let chunkStartWordIdx = 0;
 
@@ -1775,6 +1783,18 @@
             }
             displayWords = chunks[cIdx] || ayahWords.slice(0, 3);
             chunkStartWordIdx = starts[cIdx] || 0;
+          }
+
+          // Animate profiles can select a deterministic reading window
+          // independently from the legacy chunking control. This makes a
+          // teleprompter/isolate profile useful even when verseMode is full.
+          if (hasTrustedWordTiming && animationProfile === 'teleprompter' && ayahWords.length > 0) {
+            const center = activeWordIndexInAyah == null ? 0 : Math.max(0, Math.min(activeWordIndexInAyah, ayahWords.length - 1));
+            chunkStartWordIdx = Math.max(0, Math.min(center - 2, ayahWords.length - 5));
+            displayWords = ayahWords.slice(chunkStartWordIdx, chunkStartWordIdx + 5);
+          } else if (hasTrustedWordTiming && animationProfile === 'isolate' && activeWordIndexInAyah != null && ayahWords[activeWordIndexInAyah]) {
+            chunkStartWordIdx = activeWordIndexInAyah;
+            displayWords = [ayahWords[activeWordIndexInAyah]];
           }
 
           // 9. Render Quranic Ayah Text with Entrance Transitions
@@ -1930,10 +1950,25 @@
                 const globalWordIdx = chunkStartWordIdx + wordCounterInChunk;
                 const hlStyle = displaySettings.highlightStyle ?? 'glow';
                 const glowStyle = displaySettings.glowStyle || 'golden';
+                const visualState = getAnimationState(
+                  globalWordIdx,
+                  activeWordIndexInAyah,
+                  activeWordProgress,
+                  hasTrustedWordTiming ? animationProfile : 'static',
+                  ayahWords.length,
+                  animationReducedMotion,
+                );
                 const isHighlighted = (hlStyle !== 'none') &&
-                  (activeWordIndexInAyah !== null && globalWordIdx === activeWordIndexInAyah);
+                  hasTrustedWordTiming && visualState.isActive && visualState.emphasis > 0.5;
 
                 ctx.save();
+                ctx.globalAlpha *= visualState.opacity;
+                if (visualState.scale !== 1 || visualState.translateY !== 0) {
+                  const originX = cursorX - wWidth / 2;
+                  ctx.translate(originX, y);
+                  ctx.scale(visualState.scale, visualState.scale);
+                  ctx.translate(-originX, -y + visualState.translateY);
+                }
                 if (isHighlighted) {
                   const pulse = 0.35 + Math.sin(Math.PI * activeWordProgress) * 0.65;
                   let glowColor = '#FFD700';

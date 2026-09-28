@@ -36,3 +36,11 @@ uploads/renders/
 .agent
 .autoclaw
 .clinerules
+
+# Optional Python alignment worker artifacts.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+services/alignment-worker/.venv/
+services/alignment-worker/checkpoints/
+services/alignment-worker/reports/

@@ -1,5 +1,12 @@
 import { query } from '../db';
 import { logger } from '../logger';
+import {
+  decryptSettingSecret,
+  encryptLegacySettingSecret,
+  encryptSettingSecret,
+  isEncryptedSetting,
+  isSettingsSecretEncryptionConfigured,
+} from './secretSettingsCrypto';
 
 export interface SystemSetting {
   key_name: string;
@@ -18,6 +25,48 @@ export interface SettingsMap {
 }
 
 let tableInitialized = false;
+let attemptedLegacySecretMigration = false;
+
+function decodeSettingValue(value: string, isSecret: boolean, key: string): string {
+  if (!isSecret || !isEncryptedSetting(value)) return value;
+  try {
+    return decryptSettingSecret(value);
+  } catch (err: any) {
+    // Do not return a ciphertext as a credential.  The caller sees an absent
+    // value and the operator gets a safe diagnostic without exposing the key.
+    logger.error(`Unable to decrypt secret setting '${key}'`, err);
+    return '';
+  }
+}
+
+async function migrateLegacyPlaintextSecrets(): Promise<void> {
+  if (attemptedLegacySecretMigration || !isSettingsSecretEncryptionConfigured()) return;
+  attemptedLegacySecretMigration = true;
+  try {
+    const rows = await query<Array<{ key_name: string; value_text: string }>>(
+      'SELECT key_name, value_text FROM system_settings WHERE is_secret = TRUE'
+    );
+    let migrated = 0;
+    for (const row of rows) {
+      if (!row.value_text || isEncryptedSetting(row.value_text)) continue;
+      const encrypted = encryptLegacySettingSecret(row.value_text);
+      if (!encrypted) continue;
+      await query(
+        'UPDATE system_settings SET value_text = ? WHERE key_name = ? AND value_text = ?',
+        [encrypted, row.key_name, row.value_text],
+      );
+      migrated += 1;
+    }
+    if (migrated > 0) {
+      logger.info('Migrated legacy secret settings to encrypted storage', { migrated });
+    }
+  } catch (err: any) {
+    // A failed migration must not bring down the API; existing rows remain
+    // readable for a one-time retry on the next process start.
+    attemptedLegacySecretMigration = false;
+    logger.error('Failed to migrate legacy secret settings', err);
+  }
+}
 
 /**
  * Ensures the system_settings table exists in MySQL
@@ -35,9 +84,19 @@ export async function ensureSettingsTable(): Promise<void> {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);
     tableInitialized = true;
+    await migrateLegacyPlaintextSecrets();
   } catch (err: any) {
     logger.error(`Failed to ensure system_settings table: ${err.message}`);
   }
+}
+
+/** Safe metadata for the settings UI; never contains a credential. */
+export function getSecretStorageStatus(): { encryptionConfigured: boolean; storageMode: 'encrypted_database' | 'environment_only' } {
+  const encryptionConfigured = isSettingsSecretEncryptionConfigured();
+  return {
+    encryptionConfigured,
+    storageMode: encryptionConfigured ? 'encrypted_database' : 'environment_only',
+  };
 }
 
 /**
@@ -51,19 +110,38 @@ export function maskSecret(val: string): string {
 }
 
 /**
- * Retrieves a raw setting value directly from DB or process.env fallback
+ * Retrieves many raw values in one bounded query. Database values retain the
+ * existing admin-settings precedence; process.env remains the safe fallback
+ * for Railway-managed deployments and bootstrapping.
  */
-export async function getRawSetting(key: string): Promise<string> {
+export async function getRawSettings(keys: string[]): Promise<Record<string, string>> {
+  const uniqueKeys = [...new Set(keys.filter(Boolean))];
+  const result: Record<string, string> = {};
+  for (const key of uniqueKeys) result[key] = process.env[key] || '';
+  if (uniqueKeys.length === 0) return result;
+
   await ensureSettingsTable();
   try {
-    const rows = await query<any[]>('SELECT value_text FROM system_settings WHERE key_name = ? LIMIT 1', [key]);
-    if (rows.length > 0 && rows[0].value_text !== undefined && rows[0].value_text !== null) {
-      return rows[0].value_text;
+    const placeholders = uniqueKeys.map(() => '?').join(', ');
+    const rows = await query<Array<{ key_name: string; value_text: string; is_secret: boolean }>>(
+      `SELECT key_name, value_text, is_secret FROM system_settings WHERE key_name IN (${placeholders})`,
+      uniqueKeys,
+    );
+    for (const row of rows) {
+      if (row.value_text !== undefined && row.value_text !== null) {
+        result[row.key_name] = decodeSettingValue(row.value_text, Boolean(row.is_secret), row.key_name);
+      }
     }
   } catch (err: any) {
-    logger.warn(`Could not read setting '${key}' from DB: ${err.message}`);
+    logger.warn(`Could not read settings from DB: ${err.message}`);
   }
-  return process.env[key] || '';
+  return result;
+}
+
+/** Retrieves one raw setting value from encrypted DB storage or process.env. */
+export async function getRawSetting(key: string): Promise<string> {
+  const settings = await getRawSettings([key]);
+  return settings[key] || '';
 }
 
 /**
@@ -82,6 +160,16 @@ export async function getAllSettingsMasked(): Promise<Record<string, { value: st
     { key: 'QF_PROD_CLIENT_ID', isSecret: false, category: 'quran_foundation', defaultVal: process.env.QF_PROD_CLIENT_ID || '' },
     { key: 'QF_PROD_CLIENT_SECRET', isSecret: true, category: 'quran_foundation', defaultVal: process.env.QF_PROD_CLIENT_SECRET || '' },
     { key: 'QF_ENV', isSecret: false, category: 'quran_foundation', defaultVal: process.env.QF_ENV || 'prelive' },
+    { key: 'AI_PROVIDER', isSecret: false, category: 'ai', defaultVal: process.env.AI_PROVIDER || 'openrouter' },
+    { key: 'OPENROUTER_API_KEY', isSecret: true, category: 'ai', defaultVal: process.env.OPENROUTER_API_KEY || '' },
+    { key: 'OPENROUTER_TEXT_MODEL', isSecret: false, category: 'ai', defaultVal: process.env.OPENROUTER_TEXT_MODEL || 'qwen/qwen3.8-27b:free' },
+    { key: 'OPENROUTER_TEXT_FALLBACK_MODELS', isSecret: false, category: 'ai', defaultVal: process.env.OPENROUTER_TEXT_FALLBACK_MODELS || '' },
+    { key: 'OPENROUTER_FREE_ONLY', isSecret: false, category: 'ai', defaultVal: process.env.OPENROUTER_FREE_ONLY || 'true' },
+    { key: 'OPENROUTER_MODEL_FALLBACKS_ENABLED', isSecret: false, category: 'ai', defaultVal: process.env.OPENROUTER_MODEL_FALLBACKS_ENABLED || 'false' },
+    { key: 'OPENROUTER_ALLOW_PROVIDER_FALLBACKS', isSecret: false, category: 'ai', defaultVal: process.env.OPENROUTER_ALLOW_PROVIDER_FALLBACKS || 'false' },
+    { key: 'OPENROUTER_DATA_COLLECTION', isSecret: false, category: 'ai', defaultVal: process.env.OPENROUTER_DATA_COLLECTION || 'deny' },
+    { key: 'OPENROUTER_SITE_URL', isSecret: false, category: 'ai', defaultVal: process.env.OPENROUTER_SITE_URL || '' },
+    { key: 'AI_IMAGE_PROVIDER', isSecret: false, category: 'ai', defaultVal: process.env.AI_IMAGE_PROVIDER || 'gemini' },
     { key: 'GEMINI_API_KEY', isSecret: true, category: 'ai', defaultVal: process.env.GEMINI_API_KEY || '' },
     { key: 'PEXELS_API_KEY', isSecret: true, category: 'media', defaultVal: process.env.PEXELS_API_KEY || process.env.VITE_PEXELS_API_KEY || '' },
     { key: 'REELS_DEFAULT_QUALITY', isSecret: false, category: 'reels', defaultVal: '1080p' },
@@ -95,7 +183,7 @@ export async function getAllSettingsMasked(): Promise<Record<string, { value: st
     const dbMap = new Map<string, { value: string; isSecret: boolean; category: string }>();
     rows.forEach(r => {
       dbMap.set(r.key_name, {
-        value: r.value_text,
+        value: decodeSettingValue(r.value_text, Boolean(r.is_secret), r.key_name),
         isSecret: Boolean(r.is_secret),
         category: r.category || 'general',
       });
@@ -144,7 +232,9 @@ export async function getAllSettingsMasked(): Promise<Record<string, { value: st
 }
 
 /**
- * Saves or updates a setting in the database and updates process.env in-memory
+ * Saves or updates a setting in the database and updates process.env in-memory.
+ * Secrets are AES-256-GCM encrypted before they ever reach MySQL; an operator
+ * must configure SETTINGS_ENCRYPTION_KEY or use Railway environment variables.
  */
 export async function saveSetting(key: string, value: string, isSecret: boolean, category: string): Promise<void> {
   await ensureSettingsTable();
@@ -156,11 +246,12 @@ export async function saveSetting(key: string, value: string, isSecret: boolean,
   }
 
   try {
+    const valueToStore = isSecret && cleanVal ? encryptSettingSecret(cleanVal) : cleanVal;
     await query(
       `INSERT INTO system_settings (key_name, value_text, is_secret, category)
        VALUES (?, ?, ?, ?)
        ON DUPLICATE KEY UPDATE value_text = VALUES(value_text), is_secret = VALUES(is_secret), category = VALUES(category), updated_at = CURRENT_TIMESTAMP`,
-      [key, cleanVal, isSecret, category]
+      [key, valueToStore, isSecret, category]
     );
 
     // Sync to active process.env

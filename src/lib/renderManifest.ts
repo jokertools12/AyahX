@@ -1,4 +1,5 @@
 import { TimingMap } from './timingMap';
+import type { AnimationProfile } from './animationTimeline';
 import { ExportQuality, getQualityDimensions } from '@/hooks/useVideoRecorder';
 import { AudioEffects } from '@/hooks/useAudioEffects';
 
@@ -8,6 +9,9 @@ export interface ClientManifestParams {
   fps?: 30 | 60;
   audioBitrate?: '128k' | '192k' | '320k';
   motionSpeed?: number;
+  /** Deterministic timing presentation; never changes the underlying audio. */
+  animationProfile?: AnimationProfile;
+  animationReducedMotion?: boolean;
   surah: { number: number; name: string };
   ayahRange: { start: number; end: number };
   ayahs: { numberInSurah: number; text: string }[];
@@ -65,6 +69,8 @@ export function buildClientRenderManifest(params: ClientManifestParams): any {
     aspectRatio: params.aspectRatio,
     outputDimensions: dimensions,
     fps: params.fps || 30,
+    animationProfile: params.animationProfile || params.displaySettings.animationProfile || 'karaoke',
+    animationReducedMotion: params.animationReducedMotion ?? params.displaySettings.animationReducedMotion ?? false,
     qualityPreset: params.quality,
     audioBitrate: params.audioBitrate || '192k',
     codecProfile: 'high-4.1',
@@ -103,23 +109,23 @@ export function buildClientRenderManifest(params: ClientManifestParams): any {
       sourceMethod: params.timingMap.sourceMethod,
       audioContentHash: params.timingMap.audioContentHash,
       validationStatus: params.timingMap.validationStatus,
+      alignment: params.timingMap.alignment,
+      review: params.timingMap.review,
       compositionOffsets: params.timingMap.compositionOffsets,
-      words: (params.timingMap?.words || []).map((w, idx, arr) => {
-        const nextStart = arr[idx + 1]?.startMs;
-        const fallbackEnd = typeof nextStart === 'number' && nextStart > (w.startMs || 0)
-          ? nextStart
-          : ((w.startMs || 0) + 600);
-        const resolvedEnd = (typeof w.endMs === 'number' && !isNaN(w.endMs) && w.endMs > 0)
-          ? w.endMs
-          : fallbackEnd;
-
+      words: (params.timingMap?.words || []).map((w, idx) => {
+        if (!Number.isFinite(w.startMs) || !Number.isFinite(w.endMs) || w.endMs <= w.startMs) {
+          throw new Error(`TIMING_MAP_WORD_${idx}_EXPLICIT_INTERVAL_REQUIRED`);
+        }
         return {
           canonicalWordKey: w.canonicalWordKey || `word_${idx}`,
           displayWordIndex: typeof w.displayWordIndex === 'number' ? w.displayWordIndex : idx,
           displayToken: w.displayToken || '',
-          startMs: typeof w.startMs === 'number' ? Math.max(0, w.startMs) : 0,
-          endMs: Math.max(resolvedEnd, (typeof w.startMs === 'number' ? w.startMs : 0) + 50),
+          occurrenceId: w.occurrenceId || `${w.canonicalWordKey || `word_${idx}`}:occurrence:${idx + 1}`,
+          startMs: Math.max(0, w.startMs),
+          endMs: w.endMs,
           confidence: w.confidence,
+          letters: w.letters,
+          phonemes: w.phonemes,
         };
       }),
       gaps: params.timingMap.gaps,

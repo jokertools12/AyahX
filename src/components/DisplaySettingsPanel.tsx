@@ -34,6 +34,7 @@ import { useState, useRef } from 'react';
 import { useSubscription } from '@/hooks/useSubscription';
 import { api } from '@/lib/api';
 import { PremiumBadge } from '@/components/PremiumBadge';
+import type { AnimationProfile } from '@/lib/animationTimeline';
 
 export interface DisplaySettings {
   /** Overall visual direction for the reel canvas. */
@@ -47,6 +48,9 @@ export interface DisplaySettings {
   ayahNumberStyle: 'quran3d' | 'circle' | 'star' | 'diamond' | 'octagon' | 'flower' | 'square' | 'hexagon';
   ayahNumberColor: 'gold' | 'metallicGold3D' | 'white' | 'silver' | 'emerald' | 'royal';
   verseDisplayMode: 'full' | 'twoWords' | 'threeTwo' | 'wordByWord';
+  /** Deterministic timing presentation profile shared by every renderer. */
+  animationProfile?: AnimationProfile;
+  animationReducedMotion?: boolean;
   surahNamePosition: 'top' | 'bottom' | 'topLeft' | 'topRight';
   surahNameStyle: 'classic' | 'goldenBadge' | 'banner' | 'calligraphy' | 'circle' | 'diamond' | 'ribbon';
   reciterNameStyle: 'simple' | 'elegant' | 'audioPill' | 'badge' | 'tag' | 'glow';
@@ -182,6 +186,17 @@ const verseDisplayModeOptions = [
   { value: 'twoWords', label: 'كلمتان', description: 'عرض كلمتين كلمتين بالتناوب' },
   { value: 'threeTwo', label: 'ثلاث ثم اثنتان', description: 'تقسيم إيقاعي ديناميكي' },
   { value: 'wordByWord', label: 'كلمة كلمة', description: 'عرض كلمة تلو الأخرى (تيك توك ترند)' },
+];
+
+const animationProfileOptions: Array<{ value: AnimationProfile; label: string; description: string }> = [
+  { value: 'karaoke', label: 'كاريوكي دقيق', description: 'تمييز الكلمة مع ساعة الصوت' },
+  { value: 'teleprompter', label: 'Teleprompter', description: 'نافذة ناعمة حول الكلمة الحالية' },
+  { value: 'reveal', label: 'كشف تدريجي', description: 'الكلمات تظهر بعد نطقها' },
+  { value: 'fade', label: 'تلاشي متتابع', description: 'الماضي يهدأ والقادم ينتظر' },
+  { value: 'spotlight', label: 'Spotlight', description: 'تركيز بصري قوي على الكلمة الحالية' },
+  { value: 'isolate', label: 'عزل الكلمة', description: 'عرض الكلمة الحالية فقط' },
+  { value: 'consume', label: 'استهلاك النص', description: 'الكلمات المنطوقة تختفي تدريجيًا' },
+  { value: 'static', label: 'ثابت', description: 'النص كامل بلا حركة زمنية' },
 ];
 
 const glowStyleOptions = [
@@ -763,6 +778,37 @@ export function DisplaySettingsPanel({ settings, onChange }: DisplaySettingsPane
                   onChange={(v) => updateSetting('verseDisplayMode', v as DisplaySettings['verseDisplayMode'])}
                   idPrefix="vdm"
                 />
+              </div>
+
+              {/* Deterministic animation profile. This is deliberately
+                  separate from verse chunking: the profile consumes trusted
+                  TimingMap events and never estimates audio timing. */}
+              <div className="space-y-3 pt-2 border-t border-border/40">
+                <Label className="text-sm flex items-center gap-2 font-medium">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  وضع Animate الاحترافي
+                </Label>
+                <p className="text-[11px] text-muted-foreground">
+                  هذه أوضاع عرض حتمية مشتركة بين المعاينة والتسجيل والريندر السحابي.
+                </p>
+                <RadioOptionGrid
+                  options={animationProfileOptions}
+                  value={settings.animationProfile || 'karaoke'}
+                  onChange={(v) => updateSetting('animationProfile', v as DisplaySettings['animationProfile'])}
+                  idPrefix="animation-profile"
+                  columns={2}
+                />
+                <div className="flex items-center justify-between rounded-lg border border-border/40 p-2.5">
+                  <div>
+                    <Label htmlFor="animation-reduced-motion" className="text-sm cursor-pointer">تقليل الحركة</Label>
+                    <p className="text-[11px] text-muted-foreground">يحافظ على التوقيت ويوقف النبض والتكبير فقط</p>
+                  </div>
+                  <Switch
+                    id="animation-reduced-motion"
+                    checked={settings.animationReducedMotion === true}
+                    onCheckedChange={(checked) => updateSetting('animationReducedMotion', checked)}
+                  />
+                </div>
               </div>
 
               {/* Ayah Number Style & Color */}

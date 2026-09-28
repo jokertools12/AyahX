@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { query, transaction } from '../db';
 import { AuthenticatedRequest, requireAdmin } from '../middleware/auth';
+import { aiRateLimiter } from '../middleware/rateLimiter';
 import { renderJobQueue } from '../services/renderJobQueue';
 import { SUBSCRIPTION_CATALOG, isCheckoutPlan } from '../../shared/subscriptionCatalog';
 
@@ -291,9 +292,15 @@ router.post('/payment-requests/:id/reject', async (req: AuthenticatedRequest, re
  */
 router.get('/settings', async (_req: AuthenticatedRequest, res: Response) => {
   try {
-    const { getAllSettingsMasked } = await import('../services/settingsService');
+    const { getAllSettingsMasked, getSecretStorageStatus } = await import('../services/settingsService');
+    const { getAiProviderStatus } = await import('../services/aiService');
     const settings = await getAllSettingsMasked();
-    return res.json({ settings });
+    const aiRuntime = await getAiProviderStatus();
+    return res.json({
+      settings,
+      secretStorage: getSecretStorageStatus(),
+      aiRuntime,
+    });
   } catch (err: any) {
     console.error('Fetch settings error:', err);
     return res.status(500).json({ error: 'فشل استرجاع إعدادات النظام' });
@@ -312,18 +319,45 @@ router.post('/settings', async (req: AuthenticatedRequest, res: Response) => {
     }
 
     const { saveSetting } = await import('../services/settingsService');
+    const { isSettingsSecretEncryptionConfigured } = await import('../services/secretSettingsCrypto');
 
     const knownKeys: Record<string, { isSecret: boolean; category: string }> = {
       QF_CLIENT_ID: { isSecret: false, category: 'quran_foundation' },
       QF_CLIENT_SECRET: { isSecret: true, category: 'quran_foundation' },
       QF_ENV: { isSecret: false, category: 'quran_foundation' },
       GEMINI_API_KEY: { isSecret: true, category: 'ai' },
+      AI_PROVIDER: { isSecret: false, category: 'ai' },
+      AI_IMAGE_PROVIDER: { isSecret: false, category: 'ai' },
+      OPENROUTER_API_KEY: { isSecret: true, category: 'ai' },
+      OPENROUTER_TEXT_MODEL: { isSecret: false, category: 'ai' },
+      OPENROUTER_TEXT_FALLBACK_MODELS: { isSecret: false, category: 'ai' },
+      OPENROUTER_MODEL_FALLBACKS_ENABLED: { isSecret: false, category: 'ai' },
+      OPENROUTER_FREE_ONLY: { isSecret: false, category: 'ai' },
+      OPENROUTER_ALLOW_PROVIDER_FALLBACKS: { isSecret: false, category: 'ai' },
+      OPENROUTER_DATA_COLLECTION: { isSecret: false, category: 'ai' },
+      OPENROUTER_SITE_URL: { isSecret: false, category: 'ai' },
       PEXELS_API_KEY: { isSecret: true, category: 'media' },
       REELS_DEFAULT_QUALITY: { isSecret: false, category: 'reels' },
       REELS_DEFAULT_FPS: { isSecret: false, category: 'reels' },
       REELS_DEFAULT_GLOW: { isSecret: false, category: 'reels' },
       REELS_AUDIO_BITRATE: { isSecret: false, category: 'reels' },
     };
+
+    // Validate the whole batch before writing anything.  Without this guard a
+    // settings request could persist several non-secret values and then fail
+    // halfway through when the first API key needs encryption.
+    const hasNewSecret = Object.entries(settings).some(([key, rawVal]) => {
+      const meta = knownKeys[key] || { isSecret: key.includes('KEY') || key.includes('SECRET'), category: 'general' };
+      if (!meta.isSecret || typeof rawVal !== 'string') return false;
+      const cleanVal = rawVal.trim();
+      return Boolean(cleanVal) && !cleanVal.includes('****') && cleanVal !== '******';
+    });
+    if (hasNewSecret && !isSettingsSecretEncryptionConfigured()) {
+      return res.status(422).json({
+        error: 'اضبط SETTINGS_ENCRYPTION_KEY على الخادم قبل حفظ مفاتيح API من لوحة الإعدادات.',
+        code: 'SETTINGS_ENCRYPTION_KEY_NOT_CONFIGURED',
+      });
+    }
 
     for (const [key, rawVal] of Object.entries(settings)) {
       if (typeof rawVal === 'string') {
@@ -335,7 +369,11 @@ router.post('/settings', async (req: AuthenticatedRequest, res: Response) => {
     return res.json({ success: true, message: 'تم حفظ الإعدادات بنجاح' });
   } catch (err: any) {
     console.error('Save settings error:', err);
-    return res.status(500).json({ error: 'فشل حفظ إعدادات النظام' });
+    const isSecretStorageError = typeof err?.code === 'string' && err.code.startsWith('SETTINGS_');
+    return res.status(isSecretStorageError ? 422 : 500).json({
+      error: isSecretStorageError ? err.message : 'فشل حفظ إعدادات النظام',
+      code: isSecretStorageError ? err.code : undefined,
+    });
   }
 });
 
@@ -407,6 +445,91 @@ router.post('/settings/test-gemini', async (req: AuthenticatedRequest, res: Resp
     });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+/**
+ * POST /api/admin/settings/test-openrouter
+ * Verifies the key and selected model catalog, then performs a tiny synthetic
+ * JSON generation so this checks live inference, not catalog metadata alone.
+ */
+router.post('/settings/test-openrouter', aiRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { apiKey, settings: rawOverrides } = req.body || {};
+    const { getRawSettings } = await import('../services/settingsService');
+    const settings = await getRawSettings([
+      'OPENROUTER_API_KEY',
+      'OPENROUTER_TEXT_MODEL',
+      'OPENROUTER_TEXT_FALLBACK_MODELS',
+      'OPENROUTER_MODEL_FALLBACKS_ENABLED',
+      'OPENROUTER_ALLOW_PROVIDER_FALLBACKS',
+      'OPENROUTER_DATA_COLLECTION',
+      'OPENROUTER_FREE_ONLY',
+      'OPENROUTER_SITE_URL',
+      'OPENROUTER_APP_NAME',
+    ]);
+    const allowedOverrideKeys = new Set([
+      'OPENROUTER_TEXT_MODEL',
+      'OPENROUTER_TEXT_FALLBACK_MODELS',
+      'OPENROUTER_MODEL_FALLBACKS_ENABLED',
+      'OPENROUTER_ALLOW_PROVIDER_FALLBACKS',
+      'OPENROUTER_DATA_COLLECTION',
+      'OPENROUTER_FREE_ONLY',
+      'OPENROUTER_SITE_URL',
+      'OPENROUTER_APP_NAME',
+    ]);
+    const overrides: Record<string, string> = {};
+    if (rawOverrides && typeof rawOverrides === 'object' && !Array.isArray(rawOverrides)) {
+      for (const [key, value] of Object.entries(rawOverrides)) {
+        if (allowedOverrideKeys.has(key) && typeof value === 'string') {
+          overrides[key] = value.slice(0, 2000);
+        }
+      }
+    }
+    const resolvedSettings = { ...settings, ...overrides };
+    const keyToTest = typeof apiKey === 'string' && !apiKey.includes('****')
+      ? apiKey.trim().slice(0, 512)
+      : resolvedSettings.OPENROUTER_API_KEY;
+    const {
+      getOpenRouterConfig,
+      inspectOpenRouterModels,
+      smokeTestOpenRouterGeneration,
+    } = await import('../services/openRouterService');
+    const config = getOpenRouterConfig(keyToTest, resolvedSettings);
+    const catalog = await inspectOpenRouterModels(config);
+    if (!catalog.success || !config) {
+      return res.json({ ...catalog, generationTested: false });
+    }
+
+    const generationStartedAt = Date.now();
+    try {
+      const generation = await smokeTestOpenRouterGeneration(config);
+      return res.json({
+        ...catalog,
+        success: true,
+        message: `نجح الاتصال والتوليد المنظّم باستخدام ${generation.model}.`,
+        latencyMs: catalog.latencyMs + generation.latencyMs,
+        catalogLatencyMs: catalog.latencyMs,
+        generationTested: true,
+        generationLatencyMs: generation.latencyMs,
+        generationModel: generation.model,
+        ...(generation.generationId ? { generationId: generation.generationId } : {}),
+      });
+    } catch (generationError: any) {
+      return res.json({
+        ...catalog,
+        success: false,
+        message: generationError?.message || 'نجح فحص الكتالوج، لكن فشل التوليد الفعلي.',
+        latencyMs: catalog.latencyMs + (Date.now() - generationStartedAt),
+        catalogLatencyMs: catalog.latencyMs,
+        generationTested: true,
+        generationLatencyMs: Date.now() - generationStartedAt,
+        ...(generationError?.code ? { generationErrorCode: String(generationError.code).slice(0, 100) } : {}),
+        ...(Number.isInteger(generationError?.status) ? { generationHttpStatus: generationError.status } : {}),
+      });
+    }
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: err.message || 'حدث خطأ أثناء فحص OpenRouter' });
   }
 });
 

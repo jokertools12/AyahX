@@ -4,8 +4,31 @@ import {
   getQuranFoundationConfig,
 } from '../services/quranFoundationService';
 import { logger } from '../logger';
+import { AuthenticatedRequest, requireAuth } from '../middleware/auth';
+import { generalApiLimiter } from '../middleware/rateLimiter';
+import { fingerprintTrustedQuranAudio } from '../services/audioFingerprintService';
 
 const router = Router();
+
+/**
+ * Returns a byte-level identity for a trusted Quran CDN asset. This endpoint
+ * is intentionally authenticated and allowlisted; arbitrary URLs must never
+ * become a server-side fetch primitive.
+ */
+router.post('/audio-fingerprint', requireAuth, generalApiLimiter, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const sourceUrl = req.body?.audioUrl;
+    if (typeof sourceUrl !== 'string' || sourceUrl.length > 2048) {
+      return res.status(400).json({ error: 'رابط الصوت غير صالح', code: 'AUDIO_FINGERPRINT_URL_INVALID' });
+    }
+    const fingerprint = await fingerprintTrustedQuranAudio(sourceUrl);
+    return res.json({ fingerprint });
+  } catch (error: any) {
+    const code = String(error?.message || 'AUDIO_FINGERPRINT_FAILED');
+    const status = code.includes('NOT_TRUSTED') || code.includes('INVALID') || code.includes('UNSAFE') ? 400 : 502;
+    return res.status(status).json({ error: 'تعذر التحقق من بصمة ملف الصوت', code });
+  }
+});
 
 // In-memory cache for Quran content (chapters, recitations, etc.) to minimize upstream calls
 const contentCache = new Map<string, { data: any; timestamp: number }>();

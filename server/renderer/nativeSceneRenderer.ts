@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import vm from 'vm';
 import { fileURLToPath } from 'url';
-import { createCanvas, GlobalFonts, Image } from '@napi-rs/canvas';
+import { createCanvas, GlobalFonts, Image, type Canvas } from '@napi-rs/canvas';
 import { RenderManifest } from '../models/renderManifest';
 
 type CanvasImage = InstanceType<typeof Image>;
@@ -152,7 +152,7 @@ interface HarnessController {
  * backgrounds, animation, typography, borders, badges, timing and branding.
  */
 export class NativeSceneRenderer {
-  private readonly canvas: ReturnType<typeof createCanvas>;
+  private readonly canvas: Canvas;
   private readonly context: any;
   private readonly controller: HarnessController;
   private closed = false;

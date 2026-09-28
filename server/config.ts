@@ -19,6 +19,11 @@ export interface AppConfig {
     connectionLimit: number;
   };
   ai: {
+    provider?: 'openrouter' | 'gemini' | 'lovable' | 'openai';
+    openRouterApiKey?: string;
+    openRouterTextModel?: string;
+    openRouterTextFallbackModels?: string[];
+    openRouterFreeOnly: boolean;
     geminiApiKey?: string;
     lovableApiKey?: string;
     openaiApiKey?: string;
@@ -68,6 +73,15 @@ export const config: AppConfig = {
     connectionLimit: Math.max(2, parseInt(process.env.MYSQL_POOL_SIZE || '15', 10)),
   },
   ai: {
+    provider: ['openrouter', 'gemini', 'lovable', 'openai'].includes((process.env.AI_PROVIDER || '').toLowerCase())
+      ? process.env.AI_PROVIDER?.toLowerCase() as 'openrouter' | 'gemini' | 'lovable' | 'openai'
+      : undefined,
+    openRouterApiKey: process.env.OPENROUTER_API_KEY || undefined,
+    openRouterTextModel: process.env.OPENROUTER_TEXT_MODEL || undefined,
+    openRouterTextFallbackModels: process.env.OPENROUTER_TEXT_FALLBACK_MODELS
+      ? process.env.OPENROUTER_TEXT_FALLBACK_MODELS.split(',').map((value) => value.trim()).filter(Boolean)
+      : undefined,
+    openRouterFreeOnly: process.env.OPENROUTER_FREE_ONLY !== 'false',
     geminiApiKey: process.env.GEMINI_API_KEY || undefined,
     lovableApiKey: process.env.LOVABLE_API_KEY || undefined,
     openaiApiKey: process.env.OPENAI_API_KEY || undefined,
@@ -116,6 +130,11 @@ export function getSanitizedConfig(): Record<string, any> {
       connectionLimit: config.db.connectionLimit,
     },
     ai: {
+      provider: config.ai.provider || null,
+      openRouterConfigured: Boolean(config.ai.openRouterApiKey),
+      openRouterTextModel: config.ai.openRouterTextModel || null,
+      openRouterFallbackCount: config.ai.openRouterTextFallbackModels?.length || 0,
+      openRouterFreeOnly: config.ai.openRouterFreeOnly,
       geminiConfigured: Boolean(config.ai.geminiApiKey),
       lovableConfigured: Boolean(config.ai.lovableApiKey),
       openaiConfigured: Boolean(config.ai.openaiApiKey),

@@ -646,7 +646,7 @@ describe('Deterministic Server-Side Offline Video Renderer', () => {
     expect(QUALITY_ENCODING_PROFILES.ultra.audioBitrate).toBe('320k');
   });
 
-  it('applies native FFmpeg audio filtergraph for reverb, echo, EQ, normalize, and copyright protection', async () => {
+  it('applies native FFmpeg audio filtergraph for reverb, echo, EQ, and normalize without changing the source clock', async () => {
     const mockManifest: RenderManifest = {
       schemaVersion: '1.0.0',
       rendererVersion: '1.0.0',
@@ -686,7 +686,7 @@ describe('Deterministic Server-Side Offline Video Renderer', () => {
         echoFeedback: 0.35,
         normalizeEnabled: true,
         eqEnabled: true,
-        copyrightProtectionEnabled: true,
+        copyrightProtectionEnabled: false,
       },
       background: { id: 'bg-1', type: 'color', url: '#000' },
       typography: { fontFamily: 'Amiri', fontSize: 32, textColor: '#FFF', shadowIntensity: 0.5 },
