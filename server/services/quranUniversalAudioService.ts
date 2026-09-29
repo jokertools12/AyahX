@@ -380,8 +380,8 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
       tokens = tokens.slice(4);
     }
     if (rowKey !== key || !Number.isFinite(startMs) || !Number.isFinite(endMs) || startMs < 0 || !(endMs > startMs)
-      || !Array.isArray(sourceWords) || sourceWords.length !== tokens.length) {
-      throw new Error('UNIVERSAL_ALIGNMENT_TEXT_MISMATCH');
+      || !Array.isArray(sourceWords) || sourceWords.length === 0) {
+      throw new Error('UNIVERSAL_ALIGNMENT_DATA_INVALID');
     }
     if (letterData && letterRows.length !== 1) throw new Error('UNIVERSAL_ALIGNMENT_LETTER_DATA_INVALID');
     const letterRow = letterRows[0];
@@ -396,8 +396,11 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
     }
     if (letterRow) {
       const letterTokens = letterRow[6].split(/\s+/).map(normalizeLetterProjection).filter(Boolean);
-      if (letterTokens.length !== tokens.length
-        || letterTokens.some((token, tokenIndex) => token !== normalizeLetterProjection(tokens[tokenIndex]))) {
+      if (letterTokens.length !== sourceWords.length
+        || letterTokens.some((token, tokenIndex) => {
+          const wIdx = Number(sourceWords[tokenIndex][0]);
+          return token !== normalizeLetterProjection(tokens[wIdx - 1]);
+        })) {
         throw new Error('UNIVERSAL_ALIGNMENT_LETTER_TEXT_MISMATCH');
       }
     }
@@ -410,8 +413,9 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
       const [wordIndex, rawWordStart, rawWordEnd] = sourceWord.map(Number);
       const wordStartMs = rawWordStart + chapterOffsetMs;
       const wordEndMs = rawWordEnd + chapterOffsetMs;
-      // Reject repeated or skipped canonical indexes instead of shifting words onto the wrong Quran text.
-      if (wordIndex !== wordOffset + 1 || !Number.isFinite(wordStartMs) || !Number.isFinite(wordEndMs)
+      // Validate word timestamps and ensure wordIndex points to a valid Quran token in the ayah
+      if (!Number.isInteger(wordIndex) || wordIndex < 1 || wordIndex > tokens.length
+        || !Number.isFinite(wordStartMs) || !Number.isFinite(wordEndMs)
         || wordStartMs < startMs || wordEndMs > endMs || !(wordEndMs > wordStartMs)
         || wordStartMs < previousWordEndMs) {
         throw new Error('UNIVERSAL_ALIGNMENT_DATA_INVALID');
@@ -419,11 +423,12 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
       if (previousWordEndMs >= 0 && wordStartMs - previousWordEndMs >= 80) {
         gaps.push({ startMs: previousWordEndMs, endMs: wordStartMs, type: 'waqf' });
       }
+      const tokenText = tokens[wordIndex - 1];
       const occurrenceId = `${key}:${wordIndex}:qua-${wordStartMs}-${wordEndMs}`;
       const letters = letterRow ? letterSpansForWord({
         row: letterRow,
         wordIndex: wordOffset,
-        displayToken: tokens[wordOffset],
+        displayToken: tokenText,
         wordStartMs,
         wordEndMs,
         chapterOffsetMs,
@@ -432,8 +437,8 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
       words.push({
         canonicalWordKey: `${surahNumber}:${ayahNumber}:${wordIndex}`,
         displayWordIndex: words.length,
-        displayToken: tokens[wordOffset],
-        normalizedAlignmentToken: normalizeQuranicToken(tokens[wordOffset]),
+        displayToken: tokenText,
+        normalizedAlignmentToken: normalizeQuranicToken(tokenText),
         startMs: wordStartMs,
         endMs: wordEndMs,
         // QUA does not publish a numeric confidence field.  This value records

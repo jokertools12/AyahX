@@ -57,10 +57,18 @@ import {
   Volume2,
   VolumeX,
   Zap,
+  CheckCircle2,
+  Layers,
+  Film,
+  Sun,
+  Flame,
+  Sliders,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { ErrorState } from '@/components/ErrorState';
 import { normalizeArabicText, cn } from '@/lib/utils';
+import type { DisplaySettings } from '@/components/DisplaySettingsPanel';
+import type { AnimationProfile } from '@/lib/animationTimeline';
 
 type AspectRatio = '9:16' | '16:9';
 type ContentMode = 'surah' | 'famous' | 'ibtahalat';
@@ -72,6 +80,65 @@ const defaultTextSettings: TextSettings = {
   shadowIntensity: 0.5,
   overlayOpacity: 0.4,
 };
+
+const verseDisplayModeOptions: Array<{ value: DisplaySettings['verseDisplayMode']; label: string; description: string; badge?: string }> = [
+  { value: 'full', label: 'الآية كاملة', description: 'عرض الآية كاملة مع التمرير والانسياب' },
+  { value: 'wordByWord', label: 'كلمة بكلمة', description: 'تظهر كل كلمة في موضعها مع توقيت الصوت' },
+  { value: 'letterByLetter', label: 'حرفاً بحرف (Animate)', description: 'كشف انسيابي فائق الدقة لحروف الكلمة', badge: 'احترافي' },
+  { value: 'twoWords', label: 'كلمتان كلمتان', description: 'عرض ثنائي إيقاعي بالتناوب' },
+  { value: 'threeTwo', label: 'ثلاث ثم اثنتان', description: 'تقسيم إيقاعي ذكي للآية' },
+];
+
+const animationProfileOptions: Array<{ value: AnimationProfile; label: string; description: string }> = [
+  { value: 'karaoke', label: 'كاريوكي سلس', description: 'تمييز متزامن مع ساعة الصوت بدقة' },
+  { value: 'teleprompter', label: 'Teleprompter', description: 'نافذة متحركة ناعمة حول الكلمة الحالية' },
+  { value: 'reveal', label: 'كشف تدريجي', description: 'ظهور الكلمات تباعاً بعد نطقها' },
+  { value: 'fade', label: 'تلاشي متتابع', description: 'الماضي يهدأ والقادم ينتظر بوقار' },
+  { value: 'spotlight', label: 'Spotlight', description: 'تسليط ضوء بصري قوي على الكلمة المقروءة' },
+  { value: 'isolate', label: 'عزل الكلمة', description: 'عرض الكلمة الحالية فقط في المشهد' },
+  { value: 'consume', label: 'استهلاك النص', description: 'الكلمات المنطوقة تختفي تدريجياً' },
+  { value: 'static', label: 'ثابت وقور', description: 'نص كامل هادئ بلا حركة زمنية' },
+];
+
+const highlightOptions: Array<{ value: DisplaySettings['highlightStyle']; label: string; description: string }> = [
+  { value: 'glow', label: 'توهج الكلمة', description: 'إضاءة محيطية حول الكلمة المقروءة' },
+  { value: 'solid', label: 'تظليل مملوء', description: 'كبسولة خلفية ملونة أنيقة' },
+  { value: 'underline', label: 'خط سفلي', description: 'خط ذهبي أنيق تحت الكلمة' },
+  { value: 'shadow', label: 'ظل ناعم', description: 'ظل عميق محيط يبرز الكلمة' },
+  { value: 'none', label: 'بدون تمييز', description: 'نص نقي بلا تظليل إضافي' },
+];
+
+const glowOptions: Array<{ value: NonNullable<DisplaySettings['glowStyle']>; label: string; color: string; description: string }> = [
+  { value: 'golden', label: 'ذهبي أصيل', color: '#D4AF37', description: 'توهج ملكي دافئ (#D4AF37)' },
+  { value: 'soft', label: 'إشراقة بيضاء', color: '#FFFFFF', description: 'إضاءة نورانية هادئة ونقية' },
+  { value: 'neon', label: 'نيون سماوي', color: '#38BDF8', description: 'توهج أزرق سماوي ساطع' },
+  { value: 'emerald', label: 'أخضر زمردي', color: '#10B981', description: 'توهج قرآني فاخر' },
+  { value: 'pulse', label: 'نبض عنبري', color: '#F59E0B', description: 'توهج متموج ومتحرك' },
+  { value: 'royal', label: 'بنفسجي ملكي', color: '#8B5CF6', description: 'توهج مهيب فاخر' },
+  { value: 'none', label: 'بدون توهج', color: '#6B7280', description: 'لون نص طبيعي ثابت' },
+];
+
+const shadowOptions: Array<{ value: DisplaySettings['textShadowStyle']; label: string; description: string }> = [
+  { value: 'none', label: 'بدون ظل', description: 'نص نقي مسطح مثل الريلز الاحترافية' },
+  { value: 'soft', label: 'ظل سينمائي ناعم', description: 'تدرج خفيف يعطي بعداً جمالياً' },
+  { value: 'strong', label: 'ظل داكن بارز', description: 'ظل عميق ذو تباين عالٍ' },
+  { value: '3d', label: 'تجسيم 3D عميق', description: 'بروز واقعي ثلاثي الأبعاد' },
+  { value: 'glow', label: 'توهج نوراني', description: 'هالة ضوئية مشعة' },
+  { value: 'outline', label: 'تحديد كونتور Outline', description: 'حدود محيطية دقيقة حول الحروف' },
+];
+
+const transitionOptions: Array<{ value: DisplaySettings['ayahTransition']; label: string; description: string }> = [
+  { value: 'fade', label: 'تلاشي ناعم', description: 'ظهور تدريجي سينمائي' },
+  { value: 'slide', label: 'انزلاق', description: 'دخول انسيابي من الأسفل' },
+  { value: 'zoom', label: 'تكبير ناعم', description: 'تقريب هادئ للداخل' },
+  { value: 'blur', label: 'كشف ضبابي', description: 'إزالة الضبابية تدريجياً' },
+  { value: 'rise', label: 'صعود ناعم', description: 'ارتفاع سينمائي وقور' },
+  { value: 'rotate', label: 'دوران خفيف', description: 'ميل احترافي خفيف' },
+  { value: 'cinematic', label: 'سينمائي درامي', description: 'دخول درامي مركب' },
+  { value: 'elastic', label: 'مرن وأنيق', description: 'ارتداد هادئ ومريح' },
+  { value: 'random', label: '🎲 عشوائي', description: 'تأثير مختلف لكل آية' },
+  { value: 'none', label: 'بدون انتقال', description: 'ظهور مباشر فوري' },
+];
 
 export default function CreatePage() {
   const [searchParams] = useSearchParams();
@@ -99,6 +166,73 @@ export default function CreatePage() {
   );
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('9:16');
   const [textSettings, setTextSettings] = useState<TextSettings>(defaultTextSettings);
+
+  // ── Display & Animation Settings ──
+  const [verseDisplayMode, setVerseDisplayMode] = useState<DisplaySettings['verseDisplayMode']>('full');
+  const [animationProfile, setAnimationProfile] = useState<AnimationProfile>('karaoke');
+  const [highlightStyle, setHighlightStyle] = useState<DisplaySettings['highlightStyle']>('glow');
+  const [glowStyle, setGlowStyle] = useState<NonNullable<DisplaySettings['glowStyle']>>('golden');
+  const [textShadowStyle, setTextShadowStyle] = useState<DisplaySettings['textShadowStyle']>('none');
+  const [ayahTransition, setAyahTransition] = useState<DisplaySettings['ayahTransition']>('fade');
+
+  const quickPresets = useMemo(() => [
+    {
+      id: 'animate_letter',
+      title: 'وضع Animate الحرفي ✦',
+      description: 'كشف حروف متزامن + كاريوكي + هالة ذهبية ملكية',
+      apply: () => {
+        setVerseDisplayMode('letterByLetter');
+        setAnimationProfile('karaoke');
+        setHighlightStyle('glow');
+        setGlowStyle('golden');
+        setTextShadowStyle('soft');
+        setAyahTransition('fade');
+        toast.success('تم تفعيل وضع Animate الحرفي الفاخر');
+      },
+    },
+    {
+      id: 'cinematic_word',
+      title: 'سينمائي كلمة بكلمة 🎬',
+      description: 'تسليط Spotlight + نيون سماوي + كشف ضبابي',
+      apply: () => {
+        setVerseDisplayMode('wordByWord');
+        setAnimationProfile('spotlight');
+        setHighlightStyle('glow');
+        setGlowStyle('neon');
+        setTextShadowStyle('3d');
+        setAyahTransition('blur');
+        toast.success('تم تفعيل النمط السينمائي كلمة بكلمة');
+      },
+    },
+    {
+      id: 'classic_mushaf',
+      title: 'المصحف المرتل الوقور 📖',
+      description: 'الآية كاملة + كاريوكي ناعم + خط سفلي ذهبي',
+      apply: () => {
+        setVerseDisplayMode('full');
+        setAnimationProfile('karaoke');
+        setHighlightStyle('underline');
+        setGlowStyle('golden');
+        setTextShadowStyle('none');
+        setAyahTransition('fade');
+        toast.success('تم تفعيل نمط المصحف المرتل');
+      },
+    },
+    {
+      id: 'rhythmic_reels',
+      title: 'ريلز إيقاعي سريع ⚡',
+      description: 'كلمتان كلمتان + كشف تدريجي + كبسولة ملونة',
+      apply: () => {
+        setVerseDisplayMode('twoWords');
+        setAnimationProfile('reveal');
+        setHighlightStyle('solid');
+        setGlowStyle('pulse');
+        setTextShadowStyle('strong');
+        setAyahTransition('slide');
+        toast.success('تم تفعيل نمط الريلز السريع');
+      },
+    },
+  ], []);
 
   // A draft, URL, or cached selection must not carry paid assets through the
   // create flow after a user is on the free plan.
@@ -212,16 +346,36 @@ export default function CreatePage() {
           end: endAyah,
           backgroundId: selectedBackground?.id,
           ratio: aspectRatio,
+          verseDisplayMode,
+          animationProfile,
+          highlightStyle,
+          glowStyle,
+          textShadowStyle,
+          ayahTransition,
           updatedAt: Date.now(),
         }));
       } catch {
         // Draft persistence is a convenience only; creation remains usable.
       }
     }
-  }, [selectedSurah, selectedReciter, startAyah, endAyah, selectedBackground, aspectRatio, contentMode]);
+  }, [selectedSurah, selectedReciter, startAyah, endAyah, selectedBackground, aspectRatio, contentMode, verseDisplayMode, animationProfile, highlightStyle, glowStyle, textShadowStyle, ayahTransition]);
 
   const handleRestoreDraft = () => {
     if (!draftAvailable) return;
+    try {
+      const raw = localStorage.getItem('ayah_clip_maker_draft');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed.verseDisplayMode) setVerseDisplayMode(parsed.verseDisplayMode);
+        if (parsed.animationProfile) setAnimationProfile(parsed.animationProfile);
+        if (parsed.highlightStyle) setHighlightStyle(parsed.highlightStyle);
+        if (parsed.glowStyle) setGlowStyle(parsed.glowStyle);
+        if (parsed.textShadowStyle) setTextShadowStyle(parsed.textShadowStyle);
+        if (parsed.ayahTransition) setAyahTransition(parsed.ayahTransition);
+      }
+    } catch {
+      // Ignore draft parsing issues
+    }
     setSelectedSurah(draftAvailable.surahNumber);
     setSelectedReciter(draftAvailable.reciterId);
     setStartAyah(draftAvailable.startAyah);
@@ -497,6 +651,12 @@ export default function CreatePage() {
       textColor: textSettings.textColor,
       shadowIntensity: textSettings.shadowIntensity.toString(),
       overlayOpacity: textSettings.overlayOpacity.toString(),
+      verseDisplayMode: verseDisplayMode || 'full',
+      animationProfile: animationProfile || 'karaoke',
+      highlightStyle: highlightStyle || 'glow',
+      glowStyle: glowStyle || 'golden',
+      textShadowStyle: textShadowStyle || 'none',
+      ayahTransition: ayahTransition || 'fade',
     });
     navigate(`/preview?${params.toString()}`);
   };
@@ -1384,6 +1544,353 @@ export default function CreatePage() {
                   </SettingsSection>
                 )}
               </div>
+
+              {/* ═══════ Advanced Motion & Display Settings ═══════ */}
+              {contentMode !== 'ibtahalat' && (
+                <Card className="border-primary/30 shadow-md overflow-hidden">
+                  <CardHeader className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-b pb-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div>
+                        <CardTitle className="text-xl flex items-center gap-2">
+                          <Sparkles className="h-5 w-5 text-primary" />
+                          أنماط الحركة وتأثيرات العرض القرآني المتقدمة
+                        </CardTitle>
+                        <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                          تحكم كامل في وضع Animate الاحترافي، طريقة تقسيم الآيات، توهج الكلمات، والظلال السينمائية
+                        </p>
+                      </div>
+                      {selectedReciterData && (
+                        <Badge
+                          variant={isAccreditedReciter(selectedReciterData) ? 'default' : 'secondary'}
+                          className="self-start sm:self-auto gap-1 text-xs py-1"
+                        >
+                          <CheckCircle2 className="h-3.5 w-3.5" />
+                          {isAccreditedReciter(selectedReciterData) ? 'قارئ معتمد للمحاذاة المباشرة' : 'قارئ قياسي'}
+                        </Badge>
+                      )}
+                    </div>
+
+                    {/* Quick Presets */}
+                    <div className="mt-4 pt-3 border-t border-border/40">
+                      <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
+                        <Zap className="h-3.5 w-3.5 text-primary" />
+                        أوضاع سريعة بنقرة واحدة:
+                      </p>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {quickPresets.map((preset) => (
+                          <button
+                            key={preset.id}
+                            type="button"
+                            onClick={preset.apply}
+                            className="p-2.5 rounded-lg border border-border/60 hover:border-primary/60 bg-background/50 hover:bg-primary/5 transition-all text-right group"
+                          >
+                            <p className="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
+                              {preset.title}
+                            </p>
+                            <p className="text-[11px] text-muted-foreground line-clamp-1 mt-0.5">
+                              {preset.description}
+                            </p>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </CardHeader>
+
+                  <CardContent className="p-4 sm:p-6 space-y-6">
+                    <Tabs defaultValue="verseMode" className="w-full">
+                      <TabsList className="grid grid-cols-3 w-full mb-6">
+                        <TabsTrigger value="verseMode" className="text-xs sm:text-sm gap-1.5">
+                          <Layers className="h-4 w-4" />
+                          تقسيم الآيات والحركة
+                        </TabsTrigger>
+                        <TabsTrigger value="highlightGlow" className="text-xs sm:text-sm gap-1.5">
+                          <Sun className="h-4 w-4" />
+                          التمييز وهالة التوهج
+                        </TabsTrigger>
+                        <TabsTrigger value="shadowTransition" className="text-xs sm:text-sm gap-1.5">
+                          <Film className="h-4 w-4" />
+                          الظل والانتقال السينمائي
+                        </TabsTrigger>
+                      </TabsList>
+
+                      {/* Tab 1: Verse Display Mode & Animation Profile */}
+                      <TabsContent value="verseMode" className="space-y-6 mt-0">
+                        {/* 1. Verse Display Mode */}
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-sm font-semibold flex items-center gap-2">
+                              <span>طريقة تقسيم وعرض الآيات</span>
+                              <Badge variant="outline" className="text-[11px] font-normal">
+                                {verseDisplayModeOptions.find((o) => o.value === verseDisplayMode)?.label}
+                              </Badge>
+                            </Label>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                            {verseDisplayModeOptions.map((option) => {
+                              const isSelected = verseDisplayMode === option.value;
+                              return (
+                                <div
+                                  key={option.value}
+                                  onClick={() => setVerseDisplayMode(option.value)}
+                                  className={cn(
+                                    'p-3 rounded-xl border-2 transition-all cursor-pointer relative flex flex-col justify-between',
+                                    isSelected
+                                      ? 'border-primary bg-primary/5 shadow-sm'
+                                      : 'border-border/60 hover:border-primary/40 bg-card hover:bg-muted/40'
+                                  )}
+                                >
+                                  <div>
+                                    <div className="flex items-center justify-between gap-1 mb-1">
+                                      <span className="font-bold text-sm text-foreground">{option.label}</span>
+                                      {option.badge && (
+                                        <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-semibold">
+                                          {option.badge}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <p className="text-xs text-muted-foreground leading-relaxed">{option.description}</p>
+                                  </div>
+                                  {isSelected && (
+                                    <div className="mt-2 pt-1 border-t border-primary/20 flex items-center gap-1 text-[11px] text-primary font-medium">
+                                      <CheckCircle2 className="h-3.5 w-3.5" />
+                                      محدد
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                          {verseDisplayMode === 'letterByLetter' && selectedReciterData?.quranUniversalSlug && (
+                            <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-2 text-xs text-emerald-400">
+                              <CheckCircle2 className="h-4 w-4 shrink-0" />
+                              <span>تلاوة هذا القارئ معتمدة رسمياً ومزودة بطبقة كشف الحروف والكلمات اللحظية بدقة 100%.</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* 2. Animation Profile */}
+                        <div className="space-y-3 pt-4 border-t border-border/40">
+                          <Label className="text-sm font-semibold flex items-center gap-2">
+                            <span>وضع التحريك وAnimate الاحترافي</span>
+                            <Badge variant="outline" className="text-[11px] font-normal">
+                              {animationProfileOptions.find((o) => o.value === animationProfile)?.label}
+                            </Badge>
+                          </Label>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                            {animationProfileOptions.map((option) => {
+                              const isSelected = animationProfile === option.value;
+                              return (
+                                <div
+                                  key={option.value}
+                                  onClick={() => setAnimationProfile(option.value)}
+                                  className={cn(
+                                    'p-3 rounded-xl border-2 transition-all cursor-pointer text-right flex flex-col justify-between',
+                                    isSelected
+                                      ? 'border-primary bg-primary/5 shadow-sm'
+                                      : 'border-border/60 hover:border-primary/40 bg-card hover:bg-muted/40'
+                                  )}
+                                >
+                                  <div>
+                                    <span className="font-bold text-xs sm:text-sm text-foreground block mb-0.5">
+                                      {option.label}
+                                    </span>
+                                    <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">
+                                      {option.description}
+                                    </p>
+                                  </div>
+                                  {isSelected && (
+                                    <div className="mt-2 pt-1 border-t border-primary/20 flex items-center gap-1 text-[10px] text-primary font-medium">
+                                      <CheckCircle2 className="h-3 w-3" />
+                                      نشط
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </TabsContent>
+
+                      {/* Tab 2: Highlight Style & Glow Aura */}
+                      <TabsContent value="highlightGlow" className="space-y-6 mt-0">
+                        {/* 3. Highlight Style */}
+                        <div className="space-y-3">
+                          <Label className="text-sm font-semibold flex items-center gap-2">
+                            <span>نمط تمييز الكلمات مع التلاوة</span>
+                            <Badge variant="outline" className="text-[11px] font-normal">
+                              {highlightOptions.find((o) => o.value === highlightStyle)?.label}
+                            </Badge>
+                          </Label>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+                            {highlightOptions.map((option) => {
+                              const isSelected = highlightStyle === option.value;
+                              return (
+                                <div
+                                  key={option.value}
+                                  onClick={() => setHighlightStyle(option.value)}
+                                  className={cn(
+                                    'p-3 rounded-xl border-2 transition-all cursor-pointer text-right flex flex-col justify-between',
+                                    isSelected
+                                      ? 'border-primary bg-primary/5 shadow-sm'
+                                      : 'border-border/60 hover:border-primary/40 bg-card hover:bg-muted/40'
+                                  )}
+                                >
+                                  <div>
+                                    <span className="font-bold text-xs sm:text-sm text-foreground block mb-0.5">
+                                      {option.label}
+                                    </span>
+                                    <p className="text-[11px] text-muted-foreground leading-relaxed">
+                                      {option.description}
+                                    </p>
+                                  </div>
+                                  {isSelected && (
+                                    <div className="mt-2 pt-1 border-t border-primary/20 flex items-center gap-1 text-[10px] text-primary font-medium">
+                                      <CheckCircle2 className="h-3 w-3" />
+                                      محدد
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* 4. Glow Aura Style & Color */}
+                        <div className="space-y-3 pt-4 border-t border-border/40">
+                          <Label className="text-sm font-semibold flex items-center gap-2">
+                            <span>نوع ولون هالة التوهج (Glow Aura Style)</span>
+                            <Badge variant="outline" className="text-[11px] font-normal">
+                              {glowOptions.find((o) => o.value === glowStyle)?.label}
+                            </Badge>
+                          </Label>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+                            {glowOptions.map((option) => {
+                              const isSelected = glowStyle === option.value;
+                              return (
+                                <div
+                                  key={option.value}
+                                  onClick={() => setGlowStyle(option.value)}
+                                  className={cn(
+                                    'p-3 rounded-xl border-2 transition-all cursor-pointer flex flex-col items-center text-center justify-between gap-2',
+                                    isSelected
+                                      ? 'border-primary bg-primary/5 shadow-sm'
+                                      : 'border-border/60 hover:border-primary/40 bg-card hover:bg-muted/40'
+                                  )}
+                                >
+                                  <div
+                                    className="w-7 h-7 rounded-full border shadow-sm transition-transform"
+                                    style={{
+                                      backgroundColor: option.color,
+                                      boxShadow: isSelected && option.value !== 'none'
+                                        ? `0 0 12px ${option.color}`
+                                        : undefined,
+                                    }}
+                                  />
+                                  <div>
+                                    <span className="font-bold text-xs text-foreground block">
+                                      {option.label}
+                                    </span>
+                                    <span className="text-[10px] text-muted-foreground line-clamp-1">
+                                      {option.description}
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </TabsContent>
+
+                      {/* Tab 3: Text Shadow & Ayah Transition */}
+                      <TabsContent value="shadowTransition" className="space-y-6 mt-0">
+                        {/* 5. Text Shadow Style */}
+                        <div className="space-y-3">
+                          <Label className="text-sm font-semibold flex items-center gap-2">
+                            <span>نمط ظل النص القرآني</span>
+                            <Badge variant="outline" className="text-[11px] font-normal">
+                              {shadowOptions.find((o) => o.value === textShadowStyle)?.label}
+                            </Badge>
+                          </Label>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                            {shadowOptions.map((option) => {
+                              const isSelected = textShadowStyle === option.value;
+                              return (
+                                <div
+                                  key={option.value}
+                                  onClick={() => setTextShadowStyle(option.value)}
+                                  className={cn(
+                                    'p-3 rounded-xl border-2 transition-all cursor-pointer text-right flex flex-col justify-between',
+                                    isSelected
+                                      ? 'border-primary bg-primary/5 shadow-sm'
+                                      : 'border-border/60 hover:border-primary/40 bg-card hover:bg-muted/40'
+                                  )}
+                                >
+                                  <div>
+                                    <span className="font-bold text-xs sm:text-sm text-foreground block mb-0.5">
+                                      {option.label}
+                                    </span>
+                                    <p className="text-[11px] text-muted-foreground leading-relaxed">
+                                      {option.description}
+                                    </p>
+                                  </div>
+                                  {isSelected && (
+                                    <div className="mt-2 pt-1 border-t border-primary/20 flex items-center gap-1 text-[10px] text-primary font-medium">
+                                      <CheckCircle2 className="h-3 w-3" />
+                                      محدد
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* 6. Ayah Transition */}
+                        <div className="space-y-3 pt-4 border-t border-border/40">
+                          <Label className="text-sm font-semibold flex items-center gap-2">
+                            <span>تأثير الانتقال بين الآيات</span>
+                            <Badge variant="outline" className="text-[11px] font-normal">
+                              {transitionOptions.find((o) => o.value === ayahTransition)?.label}
+                            </Badge>
+                          </Label>
+                          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+                            {transitionOptions.map((option) => {
+                              const isSelected = ayahTransition === option.value;
+                              return (
+                                <div
+                                  key={option.value}
+                                  onClick={() => setAyahTransition(option.value)}
+                                  className={cn(
+                                    'p-3 rounded-xl border-2 transition-all cursor-pointer text-right flex flex-col justify-between',
+                                    isSelected
+                                      ? 'border-primary bg-primary/5 shadow-sm'
+                                      : 'border-border/60 hover:border-primary/40 bg-card hover:bg-muted/40'
+                                  )}
+                                >
+                                  <div>
+                                    <span className="font-bold text-xs sm:text-sm text-foreground block mb-0.5">
+                                      {option.label}
+                                    </span>
+                                    <p className="text-[10px] text-muted-foreground line-clamp-1">
+                                      {option.description}
+                                    </p>
+                                  </div>
+                                  {isSelected && (
+                                    <div className="mt-2 pt-1 border-t border-primary/20 flex items-center gap-1 text-[10px] text-primary font-medium">
+                                      <CheckCircle2 className="h-3 w-3" />
+                                      نشط
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </TabsContent>
+                    </Tabs>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           )}
 
@@ -1438,6 +1945,22 @@ export default function CreatePage() {
                       {aspectRatio === '9:16' ? 'عمودي (ريلز)' : 'أفقي (يوتيوب)'}
                     </p>
                   </div>
+                  {contentMode !== 'ibtahalat' && (
+                    <>
+                      <div className="p-4 rounded-lg bg-muted/50 space-y-2">
+                        <p className="text-sm text-muted-foreground">طريقة العرض والحركة</p>
+                        <p className="font-bold">
+                          {verseDisplayModeOptions.find((o) => o.value === verseDisplayMode)?.label} — {animationProfileOptions.find((o) => o.value === animationProfile)?.label}
+                        </p>
+                      </div>
+                      <div className="p-4 rounded-lg bg-muted/50 space-y-2">
+                        <p className="text-sm text-muted-foreground">التوهج والظل القرآني</p>
+                        <p className="font-bold">
+                          {glowOptions.find((o) => o.value === glowStyle)?.label} ({highlightOptions.find((o) => o.value === highlightStyle)?.label}) — {shadowOptions.find((o) => o.value === textShadowStyle)?.label}
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <div className="pt-4">

@@ -275,10 +275,28 @@ export default function PreviewPage() {
   const totalAyahsInSurah = surah?.numberOfAyahs ?? endAyah;
 
   // ── Settings state ──────────────────────────────────────────────────────────
-  const [displaySettings, setDisplaySettings] = useState<DisplaySettings>(() => ({
-    ...DEFAULT_DISPLAY_SETTINGS,
-    ...getVisualDirection(visualDesignParam).displaySettings,
-  }));
+  const [displaySettings, setDisplaySettings] = useState<DisplaySettings>(() => {
+    const base = {
+      ...DEFAULT_DISPLAY_SETTINGS,
+      ...getVisualDirection(visualDesignParam).displaySettings,
+    };
+    const verseDisplayMode = searchParams.get('verseDisplayMode') as DisplaySettings['verseDisplayMode'] | null;
+    const animationProfile = searchParams.get('animationProfile') as DisplaySettings['animationProfile'] | null;
+    const highlightStyle = searchParams.get('highlightStyle') as DisplaySettings['highlightStyle'] | null;
+    const glowStyle = searchParams.get('glowStyle') as DisplaySettings['glowStyle'] | null;
+    const textShadowStyle = searchParams.get('textShadowStyle') as DisplaySettings['textShadowStyle'] | null;
+    const ayahTransition = searchParams.get('ayahTransition') as DisplaySettings['ayahTransition'] | null;
+
+    return {
+      ...base,
+      ...(verseDisplayMode ? { verseDisplayMode } : {}),
+      ...(animationProfile ? { animationProfile } : {}),
+      ...(highlightStyle ? { highlightStyle } : {}),
+      ...(glowStyle ? { glowStyle } : {}),
+      ...(textShadowStyle ? { textShadowStyle } : {}),
+      ...(ayahTransition ? { ayahTransition } : {}),
+    };
+  });
   const [customBackgroundType, setCustomBackgroundType] = useState<'image' | 'video'>(customBgTypeParam);
 
   // Resolve custom background: data URLs work directly, video keys need blob resolution
@@ -837,8 +855,9 @@ export default function PreviewPage() {
       // ── Strategy 1: QUA v3.2.0 – paired chapter audio + canonical word tier ──
       // The pinned timing release supplies the paired chapter URL via its
       // catalog, so no separately guessed reciter URL can drift.
-      if (isAuthenticated && reciter.quranUniversalSlug && !cancelled) {
+      if (reciter.quranUniversalSlug && !cancelled) {
         try {
+          const targetGranularity = displaySettings.verseDisplayMode === 'letterByLetter' ? 'letter' : 'word';
           const universal = await api.alignments.resolveUniversal({
             reciterId: String(reciter.id),
             reference: {
@@ -849,6 +868,7 @@ export default function PreviewPage() {
               quranTextVersion: 'uthmani_hafs_v1',
             },
             providerInput: { reciterSlug: reciter.quranUniversalSlug },
+            granularity: targetGranularity,
           });
           if (!cancelled && universal.timingMap?.validationStatus === 'approved') {
             const universalMap = universal.timingMap as TimingMap;
@@ -868,6 +888,9 @@ export default function PreviewPage() {
             timingMapRegistry.register(universalMap);
             setActiveTimingMap(universalMap);
             activeTimingMapRef.current = universalMap;
+            if (universalMap.alignment?.availableGranularities?.includes('letter') && universalMap.words.every((w) => Boolean(w.letters?.length))) {
+              setLetterTimingStatus('available');
+            }
             console.log(`✅ QUA word map loaded [${reciter.quranUniversalSlug}]`);
             setTimingsLoading(false);
             return;
@@ -1039,7 +1062,7 @@ export default function PreviewPage() {
           // EveryAyah folders it names. It is deliberately opt-in and
           // fail-closed: the server rejects multi-word source segments rather
           // than inventing proportional boundaries.
-          if (isAuthenticated && reciter.everyAyahSubfolder) {
+          if (reciter.everyAyahSubfolder) {
             try {
               const known = await api.alignments.resolveKnown({
                 reciterId: String(reciter.id),
@@ -1100,7 +1123,7 @@ export default function PreviewPage() {
 
     load();
     return () => { cancelled = true; };
-  }, [isIbtahalatMode, ibtAudioUrl, isAuthenticated, reciter, reciter?.id, reciter?.quranFoundationId, reciter?.everyAyahSubfolder, reciter?.quranUniversalSlug, surahNumber, startAyah, endAyah, totalAyahsInSurah, requestedAyahRangeKey, loadedAyahRangeKey, ayahs.length, ayahs]);
+  }, [isIbtahalatMode, ibtAudioUrl, reciter, reciter?.id, reciter?.quranFoundationId, reciter?.everyAyahSubfolder, reciter?.quranUniversalSlug, surahNumber, startAyah, endAyah, totalAyahsInSurah, requestedAyahRangeKey, loadedAyahRangeKey, ayahs.length, ayahs]);
 
   // Letter animation is an opt-in precision tier. Load QUA's pinned letter
   // paint annotations only when selected; word playback remains fast and does
@@ -1119,10 +1142,6 @@ export default function PreviewPage() {
     }
     if (!reciter?.quranUniversalSlug) {
       setLetterTimingStatus('unsupported');
-      return;
-    }
-    if (!isAuthenticated) {
-      setLetterTimingStatus('requires-auth');
       return;
     }
     if (timingsLoading || !isAyahRangeReady({
@@ -1182,7 +1201,7 @@ export default function PreviewPage() {
       cancelled = true;
       if (letterTimingRequestKeyRef.current === requestKey) letterTimingRequestKeyRef.current = null;
     };
-  }, [isIbtahalatMode, displaySettings.verseDisplayMode, activeTimingMap, isAuthenticated, reciter, reciter?.id, reciter?.quranUniversalSlug, surahNumber, startAyah, endAyah, requestedAyahRangeKey, loadedAyahRangeKey, ayahs, timingsLoading]);
+  }, [isIbtahalatMode, displaySettings.verseDisplayMode, activeTimingMap, reciter, reciter?.id, reciter?.quranUniversalSlug, surahNumber, startAyah, endAyah, requestedAyahRangeKey, loadedAyahRangeKey, ayahs, timingsLoading]);
 
   // ── Audio effects init ──────────────────────────────────────────────────────
   useEffect(() => {
