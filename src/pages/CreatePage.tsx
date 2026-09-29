@@ -727,21 +727,19 @@ export default function CreatePage() {
             return (
               <div key={step} className="flex items-center">
                 <div
-                  className={`flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full font-bold transition-all text-sm ${
-                    currentStep === step
+                  className={`flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full font-bold transition-all text-sm ${currentStep === step
                       ? 'gradient-primary text-primary-foreground'
                       : currentStep > step
-                      ? 'bg-primary/20 text-primary'
-                      : 'bg-muted text-muted-foreground'
-                  }`}
+                        ? 'bg-primary/20 text-primary'
+                        : 'bg-muted text-muted-foreground'
+                    }`}
                 >
                   {step}
                 </div>
                 {step < stepLabels.length && (
                   <div
-                    className={`w-3 sm:w-6 md:w-12 h-1 rounded ${
-                      currentStep > step ? 'bg-primary' : 'bg-muted'
-                    }`}
+                    className={`w-3 sm:w-6 md:w-12 h-1 rounded ${currentStep > step ? 'bg-primary' : 'bg-muted'
+                      }`}
                   />
                 )}
               </div>
@@ -754,9 +752,8 @@ export default function CreatePage() {
           {stepLabels.map((label, index) => (
             <span
               key={index}
-              className={`text-sm transition-colors ${
-                currentStep === index + 1 ? 'text-primary font-medium' : 'text-muted-foreground'
-              }`}
+              className={`text-sm transition-colors ${currentStep === index + 1 ? 'text-primary font-medium' : 'text-muted-foreground'
+                }`}
             >
               {label}
             </span>
@@ -963,9 +960,8 @@ export default function CreatePage() {
                                   setSelectedTrack(track.id);
                                   setContentMode('ibtahalat');
                                 }}
-                                className={`cursor-pointer rounded-xl border-2 p-3 transition-all ${
-                                  isSelected ? 'border-primary bg-primary/5' : 'border-transparent hover:border-primary/30 bg-muted/50'
-                                }`}
+                                className={`cursor-pointer rounded-xl border-2 p-3 transition-all ${isSelected ? 'border-primary bg-primary/5' : 'border-transparent hover:border-primary/30 bg-muted/50'
+                                  }`}
                               >
                                 <div className="flex items-center gap-3">
                                   <Button
@@ -1224,9 +1220,8 @@ export default function CreatePage() {
                         variant="outline"
                         size="sm"
                         onClick={handlePlayAyahAudio}
-                        className={`gap-2 text-xs border-primary/30 transition-all ${
-                          isPlayingAyahAudio ? 'bg-primary text-primary-foreground shadow-md animate-pulse' : 'hover:bg-primary/10'
-                        }`}
+                        className={`gap-2 text-xs border-primary/30 transition-all ${isPlayingAyahAudio ? 'bg-primary text-primary-foreground shadow-md animate-pulse' : 'hover:bg-primary/10'
+                          }`}
                       >
                         {isPlayingAyahAudio ? (
                           <>
@@ -1441,7 +1436,7 @@ export default function CreatePage() {
                       <div className="border border-primary/25 rounded-2xl p-8 bg-gradient-to-b from-primary/5 via-muted/30 to-background relative overflow-hidden shadow-inner">
                         {/* Shimmer effect */}
                         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-primary/15 to-transparent -translate-x-full animate-[shimmer_1.8s_infinite]" />
-                        
+
                         <div className="flex flex-col items-center justify-center text-center space-y-4 py-8">
                           <div className="relative">
                             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/20 to-primary/20 flex items-center justify-center border border-amber-500/30 shadow-lg shadow-amber-500/10 animate-pulse">
@@ -1540,7 +1535,7 @@ export default function CreatePage() {
                 </Card>
                 {contentMode !== 'ibtahalat' && (
                   <SettingsSection title="إعدادات النص" description="الخط والحجم واللون والظل">
-                  <TextSettingsPanel settings={textSettings} onChange={setTextSettings} />
+                    <TextSettingsPanel settings={textSettings} onChange={setTextSettings} />
                   </SettingsSection>
                 )}
               </div>
