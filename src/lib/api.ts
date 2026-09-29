@@ -768,6 +768,32 @@ export const api = {
       });
     },
 
+    async resolveKnown(payload: {
+      reciterId: string;
+      audio: {
+        contentHash: string;
+        durationMs: number;
+        sampleRate?: number;
+        channels?: number;
+      };
+      reference: {
+        surahNumber: number;
+        startAyah: number;
+        endAyah: number;
+        ayahs: Array<{ numberInSurah: number; text: string }>;
+        quranTextVersion?: string;
+      };
+      providerInput: {
+        everyAyahSubfolder: string;
+        audioTimestamps: Array<{ from: number; to: number }>;
+      };
+    }) {
+      return request<{ accepted: boolean; timingMap: any; validation: any }>('/api/alignments/resolve-known', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+    },
+
     async create(payload: {
       providerId: string;
       reciterId: string;

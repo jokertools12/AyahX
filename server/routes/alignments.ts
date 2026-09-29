@@ -17,6 +17,7 @@ import {
 } from '../services/alignmentRepository';
 import { alignmentDocumentToTimingMap } from '../services/alignmentProvider';
 import { issueApprovedTimingMapAttestation } from '../services/alignmentAttestation';
+import { resolveKnownQuranAlign } from '../services/quranAlignService';
 
 const router = Router();
 
@@ -101,6 +102,41 @@ router.post('/resolve', requireAuth, aiRateLimiter, async (req: AuthenticatedReq
     return res.status(status).json({
       error: status === 503 ? 'مزود المحاذاة المحدد غير متاح حالياً' : status === 400 ? 'بيانات المحاذاة غير صالحة' : 'تعذر تشغيل المحاذاة',
       code: error?.message,
+    });
+  }
+});
+
+/**
+ * Resolves a pinned CC-BY quran-align release for an exact EveryAyah source.
+ * This is intentionally separate from model adapters: it has no audio upload,
+ * no proportional fallback, and rejects ranges containing ambiguous
+ * multi-word source segments.
+ */
+router.post('/resolve-known', requireAuth, aiRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const body = req.body || {};
+    const input = {
+      reciterId: String(body.reciterId || ''),
+      everyAyahSubfolder: String(body.providerInput?.everyAyahSubfolder || ''),
+      audio: body.audio,
+      reference: body.reference,
+      audioTimestamps: body.providerInput?.audioTimestamps,
+    };
+    if (!input.reciterId || !input.everyAyahSubfolder || !input.audio || !input.reference || !Array.isArray(input.audioTimestamps)) {
+      return res.status(400).json({ error: 'بيانات المحاذاة المعروفة غير مكتملة', code: 'KNOWN_ALIGNMENT_INPUT_REQUIRED' });
+    }
+    const timingMap = resolveKnownQuranAlign(input as any);
+    return res.json({ accepted: true, timingMap, validation: { status: 'approved', errors: [], warnings: [] } });
+  } catch (error: any) {
+    const code = String(error?.message || error || 'KNOWN_ALIGNMENT_FAILED');
+    const status = code.includes('NOT_AVAILABLE') || code.includes('MISSING') || code.includes('MULTIWORD')
+      ? 422
+      : code.includes('REQUIRED') || code.includes('INPUT') || code.includes('CONTIGUOUS')
+      ? 400
+      : 503;
+    return res.status(status).json({
+      error: status === 422 ? 'لا تتوفر حدود كلمات مستقلة لهذا المقطع' : 'تعذر تحميل محاذاة التلاوة المثبتة',
+      code,
     });
   }
 });
