@@ -204,7 +204,10 @@ async function request<T>(endpoint: string, options: RequestInit = {}, useEtagCa
         notifyAuthListeners(null);
       }
 
-      const errorMsg = data?.error || (typeof data === 'string' && data.length > 0 ? data : `خطأ في الخادم (${response.status})`);
+      const baseError = data?.error || (typeof data === 'string' && data.length > 0 ? data : `خطأ في الخادم (${response.status})`);
+      // Preserve a stable backend error code so fail-closed alignment paths can
+      // explain why a trusted map was not accepted without exposing payloads.
+      const errorMsg = data?.code ? `${baseError} [${data.code}]` : baseError;
       throw new Error(errorMsg);
     }
 
