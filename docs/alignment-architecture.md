@@ -37,7 +37,7 @@ word-by-word synchronization.
 
 | Provider | Role in AyahX | Trust / release gate |
 | --- | --- | --- |
-| `quran_foundation` | First-party word segments for supported QF recitations | Server OAuth, complete contiguous coverage, allowlisted audio, streamed SHA-256; no browser timestamps or fallback |
+| `quran_foundation` | First-party word segments for supported QF recitations | Server OAuth, complete contiguous coverage, allowlisted audio, streamed SHA-256; no browser timestamps or fallback. Follow QF's current Developer Terms: do not train on QF content without written consent; raw timing/content retention is at most seven days absent an approved Content Sync/other exception; credit QF where content is displayed/exported. |
 | `internal_ctc` | Our trainable adapter for reciter/mode coverage | Exact audio hash, complete canonical words, monotonic spans, then human review; worker returns `MODEL_NOT_CONFIGURED` without real weights |
 | `verified_dataset` | Import of a separately audited corpus | Dataset attestation, license/provenance record, deterministic split and evaluation report |
 | `manual` | Human correction/review | Immutable child document linked to its parent and reviewer event |
@@ -107,6 +107,15 @@ ALIGNMENT_WORKER_SHARED_TOKEN
 ALIGNMENT_INTERNAL_CTC_TOKEN
 QF_CLIENT_ID / QF_CLIENT_SECRET (or the environment-specific QF settings)
 ```
+
+Quran Foundation's current Developer Terms limit storage of QF Content to one
+week unless a documented exception applies, and do not permit model training on
+QF Content without written consent. Alignment documents therefore must not be
+treated as permanent QF timing archives. Before enabling persistent QF maps,
+implement and verify an expiry/deletion policy or confirm the specific data is
+covered by a supported Content Sync exception. Exported social videos need
+QF credit in an accessible place. See the [Developer Terms](https://api-docs.quran.foundation/legal/developer-terms/)
+and [audio endpoint schema](https://api-docs.quran.foundation/docs/content_apis_versioned/4.0.0/chapter-reciter-audio-file/).
 
 The worker endpoint is `POST /v1/align`; the Node adapter sends the canonical
 request and expects `{ "result": AlignmentResult }`. Health is split into
