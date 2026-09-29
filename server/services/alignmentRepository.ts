@@ -18,8 +18,9 @@ export async function saveAlignmentDocument(userId: string, document: AlignmentD
   await query(
     `INSERT INTO alignment_documents
       (id, user_id, parent_document_id, provider_id, validation_status, review_status,
-       audio_content_hash, surah_number, start_ayah, end_ayah, document_json)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       audio_content_hash, surah_number, start_ayah, end_ayah, document_json, expires_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+       CASE WHEN ? = 'quran_foundation' THEN DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 5 DAY) ELSE NULL END)`,
     [
       document.documentId,
       userId,
@@ -32,22 +33,38 @@ export async function saveAlignmentDocument(userId: string, document: AlignmentD
       document.reference.ayahRange.from,
       document.reference.ayahRange.to,
       JSON.stringify(document),
+      document.providerId,
     ],
   );
 }
 
 export async function getAlignmentDocument(id: string, context: AlignmentOwnerContext): Promise<AlignmentDocument | null> {
   const rows = context.isAdmin
-    ? await query<any[]>('SELECT document_json FROM alignment_documents WHERE id = ? LIMIT 1', [id])
-    : await query<any[]>('SELECT document_json FROM alignment_documents WHERE id = ? AND user_id = ? LIMIT 1', [id, context.userId]);
+    ? await query<any[]>(
+      'SELECT document_json FROM alignment_documents WHERE id = ? AND (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP) LIMIT 1',
+      [id],
+    )
+    : await query<any[]>(
+      'SELECT document_json FROM alignment_documents WHERE id = ? AND user_id = ? AND (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP) LIMIT 1',
+      [id, context.userId],
+    );
   return rows.length ? parseDocument(rows[0]) : null;
 }
 
 export async function listAlignmentDocuments(context: AlignmentOwnerContext, limit = 50): Promise<AlignmentDocument[]> {
   const safeLimit = Math.max(1, Math.min(100, Math.trunc(limit)));
   const rows = context.isAdmin
-    ? await query<any[]>(`SELECT document_json FROM alignment_documents ORDER BY created_at DESC LIMIT ${safeLimit}`)
-    : await query<any[]>(`SELECT document_json FROM alignment_documents WHERE user_id = ? ORDER BY created_at DESC LIMIT ${safeLimit}`, [context.userId]);
+    ? await query<any[]>(
+      `SELECT document_json FROM alignment_documents
+       WHERE expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP
+       ORDER BY created_at DESC LIMIT ${safeLimit}`,
+    )
+    : await query<any[]>(
+      `SELECT document_json FROM alignment_documents
+       WHERE user_id = ? AND (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP)
+       ORDER BY created_at DESC LIMIT ${safeLimit}`,
+      [context.userId],
+    );
   return rows.map(parseDocument);
 }
 
@@ -61,9 +78,11 @@ export async function saveReviewEvent(params: {
     const [insertResult] = await conn.query<any>(
       `INSERT INTO alignment_documents
         (id, user_id, parent_document_id, provider_id, validation_status, review_status,
-         audio_content_hash, surah_number, start_ayah, end_ayah, document_json)
-       SELECT ?, user_id, ?, ?, ?, ?, ?, ?, ?, ?, ?
-       FROM alignment_documents WHERE id = ? LIMIT 1`,
+         audio_content_hash, surah_number, start_ayah, end_ayah, document_json, expires_at)
+       SELECT ?, user_id, ?, ?, ?, ?, ?, ?, ?, ?, ?, expires_at
+       FROM alignment_documents
+       WHERE id = ? AND (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP)
+       LIMIT 1`,
       [
         params.document.documentId,
         params.parentDocumentId,
@@ -82,12 +101,13 @@ export async function saveReviewEvent(params: {
     // deleted between the ownership read and this transaction.  Do not leave
     // an audit event pointing at a revision that was never persisted.
     if (Number(insertResult?.affectedRows || 0) !== 1) {
-      throw new Error('ALIGNMENT_PARENT_NOT_FOUND');
+      throw new Error('ALIGNMENT_PARENT_EXPIRED');
     }
-    await conn.query(
+    const [eventInsertResult] = await conn.query<any>(
       `INSERT INTO alignment_review_events
-        (id, document_id, parent_document_id, user_id, status, note, revision_json)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        (id, document_id, parent_document_id, user_id, status, note, revision_json, expires_at)
+       SELECT ?, ?, ?, ?, ?, ?, ?, expires_at
+       FROM alignment_documents WHERE id = ? LIMIT 1`,
       [
         crypto.randomUUID(),
         params.document.documentId,
@@ -96,7 +116,11 @@ export async function saveReviewEvent(params: {
         params.document.review?.status || 'unreviewed',
         params.document.review?.note || null,
         JSON.stringify(params.revisions),
+        params.document.documentId,
       ],
     );
+    if (Number(eventInsertResult?.affectedRows || 0) !== 1) {
+      throw new Error('ALIGNMENT_REVIEW_DOCUMENT_NOT_FOUND');
+    }
   });
 }

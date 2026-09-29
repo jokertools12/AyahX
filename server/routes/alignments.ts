@@ -26,6 +26,7 @@ function ownerContext(req: AuthenticatedRequest) {
 
 function errorStatus(error: unknown): number {
   const message = String((error as any)?.message || error || '');
+  if (message.includes('EXPIRED')) return 410;
   if (message.includes('NOT_CONFIGURED') || message.includes('TIMEOUT') || message.includes('HTTP_')
     || message.includes('RESPONSE_TOO_LARGE') || message.includes('ENGINE_')
     || message.includes('QF_STRICT_CREDENTIALS') || message.includes('AUDIO_FINGERPRINT_FETCH')) return 503;
