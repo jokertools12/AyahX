@@ -167,6 +167,8 @@ function positiveEnvInt(name: string, fallback: number, min: number, max: number
 }
 
 const assetCacheRoot = path.join(os.tmpdir(), 'ayahx-render-assets-v1');
+const ASSET_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+const ASSET_CACHE_CLEANUP_INTERVAL_MS = 30 * 60 * 1000;
 
 function assetCacheLimitBytes(): number {
   const megabytes = positiveEnvInt('RENDER_ASSET_CACHE_MB', 2048, 0, 16_384);
@@ -180,7 +182,6 @@ function assetCachePath(assetUrl: string, extension: string): string {
 
 async function pruneAssetCache(excludePath?: string): Promise<void> {
   const limit = assetCacheLimitBytes();
-  if (!limit) return;
   try {
     await fs.promises.mkdir(assetCacheRoot, { recursive: true });
     const entries = await fs.promises.readdir(assetCacheRoot);
@@ -194,6 +195,11 @@ async function pruneAssetCache(excludePath?: string): Promise<void> {
     const candidates = files.filter((file): file is { filePath: string; size: number; mtimeMs: number } => Boolean(file));
     let total = candidates.reduce((sum, file) => sum + file.size, 0);
     for (const file of candidates.sort((a, b) => a.mtimeMs - b.mtimeMs)) {
+      if (file.filePath !== excludePath && Date.now() - file.mtimeMs > ASSET_CACHE_MAX_AGE_MS) {
+        await fs.promises.unlink(file.filePath).catch(() => {});
+        total -= file.size;
+        continue;
+      }
       if (total <= limit || file.filePath === excludePath) continue;
       await fs.promises.unlink(file.filePath).catch(() => {});
       total -= file.size;
@@ -203,6 +209,13 @@ async function pruneAssetCache(excludePath?: string): Promise<void> {
   }
 }
 
+// Cache entries are derived media copies, not a durable asset library. Sweep
+// them even when no new render is submitted so a quiet instance still honors
+// the short local-retention window.
+const assetCacheCleanupTimer = setInterval(() => { void pruneAssetCache(); }, ASSET_CACHE_CLEANUP_INTERVAL_MS);
+assetCacheCleanupTimer.unref?.();
+void pruneAssetCache();
+
 async function cacheRemoteAsset(assetUrl: string, extension: string, timeoutMs = 10_000): Promise<string> {
   const limit = assetCacheLimitBytes();
   if (!limit) throw new Error('Asset cache disabled');
@@ -211,8 +224,6 @@ async function cacheRemoteAsset(assetUrl: string, extension: string, timeoutMs =
   try {
     const stat = await fs.promises.stat(target);
     if (stat.isFile() && stat.size > 0) {
-      const now = new Date();
-      await fs.promises.utimes(target, now, now).catch(() => {});
       return target;
     }
   } catch { /* cache miss */ }
@@ -479,6 +490,24 @@ export async function detectAudioMetrics(filePath: string): Promise<AudioMetrics
  */
 export async function prepareAudioTrack(manifest: RenderManifest, scratchDir: string): Promise<string> {
   const audioFilePath = path.join(scratchDir, 'audio_track.wav');
+  const isQuranFoundationAudio = manifest.timingMap.sourceId === 'quran_foundation'
+    || manifest.timingMap.alignment?.provider === 'quran_foundation'
+    || manifest.audio.sourceMode === 'qf';
+  const downloadAudioToScratch = async (url: string, targetPath: string): Promise<void> => {
+    if (!isQuranFoundationAudio) {
+      try {
+        const cachedPath = await cacheRemoteAsset(url, '.mp3');
+        await fs.promises.copyFile(cachedPath, targetPath);
+        return;
+      } catch {
+        // Retry as a direct scratch download when caching is disabled or fails.
+      }
+    }
+
+    const response = await fetchWithTimeout(url, {}, 30_000);
+    if (!response.ok) throw new Error(`Failed to download recitation audio: HTTP ${response.status}`);
+    await fs.promises.writeFile(targetPath, Buffer.from(await response.arrayBuffer()));
+  };
 
   // Case 1: Multiple EveryAyah URLs -> Download each and concatenate via native FFmpeg
   if (manifest.audio.everyAyahUrls && manifest.audio.everyAyahUrls.length > 1) {
@@ -490,15 +519,9 @@ export async function prepareAudioTrack(manifest: RenderManifest, scratchDir: st
 
       if (url.startsWith('http://') || url.startsWith('https://')) {
         try {
-          const cachedPath = await cacheRemoteAsset(url, '.mp3');
-          await fs.promises.copyFile(cachedPath, partPath);
-        } catch {
-          const res = await fetch(url);
-          if (!res.ok) {
-            throw new Error(`Failed to download ayah part [${i + 1}] from ${url}: HTTP ${res.status}`);
-          }
-          const arrayBuf = await res.arrayBuffer();
-          await fs.promises.writeFile(partPath, Buffer.from(arrayBuf));
+          await downloadAudioToScratch(url, partPath);
+        } catch (error: any) {
+          throw new Error(`Failed to download ayah part [${i + 1}]: ${error?.message || 'network error'}`);
         }
       } else if (fs.existsSync(url)) {
         await fs.promises.copyFile(url, partPath);
@@ -562,17 +585,11 @@ export async function prepareAudioTrack(manifest: RenderManifest, scratchDir: st
   }
 
   if (targetUrl.startsWith('http://') || targetUrl.startsWith('https://')) {
-    logger.info(`Fetching recitation audio track from: ${targetUrl}`);
+    logger.info('Fetching recitation audio track from a validated remote source.');
     try {
-      const cachedPath = await cacheRemoteAsset(targetUrl, '.mp3');
-      await fs.promises.copyFile(cachedPath, rawAudioPath);
-    } catch {
-      const res = await fetch(targetUrl);
-      if (!res.ok) {
-        throw new Error(`Failed to download recitation audio: HTTP ${res.status} ${res.statusText}`);
-      }
-      const arrayBuf = await res.arrayBuffer();
-      await fs.promises.writeFile(rawAudioPath, Buffer.from(arrayBuf));
+      await downloadAudioToScratch(targetUrl, rawAudioPath);
+    } catch (error: any) {
+      throw new Error(`Failed to download recitation audio: ${error?.message || 'network error'}`);
     }
   } else if (fs.existsSync(targetUrl)) {
     await fs.promises.copyFile(targetUrl, rawAudioPath);

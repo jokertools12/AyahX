@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import type { RowDataPacket } from 'mysql2';
 import { query, transaction } from '../db';
 import type { AlignmentDocument } from './alignmentProvider';
 import type { AlignmentRevision } from './alignmentService';
@@ -122,5 +123,56 @@ export async function saveReviewEvent(params: {
     if (Number(eventInsertResult?.affectedRows || 0) !== 1) {
       throw new Error('ALIGNMENT_REVIEW_DOCUMENT_NOT_FOUND');
     }
+  });
+}
+
+/**
+ * Deletes one owner's alignment and every descendant review revision/event.
+ * Audio bytes are not stored here; only the linked metadata/timing records are
+ * removed. The account-delete foreign key is a separate defense in depth.
+ */
+export async function deleteAlignmentDocument(documentId: string, userId: string): Promise<boolean> {
+  return transaction(async (conn) => {
+    const [roots] = await conn.query<any[]>(
+      'SELECT id FROM alignment_documents WHERE id = ? AND user_id = ? LIMIT 1 FOR UPDATE',
+      [documentId, userId],
+    );
+    if (!roots.length) return false;
+
+    const documentIds = new Set<string>([documentId]);
+    let frontier = [documentId];
+    const maxRevisionDocuments = 5_000;
+    while (frontier.length > 0) {
+      const placeholders = frontier.map(() => '?').join(', ');
+      const [children] = await conn.query<(RowDataPacket & { id: string })[]>(
+        `SELECT id FROM alignment_documents
+         WHERE user_id = ? AND parent_document_id IN (${placeholders})
+         FOR UPDATE`,
+        [userId, ...frontier],
+      );
+      frontier = [];
+      for (const child of children) {
+        if (documentIds.has(child.id)) continue;
+        documentIds.add(child.id);
+        frontier.push(child.id);
+        if (documentIds.size > maxRevisionDocuments) {
+          throw new Error('ALIGNMENT_DELETE_REVISION_TREE_TOO_LARGE');
+        }
+      }
+    }
+
+    const ids = [...documentIds];
+    const placeholders = ids.map(() => '?').join(', ');
+    await conn.query(
+      `DELETE FROM alignment_review_events
+       WHERE user_id = ?
+         AND (document_id IN (${placeholders}) OR parent_document_id IN (${placeholders}))`,
+      [userId, ...ids, ...ids],
+    );
+    await conn.query(
+      `DELETE FROM alignment_documents WHERE user_id = ? AND id IN (${placeholders})`,
+      [userId, ...ids],
+    );
+    return true;
   });
 }

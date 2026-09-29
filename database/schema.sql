@@ -293,12 +293,14 @@ CREATE TABLE IF NOT EXISTS `render_jobs` (
   `started_at` TIMESTAMP NULL DEFAULT NULL,
   `completed_at` TIMESTAMP NULL DEFAULT NULL,
   `expires_at` TIMESTAMP NULL DEFAULT NULL,
+  `content_expires_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_render_jobs_idempotency` (`idempotency_key`),
   UNIQUE KEY `uq_render_jobs_one_active_user` (`active_user_id`),
   INDEX `idx_render_jobs_user` (`user_id`, `created_at` DESC),
   INDEX `idx_render_jobs_status` (`status`, `created_at` ASC),
   INDEX `idx_render_jobs_engine_state` (`engine`, `status`, `created_at` ASC),
+  INDEX `idx_render_jobs_content_expiry` (`content_expires_at`),
   CONSTRAINT `fk_render_jobs_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

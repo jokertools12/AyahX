@@ -2340,6 +2340,55 @@
             ctx.restore();
           }
 
+          // Quran Foundation requires source attribution for exported QF
+          // content. Keep this credit in the canonical scene so preview,
+          // FFmpeg, Skia, and Browser Cloud cannot silently omit it.
+          const requiresQfCredit = manifest.timingMap?.sourceId === 'quran_foundation'
+            || manifest.timingMap?.alignment?.provider === 'quran_foundation'
+            || manifest.audio?.sourceMode === 'qf';
+          if (requiresQfCredit) {
+            const logoCorner = displaySettings.logoWatermarkPosition || 'topRight';
+            const socialCorner = displaySettings.socialWatermarkPosition || displaySettings.watermarkPosition || 'bottomCenter';
+            const headerCorner = displaySettings.surahNamePosition || 'top';
+            const occupiedCorners = new Set();
+            if (displaySettings.logoWatermarkEnabled !== false) occupiedCorners.add(logoCorner);
+            if (displaySettings.socialWatermarkEnabled && socialCorner !== 'topCenter') occupiedCorners.add(socialCorner);
+            if ((displaySettings.showSurahName || displaySettings.showReciterName)
+              && ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'].includes(headerCorner)) occupiedCorners.add(headerCorner);
+            const creditCorner = ['bottomLeft', 'topLeft', 'bottomRight', 'topRight']
+              .find((corner) => !occupiedCorners.has(corner)) || 'bottomCenter';
+            const creditText = 'Source: Quran Foundation';
+            const creditFontSize = Math.max(12, 13 * S);
+            const creditPadX = Math.max(7, 8 * S);
+            const creditPadY = Math.max(4, 5 * S);
+
+            ctx.save();
+            ctx.font = `600 ${creditFontSize}px "Cairo", Arial, sans-serif`;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            const creditWidth = ctx.measureText(creditText).width + creditPadX * 2;
+            const creditHeight = creditFontSize + creditPadY * 2;
+            const isLeft = creditCorner.endsWith('Left');
+            const isTop = creditCorner.startsWith('top');
+            const creditX = creditCorner === 'bottomCenter'
+              ? (W - creditWidth) / 2
+              : isLeft ? brandingLayout.edge : W - brandingLayout.edge - creditWidth;
+            const creditY = isTop ? brandingLayout.edge : H - brandingLayout.edge - creditHeight;
+            ctx.fillStyle = 'rgba(4, 13, 18, 0.82)';
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.72)';
+            ctx.lineWidth = Math.max(1, S);
+            ctx.beginPath();
+            if (ctx.roundRect) ctx.roundRect(creditX, creditY, creditWidth, creditHeight, creditHeight / 2);
+            else ctx.rect(creditX, creditY, creditWidth, creditHeight);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = '#FFF1B8';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+            ctx.shadowBlur = 3 * S;
+            ctx.fillText(creditText, creditX + creditPadX, creditY + creditHeight / 2);
+            ctx.restore();
+          }
+
           return true;
         },
 

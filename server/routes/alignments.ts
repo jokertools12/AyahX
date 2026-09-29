@@ -9,6 +9,7 @@ import {
   runAlignment,
 } from '../services/alignmentService';
 import {
+  deleteAlignmentDocument,
   getAlignmentDocument,
   listAlignmentDocuments,
   saveAlignmentDocument,
@@ -138,6 +139,17 @@ router.get('/:id', requireAuth, async (req: AuthenticatedRequest, res: Response)
     return res.json(publicDocument(document, req.user!.id));
   } catch (error: any) {
     return res.status(500).json({ error: 'تعذر تحميل وثيقة المحاذاة', code: error?.message });
+  }
+});
+
+router.delete('/:id', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const alignmentId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const deleted = await deleteAlignmentDocument(alignmentId, req.user!.id);
+    if (!deleted) return res.status(404).json({ error: 'وثيقة المحاذاة غير موجودة' });
+    return res.status(204).send();
+  } catch {
+    return res.status(500).json({ error: 'تعذر حذف وثيقة المحاذاة' });
   }
 });
 

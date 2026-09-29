@@ -115,6 +115,7 @@ export const RenderManifestSchema = z.object({
     sourceId: z.string().min(1).optional(),
     sourceMethod: z.string().min(1).optional(),
     audioContentHash: z.string().min(8),
+    createdAt: z.string().datetime().optional(),
     validationStatus: z.enum(['approved', 'low_confidence', 'needs_review', 'rejected']),
     alignment: alignmentProvenanceSchema,
     review: alignmentReviewSchema,
@@ -367,6 +368,20 @@ export function validateRenderManifest(raw: unknown): ValidationResult {
   if (manifest.timingMap.validationStatus === 'approved'
     && manifest.timingMap.audioContentHash !== manifest.audio.audioContentHash) {
     errors.push('timingMap audio hash must match render audio hash for approved timing.');
+  }
+
+  const isQuranFoundationTiming = manifest.timingMap.sourceId === 'quran_foundation'
+    || manifest.timingMap.alignment?.provider === 'quran_foundation'
+    || manifest.audio.sourceMode === 'qf';
+  if (isQuranFoundationTiming) {
+    const timingCreatedAt = Date.parse(manifest.timingMap.createdAt || '');
+    if (!Number.isFinite(timingCreatedAt)) {
+      errors.push('QF_TIMING_MAP_CREATED_AT_REQUIRED');
+    } else if (timingCreatedAt > Date.now() + 5 * 60_000) {
+      errors.push('QF_TIMING_MAP_CREATED_AT_INVALID');
+    } else if (Date.now() - timingCreatedAt >= 5 * 24 * 60 * 60_000) {
+      errors.push('QF_TIMING_MAP_EXPIRED');
+    }
   }
 
   // An approved word map is bound to the original audio clock.  Any tempo

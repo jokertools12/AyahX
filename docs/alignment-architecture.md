@@ -116,10 +116,10 @@ QF_CLIENT_ID / QF_CLIENT_SECRET (or the environment-specific QF settings)
 Quran Foundation's current Developer Terms limit storage of QF Content to one
 week unless a documented exception applies, and do not permit model training on
 QF Content without written consent. Alignment documents therefore must not be
-treated as permanent QF timing archives. Before enabling persistent QF maps,
-implement and verify an expiry/deletion policy or confirm the specific data is
-covered by a supported Content Sync exception. Exported social videos need
-QF credit in an accessible place. See the [Developer Terms](https://api-docs.quran.foundation/legal/developer-terms/)
+treated as permanent QF timing archives. The shared render scene adds an
+unavoidable source credit to QF-backed previews/exports, and retention expiry
+is bounded from the source timing-map creation time. Exported social videos need
+QF credit in an accessible place. See the [Developer Terms](https://api-docs.quran.com/legal/developer-terms/)
 and [audio endpoint schema](https://api-docs.quran.foundation/docs/content_apis_versioned/4.0.0/chapter-reciter-audio-file/).
 
 The worker endpoint is `POST /v1/align`; the Node adapter sends the canonical

@@ -43,6 +43,7 @@ export interface RenderJobRow {
   progress: number;
   stage: string;
   manifest: RenderManifest | string;
+  content_expires_at?: string | null;
   output_path: string | null;
   output_filename: string | null;
   output_size_bytes: number | null;
@@ -224,9 +225,84 @@ export class RenderJobQueue {
    */
   public async cleanupExpiredRenders(): Promise<void> {
     try {
+      const qfSourcePredicate = `(
+          JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.timingMap.sourceId')) = 'quran_foundation'
+          OR JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.timingMap.alignment.provider')) = 'quran_foundation'
+          OR JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.audio.sourceMode')) = 'qf'
+        )`;
+      const qfContentExpiry = `(content_expires_at IS NOT NULL AND content_expires_at <= CURRENT_TIMESTAMP())
+        OR (content_expires_at IS NULL AND ${qfSourcePredicate})
+        OR error_code = 'CONTENT_RETENTION_PURGE_PENDING'`;
+      const expiredQfJobs = await query<Array<{ id: string }>>(
+        `SELECT id FROM render_jobs
+         WHERE ${qfContentExpiry}
+         ORDER BY created_at ASC
+         LIMIT 100`,
+      );
+
+      // A render manifest is a second durable copy of QF word timings. Its
+      // QF-derived fields and saved-video metadata must expire with the source
+      // document even when a render never finished or the artifact was already
+      // removed by the ordinary 48-hour output cleanup.
+      for (const job of expiredQfJobs) {
+        try {
+          // First end the durable lease and remove its manifest. Completion
+          // only succeeds while status='running', so this closes the race in
+          // which a render could publish a fresh artifact during retention.
+          await query(
+            `UPDATE render_jobs
+             SET status = 'cancelled',
+                 active_user_id = NULL,
+                 enqueue_state = 'cancelled',
+                 progress = 100.00,
+                 stage = 'تم مسح محتوى المحاذاة بعد انتهاء مدة الاحتفاظ',
+                 manifest = JSON_OBJECT(),
+                 content_expires_at = NULL,
+                 error_message = NULL,
+                 error_code = 'CONTENT_RETENTION_PURGE_PENDING',
+                 expires_at = NULL,
+                 completed_at = COALESCE(completed_at, NOW())
+             WHERE id = ? AND (${qfContentExpiry})`,
+            [job.id],
+          );
+
+          // Read the latest output path only after fencing the worker. It may
+          // have published while the initial candidate list was being read.
+          await query('DELETE FROM saved_videos WHERE id = ?', [job.id]);
+          const [current] = await query<Array<{ output_path: string | null }>>(
+            'SELECT output_path FROM render_jobs WHERE id = ? AND error_code = \'CONTENT_RETENTION_PURGE_PENDING\' LIMIT 1',
+            [job.id],
+          );
+          if (!current) continue;
+          if (isObjectStoragePath(current.output_path)) {
+            await deleteStoredRender(current.output_path!);
+          } else if (current.output_path && fs.existsSync(current.output_path)) {
+            await fs.promises.unlink(current.output_path);
+          }
+
+          await query(
+            `UPDATE render_jobs
+             SET output_path = NULL,
+                 output_filename = NULL,
+                 output_size_bytes = NULL,
+                 duration_seconds = NULL,
+                 metadata = NULL,
+                 error_code = 'CONTENT_RETENTION_EXPIRED'
+             WHERE id = ? AND error_code = 'CONTENT_RETENTION_PURGE_PENDING'`,
+            [job.id],
+          );
+        } catch (error) {
+          // The scrubbed manifest and cancelled state are durable immediately;
+          // the pending marker retains only the artifact pointer for retry.
+          logger.warn('Failed to purge an expired Quran Foundation render record.', { jobId: job.id, error });
+        }
+      }
+
       const expiredJobs = await query<RenderJobRow[]>(
         `SELECT id, output_path FROM render_jobs 
-         WHERE output_path IS NOT NULL AND (
+         WHERE output_path IS NOT NULL
+           AND COALESCE(error_code, '') <> 'CONTENT_RETENTION_PURGE_PENDING'
+           AND (
            (expires_at IS NOT NULL AND expires_at < NOW())
            OR (status IN ('failed', 'cancelled') AND created_at < DATE_SUB(NOW(), INTERVAL 30 MINUTE))
          )
@@ -238,16 +314,22 @@ export class RenderJobQueue {
       // UPDATE for every old artifact can delay worker recovery for seconds
       // when a busy installation has accumulated many failed jobs.
       await Promise.all(expiredJobs.map(async (job) => {
+        let deletionComplete = true;
         if (job.output_path && fs.existsSync(job.output_path)) {
           try {
             await fs.promises.unlink(job.output_path);
             logger.info(`Garbage Collector: Deleted expired render artifact [${job.id}]: ${job.output_path}`);
           } catch (e: any) {
+            deletionComplete = false;
             logger.warn(`Failed to unlink expired render artifact [${job.id}]:`, e.message);
           }
         } else if (isObjectStoragePath(job.output_path)) {
-          await deleteStoredRender(job.output_path).catch((error) => logger.warn(`Failed to delete expired object [${job.id}]:`, error));
+          await deleteStoredRender(job.output_path).catch((error) => {
+            deletionComplete = false;
+            logger.warn(`Failed to delete expired object [${job.id}]:`, error);
+          });
         }
+        if (!deletionComplete) return;
         await query(
           "UPDATE render_jobs SET output_path = NULL, stage = 'تم مسح الملف المؤقت لانتهاء الصلاحية' WHERE id = ? AND output_path IS NOT NULL",
           [job.id]
@@ -292,6 +374,12 @@ export class RenderJobQueue {
     }
 
     const manifest = manifestValidation.manifest;
+    const qfTimedContent = manifest.timingMap.sourceId === 'quran_foundation'
+      || manifest.timingMap.alignment?.provider === 'quran_foundation'
+      || manifest.audio.sourceMode === 'qf';
+    const contentExpiresAt = qfTimedContent
+      ? new Date(Date.parse(manifest.timingMap.createdAt!) + 5 * 24 * 60 * 60_000)
+      : null;
 
     // 3. Security & Asset Allowlist Validation
     const assetValidation = validateManifestAssets(manifest);
@@ -318,9 +406,9 @@ export class RenderJobQueue {
 
     await query(
       `INSERT INTO render_jobs (
-        id, user_id, idempotency_key, engine, active_user_id, enqueue_state, status, progress, stage, manifest, max_retries
-      ) VALUES (?, ?, ?, ?, ?, 'pending', 'queued', 0.00, 'جاري تخصيص موارد الإنتاج', ?, 2)`,
-      [jobId, userId, idempotencyKey || null, queueEngineForManifest(manifest), userId, manifestJson]
+        id, user_id, idempotency_key, engine, active_user_id, enqueue_state, status, progress, stage, manifest, max_retries, content_expires_at
+      ) VALUES (?, ?, ?, ?, ?, 'pending', 'queued', 0.00, 'جاري تخصيص موارد الإنتاج', ?, 2, ?)`,
+      [jobId, userId, idempotencyKey || null, queueEngineForManifest(manifest), userId, manifestJson, contentExpiresAt]
     );
 
     logger.info(`Enqueued render job [${jobId}] for user [${userId}]`);
@@ -509,6 +597,7 @@ export class RenderJobQueue {
   public async retryJob(jobId: string, userId?: string, isAdmin: boolean = false): Promise<RenderJobRow | null> {
     const job = await this.getJobById(jobId, userId, isAdmin);
     if (!job || !['failed', 'cancelled'].includes(job.status)) return null;
+    if (job.error_code === 'CONTENT_RETENTION_PURGE_PENDING' || job.error_code === 'CONTENT_RETENTION_EXPIRED') return null;
     if (userId) {
       const activeJobs = await query<{ id: string }[]>(
         "SELECT id FROM render_jobs WHERE user_id = ? AND status IN ('queued', 'running') LIMIT 1",

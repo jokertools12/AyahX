@@ -101,7 +101,11 @@ enabled for production use. AyahX now gives saved QF documents and review events
 a five-day TTL, hides expired records on reads, and sweeps expired rows every
 30 minutes. The migration backfills legacy rows from their original creation
 time, rather than granting a fresh window. This engineering control does not
-replace QF approval or production policy review.
+replace QF approval or production policy review. Exported QF scenes now carry a
+non-optional `Source: Quran Foundation` credit in the shared scene used by the
+preview, FFmpeg, Skia, and Browser Cloud paths. Render manifests and linked
+artifacts expire from the timing map's creation time, not the later render-job
+creation time.
 
 ## Engineering shape
 
@@ -154,13 +158,14 @@ counts, model confidence alone, or a visual animation profile.
 
 ## AyahX staging status
 
-- At the 2026-09-29 verification point, Staging commit `edb60acc322c` was live
-  on all five repo-linked services (AyahX, render-control, and the FFmpeg, Skia,
-  and Browser workers). Railway reported 8/8 Staging services online, zero
-  recent failures, and no pending work. The public `/api/health/ready` probe
-  returned HTTP 200 with MySQL connected, and the alignment-table migration
-  logged success. Production was independently checked: 7/7 services online,
-  no pending work, and all five repo-linked services track `main`.
+- Pre-update baseline (2026-09-29): Staging commit `edb60acc322c` was live on
+  all five repo-linked services (AyahX, render-control, and the FFmpeg, Skia,
+  and Browser workers). Railway reported 8/8 Staging services online and no
+  pending work. `/api/health/ready` returned HTTP 200 with MySQL connected, and
+  the alignment-table migration logged success. Production was independently
+  checked at that baseline: 7/7 services online, no pending work, and all five
+  repo-linked services track `main`. The privacy/attribution changes in this
+  revision still require a fresh Staging deployment and read-back.
 - OpenRouter is configured for the single free text model
   `qwen/qwen3.8-27b:free`, strict JSON Schema, `data_collection=deny`, and both
   model/provider fallback disabled. The free model lists ModelRun as its current
@@ -189,13 +194,16 @@ counts, model confidence alone, or a visual animation profile.
   for CTC training, requires separately reviewed gold spans for boundary
   evaluation, splits by connected reciter/audio groups, evaluates the held-out
   test split only, and counts missing/unexpected predictions against coverage.
-- Current local checks: 322 Vitest tests across 49 files, the production Vite
-  build, and TypeScript checks for the app and server passed; the 24
-  alignment-worker pytest tests passed earlier (one warning). The modified
-  retention implementation and tests pass targeted ESLint without warnings.
-  The display-render test now writes artifacts to a unique OS temp
-  directory instead of the user-owned `uploads/test_frames_out` files. These
-  local checks do not imply model accuracy or general-audio alignment quality.
+- Current pre-deploy local checks (2026-09-29): 326 Vitest tests across 52
+  files passed (the DB-connected queue test was intentionally excluded); the
+  Vite build, app TypeScript check, and targeted server TypeScript check passed.
+  Targeted ESLint exited successfully with 52 `no-explicit-any` warnings. Eight
+  dependency-light alignment-worker unittest cases passed and all worker Python
+  files compiled; two HTTP tests could not run because FastAPI is not installed
+  in the local runtime. A synthetic 720x1280, 30-fps render with timed word
+  highlights and a separate lyric render completed on FFmpeg, Skia, and Browser
+  Cloud; pairwise SSIM ranged from 0.973 to 0.997. These checks do not use real
+  QF audio and do not establish model accuracy or general-audio alignment.
 
 - A name-only Staging variable check confirmed `OPENROUTER_API_KEY` exists, but
   its value was withheld and no live OpenRouter request was made. The two keys

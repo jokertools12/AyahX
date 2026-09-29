@@ -38,7 +38,7 @@ describe('RenderManifest Specification & Validation', () => {
       ],
     },
     audio: {
-      sourceMode: 'qf' as const,
+      sourceMode: 'single_url' as const,
       audioUrl: 'https://audio.qurancdn.com/Alafasy/108.mp3',
       audioContentHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
       durationSeconds: 12.5,
@@ -88,6 +88,33 @@ describe('RenderManifest Specification & Validation', () => {
     expect(res.valid).toBe(true);
     expect(res.manifest).toBeDefined();
     expect(res.errors).toBeUndefined();
+  });
+
+  it('requires a fresh source timestamp for Quran Foundation audio or timing', () => {
+    const qfManifest = {
+      ...sampleValidManifest,
+      timingMap: {
+        ...sampleValidManifest.timingMap,
+        sourceId: 'quran_foundation',
+        createdAt: new Date().toISOString(),
+      },
+      audio: { ...sampleValidManifest.audio, sourceMode: 'qf' as const },
+    };
+    expect(validateRenderManifest(qfManifest).valid).toBe(true);
+
+    const missingTimestamp = validateRenderManifest({
+      ...qfManifest,
+      timingMap: { ...qfManifest.timingMap, createdAt: undefined },
+    });
+    expect(missingTimestamp.valid).toBe(false);
+    expect(missingTimestamp.errors).toContain('QF_TIMING_MAP_CREATED_AT_REQUIRED');
+
+    const expired = validateRenderManifest({
+      ...qfManifest,
+      timingMap: { ...qfManifest.timingMap, createdAt: new Date(Date.now() - 6 * 24 * 60 * 60_000).toISOString() },
+    });
+    expect(expired.valid).toBe(false);
+    expect(expired.errors).toContain('QF_TIMING_MAP_EXPIRED');
   });
 
   it('preserves the selected cinematic visual direction for cloud rendering', () => {

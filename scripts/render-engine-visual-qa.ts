@@ -35,6 +35,8 @@ const baseManifest: any = {
   },
   timingMap: {
     mapId: 'visual-qa-map', audioContentHash: 'visual-qa-audio', validationStatus: 'approved',
+    sourceId: 'quran_foundation', createdAt: new Date().toISOString(),
+    alignment: { provider: 'quran_foundation', providerVersion: 'visual-qa-only' },
     words: [
       { canonicalWordKey: '1:1:1', displayWordIndex: 0, displayToken: 'بِسْمِ', startMs: 0, endMs: 450, confidence: 1 },
       { canonicalWordKey: '1:1:2', displayWordIndex: 1, displayToken: 'اللَّهِ', startMs: 450, endMs: 950, confidence: 1 },

@@ -2,6 +2,8 @@ import { query } from '../../db';
 import { logger } from '../../logger';
 import { purgeExpiredAlignmentData } from '../../services/alignmentRetentionService';
 
+const ORPHAN_REVIEW_CLEANUP_BATCH_SIZE = 500;
+
 async function ensureAlignmentColumn(table: string, column: string, definition: string): Promise<void> {
   const existing = await query<Array<{ present: number }>>(
     `SELECT 1 AS present
@@ -22,6 +24,49 @@ async function ensureAlignmentIndex(table: string, index: string, definition: st
     [table, index],
   );
   if (existing.length === 0) await query(`ALTER TABLE \`${table}\` ADD INDEX \`${index}\` ${definition}`);
+}
+
+async function ensureAlignmentReviewUserCascade(): Promise<void> {
+  const constraints = await query<Array<{ deleteRule: string }>>(
+    `SELECT DELETE_RULE AS deleteRule
+     FROM information_schema.REFERENTIAL_CONSTRAINTS
+     WHERE CONSTRAINT_SCHEMA = DATABASE()
+       AND TABLE_NAME = 'alignment_review_events'
+       AND CONSTRAINT_NAME = 'fk_alignment_review_events_user'
+     LIMIT 1`,
+  );
+
+  if (constraints.length > 0) {
+    if (String(constraints[0].deleteRule).toUpperCase() !== 'CASCADE') {
+      throw new Error('ALIGNMENT_REVIEW_USER_FOREIGN_KEY_MUST_CASCADE');
+    }
+    return;
+  }
+
+  // A previous account deletion could have left review JSON orphaned because
+  // older versions had no user foreign key. Delete only those ownerless event
+  // IDs before adding the constraint; never inspect or log the note/revision.
+  while (true) {
+    const orphanEvents = await query<Array<{ id: string }>>(
+      `SELECT e.id FROM alignment_review_events e
+       LEFT JOIN users u ON u.id = e.user_id
+       WHERE u.id IS NULL
+       ORDER BY e.created_at ASC
+       LIMIT ${ORPHAN_REVIEW_CLEANUP_BATCH_SIZE}`,
+    );
+    if (orphanEvents.length === 0) break;
+
+    const eventIds = orphanEvents.map((event) => event.id);
+    await query(
+      `DELETE FROM alignment_review_events WHERE id IN (${eventIds.map(() => '?').join(', ')})`,
+      eventIds,
+    );
+    if (orphanEvents.length < ORPHAN_REVIEW_CLEANUP_BATCH_SIZE) break;
+  }
+
+  await query(
+    'ALTER TABLE `alignment_review_events` ADD CONSTRAINT `fk_alignment_review_events_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE',
+  );
 }
 
 /**
@@ -68,7 +113,8 @@ export async function ensureAlignmentTables(): Promise<void> {
       'created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,',
       'PRIMARY KEY (id),',
       'INDEX idx_alignment_review_document (document_id, created_at),',
-      'INDEX idx_alignment_review_user (user_id, created_at)',
+      'INDEX idx_alignment_review_user (user_id, created_at),',
+      'CONSTRAINT fk_alignment_review_events_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
       ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci',
     ].join(' '));
 
@@ -77,6 +123,7 @@ export async function ensureAlignmentTables(): Promise<void> {
     await ensureAlignmentColumn('alignment_review_events', 'expires_at', 'TIMESTAMP NULL DEFAULT NULL AFTER revision_json');
     await ensureAlignmentIndex('alignment_documents', 'idx_alignment_expires', '(expires_at)');
     await ensureAlignmentIndex('alignment_review_events', 'idx_alignment_review_expires', '(expires_at)');
+    await ensureAlignmentReviewUserCascade();
 
     // Backfill provider-derived QF documents from their original creation time;
     // do not grant old rows a new retention window during the migration.

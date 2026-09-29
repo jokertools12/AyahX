@@ -29,6 +29,15 @@ describe('Browser render harness', () => {
     expect(source).not.toContain('firstWordStart >= (rangeOffsetMs * 0.7)');
   });
 
+  it('keeps Quran Foundation attribution mandatory in the shared export scene', () => {
+    const source = fs.readFileSync(path.resolve(process.cwd(), 'public/render-harness.html'), 'utf8');
+    expect(source).toContain("manifest.timingMap?.sourceId === 'quran_foundation'");
+    expect(source).toContain("manifest.timingMap?.alignment?.provider === 'quran_foundation'");
+    expect(source).toContain("manifest.audio?.sourceMode === 'qf'");
+    expect(source).toContain("const creditText = 'Source: Quran Foundation';");
+    expect(source).toContain('window.__CREATE_RENDER_CONTROLLER__ = createRenderController;');
+  });
+
   it('never manufactures verse or word timing when evidence is absent', () => {
     const source = fs.readFileSync(path.resolve(process.cwd(), 'public/render-harness.html'), 'utf8');
     expect(source).toContain('No timing evidence. Keep a stable static verse');

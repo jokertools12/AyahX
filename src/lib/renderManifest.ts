@@ -108,6 +108,7 @@ export function buildClientRenderManifest(params: ClientManifestParams): any {
       sourceId: params.timingMap.sourceId,
       sourceMethod: params.timingMap.sourceMethod,
       audioContentHash: params.timingMap.audioContentHash,
+      createdAt: params.timingMap.createdAt,
       validationStatus: params.timingMap.validationStatus,
       alignment: params.timingMap.alignment,
       review: params.timingMap.review,
