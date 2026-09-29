@@ -47,7 +47,7 @@ export interface DisplaySettings {
   frameStyle: 'none' | 'simple' | 'ornate' | 'golden' | 'geometric' | 'modern' | 'minimal';
   ayahNumberStyle: 'quran3d' | 'circle' | 'star' | 'diamond' | 'octagon' | 'flower' | 'square' | 'hexagon';
   ayahNumberColor: 'gold' | 'metallicGold3D' | 'white' | 'silver' | 'emerald' | 'royal';
-  verseDisplayMode: 'full' | 'twoWords' | 'threeTwo' | 'wordByWord';
+  verseDisplayMode: 'full' | 'twoWords' | 'threeTwo' | 'wordByWord' | 'letterByLetter';
   /** Deterministic timing presentation profile shared by every renderer. */
   animationProfile?: AnimationProfile;
   animationReducedMotion?: boolean;
@@ -186,6 +186,7 @@ const verseDisplayModeOptions = [
   { value: 'twoWords', label: 'كلمتان', description: 'عرض كلمتين كلمتين بالتناوب' },
   { value: 'threeTwo', label: 'ثلاث ثم اثنتان', description: 'تقسيم إيقاعي ديناميكي' },
   { value: 'wordByWord', label: 'كلمة بكلمة', description: 'تظهر كل كلمة عند توقيتها؛ وتثبت السابقة أثناء الوقفة' },
+  { value: 'letterByLetter', label: 'حرفاً بحرف', description: 'يكشف حروف الكلمة مع توقيت QUA؛ يعود للكلمة كاملة إن لم تتوفر طبقة الحروف' },
 ];
 
 const animationProfileOptions: Array<{ value: AnimationProfile; label: string; description: string }> = [
@@ -610,6 +611,37 @@ export function DisplaySettingsPanel({ settings, onChange }: DisplaySettingsPane
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
+        {/* Unified production studio summary: the controls below are the
+            canonical source for preview, recording, and render manifests. */}
+        <div className="mx-4 mt-4 mb-2 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-background to-amber-500/5 p-4 shadow-sm" dir="rtl">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-primary" />
+                استوديو العرض والإنتاج
+              </p>
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                إعداد موحّد للمعاينة والتسجيل والتصدير؛ لا توجد إعدادات قديمة منفصلة عن هذا المصدر.
+              </p>
+            </div>
+            <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-medium text-emerald-600 dark:text-emerald-300">
+              جاهز للإنتاج
+            </span>
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] sm:grid-cols-4">
+            {[
+              ['Animate', animationProfileOptions.find((option) => option.value === (settings.animationProfile || 'karaoke'))?.label || 'كاريوكي'],
+              ['التقسيم', verseDisplayModeOptions.find((option) => option.value === (settings.verseDisplayMode || 'full'))?.label || 'الآية كاملة'],
+              ['التمييز', highlightOptions.find((option) => option.value === (settings.highlightStyle || 'glow'))?.label || 'توهج الكلمة'],
+              ['الهالة', glowStyleOptions.find((option) => option.value === (settings.glowStyle || 'golden'))?.label || 'ذهبي أصيل'],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-xl border border-border/50 bg-background/70 px-2.5 py-2">
+                <span className="block text-muted-foreground">{label}</span>
+                <span className="mt-0.5 block truncate font-medium text-foreground">{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
         {/* Accordion: All collapsed by default (defaultValue={[]}) as requested */}
         <Accordion type="multiple" defaultValue={[]} className="w-full">
           {/* ═══ Section 0: Visibility Elements ═══ */}

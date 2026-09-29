@@ -135,7 +135,7 @@
         if (safeTotal === 0 || safeActive === null || safeActive < 0 || safeActive >= safeTotal) {
           return { startIndex: 0, wordCount: 0 };
         }
-        if (mode === 'wordByWord') return { startIndex: safeActive, wordCount: 1 };
+        if (mode === 'wordByWord' || mode === 'letterByLetter') return { startIndex: safeActive, wordCount: 1 };
         if (mode === 'twoWords') {
           const startIndex = Math.floor(safeActive / 2) * 2;
           return { startIndex, wordCount: Math.min(2, safeTotal - startIndex) };
@@ -1549,7 +1549,7 @@
           const timeInAyahSec = Math.max(frameTimeSeconds - currentAyahStartSec, 0);
 
           // 7. Word-Level Highlighting Resolution
-          const ayahWords = (activeAyah.text || '').split(' ').filter(Boolean);
+          const ayahWords = (activeAyah.text || '').split(/\s+/).filter(word => stripTashkeel(word).replace(/[\u0640\s]/g, '').length > 0);
           let activeWordIndexInAyah = null;
           let activeWordProgress = 0;
           const animationProfile = normalizeAnimationProfile(
@@ -1772,12 +1772,40 @@
           if (!lyricLines) {
           const requestedVerseMode = displaySettings.verseDisplayMode || 'full';
           const verseMode = hasTrustedWordTiming ? requestedVerseMode : 'full';
-          const verseWordWindow = resolveVerseWordWindow(verseMode, ayahWords.length, activeWordIndexInAyah);
+          // A trusted map can still have a short, legitimate inter-ayah gap
+          // between the verse boundary and the first word event.  Do not turn
+          // that gap into an empty canvas: keep the complete current ayah
+          // visible until its first verified word starts.  This is a display
+          // safety rule only; it never invents a highlight or a timestamp.
+          const verseWordWindow = activeWordIndexInAyah == null && hasTrustedWordTiming
+            ? { startIndex: 0, wordCount: ayahWords.length }
+            : resolveVerseWordWindow(verseMode, ayahWords.length, activeWordIndexInAyah);
           let chunkStartWordIdx = verseWordWindow.startIndex;
           let displayWords = ayahWords.slice(
             verseWordWindow.startIndex,
             verseWordWindow.startIndex + verseWordWindow.wordCount,
           );
+
+          // QUA supplies an optional letter tier for the same word events. In
+          // letter-by-letter mode reveal only the letters whose trusted spans
+          // have started; if a different provider has no letter tier, fail
+          // closed to the complete active word rather than inventing timing.
+          if (hasTrustedWordTiming && verseMode === 'letterByLetter' && activeWordIndexInAyah != null) {
+            const activeCanonical = `${manifest.canonicalAyahRange?.surahNumber}:${activeAyah.numberInSurah}:${activeWordIndexInAyah + 1}`;
+            const activeTimingWord = timingMap.words.find(word => word.canonicalWordKey === activeCanonical);
+            const letterSpans = activeTimingWord && Array.isArray(activeTimingWord.letters) ? activeTimingWord.letters : [];
+            const sourceWord = ayahWords[activeWordIndexInAyah] || activeTimingWord?.displayToken || '';
+            if (letterSpans.length > 0) {
+              const revealed = letterSpans
+                .filter(letter => lookupTimeMs >= letter.startMs)
+                .map(letter => letter.token)
+                .join('');
+              displayWords = [revealed || sourceWord.charAt(0) || sourceWord];
+            } else {
+              displayWords = [sourceWord];
+            }
+            chunkStartWordIdx = activeWordIndexInAyah;
+          }
 
           // Teleprompter/isolate choose their own reading window only when the
           // user asked for a full ayah. An explicit word/chunk mode stays the
@@ -1841,7 +1869,7 @@
             }
 
             const fontFamily = resolveFontFamily(typography.fontFamily);
-            const modeScales = { wordByWord: 2.7, twoWords: 2.5, threeTwo: 2.3, full: 1.9 };
+            const modeScales = { letterByLetter: 2.9, wordByWord: 2.7, twoWords: 2.5, threeTwo: 2.3, full: 1.9 };
             const fontScale = modeScales[verseMode] || 1.9;
             const baseFontSize = (typography.fontSize || 28) * fontScale * S;
             let effectiveFontSize = baseFontSize;
@@ -2340,13 +2368,13 @@
             ctx.restore();
           }
 
-          // Quran Foundation requires source attribution for exported QF
-          // content. Keep this credit in the canonical scene so preview,
-          // FFmpeg, Skia, and Browser Cloud cannot silently omit it.
-          const requiresQfCredit = manifest.timingMap?.sourceId === 'quran_foundation'
+          // Keep required attribution tied to the actual dataset. QUA is not
+          // Quran Foundation and must never inherit the legacy QF label.
+          const isQuaTiming = manifest.timingMap?.sourceId === 'quranic_universal_audio';
+          const requiresQfCredit = !isQuaTiming && (manifest.timingMap?.sourceId === 'quran_foundation'
             || manifest.timingMap?.alignment?.provider === 'quran_foundation'
-            || manifest.audio?.sourceMode === 'qf';
-          if (requiresQfCredit) {
+            || manifest.audio?.sourceMode === 'qf');
+          if (requiresQfCredit || isQuaTiming) {
             const logoCorner = displaySettings.logoWatermarkPosition || 'topRight';
             const socialCorner = displaySettings.socialWatermarkPosition || displaySettings.watermarkPosition || 'bottomCenter';
             const headerCorner = displaySettings.surahNamePosition || 'top';
@@ -2357,7 +2385,9 @@
               && ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'].includes(headerCorner)) occupiedCorners.add(headerCorner);
             const creditCorner = ['bottomLeft', 'topLeft', 'bottomRight', 'topRight']
               .find((corner) => !occupiedCorners.has(corner)) || 'bottomCenter';
-            const creditText = 'Source: Quran Foundation';
+            const creditText = isQuaTiming
+              ? 'Source: Quranic Universal Audio'
+              : 'Source: Quran Foundation';
             const creditFontSize = Math.max(12, 13 * S);
             const creditPadX = Math.max(7, 8 * S);
             const creditPadY = Math.max(4, 5 * S);

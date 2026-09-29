@@ -223,14 +223,14 @@ describe('alignment orchestration', () => {
   });
 
   it('reports provider availability and legal review state explicitly', () => {
-    const descriptors = getAlignmentProviderDescriptors({ quranFoundationConfigured: false });
+    const descriptors = getAlignmentProviderDescriptors();
     const qua = descriptors.find((provider) => provider.id === 'quranic_universal_aligner');
     expect(qua).toBeDefined();
     expect(qua?.requiresHumanReview).toBe(true);
     expect(qua?.legalStatus).toBe('external_review_required');
 
     expect(descriptors.find((provider) => provider.id === 'quran_foundation')).toBeUndefined();
-    expect(getAlignmentProviderDescriptors({ quranFoundationConfigured: true })
+    expect(getAlignmentProviderDescriptors()
       .find((provider) => provider.id === 'quran_foundation')).toBeUndefined();
   });
 });

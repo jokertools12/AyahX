@@ -19,6 +19,7 @@ type AttestableSubsegment = {
 export type AttestableTimingMap = {
   mapId?: string;
   audioContentHash?: string;
+  audioFingerprintKind?: string;
   validationStatus?: string;
   sourceId?: string;
   sourceMethod?: string;
@@ -86,6 +87,7 @@ export function alignmentTimingDigest(map: AttestableTimingMap): string {
   const evidence = {
     mapId: map.mapId || '',
     audioContentHash: map.audioContentHash || '',
+    audioFingerprintKind: map.audioFingerprintKind || '',
     validationStatus: map.validationStatus || '',
     sourceId: map.sourceId || '',
     sourceMethod: map.sourceMethod || '',

@@ -95,7 +95,7 @@ const legacyQuranFoundationEnabled = (): boolean => false;
 
 /** How we play the ayahs */
 type PlaybackMode =
-  | 'qf'          // Quran Foundation single-file + word timestamps (best)
+  | 'qf'          // Legacy enum for paired chapter audio with catalog timing offsets
   | 'everyayah'   // EveryAyah.com – one MP3 per ayah (perfect verse clipping, no word highlight)
   | 'fallback';   // Full-surah source without attested word alignment
 
@@ -558,7 +558,12 @@ export default function PreviewPage() {
       contentKind: isIbtahalatMode ? 'lyrics' : 'quran',
       lyrics: isIbtahalatMode ? transcribedLines : undefined,
       audio: {
-        sourceMode: isIbtahalatMode ? 'single_url' : playbackMode === 'qf' ? 'qf' : playbackMode === 'everyayah' ? 'everyayah' : 'single_url',
+        // QUA uses the same chapter-clock playback path as the legacy QF
+        // adapter, but it must remain a distinct source in the manifest so
+        // the renderer never labels QUA output as Quran Foundation content.
+        sourceMode: isIbtahalatMode || activeTimingMap?.sourceId === 'quranic_universal_audio'
+          ? 'single_url'
+          : playbackMode === 'qf' ? 'qf' : playbackMode === 'everyayah' ? 'everyayah' : 'single_url',
         audioUrl: audioUrl || ibtAudioUrl || resolvedEveryAyahUrls?.[0] || '',
         audioContentHash: timingMap.audioContentHash,
         durationSeconds: effectiveDuration,
@@ -730,29 +735,18 @@ export default function PreviewPage() {
       return;
     }
     const loadData = async () => {
+      // Invalidate the previous range before the asynchronous fetch.  Without
+      // this, a same-length range could pass the audio effect's readiness
+      // check and pair fresh audio with stale Quran text for one render.
+      setAyahs([]);
       const data = await fetchAyahs(surahNumber, startAyah, endAyah);
       if (data) {
-        const processedAyahs = data.map((ayah, index) => {
-          let text = ayah.text;
-          if (index === 0 && startAyah <= 1 && surahNumber !== 1 && surahNumber !== 9) {
-            const words = text.split(/\s+/).filter(Boolean);
-            const normalize = (w: string) => w
-              .replace(/[^\u0621-\u064A\u0671-\u06FF]/g, '')
-              .replace(/[\u06E1\u06E4\u0640]/g, '')
-              .replace(/\u0671/g, '\u0627')
-              .replace(/\u06CC/g, '\u064A');
-            let cutAfter = -1;
-            for (let wi = 0; wi < Math.min(words.length, 8); wi++) {
-              const clean = normalize(words[wi]);
-              if (clean === 'الرحيم') { cutAfter = wi; break; }
-            }
-            if (cutAfter >= 0 && cutAfter < words.length - 1) {
-              text = words.slice(cutAfter + 1).join(' ');
-            }
-          }
-          return { ...ayah, text };
-        });
-        setAyahs(processedAyahs);
+        // Keep the canonical API text untouched.  Alignment packages index the
+        // exact Hafs word sequence; stripping a displayed basmala here made
+        // the reference intermittently disagree with the timing source.  Any
+        // presentation-only basmala treatment must happen in the renderer,
+        // never in the alignment request.
+        setAyahs(data);
       }
     };
     loadData();
@@ -785,6 +779,11 @@ export default function PreviewPage() {
     }
 
     if (!reciter) return;
+    const expectedAyahCount = Math.max(0, endAyah - startAyah + 1);
+    // Audio and alignment are a single transaction.  Waiting for the current
+    // Quran reference prevents the first render from sending an empty/stale
+    // ayah list and then silently falling back to verse-only timing.
+    if (ayahs.length !== expectedAyahCount) return;
     let cancelled = false;
 
     const load = async () => {
@@ -803,6 +802,49 @@ export default function PreviewPage() {
       everyAyahIndexRef.current = 0;
       setActiveTimingMap(null);
       activeTimingMapRef.current = null;
+
+      // ── Strategy 1: QUA v3.2.0 – paired chapter audio + canonical word tier ──
+      // The pinned timing release supplies the paired chapter URL via its
+      // catalog, so no separately guessed reciter URL can drift.
+      if (isAuthenticated && reciter.quranUniversalSlug && !cancelled) {
+        try {
+          const universal = await api.alignments.resolveUniversal({
+            reciterId: String(reciter.id),
+            reference: {
+              surahNumber,
+              startAyah,
+              endAyah,
+              ayahs,
+              quranTextVersion: 'uthmani_hafs_v1',
+            },
+            providerInput: { reciterSlug: reciter.quranUniversalSlug },
+          });
+          if (!cancelled && universal.timingMap?.validationStatus === 'approved') {
+            const universalMap = universal.timingMap as TimingMap;
+            const offsets = (universalMap.compositionOffsets || []).map((offset) => ({
+              verse_key: `${surahNumber}:${offset.ayahNumber}`,
+              timestamp_from: offset.startMs,
+              timestamp_to: offset.endMs,
+            }));
+            const first = offsets[0];
+            const last = offsets[offsets.length - 1];
+            if (!first || !last || !(last.timestamp_to > first.timestamp_from)) throw new Error('UNIVERSAL_ALIGNMENT_RANGE_INVALID');
+            setAudioUrl(universal.audioUrl);
+            setAyahTimings(offsets);
+            setRangeMs({ from: first.timestamp_from, to: last.timestamp_to });
+            setDuration((last.timestamp_to - first.timestamp_from) / 1000);
+            setPlaybackMode('qf');
+            timingMapRegistry.register(universalMap);
+            setActiveTimingMap(universalMap);
+            activeTimingMapRef.current = universalMap;
+            console.log(`✅ QUA word map loaded [${reciter.quranUniversalSlug}]`);
+            setTimingsLoading(false);
+            return;
+          }
+        } catch (universalError) {
+          console.info('QUA alignment unavailable for this range; trying exact EveryAyah fallback', universalError);
+        }
+      }
 
       // Legacy Quran Foundation strategy is intentionally disabled. Production
       // audio uses the internal alignment pipeline or an explicitly unaligned
@@ -1027,7 +1069,7 @@ export default function PreviewPage() {
 
     load();
     return () => { cancelled = true; };
-  }, [isIbtahalatMode, ibtAudioUrl, isAuthenticated, reciter?.id, reciter?.quranFoundationId, reciter?.everyAyahSubfolder, surahNumber, startAyah, endAyah, totalAyahsInSurah]);
+  }, [isIbtahalatMode, ibtAudioUrl, isAuthenticated, reciter, reciter?.id, reciter?.quranFoundationId, reciter?.everyAyahSubfolder, reciter?.quranUniversalSlug, surahNumber, startAyah, endAyah, totalAyahsInSurah, ayahs.length, ayahs]);
 
   // ── Audio effects init ──────────────────────────────────────────────────────
   useEffect(() => {
@@ -1650,7 +1692,11 @@ export default function PreviewPage() {
         contentKind: isIbtahalatMode ? 'lyrics' : 'quran',
         lyrics: isIbtahalatMode ? transcribedLines : undefined,
         audio: {
-          sourceMode: playbackMode === 'qf' ? 'qf' : playbackMode === 'everyayah' ? 'everyayah' : 'single_url',
+          // Keep QUA on the chapter-clock path while preserving its own
+          // provenance in the manifest; qf is reserved for legacy QF maps.
+          sourceMode: activeTimingMap?.sourceId === 'quranic_universal_audio'
+            ? 'single_url'
+            : playbackMode === 'qf' ? 'qf' : playbackMode === 'everyayah' ? 'everyayah' : 'single_url',
           audioUrl: resolvedAudioUrl || '',
           audioContentHash: resolvedTimingMap.audioContentHash,
           durationSeconds: effectiveDuration,
@@ -1749,8 +1795,8 @@ export default function PreviewPage() {
       let recordingStartAt = 0;
 
       // Any trimmed source (Quran or Ibtahalat) is represented by the same
-      // local scene clock. Quran Foundation audio remains absolute at the
-      // audio element, while the harness receives a zero-based frame time.
+      // local scene clock. Paired chapter audio remains absolute at the audio
+      // element, while the harness receives a zero-based frame time.
       if (trimEnabled && trimEnd > trimStart) {
         recordingDuration = trimEnd - trimStart;
         recordingStartAt = (playbackMode === 'qf' && rangeMs ? rangeMs.from / 1000 : 0) + trimStart;

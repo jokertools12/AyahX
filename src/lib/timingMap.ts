@@ -117,7 +117,9 @@ export interface TimingMap {
   providerRecitationId?: number | string | null;
   sourceId: string; // 'quran_foundation' | 'everyayah' | 'forced_alignment' | 'manual'
   sourceUrlOrImmutableAssetId: string;
-  audioContentHash: string; // SHA-256 fingerprint of audio binary or PCM
+  audioContentHash: string; // SHA-256 fingerprint of audio bytes, PCM, or a declared immutable asset identity
+  /** Distinguishes byte-level hashes from hashes of pinned external asset references. */
+  audioFingerprintKind?: 'audio_bytes_sha256' | 'dataset_asset_identity_sha256';
   audioByteLength?: number;
   decodedDurationMs: number;
   sampleRate: number;
@@ -348,6 +350,7 @@ export function validateTimingMap(map: TimingMap, expectedWordCount?: number): T
   let totalPhonemeSegments = 0;
   let totalConfidence = 0;
   let minConfidence = 1.0;
+
   const wordOccurrenceIds = new Set<string>();
 
   for (let i = 0; i < map.words.length; i++) {
@@ -668,7 +671,10 @@ export function buildAudioAlignedTimingMap(params: {
       endMs: ayah.audioEndMs,
     });
 
-    const ayahTokens = (ayah.text || '').split(' ').filter(Boolean);
+    // Standalone Uthmani pause marks are visual punctuation, not words.  They
+    // must not shift an imported word index (for example 2:2 contains ۛ marks
+    // between words in the Quran Foundation text).
+    const ayahTokens = (ayah.text || '').split(/\s+/).filter((token) => normalizeQuranicToken(token).length > 0);
     const ayahDur = Math.max(ayah.audioEndMs - ayah.audioStartMs, 100);
 
     if (explicitWordSpans && explicitWordSpans.length > 0) {

@@ -784,8 +784,37 @@ export default function AdminPage() {
 
           {/* Settings Tab */}
           <TabsContent value="settings" className="space-y-6">
+            <nav
+              aria-label="أقسام إعدادات التشغيل"
+              className="sticky top-3 z-20 -mx-1 overflow-x-auto rounded-2xl border border-border/70 bg-background/85 p-2 shadow-lg backdrop-blur-xl"
+            >
+              <div className="flex min-w-max items-center gap-2" dir="rtl">
+                <div className="px-3 text-xs font-semibold text-muted-foreground">مركز التحكم</div>
+                {[
+                  ['#admin-settings-ai', 'الذكاء والمفاتيح'],
+                  ['#admin-settings-alignment', 'المحاذاة وAnimate'],
+                  ['#admin-settings-render', 'التصيير والإخراج'],
+                  ['#admin-settings-integrations', 'الخدمات المتصلة'],
+                ].map(([href, label]) => (
+                  <a
+                    key={href}
+                    href={href}
+                    className="rounded-xl border border-transparent px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/30 hover:bg-primary/10 hover:text-foreground"
+                  >
+                    {label}
+                  </a>
+                ))}
+                <div className="mr-auto flex items-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-[11px] text-emerald-200">
+                  <span className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(110,231,183,0.9)]" />
+                  إعدادات قابلة للحفظ فوراً
+                </div>
+              </div>
+            </nav>
+
             {/* OpenRouter Control Deck */}
             <motion.section
+              id="admin-settings-ai"
+              className="scroll-mt-24"
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.38, ease: 'easeOut' }}
@@ -1049,7 +1078,7 @@ export default function AdminPage() {
             </motion.section>
 
             {/* Alignment readiness */}
-            <Card className="border-amber-500/30 bg-amber-500/[0.03] shadow-sm">
+            <Card id="admin-settings-alignment" className="scroll-mt-24 border-emerald-500/30 bg-emerald-500/[0.03] shadow-sm">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
@@ -1061,27 +1090,77 @@ export default function AdminPage() {
                       </CardDescription>
                     </div>
                   </div>
-                  <Badge variant="outline" className="shrink-0 border-amber-400/30 text-amber-200">بانتظار نموذج معتمد</Badge>
+                  <Badge variant="outline" className="shrink-0 border-emerald-400/30 bg-emerald-400/10 text-emerald-200">QUA v2.2.0 جاهز</Badge>
                 </div>
               </CardHeader>
-              <CardContent className="grid gap-3 text-xs md:grid-cols-3">
-                <div className="rounded-xl border border-border/60 bg-background/30 p-3">
+              <CardContent className="grid gap-3 text-xs md:grid-cols-4">
+                <div className="rounded-xl border border-emerald-400/20 bg-background/30 p-3">
+                  <p className="font-semibold text-foreground">المصدر المعتمد</p>
+                  <p className="mt-1 leading-5 text-muted-foreground">Quranic Universal Audio v2.2.0، دون OpenRouter ودون نموذج دافئ.</p>
+                </div>
+                <div className="rounded-xl border border-emerald-400/20 bg-background/30 p-3">
+                  <p className="font-semibold text-foreground">كلمة + حرف</p>
+                  <p className="mt-1 leading-5 text-muted-foreground">توقيتات كلمات وحروف موثقة، مع تحقق من نص حفص وبصمة مصدر الصوت.</p>
+                </div>
+                <div className="rounded-xl border border-emerald-400/20 bg-background/30 p-3">
+                  <p className="font-semibold text-foreground">القراء</p>
+                  <p className="mt-1 leading-5 text-muted-foreground">25+ قارئاً بمصادر صوت مباشرة؛ التغطية تظهر حسب القارئ والمقطع.</p>
+                </div>
+                <div className="rounded-xl border border-amber-400/20 bg-background/30 p-3">
                   <p className="font-semibold text-foreground">Internal CTC</p>
-                  <p className="mt-1 leading-5 text-muted-foreground">العامل منشور ومؤمّن، لكن بدون checkpoint مرخّص يعيد MODEL_NOT_CONFIGURED.</p>
+                  <p className="mt-1 leading-5 text-muted-foreground">اختياري فقط؛ يبقى مغلقاً حتى توفير checkpoint مرخّص. لا يؤثر على QUA.</p>
                 </div>
-                <div className="rounded-xl border border-border/60 bg-background/30 p-3">
-                  <p className="font-semibold text-foreground">Word highlight</p>
-                  <p className="mt-1 leading-5 text-muted-foreground">يُفعّل فقط بعد تغطية كاملة ومراجعة بشرية وبصمة صوت مطابقة.</p>
+              </CardContent>
+            </Card>
+
+            {/* Production render defaults */}
+            <Card id="admin-settings-render" className="scroll-mt-24 border-sky-500/25 bg-sky-500/[0.03] shadow-sm">
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-xl bg-sky-400/10 p-2.5 text-sky-300"><Video className="h-5 w-5" /></div>
+                    <div>
+                      <CardTitle className="text-base">افتراضات إنتاج الفيديو</CardTitle>
+                      <CardDescription className="mt-1 text-xs leading-6">تُطبَّق على بدء إنتاج الفيديو الجديد، بينما يستطيع المستخدم تعديلها داخل صفحة المعاينة.</CardDescription>
+                    </div>
+                  </div>
+                  <Badge variant="outline" className="border-sky-400/30 bg-sky-400/10 text-sky-200">Production defaults</Badge>
                 </div>
-                <div className="rounded-xl border border-border/60 bg-background/30 p-3">
-                  <p className="font-semibold text-foreground">Animate</p>
-                  <p className="mt-1 leading-5 text-muted-foreground">ملفات العرض منفصلة عن المحاذاة؛ لا تُعرض حركة متزامنة عند غياب المصدر الموثوق.</p>
+              </CardHeader>
+              <CardContent className="grid gap-4 md:grid-cols-4">
+                <div className="space-y-2">
+                  <Label className="text-xs">الجودة الافتراضية</Label>
+                  <Select value={editedSettings.REELS_DEFAULT_QUALITY} onValueChange={(value) => handleSettingChange('REELS_DEFAULT_QUALITY', value)}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent><SelectItem value="720p">720p</SelectItem><SelectItem value="1080p">1080p</SelectItem><SelectItem value="4k">4K</SelectItem></SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs">الإطارات في الثانية</Label>
+                  <Select value={editedSettings.REELS_DEFAULT_FPS} onValueChange={(value) => handleSettingChange('REELS_DEFAULT_FPS', value)}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent><SelectItem value="30">30 FPS</SelectItem><SelectItem value="60">60 FPS</SelectItem></SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs">نمط التوهج</Label>
+                  <Select value={editedSettings.REELS_DEFAULT_GLOW} onValueChange={(value) => handleSettingChange('REELS_DEFAULT_GLOW', value)}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent><SelectItem value="golden">ذهبي</SelectItem><SelectItem value="emerald">زمردي</SelectItem><SelectItem value="cyan">سماوي</SelectItem><SelectItem value="ruby">ياقوتي</SelectItem></SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs">معدل الصوت</Label>
+                  <Select value={editedSettings.REELS_AUDIO_BITRATE} onValueChange={(value) => handleSettingChange('REELS_AUDIO_BITRATE', value)}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent><SelectItem value="128k">128 kbps</SelectItem><SelectItem value="192k">192 kbps</SelectItem><SelectItem value="320k">320 kbps</SelectItem></SelectContent>
+                  </Select>
                 </div>
               </CardContent>
             </Card>
 
             {/* AI & Media APIs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div id="admin-settings-integrations" className="scroll-mt-24 grid grid-cols-1 gap-6 md:grid-cols-2">
               {/* Google Gemini Card */}
               <Card className="border-border/60 shadow-sm">
                 <CardHeader className="pb-3">
