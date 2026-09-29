@@ -28,187 +28,168 @@ import {
   Maximize2,
   CheckCircle2,
   Lock,
+  AlertTriangle,
+  Loader2,
+  Info,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useState, useRef } from 'react';
+import { cn } from '@/lib/utils';
 import { useSubscription } from '@/hooks/useSubscription';
 import { api } from '@/lib/api';
 import { PremiumBadge } from '@/components/PremiumBadge';
-import type { AnimationProfile } from '@/lib/animationTimeline';
+import type { AnimationProfile, VerseDisplayMode } from '@/lib/animationTimeline';
+import {
+  type AyahNumberColor,
+  type AyahNumberStyle,
+  type AyahTransition,
+  type FrameStyle,
+  type GlowStyle,
+  type HighlightStyle,
+  type LogoWatermarkPosition,
+  type LogoWatermarkPreset,
+  type LyricsDisplayStyle,
+  type ReciterNameStyle,
+  type ScreenBorderColor,
+  type ScreenBorderStyle,
+  type SlideshowTransition,
+  type SocialPlatform,
+  type SocialWatermarkPosition,
+  type SurahNamePosition,
+  type SurahNameStyle,
+  type TextShadowStyle,
+  type VisualDesign,
+  type WatermarkPosition,
+} from '@/data/displayValueUnions';
+import {
+  AYAH_NUMBER_COLOR_OPTIONS,
+  AYAH_NUMBER_STYLE_OPTIONS,
+  AYAH_TRANSITION_OPTIONS,
+  ANIMATION_PROFILE_OPTIONS,
+  FRAME_STYLE_OPTIONS,
+  GLOW_STYLE_OPTIONS,
+  HIGHLIGHT_STYLE_OPTIONS,
+  LOGO_WATERMARK_POSITION_OPTIONS,
+  LOGO_WATERMARK_PRESET_OPTIONS,
+  RECITER_NAME_STYLE_OPTIONS,
+  SCREEN_BORDER_COLOR_OPTIONS,
+  SCREEN_BORDER_STYLE_OPTIONS,
+  SOCIAL_PLATFORM_OPTIONS,
+  SOCIAL_WATERMARK_POSITION_OPTIONS,
+  SURA_NAME_POSITION_OPTIONS,
+  SURA_NAME_STYLE_OPTIONS,
+  TEXT_SHADOW_OPTIONS,
+  VERSE_DISPLAY_MODE_OPTIONS,
+  WATERMARK_POSITION_OPTIONS,
+} from '@/data/displayOptions';
+import {
+  type LetterTimingTier,
+  describeLetterTiming,
+  describeVerseModeConflict,
+  isGlowColorEnabled,
+  isGlowSectionEnabled,
+  isReducedMotionEnabled,
+} from '@/lib/displayInterlocks';
 
+/**
+ * The display contract shared by the browser, the render harness, and every
+ * server engine. Field types are imported from `displayValueUnions` so this
+ * interface cannot drift from `server/models/renderManifest.ts` — that drift is
+ * what previously hid `'pill'`, `'double'`, and `'center'` from the UI even
+ * though the production renderers already supported them.
+ */
 export interface DisplaySettings {
   /** Overall visual direction for the reel canvas. */
-  visualDesign?: 'dawn' | 'editorial' | 'moonlit';
+  visualDesign?: VisualDesign;
   showSurahName: boolean;
   showReciterName: boolean;
   showAyahText: boolean;
   showAyahNumber: boolean;
-  highlightStyle: 'none' | 'solid' | 'glow' | 'underline' | 'shadow';
-  frameStyle: 'none' | 'simple' | 'ornate' | 'golden' | 'geometric' | 'modern' | 'minimal';
-  ayahNumberStyle: 'quran3d' | 'circle' | 'star' | 'diamond' | 'octagon' | 'flower' | 'square' | 'hexagon';
-  ayahNumberColor: 'gold' | 'metallicGold3D' | 'white' | 'silver' | 'emerald' | 'royal';
-  verseDisplayMode: 'full' | 'twoWords' | 'threeTwo' | 'wordByWord' | 'letterByLetter';
+  highlightStyle: HighlightStyle;
+  frameStyle: FrameStyle;
+  ayahNumberStyle: AyahNumberStyle;
+  ayahNumberColor: AyahNumberColor;
+  verseDisplayMode: VerseDisplayMode;
   /** Deterministic timing presentation profile shared by every renderer. */
   animationProfile?: AnimationProfile;
   animationReducedMotion?: boolean;
-  surahNamePosition: 'top' | 'bottom' | 'topLeft' | 'topRight';
-  surahNameStyle: 'classic' | 'goldenBadge' | 'banner' | 'calligraphy' | 'circle' | 'diamond' | 'ribbon';
-  reciterNameStyle: 'simple' | 'elegant' | 'audioPill' | 'badge' | 'tag' | 'glow';
-  textShadowStyle: 'none' | 'soft' | 'strong' | '3d' | 'glow' | 'outline';
-  ayahTransition: 'none' | 'fade' | 'slide' | 'zoom' | 'blur' | 'rise' | 'rotate' | 'cinematic' | 'elastic' | 'random';
+  surahNamePosition: SurahNamePosition;
+  surahNameStyle: SurahNameStyle;
+  reciterNameStyle: ReciterNameStyle;
+  textShadowStyle: TextShadowStyle;
+  ayahTransition: AyahTransition;
 
   // Legacy / Basic Watermark compatibility
   watermarkEnabled: boolean;
   watermarkText: string;
-  watermarkPosition: 'bottomLeft' | 'bottomRight' | 'topLeft' | 'topRight' | 'bottomCenter';
+  watermarkPosition: WatermarkPosition;
 
   // Dual-mode Watermark: Logo & Channel Identity
   logoWatermarkEnabled?: boolean;
-  logoWatermarkPreset?: 'goldCalligraphy' | 'circularMedallion' | 'geometricEmblem' | 'glassMonogram' | 'custom';
+  logoWatermarkPreset?: LogoWatermarkPreset;
   logoBrandName?: string;
   logoSubtitle?: string;
   logoWatermarkUrl?: string;
-  logoWatermarkPosition?: 'topRight' | 'topLeft' | 'bottomRight' | 'bottomLeft';
-  logoWatermarkSize?: number; // 40 - 150
-  logoWatermarkOpacity?: number; // 0.2 - 1.0
+  logoWatermarkPosition?: LogoWatermarkPosition;
+  logoWatermarkSize?: number; // 20 - 300
+  logoWatermarkOpacity?: number; // 0 - 1
 
   // Full-Screen Video Border
-  screenBorderStyle?: 'none' | 'goldenTrim' | 'islamicCorners' | 'doubleCinema' | 'royalCrest' | 'subtleVignette';
-  screenBorderColor?: 'gold' | 'emerald' | 'white' | 'silver';
+  screenBorderStyle?: ScreenBorderStyle;
+  screenBorderColor?: ScreenBorderColor;
 
   // Dual-mode Watermark: Social Handle
   socialWatermarkEnabled?: boolean;
-  socialPlatform?: 'facebook' | 'instagram' | 'tiktok' | 'youtube' | 'x' | 'custom';
+  socialPlatform?: SocialPlatform;
   socialHandle?: string;
-  socialWatermarkPosition?: 'bottomCenter' | 'bottomRight' | 'bottomLeft' | 'topCenter';
-  socialWatermarkSize?: number; // 12 - 28
-  socialWatermarkOpacity?: number; // 0.3 - 1.0
+  socialWatermarkPosition?: SocialWatermarkPosition;
+  socialWatermarkSize?: number; // 8 - 100
+  socialWatermarkOpacity?: number; // 0 - 1
 
-  glowStyle?: 'none' | 'golden' | 'soft' | 'neon' | 'pulse' | 'emerald' | 'royal';
-  lyricsDisplayStyle: 'scroll' | 'single' | 'karaoke' | 'fade';
-  slideshowTransition: 'crossfade' | 'slideLeft' | 'slideRight' | 'slideUp' | 'zoomThrough' | 'wipe' | 'mixed';
+  glowStyle?: GlowStyle;
+  lyricsDisplayStyle: LyricsDisplayStyle;
+  slideshowTransition: SlideshowTransition;
 }
 
-interface DisplaySettingsPanelProps {
+export interface DisplaySettingsPanelProps {
   settings: DisplaySettings;
   onChange: (settings: DisplaySettings) => void;
-  letterTimingStatus?: 'idle' | 'loading' | 'available' | 'unavailable' | 'requires-auth' | 'unsupported';
+  letterTimingStatus?: LetterTimingTier;
+  /** True when the selected reciter publishes a verified letter tier. */
+  letterTimingAvailable?: boolean;
 }
 
-const highlightOptions = [
-  { value: 'none', label: 'بدون تمييز', description: 'لا يتم تمييز الكلمات' },
-  { value: 'glow', label: 'توهج الكلمة', description: 'إضاءة محيطية حول الكلمة المقروءة' },
-  { value: 'solid', label: 'تظليل مملوء', description: 'كبسولة خلفية ملونة' },
-  { value: 'underline', label: 'خط سفلي', description: 'خط ذهبي أنيق تحت الكلمة' },
-  { value: 'shadow', label: 'ظل ناعم', description: 'ظل عميق محيط' },
-];
 
-const frameOptions = [
-  { value: 'none', label: 'بدون إطار', description: 'نص حر بدون حواف' },
-  { value: 'simple', label: 'إطار أنيق', description: 'حدود رفيعة ناعمة' },
-  { value: 'ornate', label: 'إطار مزخرف', description: 'زخرفة إسلامية كلاسيكية' },
-  { value: 'golden', label: 'إطار ذهبي', description: 'توهج وحواف ذهبية 3D' },
-  { value: 'geometric', label: 'إطار هندسي', description: 'أنماط هندسية دقيقة' },
-  { value: 'modern', label: 'إطار عصري', description: 'خطوط ناعمة منحنية' },
-  { value: 'minimal', label: 'إطار بسيط', description: 'حد واحد شفاف' },
-];
+/**
+ * Option lists now resolve to `src/data/displayOptions.ts`. The previous local
+ * copies are deleted on purpose: keeping them is what allowed the create page
+ * and this panel to disagree on labels and to ship values the manifest rejects.
+ * The only lists still declared here are the two that have no shared consumer
+ * yet (AI logo styles, and the lyrics/slideshow pair used by ibtahalat mode).
+ */
+const highlightOptions = HIGHLIGHT_STYLE_OPTIONS;
+const frameOptions = FRAME_STYLE_OPTIONS;
+const ayahNumberOptions = AYAH_NUMBER_STYLE_OPTIONS;
+const surahPositionOptions = SURA_NAME_POSITION_OPTIONS;
+const textShadowOptions = TEXT_SHADOW_OPTIONS;
+const transitionOptions = AYAH_TRANSITION_OPTIONS;
+const surahNameStyleOptions = SURA_NAME_STYLE_OPTIONS;
+const reciterNameStyleOptions = RECITER_NAME_STYLE_OPTIONS;
+const ayahNumberColorOptions = AYAH_NUMBER_COLOR_OPTIONS;
+const verseDisplayModeOptions = VERSE_DISPLAY_MODE_OPTIONS;
+const animationProfileOptions = ANIMATION_PROFILE_OPTIONS;
+const glowStyleOptions = GLOW_STYLE_OPTIONS;
+const logoPresentationOptions = LOGO_WATERMARK_PRESET_OPTIONS;
+const logoPositionOptions = LOGO_WATERMARK_POSITION_OPTIONS;
+const socialPositionOptions = SOCIAL_WATERMARK_POSITION_OPTIONS;
+const screenBorderStyleOptions = SCREEN_BORDER_STYLE_OPTIONS;
+const screenBorderColorOptions = SCREEN_BORDER_COLOR_OPTIONS;
 
-const ayahNumberOptions = [
-  { value: 'quran3d', label: 'قوس قرآني 3D ﴿...﴾', description: 'قوس ذهبي مذهب مثل الريلز الفيروسي' },
-  { value: 'circle', label: 'دائرة ذهبية', description: '◯' },
-  { value: 'star', label: 'نجمة إسلامية', description: '✦' },
-  { value: 'diamond', label: 'معين ملكي', description: '◇' },
-  { value: 'octagon', label: 'مثمن هندسي', description: '⬡' },
-  { value: 'flower', label: 'زهرة قرآنية', description: '✿' },
-  { value: 'square', label: 'مربع عصري', description: '◻' },
-  { value: 'hexagon', label: 'سداسي', description: '⬢' },
-];
-
-const surahPositionOptions = [
-  { value: 'top', label: 'أعلى المنتصف', description: 'مركز الأعلى' },
-  { value: 'bottom', label: 'أسفل', description: 'مركز الأسفل' },
-  { value: 'topLeft', label: 'أعلى يسار', description: 'الزاوية العليا' },
-  { value: 'topRight', label: 'أعلى يمين', description: 'الزاوية اليمنى' },
-];
-
-// Default to 'none' as requested
-const textShadowOptions = [
-  { value: 'none', label: 'بدون ظل (افتراضي)', description: 'نص نقي مسطح مثل الريلز الاحترافية' },
-  { value: 'soft', label: 'ظل سينمائي ناعم', description: 'تدرج خفيف يعطي بعداً' },
-  { value: 'strong', label: 'ظل داكن بارز', description: 'ظل عميق ذو تباين عالٍ' },
-  { value: '3d', label: 'تجسيم 3D عميق', description: 'بروز واقعي ثلاثي الأبعاد' },
-  { value: 'glow', label: 'توهج نوراني', description: 'هالة ضوئية مشعة' },
-  { value: 'outline', label: 'تحديد كونتور Outline', description: 'حدود محيطية دقيقة' },
-];
-
-const transitionOptions = [
-  { value: 'none', label: 'بدون انتقال', description: 'ظهور مباشر' },
-  { value: 'fade', label: 'تلاشي ناعم', description: 'ظهور تدريجي سينمائي' },
-  { value: 'slide', label: 'انزلاق', description: 'دخول انسيابي من الأسفل' },
-  { value: 'zoom', label: 'تكبير ناعم', description: 'تقريب للداخل' },
-  { value: 'blur', label: 'كشف ضبابي', description: 'إزالة الضبابية' },
-  { value: 'rise', label: 'صعود ناعم', description: 'ارتفاع سينمائي' },
-  { value: 'rotate', label: 'دوران خفيف', description: 'ميل احترافي' },
-  { value: 'cinematic', label: 'سينمائي درامي', description: 'دخول درامي ناعم' },
-  { value: 'elastic', label: 'مرن وأنيق', description: 'ارتداد هادئ' },
-  { value: 'random', label: '🎲 عشوائي', description: 'تأثير مختلف لكل آية' },
-];
-
-const surahNameStyleOptions = [
-  { value: 'classic', label: 'كلاسيكي', description: 'شارة مستطيلة مزخرفة' },
-  { value: 'goldenBadge', label: 'شارة ذهبية ملكية', description: 'إطار ذهبي محفور' },
-  { value: 'banner', label: 'لافتة', description: 'شريط عريض متدرج' },
-  { value: 'calligraphy', label: 'خطي حر', description: 'نص مزخرف بدون خلفية' },
-  { value: 'circle', label: 'دائرة', description: 'داخل دائرة ذهبية' },
-  { value: 'diamond', label: 'معين', description: 'شكل ماسي أنيق' },
-  { value: 'ribbon', label: 'شريط', description: 'شريط ملفوف متدرج' },
-];
-
-const reciterNameStyleOptions = [
-  { value: 'simple', label: 'بسيط نقي', description: 'نص أنيق شفاف' },
-  { value: 'audioPill', label: 'كبسولة صوتية', description: 'شارة بيضاوية مع أيقونة ميكروفون' },
-  { value: 'elegant', label: 'أنيق بظل', description: 'خط مزخرف بظل ناعم' },
-  { value: 'badge', label: 'شارة', description: 'داخل شارة مستطيلة' },
-  { value: 'tag', label: 'علامة حديثة', description: 'تصميم وسم عصري' },
-  { value: 'glow', label: 'متوهج', description: 'توهج ذهبي حول النص' },
-];
-
-const ayahNumberColorOptions = [
-  { value: 'gold', label: 'ذهبي أصيل', description: '✨', color: '#D4AF37' },
-  { value: 'metallicGold3D', label: 'ذهبي معدني 3D', description: '👑', color: '#FFD700' },
-  { value: 'white', label: 'أبيض ناصع', description: '⬜', color: '#FFFFFF' },
-  { value: 'silver', label: 'فضي لامع', description: '🩶', color: '#C0C0C0' },
-  { value: 'emerald', label: 'زمردي إسلامي', description: '💚', color: '#10B981' },
-  { value: 'royal', label: 'بنفسجي ملكي', description: '💜', color: '#8B5CF6' },
-];
-
-const verseDisplayModeOptions = [
-  { value: 'full', label: 'الآية كاملة', description: 'عرض الآية كاملة مع التمرير والالتفاف' },
-  { value: 'twoWords', label: 'كلمتان', description: 'عرض كلمتين كلمتين بالتناوب' },
-  { value: 'threeTwo', label: 'ثلاث ثم اثنتان', description: 'تقسيم إيقاعي ديناميكي' },
-  { value: 'wordByWord', label: 'كلمة بكلمة', description: 'تظهر كل كلمة عند توقيتها؛ وتثبت السابقة أثناء الوقفة' },
-  { value: 'letterByLetter', label: 'حرفاً بحرف', description: 'يكشف حروف الكلمة مع توقيت QUA؛ يعود للكلمة كاملة إن لم تتوفر طبقة الحروف' },
-];
-
-const animationProfileOptions: Array<{ value: AnimationProfile; label: string; description: string }> = [
-  { value: 'karaoke', label: 'كاريوكي دقيق', description: 'تمييز الكلمة مع ساعة الصوت' },
-  { value: 'teleprompter', label: 'Teleprompter', description: 'نافذة ناعمة حول الكلمة الحالية' },
-  { value: 'reveal', label: 'كشف تدريجي', description: 'الكلمات تظهر بعد نطقها' },
-  { value: 'fade', label: 'تلاشي متتابع', description: 'الماضي يهدأ والقادم ينتظر' },
-  { value: 'spotlight', label: 'Spotlight', description: 'تركيز بصري قوي على الكلمة الحالية' },
-  { value: 'isolate', label: 'عزل الكلمة', description: 'عرض الكلمة الحالية فقط' },
-  { value: 'consume', label: 'استهلاك النص', description: 'الكلمات المنطوقة تختفي تدريجيًا' },
-  { value: 'static', label: 'ثابت', description: 'النص كامل بلا حركة زمنية' },
-];
-
-const glowStyleOptions = [
-  { value: 'golden', label: 'ذهبي أصيل', description: 'توهج ملكي دافئ (#D4AF37)' },
-  { value: 'soft', label: 'إشراقة بيضاء', description: 'إضاءة نورانية هادئة ونقية' },
-  { value: 'neon', label: 'نيون سماوي', description: 'توهج أزرق سماوي ساطع' },
-  { value: 'emerald', label: 'أخضر زمردي', description: 'توهج إسلامي فاخر' },
-  { value: 'pulse', label: 'نبض عنبري', description: 'توهج متموج ومتحرك' },
-  { value: 'royal', label: 'بنفسجي ملكي', description: 'توهج مهيب فاخر' },
-  { value: 'none', label: 'بدون توهج', description: 'لون نص ثابت' },
+const logoAiStyleOptions = [
+  { value: 'goldMedallion', label: 'ختم ملكي مذهب', desc: 'نجمة إسلامية ثمانية مع حواف لؤلؤية وتدرج ذهبي' },
+  { value: 'ottomanCrest', label: 'وسام عثماني فاخر', desc: 'هلال مذهب وزخارف تاجية ملكية' },
+  { value: 'modernGeometric', label: 'شعار هندسي حديث', desc: 'درع هندسي ثلاثي الأبعاد مع إضاءة نيون' },
+  { value: 'classicCalligraphy', label: 'خط عربي كلاسيكي', desc: 'حلقة أرابيسك نباتية وخط ثلث فاخر' },
 ];
 
 const lyricsDisplayOptions = [
@@ -228,65 +209,8 @@ const slideshowTransitionOptions = [
   { value: 'mixed', label: '🎲 متنوع تلقائي', description: 'انتقال مختلف لكل صورة' },
 ];
 
-const watermarkPositionOptions = [
-  { value: 'bottomRight', label: 'أسفل يمين', description: 'الزاوية السفلى اليمنى' },
-  { value: 'bottomCenter', label: 'أسفل وسط (موصى به)', description: 'منتصف أسفل الفيديو' },
-  { value: 'bottomLeft', label: 'أسفل يسار', description: 'الزاوية السفلى اليسرى' },
-  { value: 'topRight', label: 'أعلى يمين', description: 'الزاوية العليا اليمنى' },
-  { value: 'topLeft', label: 'أعلى يسار', description: 'الزاوية العليا اليسرى' },
-];
+const socialPlatformOptions = SOCIAL_PLATFORM_OPTIONS;
 
-const socialPositionOptions = [
-  ...watermarkPositionOptions.slice(0, 3),
-  { value: 'topCenter', label: 'أعلى وسط', description: 'شريط هوية علوي واضح' },
-];
-
-const logoPositionOptions = [
-  { value: 'topRight', label: 'أعلى يمين (موصى به)', description: 'الزاوية العليا اليمنى' },
-  { value: 'topLeft', label: 'أعلى يسار', description: 'الزاوية العليا اليسرى' },
-  { value: 'bottomRight', label: 'أسفل يمين', description: 'الزاوية السفلى اليمنى' },
-  { value: 'bottomLeft', label: 'أسفل يسار', description: 'الزاوية السفلى اليسرى' },
-];
-
-const logoPresentationOptions = [
-  { value: 'goldCalligraphy', label: 'ختم ذهبي 2D', description: 'هوية عربية هادئة' },
-  { value: 'circularMedallion', label: 'ميدالية ملكية 3D', description: 'عمق وحواف مذهبّة' },
-  { value: 'geometricEmblem', label: 'شعار هندسي 2D', description: 'دقة عصرية واضحة' },
-  { value: 'glassMonogram', label: 'زجاجي فاخر 3D', description: 'طبقات شفافة راقية' },
-  { value: 'custom', label: 'صورة مخصصة', description: 'شعار القناة الحقيقي' },
-];
-
-const socialPlatformOptions = [
-  { value: 'facebook', label: 'فيسبوك (ⓕ)', icon: 'ⓕ' },
-  { value: 'instagram', label: 'إنستجرام', icon: '📸' },
-  { value: 'tiktok', label: 'تيك توك', icon: '🎵' },
-  { value: 'youtube', label: 'يوتيوب', icon: '▶' },
-  { value: 'x', label: 'منصة X', icon: '𝕏' },
-  { value: 'custom', label: 'نص مخصص', icon: '✏️' },
-];
-
-const screenBorderStyleOptions = [
-  { value: 'none', label: 'بدون إطار شاشة', description: 'شاشة سينمائية حرة' },
-  { value: 'goldenTrim', label: 'إطار ذهبي رفيع مزدوج', description: 'برواز ذهبي سينمائي ناعم ومضيء' },
-  { value: 'islamicCorners', label: 'زخارف إسلامية ملكية', description: 'زخارف إسلامية فاخرة في زوايا الشاشة' },
-  { value: 'doubleCinema', label: 'إطار سينمائي منحني', description: 'حواف سينمائية مزدوجة 3D' },
-  { value: 'royalCrest', label: 'برواز عثماني منقوش', description: 'نقش ملكي محفور يحيط بالفيديو' },
-  { value: 'subtleVignette', label: 'تظليل سينمائي محيطي', description: 'تدرج أسود ناعم يعزز تركيز النص' },
-];
-
-const screenBorderColorOptions = [
-  { value: 'gold', label: 'ذهبي ملكي', description: '✨', color: '#D4AF37' },
-  { value: 'emerald', label: 'أخضر زمردي', description: '💚', color: '#10B981' },
-  { value: 'white', label: 'أبيض ناصع', description: '⬜', color: '#FFFFFF' },
-  { value: 'silver', label: 'فضي كلاسيكي', description: '🩶', color: '#CBD5E1' },
-];
-
-const logoAiStyleOptions = [
-  { value: 'goldMedallion', label: 'ختم ملكي مذهب', desc: 'نجمة إسلامية ثمانية مع حواف لؤلؤية وتدرج ذهبي' },
-  { value: 'ottomanCrest', label: 'وسام عثماني فاخر', desc: 'هلال مذهب وزخارف تاجية ملكية' },
-  { value: 'modernGeometric', label: 'شعار هندسي حديث', desc: 'درع هندسي ثلاثي الأبعاد مع إضاءة نيون' },
-  { value: 'classicCalligraphy', label: 'خط عربي كلاسيكي', desc: 'حلقة أرابيسك نباتية وخط ثلث فاخر' },
-];
 
 const TEMPLATES_KEY = 'ayah-clip-display-templates';
 
@@ -459,40 +383,65 @@ function RadioOptionGrid({
   onChange,
   idPrefix,
   columns = 2,
+  disabledValues,
 }: {
-  options: { value: string; label: string; description?: string; color?: string }[];
+  options: ReadonlyArray<{ value: string; label: string; description?: string; color?: string; badge?: string }>;
   value: string;
   onChange: (val: string) => void;
   idPrefix: string;
   columns?: number;
+  /** Interlock: option values that must not accept input in this state. */
+  disabledValues?: readonly string[];
 }) {
   const gridCols = columns === 3 ? 'grid-cols-3' : columns === 4 ? 'grid-cols-4' : 'grid-cols-2';
+  // `disabledValues` implements the interlock rules: an option that cannot
+  // affect the render is visibly inert instead of silently accepting a click.
+  const isOptionDisabled = (value: string) => disabledValues?.includes(value) === true;
   return (
     <RadioGroup value={value} onValueChange={onChange} className={`grid ${gridCols} gap-2`}>
-      {options.map((option) => (
+      {options.map((option) => {
+        const disabled = isOptionDisabled(option.value);
+        return (
         <div key={option.value} className="relative">
-          <RadioGroupItem value={option.value} id={`${idPrefix}-${option.value}`} className="peer sr-only" />
+          <RadioGroupItem
+            value={option.value}
+            id={`${idPrefix}-${option.value}`}
+            className="peer sr-only"
+            disabled={disabled}
+          />
           <Label
             htmlFor={`${idPrefix}-${option.value}`}
-            className="flex flex-col items-center rounded-lg border-2 border-muted p-2.5 hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer transition-all text-center h-full justify-center"
+            aria-disabled={disabled}
+            title={disabled ? 'هذا الخيار غير متاح ضمن إعداداتك الحالية' : option.description}
+            className={cn(
+              'relative flex flex-col items-center rounded-lg border-2 p-2.5 transition-all text-center h-full justify-center',
+              disabled
+                ? 'border-muted/40 bg-muted/20 opacity-45 cursor-not-allowed'
+                : 'border-muted hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer',
+            )}
           >
-            {option.color ? (
-              <span className="text-lg" style={{ color: option.color }}>
+            {option.color && (
+              <span
+                aria-hidden="true"
+                className="h-5 w-5 rounded-full border border-border/50"
+                style={{ backgroundColor: option.color }}
+              />
+            )}
+            <span className="font-medium text-xs sm:text-sm leading-tight">{option.label}</span>
+            {option.description && (
+              <span className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2 text-center">
                 {option.description}
               </span>
-            ) : (
-              <span className="font-medium text-xs sm:text-sm">{option.label}</span>
             )}
-            {option.color ? (
-              <span className="text-xs font-medium">{option.label}</span>
-            ) : (
-              option.description && (
-                <span className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{option.description}</span>
-              )
+            {option.badge && (
+              <span className="absolute -top-2 -left-2 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-bold text-primary-foreground shadow-sm">
+                {option.badge}
+              </span>
             )}
           </Label>
         </div>
-      ))}
+        );
+      })}
     </RadioGroup>
   );
 }
@@ -509,6 +458,25 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
   const updateSetting = <K extends keyof DisplaySettings>(key: K, value: DisplaySettings[K]) => {
     onChange({ ...settings, [key]: value });
   };
+
+  // ── Interlock state ──────────────────────────────────────────────────────────
+  // Every dependent control reads these, so a combination that cannot change
+  // the render is visibly inert rather than silently accepting input.
+  const glowSectionEnabled = isGlowSectionEnabled(settings);
+  const glowColorEnabled = isGlowColorEnabled(settings);
+  const reducedMotionEnabled = isReducedMotionEnabled(settings);
+  const verseModeConflict = describeVerseModeConflict(settings);
+  const letterNotice = describeLetterTiming(letterTimingStatus);
+  const letterToneClass =
+    letterNotice.tone === 'ready'
+      ? 'text-emerald-500'
+      : letterNotice.tone === 'warning'
+        ? 'text-amber-500'
+        : 'text-muted-foreground';
+
+  // `static` cannot pulse, so reduced motion has nothing left to switch off.
+  // Clear it rather than persisting a switch that appears to do something.
+  const effectiveReducedMotion = reducedMotionEnabled ? settings.animationReducedMotion : false;
 
   const handleGenerateAiLogo = async () => {
     if (!canUseFeature('aiLogo')) {
@@ -720,25 +688,41 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
                 />
               </div>
 
-              {/* Glow Aura Style (Active for glow / highlighting) */}
+              {/* Glow Aura Style. Interlock: this section only changes the
+                  render while a highlight style is active AND the glow
+                  palette is not set to 'none'. Otherwise it is inert, so we
+                  dim it and explain why instead of accepting dead clicks. */}
               {settings.highlightStyle !== 'none' && (
-                <div className="space-y-3 p-3.5 rounded-xl bg-gradient-to-r from-primary/5 via-muted/40 to-primary/5 border border-primary/20">
-                  <div className="flex items-center justify-between">
+                <div
+                  className={cn(
+                    'space-y-3 p-3.5 rounded-xl border transition-opacity',
+                    glowColorEnabled
+                      ? 'bg-gradient-to-r from-primary/5 via-muted/40 to-primary/5 border-primary/20'
+                      : 'bg-muted/20 border-border/40 opacity-60',
+                  )}
+                >
+                  <div className="flex items-center justify-between gap-2">
                     <Label className="text-xs sm:text-sm flex items-center gap-1.5 font-semibold text-primary">
                       <Sparkles className="h-4 w-4" />
                       نوع ولون هالة التوهج (Glow Aura Style)
                     </Label>
                     <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                      مظهر سينمائي
+                      {glowColorEnabled ? 'مظهر سينمائي' : 'معطّل'}
                     </span>
                   </div>
-                  <RadioOptionGrid
-                    options={glowStyleOptions}
-                    value={settings.glowStyle || 'golden'}
-                    onChange={(v) => updateSetting('glowStyle', v as DisplaySettings['glowStyle'])}
-                    idPrefix="glowstyle"
-                    columns={3}
-                  />
+                  {glowColorEnabled ? (
+                    <RadioOptionGrid
+                      options={glowStyleOptions}
+                      value={settings.glowStyle || 'golden'}
+                      onChange={(v) => updateSetting('glowStyle', v as DisplaySettings['glowStyle'])}
+                      idPrefix="glowstyle"
+                      columns={3}
+                    />
+                  ) : (
+                    <p className="rounded-lg border border-border/40 bg-muted/30 p-2.5 text-[11px] leading-relaxed text-muted-foreground">
+                      خيار «بدون توهج» مُفعَّل، فلا يوجد لون لونه الآن. اختر أي لون من القائمة أعلاه لتفعيل الهالة.
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -799,11 +783,10 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
               </span>
             </AccordionTrigger>
             <AccordionContent className="space-y-5 pb-4">
-              {/* Verse Display Mode */}
+              {/* ── Verse display mode ── */}
               <div className="space-y-3">
-                <Label className="text-sm flex items-center gap-2 font-medium">
-                  <Type className="h-4 w-4 text-primary" />
-                  طريقة تقسيم وععرض الآيات
+                <Label className="text-xs font-medium text-muted-foreground">
+                  طريقة تقسيم الآية
                 </Label>
                 <RadioOptionGrid
                   options={verseDisplayModeOptions}
@@ -811,32 +794,37 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
                   onChange={(v) => updateSetting('verseDisplayMode', v as DisplaySettings['verseDisplayMode'])}
                   idPrefix="vdm"
                 />
-                {settings.verseDisplayMode === 'letterByLetter' && letterTimingStatus !== 'idle' && (
+                {settings.verseDisplayMode === 'letterByLetter' && (
                   <p
                     role="status"
                     aria-live="polite"
-                    className={`text-[11px] ${letterTimingStatus === 'available' ? 'text-emerald-500' : letterTimingStatus === 'loading' ? 'text-muted-foreground' : 'text-amber-500'}`}
+                    className={cn(
+                      'flex items-start gap-1.5 rounded-lg border border-border/40 bg-muted/30 p-2.5 text-[11px] leading-relaxed',
+                      letterToneClass,
+                    )}
                   >
-                    {letterTimingStatus === 'available' && 'توقيت الحروف المعتمد جاهز لهذا القارئ والنطاق.'}
-                    {letterTimingStatus === 'loading' && 'جارٍ تحميل توقيت الحروف من الحزمة المعتمدة؛ تبقى مزامنة الكلمات فعالة أثناء التحميل.'}
-                    {letterTimingStatus === 'unavailable' && 'لا تتوفر طبقة حروف كاملة لهذا النطاق؛ سيبقى العرض على الكلمة الموقّتة دون اختلاق توقيت.'}
-                    {letterTimingStatus === 'requires-auth' && 'سجّل الدخول لتحميل طبقة الحروف المعتمدة لهذا القارئ.'}
-                    {letterTimingStatus === 'unsupported' && 'هذا القارئ لا يوفّر حالياً طبقة حروف موثقة؛ سيبقى العرض على الكلمة الموقّتة.'}
+                    {letterNotice.tone === 'ready' && <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0" />}
+                    {letterNotice.tone === 'loading' && <Loader2 className="mt-0.5 h-3 w-3 shrink-0 animate-spin" />}
+                    {letterNotice.tone === 'warning' && <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" />}
+                    {letterNotice.tone === 'info' && <Info className="mt-0.5 h-3 w-3 shrink-0" />}
+                    <span>{letterNotice.message}</span>
+                  </p>
+                )}
+                {verseModeConflict && (
+                  <p
+                    role="status"
+                    className="flex items-start gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/[0.07] p-2.5 text-[11px] leading-relaxed text-amber-600 dark:text-amber-400"
+                  >
+                    <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" />
+                    <span>{verseModeConflict}</span>
                   </p>
                 )}
               </div>
 
-              {/* Deterministic animation profile. This is deliberately
-                  separate from verse chunking: the profile consumes trusted
-                  TimingMap events and never estimates audio timing. */}
-              <div className="space-y-3 pt-2 border-t border-border/40">
-                <Label className="text-sm flex items-center gap-2 font-medium">
-                  <Sparkles className="h-4 w-4 text-primary" />
-                  وضع Animate الاحترافي
-                </Label>
-                <p className="text-[11px] text-muted-foreground">
-                  تتبع خريطة توقيت معتمدة في المعاينة والتسجيل والتصدير؛ بدونها يبقى النص كاملاً بلا توقيت مُختلق.
-                </p>
+              {/* ── Deterministic animation profile ──
+                  Consumes trusted TimingMap events only; it never estimates audio timing. ── */}
+              <div className="space-y-3 border-t border-border/40 pt-4">
+                <Label className="text-xs font-medium text-muted-foreground">نمط الحركة داخل الآية</Label>
                 <RadioOptionGrid
                   options={animationProfileOptions}
                   value={settings.animationProfile || 'karaoke'}
@@ -844,14 +832,29 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
                   idPrefix="animation-profile"
                   columns={2}
                 />
-                <div className="flex items-center justify-between rounded-lg border border-border/40 p-2.5">
+                <div
+                  className={cn(
+                    'flex items-center justify-between gap-3 rounded-lg border p-3 transition-opacity',
+                    reducedMotionEnabled ? 'border-border/40' : 'border-border/20 opacity-50',
+                  )}
+                >
                   <div>
-                    <Label htmlFor="animation-reduced-motion" className="text-sm cursor-pointer">تقليل الحركة</Label>
-                    <p className="text-[11px] text-muted-foreground">يحافظ على التوقيت ويوقف النبض والتكبير فقط</p>
+                    <Label
+                      htmlFor="animation-reduced-motion"
+                      className={cn('text-sm', reducedMotionEnabled && 'cursor-pointer')}
+                    >
+                      تقليل الحركة
+                    </Label>
+                    <p className="text-[11px] text-muted-foreground">
+                      {reducedMotionEnabled
+                        ? 'يحافظ على التوقيت ويوقف النبض والتكبير فقط'
+                        : 'النمط «ثابت وقور» لا يحوي نبضاً، فالمفتاح بلا أثر هنا'}
+                    </p>
                   </div>
                   <Switch
                     id="animation-reduced-motion"
-                    checked={settings.animationReducedMotion === true}
+                    disabled={!reducedMotionEnabled}
+                    checked={effectiveReducedMotion === true}
                     onCheckedChange={(checked) => updateSetting('animationReducedMotion', checked)}
                   />
                 </div>

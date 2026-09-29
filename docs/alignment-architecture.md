@@ -88,15 +88,50 @@ remains authoritative over profile-specific windows. A trusted map holds its
 last word through pauses, but a word/chunk layout shows no guessed first word
 between an ayah transition and the next exact word onset.
 
-The current profile clock is word-occurrence based. Letter-level timing is not
-yet a supported render tier. In particular, QUA's letter data is a set of
-script-specific paint ranges over DigitalKhatt Unicode scalars, not ordinary
-per-character timestamps; it needs a dedicated renderer mapping and font/text
-parity tests before AyahX may advertise letter-synchronous animation.
+The current profile clock is word-occurrence based. Letter-level animation is
+rendered only from an explicitly trusted letter tier: QUA's letter data is a set
+of script-specific paint ranges over DigitalKhatt Unicode scalars, not ordinary
+per-character timestamps. The harness therefore reveals only the glyph groups
+whose verified spans have already started, and fails closed to the complete
+active word when a provider supplies no letter tier. AyahX never subdivides a
+word's duration to simulate letter timing.
+
+Because that tier depends on the selected reciter and ayah range, the UI states
+which case applies instead of implying precision it cannot deliver
+(`src/lib/displayInterlocks.ts`):
+
+| Tier state | What the panel reports |
+| --- | --- |
+| `loading` / `idle` | Word sync stays live while the letter tier is fetched |
+| `available` | Each letter appears at its verified onset |
+| `unavailable` / `unsupported` | The complete timed word is shown, with no invented timing |
+| `requires-auth` | Sign in to load the approved letter tier for that reciter |
+
+`letterByLetter` degrades to `wordByWord` whenever the tier cannot exist, so the
+exported video matches the preview rather than drifting between the two.
 
 If the map is not approved, the harness forcibly selects a full-ayah static
 view. The UI may still show the chosen profile as a design preference, but it
 cannot imply exact synchronization until the evidence gate passes.
+
+## Display setting interlocks
+
+`src/data/displayOptions.ts` is the single source for every display option, and
+`src/data/displayValueUnions.ts` holds the value unions that are kept identical
+to the zod enums in `server/models/renderManifest.ts`. The create page and the
+preview display panel both read these lists, so a label cannot drift between the
+two surfaces and a value the manifest rejects cannot be offered.
+
+Several option combinations cannot change the render. `src/lib/displayInterlocks.ts`
+makes that visible instead of accepting dead input:
+
+- `highlightStyle: 'none'` disables the glow section; `glowStyle: 'none'`
+  disables the colour picker.
+- `animationProfile: 'static'` disables the reduced-motion switch, because that
+  profile never pulses in the first place.
+- `isolate` and `teleprompter` with the full-verse layout raise a notice that the
+  narrow read needs a chunked verse mode — the settings are left as the user
+  chose them, and the render harness does the correct thing on its own.
 
 ## Worker deployment
 

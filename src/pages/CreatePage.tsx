@@ -63,12 +63,27 @@ import {
   Sun,
   Flame,
   Sliders,
+  AlertTriangle,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { ErrorState } from '@/components/ErrorState';
 import { normalizeArabicText, cn } from '@/lib/utils';
 import type { DisplaySettings } from '@/components/DisplaySettingsPanel';
 import type { AnimationProfile } from '@/lib/animationTimeline';
+import {
+  ANIMATION_PROFILE_OPTIONS,
+  AYAH_TRANSITION_OPTIONS,
+  GLOW_STYLE_OPTIONS,
+  HIGHLIGHT_STYLE_OPTIONS,
+  TEXT_SHADOW_OPTIONS,
+  VERSE_DISPLAY_MODE_OPTIONS,
+} from '@/data/displayOptions';
+import {
+  describeVerseModeConflict,
+  isGlowColorEnabled,
+  isGlowSectionEnabled,
+  isReducedMotionEnabled,
+} from '@/lib/displayInterlocks';
 
 type AspectRatio = '9:16' | '16:9';
 type ContentMode = 'surah' | 'famous' | 'ibtahalat';
@@ -81,64 +96,20 @@ const defaultTextSettings: TextSettings = {
   overlayOpacity: 0.4,
 };
 
-const verseDisplayModeOptions: Array<{ value: DisplaySettings['verseDisplayMode']; label: string; description: string; badge?: string }> = [
-  { value: 'full', label: 'الآية كاملة', description: 'عرض الآية كاملة مع التمرير والانسياب' },
-  { value: 'wordByWord', label: 'كلمة بكلمة', description: 'تظهر كل كلمة في موضعها مع توقيت الصوت' },
-  { value: 'letterByLetter', label: 'حرفاً بحرف (Animate)', description: 'كشف انسيابي فائق الدقة لحروف الكلمة', badge: 'احترافي' },
-  { value: 'twoWords', label: 'كلمتان كلمتان', description: 'عرض ثنائي إيقاعي بالتناوب' },
-  { value: 'threeTwo', label: 'ثلاث ثم اثنتان', description: 'تقسيم إيقاعي ذكي للآية' },
-];
-
-const animationProfileOptions: Array<{ value: AnimationProfile; label: string; description: string }> = [
-  { value: 'karaoke', label: 'كاريوكي سلس', description: 'تمييز متزامن مع ساعة الصوت بدقة' },
-  { value: 'teleprompter', label: 'Teleprompter', description: 'نافذة متحركة ناعمة حول الكلمة الحالية' },
-  { value: 'reveal', label: 'كشف تدريجي', description: 'ظهور الكلمات تباعاً بعد نطقها' },
-  { value: 'fade', label: 'تلاشي متتابع', description: 'الماضي يهدأ والقادم ينتظر بوقار' },
-  { value: 'spotlight', label: 'Spotlight', description: 'تسليط ضوء بصري قوي على الكلمة المقروءة' },
-  { value: 'isolate', label: 'عزل الكلمة', description: 'عرض الكلمة الحالية فقط في المشهد' },
-  { value: 'consume', label: 'استهلاك النص', description: 'الكلمات المنطوقة تختفي تدريجياً' },
-  { value: 'static', label: 'ثابت وقور', description: 'نص كامل هادئ بلا حركة زمنية' },
-];
-
-const highlightOptions: Array<{ value: DisplaySettings['highlightStyle']; label: string; description: string }> = [
-  { value: 'glow', label: 'توهج الكلمة', description: 'إضاءة محيطية حول الكلمة المقروءة' },
-  { value: 'solid', label: 'تظليل مملوء', description: 'كبسولة خلفية ملونة أنيقة' },
-  { value: 'underline', label: 'خط سفلي', description: 'خط ذهبي أنيق تحت الكلمة' },
-  { value: 'shadow', label: 'ظل ناعم', description: 'ظل عميق محيط يبرز الكلمة' },
-  { value: 'none', label: 'بدون تمييز', description: 'نص نقي بلا تظليل إضافي' },
-];
-
-const glowOptions: Array<{ value: NonNullable<DisplaySettings['glowStyle']>; label: string; color: string; description: string }> = [
-  { value: 'golden', label: 'ذهبي أصيل', color: '#D4AF37', description: 'توهج ملكي دافئ (#D4AF37)' },
-  { value: 'soft', label: 'إشراقة بيضاء', color: '#FFFFFF', description: 'إضاءة نورانية هادئة ونقية' },
-  { value: 'neon', label: 'نيون سماوي', color: '#38BDF8', description: 'توهج أزرق سماوي ساطع' },
-  { value: 'emerald', label: 'أخضر زمردي', color: '#10B981', description: 'توهج قرآني فاخر' },
-  { value: 'pulse', label: 'نبض عنبري', color: '#F59E0B', description: 'توهج متموج ومتحرك' },
-  { value: 'royal', label: 'بنفسجي ملكي', color: '#8B5CF6', description: 'توهج مهيب فاخر' },
-  { value: 'none', label: 'بدون توهج', color: '#6B7280', description: 'لون نص طبيعي ثابت' },
-];
-
-const shadowOptions: Array<{ value: DisplaySettings['textShadowStyle']; label: string; description: string }> = [
-  { value: 'none', label: 'بدون ظل', description: 'نص نقي مسطح مثل الريلز الاحترافية' },
-  { value: 'soft', label: 'ظل سينمائي ناعم', description: 'تدرج خفيف يعطي بعداً جمالياً' },
-  { value: 'strong', label: 'ظل داكن بارز', description: 'ظل عميق ذو تباين عالٍ' },
-  { value: '3d', label: 'تجسيم 3D عميق', description: 'بروز واقعي ثلاثي الأبعاد' },
-  { value: 'glow', label: 'توهج نوراني', description: 'هالة ضوئية مشعة' },
-  { value: 'outline', label: 'تحديد كونتور Outline', description: 'حدود محيطية دقيقة حول الحروف' },
-];
-
-const transitionOptions: Array<{ value: DisplaySettings['ayahTransition']; label: string; description: string }> = [
-  { value: 'fade', label: 'تلاشي ناعم', description: 'ظهور تدريجي سينمائي' },
-  { value: 'slide', label: 'انزلاق', description: 'دخول انسيابي من الأسفل' },
-  { value: 'zoom', label: 'تكبير ناعم', description: 'تقريب هادئ للداخل' },
-  { value: 'blur', label: 'كشف ضبابي', description: 'إزالة الضبابية تدريجياً' },
-  { value: 'rise', label: 'صعود ناعم', description: 'ارتفاع سينمائي وقور' },
-  { value: 'rotate', label: 'دوران خفيف', description: 'ميل احترافي خفيف' },
-  { value: 'cinematic', label: 'سينمائي درامي', description: 'دخول درامي مركب' },
-  { value: 'elastic', label: 'مرن وأنيق', description: 'ارتداد هادئ ومريح' },
-  { value: 'random', label: '🎲 عشوائي', description: 'تأثير مختلف لكل آية' },
-  { value: 'none', label: 'بدون انتقال', description: 'ظهور مباشر فوري' },
-];
+/**
+ * These aliases point at `src/data/displayOptions.ts`, the same source the
+ * preview display panel renders from. The create page used to keep private
+ * copies, which is how the two surfaces drifted apart in wording and in the
+ * values they could produce. One source means the label a user reads while
+ * choosing is the label they see in the preview, and every value offered here
+ * is accepted by `server/models/renderManifest.ts`.
+ */
+const verseDisplayModeOptions = VERSE_DISPLAY_MODE_OPTIONS;
+const animationProfileOptions = ANIMATION_PROFILE_OPTIONS;
+const highlightOptions = HIGHLIGHT_STYLE_OPTIONS;
+const glowOptions = GLOW_STYLE_OPTIONS;
+const shadowOptions = TEXT_SHADOW_OPTIONS;
+const transitionOptions = AYAH_TRANSITION_OPTIONS;
 
 export default function CreatePage() {
   const [searchParams] = useSearchParams();
@@ -174,6 +145,23 @@ export default function CreatePage() {
   const [glowStyle, setGlowStyle] = useState<NonNullable<DisplaySettings['glowStyle']>>('golden');
   const [textShadowStyle, setTextShadowStyle] = useState<DisplaySettings['textShadowStyle']>('none');
   const [ayahTransition, setAyahTransition] = useState<DisplaySettings['ayahTransition']>('fade');
+
+  // ── Interlock state ──────────────────────────────────────────────────────────
+  // Same rules the preview panel applies, so choosing a combination here cannot
+  // produce a state that looks valid in one surface and inert in the other.
+  const motionSettings = useMemo(
+    () => ({
+      verseDisplayMode: verseDisplayMode as DisplaySettings['verseDisplayMode'],
+      animationProfile,
+      highlightStyle,
+      glowStyle,
+    }),
+    [verseDisplayMode, animationProfile, highlightStyle, glowStyle],
+  );
+  const glowSectionEnabled = isGlowSectionEnabled(motionSettings);
+  const glowColorEnabled = isGlowColorEnabled(motionSettings);
+  const reducedMotionEnabled = isReducedMotionEnabled(motionSettings);
+  const verseModeConflict = describeVerseModeConflict(motionSettings);
 
   const quickPresets = useMemo(() => [
     {
@@ -1661,6 +1649,27 @@ export default function CreatePage() {
                               <span>تلاوة هذا القارئ معتمدة رسمياً ومزودة بطبقة كشف الحروف والكلمات اللحظية بدقة 100%.</span>
                             </div>
                           )}
+                          {verseDisplayMode === 'letterByLetter' && !selectedReciterData?.quranUniversalSlug && (
+                            <div
+                              role="status"
+                              className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-start gap-2 text-[11px] leading-relaxed text-amber-500"
+                            >
+                              <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                              <span>
+                                هذا القارئ غير موجود في كتالوج التوقيت المعتمد، لذا سيعرض المشهد الكلمة الموقّتة كاملة
+                                بدلاً من كشف الحروف — دون اختلاق أي توقيت. اختر قارئاً معتمداً لتفعيل Animate الحرفي.
+                              </span>
+                            </div>
+                          )}
+                          {verseModeConflict && (
+                            <div
+                              role="status"
+                              className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-start gap-2 text-[11px] leading-relaxed text-amber-500"
+                            >
+                              <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                              <span>{verseModeConflict}</span>
+                            </div>
+                          )}
                         </div>
 
                         {/* 2. Animation Profile */}
@@ -1750,24 +1759,34 @@ export default function CreatePage() {
                           </div>
                         </div>
 
-                        {/* 4. Glow Aura Style & Color */}
-                        <div className="space-y-3 pt-4 border-t border-border/40">
+                        {/* 4. Glow Aura Style & Color — interlocked: the colour
+                            picker only changes the render while a highlight style
+                            is active and the palette is not set to 'none'. */}
+                        <div
+                          className={cn(
+                            'space-y-3 pt-4 border-t border-border/40 transition-opacity',
+                            !glowColorEnabled && 'opacity-55',
+                          )}
+                        >
                           <Label className="text-sm font-semibold flex items-center gap-2">
                             <span>نوع ولون هالة التوهج (Glow Aura Style)</span>
                             <Badge variant="outline" className="text-[11px] font-normal">
-                              {glowOptions.find((o) => o.value === glowStyle)?.label}
+                              {glowColorEnabled
+                                ? glowOptions.find((o) => o.value === glowStyle)?.label
+                                : 'معطّل'}
                             </Badge>
                           </Label>
-                          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
-                            {glowOptions.map((option) => {
-                              const isSelected = glowStyle === option.value;
-                              return (
-                                <div
-                                  key={option.value}
-                                  onClick={() => setGlowStyle(option.value)}
-                                  className={cn(
-                                    'p-3 rounded-xl border-2 transition-all cursor-pointer flex flex-col items-center text-center justify-between gap-2',
-                                    isSelected
+                          {glowColorEnabled ? (
+                            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+                              {glowOptions.map((option) => {
+                                const isSelected = glowStyle === option.value;
+                                return (
+                                  <div
+                                    key={option.value}
+                                    onClick={() => setGlowStyle(option.value as NonNullable<DisplaySettings['glowStyle']>)}
+                                    className={cn(
+                                      'p-3 rounded-xl border-2 transition-all cursor-pointer flex flex-col items-center text-center justify-between gap-2',
+                                      isSelected
                                       ? 'border-primary bg-primary/5 shadow-sm'
                                       : 'border-border/60 hover:border-primary/40 bg-card hover:bg-muted/40'
                                   )}
@@ -1790,9 +1809,16 @@ export default function CreatePage() {
                                     </span>
                                   </div>
                                 </div>
-                              );
-                            })}
-                          </div>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <p className="rounded-lg border border-border/40 bg-muted/40 p-3 text-[11px] leading-relaxed text-muted-foreground">
+                              {highlightStyle === 'none'
+                                ? 'نمط التمييز الحالي «بدون تمييز»، فلا هالة تُلوَّن. اختر نمط تمييز من الأعلى لتفعيل الهالة.'
+                                : 'خيار «بدون توهج» مُفعَّل، فلا يوجد لون للهالة. اختر أي لون من الأعلى لتفعيلها.'}
+                            </p>
+                          )}
                         </div>
                       </TabsContent>
 

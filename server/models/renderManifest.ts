@@ -239,7 +239,13 @@ export const RenderManifestSchema = z.object({
     screenBorderColor: z.enum(['gold', 'emerald', 'silver', 'white']).default('gold'),
     ayahNumberStyle: z.enum(['quran3d', 'circle', 'star', 'diamond', 'octagon', 'flower', 'square', 'hexagon']).default('quran3d'),
     ayahNumberColor: z.enum(['gold', 'metallicGold3D', 'white', 'silver', 'emerald', 'royal']).default('metallicGold3D'),
-  verseDisplayMode: z.enum(['full', 'twoWords', 'threeTwo', 'wordByWord', 'letterByLetter']).default('full'),
+    verseDisplayMode: z.enum(['full', 'twoWords', 'threeTwo', 'wordByWord', 'letterByLetter']).default('full'),
+    // Deterministic presentation profiles. These were previously accepted by the
+    // browser preview but absent from the manifest, so a chosen Animate profile
+    // was silently dropped on export. They only change presentation of an
+    // immutable TimingMap and never manufacture a word or letter boundary.
+    animationProfile: z.enum(['static', 'karaoke', 'teleprompter', 'reveal', 'fade', 'spotlight', 'isolate', 'consume']).default('karaoke'),
+    animationReducedMotion: z.boolean().default(false),
     surahNamePosition: z.enum(['top', 'bottom', 'topLeft', 'topRight', 'center']).default('top'),
     surahNameStyle: z.enum(['classic', 'goldenBadge', 'banner', 'calligraphy', 'circle', 'diamond', 'ribbon', 'modern', 'ornate', 'minimal']).default('classic'),
     reciterNameStyle: z.enum(['simple', 'elegant', 'audioPill', 'badge', 'tag', 'glow', 'pill', 'gold', 'bordered']).default('simple'),
