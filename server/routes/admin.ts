@@ -322,9 +322,6 @@ router.post('/settings', async (req: AuthenticatedRequest, res: Response) => {
     const { isSettingsSecretEncryptionConfigured } = await import('../services/secretSettingsCrypto');
 
     const knownKeys: Record<string, { isSecret: boolean; category: string }> = {
-      QF_CLIENT_ID: { isSecret: false, category: 'quran_foundation' },
-      QF_CLIENT_SECRET: { isSecret: true, category: 'quran_foundation' },
-      QF_ENV: { isSecret: false, category: 'quran_foundation' },
       GEMINI_API_KEY: { isSecret: true, category: 'ai' },
       AI_PROVIDER: { isSecret: false, category: 'ai' },
       AI_IMAGE_PROVIDER: { isSecret: false, category: 'ai' },
@@ -373,38 +370,6 @@ router.post('/settings', async (req: AuthenticatedRequest, res: Response) => {
     return res.status(isSecretStorageError ? 422 : 500).json({
       error: isSecretStorageError ? err.message : 'فشل حفظ إعدادات النظام',
       code: isSecretStorageError ? err.code : undefined,
-    });
-  }
-});
-
-/**
- * POST /api/admin/settings/test-quran-foundation
- * Tests connection to Quran Foundation OAuth2 and Content APIs
- */
-router.post('/settings/test-quran-foundation', async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const { testConnection, getQuranFoundationConfig } = await import('../services/quranFoundationService');
-    const { clientId, clientSecret, env } = req.body || {};
-    const targetEnv = env === 'production' ? 'production' : 'prelive';
-
-    const hasNewSecret = typeof clientSecret === 'string'
-      && clientSecret.trim().length > 0
-      && !clientSecret.includes('****');
-    const override = hasNewSecret && typeof clientId === 'string' && clientId.trim()
-      ? {
-        clientId: clientId.trim(),
-        clientSecret: clientSecret.trim(),
-        env: targetEnv,
-      }
-      : await getQuranFoundationConfig(targetEnv);
-
-    const result = await testConnection(override);
-    return res.json(result);
-  } catch (err: any) {
-    console.error('Test Quran Foundation error:', err);
-    return res.status(500).json({
-      success: false,
-      message: err.message || 'حدث خطأ غير متوقع أثناء فحص الاتصال',
     });
   }
 });

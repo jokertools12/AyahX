@@ -529,7 +529,6 @@ let defaultRegistry: AlignmentProviderRegistry | null = null;
 export function getAlignmentProviderRegistry(): AlignmentProviderRegistry {
   if (defaultRegistry) return defaultRegistry;
   defaultRegistry = new AlignmentProviderRegistry()
-    .register(quranFoundationProvider())
     .register(manualProvider())
     .register(verifiedDatasetProvider())
     .register(externalProvider('internal_ctc'))
@@ -538,8 +537,7 @@ export function getAlignmentProviderRegistry(): AlignmentProviderRegistry {
   return defaultRegistry;
 }
 
-export function getAlignmentProviderDescriptors(options: { quranFoundationConfigured?: boolean } = {}): AlignmentProviderDescriptor[] {
-  const quranFoundationConfigured = options.quranFoundationConfigured === true;
+export function getAlignmentProviderDescriptors(): AlignmentProviderDescriptor[] {
   const external = (id: 'internal_ctc' | 'quranic_universal_aligner' | 'lafzize'): AlignmentProviderDescriptor => {
     const config = externalProviderConfig[id];
     const endpointConfigured = Boolean(process.env[config.envUrl] || (config.altEnvUrl && process.env[config.altEnvUrl]));
@@ -560,15 +558,6 @@ export function getAlignmentProviderDescriptors(options: { quranFoundationConfig
     };
   };
   return [
-    {
-      id: 'quran_foundation',
-      label: 'Quran Foundation word segments',
-      configured: quranFoundationConfigured,
-      supports: ['word'],
-      requiresHumanReview: false,
-      legalStatus: 'first_party_data',
-      ...(quranFoundationConfigured ? {} : { unavailableReason: 'يتطلب إعداد بيانات OAuth الخاصة بـ Quran Foundation في هذه البيئة' }),
-    },
     {
       id: 'manual',
       label: 'مراجعة يدوية',

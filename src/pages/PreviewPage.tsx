@@ -800,8 +800,10 @@ export default function PreviewPage() {
       setActiveTimingMap(null);
       activeTimingMapRef.current = null;
 
-      // ── Strategy 1: Quran Foundation (word-level sync) ──────────────────────
-      if (reciter.quranFoundationId) {
+      // Legacy Quran Foundation strategy is intentionally disabled. Production
+      // audio uses the internal alignment pipeline or an explicitly unaligned
+      // fallback; no external timing source is accepted here.
+      if (false && reciter.quranFoundationId) {
         try {
           const audioFile = await fetchChapterRecitationAudioById(reciter.quranFoundationId, surahNumber, true);
           const all = audioFile.timestamps ?? [];

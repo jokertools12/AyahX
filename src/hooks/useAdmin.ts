@@ -100,10 +100,6 @@ export function useAdmin() {
     }
   }, []);
 
-  const testQuranFoundation = useCallback(async (payload?: { clientId?: string; clientSecret?: string; env?: string }) => {
-    return await api.admin.testQuranFoundation(payload);
-  }, []);
-
   const testGemini = useCallback(async (apiKey?: string) => {
     return await api.admin.testGemini(apiKey);
   }, []);
@@ -140,7 +136,6 @@ export function useAdmin() {
     fetchDailyVideoStats,
     fetchSettings,
     saveSettings,
-    testQuranFoundation,
     testGemini,
     testOpenRouter,
     testPexels,

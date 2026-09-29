@@ -17,7 +17,6 @@ import {
 } from '../services/alignmentRepository';
 import { alignmentDocumentToTimingMap } from '../services/alignmentProvider';
 import { issueApprovedTimingMapAttestation } from '../services/alignmentAttestation';
-import { getQuranFoundationConfig } from '../services/quranFoundationService';
 
 const router = Router();
 
@@ -57,9 +56,8 @@ function publicDocument(document: any, userId: string) {
 
 /** Provider discovery is explicit so the UI cannot accidentally fall back. */
 router.get('/providers', requireAuth, async (_req: AuthenticatedRequest, res: Response) => {
-  const qfConfig = await getQuranFoundationConfig().catch(() => ({ hasCredentials: false }));
   return res.json({
-    providers: getAlignmentProviderDescriptors({ quranFoundationConfigured: qfConfig.hasCredentials }),
+    providers: getAlignmentProviderDescriptors(),
   });
 });
 
