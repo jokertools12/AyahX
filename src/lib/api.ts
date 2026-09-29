@@ -618,22 +618,6 @@ export const api = {
       });
     },
 
-    async testQuranFoundation(payload?: { clientId?: string; clientSecret?: string; env?: string }) {
-      return request<{
-        success: boolean;
-        message: string;
-        environment: string;
-        latencyMs: number;
-        scopes?: string;
-        expiresIn?: number;
-        chaptersCount?: number;
-        error?: string;
-      }>('/api/admin/settings/test-quran-foundation', {
-        method: 'POST',
-        body: JSON.stringify(payload || {}),
-      });
-    },
-
     async testGemini(apiKey?: string) {
       return request<{ success: boolean; message: string; latencyMs: number }>('/api/admin/settings/test-gemini', {
         method: 'POST',

@@ -16,7 +16,6 @@ browser audio selection
         v
 authenticated Node alignment route
         |
-        +-- quran_foundation: server OAuth fetch -> strict coverage -> streamed SHA-256
         +-- internal_ctc: signed request -> FastAPI/Modal worker -> exact result -> review
         +-- verified_dataset: explicit attestation and provenance
         +-- manual: immutable review revision
@@ -26,6 +25,10 @@ immutable AlignmentDocument + user-bound HMAC attestation
         v
 RenderManifest -> shared render-harness -> FFmpeg / Skia / Browser Cloud
 ```
+
+Quran Foundation credentials and the first-party timing provider are disabled
+in the current product build. Public Quran content may still be used for
+display fallback, but it is never promoted to an attested timing source.
 
 The HMAC is not a substitute for validation. It binds the user, map id, audio
 hash, provider, and every timing interval, so a browser cannot edit an
@@ -37,7 +40,7 @@ word-by-word synchronization.
 
 | Provider | Role in AyahX | Trust / release gate |
 | --- | --- | --- |
-| `quran_foundation` | First-party word segments for supported QF recitations | Server OAuth, complete contiguous coverage, allowlisted audio, streamed SHA-256; no browser timestamps or fallback. Follow QF's current Developer Terms: do not train on QF content without written consent; raw timing/content retention is at most seven days absent an approved Content Sync/other exception; credit QF where content is displayed/exported. |
+| `quran_foundation` | Disabled legacy integration | Not exposed by provider discovery, not accepted by the alignment registry, and no credentials are retained by the settings UI. |
 | `internal_ctc` | Our trainable adapter for reciter/mode coverage | Exact audio hash, complete canonical words, monotonic spans, then human review; worker returns `MODEL_NOT_CONFIGURED` without real weights |
 | `verified_dataset` | Import of a separately audited corpus | Dataset attestation, license/provenance record, deterministic split and evaluation report |
 | `manual` | Human correction/review | Immutable child document linked to its parent and reviewer event |

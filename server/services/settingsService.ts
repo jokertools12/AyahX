@@ -153,13 +153,6 @@ export async function getAllSettingsMasked(): Promise<Record<string, { value: st
 
   // Default known keys
   const defaultKeys: { key: string; isSecret: boolean; category: string; defaultVal: string }[] = [
-    { key: 'QF_CLIENT_ID', isSecret: false, category: 'quran_foundation', defaultVal: process.env.QF_CLIENT_ID || '' },
-    { key: 'QF_CLIENT_SECRET', isSecret: true, category: 'quran_foundation', defaultVal: process.env.QF_CLIENT_SECRET || '' },
-    { key: 'QF_PRELIVE_CLIENT_ID', isSecret: false, category: 'quran_foundation', defaultVal: process.env.QF_PRELIVE_CLIENT_ID || process.env.QF_CLIENT_ID || '' },
-    { key: 'QF_PRELIVE_CLIENT_SECRET', isSecret: true, category: 'quran_foundation', defaultVal: process.env.QF_PRELIVE_CLIENT_SECRET || process.env.QF_CLIENT_SECRET || '' },
-    { key: 'QF_PROD_CLIENT_ID', isSecret: false, category: 'quran_foundation', defaultVal: process.env.QF_PROD_CLIENT_ID || '' },
-    { key: 'QF_PROD_CLIENT_SECRET', isSecret: true, category: 'quran_foundation', defaultVal: process.env.QF_PROD_CLIENT_SECRET || '' },
-    { key: 'QF_ENV', isSecret: false, category: 'quran_foundation', defaultVal: process.env.QF_ENV || 'prelive' },
     { key: 'AI_PROVIDER', isSecret: false, category: 'ai', defaultVal: process.env.AI_PROVIDER || 'openrouter' },
     { key: 'OPENROUTER_API_KEY', isSecret: true, category: 'ai', defaultVal: process.env.OPENROUTER_API_KEY || '' },
     { key: 'OPENROUTER_TEXT_MODEL', isSecret: false, category: 'ai', defaultVal: process.env.OPENROUTER_TEXT_MODEL || 'qwen/qwen3.8-27b:free' },

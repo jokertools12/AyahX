@@ -85,7 +85,7 @@ describe('alignment provider contract', () => {
 });
 
 describe('alignment orchestration', () => {
-  it('never accepts browser-supplied Quran Foundation timing or audio identity as an attestation', async () => {
+  it('does not expose the removed Quran Foundation provider to clients', async () => {
     const clientPayload = {
       providerId: 'quran_foundation',
       reciterId: 'test-reciter',
@@ -109,8 +109,9 @@ describe('alignment orchestration', () => {
     expect(parsed.audio.contentHash).toBe('pending-qf-server-fingerprint');
     expect(parsed.audio.sourceUrlOrAssetId).toBe('asset:pending-qf-server-fetch');
 
-    await expect(getAlignmentProviderRegistry().get('quran_foundation').align(parsed)).rejects
-      .toThrow(/QF_STRICT_SERVER_ATTESTATION_REQUIRED/);
+    expect(parsed.providerId).toBe('quran_foundation');
+    expect(() => getAlignmentProviderRegistry().get('quran_foundation'))
+      .toThrow(/ALIGNMENT_PROVIDER_NOT_REGISTERED/);
   });
 
   it('requires an exact contiguous Quran reference snapshot', () => {
@@ -128,7 +129,7 @@ describe('alignment orchestration', () => {
     })).toThrow(/ALIGNMENT_REFERENCE_AYAHS_INCOMPLETE/);
   });
 
-  it('projects a server-attested complete QF result as approved while ignoring legacy marker rows', async () => {
+  it('does not accept legacy Quran Foundation timing after provider removal', async () => {
     const qfRequest: AlignmentRequest = {
       providerId: 'quran_foundation',
       reciterId: 'test-reciter',
@@ -154,13 +155,8 @@ describe('alignment orchestration', () => {
         }],
       },
     };
-    const providerResult = await getAlignmentProviderRegistry().get('quran_foundation').align(qfRequest);
-    const normalized = normalizeAlignmentResult(qfRequest, providerResult);
-    const map = alignmentDocumentToTimingMap(normalized.document);
-    expect(normalized.validation.status).toBe('approved');
-    expect(map.validationStatus).toBe('approved');
-    expect(map.review).toBeUndefined();
-    expect(map.words).toHaveLength(2);
+    expect(() => getAlignmentProviderRegistry().get(qfRequest.providerId))
+      .toThrow(/ALIGNMENT_PROVIDER_NOT_REGISTERED/);
   });
 
   it('does not silently fall back when an explicitly selected provider is unavailable', async () => {
@@ -192,8 +188,8 @@ describe('alignment orchestration', () => {
       },
       providerInput: { recitationId: 7 },
     });
-    await expect(getAlignmentProviderRegistry().get('quran_foundation').align(parsed))
-      .rejects.toThrow(/GRANULARITY_NOT_SUPPORTED/);
+    expect(() => getAlignmentProviderRegistry().get(parsed.providerId))
+      .toThrow(/ALIGNMENT_PROVIDER_NOT_REGISTERED/);
   });
 
   it('creates an immutable approved manual review revision without mutating the source', async () => {
@@ -233,10 +229,8 @@ describe('alignment orchestration', () => {
     expect(qua?.requiresHumanReview).toBe(true);
     expect(qua?.legalStatus).toBe('external_review_required');
 
-    const qf = descriptors.find((provider) => provider.id === 'quran_foundation');
-    expect(qf?.configured).toBe(false);
-    expect(qf?.unavailableReason).toMatch(/OAuth/);
+    expect(descriptors.find((provider) => provider.id === 'quran_foundation')).toBeUndefined();
     expect(getAlignmentProviderDescriptors({ quranFoundationConfigured: true })
-      .find((provider) => provider.id === 'quran_foundation')?.configured).toBe(true);
+      .find((provider) => provider.id === 'quran_foundation')).toBeUndefined();
   });
 });

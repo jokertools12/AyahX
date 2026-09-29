@@ -12,6 +12,7 @@ export interface Reciter {
   description?: string;
   server: string;
   subfolder?: string;
+  /** @deprecated legacy source metadata; not used for alignment or rendering. */
   quranFoundationId?: number;
   everyAyahSubfolder?: string;
   isOpenLicense?: boolean;

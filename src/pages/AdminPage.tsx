@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import {
   Shield, Users, CreditCard, BarChart3, Check, X, Clock,
   Loader2, Search, Crown, Video, TrendingUp, UserCheck, AlertCircle,
-  Settings, Key, Globe, Eye, EyeOff, Sparkles, RefreshCw, CheckCircle2, XCircle, ExternalLink, Cpu, Sliders, Volume2,
+  Settings, Globe, Eye, EyeOff, Sparkles, RefreshCw, CheckCircle2, XCircle, Cpu, Sliders, Volume2,
   HardDrive, Trash2, Zap
 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
@@ -21,7 +21,7 @@ import { toast } from 'sonner';
 import { Navigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { ErrorState } from '@/components/ErrorState';
-import { buildQuranFoundationTestPayload, omitUnchangedAdminSecrets } from '@/lib/adminSettings';
+import { omitUnchangedAdminSecrets } from '@/lib/adminSettings';
 
 interface PaymentRequest {
   id: string;
@@ -47,7 +47,7 @@ export default function AdminPage() {
   const {
     isAdmin, loading: adminLoading, fetchPaymentRequests, approvePayment, rejectPayment,
     fetchAllUsers, fetchStats, fetchDailyVideoStats, fetchSettings, saveSettings,
-    testQuranFoundation, testGemini, testOpenRouter, testPexels, fetchRenderStats, cleanupRenderArtifacts
+    testGemini, testOpenRouter, testPexels, fetchRenderStats, cleanupRenderArtifacts
   } = useAdmin();
 
   const [requests, setRequests] = useState<PaymentRequest[]>([]);
@@ -63,13 +63,6 @@ export default function AdminPage() {
   // Settings State
   const [settings, setSettings] = useState<Record<string, { value: string; isSecret: boolean; category: string }>>({});
   const [editedSettings, setEditedSettings] = useState<Record<string, string>>({
-    QF_CLIENT_ID: '',
-    QF_CLIENT_SECRET: '',
-    QF_PRELIVE_CLIENT_ID: '',
-    QF_PRELIVE_CLIENT_SECRET: '',
-    QF_PROD_CLIENT_ID: '',
-    QF_PROD_CLIENT_SECRET: '',
-    QF_ENV: 'prelive',
     AI_PROVIDER: 'openrouter',
     AI_IMAGE_PROVIDER: 'gemini',
     OPENROUTER_API_KEY: '',
@@ -89,8 +82,6 @@ export default function AdminPage() {
   });
   const [showSecrets, setShowSecrets] = useState<Record<string, boolean>>({});
   const [savingSettings, setSavingSettings] = useState(false);
-  const [qfTestStatus, setQfTestStatus] = useState<any>(null);
-  const [testingQf, setTestingQf] = useState(false);
   const [testingGemini, setTestingGemini] = useState(false);
   const [geminiTestStatus, setGeminiTestStatus] = useState<any>(null);
   const [testingOpenRouter, setTestingOpenRouter] = useState(false);
@@ -171,15 +162,7 @@ export default function AdminPage() {
       setSettings(data);
       setSecretStorage(response.secretStorage || null);
       setAiRuntime(response.aiRuntime || null);
-      const currentEnv = data.QF_ENV?.value || 'prelive';
       const initValues: Record<string, string> = {
-        QF_CLIENT_ID: data.QF_CLIENT_ID?.value || '',
-        QF_CLIENT_SECRET: data.QF_CLIENT_SECRET?.value || '',
-        QF_PRELIVE_CLIENT_ID: data.QF_PRELIVE_CLIENT_ID?.value || data.QF_CLIENT_ID?.value || '',
-        QF_PRELIVE_CLIENT_SECRET: data.QF_PRELIVE_CLIENT_SECRET?.value || (currentEnv === 'prelive' ? data.QF_CLIENT_SECRET?.value : '') || '',
-        QF_PROD_CLIENT_ID: data.QF_PROD_CLIENT_ID?.value || (currentEnv === 'production' ? data.QF_CLIENT_ID?.value : '') || '',
-        QF_PROD_CLIENT_SECRET: data.QF_PROD_CLIENT_SECRET?.value || (currentEnv === 'production' ? data.QF_CLIENT_SECRET?.value : '') || '',
-        QF_ENV: currentEnv,
         AI_PROVIDER: data.AI_PROVIDER?.value || 'openrouter',
         AI_IMAGE_PROVIDER: data.AI_IMAGE_PROVIDER?.value || 'gemini',
         // Secrets are write-only: keep the replacement field blank after
@@ -251,19 +234,7 @@ export default function AdminPage() {
   const handleSaveSettings = async () => {
     setSavingSettings(true);
     try {
-      const activeEnv = editedSettings.QF_ENV || 'prelive';
-      const activeClientId = activeEnv === 'production'
-        ? (editedSettings.QF_PROD_CLIENT_ID || editedSettings.QF_CLIENT_ID)
-        : (editedSettings.QF_PRELIVE_CLIENT_ID || editedSettings.QF_CLIENT_ID);
-      const activeClientSecret = activeEnv === 'production'
-        ? (editedSettings.QF_PROD_CLIENT_SECRET || editedSettings.QF_CLIENT_SECRET)
-        : (editedSettings.QF_PRELIVE_CLIENT_SECRET || editedSettings.QF_CLIENT_SECRET);
-
-      const payload = omitUnchangedAdminSecrets({
-        ...editedSettings,
-        QF_CLIENT_ID: activeClientId,
-        QF_CLIENT_SECRET: activeClientSecret,
-      });
+      const payload = omitUnchangedAdminSecrets(editedSettings);
 
       await saveSettings(payload);
       setOpenRouterTestStatus(null);
@@ -273,37 +244,6 @@ export default function AdminPage() {
       toast.error(err.message || 'فشل حفظ الإعدادات');
     } finally {
       setSavingSettings(false);
-    }
-  };
-
-  const handleTestQf = async () => {
-    setTestingQf(true);
-    setQfTestStatus(null);
-    try {
-      const activeEnv = editedSettings.QF_ENV || 'prelive';
-      const clientId = activeEnv === 'production'
-        ? (editedSettings.QF_PROD_CLIENT_ID || editedSettings.QF_CLIENT_ID)
-        : (editedSettings.QF_PRELIVE_CLIENT_ID || editedSettings.QF_CLIENT_ID);
-      const clientSecret = activeEnv === 'production'
-        ? (editedSettings.QF_PROD_CLIENT_SECRET || editedSettings.QF_CLIENT_SECRET)
-        : (editedSettings.QF_PRELIVE_CLIENT_SECRET || editedSettings.QF_CLIENT_SECRET);
-
-      const res = await testQuranFoundation(buildQuranFoundationTestPayload({
-        clientId,
-        clientSecret,
-        env: activeEnv,
-      }));
-      setQfTestStatus(res);
-      if (res.success) {
-        toast.success(res.message);
-      } else {
-        toast.error(res.message);
-      }
-    } catch (err: any) {
-      setQfTestStatus({ success: false, message: err.message || 'فشل الاتصال' });
-      toast.error('فشل فحص اتصال Quran Foundation');
-    } finally {
-      setTestingQf(false);
     }
   };
 
@@ -1108,245 +1048,35 @@ export default function AdminPage() {
               </Card>
             </motion.section>
 
-            {/* Quran Foundation App Server Config */}
-            <Card className="border-primary/30 shadow-lg relative overflow-hidden">
-              <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-amber-500 via-primary to-emerald-500" />
-              <CardHeader className="pb-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                        <Globe className="h-5 w-5" />
-                      </div>
-                      <CardTitle className="text-xl">منظومة Quran Foundation (App Server: ayahx2)</CardTitle>
-                      <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 text-xs">
-                        Official OAuth2
-                      </Badge>
+            {/* Alignment readiness */}
+            <Card className="border-amber-500/30 bg-amber-500/[0.03] shadow-sm">
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-xl bg-amber-500/10 p-2.5 text-amber-300"><Clock className="h-5 w-5" /></div>
+                    <div>
+                      <CardTitle className="text-base">المحاذاة الحقيقية وAnimate</CardTitle>
+                      <CardDescription className="mt-1 text-xs leading-6">
+                        التمييز المتزامن لا يعمل إلا مع خريطة كلمات موثّقة مرتبطة ببصمة الصوت. لا يتم إنشاء توقيتات تقديرية أو تمرير الصوت إلى OpenRouter.
+                      </CardDescription>
                     </div>
-                    <CardDescription>
-                      ربط النظام بحساب المطورين في Quran Foundation لجلب السور، الآيات، التلاوات الصوتية بأعلى دقة، وتوقيت الكلمات لحظياً.
-                    </CardDescription>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-1.5 self-start sm:self-auto border-primary/30 hover:bg-primary/10"
-                    asChild
-                  >
-                    <a
-                      href="https://dev-console.quran.foundation/projects/eecf8558-2521-43ab-a6d0-9ab6d949b4c9"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                      لوحة المطورين (ayahx2)
-                    </a>
-                  </Button>
+                  <Badge variant="outline" className="shrink-0 border-amber-400/30 text-amber-200">بانتظار نموذج معتمد</Badge>
                 </div>
               </CardHeader>
-
-              <CardContent className="space-y-6">
-                {/* Environment Selector Tabs */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-muted/40 border border-border/60">
-                  <div className="space-y-0.5">
-                    <div className="text-sm font-semibold flex items-center gap-2">
-                      <Sliders className="h-4 w-4 text-primary" />
-                      إعدادات المفاتيح لكل بيئة (Environment Credentials)
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      احفظ مفاتيح التطوير (Prelive) ومفاتيح الإنتاج (Production) بشكل مستقل للتبديل بينهما بسلاسة.
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant={editedSettings.QF_ENV === 'prelive' ? 'default' : 'outline'}
-                      onClick={() => setEditedSettings(prev => ({ ...prev, QF_ENV: 'prelive' }))}
-                      className="text-xs gap-1.5"
-                    >
-                      <span>بيئة التطوير (Prelive)</span>
-                      {editedSettings.QF_ENV === 'prelive' && <Check className="h-3.5 w-3.5" />}
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant={editedSettings.QF_ENV === 'production' ? 'default' : 'outline'}
-                      onClick={() => setEditedSettings(prev => ({ ...prev, QF_ENV: 'production' }))}
-                      className="text-xs gap-1.5"
-                    >
-                      <span>بيئة الإنتاج (Production)</span>
-                      {editedSettings.QF_ENV === 'production' && <Check className="h-3.5 w-3.5" />}
-                    </Button>
-                  </div>
+              <CardContent className="grid gap-3 text-xs md:grid-cols-3">
+                <div className="rounded-xl border border-border/60 bg-background/30 p-3">
+                  <p className="font-semibold text-foreground">Internal CTC</p>
+                  <p className="mt-1 leading-5 text-muted-foreground">العامل منشور ومؤمّن، لكن بدون checkpoint مرخّص يعيد MODEL_NOT_CONFIGURED.</p>
                 </div>
-
-                {/* Active Environment Inputs */}
-                {editedSettings.QF_ENV === 'prelive' ? (
-                  <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Badge className="bg-primary/20 text-primary border-primary/30 text-xs">
-                          بيئة الاختبار الحالية (Prelive)
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">https://apis-prelive.quran.foundation</span>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      <div className="space-y-2">
-                        <Label htmlFor="qf-prelive-client-id" className="text-sm font-medium flex items-center gap-1.5">
-                          <Key className="h-3.5 w-3.5 text-primary" />
-                          معرف العميل للـ Prelive (Client ID)
-                        </Label>
-                        <Input
-                          id="qf-prelive-client-id"
-                          value={editedSettings.QF_PRELIVE_CLIENT_ID}
-                          onChange={(e) => setEditedSettings(prev => ({ ...prev, QF_PRELIVE_CLIENT_ID: e.target.value }))}
-                          placeholder="معرف العميل لبيئة Prelive..."
-                          className="font-mono text-xs bg-background"
-                          dir="ltr"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="qf-prelive-client-secret" className="text-sm font-medium flex items-center gap-1.5">
-                          <Key className="h-3.5 w-3.5 text-amber-500" />
-                          المفتاح السري للـ Prelive (Client Secret)
-                        </Label>
-                        <div className="relative">
-                          <Input
-                            id="qf-prelive-client-secret"
-                            type={showSecrets['QF_PRELIVE_CLIENT_SECRET'] ? 'text' : 'password'}
-                            value={editedSettings.QF_PRELIVE_CLIENT_SECRET}
-                            onChange={(e) => setEditedSettings(prev => ({ ...prev, QF_PRELIVE_CLIENT_SECRET: e.target.value }))}
-                            placeholder={settings.QF_PRELIVE_CLIENT_SECRET?.value || settings.QF_CLIENT_SECRET?.value ? '****** (محفوظ ومؤمن)' : 'الصق المفتاح السري للـ Prelive'}
-                            className="font-mono text-xs pr-10 bg-background"
-                            dir="ltr"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowSecrets(prev => ({ ...prev, QF_PRELIVE_CLIENT_SECRET: !prev.QF_PRELIVE_CLIENT_SECRET }))}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                          >
-                            {showSecrets['QF_PRELIVE_CLIENT_SECRET'] ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
-                          بيئة الإنتاج المباشرة (Production)
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">https://apis.quran.foundation</span>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      <div className="space-y-2">
-                        <Label htmlFor="qf-prod-client-id" className="text-sm font-medium flex items-center gap-1.5">
-                          <Key className="h-3.5 w-3.5 text-emerald-400" />
-                          معرف العميل للإنتاج (Production Client ID)
-                        </Label>
-                        <Input
-                          id="qf-prod-client-id"
-                          value={editedSettings.QF_PROD_CLIENT_ID}
-                          onChange={(e) => setEditedSettings(prev => ({ ...prev, QF_PROD_CLIENT_ID: e.target.value }))}
-                          placeholder="معرف العميل لبيئة الإنتاج..."
-                          className="font-mono text-xs bg-background"
-                          dir="ltr"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="qf-prod-client-secret" className="text-sm font-medium flex items-center gap-1.5">
-                          <Key className="h-3.5 w-3.5 text-amber-500" />
-                          المفتاح السري للإنتاج (Production Client Secret)
-                        </Label>
-                        <div className="relative">
-                          <Input
-                            id="qf-prod-client-secret"
-                            type={showSecrets['QF_PROD_CLIENT_SECRET'] ? 'text' : 'password'}
-                            value={editedSettings.QF_PROD_CLIENT_SECRET}
-                            onChange={(e) => setEditedSettings(prev => ({ ...prev, QF_PROD_CLIENT_SECRET: e.target.value }))}
-                            placeholder={settings.QF_PROD_CLIENT_SECRET?.value ? '****** (محفوظ ومؤمن)' : 'الصق المفتاح السري للإنتاج'}
-                            className="font-mono text-xs pr-10 bg-background"
-                            dir="ltr"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowSecrets(prev => ({ ...prev, QF_PROD_CLIENT_SECRET: !prev.QF_PROD_CLIENT_SECRET }))}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                          >
-                            {showSecrets['QF_PROD_CLIENT_SECRET'] ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
-                  <div className="text-xs text-muted-foreground">
-                    البيئة المحددة حالياً للعمل: <span className="font-semibold text-foreground uppercase">{editedSettings.QF_ENV}</span>
-                  </div>
-                  <Button
-                    onClick={handleTestQf}
-                    disabled={testingQf}
-                    variant="outline"
-                    className="gap-2 border-primary/40 hover:bg-primary/10 h-10 w-full sm:w-auto"
-                  >
-                    {testingQf ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                        جاري فحص اتصال {editedSettings.QF_ENV}...
-                      </>
-                    ) : (
-                      <>
-                        <RefreshCw className="h-4 w-4 text-primary" />
-                        فحص اتصال وتوثيق ({editedSettings.QF_ENV})
-                      </>
-                    )}
-                  </Button>
+                <div className="rounded-xl border border-border/60 bg-background/30 p-3">
+                  <p className="font-semibold text-foreground">Word highlight</p>
+                  <p className="mt-1 leading-5 text-muted-foreground">يُفعّل فقط بعد تغطية كاملة ومراجعة بشرية وبصمة صوت مطابقة.</p>
                 </div>
-
-                {/* Test Result Display */}
-                {qfTestStatus && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`p-4 rounded-xl border flex flex-col gap-2 ${
-                      qfTestStatus.success
-                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
-                        : 'bg-destructive/10 border-destructive/30 text-destructive'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2 font-semibold">
-                      {qfTestStatus.success ? (
-                        <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0" />
-                      ) : (
-                        <XCircle className="h-5 w-5 text-destructive shrink-0" />
-                      )}
-                      <span>{qfTestStatus.message}</span>
-                    </div>
-                    {qfTestStatus.details && (
-                      <div className="text-xs opacity-90 font-mono space-y-1 bg-background/50 p-2.5 rounded-lg border border-border/40 mt-1">
-                        <div>البيئة المستهدفة: {qfTestStatus.details.environment}</div>
-                        <div>الوضع: {qfTestStatus.details.mode === 'authenticated' ? 'توثيق ناجح عبر OAuth2 (حساب App Server)' : 'استخدام الحساب المتاح'}</div>
-                        {qfTestStatus.details.chaptersCount && (
-                          <div>عدد السور المتاحة للاسترجاع: {qfTestStatus.details.chaptersCount} سورة</div>
-                        )}
-                        {qfTestStatus.details.latencyMs && (
-                          <div>زمن الاستجابة: {qfTestStatus.details.latencyMs} مللي ثانية</div>
-                        )}
-                      </div>
-                    )}
-                  </motion.div>
-                )}
+                <div className="rounded-xl border border-border/60 bg-background/30 p-3">
+                  <p className="font-semibold text-foreground">Animate</p>
+                  <p className="mt-1 leading-5 text-muted-foreground">ملفات العرض منفصلة عن المحاذاة؛ لا تُعرض حركة متزامنة عند غياب المصدر الموثوق.</p>
+                </div>
               </CardContent>
             </Card>
 

@@ -16,9 +16,6 @@ export function omitUnchangedOpenRouterSecret(settings: Record<string, string>):
 
 const WRITE_ONLY_SECRET_KEYS = new Set([
   'OPENROUTER_API_KEY',
-  'QF_CLIENT_SECRET',
-  'QF_PRELIVE_CLIENT_SECRET',
-  'QF_PROD_CLIENT_SECRET',
   'GEMINI_API_KEY',
   'PEXELS_API_KEY',
 ]);
@@ -43,16 +40,4 @@ export function omitUnchangedAdminSecrets(settings: Record<string, string>): Rec
     result[key] = value;
   }
   return result;
-}
-
-export function buildQuranFoundationTestPayload(input: {
-  env: string;
-  clientId: string;
-  clientSecret: string;
-}): { env: 'prelive' | 'production'; clientId?: string; clientSecret?: string } {
-  const env = input.env === 'production' ? 'production' : 'prelive';
-  const clientId = input.clientId.trim();
-  const clientSecret = input.clientSecret.trim();
-  if (!clientId || isMaskedOrEmptySecret(clientSecret)) return { env };
-  return { env, clientId, clientSecret };
 }
