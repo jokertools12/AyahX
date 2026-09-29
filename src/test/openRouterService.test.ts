@@ -8,7 +8,11 @@ import {
   inspectOpenRouterModels,
   smokeTestOpenRouterGeneration,
 } from '../../server/services/openRouterService';
-import { resolveAiConfigFromSettings, transcribeAudioWithAi } from '../../server/services/aiService';
+import {
+  resolveAiConfigFromSettings,
+  resolveImageAiConfigFromSettings,
+  transcribeAudioWithAi,
+} from '../../server/services/aiService';
 
 const envKeys = [
   'AI_PROVIDER',
@@ -373,5 +377,20 @@ describe('OpenRouter provider gateway', () => {
       code: 'OPENROUTER_AUDIO_UNSUPPORTED',
     });
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('does not advertise OpenRouter text credentials as a working image provider', () => {
+    expect(resolveImageAiConfigFromSettings({
+      AI_IMAGE_PROVIDER: 'openrouter',
+      OPENROUTER_API_KEY: 'or-test-secret',
+    })).toBeNull();
+    expect(resolveImageAiConfigFromSettings({
+      AI_IMAGE_PROVIDER: 'none',
+      GEMINI_API_KEY: 'gemini-test-secret',
+    })).toBeNull();
+    expect(resolveImageAiConfigFromSettings({
+      AI_IMAGE_PROVIDER: 'gemini',
+      GEMINI_API_KEY: 'gemini-test-secret',
+    })).toMatchObject({ type: 'gemini', key: 'gemini-test-secret' });
   });
 });

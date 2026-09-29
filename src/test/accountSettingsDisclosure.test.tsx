@@ -22,6 +22,18 @@ afterEach(()=>{cleanup();fixtures.premium=false;vi.clearAllMocks();});
 function toggle(text:string) {fireEvent.click(screen.getByText(text,{selector:'summary span.block'}));}
 
 describe('account settings disclosure',()=>{
+  it('provides working navigation to each settings section',()=>{
+    render(<MemoryRouter><UserSettingsPage/></MemoryRouter>);
+    const nav=screen.getByRole('navigation',{name:'أقسام الإعدادات'});
+    const links=Array.from(nav.querySelectorAll('a[href^="#settings-"]'));
+    expect(links).toHaveLength(6);
+    for(const link of links){
+      const target=link.getAttribute('href')?.slice(1);
+      expect(target).toBeTruthy();
+      expect(document.getElementById(target!)).toBeInTheDocument();
+    }
+  });
+
   it.each([false,true])('keeps profile, password, usage and deletion accessible, premium=%s',async(premium)=>{
     fixtures.premium=premium;
     render(<MemoryRouter><UserSettingsPage/></MemoryRouter>);

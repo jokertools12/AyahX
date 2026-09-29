@@ -12,9 +12,18 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
-import { User, Crown, Video, Calendar, Mail, Edit2, Loader2, Check, History, Camera, Image, Lock, Eye, EyeOff, KeyRound, AlertCircle, Trash2, AlertTriangle, Cpu, Zap, Sparkles, Clock3 } from 'lucide-react';
+import { User, Crown, Video, Calendar, Mail, Edit2, Loader2, Check, History, Camera, Image, Lock, Eye, EyeOff, KeyRound, AlertCircle, Trash2, AlertTriangle, Cpu, Zap, Sparkles, Clock3, ShieldCheck, CircleDollarSign, ChevronLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+
+const SETTINGS_NAV_ITEMS = [
+  { id: 'settings-profile', label: 'الملف الشخصي', icon: User },
+  { id: 'settings-security', label: 'الأمان', icon: ShieldCheck },
+  { id: 'settings-plan', label: 'العضوية', icon: Crown },
+  { id: 'settings-usage', label: 'الاستخدام', icon: Video },
+  { id: 'settings-history', label: 'المدفوعات', icon: History },
+  { id: 'settings-danger', label: 'حذف الحساب', icon: Trash2 },
+] as const;
 
 export default function UserSettingsPage() {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
@@ -164,16 +173,56 @@ export default function UserSettingsPage() {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
+      <div className="container mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:py-12">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-bold mb-8 flex items-center gap-3">
-            <User className="h-8 w-8 text-primary" />
-            الإعدادات
-          </h1>
+          <header className="relative isolate mb-6 overflow-hidden rounded-[1.75rem] border border-primary/20 bg-[radial-gradient(ellipse_at_top_right,hsl(var(--primary)/0.24),transparent_54%),linear-gradient(135deg,hsl(var(--card)),hsl(var(--card)),hsl(var(--primary)/0.08))] px-5 py-6 shadow-[0_24px_70px_-42px_hsl(var(--primary)/0.65)] sm:px-8 sm:py-8">
+            <div aria-hidden="true" className="pointer-events-none absolute -left-10 -top-20 h-56 w-56 rounded-full border border-primary/10" />
+            <div aria-hidden="true" className="pointer-events-none absolute -left-2 -top-12 h-40 w-40 rounded-full border border-primary/10" />
+            <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+              <div className="max-w-2xl">
+                <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-background/55 px-3 py-1 text-xs font-semibold text-primary backdrop-blur">
+                  <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                  مساحة حسابك
+                </p>
+                <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">إعدادات AyahX</h1>
+                <p className="mt-2 max-w-xl text-sm leading-7 text-muted-foreground sm:text-base">
+                  ملفك الشخصي، أمان حسابك، وخيارات العضوية والإنتاج — في مكان واحد واضح.
+                </p>
+              </div>
+              <div className="flex items-center gap-3 rounded-2xl border border-border/70 bg-background/65 px-4 py-3 backdrop-blur-sm">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <CircleDollarSign className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] text-muted-foreground">حالة العضوية</p>
+                  <p className="font-semibold">{isPremium ? 'مميز ✨' : 'الخطة المجانية'}</p>
+                </div>
+                <ChevronLeft className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+              </div>
+            </div>
+          </header>
 
-          <div className="space-y-6">
+          <div className="grid items-start gap-5 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8">
+            <aside className="min-w-0 lg:sticky lg:top-24">
+              <p className="mb-2 hidden px-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground lg:block">التنقل السريع</p>
+              <nav aria-label="أقسام الإعدادات" className="-mx-4 flex min-w-0 gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0 lg:flex-col lg:gap-1.5 lg:overflow-visible lg:pb-0">
+                {SETTINGS_NAV_ITEMS.map(({ id, label, icon: Icon }) => (
+                  <a
+                    key={id}
+                    href={`#${id}`}
+                    className="group flex shrink-0 items-center gap-2.5 rounded-full border border-border/70 bg-card px-3.5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/25 hover:bg-primary/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:w-full lg:rounded-xl lg:border-transparent lg:bg-transparent lg:px-3"
+                  >
+                    <Icon className="h-4 w-4 shrink-0 text-primary/80" aria-hidden="true" />
+                    <span>{label}</span>
+                    <ChevronLeft className="mr-auto hidden h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-70 lg:block" aria-hidden="true" />
+                  </a>
+                ))}
+              </nav>
+            </aside>
+
+          <div className="min-w-0 space-y-5">
             {/* Profile Card with Avatar */}
-            <Card>
+            <section id="settings-profile" className="scroll-mt-24"><Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Edit2 className="h-5 w-5" />
@@ -236,10 +285,10 @@ export default function UserSettingsPage() {
                   حفظ
                 </Button>
               </CardContent>
-            </Card>
+            </Card></section>
 
             {/* Change Password Card */}
-            <SettingsSection title="تغيير كلمة المرور">
+            <section id="settings-security" className="scroll-mt-24"><SettingsSection title="تغيير كلمة المرور">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -350,8 +399,8 @@ export default function UserSettingsPage() {
             </Card>
 
             {/* Subscription Card */}
-            </SettingsSection>
-            <Card className={isPremium ? 'border-primary/50 shadow-lg shadow-primary/10' : ''}>
+            </SettingsSection></section>
+            <section id="settings-plan" className="scroll-mt-24"><Card className={isPremium ? 'border-primary/50 shadow-lg shadow-primary/10' : ''}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Crown className={`h-5 w-5 ${isPremium ? 'text-primary' : 'text-muted-foreground'}`} />
@@ -377,10 +426,10 @@ export default function UserSettingsPage() {
                   </Button>
                 )}
               </CardContent>
-            </Card>
+            </Card></section>
 
             {/* Usage Card */}
-            <SettingsSection title="تفاصيل الاستخدام" description="الحصص اليومية وصلاحية الفيديوهات">
+            <section id="settings-usage" className="scroll-mt-24"><SettingsSection title="تفاصيل الاستخدام" description="الحصص اليومية وصلاحية الفيديوهات">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -460,8 +509,8 @@ export default function UserSettingsPage() {
             </Card>
 
             {/* Payment History Link */}
-            </SettingsSection>
-            <Card>
+            </SettingsSection></section>
+            <section id="settings-history" className="scroll-mt-24"><Card>
               <CardContent className="p-4">
                 <Button asChild variant="outline" className="w-full gap-2">
                   <Link to="/payment-history">
@@ -470,10 +519,10 @@ export default function UserSettingsPage() {
                   </Link>
                 </Button>
               </CardContent>
-            </Card>
+            </Card></section>
 
             {/* Danger Zone: Account Deletion */}
-            <SettingsSection title="حذف الحساب" description="إدارة حذف حسابك وبياناتك" className="border-destructive/30">
+            <section id="settings-danger" className="scroll-mt-24"><SettingsSection title="حذف الحساب" description="إدارة حذف حسابك وبياناتك" className="border-destructive/30">
             <Card className="border-destructive/30 bg-destructive/5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-destructive">
@@ -537,7 +586,8 @@ export default function UserSettingsPage() {
                 )}
               </CardContent>
             </Card>
-            </SettingsSection>
+            </SettingsSection></section>
+          </div>
           </div>
         </motion.div>
       </div>

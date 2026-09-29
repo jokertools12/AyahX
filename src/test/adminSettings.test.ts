@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { omitUnchangedOpenRouterSecret } from '@/lib/adminSettings';
+import {
+  buildQuranFoundationTestPayload,
+  omitUnchangedAdminSecrets,
+  omitUnchangedOpenRouterSecret,
+} from '@/lib/adminSettings';
 
 describe('admin settings secret payload', () => {
   it('omits an empty OpenRouter key so unrelated settings saves preserve the current secret', () => {
@@ -23,5 +27,43 @@ describe('admin settings secret payload', () => {
       AI_PROVIDER: 'openrouter',
       OPENROUTER_API_KEY: 'sk-or-new-test-key',
     });
+  });
+
+  it('does not overwrite write-only credentials when saving unrelated settings', () => {
+    expect(omitUnchangedAdminSecrets({
+      AI_PROVIDER: 'openrouter',
+      OPENROUTER_API_KEY: '',
+      QF_PRELIVE_CLIENT_SECRET: 'abc****xyz',
+      QF_PROD_CLIENT_SECRET: '',
+      GEMINI_API_KEY: 'AIza****123',
+    })).toEqual({ AI_PROVIDER: 'openrouter' });
+  });
+
+  it('keeps explicitly entered secrets while trimming whitespace', () => {
+    expect(omitUnchangedAdminSecrets({
+      OPENROUTER_API_KEY: '  fresh-or-key  ',
+      QF_PRELIVE_CLIENT_SECRET: '  fresh-qf-secret  ',
+      AI_PROVIDER: 'openrouter',
+    })).toEqual({
+      OPENROUTER_API_KEY: 'fresh-or-key',
+      QF_PRELIVE_CLIENT_SECRET: 'fresh-qf-secret',
+      AI_PROVIDER: 'openrouter',
+    });
+  });
+
+  it('uses saved Quran Foundation credentials when the form contains the display mask', () => {
+    expect(buildQuranFoundationTestPayload({
+      env: 'production',
+      clientId: 'saved-client-id',
+      clientSecret: 'cli****ret',
+    })).toEqual({ env: 'production' });
+  });
+
+  it('uses a newly entered Quran Foundation credential pair for an unsaved connection test', () => {
+    expect(buildQuranFoundationTestPayload({
+      env: 'prelive',
+      clientId: ' new-client ',
+      clientSecret: ' new-secret ',
+    })).toEqual({ env: 'prelive', clientId: 'new-client', clientSecret: 'new-secret' });
   });
 });

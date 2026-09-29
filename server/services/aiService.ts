@@ -149,19 +149,10 @@ export async function getAiProviderStatus(): Promise<Record<string, unknown>> {
   return diagnostic;
 }
 
-/**
- * Image generation is intentionally a separate capability.  OpenRouter's
- * free text catalog is not an image generator; keep an explicitly configured
- * Gemini image key available while the settings redesign adds per-capability
- * controls.
- */
+/** Image generation is a separate capability; OpenRouter is text-only here. */
 export function resolveImageAiConfigFromSettings(settings: AiSettingsSource): AiConfig | null {
   const requested = (settings.AI_IMAGE_PROVIDER || '').trim().toLowerCase();
-  if (requested === 'openrouter') {
-    return settings.OPENROUTER_API_KEY
-      ? buildProviderConfig('openrouter', settings.OPENROUTER_API_KEY, settings)
-      : null;
-  }
+  if (requested === 'none' || requested === 'openrouter') return null;
   if (requested === 'gemini' || (!requested && settings.GEMINI_API_KEY)) {
     return settings.GEMINI_API_KEY ? buildProviderConfig('gemini', settings.GEMINI_API_KEY, settings) : null;
   }
