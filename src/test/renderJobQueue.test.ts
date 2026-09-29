@@ -32,7 +32,7 @@ describe('Durable Render Job System & Queue', () => {
       words: [{ canonicalWordKey: '108:1:1', displayWordIndex: 0, displayToken: 'إِنَّا', startMs: 0, endMs: 500 }],
     },
     audio: {
-      sourceMode: 'qf',
+      sourceMode: 'single_url',
       audioUrl: 'https://audio.qurancdn.com/test.mp3',
       audioContentHash: 'hash_test_12345',
       durationSeconds: 3.0,

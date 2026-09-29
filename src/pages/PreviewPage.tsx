@@ -39,11 +39,13 @@ import {
   buildAudioAlignedTimingMap,
   timingMapRegistry,
   resolveActiveWordAtTime,
+  validateTimingMap,
 } from '@/lib/wordTimingEngine';
 
 import { api } from '@/lib/api';
 import { TextSettings } from '@/components/TextSettingsPanel';
 import { TimingEditor } from '@/components/TimingEditor';
+import { AlignmentReviewPanel } from '@/components/AlignmentReviewPanel';
 import {
   Download,
   RotateCcw,
@@ -91,7 +93,7 @@ import { getVisualDirection, type VisualDirectionId } from '@/data/visualDirecti
 type PlaybackMode =
   | 'qf'          // Quran Foundation single-file + word timestamps (best)
   | 'everyayah'   // EveryAyah.com – one MP3 per ayah (perfect verse clipping, no word highlight)
-  | 'fallback';   // Full-surah mp3quran file with proportional estimation (last resort)
+  | 'fallback';   // Full-surah source without attested word alignment
 
 const DEFAULT_DISPLAY_SETTINGS: DisplaySettings = {
   visualDesign: 'dawn',
@@ -106,6 +108,8 @@ const DEFAULT_DISPLAY_SETTINGS: DisplaySettings = {
   ayahNumberStyle: 'quran3d',
   ayahNumberColor: 'gold',
   verseDisplayMode: 'full',
+  animationProfile: 'karaoke',
+  animationReducedMotion: false,
   surahNamePosition: 'top',
   surahNameStyle: 'classic',
   reciterNameStyle: 'simple',
@@ -432,6 +436,20 @@ export default function PreviewPage() {
   const [activeTimingMap, setActiveTimingMap] = useState<TimingMap | null>(null);
   const activeTimingMapRef = useRef<TimingMap | null>(null);
 
+  // Approved word timings are tied to the source audio clock.  Normalize any
+  // legacy saved tempo/fingerprint flags as soon as an approved map arrives;
+  // the server validator applies the same invariant as a final guard.
+  useEffect(() => {
+    if (activeTimingMap?.validationStatus !== 'approved') return;
+    if (audioEffects.effects.speedAdjust === 1 && !audioEffects.effects.copyrightProtectionEnabled) return;
+    audioEffects.setEffects((previous) => ({
+      ...previous,
+      speedAdjust: 1,
+      copyrightProtectionEnabled: false,
+    }));
+    toast.info('تم تثبيت سرعة الصوت للحفاظ على دقة تزامن الكلمات.');
+  }, [activeTimingMap?.validationStatus, audioEffects.effects.speedAdjust, audioEffects.effects.copyrightProtectionEnabled, audioEffects.setEffects]);
+
   const [timingsLoading, setTimingsLoading] = useState(false);
 
   // ── Refs ────────────────────────────────────────────────────────────────────
@@ -504,8 +522,6 @@ export default function PreviewPage() {
         ? 'slideshow'
         : background?.type === 'video'
           ? 'video'
-          : background?.type === 'color'
-            ? 'color'
           : 'image';
     const visibleBackgroundUrl = permittedCustomBackground || background?.url || '';
     const visibleBackgroundThumbnail = permittedCustomBackground && customBackgroundType === 'image'
@@ -809,28 +825,85 @@ export default function PreviewPage() {
             setDuration(Math.max((to - from) / 1000, 0));
             setPlaybackMode('qf');
 
-            // Build authentic TimingMap for exact audio word alignment
-            try {
-              const timingMap = normalizeQuranFoundationSegmentsToTimingMap({
+            // Exact word timing is accepted only from the authenticated server
+            // alignment route.  The browser response is retained solely as a
+            // review draft when the server/provider is unavailable; it can
+            // never silently become a renderable approved map.
+            let timingMap: TimingMap | null = null;
+            if (isAuthenticated) {
+              try {
+                const trusted = await api.alignments.resolve({
+                  providerId: 'quran_foundation',
+                  reciterId: String(reciter.id),
+                  granularity: 'word',
+                  reference: {
+                    surahNumber,
+                    startAyah,
+                    endAyah,
+                    ayahs,
+                    quranTextVersion: 'uthmani_hafs_v1',
+                  },
+                  providerInput: { recitationId: reciter.quranFoundationId },
+                });
+                if (!cancelled && trusted.timingMap) {
+                  timingMap = trusted.timingMap as TimingMap;
+                  console.log(`✅ Server-attested QF TimingMap [status: ${timingMap.validationStatus}]`);
+                }
+              } catch (serverAlignmentError) {
+                console.warn('Server QF alignment unavailable; keeping timing in review mode', serverAlignmentError);
+              }
+            }
+
+            if (!timingMap && !cancelled) {
+              const reviewTimestamps = existing.map((timestamp) => ({
+                ...timestamp,
+                // QF may include one-value marker rows. Keep only complete
+                // triplets in this provisional draft; missing coverage stays
+                // visibly unapproved and must be corrected/re-fetched.
+                segments: (timestamp.segments || []).filter((segment) => (
+                  Array.isArray(segment)
+                  && segment.length === 3
+                  && Number.isFinite(Number(segment[0]))
+                  && Number.isFinite(Number(segment[1]))
+                  && Number.isFinite(Number(segment[2]))
+                  && Number(segment[2]) > Number(segment[1])
+                )) as QuranFoundationTimestamp['segments'],
+              }));
+              timingMap = normalizeQuranFoundationSegmentsToTimingMap({
                 reciterId: String(reciter.id),
                 providerRecitationId: reciter.quranFoundationId,
                 surahNumber,
                 startAyah,
                 endAyah,
                 audioUrl: audioFile.audio_url,
-                audioContentHash: `qf-${reciter.id}-${surahNumber}-${audioFile.audio_url.split('/').pop() || 'recitation'}`,
+                audioContentHash: `unverified-qf-source:${reciter.id}:${surahNumber}:${audioFile.audio_url.split('/').pop() || 'recitation'}`,
                 decodedDurationMs: to,
                 sampleRate: 44100,
                 channels: 2,
-                qfTimestamps: existing,
+                qfTimestamps: reviewTimestamps,
                 ayahsText: ayahs.map((a) => ({ numberInSurah: a.numberInSurah, text: a.text })),
               });
+              timingMap.review = {
+                status: 'unreviewed',
+                note: 'هذه مسودة من بيانات المتصفح؛ يلزم اعتماد الخادم وبصمة الصوت قبل التحريك أو النشر.',
+              };
+              const reviewValidation = validateTimingMap(timingMap);
+              timingMap.validationStatus = reviewValidation.validationStatus;
+              timingMap.diagnostics = {
+                ...(timingMap.diagnostics || {}),
+                validationMetrics: reviewValidation.metrics,
+                errors: reviewValidation.errors,
+                warnings: reviewValidation.warnings,
+                audioFingerprint: 'unverified',
+                serverAttestation: 'unavailable',
+              };
+            }
+
+            if (timingMap && !cancelled) {
               timingMapRegistry.register(timingMap);
               setActiveTimingMap(timingMap);
               activeTimingMapRef.current = timingMap;
-              console.log(`✅ QF TimingMap validated & registered [status: ${timingMap.validationStatus}]`);
-            } catch (err) {
-              console.warn('Failed to build TimingMap for QF:', err);
+              console.log(`✅ QF TimingMap registered [status: ${timingMap.validationStatus}]`);
             }
 
             console.log(`✅ QF mode – word-level sync, range ${from}–${to}ms`);
@@ -871,7 +944,7 @@ export default function PreviewPage() {
             startAyah,
             endAyah,
             audioUrl: urls[0] || result.blobUrl,
-            audioContentHash: `ea-${reciter.id}-${surahNumber}-${startAyah}_${endAyah}`,
+            audioContentHash: result.audioContentHash,
             decodedDurationMs: result.totalDuration * 1000,
             sampleRate: 44100,
             channels: 2,
@@ -894,7 +967,7 @@ export default function PreviewPage() {
         }
       }
 
-      // ── Strategy 3: Fallback – full surah mp3 with proportional estimation ───
+      // ── Strategy 3: fallback audio without word alignment ───────────────────
       if (!cancelled) {
         const url = getAudioUrl(reciter, surahNumber);
         setAyahTimings([]);
@@ -905,7 +978,7 @@ export default function PreviewPage() {
         setPlaybackMode('fallback');
         setActiveTimingMap(null);
         activeTimingMapRef.current = null;
-        console.log(`⚠️ Fallback mode – full surah mp3 with proportional estimation`);
+        console.log(`⚠️ Fallback mode – full surah audio, word animation disabled until alignment is reviewed`);
       }
 
       if (!cancelled) setTimingsLoading(false);
@@ -913,7 +986,7 @@ export default function PreviewPage() {
 
     load();
     return () => { cancelled = true; };
-  }, [isIbtahalatMode, ibtAudioUrl, reciter?.id, reciter?.quranFoundationId, reciter?.everyAyahSubfolder, surahNumber, startAyah, endAyah, totalAyahsInSurah]);
+  }, [isIbtahalatMode, ibtAudioUrl, isAuthenticated, reciter?.id, reciter?.quranFoundationId, reciter?.everyAyahSubfolder, surahNumber, startAyah, endAyah, totalAyahsInSurah]);
 
   // ── Audio effects init ──────────────────────────────────────────────────────
   useEffect(() => {
@@ -948,7 +1021,7 @@ export default function PreviewPage() {
         return;
       }
 
-      // Fallback: proportional estimation
+      // Fallback audio has no authenticated range or word alignment.
       const totalDur = audio.duration;
       if (isIbtahalatMode) {
         // Ibtahalat: play entire file, no range estimation needed
@@ -970,7 +1043,7 @@ export default function PreviewPage() {
         const estTo = (endAyah / totalAyahsInSurah) * totalDur;
         setRangeMs({ from: estFrom * 1000, to: estTo * 1000 });
         setDuration(Math.max(estTo - estFrom, 1));
-        console.log(`📐 Fallback estimate: ${estFrom.toFixed(1)}s–${estTo.toFixed(1)}s of ${totalDur.toFixed(1)}s`);
+        console.log(`⚠️ Fallback audio range is a playback convenience only; no ayah or word timing is treated as exact.`);
       } else {
         setDuration(totalDur);
       }
@@ -1099,22 +1172,10 @@ export default function PreviewPage() {
               setHighlightWordIndex(boundedIdx);
               setHighlightWordProgress(res.wordProgress);
             } else {
-              // الوضع القديم التقريبي للقراء الذين ليس لديهم تزامن دقيق
-              const ayahStart = t.timestamp_from / 1000;
-              const ayahEnd = t.timestamp_to / 1000;
-              const ayahDur = Math.max(ayahEnd - ayahStart, 0.5);
-              const elapsed = Math.max(nowSec - ayahStart, 0);
-              const ratio = Math.min(elapsed / ayahDur, 1);
-              if (ayahWords.length > 0) {
-                const wIdx = Math.min(Math.floor(ratio * ayahWords.length), ayahWords.length - 1);
-                setHighlightWordIndex(wIdx);
-                const perWord = 1 / ayahWords.length;
-                const localProgress = Math.min(Math.max((ratio - wIdx * perWord) / Math.max(perWord, 0.0001), 0), 1);
-                setHighlightWordProgress(localProgress);
-              } else {
-                setHighlightWordIndex(null);
-                setHighlightWordProgress(0);
-              }
+              // Quran Foundation's verse boundary alone is not a word map.
+              // Do not turn it into a fabricated word-by-word animation.
+              setHighlightWordIndex(null);
+              setHighlightWordProgress(0);
             }
             break;
           }
@@ -1170,22 +1231,9 @@ export default function PreviewPage() {
               setHighlightWordIndex(boundedIdx);
               setHighlightWordProgress(res.wordProgress);
             } else {
-              // الوضع القديم التقريبي للقراء الذين ليس لديهم تزامن دقيق
-              const ayahStart = everyAyahTimestamps[i].from;
-              const ayahEnd = everyAyahTimestamps[i].to;
-              const ayahDur = Math.max(ayahEnd - ayahStart, 0.5);
-              const elapsed = Math.max(nowSec - ayahStart, 0);
-              const ratio = Math.min(elapsed / ayahDur, 1);
-              if (ayahWords.length > 0) {
-                const wIdx = Math.min(Math.floor(ratio * ayahWords.length), ayahWords.length - 1);
-                setHighlightWordIndex(wIdx);
-                const perWord = 1 / ayahWords.length;
-                const localProgress = Math.min(Math.max((ratio - wIdx * perWord) / Math.max(perWord, 0.0001), 0), 1);
-                setHighlightWordProgress(localProgress);
-              } else {
-                setHighlightWordIndex(null);
-                setHighlightWordProgress(0);
-              }
+              // EveryAyah supplies exact ayah boundaries, not exact words.
+              setHighlightWordIndex(null);
+              setHighlightWordProgress(0);
             }
             break;
           }
@@ -1230,32 +1278,17 @@ export default function PreviewPage() {
               if (i === segs.length - 1) estimatedIndex = i;
             }
           } else {
-            // Proportional fallback
-            const ayahDuration = totalSec / ayahsCount;
-            estimatedIndex = Math.min(Math.floor(relativeSec / ayahDuration), ayahsCount - 1);
+            // Without attested ayah boundaries do not pretend that duration
+            // slices locate recitation text. Keep the stable first ayah.
+            estimatedIndex = 0;
           }
 
           if (estimatedIndex !== currentAyahIndexRef.current) setCurrentAyahIndex(estimatedIndex);
 
-          // Word-level highlight
-          const seg = segs.length === ayahsCount ? segs[estimatedIndex] : null;
-          const ayahStart = seg ? seg.from : estStartSec + estimatedIndex * (totalSec / ayahsCount);
-          const ayahEnd = seg ? seg.to : ayahStart + totalSec / ayahsCount;
-          const ayahDur = Math.max(ayahEnd - ayahStart, 0.001);
-          const posInAyah = Math.max(nowSec - ayahStart, 0);
-          const ratio = Math.min(posInAyah / ayahDur, 1);
-
-          const wordCount = (ayahsRef.current[estimatedIndex]?.text ?? '').split(' ').filter(Boolean).length;
-          if (wordCount > 0) {
-            const wordIdx = Math.min(Math.floor(ratio * wordCount), wordCount - 1);
-            setHighlightWordIndex(wordIdx);
-            const perWord = 1 / wordCount;
-            const localProgress = Math.min(Math.max((ratio - wordIdx * perWord) / Math.max(perWord, 0.0001), 0), 1);
-            setHighlightWordProgress(localProgress);
-          } else {
-            setHighlightWordIndex(null);
-            setHighlightWordProgress(0);
-          }
+          // Silence is safer than a guessed word event. The shared harness
+          // receives the same unreviewed map and therefore stays static too.
+          setHighlightWordIndex(null);
+          setHighlightWordProgress(0);
         }
       } else {
         updateTimeline(nowSec, audio.duration > 0 ? (nowSec / audio.duration) * 100 : 0);
@@ -1461,13 +1494,6 @@ export default function PreviewPage() {
         audioBitrate: '192k',
         motionSpeed: 1,
       };
-
-    // Inform user if phonetic pacing will be used for glow
-    if (displaySettings.highlightStyle === 'glow' && (!activeTimingMap || activeTimingMap.validationStatus !== 'approved')) {
-      if (playbackMode !== 'everyayah' && !isIbtahalatMode) {
-        console.log('Using phonetic Tajweed pacing for smooth golden glow render.');
-      }
-    }
 
     try {
       const audio = audioRef.current;
@@ -2370,6 +2396,25 @@ export default function PreviewPage() {
               </CardContent>
             </Card>
 
+            {!isIbtahalatMode && activeTimingMap && (
+              <AlignmentReviewPanel
+                timingMap={activeTimingMap}
+                isAuthenticated={isAuthenticated}
+                reciterId={String(reciter?.id || reciterId)}
+                surahNumber={surahNumber}
+                startAyah={startAyah}
+                endAyah={endAyah}
+                ayahs={ayahs}
+                audioUrl={audioUrl}
+                quranFoundationRecitationId={reciter?.quranFoundationId}
+                onTimingMapChange={(map) => {
+                  timingMapRegistry.register(map);
+                  activeTimingMapRef.current = map;
+                  setActiveTimingMap(map);
+                }}
+              />
+            )}
+
             <Card>
               <CardContent className="p-4 space-y-4">
                 {audioError && (
@@ -2478,7 +2523,6 @@ export default function PreviewPage() {
                   effects={audioEffects.effects}
                   onChange={audioEffects.setEffects}
                   disabled={!audioLoaded || audioError}
-                  onToggleCopyrightProtection={audioEffects.toggleCopyrightProtection}
                 />
               </TabsContent>
 

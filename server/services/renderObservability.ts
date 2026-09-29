@@ -104,7 +104,9 @@ export async function refreshRenderMetrics(): Promise<void> {
   const capacityRows = await query<Array<{ engine: string; replicas: number; slots_per_replica: number }>>(
     'SELECT engine, replicas, slots_per_replica FROM render_engine_capacity',
   ).catch(() => []);
-  const capacityByEngine = new Map(capacityRows.map((row) => [normalizeEngine(row.engine), row]));
+  const capacityByEngine = new Map<RenderWorkerEngine, { engine: string; replicas: number; slots_per_replica: number }>(
+    capacityRows.map((row) => [normalizeEngine(row.engine), row] as const),
+  );
   renderQueueDepth.set(queued);
   for (const engine of ENGINES) {
     const capacity = capacityByEngine.get(engine);

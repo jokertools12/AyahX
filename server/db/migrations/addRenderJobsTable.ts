@@ -1,6 +1,45 @@
 import { query } from '../../db';
 import { logger } from '../../logger';
 
+const ORPHAN_RENDER_AUDIT_CLEANUP_BATCH_SIZE = 500;
+
+async function ensureRenderAuditUserCascade(): Promise<void> {
+  const constraints = await query<Array<{ deleteRule: string }>>(
+    `SELECT DELETE_RULE AS deleteRule
+     FROM information_schema.REFERENTIAL_CONSTRAINTS
+     WHERE CONSTRAINT_SCHEMA = DATABASE()
+       AND TABLE_NAME = 'render_job_audit'
+       AND CONSTRAINT_NAME = 'fk_render_job_audit_user'
+     LIMIT 1`,
+  );
+  if (constraints.length > 0) {
+    if (String(constraints[0].deleteRule).toUpperCase() !== 'CASCADE') {
+      throw new Error('RENDER_AUDIT_USER_FOREIGN_KEY_MUST_CASCADE');
+    }
+    return;
+  }
+
+  // Earlier account deletions could leave audit metadata detached from its
+  // owner. Remove only bounded batches of orphan IDs; never read/log details.
+  while (true) {
+    const orphanEvents = await query<Array<{ id: string }>>(
+      `SELECT e.id FROM render_job_audit e
+       LEFT JOIN users u ON u.id = e.user_id
+       WHERE u.id IS NULL
+       ORDER BY e.created_at ASC
+       LIMIT ${ORPHAN_RENDER_AUDIT_CLEANUP_BATCH_SIZE}`,
+    );
+    if (orphanEvents.length === 0) break;
+    const ids = orphanEvents.map((event) => event.id);
+    await query(`DELETE FROM render_job_audit WHERE id IN (${ids.map(() => '?').join(', ')})`, ids);
+    if (orphanEvents.length < ORPHAN_RENDER_AUDIT_CLEANUP_BATCH_SIZE) break;
+  }
+
+  await query(
+    'ALTER TABLE `render_job_audit` ADD CONSTRAINT `fk_render_job_audit_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE',
+  );
+}
+
 /**
  * Creates the durable render job tables and upgrades installations from the
  * original single-queue schema. active_user_id is intentionally a normal
@@ -36,12 +75,14 @@ export async function ensureRenderJobsTable(): Promise<void> {
     'started_at TIMESTAMP NULL DEFAULT NULL,',
     'completed_at TIMESTAMP NULL DEFAULT NULL,',
     'expires_at TIMESTAMP NULL DEFAULT NULL,',
+    'content_expires_at TIMESTAMP NULL DEFAULT NULL,',
     'PRIMARY KEY (id),',
     'UNIQUE KEY uk_render_jobs_idempotency (idempotency_key),',
     'UNIQUE KEY uq_render_jobs_one_active_user (active_user_id),',
     'INDEX idx_render_jobs_user (user_id, created_at DESC),',
     'INDEX idx_render_jobs_status (status, created_at ASC),',
     'INDEX idx_render_jobs_engine_state (engine, status, created_at ASC),',
+    'INDEX idx_render_jobs_content_expiry (content_expires_at),',
     'CONSTRAINT fk_render_jobs_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
     ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci',
   ].join(' ');
@@ -54,6 +95,7 @@ export async function ensureRenderJobsTable(): Promise<void> {
       ['enqueue_state', "VARCHAR(16) NOT NULL DEFAULT 'pending' AFTER engine"],
       ['heartbeat_at', 'TIMESTAMP NULL DEFAULT NULL AFTER updated_at'],
       ['worker_id', 'VARCHAR(128) DEFAULT NULL AFTER heartbeat_at'],
+      ['content_expires_at', 'TIMESTAMP NULL DEFAULT NULL AFTER expires_at'],
     ];
     for (const [column, definition] of columns) {
       const existing = await query<Array<{ present: number }>>(
@@ -108,6 +150,7 @@ export async function ensureRenderJobsTable(): Promise<void> {
     const indexes: Array<[string, string]> = [
       ['uq_render_jobs_one_active_user', 'ALTER TABLE render_jobs ADD UNIQUE KEY uq_render_jobs_one_active_user (active_user_id)'],
       ['idx_render_jobs_engine_state', 'ALTER TABLE render_jobs ADD INDEX idx_render_jobs_engine_state (engine, status, created_at ASC)'],
+      ['idx_render_jobs_content_expiry', 'ALTER TABLE render_jobs ADD INDEX idx_render_jobs_content_expiry (content_expires_at)'],
     ];
     for (const [index, statement] of indexes) {
       const existing = await query<Array<{ present: number }>>(
@@ -116,6 +159,24 @@ export async function ensureRenderJobsTable(): Promise<void> {
       );
       if (!existing.length) await query(statement);
     }
+
+    // Recover the source-map retention deadline from old QF render manifests.
+    // Rows without a trustworthy source timestamp stay NULL and are purged by
+    // the retention worker rather than receiving an accidentally extended TTL.
+    await query(
+      `UPDATE render_jobs
+       SET content_expires_at = DATE_ADD(
+         STR_TO_DATE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.timingMap.createdAt')), '%Y-%m-%dT%H:%i:%s.%fZ'),
+         INTERVAL 5 DAY
+       )
+       WHERE content_expires_at IS NULL
+         AND (
+           JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.timingMap.sourceId')) = 'quran_foundation'
+           OR JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.timingMap.alignment.provider')) = 'quran_foundation'
+           OR JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.audio.sourceMode')) = 'qf'
+         )
+         AND STR_TO_DATE(JSON_UNQUOTE(JSON_EXTRACT(manifest, '$.timingMap.createdAt')), '%Y-%m-%dT%H:%i:%s.%fZ') IS NOT NULL`,
+    );
 
     await query([
       'CREATE TABLE IF NOT EXISTS render_job_audit (',
@@ -126,9 +187,11 @@ export async function ensureRenderJobsTable(): Promise<void> {
       'details JSON DEFAULT NULL,',
       'created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,',
       'INDEX idx_render_audit_job (job_id, created_at),',
-      'INDEX idx_render_audit_user (user_id, created_at)',
+      'INDEX idx_render_audit_user (user_id, created_at),',
+      'CONSTRAINT fk_render_job_audit_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE',
       ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci',
     ].join(' '));
+    await ensureRenderAuditUserCascade();
     await query([
       'CREATE TABLE IF NOT EXISTS render_engine_capacity (',
       'engine VARCHAR(32) NOT NULL PRIMARY KEY,',

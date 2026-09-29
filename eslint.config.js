@@ -5,7 +5,9 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  // The Python test runner may create an ACL-protected cache directory on
+  // Windows. ESLint should not attempt to traverse generated caches.
+  { ignores: ["dist", "node_modules", ".git", ".pytest_cache", "**/.pytest_cache/**", "**/__pycache__/**"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],

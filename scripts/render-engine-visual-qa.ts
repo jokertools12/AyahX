@@ -8,8 +8,14 @@ import { renderSkiaCanvasVideo } from '../server/services/skiaCanvasRenderer';
 import { renderDeterministicVideo } from '../server/services/deterministicVideoRenderer';
 import { probeMediaFile } from '../server/services/mediaProbeService';
 
-const outputDir = path.resolve(process.cwd(), 'qa-output/render-engines');
-fs.rmSync(outputDir, { recursive: true, force: true });
+const defaultRunId = new Date().toISOString().replace(/[:.]/g, '-');
+const configuredOutputDir = process.env.AYAHX_RENDER_QA_OUTPUT_DIR?.trim();
+const outputDir = path.resolve(
+  configuredOutputDir || path.join('qa-output', `render-engines-${defaultRunId}`),
+);
+if (fs.existsSync(outputDir) && fs.readdirSync(outputDir).length > 0) {
+  throw new Error(`Refusing to overwrite non-empty render QA output directory: ${outputDir}`);
+}
 fs.mkdirSync(outputDir, { recursive: true });
 
 const audioPath = path.join(os.tmpdir(), `ayahx-engine-qa-${process.pid}.m4a`);
@@ -29,6 +35,8 @@ const baseManifest: any = {
   },
   timingMap: {
     mapId: 'visual-qa-map', audioContentHash: 'visual-qa-audio', validationStatus: 'approved',
+    sourceId: 'quran_foundation', createdAt: new Date().toISOString(),
+    alignment: { provider: 'quran_foundation', providerVersion: 'visual-qa-only' },
     words: [
       { canonicalWordKey: '1:1:1', displayWordIndex: 0, displayToken: 'بِسْمِ', startMs: 0, endMs: 450, confidence: 1 },
       { canonicalWordKey: '1:1:2', displayWordIndex: 1, displayToken: 'اللَّهِ', startMs: 450, endMs: 950, confidence: 1 },

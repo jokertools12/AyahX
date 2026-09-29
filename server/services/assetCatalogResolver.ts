@@ -38,6 +38,7 @@ function validateBackgroundAssetUrl(url: string, label: string): SecurityCheckRe
 const TRUSTED_DOMAINS = [
   'audio.qurancdn.com',
   'verses.quran.com',
+  'download.quranicaudio.com',
   'everyayah.com',
   'www.everyayah.com',
   'api.quran.com',

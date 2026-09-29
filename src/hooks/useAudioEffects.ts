@@ -6,7 +6,8 @@ export interface AudioEffects {
   echoEnabled: boolean;
   echoDelay: number; // 0-1 seconds
   echoFeedback: number; // 0-0.8
-  // Copyright protection effects
+  // Legacy field retained only so older saved manifests can be read. It is
+  // ignored by the live graph and rejected by the server validator.
   pitchShift: number; // -0.1 to 0.1 (subtle pitch change)
   speedAdjust: number; // 0.95 to 1.05 (subtle speed change)
   copyrightProtectionEnabled: boolean;
@@ -68,8 +69,8 @@ export function useAudioEffects() {
     return impulse;
   }, []);
 
-  // Initialize audio context and nodes with copyright protection
-  const initializeAudio = useCallback((audioElement: HTMLAudioElement, enableCopyrightProtection = false) => {
+  // Initialize the audio graph without changing the source clock.
+  const initializeAudio = useCallback((audioElement: HTMLAudioElement) => {
     if (isInitialized && sourceNodeRef.current) {
       return;
     }
@@ -120,22 +121,22 @@ export function useAudioEffects() {
         convolver.buffer = impulse;
       }
 
-      // Configure multi-band EQ for copyright fingerprint uniqueness
+      // Configure the optional clarity EQ.
       // Mid-range subtle boost
       biquadFilter.type = 'peaking';
       biquadFilter.frequency.value = 1200;
       biquadFilter.Q.value = 0.7;
-      biquadFilter.gain.value = enableCopyrightProtection ? 1.2 : 0;
+      biquadFilter.gain.value = 0;
 
       // High shelf - subtle warmth reduction
       highShelf.type = 'highshelf';
       highShelf.frequency.value = 8000;
-      highShelf.gain.value = enableCopyrightProtection ? -0.8 : 0;
+      highShelf.gain.value = 0;
 
       // Low shelf - very subtle bass adjustment
       lowShelf.type = 'lowshelf';
       lowShelf.frequency.value = 200;
-      lowShelf.gain.value = enableCopyrightProtection ? 0.6 : 0;
+      lowShelf.gain.value = 0;
 
       // Set initial values
       dryGain.gain.value = 1;
@@ -149,7 +150,7 @@ export function useAudioEffects() {
       masterGain.connect(ctx.destination);
       masterGain.connect(recordingDest);
 
-      // Dry path with multi-band fingerprint filter chain
+      // Dry path with the optional clarity filter chain
       sourceNodeRef.current.connect(biquadFilter);
       biquadFilter.connect(highShelf);
       highShelf.connect(lowShelf);
@@ -167,13 +168,6 @@ export function useAudioEffects() {
       feedback.connect(delay);
       delay.connect(echoGain);
       echoGain.connect(masterGain);
-
-      // Apply copyright protection if enabled
-      if (enableCopyrightProtection) {
-        setEffects(prev => ({ ...prev, copyrightProtectionEnabled: true }));
-        // Apply subtle speed change via playbackRate
-        audioElement.playbackRate = 1.02; // 2% faster - subtle enough to not notice
-      }
 
       setIsInitialized(true);
     } catch (error) {
@@ -202,42 +196,26 @@ export function useAudioEffects() {
       echoGainRef.current.gain.value = effects.echoEnabled ? 0.6 : 0;
     }
 
-    // Update EQ enhancement and copyright protection (multi-band fingerprint)
+    // Update EQ enhancement only; the source clock remains independently
+    // controllable through the explicit speed setting.
     const eqMid = effects.eqEnabled ? 2.5 : 0;
     const eqHigh = effects.eqEnabled ? -1.0 : 0;
     const eqLow = effects.eqEnabled ? 2.0 : 0;
 
-    const cpMid = effects.copyrightProtectionEnabled ? 1.2 : 0;
-    const cpHigh = effects.copyrightProtectionEnabled ? -0.8 : 0;
-    const cpLow = effects.copyrightProtectionEnabled ? 0.6 : 0;
-
     if (biquadFilterRef.current) {
-      biquadFilterRef.current.gain.value = cpMid + eqMid;
+      biquadFilterRef.current.gain.value = eqMid;
     }
     if (highShelfRef.current) {
-      highShelfRef.current.gain.value = cpHigh + eqHigh;
+      highShelfRef.current.gain.value = eqHigh;
     }
     if (lowShelfRef.current) {
-      lowShelfRef.current.gain.value = cpLow + eqLow;
+      lowShelfRef.current.gain.value = eqLow;
     }
 
     if (audioElementRef.current) {
-      audioElementRef.current.playbackRate = effects.copyrightProtectionEnabled ? 1.02 : effects.speedAdjust;
+      audioElementRef.current.playbackRate = effects.speedAdjust;
     }
   }, [effects, isInitialized]);
-
-  // Toggle copyright protection
-  const toggleCopyrightProtection = useCallback((enabled: boolean) => {
-    setEffects(prev => ({ 
-      ...prev, 
-      copyrightProtectionEnabled: enabled,
-      speedAdjust: enabled ? 1.02 : 1.0,
-    }));
-    
-    if (audioElementRef.current) {
-      audioElementRef.current.playbackRate = enabled ? 1.02 : 1.0;
-    }
-  }, []);
 
   const getRecordingStream = useCallback((): MediaStream | null => {
     return recordingDestRef.current?.stream ?? null;
@@ -294,6 +272,5 @@ export function useAudioEffects() {
     cleanup,
     getRecordingStream,
     isInitialized,
-    toggleCopyrightProtection,
   };
 }

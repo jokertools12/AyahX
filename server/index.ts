@@ -20,6 +20,7 @@ import servicesRouter from './routes/services';
 import renderJobsRouter from './routes/renderJobs';
 import quranRouter from './routes/quran';
 import videoTranscodeRouter from './routes/videoTranscode';
+import alignmentsRouter from './routes/alignments';
 
 
 
@@ -27,11 +28,14 @@ import videoTranscodeRouter from './routes/videoTranscode';
 import { ensureRenderJobsTable } from './db/migrations/addRenderJobsTable';
 import { ensurePlanEntitlementSchema } from './db/migrations/ensurePlanEntitlementSchema';
 import { ensureSettingsTable } from './services/settingsService';
+import { ensureAlignmentTables } from './db/migrations/addAlignmentTables';
+import { startAlignmentRetentionCleanup } from './services/alignmentRetentionService';
 import { renderJobQueue } from './services/renderJobQueue';
 import { prometheusMetrics } from './services/renderObservability';
 
 const app = express();
 let isShuttingDown = false;
+let stopAlignmentRetentionCleanup: (() => void) | null = null;
 
 // Railway terminates TLS before the app. Trust exactly that proxy hop so
 // req.ip is the real client address without trusting client-supplied headers
@@ -188,6 +192,7 @@ app.use('/api/admin', adminRouter);
 app.use('/api/services', servicesRouter);
 app.use('/api/render-jobs', renderJobsRouter);
 app.use('/api/quran', quranRouter);
+app.use('/api/alignments', alignmentsRouter);
 
 // 404 Catch-all for undefined API endpoints
 app.use('/api', (_req, res) => {
@@ -257,6 +262,11 @@ export const server = app.listen(config.port, () => {
     ensureRenderJobsTable().then(() => renderJobQueue.recoverStaleJobs()),
     ensurePlanEntitlementSchema(),
     ensureSettingsTable(),
+    ensureAlignmentTables().then(() => {
+      if (!isShuttingDown && !stopAlignmentRetentionCleanup) {
+        stopAlignmentRetentionCleanup = startAlignmentRetentionCleanup();
+      }
+    }),
   ]).catch((err) => {
     logger.warn('Startup database initialization deferred (database may still be starting):', err.message);
   });
@@ -265,6 +275,8 @@ export const server = app.listen(config.port, () => {
 export async function gracefulShutdown(signal: string): Promise<void> {
   if (isShuttingDown) return;
   isShuttingDown = true;
+  stopAlignmentRetentionCleanup?.();
+  stopAlignmentRetentionCleanup = null;
   logger.warn(`Received ${signal}. Initiating graceful shutdown...`);
 
   // Abort any active rendering jobs to free Chromium and FFmpeg processes immediately

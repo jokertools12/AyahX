@@ -606,6 +606,8 @@ export const api = {
     async getSettings() {
       return request<{
         settings: Record<string, { value: string; isSecret: boolean; category: string }>;
+        secretStorage?: { encryptionConfigured: boolean; storageMode: 'encrypted_database' | 'environment_only' };
+        aiRuntime?: Record<string, any>;
       }>('/api/admin/settings');
     },
 
@@ -636,6 +638,41 @@ export const api = {
       return request<{ success: boolean; message: string; latencyMs: number }>('/api/admin/settings/test-gemini', {
         method: 'POST',
         body: JSON.stringify({ apiKey }),
+      });
+    },
+
+    async testOpenRouter(payload?: { apiKey?: string; settings?: Record<string, string> }) {
+      return request<{
+        success: boolean;
+        message: string;
+        latencyMs: number;
+        generationTested?: boolean;
+        generationLatencyMs?: number;
+        generationModel?: string;
+        generationHttpStatus?: number;
+        generationErrorCode?: string;
+        selectedModels: string[];
+        availableSelectedModels: string[];
+        freeSelectedModels: string[];
+        structuredOutputSelectedModels: string[];
+        selectedModelReports: Array<{
+          id: string;
+          available: boolean;
+          free: boolean;
+          freeSlug: boolean;
+          contextLength?: number;
+          supportsStructuredOutputs: boolean;
+          zeroRetentionRequired: boolean;
+          hasZeroRetentionEndpoint: boolean;
+          supportsStructuredOutputsOnZeroRetentionEndpoint: boolean;
+          zeroRetentionProvider?: string;
+          zeroRetentionUptimeLast1d?: number;
+          usableForAyahXText: boolean;
+          issues: Array<string>;
+        }>;
+      }>('/api/admin/settings/test-openrouter', {
+        method: 'POST',
+        body: JSON.stringify(payload || {}),
       });
     },
 
@@ -671,6 +708,13 @@ export const api = {
   },
 
   quran: {
+    async fingerprintAudio(audioUrl: string) {
+      return request<{ fingerprint: { sha256: string; byteLength: number; sourceUrl: string } }>('/api/quran/audio-fingerprint', {
+        method: 'POST',
+        body: JSON.stringify({ audioUrl }),
+      });
+    },
+
     async getStatus() {
       return request<{ configured: boolean; environment: string; clientIdMasked: string | null }>('/api/quran/status');
     },
@@ -691,6 +735,103 @@ export const api = {
 
     async getRecitations(language: string = 'ar') {
       return request<{ recitations: any[] }>(`/api/quran/recitations?language=${encodeURIComponent(language)}`);
+    },
+  },
+
+  alignments: {
+    async getProviders() {
+      return request<{ providers: Array<{
+        id: string;
+        label: string;
+        configured: boolean;
+        supports: string[];
+        requiresHumanReview: boolean;
+        legalStatus: string;
+        unavailableReason?: string;
+      }> }>('/api/alignments/providers');
+    },
+
+    async list(limit = 20) {
+      return request<{ documents: any[] }>(`/api/alignments?limit=${encodeURIComponent(String(limit))}`);
+    },
+
+    async resolve(payload: {
+      providerId: string;
+      reciterId: string;
+      granularity?: 'word' | 'letter' | 'phoneme';
+      /** Quran Foundation requests are server-hydrated and intentionally omit client audio evidence. */
+      audio?: {
+        contentHash: string;
+        durationMs: number;
+        sampleRate?: number;
+        channels?: number;
+        sourceUrlOrAssetId?: string;
+      };
+      reference: {
+        surahNumber: number;
+        startAyah: number;
+        endAyah: number;
+        ayahs: Array<{ numberInSurah: number; text: string }>;
+        quranTextVersion?: string;
+        riwayah?: string;
+      };
+      providerInput?: unknown;
+      jobId?: string;
+    }) {
+      return request<{ accepted: boolean; document: any; timingMap: any; validation: any }>('/api/alignments/resolve', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+    },
+
+    async create(payload: {
+      providerId: string;
+      reciterId: string;
+      granularity?: 'word' | 'letter' | 'phoneme';
+      /** Quran Foundation requests are server-hydrated and intentionally omit client audio evidence. */
+      audio?: {
+        contentHash: string;
+        durationMs: number;
+        sampleRate?: number;
+        channels?: number;
+        sourceUrlOrAssetId?: string;
+      };
+      reference: {
+        surahNumber: number;
+        startAyah: number;
+        endAyah: number;
+        ayahs: Array<{ numberInSurah: number; text: string }>;
+        quranTextVersion?: string;
+        riwayah?: string;
+      };
+      providerInput?: unknown;
+      jobId?: string;
+    }) {
+      return request<{ accepted: boolean; document: any; timingMap: any; validation: any }>('/api/alignments', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+    },
+
+    async get(id: string) {
+      return request<{ document: any; timingMap: any; validation: any }>(`/api/alignments/${encodeURIComponent(id)}`);
+    },
+
+    async review(id: string, payload: {
+      status: 'approved' | 'needs_review' | 'rejected';
+      note?: string;
+      revisions: Array<{
+        occurrenceId?: string;
+        canonicalWordKey?: string;
+        startMs: number;
+        endMs: number;
+        confidence?: number;
+      }>;
+    }) {
+      return request<{ accepted: boolean; document: any; timingMap: any; validation: any }>(`/api/alignments/${encodeURIComponent(id)}/reviews`, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
     },
   },
 

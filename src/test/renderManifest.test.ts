@@ -38,7 +38,7 @@ describe('RenderManifest Specification & Validation', () => {
       ],
     },
     audio: {
-      sourceMode: 'qf' as const,
+      sourceMode: 'single_url' as const,
       audioUrl: 'https://audio.qurancdn.com/Alafasy/108.mp3',
       audioContentHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
       durationSeconds: 12.5,
@@ -90,6 +90,33 @@ describe('RenderManifest Specification & Validation', () => {
     expect(res.errors).toBeUndefined();
   });
 
+  it('requires a fresh source timestamp for Quran Foundation audio or timing', () => {
+    const qfManifest = {
+      ...sampleValidManifest,
+      timingMap: {
+        ...sampleValidManifest.timingMap,
+        sourceId: 'quran_foundation',
+        createdAt: new Date().toISOString(),
+      },
+      audio: { ...sampleValidManifest.audio, sourceMode: 'qf' as const },
+    };
+    expect(validateRenderManifest(qfManifest).valid).toBe(true);
+
+    const missingTimestamp = validateRenderManifest({
+      ...qfManifest,
+      timingMap: { ...qfManifest.timingMap, createdAt: undefined },
+    });
+    expect(missingTimestamp.valid).toBe(false);
+    expect(missingTimestamp.errors).toContain('QF_TIMING_MAP_CREATED_AT_REQUIRED');
+
+    const expired = validateRenderManifest({
+      ...qfManifest,
+      timingMap: { ...qfManifest.timingMap, createdAt: new Date(Date.now() - 6 * 24 * 60 * 60_000).toISOString() },
+    });
+    expect(expired.valid).toBe(false);
+    expect(expired.errors).toContain('QF_TIMING_MAP_EXPIRED');
+  });
+
   it('preserves the selected cinematic visual direction for cloud rendering', () => {
     const res = validateRenderManifest({
       ...sampleValidManifest,
@@ -130,7 +157,7 @@ describe('RenderManifest Specification & Validation', () => {
     expect(res.errors?.some((e) => e.includes('audio'))).toBe(true);
   });
 
-  it('allows glow highlight with unapproved timingMap using approximate word pacing fallback', () => {
+  it('accepts an unapproved map only as a review-state manifest', () => {
     const unapproved = {
       ...sampleValidManifest,
       timingMap: {
@@ -140,6 +167,25 @@ describe('RenderManifest Specification & Validation', () => {
     };
     const res = validateRenderManifest(unapproved);
     expect(res.valid).toBe(true);
+  });
+
+  it('rejects approved timing when an audio tempo transform is requested', () => {
+    const res = validateRenderManifest({
+      ...sampleValidManifest,
+      audioEffects: { speedAdjust: 1.02 },
+    });
+    expect(res.valid).toBe(false);
+    expect(res.errors?.some((error) => error.includes('audio speed change'))).toBe(true);
+  });
+
+  it('rejects the retired fingerprint-evasion transform for every timing state', () => {
+    const res = validateRenderManifest({
+      ...sampleValidManifest,
+      timingMap: { ...sampleValidManifest.timingMap, validationStatus: 'needs_review' as const },
+      audioEffects: { copyrightProtectionEnabled: true },
+    });
+    expect(res.valid).toBe(false);
+    expect(res.errors?.some((error) => error.includes('retired copyrightProtectionEnabled'))).toBe(true);
   });
 
   it('enforces aspect ratio dimensions match (portrait for 9:16, landscape for 16:9)', () => {

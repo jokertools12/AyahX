@@ -83,8 +83,7 @@ export function useAdmin() {
 
   const fetchSettings = useCallback(async () => {
     try {
-      const res = await api.admin.getSettings();
-      return res.settings;
+      return await api.admin.getSettings();
     } catch (err: any) {
       console.error('Failed to fetch settings:', err);
       throw err;
@@ -107,6 +106,10 @@ export function useAdmin() {
 
   const testGemini = useCallback(async (apiKey?: string) => {
     return await api.admin.testGemini(apiKey);
+  }, []);
+
+  const testOpenRouter = useCallback(async (payload?: { apiKey?: string; settings?: Record<string, string> }) => {
+    return await api.admin.testOpenRouter(payload);
   }, []);
 
   const testPexels = useCallback(async (apiKey?: string) => {
@@ -139,6 +142,7 @@ export function useAdmin() {
     saveSettings,
     testQuranFoundation,
     testGemini,
+    testOpenRouter,
     testPexels,
     fetchRenderStats,
     cleanupRenderArtifacts,

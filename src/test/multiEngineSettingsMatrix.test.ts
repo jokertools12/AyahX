@@ -53,6 +53,7 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
       surahName: 'الفاتحة',
       startAyah: 1,
       endAyah: 1,
+      ayahs: [{ numberInSurah: 1, text: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ' }],
     },
     audio: {
       sourceMode: 'single_url',
@@ -64,19 +65,24 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
       id: 'mishari',
       name: 'مشاري راشد العفاسي',
     },
-    ayahTimings: [
-      {
-        surahNumber: 1,
-        ayahNumber: 1,
-        startMs: 0,
-        endMs: 1000,
-        words: [
-          { text: 'بِسْمِ', displayToken: 'بِسْمِ', startMs: 0, endMs: 300 },
-          { text: 'اللَّهِ', displayToken: 'اللَّهِ', startMs: 300, endMs: 650 },
-          { text: 'الرَّحْمَٰنِ', displayToken: 'الرَّحْمَٰنِ', startMs: 650, endMs: 1000 },
-        ],
+    timingMap: {
+      mapId: 'engine-matrix-map',
+      sourceId: 'verified_dataset',
+      sourceMethod: 'verified_dataset',
+      audioContentHash: 'hash_test_mishari_1',
+      validationStatus: 'approved',
+      alignment: {
+        provider: 'verified_dataset',
+        requestedGranularity: 'word',
+        availableGranularities: ['word'],
+        inputAudioSha256: 'hash_test_mishari_1',
       },
-    ],
+      words: [
+        { canonicalWordKey: '1:1:1', occurrenceId: '1:1:1:occurrence:1', displayWordIndex: 0, displayToken: 'بِسْمِ', startMs: 0, endMs: 300, confidence: 1 },
+        { canonicalWordKey: '1:1:2', occurrenceId: '1:1:2:occurrence:1', displayWordIndex: 1, displayToken: 'اللَّهِ', startMs: 300, endMs: 650, confidence: 1 },
+        { canonicalWordKey: '1:1:3', occurrenceId: '1:1:3:occurrence:1', displayWordIndex: 2, displayToken: 'الرَّحْمَٰنِ', startMs: 650, endMs: 1000, confidence: 1 },
+      ],
+    },
     typography: {
       fontFamily: 'Amiri',
       fontSize: 32,
@@ -342,6 +348,46 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
       expect(probe.video?.codec).toBe('h264');
       expect(probe.audio?.codec).toBe('aac');
       expect(probe.durationSeconds).toBeGreaterThanOrEqual(0.9);
+    }
+  }, 90000);
+
+  it('All engines: keep explicit word-by-word layout tied to a trusted word event', async () => {
+    const engines = [
+      { name: 'ffmpeg', renderEngine: 'ffmpeg_ass' as const, render: renderFfmpegAssVideo },
+      { name: 'skia', renderEngine: 'skia_canvas' as const, render: renderSkiaCanvasVideo },
+      { name: 'browser', renderEngine: 'browser_cloud' as const, render: renderDeterministicVideo },
+    ];
+    const base = getBaseManifest();
+    const words = base.timingMap.words;
+    const manifest: RenderManifest = {
+      ...base,
+      animationProfile: 'teleprompter',
+      animationReducedMotion: true,
+      timingMap: {
+        ...base.timingMap,
+        words: [
+          { ...words[0], startMs: 200, endMs: 400 },
+          { ...words[1], startMs: 400, endMs: 700 },
+          { ...words[2], startMs: 700, endMs: 1000 },
+        ],
+      },
+      displaySettings: {
+        ...base.displaySettings,
+        verseDisplayMode: 'wordByWord',
+      },
+    };
+
+    for (const engine of engines) {
+      const outputPath = path.join(tempDir, `word_by_word_${engine.name}.mp4`);
+      const result = await engine.render({
+        manifest: { ...manifest, renderEngine: engine.renderEngine },
+        audioFilePath: sampleAudioPath,
+        outputPath,
+      });
+      const probe = await probeMediaFile(outputPath);
+      expect(fs.existsSync(outputPath), `${engine.name} output exists`).toBe(true);
+      expect(result.fileSizeBytes, `${engine.name} output is non-empty`).toBeGreaterThan(1000);
+      expect(probe.durationSeconds, `${engine.name} preserves the clip duration`).toBeGreaterThanOrEqual(0.9);
     }
   }, 90000);
 

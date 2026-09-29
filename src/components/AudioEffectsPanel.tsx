@@ -5,18 +5,16 @@ import { Slider } from '@/components/ui/slider';
 import { AudioEffects } from '@/hooks/useAudioEffects';
 import { PremiumBadge } from '@/components/PremiumBadge';
 import { useSubscription } from '@/hooks/useSubscription';
-import { Music, Waves, Timer, Shield, AlertTriangle, Volume2, Lock } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Music, Waves, Timer, Volume2, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface AudioEffectsPanelProps {
   effects: AudioEffects;
   onChange: (effects: AudioEffects) => void;
   disabled?: boolean;
-  onToggleCopyrightProtection?: (enabled: boolean) => void;
 }
 
-export function AudioEffectsPanel({ effects, onChange, disabled, onToggleCopyrightProtection }: AudioEffectsPanelProps) {
+export function AudioEffectsPanel({ effects, onChange, disabled }: AudioEffectsPanelProps) {
   const { isPremium, canUseFeature } = useSubscription();
   const locked = !canUseFeature('audioFilters');
   
@@ -60,42 +58,9 @@ export function AudioEffectsPanel({ effects, onChange, disabled, onToggleCopyrig
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Copyright Protection - Premium */}
-        <div className="p-3 rounded-lg bg-primary/10 border border-primary/20 space-y-3">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="copyrightProtection" className="flex items-center gap-2 cursor-pointer">
-              <Shield className="h-4 w-4 text-primary" />
-              <span className="text-primary font-medium text-sm">حماية حقوق النشر</span>
-              {!isPremium && <Lock className="h-3 w-3 text-muted-foreground" />}
-            </Label>
-            <Switch
-              id="copyrightProtection"
-              checked={effects.copyrightProtectionEnabled}
-              onCheckedChange={(checked) => {
-                if (!isPremium) {
-                  toast.error('حماية حقوق النشر متاحة للأعضاء المميزين فقط');
-                  return;
-                }
-                updateEffect('copyrightProtectionEnabled', checked);
-                onToggleCopyrightProtection?.(checked);
-              }}
-              disabled={disabled}
-            />
-          </div>
-          <div className="flex items-start gap-2 text-xs text-muted-foreground">
-            <AlertTriangle className="h-3 w-3 mt-0.5 shrink-0 text-primary" />
-            <p>
-              يُطبق تعديلات صوتية طفيفة غير ملحوظة لتجنب اكتشاف الصوت تلقائياً على فيسبوك ويوتيوب
-            </p>
-          </div>
-          {!isPremium && <PremiumBadge showLock />}
-          {effects.copyrightProtectionEnabled && isPremium && (
-            <Badge variant="secondary" className="bg-primary/20 text-primary border-0">
-              <Shield className="h-3 w-3 ml-1" />
-              الحماية مُفعّلة
-            </Badge>
-          )}
-        </div>
+        {/* The old fingerprint-evasion toggle was intentionally retired. A
+            licensed audio track and a stable audio clock are required for
+            trustworthy Quran word timing. */}
 
         {/* Master Volume / Amplification - Free */}
         <div className="space-y-3 p-3 rounded-lg bg-secondary/40 border border-secondary">

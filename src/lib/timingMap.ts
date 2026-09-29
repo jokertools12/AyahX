@@ -14,6 +14,61 @@
  * ============================================================================
  */
 
+/**
+ * A nested timing unit is deliberately tied to a word occurrence instead of a
+ * dictionary token.  A reciter can repeat a word, return to it after a waqf,
+ * or join it through wasl; using the occurrence preserves the acoustic truth
+ * that the animation layer needs.
+ */
+export interface TimingSubsegment {
+  /** Stable only inside the parent word occurrence, for example `...:p:3`. */
+  occurrenceId: string;
+  /** Human-readable letter, phoneme, or pause marker. */
+  token: string;
+  startMs: number;
+  endMs: number;
+  confidence: number;
+  flags?: string[];
+}
+
+export type AlignmentGranularity = 'word' | 'letter' | 'phoneme';
+
+export type AlignmentProviderId =
+  | 'quran_foundation'
+  | 'manual'
+  | 'internal_ctc'
+  | 'quranic_universal_aligner'
+  | 'lafzize'
+  | 'verified_dataset'
+  | 'unknown';
+
+/** Immutable evidence attached to the output of an alignment provider. */
+export interface AlignmentProvenance {
+  provider: AlignmentProviderId;
+  providerVersion?: string;
+  providerResultId?: string;
+  requestedGranularity: AlignmentGranularity;
+  availableGranularities: AlignmentGranularity[];
+  modelId?: string;
+  modelVersion?: string;
+  checkpointSha256?: string;
+  preprocessingVersion?: string;
+  quranEdition?: string;
+  riwayah?: string;
+  license?: string;
+  inputAudioSha256?: string;
+  parentMapId?: string;
+  createdBy?: 'provider' | 'manual_review' | 'dataset_import';
+}
+
+/** A review result is separate from model confidence: both are required. */
+export interface AlignmentReview {
+  status: 'unreviewed' | 'needs_review' | 'approved' | 'rejected';
+  reviewerId?: string;
+  reviewedAt?: string;
+  note?: string;
+}
+
 export interface TimingWord {
   /** Canonical identifier: `${surah}:${ayah}:${wordIndex1Based}` */
   canonicalWordKey: string;
@@ -29,6 +84,16 @@ export interface TimingWord {
   endMs: number;
   /** Alignment confidence score (0.0 to 1.0) */
   confidence: number;
+  /**
+   * Unique acoustic occurrence. `canonicalWordKey` identifies scripture;
+   * `occurrenceId` identifies the actual spoken instance and must be used by
+   * animation when a word is repeated.
+   */
+  occurrenceId?: string;
+  /** Exact letter timing, present only when a trusted provider supplied it. */
+  letters?: TimingSubsegment[];
+  /** Exact phoneme timing, present only when a trusted provider supplied it. */
+  phonemes?: TimingSubsegment[];
   /** Special phonetic or liturgical flags (e.g., "madd", "waqf_next", "ghunnah") */
   flags?: string[];
 }
@@ -46,7 +111,7 @@ export interface TimingCompositionOffset {
 }
 
 export interface TimingMap {
-  schemaVersion: string; // "1.0.0"
+  schemaVersion: string; // "1.0.0" remains accepted; new maps use "2.0.0"
   mapId: string;
   reciterId: string;
   providerRecitationId?: number | string | null;
@@ -66,6 +131,10 @@ export interface TimingMap {
   alignerVersion: string; // e.g. "exact_audio_v1"
   sourceMethod: 'quran_foundation_segments' | 'forced_alignment' | 'manual_override' | 'verified_dataset';
   validationStatus: 'approved' | 'low_confidence' | 'needs_review' | 'rejected';
+  /** Provider/model/license evidence. Optional to preserve existing maps. */
+  alignment?: AlignmentProvenance;
+  /** Human review decision; it can only reduce trust, never invent timing. */
+  review?: AlignmentReview;
   createdAt: string;
   words: TimingWord[];
   gaps: TimingGap[];
@@ -85,6 +154,10 @@ export interface TimingMapValidationResult {
     monotonic: boolean;
     zeroOverlap: boolean;
     durationBounded: boolean;
+    occurrenceIdsUnique: boolean;
+    subsegmentsBounded: boolean;
+    totalLetterSegments: number;
+    totalPhonemeSegments: number;
   };
 }
 
@@ -182,6 +255,57 @@ export function createTimingMapCacheKey(params: TimingMapCacheKeyParams): string
 }
 
 /**
+ * Returns the stable acoustic identity for a word. Older v1 maps do not have
+ * an occurrence id, so the index is retained as a deterministic compatibility
+ * suffix rather than silently treating repeated tokens as the same event.
+ */
+export function getTimingWordOccurrenceId(word: TimingWord, index: number): string {
+  return word.occurrenceId || `${word.canonicalWordKey || 'word'}:occurrence:${index + 1}`;
+}
+
+function validateSubsegments(
+  parent: TimingWord,
+  parentIndex: number,
+  kind: 'letters' | 'phonemes',
+  subsegments: TimingSubsegment[] | undefined,
+  errors: string[],
+  warnings: string[],
+): { bounded: boolean; count: number } {
+  if (!subsegments || subsegments.length === 0) return { bounded: true, count: 0 };
+
+  let bounded = true;
+  let previousEnd = parent.startMs;
+  const seen = new Set<string>();
+  for (let index = 0; index < subsegments.length; index += 1) {
+    const segment = subsegments[index];
+    const label = `${kind}[${index}] on word ${parentIndex}`;
+    if (!segment.occurrenceId || seen.has(segment.occurrenceId)) {
+      bounded = false;
+      errors.push(`${label} has a missing or duplicate occurrenceId.`);
+    }
+    seen.add(segment.occurrenceId);
+    if (!Number.isFinite(segment.startMs) || !Number.isFinite(segment.endMs) || segment.startMs >= segment.endMs) {
+      bounded = false;
+      errors.push(`${label} has a non-monotonic interval.`);
+      continue;
+    }
+    if (segment.startMs < parent.startMs || segment.endMs > parent.endMs) {
+      bounded = false;
+      errors.push(`${label} falls outside its parent word interval.`);
+    }
+    if (segment.startMs < previousEnd) {
+      bounded = false;
+      errors.push(`${label} overlaps its preceding subsegment.`);
+    }
+    if (segment.confidence < 0 || segment.confidence > 1 || !Number.isFinite(segment.confidence)) {
+      warnings.push(`${label} has an invalid confidence and will require review.`);
+    }
+    previousEnd = Math.max(previousEnd, segment.endMs);
+  }
+  return { bounded, count: subsegments.length };
+}
+
+/**
  * Rigorous validator for TimingMap instances.
  * Enforces strict monotonicity, non-overlap, boundary confinement, and token coverage.
  */
@@ -207,6 +331,10 @@ export function validateTimingMap(map: TimingMap, expectedWordCount?: number): T
         monotonic: false,
         zeroOverlap: false,
         durationBounded: false,
+        occurrenceIdsUnique: false,
+        subsegmentsBounded: false,
+        totalLetterSegments: 0,
+        totalPhonemeSegments: 0,
       },
     };
   }
@@ -214,8 +342,13 @@ export function validateTimingMap(map: TimingMap, expectedWordCount?: number): T
   let monotonic = true;
   let zeroOverlap = true;
   let durationBounded = true;
+  let occurrenceIdsUnique = true;
+  let subsegmentsBounded = true;
+  let totalLetterSegments = 0;
+  let totalPhonemeSegments = 0;
   let totalConfidence = 0;
   let minConfidence = 1.0;
+  const wordOccurrenceIds = new Set<string>();
 
   for (let i = 0; i < map.words.length; i++) {
     const w = map.words[i];
@@ -224,6 +357,13 @@ export function validateTimingMap(map: TimingMap, expectedWordCount?: number): T
       monotonic = false;
       errors.push(`Word [${i} - "${w.displayToken}"] has non-monotonic interval: ${w.startMs}ms >= ${w.endMs}ms.`);
     }
+
+    const occurrenceId = getTimingWordOccurrenceId(w, i);
+    if (wordOccurrenceIds.has(occurrenceId)) {
+      occurrenceIdsUnique = false;
+      errors.push(`Word [${i} - "${w.displayToken}"] duplicates occurrenceId "${occurrenceId}".`);
+    }
+    wordOccurrenceIds.add(occurrenceId);
 
     if (i > 0) {
       const prev = map.words[i - 1];
@@ -241,6 +381,12 @@ export function validateTimingMap(map: TimingMap, expectedWordCount?: number): T
     const conf = typeof w.confidence === 'number' ? Math.max(0, Math.min(w.confidence, 1)) : 0;
     totalConfidence += conf;
     if (conf < minConfidence) minConfidence = conf;
+
+    const letters = validateSubsegments(w, i, 'letters', w.letters, errors, warnings);
+    const phonemes = validateSubsegments(w, i, 'phonemes', w.phonemes, errors, warnings);
+    totalLetterSegments += letters.count;
+    totalPhonemeSegments += phonemes.count;
+    subsegmentsBounded = subsegmentsBounded && letters.bounded && phonemes.bounded;
   }
 
   const meanConfidence = totalConfidence / map.words.length;
@@ -259,7 +405,7 @@ export function validateTimingMap(map: TimingMap, expectedWordCount?: number): T
     }
   }
 
-  const isValid = errors.length === 0 && monotonic && zeroOverlap;
+  const isValid = errors.length === 0 && monotonic && zeroOverlap && occurrenceIdsUnique && subsegmentsBounded;
   let validationStatus: 'approved' | 'low_confidence' | 'needs_review' | 'rejected' = 'approved';
 
   if (!isValid) {
@@ -267,6 +413,16 @@ export function validateTimingMap(map: TimingMap, expectedWordCount?: number): T
   } else if (meanConfidence < 0.65 || minConfidence < 0.3) {
     validationStatus = 'low_confidence';
   } else if (warnings.length > 0) {
+    validationStatus = 'needs_review';
+  }
+
+  // A reviewer can downgrade a mathematically-valid result, but no review
+  // status can turn an invalid map into an approved one.
+  if (isValid && map.review?.status === 'rejected') {
+    validationStatus = 'rejected';
+  } else if (isValid && map.review?.status === 'needs_review') {
+    validationStatus = 'needs_review';
+  } else if (isValid && map.review?.status === 'unreviewed' && validationStatus === 'approved') {
     validationStatus = 'needs_review';
   }
 
@@ -283,6 +439,10 @@ export function validateTimingMap(map: TimingMap, expectedWordCount?: number): T
       monotonic,
       zeroOverlap,
       durationBounded,
+      occurrenceIdsUnique,
+      subsegmentsBounded,
+      totalLetterSegments,
+      totalPhonemeSegments,
     },
   };
 }
@@ -391,6 +551,7 @@ export function normalizeQuranFoundationSegmentsToTimingMap(params: {
         startMs,
         endMs,
         confidence: 1.0, // Approved Quran Foundation ground truth
+        occurrenceId: `${surahNumber}:${aNum}:${wordIdx1Based}:occurrence:${globalDisplayWordIndex}`,
         flags,
       });
     }
@@ -428,6 +589,14 @@ export function normalizeQuranFoundationSegmentsToTimingMap(params: {
     alignerVersion: 'qf_exact_v1',
     sourceMethod: 'quran_foundation_segments',
     validationStatus: 'approved',
+    alignment: {
+      provider: 'quran_foundation',
+      requestedGranularity: 'word',
+      availableGranularities: ['word'],
+      providerVersion: 'qdc-word-segments-v1',
+      quranEdition: 'uthmani_hafs_v1',
+      createdBy: 'provider',
+    },
     createdAt: new Date().toISOString(),
     words,
     gaps,
@@ -469,6 +638,8 @@ export function buildAudioAlignedTimingMap(params: {
     endMs: number;
     confidence?: number;
   }>;
+  /** Optional provider evidence supplied by an offline/remote adapter. */
+  alignment?: Partial<AlignmentProvenance>;
 }): TimingMap {
   const {
     reciterId,
@@ -482,6 +653,7 @@ export function buildAudioAlignedTimingMap(params: {
     channels = 2,
     ayahs,
     explicitWordSpans,
+    alignment,
   } = params;
 
   const words: TimingWord[] = [];
@@ -524,6 +696,7 @@ export function buildAudioAlignedTimingMap(params: {
           startMs: span.startMs,
           endMs: span.endMs,
           confidence: span.confidence ?? 0.95,
+          occurrenceId: `${surahNumber}:${ayah.numberInSurah}:${span.wordIndex1Based}:occurrence:${globalWordIdx}`,
         });
       }
     } else {
@@ -557,8 +730,15 @@ export function buildAudioAlignedTimingMap(params: {
     quranTextVersion: 'uthmani_hafs_v1',
     segmentationVersion: 'energy_vad_v1',
     alignerVersion: 'forced_alignment_v1',
-    sourceMethod: explicitWordSpans && explicitWordSpans.length > 0 ? 'forced_alignment' : 'needs_review' as any,
+    sourceMethod: 'forced_alignment',
     validationStatus: explicitWordSpans && explicitWordSpans.length > 0 ? 'approved' : 'needs_review',
+    alignment: {
+      provider: alignment?.provider || 'unknown',
+      requestedGranularity: alignment?.requestedGranularity || 'word',
+      availableGranularities: alignment?.availableGranularities || ['word'],
+      ...alignment,
+      createdBy: alignment?.createdBy || 'provider',
+    },
     createdAt: new Date().toISOString(),
     words,
     gaps,
@@ -569,6 +749,74 @@ export function buildAudioAlignedTimingMap(params: {
   timingMap.diagnostics = { validationMetrics: validation.metrics, errors: validation.errors };
 
   return timingMap;
+}
+
+export interface TimingWordRevision {
+  occurrenceId?: string;
+  canonicalWordKey?: string;
+  startMs: number;
+  endMs: number;
+  confidence?: number;
+}
+
+/**
+ * Creates a new review revision without mutating the provider result. This is
+ * the only supported path for manual timing edits, so the audit trail can
+ * always point back to the original audio hash and map id.
+ */
+export function createReviewedTimingMapRevision(
+  base: TimingMap,
+  revisions: TimingWordRevision[],
+  review: Omit<AlignmentReview, 'status'> & { status: 'approved' | 'needs_review' | 'rejected' },
+): TimingMap {
+  const byIdentity = new Map<string, TimingWordRevision>();
+  revisions.forEach((revision, index) => {
+    const key = revision.occurrenceId || revision.canonicalWordKey || String(index);
+    byIdentity.set(key, revision);
+  });
+
+  const words = base.words.map((word, index) => {
+    const revision = byIdentity.get(word.occurrenceId || word.canonicalWordKey) || byIdentity.get(String(index));
+    if (!revision) return { ...word };
+    return {
+      ...word,
+      startMs: revision.startMs,
+      endMs: revision.endMs,
+      confidence: revision.confidence ?? word.confidence,
+    };
+  });
+
+  const next: TimingMap = {
+    ...base,
+    schemaVersion: '2.0.0',
+    mapId: `${base.mapId}:review:${Date.now()}`,
+    sourceMethod: 'manual_override',
+    words,
+    alignment: {
+      ...(base.alignment || {
+        provider: 'manual',
+        requestedGranularity: 'word',
+        availableGranularities: ['word'],
+      }),
+      provider: 'manual',
+      parentMapId: base.mapId,
+      createdBy: 'manual_review',
+    },
+    review: {
+      ...review,
+      reviewedAt: review.reviewedAt || new Date().toISOString(),
+    },
+  };
+  const validation = validateTimingMap(next);
+  next.validationStatus = validation.validationStatus;
+  next.diagnostics = {
+    ...(next.diagnostics || {}),
+    validationMetrics: validation.metrics,
+    errors: validation.errors,
+    warnings: validation.warnings,
+    parentMapId: base.mapId,
+  };
+  return next;
 }
 
 /**

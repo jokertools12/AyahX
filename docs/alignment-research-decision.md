@@ -1,0 +1,220 @@
+# Quran alignment and Animate engineering decision
+
+Research snapshot: 2026-09-29. This is an engineering and provenance decision,
+not a legal opinion. Source claims about accuracy and speed are marked as
+maintainer-reported unless independently reproducible.
+
+## Decision
+
+Build AyahX as a hybrid system, not as a wrapper around one public demo:
+
+1. For known, supported recitations, prefer first-party Quran Foundation timing
+   where credentials and terms permit. Add a pinned, offline `verified_dataset`
+   import path for selected QUA and QuranLab timing releases after per-record
+   validation and attribution checks. QuranLab is a promising word-timing
+   catalog for its specific EveryAyah recordings; it does not license those
+   recordings. Reuse only the timing/metadata covered by each dataset license;
+   do not bundle or train on linked source audio by default.
+2. For arbitrary user audio, keep the internal CTC worker as the future
+   forced-aligner. Use a commercially compatible, pinned checkpoint and
+   explicitly licensed audio/labels, or an AyahX-owned corpus. Until then the
+   worker must remain not-ready and never manufacture timestamps.
+3. Keep Animate presentation profiles separate from alignment/model choice.
+   Apply word-synchronous effects only when the audio identity, Quran edition,
+   complete timing map, and AyahX attestation all match. Otherwise show a
+   non-synchronized/static rendering and label the limitation honestly.
+4. Keep OpenRouter text-only. It may refine non-audio copy; it is not an
+   alignment engine and must never receive recitation audio.
+
+There is no public, ready-to-train model in the supplied links that AyahX can
+adopt wholesale. The useful transferable assets are alignment pipelines,
+timestamp formats, and—in some cases—licensed annotations. Word timing and
+Animate are separate layers: an approved audio-to-word timeline is the source
+of truth; Animate profiles deterministically style that timeline. Training a
+model is a later option only after the audio, labels, and commercial rights are
+explicitly cleared.
+
+## Source assessment
+
+| Source | What it is useful for | Evidence and constraints | AyahX decision |
+| --- | --- | --- | --- |
+| [Quran Foundation Content API](https://api-docs.quran.foundation/), [OAuth quickstart](https://api-docs.quran.foundation/docs/quickstart/), and [chapter-recitation segments endpoint](https://api-docs.quran.foundation/docs/content_apis_versioned/4.0.0/chapter-reciter-audio-file/) | Preferred word timings for supported, catalogued chapter recitations | The backend-only Client Credentials flow uses `scope=content`; the chapter-recitation endpoint accepts `segments=true` and may return verse offsets plus `[word_index,start_ms,end_ms]` word spans. Use IDs from `chapter_reciters`, not the separate ayah-recitation catalog. Prelive is limited to Al-Fatihah and Al-Baqarah, and production access requires approval. Audio usage, storage, and redistribution remain subject to Quran Foundation's developer terms. | Keep the existing strict first-party adapter. Store OAuth credentials only on the server; require complete word coverage and exact source-audio SHA-256. Never fall back to a public API response or another reciter. This is a known-recitation service, not a trainable model and not a solution for arbitrary uploads. |
+| [Quranic Universal Aligner Space](https://huggingface.co/spaces/hetchyy/quranic-universal-aligner), [README](https://huggingface.co/spaces/hetchyy/quranic-universal-aligner/blob/main/README.md), [API guide](https://huggingface.co/spaces/hetchyy/quranic-universal-aligner/blob/main/docs/client_api.md), and [owner profile](https://huggingface.co/hetchyy) | Strongest technical reference in the supplied links for staged automatic alignment and live word animation | HF metadata inspected 2026-09-29 reports a public Gradio Space with an MIT card and a versioned `/api/v1` API. Its documented pipeline is VAD → Quran phoneme CTC → n-gram chapter/verse anchoring → substring edit-distance alignment with word-boundary constraints, retry, and re-anchoring; word timing is a follow-up session/MFA step, not the initial segment response. The README says matching/inference assets are installed from pinned private QUA SDK packages; the owner profile lists no public models. The API guide documents unauthenticated audio upload, a temporary `audio_id` session retaining processed audio for a few hours, daily GPU quota, and CPU fallback. The Space's MIT card therefore does not establish rights to its private SDK, model weights, training corpus, or recitation audio. Its accuracy/speed claims have not been independently reproduced by AyahX. No AyahX or user audio was uploaded. | Reproduce the architecture and evaluate only as an explicitly selected research benchmark with cleared test audio. Do not wrap it as the production default or send user audio automatically. Before any adoption, resolve private SDK/model/data rights, retention/privacy terms, pinned revisions, quotas, and a held-out AyahX boundary benchmark. |
+| [QuranLab Quran Audio](https://huggingface.co/datasets/quranlab/quran-audio) | Candidate word-timing catalog for exact, known EveryAyah ayah clips | The current dataset card documents 47 per-ayah recording configs, with CC-BY-4.0 word timings for 44 (11 credited to `cpfair/quran-align`, 33 generated by QuranLab); 3 Warsh configs are reference-only and untimed. Rows join by canonical Hafs `verse_key`; per-ayah segments use 1-based word positions and `start_ms`/`end_ms`. Audio bytes are not hosted or relicensed: `audio_url` points to EveryAyah, whose separate terms govern the recitation. The timings are automatic forced alignments with ordering/bounds/integrity checks, not infallible human gold; some individual ayahs are untimed. | Prioritize a small, pinned metadata-only feasibility import after exact clip URL/identity, source offset, riwayah, Quran edition, per-ayah coverage and attribution match. Never match by reciter name alone, assume 6,236-row coverage, ingest Warsh as Hafs, mirror the audio, or use it as permission to train on linked audio. A set of ayah-local intervals is not automatically a chapter timeline: multi-ayah playback needs a verified clip order and exact per-clip duration/offset map. Keep imported timings untrusted until exact source/timeline matching and AyahX validation; benchmark/review before enabling synchronized output. |
+| [Quranic Universal Audio repo](https://github.com/QUD-Technologies/quranic-universal-audio), [release history](https://github.com/QUD-Technologies/quranic-universal-audio/releases), [HF Space](https://huggingface.co/spaces/hetchyy/quranic-universal-audio), its [Inspector README](https://huggingface.co/spaces/hetchyy/quranic-universal-audio/blob/main/inspector/README.md), [product brief](https://huggingface.co/spaces/hetchyy/quranic-universal-audio/blob/main/PRODUCT.md), and [HF dataset](https://huggingface.co/datasets/QUD-Technologies/quranic-universal-ayahs) | Best known-recording timing catalog candidate and strongest reference for a human review/editor workflow; possible later source of script-specific letter animation | The pinned GitHub release page lists v3.2.0 with 69 recitation entries, manifests, per-recitation archives, and checksums. The rolling HF card currently lists 80 subsets (79 recitation/mushaf variants plus a catalog), 492,646 ayah rows, and 132 GB; rows include word timestamps, source URLs, and source offsets. Release archives may include verse, word, and letter tiers. The letter tier is a producer-defined animation/paint timeline over Unicode-scalar ranges in the exact DigitalKhatt script, not a timestamp for every Unicode character; tiers are not present for every recitation. Its separate Inspector is a Flask + Svelte catalog/reviewer with audio/waveform playback, timestamp animation, segment editing, claims/reviews, roles, and release workflows; its README documents offline fixtures and per-user dev buckets/spaces, while the product brief specifies reduced-motion and long-session accessibility. The HF Space's CC BY 4.0 license covers the project material as stated there; source recordings, Quran text/fonts, and private domain packages keep their own terms. The authors' timing comparisons are not human-ground-truth accuracy or an AyahX benchmark. | Prefer timestamp-only, pinned releases over mirroring the large audio-bearing HF dataset. Borrow the review workflow concepts, not the whole stack; verify package/data/font rights separately. Preserve attribution, provenance, and coverage gaps; do not train on or redistribute source audio without separate rights. Match each map to the exact audio, edition, and riwayah before approval. Use word tiers first; do not advertise letter-synchronous Animate until the renderer maps QUA paint ranges to the exact script/font and real exports pass review. |
+| [Quran.com MCP repository](https://github.com/quran/quran-mcp) and [hosted MCP](https://mcp.quran.ai/) | Canonical text, translations, tafsir, search, and morphology for assistant/tool workflows | The repository describes text/translation/tafsir/search/morphology tools sourced from Quran Foundation projects; it is licensed QFGPL-1.0. The hosted endpoint refused automated page inspection in this review, and the repository describes no audio timing/alignment tool. | Do not use MCP output as a word-timing engine or ship the MCP package as an AyahX runtime dependency. If later used for grounded assistant replies, review the QFGPL terms and keep Quran text sourced/attributed explicitly. |
+| [Quran.com frontend-next](https://github.com/quran/quran.com-frontend-next), [Quran.com apps](https://quran.com/ar/apps), [QuranicAudio](https://quranicaudio.com/), and [audio.quran.com source](https://github.com/quran/audio.quran.com) | UX, reciter catalog, and audio-hosting/reference integration | These are product/frontend or audio catalog/hosting sources, not model checkpoints or validated word-boundary datasets. Quran Foundation's own chapter-audio schema is the stronger timing contract; its examples use `download.quranicaudio.com`, but a host match alone does not establish rights or exact byte identity. The legacy Labs site did not expose a usable API/schema during this review. | Borrow interaction patterns only. Resolve canonical reciter/audio/timing through the documented QF endpoint or an approved pinned data import; do not infer timings from a player, marketing page, or audio URL. Treat QuranicAudio terms as separate from QF timing metadata. |
+| [UmmahAPI docs](https://ummahapi.com/api/docs) | Possible convenience source for Quran text, word display, translations, and audio catalog | Its documentation claims no-signup Quran and word-by-word endpoints, but the inspected API surface does not document word timestamps, a stable data revision, independent Quran-text validation, or a clear rights/provenance chain for all bundled content. | Not a trusted scripture/timing source for the rendering pipeline. Consider only a separately reviewed optional discovery/display adapter after terms, provenance, and text parity are established. |
+| [QuranReciteToText source](https://github.com/Iam-Muslim/QuranReciteToText), [releases](https://github.com/Iam-Muslim/QuranReciteToText/releases) | Strong architecture reference for a self-hosted CPU aligner prototype | The current source stages VAD/phoneme recognition, speech recovery, CTC Viterbi alignment, then maps phonemes to canonical Quran text/word intervals. The README claims 20–65x real-time speed, but no reproducible hardware/corpus benchmark is supplied. The code downloads `zipformer_p_arabic_v3.int8.onnx` from a separate `Iam-Muslim/Natlu` release; that is not the separately published FastConformer release. The matching Quran-Lab Zipformer checkpoint is gated and NPL-1.2 restricts commercial charging; do not assume that license covers the Natlu mirror. Its aligner declares 25 Hz / 40 ms frame steps, so the README's 20 ms precision claim needs sub-frame evidence. No license file was visible in the inspected repository root. | Borrow the staged design only as a reference. Do not copy/deploy its code or checkpoint until code and weight licenses are explicit and we reproduce boundary-error evaluation on held-out reciters and styles. |
+| [Rabah Quran Wav2Vec2 ASR checkpoint](https://huggingface.co/rabah2026/wav2vec2-large-xlsr-53-arabic-quran-v_final) and [Quran-Ayah-Corpus](https://huggingface.co/datasets/rabah2026/Quran-Ayah-Corpus) | Candidate for an isolated transcription/CTC feasibility benchmark, not a forced aligner | The model card is tagged Apache-2.0 and describes Quran ASR; its reported ~4%/~6% WER is maintainer-reported, not an independent AyahX result, and it gives no word-boundary accuracy. The corpus has 263,263 rows across 44 reciters and reciter-separated splits, but its Hugging Face metadata badge says Apache-2.0 while the dataset card says CC BY-NC-SA 4.0. The card says recordings were collected from AlQuran.cloud and EveryAyah.com, whose upstream audio rights are separate. | Do not import/train on the corpus or ship the model until the contradictory dataset license and upstream audio rights are resolved. If permission is cleared, benchmark transcription errors and word-boundary errors separately on held-out reciters; ASR WER alone cannot qualify an aligner. |
+| [Salama Tarteel/EveryAyah dataset](https://huggingface.co/datasets/Salama1429/tarteel-ai-everyayah-Quran) and [Whisper tiny checkpoint](https://huggingface.co/Salama1429/tarteel-ai-whisper-tiny-ar-quran) | Research-only ASR/mismatch-detection baseline | The dataset card describes audio+verse transcript with reciter labels, 36 reciters, roughly 829 training hours plus validation/test, and no word-time labels. Hugging Face metadata says MIT while the card says CC-BY-4.0; the audio is sourced from EveryAyah and remains subject to upstream rights. The 153 MB Whisper checkpoint is tagged Apache-2.0, but its model card says it was trained on the `None` dataset, reports 7.0535 WER on an unspecified evaluation set, and provides no timestamp/boundary benchmark; the repository contains pickle-based PyTorch weights. | Do not use as word aligner, train on the dataset, or load the checkpoint in production. If licensing/provenance is resolved, it could be evaluated as a candidate recitation-text mismatch detector in an isolated sandbox; its output must never create canonical Quran text or render timings. |
+| [Quran-Lab Zipformer v3 model card](https://huggingface.co/Quran-Lab/zipformer_p-arabic-v3), [benchmark dataset](https://huggingface.co/datasets/Quran-Lab/quranic-asr-benchmark) | Technical reference for a phoneme CTC recognizer and evaluation practice | The gated 65.5M-parameter checkpoint reports phoneme error rates (not word-boundary accuracy) on a 600-clip benchmark and discloses measured failure modes; its NPL-1.2 license prohibits charging for the model or a feature it powers. The benchmark's audio is restricted to research/evaluation, may not be redistributed, and has separate upstream terms. The public evidence does not establish that this checkpoint's rights automatically cover the separate `Iam-Muslim/Natlu` mirror used by QuranReciteToText. | Do not select as AyahX's default model for a commercial product. Do not conflate the checkpoint license with the repository/release license or a same-named mirrored file. Reconsider only if project use and all upstream terms are explicitly compatible. |
+| [Lafzize SourceHut project](https://sr.ht/~rehandaphedar/lafzize/), [published Go module](https://pkg.go.dev/git.sr.ht/~rehandaphedar/lafzize/v3), and [default aligner checkpoint](https://huggingface.co/MahmoudAshraf/mms-300m-1130-forced-aligner) | Local/API design reference for forced alignment over a supplied Quran verse range | The inspected SourceHut HEAD README describes a FastAPI endpoint accepting audio plus ordered verse ranges and returning millisecond word spans; it requires separate Quran word/metadata files and says there is no public hosted instance. Its source LICENSE is AGPL-3.0; the published Go module is also AGPL-3.0. The default MMS-300M checkpoint is separately tagged CC-BY-NC-4.0, so it is not an appropriate commercial default. The repository's license does not clear the checkpoint or its recitation/text assets. | Keep it as a local research reference only. Do not deploy the default checkpoint for AyahX commercial use. Reconsider code reuse only after reviewing AGPL obligations and replacing/licensing every model/data dependency; no automatic upload to a third party. |
+| [quran-align](https://github.com/cpfair/quran-align) | Baseline data and comparison/evaluation fixture for matching EveryAyah-style recordings | Code is MIT and generated timing data is CC BY 4.0. The author reports average per-span difference of about 73 ms versus ElMohafez timings on six recordings using a different methodology, but explicitly notes the lack of human-reviewed ground truth, repeated/skipped phrase errors, and occasionally omitted words. The model is speaker-specific and its data-preparation component is unpublished. | Reuse eligible data with attribution as a reference/evaluation fixture; do not treat it as a general aligner or universal gold truth. |
+
+**QuranLab import pin (2026-09-29):** the Hugging Face Hub repository API returned commit
+`55d48a9cfc9dec3836efc9b0f8631c4ff6399c28` for `quranlab/quran-audio`.
+Use the [pinned snapshot](https://huggingface.co/datasets/quranlab/quran-audio/tree/55d48a9cfc9dec3836efc9b0f8631c4ff6399c28)
+for any future import; do not use the rolling `main` branch. Hugging Face's
+Dataset Viewer `/rows` API documents only dataset/config/split/offset/length,
+not a repository revision, so it is suitable for inspection but not a
+reproducible production import. The pinned metadata still does not establish
+that an AyahX audio file is byte-identical to the referenced EveryAyah clip.
+The pinned `husary-mujawwad` row for 1:2 was inspected through the metadata
+viewer and parsed by the candidate exporter; its `timing_source` is the exact
+string `quranlab-forced-alignment (wav2vec2 Apache-2.0 + torchaudio)`. This is
+only a one-row schema-compatibility smoke test, not a full catalog import or an
+accuracy evaluation. No audio was fetched. The exporter allowlists that pinned
+provenance value and `cpfair/quran-align`; both remain unverified, non-renderable
+candidates until exact audio binding and review.
+
+**QUA v3.2.0 metadata pilot (2026-09-29):** a checksum-pinned import of
+`mahmoud_khalil_al_husary_qdc_128k` parsed 6,236 canonical ayah candidates
+without fetching the linked recitation audio. It found 307 ayahs whose source
+word indexes are repeated or nonsequential. These were preserved in audio
+order with distinct occurrence indexes, not silently renumbered; this is an
+input anomaly requiring timeline review, not proof of a QUA bug or a validated
+repeat. Every row still has no matched audio hash/duration and all policy gates
+remain false. The pilot demonstrates catalog/schema compatibility only; it is
+not an accuracy benchmark or render-ready provider.
+
+The same pinned archive's v3 letter tier was then parsed into 346,459 candidate
+paint events across those 6,236 ayahs, preserving its exact row text,
+Unicode-scalar ranges, word-occurrence references, sound-ownership flags, and
+timestamps. A real zero-duration event was present and is retained as an
+instantaneous event rather than rejected or widened. This validates the
+producer schema and importer against the actual release, not the event-to-audio
+accuracy or AyahX's Arabic glyph mapping. Letter events remain unbound,
+unreviewed, non-renderable candidates.
+
+**Quran Foundation policy gate:** the current [Developer Terms](https://api-docs.quran.foundation/legal/developer-terms/)
+permit in-app display under the stated constraints, forbid changing Quran text,
+and limit storage/caching of QF Content to one week unless expressly permitted
+or maintained through supported Content Sync. The Terms also prohibit using QF
+Content to build machine-learning models without written consent and require
+QF attribution in app/video contexts. Therefore QF's endpoint may serve a
+runtime known-recitation path, but AyahX must not train on its text/audio/timing
+data, permanently retain raw response spans, or publish generated videos
+without the required credit and policy review. A persistent QF alignment cache
+needs an expiry or a documented Content Sync exception before the provider is
+enabled for production use. AyahX now gives saved QF documents and review events
+a five-day TTL, hides expired records on reads, and sweeps expired rows every
+30 minutes. The migration backfills legacy rows from their original creation
+time, rather than granting a fresh window. This engineering control does not
+replace QF approval or production policy review. Exported QF scenes now carry a
+non-optional `Source: Quran Foundation` credit in the shared scene used by the
+preview, FFmpeg, Skia, and Browser Cloud paths. Render manifests and linked
+artifacts expire from the timing map's creation time, not the later render-job
+creation time.
+
+## Engineering shape
+
+```text
+Known recording
+  -> pinned QF timing or licensed QUA/QuranLab timing import
+  -> exact source/audio identity + Quran edition/riwayah + coverage checks
+  -> AyahX validation and attestation
+  -> word/letter/phoneme Animate profile
+
+Unknown or user-uploaded recording
+  -> validate expected words against the actual recitation (alignment alone does not verify recitation)
+  -> internal CTC forced alignment (future, licensed model/corpus required)
+  -> complete canonical-word checks
+  -> human review / correction
+  -> AyahX attestation
+  -> word-synchronous Animate profile
+```
+
+Importing a timing file is not enough to prove it fits an audio file: the
+catalog record must identify the same recording and timeline. Per-ayah source
+clips cannot be joined into a chapter clock by concatenating timestamps alone;
+the exact clip sequence and boundaries must be verified. A different encode,
+edit, excerpt, or recording requires an explicit verified offset/map or fresh
+alignment. Never infer a word boundary from verse duration, WPM, character
+counts, model confidence alone, or a visual animation profile.
+
+## Quality gates before enabling exact word animation
+
+- Pin the data release, archive SHA-256, data license, attribution, source
+  recording identity, Quran text edition, riwayah, reciter, and coverage.
+- Require the canonical sequence to cover every expected word exactly once in
+  order; reject overlap, gaps, out-of-range intervals, duplicated or missing
+  words unless an explicit reviewed exception explains them.
+- Validate a held-out sample stratified by reciter and murattal/mujawwad/tarteel/
+  tajweed style. Report coverage and boundary MAE/P50/P95; manually review
+  repeated/skipped passages and low-confidence boundaries.
+- Keep recognition/transcription error separate from boundary error: a forced
+  aligner can confidently timestamp a supplied canonical text that does not
+  match what was recited.
+- Bind the approved map to the exact audio hash and immutable review event.
+  Remote-provider claims alone must not set AyahX `providerVerified`.
+- Render real clips with every Animate profile through the shared scene and
+  compare preview/FFmpeg/Skia/browser outputs, audio duration, and reduced-motion
+  behavior before release.
+- The currently implemented Animate profile resolver consumes word events.
+  Letter-level highlighting remains a separate renderer feature: QUA's paint
+  units are script-specific and cannot safely be approximated by splitting
+  Arabic strings into JavaScript characters.
+
+## AyahX staging status
+
+- Pre-update baseline (2026-09-29): Staging commit `edb60acc322c` was live on
+  all five repo-linked services (AyahX, render-control, and the FFmpeg, Skia,
+  and Browser workers). Railway reported 8/8 Staging services online and no
+  pending work. `/api/health/ready` returned HTTP 200 with MySQL connected, and
+  the alignment-table migration logged success. Production was independently
+  checked at that baseline: 7/7 services online, no pending work, and all five
+  repo-linked services track `main`. The privacy/attribution changes in this
+  revision still require a fresh Staging deployment and read-back.
+- OpenRouter is configured for the single free text model
+  `qwen/qwen3.8-27b:free`, strict JSON Schema, `data_collection=deny`, and both
+  model/provider fallback disabled. The free model lists ModelRun as its current
+  provider and supports JSON Schema; OpenRouter's provider directory lists
+  ModelRun as no-training/zero-retention. A sanitized Staging key check showed
+  free tier and 0/50 daily free calls used, but a synthetic schema-generation
+  smoke test returned HTTP 429 from ModelRun. Treat that as an observed
+  transient/provider-capacity failure—not proof that the model is always down—
+  and keep inference marked unverified until a real successful response.
+  Nemotron 3 Super also supports JSON Schema, but its free NVIDIA endpoint
+  discloses logging/use for NVIDIA improvement and OpenRouter lists NVIDIA as
+  retaining prompts/training, so it is excluded under `data_collection=deny`.
+- The internal alignment worker returns `503 MODEL_NOT_CONFIGURED`. No CTC
+  engine/checkpoint is configured, and Quran Foundation OAuth credentials are
+  absent in Staging. Consequently, real word timing and word-synchronized Animate
+  are not live-ready even though the fail-closed API, review, attestation, and
+  rendering contracts are implemented.
+- QuranLab's published timing annotations remain metadata-only candidates, not
+  a current AyahX provider. A candidate exporter now pins revision
+  `55d48a9cfc9dec3836efc9b0f8631c4ff6399c28`, but exact EveryAyah audio-hash
+  matching, multi-ayah offset validation, and a held-out boundary benchmark
+  are still incomplete. The generic `verified_dataset` provider remains
+  disabled; its environment attestation alone is not evidence of source/audio
+  identity or timing accuracy.
+- The alignment data gate now permits reviewed transcripts without timing labels
+  for CTC training, requires separately reviewed gold spans for boundary
+  evaluation, splits by connected reciter/audio groups, evaluates the held-out
+  test split only, and counts missing/unexpected predictions against coverage.
+- Current pre-deploy local checks (2026-09-29): 326 Vitest tests across 52
+  files passed (the DB-connected queue test was intentionally excluded); the
+  Vite build, app TypeScript check, and targeted server TypeScript check passed.
+  Targeted ESLint exited successfully with 52 `no-explicit-any` warnings. Eight
+  dependency-light alignment-worker unittest cases passed and all worker Python
+  files compiled; two HTTP tests could not run because FastAPI is not installed
+  in the local runtime. A synthetic 720x1280, 30-fps render with timed word
+  highlights and a separate lyric render completed on FFmpeg, Skia, and Browser
+  Cloud; pairwise SSIM ranged from 0.973 to 0.997. These checks do not use real
+  QF audio and do not establish model accuracy or general-audio alignment.
+
+- A name-only Staging variable check confirmed `OPENROUTER_API_KEY` exists, but
+  its value was withheld and no live OpenRouter request was made. The two keys
+  previously pasted into chat must be treated as exposed: revoke/rotate them,
+  then enter a fresh key directly in Staging. The two pre-existing user-owned
+  MP4 modifications remain outside all commits.
+
+The remaining release decisions are permission to use training audio (linked
+audio rights are not granted by the QuranLab timing license) and, if using
+Quran Foundation, its approved credentials. QuranLab's CC-BY timing metadata
+may support a metadata-only known-recording pilot after exact-source matching,
+but no such import or accuracy benchmark has been completed. Until an approved
+provider or validated import is configured, Staging correctly refuses exact
+word alignment rather than presenting guessed timing as professional output.

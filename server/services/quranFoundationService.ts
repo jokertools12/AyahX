@@ -215,6 +215,48 @@ export async function fetchQuranContent<T = any>(endpoint: string, queryParams: 
 }
 
 /**
+ * Fetches Quran Foundation content with the configured first-party
+ * credentials only. Alignment provenance uses this rather than the public
+ * fallback path: a fallback response may be useful for browsing, but it must
+ * never silently become a trusted timing provider.
+ */
+export async function fetchQuranFoundationContentStrict<T = any>(
+  endpoint: string,
+  queryParams: Record<string, string> = {},
+): Promise<T> {
+  const tokenData = await getAccessToken();
+  const serviceConfig = await getQuranFoundationConfig();
+  if (!tokenData || !serviceConfig.hasCredentials) {
+    throw new Error('QF_STRICT_CREDENTIALS_NOT_CONFIGURED');
+  }
+  const qs = new URLSearchParams(queryParams).toString();
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const envDetails = ENV_CONFIG[tokenData.env];
+  const url = `${envDetails.apiUrl}${cleanEndpoint}${qs ? `?${qs}` : ''}`;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15_000);
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'x-auth-token': tokenData.token,
+        'x-client-id': tokenData.clientId,
+        Accept: 'application/json',
+      },
+      signal: controller.signal,
+    });
+    if (!response.ok) {
+      throw new Error(`QF_STRICT_HTTP_${response.status}`);
+    }
+    return await response.json() as T;
+  } catch (error: any) {
+    if (error?.name === 'AbortError') throw new Error('QF_STRICT_TIMEOUT');
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+/**
  * Diagnostic test connection method for Admin Settings Panel
  */
 export async function testConnection(overrideConfig?: {

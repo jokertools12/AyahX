@@ -6,6 +6,8 @@ import { canUseFeature, type PremiumFeature } from '../../shared/planEntitlement
 import { getActivePlanForUser, syncExpiredSubscriptions } from '../services/subscriptionService';
 import {
   getAiConfig,
+  getAiProviderStatus,
+  getImageAiConfig,
   safeParseJson,
   transcribeAudioWithAi,
   refineTextWithAi,
@@ -19,6 +21,14 @@ const router = Router();
 
 const ALLOWED_PROXY_DOMAINS = ['pexels.com', 'everyayah.com', 'quran.com', 'images.pexels.com', 'videos.pexels.com'];
 const ALLOWED_AUDIO_DOMAINS = ['everyayah.com', 'quran.com', 'cdn.islamic.network', 'download.quranicaudio.com', 'surah.my'];
+
+/**
+ * Sanitized capability metadata for the settings redesign.  It never returns
+ * an API key and is safe for an authenticated user to use for feature gating.
+ */
+router.get('/ai-status', requireAuth, async (_req: AuthenticatedRequest, res: Response) => {
+  return res.json(await getAiProviderStatus());
+});
 
 /** Enforce paid capabilities at the API boundary, not only in the React UI. */
 function requirePremiumFeature(feature: PremiumFeature) {
@@ -136,9 +146,10 @@ router.post('/video-proxy', requireAuth, requirePremiumFeature('pexelsVideos'), 
       return res.end();
     }
 
-    // Direct stream piping to client response without loading full video into RAM
-    // @ts-expect-error Node stream from Web ReadableStream
-    const nodeStream = Readable.fromWeb(response.body);
+    // Direct stream piping to client response without loading full video into RAM.
+    // Current Node typings accept the WHATWG stream directly; keep this path
+    // streaming so a large background video never occupies the API heap.
+    const nodeStream = Readable.fromWeb(response.body as any);
     nodeStream.on('error', (err) => {
       console.error('Video proxy stream error:', err);
       if (!res.headersSent) res.status(500).end();
@@ -158,16 +169,34 @@ router.post('/video-proxy', requireAuth, requirePremiumFeature('pexelsVideos'), 
  */
 router.post('/transcribe-audio', requireAuth, transcribeRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { audioUrl, audioBase64: inputBase64, mimeType } = req.body;
+    const { audioUrl, audioBase64: inputBase64, mimeType, language, contentKind } = req.body;
     if (!audioUrl && !inputBase64) {
       return res.status(400).json({ error: 'audioUrl أو audioBase64 مطلوب' });
     }
 
-    const aiConfig = getAiConfig();
+    // An LLM transcript is useful for an Ibtahalat draft, but it must never be
+    // mistaken for the source of Quran word timing.  Quran alignment goes
+    // through the attested provider/review pipeline instead.
+    if (contentKind === 'quran') {
+      return res.status(422).json({
+        error: 'لا يُستخدم التفريغ العام لمحاذاة كلمات القرآن. استخدم مسار المحاذاة المعتمدة والمراجعة.',
+        code: 'QURAN_ALIGNMENT_REQUIRES_ATTESTED_PROVIDER',
+      });
+    }
+
+    const aiConfig = await getAiConfig();
     if (!aiConfig) {
       return res.status(503).json({
-        error: 'خدمة الذكاء الاصطناعي غير مهيأة في الخادم (يرجى إضافة GEMINI_API_KEY في ملف .env)',
+        error: 'خدمة الذكاء الاصطناعي غير مهيأة في الخادم (اضبط AI_PROVIDER وOPENROUTER_API_KEY في بيئة الخادم)',
+        code: 'AI_PROVIDER_NOT_CONFIGURED',
         configured: false,
+      });
+    }
+
+    if (aiConfig.type === 'openrouter') {
+      return res.status(501).json({
+        error: 'OpenRouter مفعّل للنص فقط في AyahX؛ لم يُرسل الملف الصوتي إلى أي مزوّد.',
+        code: 'OPENROUTER_AUDIO_UNSUPPORTED',
       });
     }
 
@@ -229,7 +258,7 @@ router.post('/transcribe-audio', requireAuth, transcribeRateLimiter, async (req:
     }
 
     try {
-      const result = await transcribeAudioWithAi(audioBase64, aiConfig, mimeType);
+      const result = await transcribeAudioWithAi(audioBase64, aiConfig, mimeType, language);
       return res.json(result);
     } catch (aiErr: any) {
       console.error('AI provider error:', aiErr);
@@ -255,10 +284,11 @@ router.post('/refine-text', requireAuth, aiRateLimiter, async (req: Authenticate
       return res.status(400).json({ error: 'عدد الأسطر يجب ألا يتجاوز 100 سطر في المرة الواحدة' });
     }
 
-    const aiConfig = getAiConfig();
+    const aiConfig = await getAiConfig();
     if (!aiConfig) {
       return res.status(503).json({
-        error: 'خدمة الذكاء الاصطناعي غير مهيأة في الخادم (يرجى إضافة GEMINI_API_KEY في ملف .env)',
+        error: 'خدمة الذكاء الاصطناعي غير مهيأة في الخادم (اضبط AI_PROVIDER وOPENROUTER_API_KEY في بيئة الخادم)',
+        code: 'AI_PROVIDER_NOT_CONFIGURED',
         configured: false,
       });
     }
@@ -285,15 +315,15 @@ router.post('/refine-timing', requireAuth, aiRateLimiter, async (req: Authentica
       return res.status(400).json({ error: 'عدد الأسطر يجب ألا يتجاوز 100 سطر' });
     }
 
-    const aiConfig = getAiConfig();
-    if (!aiConfig) {
-      return res.status(503).json({
-        error: 'خدمة الذكاء الاصطناعي غير مهيأة في الخادم (يرجى إضافة GEMINI_API_KEY في ملف .env)',
-        configured: false,
-      });
-    }
-
-    return res.json({ refinedLines: lines });
+    // Do not let a language model invent timing.  Keep this endpoint as a
+    // compatibility response for the old client and direct real alignment to
+    // /api/alignments, where an attested source and human review are required.
+    return res.json({
+      refinedLines: lines,
+      timingStatus: 'untrusted',
+      requiresAlignmentReview: true,
+      message: 'لم يتم تعديل التوقيتات؛ التوقيت الدقيق يمر عبر مزود المحاذاة والمراجعة.',
+    });
   } catch (err: any) {
     console.error('Refine timing error:', err);
     return res.status(500).json({ error: 'فشل ضبط التوقيتات' });
@@ -478,7 +508,7 @@ router.post('/generate-logo', requireAuth, requirePremiumFeature('aiLogo'), aiRa
     const safeStyle = (style || 'goldMedallion') as any;
 
     const { generateProceduralLogo } = await import('../services/logoGenerator');
-    const aiConfig = getAiConfig();
+    const aiConfig = await getImageAiConfig();
     let generatedSvg: string | null = null;
 
     if (aiConfig && aiConfig.type === 'gemini') {
@@ -562,10 +592,11 @@ router.post('/generate-image', requireAuth, requirePremiumFeature('aiBackgrounds
       return res.status(400).json({ error: 'يرجى إدخال وصف الصورة المراد توليدها' });
     }
 
-    const aiConfig = getAiConfig();
+    const aiConfig = await getImageAiConfig();
     if (!aiConfig) {
       return res.status(503).json({
-        error: 'خدمة الذكاء الاصطناعي غير مهيأة في الخادم (يرجى إضافة GEMINI_API_KEY في ملف .env)',
+        error: 'مزود توليد الصور غير مهيأ. اضبط AI_IMAGE_PROVIDER=gemini وGEMINI_API_KEY في بيئة الخادم.',
+        code: 'AI_IMAGE_PROVIDER_NOT_CONFIGURED',
         configured: false,
       });
     }

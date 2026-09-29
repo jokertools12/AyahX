@@ -12,6 +12,7 @@ import { getPlanEntitlements, validateRenderEntitlements } from '../../shared/pl
 import { getActivePlanForUser, getTodayCloudRenderUsage } from '../services/subscriptionService';
 import { isObjectStoragePath, streamStoredRender } from '../services/objectStorage';
 import { recordRenderAudit } from '../services/renderObservability';
+import { verifyApprovedTimingMapAttestation } from '../services/alignmentAttestation';
 
 const router = Router();
 
@@ -87,6 +88,19 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
     const assetValidation = validateManifestAssets(manifestValidation.manifest);
     if (!assetValidation.safe) {
       return res.status(400).json({ error: `فشل التحقق الأمني من وسائط الريندر: ${assetValidation.reason}` });
+    }
+    // Structural interval validation prevents malformed spans. This proof is
+    // the second, separate gate: an approved word animation must be the exact
+    // server-issued map for this account, not a hand-crafted browser payload.
+    const timingAttestation = verifyApprovedTimingMapAttestation(
+      manifestValidation.manifest.timingMap,
+      userId,
+    );
+    if (!timingAttestation.valid) {
+      return res.status(400).json({
+        error: 'لا يمكن تصدير تحريك كلمة-بكلمة قبل توثيق خريطة التوقيت من الخادم.',
+        code: timingAttestation.code,
+      });
     }
 
     // getActivePlanForUser already excludes expired subscriptions. Avoid a

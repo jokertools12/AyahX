@@ -3,12 +3,16 @@
  * into a single seamless WAV blob with zero gaps between segments,
  * micro-fade boundary smoothing, and broadcast peak normalization.
  *
- * Returns the blob URL and per-segment timestamps (in seconds).
+ * Returns the blob URL, its byte-level identity, and per-segment timestamps.
  */
+
+import { computeAudioContentHash } from './timingMap';
 
 export interface ConcatResult {
   /** Object URL pointing to a WAV blob of the concatenated audio */
   blobUrl: string;
+  /** SHA-256 of the exact normalized WAV bytes exposed by blobUrl. */
+  audioContentHash: string;
   /** Total duration in seconds */
   totalDuration: number;
   /** Per-segment start/end timestamps in seconds */
@@ -22,6 +26,7 @@ export async function concatenateAudioUrls(
   if (!urls || urls.length === 0) {
     return {
       blobUrl: '',
+      audioContentHash: '',
       totalDuration: 0,
       timestamps: [],
     };
@@ -151,13 +156,15 @@ export async function concatenateAudioUrls(
   }
 
   // 7. Encode to WAV
-  const wavBlob = audioBufferToWav(merged);
-  const blobUrl = URL.createObjectURL(wavBlob);
+  const wav = audioBufferToWav(merged);
+  const blobUrl = URL.createObjectURL(wav.blob);
+  const audioContentHash = await computeAudioContentHash(wav.bytes);
 
   ctx.close().catch(() => {});
 
   return {
     blobUrl,
+    audioContentHash,
     totalDuration: totalSamples / targetSampleRate,
     timestamps,
   };
@@ -165,7 +172,7 @@ export async function concatenateAudioUrls(
 
 // ── WAV encoder ─────────────────────────────────────────────────────────────
 
-function audioBufferToWav(buffer: AudioBuffer): Blob {
+function audioBufferToWav(buffer: AudioBuffer): { blob: Blob; bytes: ArrayBuffer } {
   const numChannels = buffer.numberOfChannels;
   const sampleRate = buffer.sampleRate;
   const format = 1; // PCM
@@ -216,7 +223,7 @@ function audioBufferToWav(buffer: AudioBuffer): Blob {
     writeOffset += 2;
   }
 
-  return new Blob([arrayBuffer], { type: 'audio/wav' });
+  return { blob: new Blob([arrayBuffer], { type: 'audio/wav' }), bytes: arrayBuffer };
 }
 
 function writeString(view: DataView, offset: number, str: string) {
