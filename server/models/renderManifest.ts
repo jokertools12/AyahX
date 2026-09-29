@@ -115,6 +115,7 @@ export const RenderManifestSchema = z.object({
     sourceId: z.string().min(1).optional(),
     sourceMethod: z.string().min(1).optional(),
     audioContentHash: z.string().min(8),
+    audioFingerprintKind: z.enum(['audio_bytes_sha256', 'dataset_asset_identity_sha256']).optional(),
     createdAt: z.string().datetime().optional(),
     validationStatus: z.enum(['approved', 'low_confidence', 'needs_review', 'rejected']),
     alignment: alignmentProvenanceSchema,

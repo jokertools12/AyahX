@@ -799,12 +799,6 @@ export const api = {
 
     async resolveUniversal(payload: {
       reciterId: string;
-      audio?: {
-        contentHash?: string;
-        durationMs?: number;
-        sampleRate?: number;
-        channels?: number;
-      };
       reference: {
         surahNumber: number;
         startAyah: number;

@@ -61,7 +61,7 @@ describe('Browser render harness', () => {
     expect(source).toContain("hasTrustedWordTiming && verseMode === 'full' && animationProfile === 'teleprompter'");
     expect(source).toContain("hasTrustedWordTiming && verseMode === 'full' && animationProfile === 'isolate'");
     expect(source).toContain('animationReducedMotion');
-    expect(source).toContain('keep the complete current ayah visible until its first verified word starts');
+    expect(source).toMatch(/keep the complete current ayah\s*\/\/\s*visible until its first verified word starts/);
     expect(source).toContain('activeWordIndexInAyah == null && hasTrustedWordTiming');
   });
 

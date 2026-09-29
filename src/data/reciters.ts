@@ -15,7 +15,7 @@ export interface Reciter {
   /** @deprecated legacy source metadata; not used for alignment or rendering. */
   quranFoundationId?: number;
   everyAyahSubfolder?: string;
-  /** QUA v2.2.0 timing package slug; the resolver supplies its matching audio URL. */
+  /** QUA v3.2.0 word-tier package slug; the resolver supplies its paired audio URL. */
   quranUniversalSlug?: string;
   isOpenLicense?: boolean;
   moshafId?: number;
@@ -583,61 +583,61 @@ export const reciters: Reciter[] = [
   },
 
   // =====================================================================
-  // QUA v2.2.0 catalogue reciters (word + letter timing available)
+  // QUA v3.2.0 Hafs catalogue reciters (canonical word timing; no letter renderer)
   // =====================================================================
   {
     id: 'abdullah_al_qarafi', name: 'عبد الله القرافي', englishName: 'Abdullah Al-Qarafi', style: 'مرتل',
-    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    description: 'تلاوة مرتلة مع توقيت الكلمات بحسب بيانات المحاذاة المثبتة',
     server: 'https://server16.mp3quran.net/a_alqrafi/Rewayat-Hafs-A-n-Assem', quranUniversalSlug: 'abdullah_al_qarafi_mp3quran', isOpenLicense: true,
   },
   {
     id: 'abdulwadood_haneef', name: 'عبد الودود حنيف', englishName: 'Abdulwadood Haneef', style: 'مرتل',
-    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    description: 'تلاوة مرتلة مع توقيت الكلمات بحسب بيانات المحاذاة المثبتة',
     server: 'https://server8.mp3quran.net/wdod', quranUniversalSlug: 'abdulwadood_haneef_mp3quran', isOpenLicense: true,
   },
   {
     id: 'abdur_rashid_sufi', name: 'عبد الرشيد صوفي', englishName: 'Abdur-Rashid Sufi', style: 'مرتل',
-    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    description: 'تلاوة مرتلة مع توقيت الكلمات بحسب بيانات المحاذاة المثبتة',
     server: 'https://download.quranicaudio.com/quran/abdurrashid_sufi', quranUniversalSlug: 'abdur_rashid_sufi_qdc', isOpenLicense: true,
   },
   {
     id: 'ahmed_amer', name: 'أحمد عامر', englishName: 'Ahmed Amer', style: 'مرتل',
-    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    description: 'تلاوة مرتلة مع توقيت الكلمات بحسب بيانات المحاذاة المثبتة',
     server: 'https://download.tvquran.com/download/recitations/197/143', quranUniversalSlug: 'ahmed_amer_tvquran', isOpenLicense: true,
   },
   {
     id: 'ahmed_issa_al_maasaraawi', name: 'أحمد عيسى المعصراوي', englishName: 'Ahmed Issa Al-Maasaraawi', style: 'مرتل',
-    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    description: 'تلاوة مرتلة مع توقيت الكلمات بحسب بيانات المحاذاة المثبتة',
     server: 'https://server16.mp3quran.net/a_maasaraawi/Rewayat-Hafs-A-n-Assem', quranUniversalSlug: 'ahmed_issa_al_maasaraawi_mp3quran', isOpenLicense: true,
   },
   {
     id: 'ahmed_shaheen', name: 'أحمد خليل شاهين', englishName: 'Ahmed Khalil Shaheen', style: 'مرتل',
-    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    description: 'تلاوة مرتلة مع توقيت الكلمات بحسب بيانات المحاذاة المثبتة',
     server: 'https://server16.mp3quran.net/shaheen/Rewayat-Hafs-A-n-Assem', quranUniversalSlug: 'ahmed_shaheen_mp3quran', isOpenLicense: true,
   },
   {
     id: 'ali_al_huthaifi', name: 'علي بن عبد الرحمن الحذيفي', englishName: 'Ali Al-Huthaifi', style: 'مرتل',
-    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    description: 'تلاوة مرتلة مع توقيت الكلمات بحسب بيانات المحاذاة المثبتة',
     server: 'https://server9.mp3quran.net/hthfi', quranUniversalSlug: 'ali_al_huthaifi_mp3quran', isOpenLicense: true,
   },
   {
     id: 'ayman_swed', name: 'أيمن سويد', englishName: 'Ayman Suwayd', style: 'ترتيل',
-    description: 'المصحف المعلم مع توقيت الكلمات والحروف',
-    server: 'https://download.tvquran.com/download/recitations/346/270', quranUniversalSlug: 'ayman_swed_muallim_tvquran', isOpenLicense: true,
+    description: 'المصحف المعلم',
+    server: 'https://download.tvquran.com/download/recitations/346/270', isOpenLicense: true,
   },
   {
     id: 'mahmoud_abdul_hakam', name: 'محمود عبدالحكم', englishName: 'Mahmoud Abdul Hakam', style: 'مرتل',
-    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    description: 'تلاوة مرتلة مع توقيت الكلمات بحسب بيانات المحاذاة المثبتة',
     server: 'https://server16.mp3quran.net/m_abdelhakam/Rewayat-Hafs-A-n-Assem', quranUniversalSlug: 'mahmoud_abdul_hakam_mp3quran', isOpenLicense: true,
   },
   {
     id: 'mohammed_alghazali', name: 'محمد الغزالي', englishName: 'Mohammed Al-Ghazali', style: 'مرتل',
-    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    description: 'تلاوة مرتلة مع توقيت الكلمات بحسب بيانات المحاذاة المثبتة',
     server: 'https://ia601406.us.archive.org/16/items/Mohammed-Al-Ghazali', quranUniversalSlug: 'mohammed_alghazali_archive', isOpenLicense: true,
   },
   {
     id: 'mustafa_ismail_murattal', name: 'مصطفى إسماعيل', englishName: 'Mustafa Ismail', style: 'مرتل',
-    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    description: 'تلاوة مرتلة مع توقيت الكلمات بحسب بيانات المحاذاة المثبتة',
     server: 'https://server8.mp3quran.net/mustafa', quranUniversalSlug: 'mustafa_ismail_mp3quran', isOpenLicense: true,
   },
 ];

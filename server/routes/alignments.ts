@@ -143,19 +143,27 @@ router.post('/resolve-known', requireAuth, aiRateLimiter, async (req: Authentica
 });
 
 /**
- * Resolves the immutable QUA v2.2.0 word + letter tiers and returns the exact
- * catalogue chapter URL that those timestamps describe.  This route is kept
+ * Resolves the pinned QUA v3.2.0 word tier and returns the exact catalogue
+ * chapter URL and offset that those timestamps describe. This route is kept
  * separate from model providers so a missing remote package fails closed and
  * never turns into a guessed word duration.
  */
 router.post('/resolve-universal', requireAuth, aiRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const body = req.body || {};
+    const reference = body.reference || {};
+    const expectedAyahCount = Number(reference.endAyah) - Number(reference.startAyah) + 1;
+    if (!Number.isInteger(reference.surahNumber) || reference.surahNumber < 1 || reference.surahNumber > 114
+      || !Number.isInteger(reference.startAyah) || !Number.isInteger(reference.endAyah)
+      || reference.startAyah < 1 || reference.endAyah < reference.startAyah
+      || expectedAyahCount > 300 || !Array.isArray(reference.ayahs) || reference.ayahs.length !== expectedAyahCount
+      || reference.ayahs.some((ayah: any, index: number) => ayah?.numberInSurah !== reference.startAyah + index || typeof ayah?.text !== 'string' || !ayah.text.trim())) {
+      return res.status(400).json({ error: 'نطاق الآيات غير صالح', code: 'UNIVERSAL_ALIGNMENT_REFERENCE_INVALID' });
+    }
     const input = {
       reciterId: String(body.reciterId || ''),
       reciterSlug: String(body.providerInput?.reciterSlug || ''),
-      audio: body.audio || {},
-      reference: body.reference,
+      reference,
     };
     if (!input.reciterId || !input.reciterSlug || !input.reference) {
       return res.status(400).json({ error: 'بيانات QUA غير مكتملة', code: 'UNIVERSAL_ALIGNMENT_INPUT_REQUIRED' });
@@ -171,6 +179,7 @@ router.post('/resolve-universal', requireAuth, aiRateLimiter, async (req: Authen
   } catch (error: any) {
     const code = String(error?.message || error || 'UNIVERSAL_ALIGNMENT_FAILED');
     const status = code.includes('NOT_AVAILABLE') || code.includes('NOT_SUPPORTED') || code.includes('MISSING')
+      || code.includes('AUDIO_URL_') || code.includes('TIMING_INVALID')
       ? 422
       : code.includes('REQUIRED') || code.includes('INPUT') || code.includes('MISMATCH')
       ? 400
