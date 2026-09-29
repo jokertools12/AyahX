@@ -43,13 +43,70 @@ describe('Browser render harness', () => {
 
   it('never manufactures verse or word timing when evidence is absent', () => {
     const source = fs.readFileSync(path.resolve(process.cwd(), 'public/render-harness.html'), 'utf8');
-    expect(source).toContain('No timing evidence. Keep a stable static verse');
+    expect(source).toContain('static no-timing fallback');
     expect(source).toContain('it cannot');
     expect(source).toContain('manufacture a word boundary from duration');
     expect(source).not.toContain('allowApproximateTiming');
     expect(source).not.toContain('computeWordPhoneticWeight');
     expect(source).not.toContain('Fallback proportional duration across verses');
     expect(source).not.toContain('activeAyahIndex = Math.floor(fraction * allAyahs.length)');
+  });
+
+  it('keeps the active next ayah when composition offsets are present', () => {
+    const source = fs.readFileSync(path.resolve(process.cwd(), 'public/render-harness.html'), 'utf8');
+    const start = source.indexOf('function resolveActiveAyahTimeline(');
+    const end = source.indexOf('// Rosette / Ayah Badge Drawing', start);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    const resolveTimeline = new Function('input', `${source.slice(start, end)}\nreturn resolveActiveAyahTimeline(input);`) as (input: unknown) => {
+      activeAyahIndex: number;
+      currentAyahStartSec: number;
+      currentAyahEndSec: number;
+      activeCompositionOffset: { ayahNumber: number } | null;
+    };
+
+    const result = resolveTimeline({
+      allAyahs: [{ numberInSurah: 63 }, { numberInSurah: 64 }, { numberInSurah: 65 }],
+      everyAyahTimestamps: [],
+      timingMap: {
+        compositionOffsets: [
+          { ayahNumber: 63, startMs: 10_000, endMs: 20_000 },
+          { ayahNumber: 64, startMs: 20_000, endMs: 30_000 },
+        ],
+        words: [],
+      },
+      frameTimeSeconds: 25,
+      lookupTimeMs: 25_000,
+      isTimingMapAbsolute: true,
+      rangeOffsetMs: 10_000,
+      audioDurationSeconds: 60,
+    });
+
+    expect(result.activeCompositionOffset?.ayahNumber).toBe(64);
+    expect(result.activeAyahIndex).toBe(1);
+    expect(result.currentAyahStartSec).toBe(10);
+    expect(result.currentAyahEndSec).toBe(20);
+  });
+
+  it('reveals only source-timed glyph groups as the audio clock advances', () => {
+    const source = fs.readFileSync(path.resolve(process.cwd(), 'public/render-harness.html'), 'utf8');
+    const start = source.indexOf('function resolveRevealedLetters(');
+    const end = source.indexOf('// Rosette / Ayah Badge Drawing', start);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    const resolveRevealedLetters = new Function('letterSpans', 'lookupTimeMs',
+      `${source.slice(start, end)}\nreturn resolveRevealedLetters(letterSpans, lookupTimeMs);`) as (
+        letterSpans: Array<{ token: string; startMs: number }>,
+        lookupTimeMs: number,
+      ) => string;
+    const spans = [
+      { token: 'ٱللَّ', startMs: 100 },
+      { token: 'هِ', startMs: 320 },
+    ];
+
+    expect(resolveRevealedLetters(spans, 99)).toBe('');
+    expect(resolveRevealedLetters(spans, 100)).toBe('ٱللَّ');
+    expect(resolveRevealedLetters(spans, 320)).toBe('ٱللَّهِ');
   });
 
   it('shares deterministic Animate profiles with the canonical timing map contract', () => {

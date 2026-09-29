@@ -1,11 +1,11 @@
 import { useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Play, Pause, Volume2, Heart } from 'lucide-react';
+import { Pause, Volume2, Heart, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useFavorites } from '@/hooks/useFavorites';
 import type { Reciter } from '@/data/reciters';
-import { getPreviewAudioUrl } from '@/data/reciters';
+import { getPreviewAudioUrl, isAccreditedReciter, getReciterRiwayah } from '@/data/reciters';
 
 interface ReciterCardProps {
   reciter: Reciter;
@@ -26,6 +26,9 @@ export function ReciterCard({
   const isFavorite = isFavoriteProp !== undefined ? isFavoriteProp : isFavoriteReciter(reciter.id);
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const isAccredited = isAccreditedReciter(reciter);
+  const riwayah = getReciterRiwayah(reciter);
 
   const toggleFavorite = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -71,59 +74,100 @@ export function ReciterCard({
 
   return (
     <motion.div
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ scale: 1.015 }}
+      whileTap={{ scale: 0.985 }}
       onClick={onClick}
       className={cn(
-        "cursor-pointer rounded-xl border p-4 transition-all duration-300",
+        "cursor-pointer rounded-xl border p-3.5 transition-all duration-300 relative overflow-hidden",
         "bg-card hover:shadow-lg hover:shadow-primary/10",
-        isSelected && "ring-2 ring-primary border-primary bg-primary/5"
+        isSelected && "ring-2 ring-primary border-primary bg-primary/5",
+        isAccredited && "border-emerald-500/20 hover:border-emerald-500/40"
       )}
     >
-      <div className="flex items-center gap-3">
-        {/* Avatar */}
-        <div className="flex h-11 w-11 items-center justify-center rounded-full gradient-gold text-accent-foreground font-bold text-base shrink-0">
-          {reciter.name.charAt(0)}
+      <div className="flex items-start gap-3">
+        {/* Avatar with optional accredited halo */}
+        <div className="relative shrink-0 mt-0.5">
+          <div className={cn(
+            "flex h-11 w-11 items-center justify-center rounded-full font-bold text-base transition-transform",
+            isAccredited
+              ? "bg-gradient-to-br from-emerald-500 to-teal-700 text-white shadow-md shadow-emerald-500/20"
+              : "gradient-gold text-accent-foreground shadow-sm"
+          )}>
+            {reciter.name.charAt(0)}
+          </div>
+          {isAccredited && (
+            <span
+              title="قارئ معتمد بمحاذاة زمنية فائقة الدقة"
+              className="absolute -bottom-1 -left-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[9px] text-white shadow-sm ring-2 ring-card"
+            >
+              ⚡
+            </span>
+          )}
         </div>
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h3 className="font-bold text-sm leading-tight truncate">{reciter.name}</h3>
-          <p className="text-xs text-muted-foreground truncate">{reciter.description}</p>
+          <div className="flex items-center justify-between gap-1 mb-1">
+            <h3 className="font-bold text-sm leading-tight truncate">{reciter.name}</h3>
+          </div>
+          {reciter.description && (
+            <p className="text-xs text-muted-foreground truncate mb-2">{reciter.description}</p>
+          )}
+
+          {/* Badges row: Accreditation, Riwayah, Style */}
+          <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+            {isAccredited ? (
+              <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shrink-0">
+                <Zap className="h-2.5 w-2.5 fill-current" />
+                معتمد ⚡
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium bg-muted text-muted-foreground border border-border/40 shrink-0">
+                تلاوة قياسية
+              </span>
+            )}
+
+            <span className="rounded-full bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 text-[10px] font-medium shrink-0">
+              {riwayah}
+            </span>
+
+            <span className="rounded-full bg-secondary text-secondary-foreground px-2 py-0.5 text-[10px] font-medium shrink-0">
+              {reciter.style}
+            </span>
+          </div>
         </div>
 
-        {/* Favorite Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 rounded-full shrink-0"
-          onClick={toggleFavorite}
-        >
-          <Heart className={cn("h-4 w-4", isFavorite && "fill-red-500 text-red-500")} />
-        </Button>
+        {/* Action Buttons */}
+        <div className="flex items-center gap-1 shrink-0 -mt-0.5">
+          {/* Favorite Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 rounded-full"
+            onClick={toggleFavorite}
+            title={isFavorite ? "إزالة من المفضلة" : "إضافة للمفضلة"}
+          >
+            <Heart className={cn("h-4 w-4", isFavorite && "fill-red-500 text-red-500")} />
+          </Button>
 
-        {/* Preview Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className={cn(
-            "h-9 w-9 rounded-full shrink-0 transition-colors",
-            isPreviewPlaying && "text-primary bg-primary/10"
-          )}
-          onClick={togglePreview}
-          title="معاينة الصوت"
-        >
-          {isPreviewPlaying ? (
-            <Pause className="h-4 w-4" />
-          ) : (
-            <Volume2 className="h-4 w-4" />
-          )}
-        </Button>
-
-        {/* Style Badge */}
-        <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground shrink-0">
-          {reciter.style}
-        </span>
+          {/* Preview Audio Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(
+              "h-8 w-8 rounded-full transition-colors",
+              isPreviewPlaying && "text-primary bg-primary/10 animate-pulse"
+            )}
+            onClick={togglePreview}
+            title="معاينة الصوت"
+          >
+            {isPreviewPlaying ? (
+              <Pause className="h-4 w-4 text-primary" />
+            ) : (
+              <Volume2 className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
       </div>
     </motion.div>
   );

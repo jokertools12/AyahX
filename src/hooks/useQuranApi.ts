@@ -1,5 +1,7 @@
 import { useState, useCallback } from 'react';
 import { fetchChapterVerses } from '@/lib/quranFoundationApi';
+import { isCompleteAyahRange } from '@/lib/ayahRangeIdentity';
+import { normalizeQuranicToken, tokenizeQuranicText } from '@/lib/timingMap';
 
 export interface Ayah {
   number: number;
@@ -20,6 +22,20 @@ export interface SurahData {
   revelationType: string;
   numberOfAyahs: number;
   ayahs: Ayah[];
+}
+
+function stripNonAyahOpeningBasmala(surahNumber: number, ayahNumber: number, text: string): string {
+  // AlQuran.cloud includes the opening basmala in the first displayed text of
+  // most surahs, although it is not numbered as part of those first ayahs in
+  // the paired QUA/Hafs verse tier. Keep Al-Fatiha (where it is ayah 1) and
+  // At-Tawbah (which has no opening basmala) untouched.
+  if (ayahNumber !== 1 || surahNumber === 1 || surahNumber === 9) return text;
+  const tokens = tokenizeQuranicText(text);
+  const normalized = tokens.slice(0, 4).map((token) => normalizeQuranicToken(token)
+    .replace(/[ٱأإآ]/g, 'ا')
+    .replace(/ی/g, 'ي'));
+  if (normalized.join(' ') !== 'بسم الله الرحمن الرحيم') return text;
+  return tokens.slice(4).join(' ');
 }
 
 interface QuranApiResponse {
@@ -91,9 +107,7 @@ export function useQuranApi() {
           const filtered = qfVerses.filter(
             (v) => v.verse_number >= startAyah && v.verse_number <= endAyah
           );
-
-          if (filtered.length > 0) {
-            return filtered.map((v) => ({
+          const mappedVerses = filtered.map((v) => ({
               number: v.id || v.verse_number,
               numberInSurah: v.verse_number,
               text: v.text_uthmani,
@@ -101,7 +115,11 @@ export function useQuranApi() {
               hizbQuarter: 1,
               juz: 1,
             }));
+
+          if (isCompleteAyahRange(startAyah, endAyah, mappedVerses)) {
+            return mappedVerses;
           }
+          console.warn(`Quran Foundation returned an incomplete ayah range ${surahNumber}:${startAyah}-${endAyah}; trying the complete-range fallback`);
         }
       } catch (qfErr) {
         console.warn('Quran Foundation verse fetch failed, using fallback', qfErr);
@@ -124,7 +142,14 @@ export function useQuranApi() {
 
       const ayahs = data.data.ayahs.filter(
         (ayah) => ayah.numberInSurah >= startAyah && ayah.numberInSurah <= endAyah
-      );
+      ).map((ayah) => ({
+        ...ayah,
+        text: stripNonAyahOpeningBasmala(surahNumber, ayah.numberInSurah, ayah.text),
+      }));
+
+      if (!isCompleteAyahRange(startAyah, endAyah, ayahs)) {
+        throw new Error('لم تصل الآيات المطلوبة كاملة وبالترتيب');
+      }
 
       return ayahs;
     } catch (err) {

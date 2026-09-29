@@ -231,6 +231,60 @@ describe('RenderManifest Specification & Validation', () => {
     expect(res.errors).toBeUndefined();
   });
 
+  it('accepts QUA letter paint that crosses a word edge but stays inside its ayah', () => {
+    const crossWordLetterPaint = {
+      ...sampleValidManifest,
+      timingMap: {
+        ...sampleValidManifest.timingMap,
+        compositionOffsets: [{ ayahNumber: 1, startMs: 100, endMs: 900 }],
+        alignment: {
+          provider: 'quranic_universal_aligner' as const,
+          requestedGranularity: 'letter' as const,
+          availableGranularities: ['word', 'letter'] as const,
+        },
+        words: sampleValidManifest.timingMap.words.map((word, index) => index === 0 ? {
+          ...word,
+          letters: [{
+            occurrenceId: '108:1:1:letter:1',
+            token: 'إِ',
+            startMs: 150,
+            endMs: 250,
+            confidence: 1,
+            flags: ['cross_word_boundary'],
+          }],
+        } : word),
+      },
+    };
+    expect(validateRenderManifest(crossWordLetterPaint).valid).toBe(true);
+  });
+
+  it('rejects cross-word QUA paint that escapes the canonical ayah interval', () => {
+    const outsideAyah = {
+      ...sampleValidManifest,
+      timingMap: {
+        ...sampleValidManifest.timingMap,
+        compositionOffsets: [{ ayahNumber: 1, startMs: 100, endMs: 900 }],
+        alignment: {
+          provider: 'quranic_universal_aligner' as const,
+          requestedGranularity: 'letter' as const,
+          availableGranularities: ['word', 'letter'] as const,
+        },
+        words: sampleValidManifest.timingMap.words.map((word, index) => index === 0 ? {
+          ...word,
+          letters: [{
+            occurrenceId: '108:1:1:letter:1',
+            token: 'إِ',
+            startMs: 50,
+            endMs: 150,
+            confidence: 1,
+            flags: ['cross_word_boundary'],
+          }],
+        } : word),
+      },
+    };
+    expect(validateRenderManifest(outsideAyah).valid).toBe(false);
+  });
+
   it('auto-heals client blob audioUrl to canonical everyAyahUrls when present', () => {
     const manifestWithBlob = {
       ...sampleValidManifest,

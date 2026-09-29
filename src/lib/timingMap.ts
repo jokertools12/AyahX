@@ -197,6 +197,19 @@ export function normalizeQuranicToken(text: string): string {
 }
 
 /**
+ * Splits a Uthmani reference into logical Quran words. Some canonical text
+ * editions insert invisible hair/zero-width format characters inside a word
+ * (for example around dagger alif); those are presentation controls, not
+ * verse word boundaries and must not shift the timing-map word indexes.
+ */
+export function tokenizeQuranicText(text: string): string[] {
+  return (text || '')
+    .replace(/[\u200A\u200B\u2060\u2063]/g, '')
+    .split(/\s+/)
+    .filter((token) => normalizeQuranicToken(token).length > 0);
+}
+
+/**
  * Computes deterministic SHA-256 fingerprint for audio bytes or PCM data.
  * Compatible with Web Crypto (Browser) and Node.js crypto in test/server environments.
  */
@@ -272,11 +285,12 @@ function validateSubsegments(
   subsegments: TimingSubsegment[] | undefined,
   errors: string[],
   warnings: string[],
+  allowCrossWordBoundary?: (segment: TimingSubsegment) => boolean,
 ): { bounded: boolean; count: number } {
   if (!subsegments || subsegments.length === 0) return { bounded: true, count: 0 };
 
   let bounded = true;
-  let previousEnd = parent.startMs;
+  let previousEnd = Number.NEGATIVE_INFINITY;
   const seen = new Set<string>();
   for (let index = 0; index < subsegments.length; index += 1) {
     const segment = subsegments[index];
@@ -286,12 +300,16 @@ function validateSubsegments(
       errors.push(`${label} has a missing or duplicate occurrenceId.`);
     }
     seen.add(segment.occurrenceId);
-    if (!Number.isFinite(segment.startMs) || !Number.isFinite(segment.endMs) || segment.startMs >= segment.endMs) {
+    const instantaneousLetterPaint = kind === 'letters' && segment.startMs === segment.endMs
+      && segment.flags?.includes('instantaneous_paint') === true;
+    if (!Number.isFinite(segment.startMs) || !Number.isFinite(segment.endMs)
+      || segment.startMs > segment.endMs || segment.startMs === segment.endMs && !instantaneousLetterPaint) {
       bounded = false;
       errors.push(`${label} has a non-monotonic interval.`);
       continue;
     }
-    if (segment.startMs < parent.startMs || segment.endMs > parent.endMs) {
+    if ((segment.startMs < parent.startMs || segment.endMs > parent.endMs)
+      && !(kind === 'letters' && allowCrossWordBoundary?.(segment))) {
       bounded = false;
       errors.push(`${label} falls outside its parent word interval.`);
     }
@@ -385,7 +403,16 @@ export function validateTimingMap(map: TimingMap, expectedWordCount?: number): T
     totalConfidence += conf;
     if (conf < minConfidence) minConfidence = conf;
 
-    const letters = validateSubsegments(w, i, 'letters', w.letters, errors, warnings);
+    const wordAyahNumber = Number(w.canonicalWordKey.split(':')[1]);
+    const ayahOffset = map.compositionOffsets?.find((offset) => offset.ayahNumber === wordAyahNumber);
+    const allowQauLetterBoundary = (segment: TimingSubsegment) => (
+      map.alignment?.provider === 'quranic_universal_aligner'
+      && segment.flags?.includes('cross_word_boundary') === true
+      && Boolean(ayahOffset)
+      && segment.startMs >= (ayahOffset?.startMs ?? Number.POSITIVE_INFINITY)
+      && segment.endMs <= (ayahOffset?.endMs ?? Number.NEGATIVE_INFINITY)
+    );
+    const letters = validateSubsegments(w, i, 'letters', w.letters, errors, warnings, allowQauLetterBoundary);
     const phonemes = validateSubsegments(w, i, 'phonemes', w.phonemes, errors, warnings);
     totalLetterSegments += letters.count;
     totalPhonemeSegments += phonemes.count;
@@ -674,7 +701,7 @@ export function buildAudioAlignedTimingMap(params: {
     // Standalone Uthmani pause marks are visual punctuation, not words.  They
     // must not shift an imported word index (for example 2:2 contains ۛ marks
     // between words in the Quran Foundation text).
-    const ayahTokens = (ayah.text || '').split(/\s+/).filter((token) => normalizeQuranicToken(token).length > 0);
+    const ayahTokens = tokenizeQuranicText(ayah.text || '');
     const ayahDur = Math.max(ayah.audioEndMs - ayah.audioStartMs, 100);
 
     if (explicitWordSpans && explicitWordSpans.length > 0) {

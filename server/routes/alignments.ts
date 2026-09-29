@@ -56,8 +56,8 @@ function publicDocument(document: any, userId: string) {
   };
 }
 
-/** Provider discovery is explicit so the UI cannot accidentally fall back. */
-router.get('/providers', requireAuth, async (_req: AuthenticatedRequest, res: Response) => {
+/** Provider discovery is explicit and publicly available so the preview can display accredited providers without blocking unauthenticated visitors. */
+router.get('/providers', async (_req: any, res: Response) => {
   return res.json({
     providers: getAlignmentProviderDescriptors(),
   });
@@ -113,7 +113,7 @@ router.post('/resolve', requireAuth, aiRateLimiter, async (req: AuthenticatedReq
  * no proportional fallback, and rejects ranges containing ambiguous
  * multi-word source segments.
  */
-router.post('/resolve-known', requireAuth, aiRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
+router.post('/resolve-known', aiRateLimiter, async (req: any, res: Response) => {
   try {
     const body = req.body || {};
     const input = {
@@ -148,7 +148,7 @@ router.post('/resolve-known', requireAuth, aiRateLimiter, async (req: Authentica
  * separate from model providers so a missing remote package fails closed and
  * never turns into a guessed word duration.
  */
-router.post('/resolve-universal', requireAuth, aiRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
+router.post('/resolve-universal', aiRateLimiter, async (req: any, res: Response) => {
   try {
     const body = req.body || {};
     const reference = body.reference || {};
@@ -163,8 +163,12 @@ router.post('/resolve-universal', requireAuth, aiRateLimiter, async (req: Authen
     const input = {
       reciterId: String(body.reciterId || ''),
       reciterSlug: String(body.providerInput?.reciterSlug || ''),
+      granularity: body.granularity === 'letter' ? 'letter' : 'word',
       reference,
     };
+    if (body.granularity !== undefined && body.granularity !== 'word' && body.granularity !== 'letter') {
+      return res.status(400).json({ error: 'مستوى المحاذاة غير صالح', code: 'UNIVERSAL_ALIGNMENT_GRANULARITY_INVALID' });
+    }
     if (!input.reciterId || !input.reciterSlug || !input.reference) {
       return res.status(400).json({ error: 'بيانات QUA غير مكتملة', code: 'UNIVERSAL_ALIGNMENT_INPUT_REQUIRED' });
     }
@@ -179,6 +183,7 @@ router.post('/resolve-universal', requireAuth, aiRateLimiter, async (req: Authen
   } catch (error: any) {
     const code = String(error?.message || error || 'UNIVERSAL_ALIGNMENT_FAILED');
     const status = code.includes('NOT_AVAILABLE') || code.includes('NOT_SUPPORTED') || code.includes('MISSING')
+      || code.includes('LETTER_TIER') || code.includes('LETTER_TEXT_MISMATCH')
       || code.includes('AUDIO_URL_') || code.includes('TIMING_INVALID')
       ? 422
       : code.includes('REQUIRED') || code.includes('INPUT') || code.includes('MISMATCH')

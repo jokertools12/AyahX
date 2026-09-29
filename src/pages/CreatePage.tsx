@@ -17,7 +17,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { surahs } from '@/data/surahs';
-import { reciters, getRecitersByStyle, getAudioUrl } from '@/data/reciters';
+import { reciters, isAccreditedReciter, getReciterRiwayah, getAvailableRiwayahs, getAudioUrl } from '@/data/reciters';
 import { BackgroundItem, getRandomBackground, slideshowBackgrounds, backgroundImages } from '@/data/backgrounds';
 import { FamousAyah, famousAyahs, ayahCategories, getAyahsByCategory } from '@/data/famousAyahs';
 import {
@@ -56,6 +56,7 @@ import {
   Minus,
   Volume2,
   VolumeX,
+  Zap,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { ErrorState } from '@/components/ErrorState';
@@ -120,6 +121,9 @@ export default function CreatePage() {
   const [startAyahInput, setStartAyahInput] = useState('1');
   const [endAyahInput, setEndAyahInput] = useState('5');
   const [reciterSearch, setReciterSearch] = useState('');
+  const [reciterAccreditationFilter, setReciterAccreditationFilter] = useState<'all' | 'accredited' | 'standard'>('all');
+  const [reciterRiwayahFilter, setReciterRiwayahFilter] = useState<string>('all');
+  const [reciterStyleFilter, setReciterStyleFilter] = useState<string>('all');
 
   // ── Ibtahalat state ──
   const [ibtSearchQuery, setIbtSearchQuery] = useState('');
@@ -248,15 +252,69 @@ export default function CreatePage() {
     );
   });
 
-  const filterReciters = (list: typeof reciters) => {
+  const availableRiwayahs = useMemo(() => getAvailableRiwayahs(), []);
+  const availableStyles = useMemo(() => [
+    { id: 'all', label: 'الكل' },
+    { id: 'مرتل', label: 'مرتل' },
+    { id: 'مجود', label: 'مجود' },
+    { id: 'ترتيل', label: 'ترتيل' },
+    { id: 'معلم', label: 'المعلم' },
+  ], []);
+
+  const countAccredited = useMemo(() => reciters.filter(r => isAccreditedReciter(r)).length, []);
+  const countStandard = useMemo(() => reciters.filter(r => !isAccreditedReciter(r)).length, []);
+
+  const filteredReciters = useMemo(() => {
     const q = normalizeArabicText(reciterSearch);
-    if (!q) return list;
-    return list.filter(r =>
-      normalizeArabicText(r.name).includes(q) ||
-      r.englishName.toLowerCase().includes(q) ||
-      (r.description && normalizeArabicText(r.description).includes(q))
-    );
-  };
+    return reciters.filter((r) => {
+      // 1. Search Query
+      if (q) {
+        const rNameNorm = normalizeArabicText(r.name);
+        const rDescNorm = r.description ? normalizeArabicText(r.description) : '';
+        const rRiwayahNorm = normalizeArabicText(getReciterRiwayah(r));
+        const rStyleNorm = normalizeArabicText(r.style);
+        const match =
+          rNameNorm.includes(q) ||
+          rNameNorm.replace(/\s+/g, '').includes(q.replace(/\s+/g, '')) ||
+          r.englishName.toLowerCase().includes(q) ||
+          rDescNorm.includes(q) ||
+          rRiwayahNorm.includes(q) ||
+          rStyleNorm.includes(q);
+        if (!match) return false;
+      }
+
+      // 2. Accreditation Filter
+      if (reciterAccreditationFilter === 'accredited' && !isAccreditedReciter(r)) return false;
+      if (reciterAccreditationFilter === 'standard' && isAccreditedReciter(r)) return false;
+
+      // 3. Riwayah Filter
+      if (reciterRiwayahFilter !== 'all') {
+        const riw = getReciterRiwayah(r);
+        if (riw !== reciterRiwayahFilter) return false;
+      }
+
+      // 4. Style Filter
+      if (reciterStyleFilter !== 'all') {
+        if (r.style !== reciterStyleFilter) return false;
+      }
+
+      return true;
+    });
+  }, [reciterSearch, reciterAccreditationFilter, reciterRiwayahFilter, reciterStyleFilter]);
+
+  const hasActiveReciterFilters = Boolean(
+    reciterSearch.trim() ||
+    reciterAccreditationFilter !== 'all' ||
+    reciterRiwayahFilter !== 'all' ||
+    reciterStyleFilter !== 'all'
+  );
+
+  const resetReciterFilters = useCallback(() => {
+    setReciterSearch('');
+    setReciterAccreditationFilter('all');
+    setReciterRiwayahFilter('all');
+    setReciterStyleFilter('all');
+  }, []);
 
   // Ibtahalat filtering
   const getFilteredTracks = (): IbtahalTrack[] => {
@@ -786,35 +844,143 @@ export default function CreatePage() {
 
           {/* ═══════ Quran: Step 2 - Select Reciter ═══════ */}
           {contentMode !== 'ibtahalat' && currentStep === 2 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>اختر القارئ</CardTitle>
+            <Card className="border-border/60 shadow-md">
+              <CardHeader className="pb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Mic className="h-5 w-5 text-primary" />
+                      اختيار القارئ والتلاوة والرواية
+                    </CardTitle>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      اختر من بين كبار القراء المعتمدين بمحاذاة الحروف والكلمات أو التلاوات القياسية بمختلف الروايات
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 self-start sm:self-auto">
+                    <Badge variant="outline" className="text-xs font-normal">
+                      {filteredReciters.length} من أصل {reciters.length} قارئ
+                    </Badge>
+                    {hasActiveReciterFilters && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={resetReciterFilters}
+                        className="text-xs h-7 px-2 gap-1 text-muted-foreground hover:text-foreground"
+                      >
+                        <RotateCcw className="h-3 w-3" />
+                        إعادة ضبط
+                      </Button>
+                    )}
+                  </div>
+                </div>
               </CardHeader>
-              <CardContent>
-                <div className="relative mb-4">
+              <CardContent className="space-y-3.5">
+                {/* Search Bar with Clear Button */}
+                <div className="relative">
                   <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
                   <Input
-                    placeholder="ابحث عن قارئ..."
+                    placeholder="ابحث باسم القارئ، الرواية، أو نوع التلاوة..."
                     aria-label="ابحث عن قارئ"
                     value={reciterSearch}
                     onChange={(e) => setReciterSearch(e.target.value)}
-                    className="pr-10"
+                    className="pr-10 pl-9"
                   />
+                  {reciterSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setReciterSearch('')}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      title="مسح البحث"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
                 </div>
-                <p className="text-xs text-muted-foreground mb-3">
-                  🔊 اضغط على أيقونة السماعة لمعاينة صوت القارئ
-                </p>
+
+                {/* Primary Accreditation Filter Tabs */}
+                <Tabs
+                  value={reciterAccreditationFilter}
+                  onValueChange={(val) => setReciterAccreditationFilter(val as any)}
+                  className="w-full"
+                >
+                  <TabsList className="w-full grid grid-cols-3 h-9">
+                    <TabsTrigger value="all" className="text-xs">
+                      جميع القراء ({reciters.length})
+                    </TabsTrigger>
+                    <TabsTrigger value="accredited" className="text-xs gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
+                      <Zap className="h-3 w-3 fill-current" />
+                      المعتمدون ⚡ ({countAccredited})
+                    </TabsTrigger>
+                    <TabsTrigger value="standard" className="text-xs">
+                      تلاوات قياسية ({countStandard})
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+
+                {/* Secondary Filters: Riwayah & Style */}
+                <div className="space-y-2 pt-0.5">
+                  {/* Riwayah Filter */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1" style={{ WebkitOverflowScrolling: 'touch' }}>
+                    <span className="text-[11px] font-medium text-muted-foreground shrink-0 ml-1">
+                      الرواية:
+                    </span>
+                    {availableRiwayahs.map((riw) => {
+                      const isSelected = reciterRiwayahFilter === (riw.id === 'all' ? 'all' : riw.arabicName);
+                      return (
+                        <button
+                          key={riw.id}
+                          type="button"
+                          onClick={() => setReciterRiwayahFilter(riw.id === 'all' ? 'all' : riw.arabicName)}
+                          className={cn(
+                            "rounded-full px-2.5 py-1 text-xs whitespace-nowrap transition-all border shrink-0",
+                            isSelected
+                              ? "bg-primary text-primary-foreground border-primary font-medium shadow-sm"
+                              : "bg-muted/50 hover:bg-muted text-muted-foreground border-transparent hover:border-border"
+                          )}
+                        >
+                          {riw.arabicName}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Style Filter */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1" style={{ WebkitOverflowScrolling: 'touch' }}>
+                    <span className="text-[11px] font-medium text-muted-foreground shrink-0 ml-1">
+                      النمط:
+                    </span>
+                    {availableStyles.map((st) => {
+                      const isSelected = reciterStyleFilter === (st.id === 'all' ? 'all' : st.id);
+                      return (
+                        <button
+                          key={st.id}
+                          type="button"
+                          onClick={() => setReciterStyleFilter(st.id === 'all' ? 'all' : st.id)}
+                          className={cn(
+                            "rounded-full px-2.5 py-1 text-xs whitespace-nowrap transition-all border shrink-0",
+                            isSelected
+                              ? "bg-secondary text-secondary-foreground border-secondary font-medium shadow-sm"
+                              : "bg-muted/40 hover:bg-muted text-muted-foreground border-transparent hover:border-border"
+                          )}
+                        >
+                          {st.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
                 {/* Recent / Popular Reciters Quick Chips */}
                 {recentReciters.length > 0 && !reciterSearch && (
-                  <div className="mb-4">
-                    <p className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
+                  <div className="pt-1">
+                    <p className="text-xs font-medium text-muted-foreground mb-1.5 flex items-center gap-1.5">
                       <Sparkles className="h-3.5 w-3.5 text-primary" />
-                      القراء الأكثر استخداماً / مستخدم مؤخراً:
+                      الأكثر استخداماً / حديثاً:
                     </p>
                     <div className="flex gap-2 overflow-x-auto pb-1" style={{ WebkitOverflowScrolling: 'touch' }}>
-                      {recentReciters.map(recId => {
-                        const rData = reciters.find(r => r.id === recId);
+                      {recentReciters.map((recId) => {
+                        const rData = reciters.find((r) => r.id === recId);
                         if (!rData) return null;
                         const isSelected = selectedReciter === rData.id;
                         return (
@@ -827,9 +993,10 @@ export default function CreatePage() {
                               setSelectedReciter(rData.id);
                               saveRecentReciter(rData.id);
                             }}
-                            className={`whitespace-nowrap rounded-full text-xs h-8 gap-1.5 transition-all ${
-                              isSelected ? 'gradient-primary text-primary-foreground' : 'hover:border-primary/50'
-                            }`}
+                            className={cn(
+                              "whitespace-nowrap rounded-full text-xs h-7 px-3 gap-1 transition-all shrink-0",
+                              isSelected ? "gradient-primary text-primary-foreground shadow-sm" : "hover:border-primary/50"
+                            )}
                           >
                             <span>{rData.name}</span>
                             <span className="text-[10px] opacity-70">({rData.style})</span>
@@ -840,50 +1007,36 @@ export default function CreatePage() {
                   </div>
                 )}
 
-                <Tabs defaultValue="all" className="w-full">
-                  <TabsList className="w-full grid grid-cols-4 mb-4">
-                    <TabsTrigger value="all">الكل ({filterReciters(reciters).length})</TabsTrigger>
-                    <TabsTrigger value="مرتل">مرتل</TabsTrigger>
-                    <TabsTrigger value="مجود">مجود</TabsTrigger>
-                    <TabsTrigger value="ترتيل">ترتيل</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="all">
-                    <ScrollArea className="h-[50vh]">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-1">
-                        {filterReciters(reciters).map((reciter) => (
-                          <ReciterCard
-                            key={reciter.id}
-                            reciter={reciter}
-                            isSelected={selectedReciter === reciter.id}
-                            onClick={() => {
-                              setSelectedReciter(reciter.id);
-                              saveRecentReciter(reciter.id);
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </ScrollArea>
-                  </TabsContent>
-                  {(['مرتل', 'مجود', 'ترتيل'] as const).map(style => (
-                    <TabsContent key={style} value={style}>
-                      <ScrollArea className="h-[50vh]">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-1">
-                          {filterReciters(getRecitersByStyle(style)).map((reciter) => (
-                            <ReciterCard
-                              key={reciter.id}
-                              reciter={reciter}
-                              isSelected={selectedReciter === reciter.id}
-                              onClick={() => {
-                                setSelectedReciter(reciter.id);
-                                saveRecentReciter(reciter.id);
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </ScrollArea>
-                    </TabsContent>
-                  ))}
-                </Tabs>
+                {/* Reciter Grid / Empty State */}
+                {filteredReciters.length === 0 ? (
+                  <div className="p-8 text-center border rounded-xl bg-muted/20 border-dashed my-2">
+                    <Mic className="h-10 w-10 mx-auto mb-2 opacity-40 text-muted-foreground" />
+                    <p className="text-sm font-semibold mb-1">لا توجد نتائج مطابقة لخيار التصفية</p>
+                    <p className="text-xs text-muted-foreground mb-4">
+                      جرب تغيير الكلمات المفتاحية للبحث أو إزالة فلتر الرواية والاعتمادية
+                    </p>
+                    <Button type="button" variant="outline" size="sm" onClick={resetReciterFilters} className="text-xs gap-1.5">
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      إعادة ضبط جميع الفلاتر
+                    </Button>
+                  </div>
+                ) : (
+                  <ScrollArea className="h-[52vh] rounded-lg border border-border/40 p-1">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 p-1">
+                      {filteredReciters.map((reciter) => (
+                        <ReciterCard
+                          key={reciter.id}
+                          reciter={reciter}
+                          isSelected={selectedReciter === reciter.id}
+                          onClick={() => {
+                            setSelectedReciter(reciter.id);
+                            saveRecentReciter(reciter.id);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </ScrollArea>
+                )}
               </CardContent>
             </Card>
           )}

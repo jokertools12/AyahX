@@ -46,6 +46,8 @@ import { api } from '@/lib/api';
 import { TextSettings } from '@/components/TextSettingsPanel';
 import { TimingEditor } from '@/components/TimingEditor';
 import { AlignmentReviewPanel } from '@/components/AlignmentReviewPanel';
+import { createAyahRangeKey, isAyahRangeReady } from '@/lib/ayahRangeIdentity';
+import { tokenizeQuranicText } from '@/lib/timingMap';
 import {
   Download,
   RotateCcw,
@@ -196,6 +198,7 @@ export default function PreviewPage() {
   const reciterId = searchParams.get('reciter') || 'mishary_alafasy';
   const startAyah = parseInt(searchParams.get('start') || '1');
   const endAyah = parseInt(searchParams.get('end') || '5');
+  const requestedAyahRangeKey = createAyahRangeKey(surahNumber, startAyah, endAyah);
 
   // Ibtahalat params
   const ibtTrackId = searchParams.get('trackId') || '';
@@ -389,6 +392,8 @@ export default function PreviewPage() {
 
   // ── Ayah data ───────────────────────────────────────────────────────────────
   const [ayahs, setAyahs] = useState<{ numberInSurah: number; text: string }[]>([]);
+  const [loadedAyahRangeKey, setLoadedAyahRangeKey] = useState<string | null>(null);
+  const [ayahLoadError, setAyahLoadError] = useState(false);
   const [currentAyahIndex, setCurrentAyahIndex] = useState(0);
   const [highlightWordIndex, setHighlightWordIndex] = useState<number | null>(null);
   const [highlightWordProgress, setHighlightWordProgress] = useState(0);
@@ -439,6 +444,8 @@ export default function PreviewPage() {
   // Exact audio word-timing map (production alignment contract)
   const [activeTimingMap, setActiveTimingMap] = useState<TimingMap | null>(null);
   const activeTimingMapRef = useRef<TimingMap | null>(null);
+  const [letterTimingStatus, setLetterTimingStatus] = useState<'idle' | 'loading' | 'available' | 'unavailable' | 'requires-auth' | 'unsupported'>('idle');
+  const letterTimingRequestKeyRef = useRef<string | null>(null);
 
   // Approved word timings are tied to the source audio clock.  Normalize any
   // legacy saved tempo/fingerprint flags as soon as an approved map arrives;
@@ -655,6 +662,8 @@ export default function PreviewPage() {
   // ── Load ayah texts (Quran mode) / Transcribe audio (Ibtahalat mode) ───────
   useEffect(() => {
     if (isIbtahalatMode) {
+      setLoadedAyahRangeKey(null);
+      setAyahLoadError(false);
       // Check cache first
       const cacheKey = getAudioCacheKey(ibtAudioUrl);
       const cached = localStorage.getItem(cacheKey);
@@ -734,23 +743,39 @@ export default function PreviewPage() {
       }
       return;
     }
+    let requestIsCurrent = true;
+    // Invalidate both the old text and media while the selected reference is
+    // loading. A late response from a previous same-length range must never be
+    // accepted as this request's Quran text.
+    setAyahs([]);
+    setLoadedAyahRangeKey(null);
+    setAyahLoadError(false);
+    setTimingsLoading(true);
+    setAudioLoaded(false);
+    setAudioError(false);
+    setIsPlaying(false);
+    setAudioUrl('');
+    setActiveTimingMap(null);
+    activeTimingMapRef.current = null;
     const loadData = async () => {
-      // Invalidate the previous range before the asynchronous fetch.  Without
-      // this, a same-length range could pass the audio effect's readiness
-      // check and pair fresh audio with stale Quran text for one render.
-      setAyahs([]);
       const data = await fetchAyahs(surahNumber, startAyah, endAyah);
-      if (data) {
-        // Keep the canonical API text untouched.  Alignment packages index the
-        // exact Hafs word sequence; stripping a displayed basmala here made
-        // the reference intermittently disagree with the timing source.  Any
-        // presentation-only basmala treatment must happen in the renderer,
-        // never in the alignment request.
-        setAyahs(data);
+      if (!requestIsCurrent) return;
+      const isCompleteRange = Boolean(data)
+        && data!.length === Math.max(0, endAyah - startAyah + 1)
+        && data!.every((ayah, index) => ayah.numberInSurah === startAyah + index && Boolean(ayah.text?.trim()));
+      if (!data || !isCompleteRange) {
+        setAyahLoadError(true);
+        setTimingsLoading(false);
+        return;
       }
+      // Keep canonical Quran text untouched; this exact ordered reference is
+      // the one the approved timing provider receives.
+      setAyahs(data);
+      setLoadedAyahRangeKey(requestedAyahRangeKey);
     };
-    loadData();
-  }, [isIbtahalatMode, ibtTrackTitle, ibtAudioUrl, surahNumber, startAyah, endAyah, fetchAyahs, retranscribeTrigger, applyPredefinedLyrics, predefinedLyricsLines]);
+    void loadData();
+    return () => { requestIsCurrent = false; };
+  }, [isIbtahalatMode, ibtTrackTitle, ibtAudioUrl, surahNumber, startAyah, endAyah, requestedAyahRangeKey, fetchAyahs, retranscribeTrigger, applyPredefinedLyrics, predefinedLyricsLines]);
 
   useEffect(() => {
     currentAyahIndexRef.current = currentAyahIndex;
@@ -762,7 +787,7 @@ export default function PreviewPage() {
 
   const currentAyahWords = useMemo(() => {
     const text = ayahs[currentAyahIndex]?.text ?? '';
-    return text.split(' ').filter(Boolean);
+    return tokenizeQuranicText(text);
   }, [ayahs, currentAyahIndex]);
 
   // ── Load audio strategy ─────────────────────────────────────────────────────
@@ -783,7 +808,13 @@ export default function PreviewPage() {
     // Audio and alignment are a single transaction.  Waiting for the current
     // Quran reference prevents the first render from sending an empty/stale
     // ayah list and then silently falling back to verse-only timing.
-    if (ayahs.length !== expectedAyahCount) return;
+    if (!isAyahRangeReady({
+      loadedKey: loadedAyahRangeKey,
+      requestedKey: requestedAyahRangeKey,
+      startAyah,
+      endAyah,
+      ayahs,
+    }) || ayahs.length !== expectedAyahCount) return;
     let cancelled = false;
 
     const load = async () => {
@@ -1069,7 +1100,89 @@ export default function PreviewPage() {
 
     load();
     return () => { cancelled = true; };
-  }, [isIbtahalatMode, ibtAudioUrl, isAuthenticated, reciter, reciter?.id, reciter?.quranFoundationId, reciter?.everyAyahSubfolder, reciter?.quranUniversalSlug, surahNumber, startAyah, endAyah, totalAyahsInSurah, ayahs.length, ayahs]);
+  }, [isIbtahalatMode, ibtAudioUrl, isAuthenticated, reciter, reciter?.id, reciter?.quranFoundationId, reciter?.everyAyahSubfolder, reciter?.quranUniversalSlug, surahNumber, startAyah, endAyah, totalAyahsInSurah, requestedAyahRangeKey, loadedAyahRangeKey, ayahs.length, ayahs]);
+
+  // Letter animation is an opt-in precision tier. Load QUA's pinned letter
+  // paint annotations only when selected; word playback remains fast and does
+  // not inflate every reciter package with the larger research tier.
+  useEffect(() => {
+    if (isIbtahalatMode || displaySettings.verseDisplayMode !== 'letterByLetter') {
+      letterTimingRequestKeyRef.current = null;
+      setLetterTimingStatus('idle');
+      return;
+    }
+    if (activeTimingMap?.alignment?.availableGranularities?.includes('letter')
+      && activeTimingMap.words.length > 0
+      && activeTimingMap.words.every((word) => Boolean(word.letters?.length))) {
+      setLetterTimingStatus('available');
+      return;
+    }
+    if (!reciter?.quranUniversalSlug) {
+      setLetterTimingStatus('unsupported');
+      return;
+    }
+    if (!isAuthenticated) {
+      setLetterTimingStatus('requires-auth');
+      return;
+    }
+    if (timingsLoading || !isAyahRangeReady({
+      loadedKey: loadedAyahRangeKey,
+      requestedKey: requestedAyahRangeKey,
+      startAyah,
+      endAyah,
+      ayahs,
+    })) {
+      setLetterTimingStatus('loading');
+      return;
+    }
+    if (!activeTimingMap || activeTimingMap.sourceId !== 'quranic_universal_audio') {
+      setLetterTimingStatus('unavailable');
+      return;
+    }
+
+    const requestKey = `${reciter.id}:${requestedAyahRangeKey}:${activeTimingMap.mapId}`;
+    if (letterTimingRequestKeyRef.current === requestKey) return;
+    letterTimingRequestKeyRef.current = requestKey;
+    let cancelled = false;
+    setLetterTimingStatus('loading');
+    api.alignments.resolveUniversal({
+      reciterId: String(reciter.id),
+      reference: {
+        surahNumber,
+        startAyah,
+        endAyah,
+        ayahs,
+        quranTextVersion: 'uthmani_hafs_v1',
+      },
+      providerInput: { reciterSlug: reciter.quranUniversalSlug },
+      granularity: 'letter',
+    }).then((result) => {
+      if (cancelled) return;
+      const letterMap = result.timingMap as TimingMap;
+      const hasCompleteLetterTier = result.accepted
+        && letterMap?.validationStatus === 'approved'
+        && letterMap.alignment?.availableGranularities?.includes('letter')
+        && letterMap.words.length > 0
+        && letterMap.words.every((word) => Boolean(word.letters?.length));
+      if (!hasCompleteLetterTier) {
+        setLetterTimingStatus('unavailable');
+        return;
+      }
+      timingMapRegistry.register(letterMap);
+      activeTimingMapRef.current = letterMap;
+      setActiveTimingMap(letterMap);
+      setLetterTimingStatus('available');
+    }).catch((error) => {
+      if (cancelled) return;
+      console.info('QUA letter-paint tier unavailable for this reader/range', error);
+      setLetterTimingStatus('unavailable');
+    });
+
+    return () => {
+      cancelled = true;
+      if (letterTimingRequestKeyRef.current === requestKey) letterTimingRequestKeyRef.current = null;
+    };
+  }, [isIbtahalatMode, displaySettings.verseDisplayMode, activeTimingMap, isAuthenticated, reciter, reciter?.id, reciter?.quranUniversalSlug, surahNumber, startAyah, endAyah, requestedAyahRangeKey, loadedAyahRangeKey, ayahs, timingsLoading]);
 
   // ── Audio effects init ──────────────────────────────────────────────────────
   useEffect(() => {
@@ -1233,7 +1346,7 @@ export default function PreviewPage() {
             if (i !== currentAyahIndexRef.current) setCurrentAyahIndex(i);
 
             const currentAyahObj = ayahsRef.current[i];
-            const ayahWords = (currentAyahObj?.text ?? '').split(' ').filter(Boolean);
+            const ayahWords = tokenizeQuranicText(currentAyahObj?.text ?? '');
 
             if (activeTimingMapRef.current && activeTimingMapRef.current.words && activeTimingMapRef.current.words.length > 0) {
               const res = resolveActiveWordAtTime(activeTimingMapRef.current, nowMs);
@@ -1292,7 +1405,7 @@ export default function PreviewPage() {
             }
 
             const currentAyahObj = ayahsRef.current[i];
-            const ayahWords = (currentAyahObj?.text ?? '').split(' ').filter(Boolean);
+            const ayahWords = tokenizeQuranicText(currentAyahObj?.text ?? '');
 
             if (activeTimingMapRef.current && activeTimingMapRef.current.words && activeTimingMapRef.current.words.length > 0) {
               const res = resolveActiveWordAtTime(activeTimingMapRef.current, nowMs);
@@ -2509,12 +2622,12 @@ export default function PreviewPage() {
 
             <Card>
               <CardContent className="p-4 space-y-4">
-                {audioError && (
+                {(audioError || ayahLoadError) && (
                   <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-start gap-2">
                     <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-destructive">تعذر تحميل الصوت</p>
-                      <p className="text-xs text-muted-foreground">قد يكون الملف غير متوفر لهذه السورة</p>
+                      <p className="text-sm font-medium text-destructive">{ayahLoadError ? 'تعذر تحميل الآيات المحددة' : 'تعذر تحميل الصوت'}</p>
+                      <p className="text-xs text-muted-foreground">{ayahLoadError ? 'لم تصل الآيات المطلوبة كاملة وبالترتيب؛ أعد المحاولة أو غيّر النطاق.' : 'قد يكون الملف غير متوفر لهذه السورة'}</p>
                     </div>
                   </div>
                 )}
@@ -2607,7 +2720,11 @@ export default function PreviewPage() {
               </TabsContent>
 
               <TabsContent value="display" className="mt-4">
-                <DisplaySettingsPanel settings={displaySettings} onChange={setDisplaySettings} />
+                <DisplaySettingsPanel
+                  settings={displaySettings}
+                  onChange={setDisplaySettings}
+                  letterTimingStatus={letterTimingStatus}
+                />
               </TabsContent>
 
               <TabsContent value="effects" className="mt-4">

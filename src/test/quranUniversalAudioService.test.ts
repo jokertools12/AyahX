@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { isUniversalReciter, QUA_RECITATIONS, resolveUniversalQuranAudio } from '../../server/services/quranUniversalAudioService';
 import { resolveAnimationStates, resolveVerseWordWindow, getAvailableTimingGranularity } from '../lib/animationTimeline';
 import { resolveActiveWordAtTime } from '../lib/wordTimingEngine';
+import { tokenizeQuranicText } from '../lib/timingMap';
 
 let shaToRestore: { slug: string; sha256: string } | null = null;
 afterEach(() => {
@@ -14,6 +15,10 @@ afterEach(() => {
 });
 
 describe('Quranic Universal Audio catalogue', () => {
+  it('treats invisible Uthmani positioning marks as intraword formatting, not word boundaries', () => {
+    expect(tokenizeQuranicText('ٱلصِّرَ ٰ⁠طَ ٱلْمُسْتَقِيمَ')).toEqual(['ٱلصِّرَٰطَ', 'ٱلْمُسْتَقِيمَ']);
+  });
+
   it('exposes the production direct-audio catalogue without model configuration', () => {
     expect(Object.keys(QUA_RECITATIONS).length).toBeGreaterThanOrEqual(20);
     expect(isUniversalReciter('mishary_rashid_al_afasy_mp3quran')).toBe(true);
@@ -61,9 +66,51 @@ describe('Quranic Universal Audio catalogue', () => {
         ['3:1', 0, 1000, true, 0, [[-1, 0, 200], [2, 200, 400], [3, 400, 700], [4, 700, 1000]]],
       ],
     };
+    const letterText = 'بسم الله الرحمن الرحيم';
+    const letterRows = word.rows.map((row) => {
+      if (row[0] !== '1:1' || row[3] !== true) {
+        return [row[0], row[1], row[2], row[3], row[4], row[5], letterText, []];
+      }
+      const scalars = Array.from(letterText);
+      const events: Array<[number, number, number, boolean, Array<[number, number]>]> = [];
+      let scalarIndex = 0;
+      row[5].forEach((sourceWord, wordIndex) => {
+        while (scalars[scalarIndex] === ' ') scalarIndex += 1;
+        const tokenScalars = Array.from(letterText.split(/\s+/)[wordIndex]);
+        const startMs = sourceWord[1];
+        const endMs = sourceWord[2];
+        tokenScalars.forEach((_, tokenIndex) => {
+          const simultaneousSecondWordGlyph = wordIndex === 1 && tokenIndex < 3;
+          const from = simultaneousSecondWordGlyph
+            ? startMs
+            : startMs + Math.floor((endMs - startMs) * tokenIndex / tokenScalars.length);
+          const to = simultaneousSecondWordGlyph
+            ? startMs + Math.floor((endMs - startMs) * 0.65)
+            : startMs + Math.floor((endMs - startMs) * (tokenIndex + 1) / tokenScalars.length);
+          events.push([wordIndex, from, to, tokenIndex === tokenScalars.length - 1, [[scalarIndex + tokenIndex, scalarIndex + tokenIndex + 1]]]);
+        });
+        scalarIndex += tokenScalars.length;
+      });
+      return [row[0], row[1], row[2], row[3], row[4], row[5], letterText, events];
+    });
+    const letter = {
+      _meta: {
+        schema_version: 3,
+        slug,
+        audio_category: 'by_surah',
+        units: 'ms',
+        riwayah: 'hafs',
+        tier: 'letter',
+        script: 'digital_khatt_v2',
+        script_sha256: '19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86',
+        unicode_indexing: 'scalar',
+      },
+      rows: letterRows,
+    };
     const archive = zipSync({
       'catalog.json': strToU8(JSON.stringify(catalog)),
       'word_timestamps.json.gz': gzipSync(strToU8(JSON.stringify(word))),
+      'letter_timestamps.json.gz': gzipSync(strToU8(JSON.stringify(letter))),
     });
     shaToRestore = { slug, sha256: QUA_RECITATIONS[slug].sha256 };
     QUA_RECITATIONS[slug].sha256 = createHash('sha256').update(archive).digest('hex');
@@ -108,6 +155,24 @@ describe('Quranic Universal Audio catalogue', () => {
     expect(animated[1].scale).toBe(1);
     expect(resolveVerseWordWindow('letterByLetter', result.timingMap.words.length, 1).wordCount).toBe(1);
     expect(getAvailableTimingGranularity(result.timingMap.words[1])).toBe('word');
+
+    const letterResult = await resolveUniversalQuranAudio({
+      reciterId: 'mishary',
+      reciterSlug: slug,
+      granularity: 'letter',
+      reference: {
+        surahNumber: 1,
+        startAyah: 1,
+        endAyah: 1,
+        ayahs: [{ numberInSurah: 1, text: letterText }],
+      },
+    });
+    expect(letterResult.timingMap.validationStatus).toBe('approved');
+    expect(letterResult.timingMap.alignment?.availableGranularities).toEqual(['word', 'letter']);
+    expect(letterResult.timingMap.alignment?.requestedGranularity).toBe('letter');
+    expect(letterResult.timingMap.words[1].letters?.map((span) => span.token).join('')).toBe('الله');
+    expect(letterResult.timingMap.words[1].letters).toHaveLength(2);
+    expect(getAvailableTimingGranularity(letterResult.timingMap.words[1])).toBe('letter');
 
     await expect(resolveUniversalQuranAudio({
       reciterId: 'mishary',

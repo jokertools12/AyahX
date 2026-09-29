@@ -11,14 +11,23 @@ const animationProfileSchema = z.enum([
   'consume',
 ]);
 
-const timingSubsegmentSchema = z.object({
+const timingSubsegmentBaseSchema = z.object({
   occurrenceId: z.string().min(1).max(180),
   token: z.string().max(120),
   startMs: z.number().min(0),
   endMs: z.number().min(0),
   confidence: z.number().min(0).max(1),
   flags: z.array(z.string().max(64)).optional(),
-}).refine((segment) => segment.endMs > segment.startMs, {
+});
+
+const letterTimingSubsegmentSchema = timingSubsegmentBaseSchema.refine((segment) => (
+  segment.endMs > segment.startMs
+  || segment.endMs === segment.startMs && segment.flags?.includes('instantaneous_paint') === true
+), {
+  message: 'letter subsegment must have a positive interval or an explicit instantaneous paint event',
+});
+
+const positiveTimingSubsegmentSchema = timingSubsegmentBaseSchema.refine((segment) => segment.endMs > segment.startMs, {
   message: 'timing subsegment endMs must be greater than startMs',
 });
 
@@ -138,8 +147,8 @@ export const RenderManifestSchema = z.object({
         startMs: z.number().min(0),
         endMs: z.number().min(0),
         confidence: z.number().min(0).max(1).optional(),
-        letters: z.array(timingSubsegmentSchema).optional(),
-        phonemes: z.array(timingSubsegmentSchema).optional(),
+        letters: z.array(letterTimingSubsegmentSchema).optional(),
+        phonemes: z.array(positiveTimingSubsegmentSchema).optional(),
       }).refine((word) => word.endMs > word.startMs, {
         message: 'timing word endMs must be greater than startMs',
       })
@@ -300,14 +309,26 @@ function validateManifestTimingIntervals(manifest: RenderManifest, errors: strin
     for (const kind of ['letters', 'phonemes'] as const) {
       const segments = word[kind] || [];
       const segmentIds = new Set<string>();
-      let segmentEnd = word.startMs;
+      let segmentEnd = Number.NEGATIVE_INFINITY;
       for (let segmentIndex = 0; segmentIndex < segments.length; segmentIndex += 1) {
         const segment = segments[segmentIndex];
         if (segmentIds.has(segment.occurrenceId)) {
           errors.push(`timingMap.words[${index}].${kind}[${segmentIndex}]: duplicate occurrenceId`);
         }
         segmentIds.add(segment.occurrenceId);
-        if (segment.startMs < word.startMs || segment.endMs > word.endMs || segment.startMs < segmentEnd) {
+        const wordAyahNumber = Number(word.canonicalWordKey.split(':')[1]);
+        const ayahOffset = manifest.timingMap.compositionOffsets?.find((offset) => offset.ayahNumber === wordAyahNumber);
+        const trustedQauCrossBoundary = kind === 'letters'
+          && manifest.timingMap.alignment?.provider === 'quranic_universal_aligner'
+          && segment.flags?.includes('cross_word_boundary') === true
+          && Boolean(ayahOffset)
+          && segment.startMs >= (ayahOffset?.startMs ?? Number.POSITIVE_INFINITY)
+          && segment.endMs <= (ayahOffset?.endMs ?? Number.NEGATIVE_INFINITY);
+        const outsideWord = segment.startMs < word.startMs || segment.endMs > word.endMs;
+        const instantaneousPaint = kind === 'letters' && segment.startMs === segment.endMs
+          && segment.flags?.includes('instantaneous_paint') === true;
+        if (outsideWord && !trustedQauCrossBoundary || segment.endMs < segment.startMs
+          || segment.startMs === segment.endMs && !instantaneousPaint || segment.startMs < segmentEnd) {
           errors.push(`timingMap.words[${index}].${kind}[${segmentIndex}]: outside parent interval or overlapping`);
         }
         segmentEnd = Math.max(segmentEnd, segment.endMs);

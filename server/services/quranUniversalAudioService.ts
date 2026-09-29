@@ -3,13 +3,14 @@ import { gunzipSync } from 'node:zlib';
 import { unzipSync, strFromU8 } from 'fflate';
 import {
   normalizeQuranicToken,
+  tokenizeQuranicText,
   validateTimingMap,
   type TimingGap,
   type TimingMap,
   type TimingWord,
 } from '../../src/lib/timingMap';
 
-/** Pinned word-tier import from Quranic Universal Audio's v3 release schema. */
+/** Pinned word and optional letter-tier import from QUA's v3 release schema. */
 const RELEASE = 'v3.2.0';
 const RELEASE_BASE = `https://github.com/QUD-Technologies/quranic-universal-audio/releases/download/${RELEASE}`;
 const MAX_PACKAGE_BYTES = 12 * 1024 * 1024;
@@ -85,7 +86,33 @@ type UniversalWordData = {
   rows: UniversalWordRow[];
 };
 
-type UniversalPackage = { catalog: UniversalCatalog; word: UniversalWordData };
+type UniversalLetterEvent = [wordOccurrenceIndex: number, startMs: number, endMs: number, ownsSound: boolean, paintRanges: Array<[number, number]>];
+type UniversalLetterRow = [
+  reference: string,
+  startMs: number,
+  endMs: number,
+  canonical: boolean,
+  silenceAfterMs: number,
+  words: UniversalWordRow[5],
+  text: string,
+  events: UniversalLetterEvent[],
+];
+type UniversalLetterData = {
+  _meta: {
+    schema_version: number;
+    slug: string;
+    audio_category: string;
+    units: string;
+    riwayah: string;
+    tier: string;
+    script_sha256: string;
+    script?: string;
+    unicode_indexing?: string;
+  };
+  rows: UniversalLetterRow[];
+};
+
+type UniversalPackage = { catalog: UniversalCatalog; word: UniversalWordData; letterGzip?: Uint8Array };
 
 const packageCache = new Map<string, Promise<UniversalPackage>>();
 const AUDIO_HOST_SUFFIXES = ['mp3quran.net', 'tarteel.ai', 'quranicaudio.com', 'tvquran.com', 'archive.org'];
@@ -167,7 +194,7 @@ async function loadPackage(slug: string): Promise<UniversalPackage> {
       || word._meta.script_sha256 !== QUA_HAFS_SCRIPT_SHA256 || !Array.isArray(word.rows)) {
       throw new Error('UNIVERSAL_ALIGNMENT_CATALOG_INVALID');
     }
-    return { catalog, word };
+    return { catalog, word, letterGzip: zip['letter_timestamps.json.gz'] };
   })();
   packageCache.set(slug, promise);
   try {
@@ -186,6 +213,7 @@ async function loadPackage(slug: string): Promise<UniversalPackage> {
 export interface UniversalAlignmentInput {
   reciterId: string;
   reciterSlug: string;
+  granularity?: 'word' | 'letter';
   reference: {
     surahNumber: number;
     startAyah: number;
@@ -193,6 +221,123 @@ export interface UniversalAlignmentInput {
     ayahs: Array<{ numberInSurah: number; text: string }>;
     quranTextVersion?: string;
   };
+}
+
+function normalizeLetterProjection(text: string): string {
+  // QUA's digital_khatt_v2 uses standard Arabic Yeh, while some Uthmani
+  // sources encode Yeh as Arabic Letter Yeh with Hamza Above / Farsi Yeh.
+  // Normalize only these presentation-equivalent script forms after the
+  // Quran token normalizer has removed recitation marks.
+  return normalizeQuranicToken(text)
+    .replace(/[ٱ]/g, 'ا')
+    .replace(/ی/g, 'ي')
+    // Mushaf text services use precomposed hamza-on-waw/ya where QUA's
+    // digital_khatt_v2 encodes the equivalent as a combining hamza mark.
+    .replace(/ؤ/g, 'و')
+    .replace(/ئ/g, 'ي')
+    .replace(/[\u08D3-\u08FF]/g, '')
+    .replace(/[\u200C-\u200F\uFEFF]/g, '');
+}
+
+function loadLetterTier(packageData: UniversalPackage, slug: string): UniversalLetterData {
+  if (!packageData.letterGzip) throw new Error('UNIVERSAL_ALIGNMENT_LETTER_TIER_NOT_AVAILABLE');
+  const letter = JSON.parse(strFromU8(gunzipSync(packageData.letterGzip))) as UniversalLetterData;
+  if (letter._meta?.schema_version !== 3 || letter._meta.slug !== slug || letter._meta.audio_category !== 'by_surah'
+    || letter._meta.units !== 'ms' || letter._meta.riwayah !== 'hafs' || letter._meta.tier !== 'letter'
+    || letter._meta.script !== 'digital_khatt_v2' || letter._meta.script_sha256 !== QUA_HAFS_SCRIPT_SHA256
+    || letter._meta.unicode_indexing !== 'scalar'
+    || !Array.isArray(letter.rows) || letter.rows.length !== packageData.word.rows.length) {
+    throw new Error('UNIVERSAL_ALIGNMENT_LETTER_CATALOG_INVALID');
+  }
+  return letter;
+}
+
+function letterSpansForWord(input: {
+  row: UniversalLetterRow;
+  wordIndex: number;
+  displayToken: string;
+  wordStartMs: number;
+  wordEndMs: number;
+  chapterOffsetMs: number;
+  wordOccurrenceId: string;
+}): TimingWord['letters'] {
+  const { row, wordIndex, displayToken, wordStartMs, wordEndMs, chapterOffsetMs, wordOccurrenceId } = input;
+  const scalars = Array.from(row[6]);
+  if (scalars.length > 4096 || !Array.isArray(row[7])) throw new Error('UNIVERSAL_ALIGNMENT_LETTER_DATA_INVALID');
+
+  const eventGroups = new Map<string, {
+    startMs: number;
+    endMs: number;
+    ownsSound: boolean;
+    paint: Array<{ scalarStart: number; scalarEnd: number; token: string }>;
+  }>();
+  let previousStartMs = -1;
+  for (let eventIndex = 0; eventIndex < row[7].length; eventIndex += 1) {
+    const rawEvent = row[7][eventIndex] as unknown;
+    if (!Array.isArray(rawEvent) || rawEvent.length !== 5) throw new Error('UNIVERSAL_ALIGNMENT_LETTER_DATA_INVALID');
+    const [wordOccurrenceIndex, localStartValue, localEndValue, ownsSound, paintRanges] = rawEvent as UniversalLetterEvent;
+    const localStart = Number(localStartValue);
+    const localEnd = Number(localEndValue);
+    if (!Array.isArray(row[5]) || !Number.isInteger(wordOccurrenceIndex) || wordOccurrenceIndex < 0 || wordOccurrenceIndex >= row[5].length
+      || typeof ownsSound !== 'boolean' || !Number.isFinite(localStart) || !Number.isFinite(localEnd)
+      || localStart < row[1] || localEnd > row[2] || localEnd < localStart || localStart < previousStartMs
+      || !Array.isArray(paintRanges)) {
+      throw new Error('UNIVERSAL_ALIGNMENT_LETTER_DATA_INVALID');
+    }
+    previousStartMs = localStart;
+    const parsedRanges = paintRanges.map((range) => {
+      if (!Array.isArray(range) || range.length !== 2) throw new Error('UNIVERSAL_ALIGNMENT_LETTER_DATA_INVALID');
+      const [scalarStart, scalarEnd] = range.map(Number);
+      if (!Number.isInteger(scalarStart) || !Number.isInteger(scalarEnd)
+        || scalarEnd <= scalarStart || scalarEnd > scalars.length) {
+        throw new Error('UNIVERSAL_ALIGNMENT_LETTER_DATA_INVALID');
+      }
+      return { scalarStart, scalarEnd, token: scalars.slice(scalarStart, scalarEnd).join('') };
+    });
+    if (wordOccurrenceIndex !== wordIndex || parsedRanges.length === 0) continue;
+
+    const startMs = localStart + chapterOffsetMs;
+    const endMs = localEnd + chapterOffsetMs;
+    const groupKey = `${localStart}:${localEnd}`;
+    const group = eventGroups.get(groupKey) || { startMs, endMs, ownsSound: false, paint: [] };
+    group.ownsSound ||= ownsSound;
+    group.paint.push(...parsedRanges);
+    eventGroups.set(groupKey, group);
+  }
+
+  // QUA legitimately emits several paint events at the same audio interval
+  // (for example, a base glyph and its attached marks). Render those glyphs
+  // together as one step; treating each as a sequential span made the
+  // canonical interval validator reject valid letter-tier packages.
+  const spans: NonNullable<TimingWord['letters']> = Array.from(eventGroups.values())
+    .sort((left, right) => left.startMs - right.startMs || left.endMs - right.endMs)
+    .map((group, index) => {
+      const orderedPaint = group.paint.sort((left, right) => left.scalarStart - right.scalarStart);
+      for (let paintIndex = 1; paintIndex < orderedPaint.length; paintIndex += 1) {
+        if (orderedPaint[paintIndex].scalarStart < orderedPaint[paintIndex - 1].scalarEnd) {
+          throw new Error('UNIVERSAL_ALIGNMENT_LETTER_DATA_INVALID');
+        }
+      }
+      const flags: string[] = [];
+      if (group.startMs === group.endMs) flags.push('instantaneous_paint');
+      if (group.startMs < wordStartMs || group.endMs > wordEndMs) flags.push('cross_word_boundary');
+      if (!group.ownsSound) flags.push('non_acoustic_paint');
+      return {
+        occurrenceId: `${wordOccurrenceId}:letter:${index + 1}`,
+        token: orderedPaint.map((paint) => paint.token).join(''),
+        startMs: group.startMs,
+        endMs: group.endMs,
+        confidence: 1,
+        ...(flags.length > 0 ? { flags } : {}),
+      };
+    });
+  for (let index = 1; index < spans.length; index += 1) {
+    if (spans[index].startMs < spans[index - 1].endMs) throw new Error('UNIVERSAL_ALIGNMENT_LETTER_WORD_RANGE_INVALID');
+  }
+  const sourceProjection = normalizeLetterProjection(spans.map((span) => span.token).join(''));
+  const displayProjection = normalizeLetterProjection(displayToken);
+  if (spans.length === 0 || sourceProjection !== displayProjection) return undefined;
+  return spans;
 }
 
 export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput): Promise<{ timingMap: TimingMap; audioUrl: string; reciter: UniversalReciter & { coverageAyahs: number } }> {
@@ -203,6 +348,7 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
     throw new Error('UNIVERSAL_ALIGNMENT_TEXT_VERSION_UNSUPPORTED');
   }
   const packageData = await loadPackage(input.reciterSlug);
+  const letterData = input.granularity === 'letter' ? loadLetterTier(packageData, input.reciterSlug) : undefined;
   const sourceAudioUrl = catalogAudioUrl(packageData.catalog, surahNumber);
   const chapterOffsetMs = Number(packageData.catalog.audio.chapter_offsets_ms?.[String(surahNumber)] || 0);
   if (!Number.isFinite(chapterOffsetMs) || chapterOffsetMs < 0) throw new Error('UNIVERSAL_ALIGNMENT_CATALOG_INVALID');
@@ -219,7 +365,7 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
     if (!reference || reference.numberInSurah !== ayahNumber) throw new Error('UNIVERSAL_ALIGNMENT_REFERENCE_INVALID');
     const text = reference.text;
     // Standalone waqf symbols are presentation marks, not independently timed words.
-    const tokens = text.split(/\s+/).filter((token) => normalizeQuranicToken(token).length > 0);
+    let tokens = tokenizeQuranicText(text);
     if (tokens.length === 0) throw new Error('UNIVERSAL_ALIGNMENT_TEXT_MISMATCH');
 
     const key = `${surahNumber}:${ayahNumber}`;
@@ -227,11 +373,33 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
     const canonicalRows = candidates.filter((row) => row[3] === true);
     if (canonicalRows.length !== 1) throw new Error('UNIVERSAL_ALIGNMENT_AYAH_NOT_AVAILABLE');
     const [rowKey, rawStart, rawEnd, , , sourceWords] = canonicalRows[0];
+    const letterRows = letterData?.rows.filter((row) => Array.isArray(row) && row[0] === key && row[3] === true) || [];
     const startMs = Number(rawStart) + chapterOffsetMs;
     const endMs = Number(rawEnd) + chapterOffsetMs;
+    if (ayahNumber === 1 && surahNumber !== 1 && surahNumber !== 9 && Array.isArray(sourceWords) && tokens.length === sourceWords.length + 4) {
+      tokens = tokens.slice(4);
+    }
     if (rowKey !== key || !Number.isFinite(startMs) || !Number.isFinite(endMs) || startMs < 0 || !(endMs > startMs)
       || !Array.isArray(sourceWords) || sourceWords.length !== tokens.length) {
       throw new Error('UNIVERSAL_ALIGNMENT_TEXT_MISMATCH');
+    }
+    if (letterData && letterRows.length !== 1) throw new Error('UNIVERSAL_ALIGNMENT_LETTER_DATA_INVALID');
+    const letterRow = letterRows[0];
+    if (letterRow && (letterRow.length !== 8 || letterRow[1] !== canonicalRows[0][1]
+      || letterRow[2] !== canonicalRows[0][2] || !Array.isArray(letterRow[5])
+      || letterRow[5].length !== sourceWords.length || typeof letterRow[6] !== 'string' || !Array.isArray(letterRow[7])
+      || letterRow[5].some((letterWord, wordIndex) => (
+        !Array.isArray(letterWord) || letterWord.length !== 3 || !Array.isArray(sourceWords[wordIndex])
+        || letterWord.some((value, valueIndex) => value !== sourceWords[wordIndex][valueIndex])
+      )))) {
+      throw new Error('UNIVERSAL_ALIGNMENT_LETTER_DATA_INVALID');
+    }
+    if (letterRow) {
+      const letterTokens = letterRow[6].split(/\s+/).map(normalizeLetterProjection).filter(Boolean);
+      if (letterTokens.length !== tokens.length
+        || letterTokens.some((token, tokenIndex) => token !== normalizeLetterProjection(tokens[tokenIndex]))) {
+        throw new Error('UNIVERSAL_ALIGNMENT_LETTER_TEXT_MISMATCH');
+      }
     }
     compositionOffsets.push({ ayahNumber, startMs, endMs });
     rangeEndMs = Math.max(rangeEndMs, endMs);
@@ -251,6 +419,16 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
       if (previousWordEndMs >= 0 && wordStartMs - previousWordEndMs >= 80) {
         gaps.push({ startMs: previousWordEndMs, endMs: wordStartMs, type: 'waqf' });
       }
+      const occurrenceId = `${key}:${wordIndex}:qua-${wordStartMs}-${wordEndMs}`;
+      const letters = letterRow ? letterSpansForWord({
+        row: letterRow,
+        wordIndex: wordOffset,
+        displayToken: tokens[wordOffset],
+        wordStartMs,
+        wordEndMs,
+        chapterOffsetMs,
+        wordOccurrenceId: occurrenceId,
+      }) : undefined;
       words.push({
         canonicalWordKey: `${surahNumber}:${ayahNumber}:${wordIndex}`,
         displayWordIndex: words.length,
@@ -261,16 +439,22 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
         // QUA does not publish a numeric confidence field.  This value records
         // that the pinned source timestamp is structurally verified, not model probability.
         confidence: 1,
-        occurrenceId: `${key}:${wordIndex}:qua-${wordStartMs}-${wordEndMs}`,
+        occurrenceId,
+        letters,
       });
       previousWordEndMs = wordEndMs;
     }
   }
 
+  const hasCompleteLetterTier = words.length > 0 && words.every((word) => Boolean(word.letters?.length));
+  if (input.granularity === 'letter' && !hasCompleteLetterTier) {
+    throw new Error('UNIVERSAL_ALIGNMENT_LETTER_TIER_INCOMPLETE');
+  }
+
   const audioHash = catalogAssetHash(reciter.slug, surahNumber, sourceAudioUrl, chapterOffsetMs, reciter.sha256);
   const timingMap: TimingMap = {
     schemaVersion: '1.0.0',
-    mapId: `tm-qua-${reciter.slug}-${surahNumber}-${startAyah}_${endAyah}-${audioHash.slice(0, 12)}`,
+    mapId: `tm-qua-${reciter.slug}-${surahNumber}-${startAyah}_${endAyah}-${input.granularity === 'letter' ? 'letter' : 'word'}-${audioHash.slice(0, 12)}`,
     reciterId: input.reciterId,
     sourceId: 'quranic_universal_audio',
     sourceUrlOrImmutableAssetId: sourceAudioUrl,
@@ -291,8 +475,8 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
     alignment: {
       provider: 'quranic_universal_aligner',
       providerVersion: RELEASE,
-      requestedGranularity: 'word',
-      availableGranularities: ['word'],
+      requestedGranularity: input.granularity || 'word',
+      availableGranularities: hasCompleteLetterTier ? ['word', 'letter'] : ['word'],
       quranEdition: input.reference.quranTextVersion || 'uthmani_hafs_v1',
       riwayah: QUA_HAFS_RIWAYAH,
       license: 'CC-BY-4.0',
