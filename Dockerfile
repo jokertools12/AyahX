@@ -9,7 +9,10 @@ FROM node:22-bookworm-slim
 WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg chromium ca-certificates fonts-noto-core fonts-noto-extra fonts-hosny-amiri fontconfig libass9 libharfbuzz0b && rm -rf /var/lib/apt/lists/*
 COPY scripts/verify-render-runtime.sh /usr/local/bin/verify-render-runtime
-RUN chmod +x /usr/local/bin/verify-render-runtime && /usr/local/bin/verify-render-runtime
+# Windows checkouts can store this script with CRLF; normalize it before Linux executes it.
+RUN sed -i 's/\r$//' /usr/local/bin/verify-render-runtime \
+    && chmod +x /usr/local/bin/verify-render-runtime \
+    && /usr/local/bin/verify-render-runtime
 COPY --from=build /app/package*.json ./
 # The runtime entrypoints use tsx. Keep the locked dev toolchain in the
 # runtime image; NODE_ENV is set only after npm ci so npm does not omit it.

@@ -21,7 +21,7 @@ import { toast } from 'sonner';
 import { Navigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { ErrorState } from '@/components/ErrorState';
-import { omitUnchangedOpenRouterSecret } from '@/lib/adminSettings';
+import { buildQuranFoundationTestPayload, omitUnchangedAdminSecrets } from '@/lib/adminSettings';
 
 interface PaymentRequest {
   id: string;
@@ -243,6 +243,9 @@ export default function AdminPage() {
 
   const handleSettingChange = (key: string, val: string) => {
     setEditedSettings(prev => ({ ...prev, [key]: val }));
+    if (key === 'AI_PROVIDER' || key.startsWith('OPENROUTER_')) {
+      setOpenRouterTestStatus(null);
+    }
   };
 
   const handleSaveSettings = async () => {
@@ -256,13 +259,14 @@ export default function AdminPage() {
         ? (editedSettings.QF_PROD_CLIENT_SECRET || editedSettings.QF_CLIENT_SECRET)
         : (editedSettings.QF_PRELIVE_CLIENT_SECRET || editedSettings.QF_CLIENT_SECRET);
 
-      const payload = {
-        ...omitUnchangedOpenRouterSecret(editedSettings),
+      const payload = omitUnchangedAdminSecrets({
+        ...editedSettings,
         QF_CLIENT_ID: activeClientId,
         QF_CLIENT_SECRET: activeClientSecret,
-      };
+      });
 
       await saveSettings(payload);
+      setOpenRouterTestStatus(null);
       toast.success('تم حفظ الإعدادات؛ الحقول السرية الفارغة لم تُغيّر قيمتها.');
       await loadSettings();
     } catch (err: any) {
@@ -284,11 +288,11 @@ export default function AdminPage() {
         ? (editedSettings.QF_PROD_CLIENT_SECRET || editedSettings.QF_CLIENT_SECRET)
         : (editedSettings.QF_PRELIVE_CLIENT_SECRET || editedSettings.QF_CLIENT_SECRET);
 
-      const res = await testQuranFoundation({
+      const res = await testQuranFoundation(buildQuranFoundationTestPayload({
         clientId,
         clientSecret,
         env: activeEnv,
-      });
+      }));
       setQfTestStatus(res);
       if (res.success) {
         toast.success(res.message);
@@ -920,7 +924,7 @@ export default function AdminPage() {
                       <div className="grid gap-4 sm:grid-cols-2">
                         <div className="space-y-2">
                           <Label htmlFor="ai-provider" className="text-xs font-medium">مزوّد النص</Label>
-                          <Select value={editedSettings.AI_PROVIDER} onValueChange={(value) => setEditedSettings(prev => ({ ...prev, AI_PROVIDER: value }))}>
+                          <Select value={editedSettings.AI_PROVIDER} onValueChange={(value) => handleSettingChange('AI_PROVIDER', value)}>
                             <SelectTrigger id="ai-provider" className="bg-background/70"><SelectValue /></SelectTrigger>
                             <SelectContent>
                               <SelectItem value="openrouter">OpenRouter — الموصى به</SelectItem>
@@ -932,11 +936,12 @@ export default function AdminPage() {
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="ai-image-provider" className="text-xs font-medium">مزوّد الصور منفصل</Label>
-                          <Select value={editedSettings.AI_IMAGE_PROVIDER} onValueChange={(value) => setEditedSettings(prev => ({ ...prev, AI_IMAGE_PROVIDER: value }))}>
+                          <Select value={editedSettings.AI_IMAGE_PROVIDER} onValueChange={(value) => handleSettingChange('AI_IMAGE_PROVIDER', value)}>
                             <SelectTrigger id="ai-image-provider" className="bg-background/70"><SelectValue /></SelectTrigger>
                             <SelectContent>
                               <SelectItem value="gemini">Gemini — صور فقط</SelectItem>
-                              <SelectItem value="openrouter">OpenRouter — يتطلب إعداد صورة صريح</SelectItem>
+                              <SelectItem value="openrouter" disabled>OpenRouter — النص فقط (غير مدعوم للصور)</SelectItem>
+                              <SelectItem value="none">إيقاف توليد الصور بالذكاء الاصطناعي</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -953,7 +958,7 @@ export default function AdminPage() {
                             name="openrouter-api-key"
                             type={showSecrets.OPENROUTER_API_KEY ? 'text' : 'password'}
                             value={editedSettings.OPENROUTER_API_KEY}
-                            onChange={(e) => setEditedSettings(prev => ({ ...prev, OPENROUTER_API_KEY: e.target.value }))}
+                            onChange={(e) => handleSettingChange('OPENROUTER_API_KEY', e.target.value)}
                             placeholder={settings.OPENROUTER_API_KEY?.value ? 'اتركه فارغًا للاحتفاظ بالمفتاح الحالي' : 'sk-or-v1-…'}
                             className="h-11 border-emerald-400/20 bg-background/80 pr-11 font-mono text-xs"
                             dir="ltr"
@@ -1002,7 +1007,7 @@ export default function AdminPage() {
                       <div className="space-y-1"><p className="text-sm font-semibold">النموذج الأساسي</p><p className="text-xs text-muted-foreground">يُستخدم أولًا للتدقيق والنصوص المنظمة.</p></div>
                       <Input
                         value={editedSettings.OPENROUTER_TEXT_MODEL}
-                        onChange={(e) => setEditedSettings(prev => ({ ...prev, OPENROUTER_TEXT_MODEL: e.target.value }))}
+                        onChange={(e) => handleSettingChange('OPENROUTER_TEXT_MODEL', e.target.value)}
                         className="font-mono text-xs"
                         dir="ltr"
                         aria-label="نموذج OpenRouter الأساسي"
@@ -1012,7 +1017,7 @@ export default function AdminPage() {
                       <div className="space-y-1"><p className="text-sm font-semibold">نماذج احتياطية اختيارية</p><p className="text-xs text-muted-foreground">معطّلة افتراضيًا؛ أضف نموذجًا بعد مراجعة مخرجاته وخصوصيته. لا يستخدم النظام <code className="rounded bg-background/70 px-1">openrouter/free</code> المتغير.</p></div>
                       <Input
                         value={editedSettings.OPENROUTER_TEXT_FALLBACK_MODELS}
-                        onChange={(e) => setEditedSettings(prev => ({ ...prev, OPENROUTER_TEXT_FALLBACK_MODELS: e.target.value }))}
+                        onChange={(e) => handleSettingChange('OPENROUTER_TEXT_FALLBACK_MODELS', e.target.value)}
                         className="font-mono text-xs"
                         dir="ltr"
                         aria-label="نماذج OpenRouter الاحتياطية"
@@ -1034,15 +1039,15 @@ export default function AdminPage() {
                   <div className="grid gap-3 md:grid-cols-3">
                     <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-border/60 bg-background/30 p-3 transition-colors hover:border-emerald-400/30">
                       <span><span className="block text-sm font-medium">قفل المجاني</span><span className="mt-0.5 block text-[11px] text-muted-foreground">سعر $0 ومعرّف ينتهي بـ :free</span></span>
-                      <Switch checked={editedSettings.OPENROUTER_FREE_ONLY === 'true'} onCheckedChange={(checked) => setEditedSettings(prev => ({ ...prev, OPENROUTER_FREE_ONLY: String(checked) }))} />
+                      <Switch checked={editedSettings.OPENROUTER_FREE_ONLY === 'true'} onCheckedChange={(checked) => handleSettingChange('OPENROUTER_FREE_ONLY', String(checked))} />
                     </label>
                     <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-border/60 bg-background/30 p-3 transition-colors hover:border-emerald-400/30">
                       <span><span className="block text-sm font-medium">تفعيل احتياطي النماذج</span><span className="mt-0.5 block text-[11px] text-muted-foreground">اختياري وبعد مراجعة النموذج</span></span>
-                      <Switch checked={editedSettings.OPENROUTER_MODEL_FALLBACKS_ENABLED === 'true'} onCheckedChange={(checked) => setEditedSettings(prev => ({ ...prev, OPENROUTER_MODEL_FALLBACKS_ENABLED: String(checked) }))} />
+                      <Switch checked={editedSettings.OPENROUTER_MODEL_FALLBACKS_ENABLED === 'true'} onCheckedChange={(checked) => handleSettingChange('OPENROUTER_MODEL_FALLBACKS_ENABLED', String(checked))} />
                     </label>
                     <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-border/60 bg-background/30 p-3 transition-colors hover:border-emerald-400/30">
                       <span><span className="block text-sm font-medium">رفض جمع البيانات</span><span className="mt-0.5 block text-[11px] text-muted-foreground">تفضيل مسار الخصوصية</span></span>
-                      <Switch checked={editedSettings.OPENROUTER_DATA_COLLECTION !== 'allow'} onCheckedChange={(checked) => setEditedSettings(prev => ({ ...prev, OPENROUTER_DATA_COLLECTION: checked ? 'deny' : 'allow' }))} />
+                      <Switch checked={editedSettings.OPENROUTER_DATA_COLLECTION !== 'allow'} onCheckedChange={(checked) => handleSettingChange('OPENROUTER_DATA_COLLECTION', checked ? 'deny' : 'allow')} />
                     </label>
                   </div>
 
@@ -1053,9 +1058,9 @@ export default function AdminPage() {
                     </Button>
                     {showOpenRouterAdvanced && (
                       <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-3 grid gap-4 rounded-2xl border border-border/60 bg-background/20 p-4 md:grid-cols-2">
-                        <div className="space-y-2"><Label className="text-xs">رابط الموقع لتعريف التطبيق</Label><Input value={editedSettings.OPENROUTER_SITE_URL} onChange={(e) => setEditedSettings(prev => ({ ...prev, OPENROUTER_SITE_URL: e.target.value }))} placeholder="https://ayahx.example" className="font-mono text-xs" dir="ltr" /></div>
+                        <div className="space-y-2"><Label className="text-xs">رابط الموقع لتعريف التطبيق</Label><Input value={editedSettings.OPENROUTER_SITE_URL} onChange={(e) => handleSettingChange('OPENROUTER_SITE_URL', e.target.value)} placeholder="https://ayahx.example" className="font-mono text-xs" dir="ltr" /></div>
                         <div className="grid grid-cols-2 gap-3">
-                          <label className="flex items-center justify-between gap-2 rounded-lg border border-border/60 px-3 py-2 text-xs"><span>fallback بين المزودين</span><Switch checked={editedSettings.OPENROUTER_ALLOW_PROVIDER_FALLBACKS === 'true'} onCheckedChange={(checked) => setEditedSettings(prev => ({ ...prev, OPENROUTER_ALLOW_PROVIDER_FALLBACKS: String(checked) }))} /></label>
+                          <label className="flex items-center justify-between gap-2 rounded-lg border border-border/60 px-3 py-2 text-xs"><span>fallback بين المزودين</span><Switch checked={editedSettings.OPENROUTER_ALLOW_PROVIDER_FALLBACKS === 'true'} onCheckedChange={(checked) => handleSettingChange('OPENROUTER_ALLOW_PROVIDER_FALLBACKS', String(checked))} /></label>
                         </div>
                       </motion.div>
                     )}

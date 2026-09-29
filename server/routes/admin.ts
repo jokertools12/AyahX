@@ -383,17 +383,20 @@ router.post('/settings', async (req: AuthenticatedRequest, res: Response) => {
  */
 router.post('/settings/test-quran-foundation', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { testConnection } = await import('../services/quranFoundationService');
+    const { testConnection, getQuranFoundationConfig } = await import('../services/quranFoundationService');
     const { clientId, clientSecret, env } = req.body || {};
+    const targetEnv = env === 'production' ? 'production' : 'prelive';
 
-    let override: any = undefined;
-    if (clientId && clientSecret) {
-      override = {
-        clientId: String(clientId).trim(),
-        clientSecret: String(clientSecret).trim(),
-        env: env === 'production' ? 'production' : 'prelive',
-      };
-    }
+    const hasNewSecret = typeof clientSecret === 'string'
+      && clientSecret.trim().length > 0
+      && !clientSecret.includes('****');
+    const override = hasNewSecret && typeof clientId === 'string' && clientId.trim()
+      ? {
+        clientId: clientId.trim(),
+        clientSecret: clientSecret.trim(),
+        env: targetEnv,
+      }
+      : await getQuranFoundationConfig(targetEnv);
 
     const result = await testConnection(override);
     return res.json(result);
