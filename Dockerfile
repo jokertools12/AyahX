@@ -20,6 +20,10 @@ RUN npm ci --include=dev
 ENV NODE_ENV=production
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/public ./public
+# The API runtime imports the canonical timing-map contract for verified
+# alignment maps. Keep the source module available alongside the tsx server
+# entrypoint (the frontend build output does not contain this server import).
+COPY --from=build /app/src ./src
 COPY --from=build /app/server ./server
 COPY --from=build /app/shared ./shared
 # Required by the Railway API service's pre-deploy schema migration.
