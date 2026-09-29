@@ -356,7 +356,10 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
   const words: TimingWord[] = [];
   const gaps: TimingGap[] = [];
   const compositionOffsets: NonNullable<TimingMap['compositionOffsets']> = [];
-  let previousWordEndMs = -1;
+  // previousWordEndMs is reset per-ayah to avoid false cross-ayah monotonicity failures.
+  // The QUA dataset occasionally has the last word of ayah N ending a few ms after the
+  // first word of ayah N+1 starts (boundary encoding); this is valid in the source data.
+  let globalPreviousWordEndMs = -1; // used only for inter-ayah gap detection
   let rangeEndMs = 0;
 
   for (let index = 0; index <= endAyah - startAyah; index += 1) {
@@ -407,21 +410,31 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
     compositionOffsets.push({ ayahNumber, startMs, endMs });
     rangeEndMs = Math.max(rangeEndMs, endMs);
 
+    // Reset per-ayah monotonicity cursor to startMs - 1 so that:
+    //   (a) the first word of this ayah just needs to be >= startMs (checked separately)
+    //   (b) cross-ayah boundary overlaps in the QUA dataset don't cause false failures
+    let previousWordEndMs = startMs - 1;
+    // Track seen wordIndex values within this ayah to detect duplicates in the source data.
+    const seenWordIndices = new Set<number>();
+
     for (let wordOffset = 0; wordOffset < sourceWords.length; wordOffset += 1) {
       const sourceWord = sourceWords[wordOffset];
       if (!Array.isArray(sourceWord) || sourceWord.length !== 3) throw new Error('UNIVERSAL_ALIGNMENT_DATA_INVALID');
       const [wordIndex, rawWordStart, rawWordEnd] = sourceWord.map(Number);
       const wordStartMs = rawWordStart + chapterOffsetMs;
       const wordEndMs = rawWordEnd + chapterOffsetMs;
-      // Validate word timestamps and ensure wordIndex points to a valid Quran token in the ayah
+      // Validate word timestamps and ensure wordIndex points to a valid, non-duplicate Quran token in the ayah.
       if (!Number.isInteger(wordIndex) || wordIndex < 1 || wordIndex > tokens.length
+        || seenWordIndices.has(wordIndex)
         || !Number.isFinite(wordStartMs) || !Number.isFinite(wordEndMs)
         || wordStartMs < startMs || wordEndMs > endMs || !(wordEndMs > wordStartMs)
         || wordStartMs < previousWordEndMs) {
         throw new Error('UNIVERSAL_ALIGNMENT_DATA_INVALID');
       }
-      if (previousWordEndMs >= 0 && wordStartMs - previousWordEndMs >= 80) {
-        gaps.push({ startMs: previousWordEndMs, endMs: wordStartMs, type: 'waqf' });
+      seenWordIndices.add(wordIndex);
+      // Emit an inter-word gap only when both cursors agree (avoiding false gaps at ayah starts).
+      if (globalPreviousWordEndMs >= 0 && wordStartMs - globalPreviousWordEndMs >= 80) {
+        gaps.push({ startMs: globalPreviousWordEndMs, endMs: wordStartMs, type: 'waqf' });
       }
       const tokenText = tokens[wordIndex - 1];
       const occurrenceId = `${key}:${wordIndex}:qua-${wordStartMs}-${wordEndMs}`;
@@ -448,6 +461,7 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
         letters,
       });
       previousWordEndMs = wordEndMs;
+      globalPreviousWordEndMs = wordEndMs;
     }
   }
 
