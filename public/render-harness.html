@@ -1772,7 +1772,14 @@
           if (!lyricLines) {
           const requestedVerseMode = displaySettings.verseDisplayMode || 'full';
           const verseMode = hasTrustedWordTiming ? requestedVerseMode : 'full';
-          const verseWordWindow = resolveVerseWordWindow(verseMode, ayahWords.length, activeWordIndexInAyah);
+          // A trusted map can still have a short, legitimate inter-ayah gap
+          // between the verse boundary and the first word event.  Do not turn
+          // that gap into an empty canvas: keep the complete current ayah
+          // visible until its first verified word starts.  This is a display
+          // safety rule only; it never invents a highlight or a timestamp.
+          const verseWordWindow = activeWordIndexInAyah == null && hasTrustedWordTiming
+            ? { startIndex: 0, wordCount: ayahWords.length }
+            : resolveVerseWordWindow(verseMode, ayahWords.length, activeWordIndexInAyah);
           let chunkStartWordIdx = verseWordWindow.startIndex;
           let displayWords = ayahWords.slice(
             verseWordWindow.startIndex,
