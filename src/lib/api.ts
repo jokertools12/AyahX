@@ -797,6 +797,35 @@ export const api = {
       });
     },
 
+    async resolveUniversal(payload: {
+      reciterId: string;
+      audio?: {
+        contentHash?: string;
+        durationMs?: number;
+        sampleRate?: number;
+        channels?: number;
+      };
+      reference: {
+        surahNumber: number;
+        startAyah: number;
+        endAyah: number;
+        ayahs: Array<{ numberInSurah: number; text: string }>;
+        quranTextVersion?: string;
+      };
+      providerInput: { reciterSlug: string };
+    }) {
+      return request<{
+        accepted: boolean;
+        timingMap: any;
+        audioUrl: string;
+        reciter: { slug: string; coverageAyahs: number };
+        validation: any;
+      }>('/api/alignments/resolve-universal', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+    },
+
     async create(payload: {
       providerId: string;
       reciterId: string;

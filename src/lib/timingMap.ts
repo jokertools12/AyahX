@@ -668,7 +668,10 @@ export function buildAudioAlignedTimingMap(params: {
       endMs: ayah.audioEndMs,
     });
 
-    const ayahTokens = (ayah.text || '').split(' ').filter(Boolean);
+    // Standalone Uthmani pause marks are visual punctuation, not words.  They
+    // must not shift an imported word index (for example 2:2 contains ۛ marks
+    // between words in the Quran Foundation text).
+    const ayahTokens = (ayah.text || '').split(/\s+/).filter((token) => normalizeQuranicToken(token).length > 0);
     const ayahDur = Math.max(ayah.audioEndMs - ayah.audioStartMs, 100);
 
     if (explicitWordSpans && explicitWordSpans.length > 0) {

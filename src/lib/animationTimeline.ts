@@ -42,7 +42,7 @@ export interface AnimationTimelineOptions {
   windowSize?: number;
 }
 
-export type VerseDisplayMode = 'full' | 'twoWords' | 'threeTwo' | 'wordByWord';
+export type VerseDisplayMode = 'full' | 'twoWords' | 'threeTwo' | 'wordByWord' | 'letterByLetter';
 
 export interface VerseWordWindow {
   startIndex: number;
@@ -71,7 +71,9 @@ export function resolveVerseWordWindow(
     return { startIndex: 0, wordCount: 0 };
   }
 
-  if (mode === 'wordByWord') return { startIndex: safeActive, wordCount: 1 };
+  // Letter-by-letter is a higher-resolution presentation of the active word;
+  // the renderer expands that one word only when trusted letter spans exist.
+  if (mode === 'wordByWord' || mode === 'letterByLetter') return { startIndex: safeActive, wordCount: 1 };
   if (mode === 'twoWords') {
     const startIndex = Math.floor(safeActive / 2) * 2;
     return { startIndex, wordCount: Math.min(2, safeTotal - startIndex) };

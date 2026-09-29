@@ -18,6 +18,7 @@ import {
 import { alignmentDocumentToTimingMap } from '../services/alignmentProvider';
 import { issueApprovedTimingMapAttestation } from '../services/alignmentAttestation';
 import { resolveKnownQuranAlign } from '../services/quranAlignService';
+import { resolveUniversalQuranAudio } from '../services/quranUniversalAudioService';
 
 const router = Router();
 
@@ -136,6 +137,46 @@ router.post('/resolve-known', requireAuth, aiRateLimiter, async (req: Authentica
       : 503;
     return res.status(status).json({
       error: status === 422 ? 'لا تتوفر حدود كلمات مستقلة لهذا المقطع' : 'تعذر تحميل محاذاة التلاوة المثبتة',
+      code,
+    });
+  }
+});
+
+/**
+ * Resolves the immutable QUA v2.2.0 word + letter tiers and returns the exact
+ * catalogue chapter URL that those timestamps describe.  This route is kept
+ * separate from model providers so a missing remote package fails closed and
+ * never turns into a guessed word duration.
+ */
+router.post('/resolve-universal', requireAuth, aiRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const body = req.body || {};
+    const input = {
+      reciterId: String(body.reciterId || ''),
+      reciterSlug: String(body.providerInput?.reciterSlug || ''),
+      audio: body.audio || {},
+      reference: body.reference,
+    };
+    if (!input.reciterId || !input.reciterSlug || !input.reference) {
+      return res.status(400).json({ error: 'بيانات QUA غير مكتملة', code: 'UNIVERSAL_ALIGNMENT_INPUT_REQUIRED' });
+    }
+    const result = await resolveUniversalQuranAudio(input as any);
+    return res.json({
+      accepted: true,
+      timingMap: result.timingMap,
+      audioUrl: result.audioUrl,
+      reciter: { slug: result.reciter.slug, coverageAyahs: result.reciter.coverageAyahs },
+      validation: { status: 'approved', errors: [], warnings: [] },
+    });
+  } catch (error: any) {
+    const code = String(error?.message || error || 'UNIVERSAL_ALIGNMENT_FAILED');
+    const status = code.includes('NOT_AVAILABLE') || code.includes('NOT_SUPPORTED') || code.includes('MISSING')
+      ? 422
+      : code.includes('REQUIRED') || code.includes('INPUT') || code.includes('MISMATCH')
+      ? 400
+      : 503;
+    return res.status(status).json({
+      error: status === 422 ? 'لا تتوفر محاذاة QUA لهذا القارئ أو المقطع' : 'تعذر تحميل محاذاة QUA المثبتة',
       code,
     });
   }

@@ -730,29 +730,18 @@ export default function PreviewPage() {
       return;
     }
     const loadData = async () => {
+      // Invalidate the previous range before the asynchronous fetch.  Without
+      // this, a same-length range could pass the audio effect's readiness
+      // check and pair fresh audio with stale Quran text for one render.
+      setAyahs([]);
       const data = await fetchAyahs(surahNumber, startAyah, endAyah);
       if (data) {
-        const processedAyahs = data.map((ayah, index) => {
-          let text = ayah.text;
-          if (index === 0 && startAyah <= 1 && surahNumber !== 1 && surahNumber !== 9) {
-            const words = text.split(/\s+/).filter(Boolean);
-            const normalize = (w: string) => w
-              .replace(/[^\u0621-\u064A\u0671-\u06FF]/g, '')
-              .replace(/[\u06E1\u06E4\u0640]/g, '')
-              .replace(/\u0671/g, '\u0627')
-              .replace(/\u06CC/g, '\u064A');
-            let cutAfter = -1;
-            for (let wi = 0; wi < Math.min(words.length, 8); wi++) {
-              const clean = normalize(words[wi]);
-              if (clean === 'الرحيم') { cutAfter = wi; break; }
-            }
-            if (cutAfter >= 0 && cutAfter < words.length - 1) {
-              text = words.slice(cutAfter + 1).join(' ');
-            }
-          }
-          return { ...ayah, text };
-        });
-        setAyahs(processedAyahs);
+        // Keep the canonical API text untouched.  Alignment packages index the
+        // exact Hafs word sequence; stripping a displayed basmala here made
+        // the reference intermittently disagree with the timing source.  Any
+        // presentation-only basmala treatment must happen in the renderer,
+        // never in the alignment request.
+        setAyahs(data);
       }
     };
     loadData();
@@ -785,6 +774,11 @@ export default function PreviewPage() {
     }
 
     if (!reciter) return;
+    const expectedAyahCount = Math.max(0, endAyah - startAyah + 1);
+    // Audio and alignment are a single transaction.  Waiting for the current
+    // Quran reference prevents the first render from sending an empty/stale
+    // ayah list and then silently falling back to verse-only timing.
+    if (ayahs.length !== expectedAyahCount) return;
     let cancelled = false;
 
     const load = async () => {
@@ -803,6 +797,54 @@ export default function PreviewPage() {
       everyAyahIndexRef.current = 0;
       setActiveTimingMap(null);
       activeTimingMapRef.current = null;
+
+      // ── Strategy 1: QUA v2.2.0 – chapter audio + word/letter tiers ───────
+      // The returned timestamps and audio URL are from the same immutable
+      // release, so no cross-provider timing drift is possible.
+      if (isAuthenticated && reciter.quranUniversalSlug && !cancelled) {
+        try {
+          const universal = await api.alignments.resolveUniversal({
+            reciterId: String(reciter.id),
+            audio: {
+              contentHash: `qua:${reciter.quranUniversalSlug}:${surahNumber}`,
+              sampleRate: 44100,
+              channels: 2,
+            },
+            reference: {
+              surahNumber,
+              startAyah,
+              endAyah,
+              ayahs,
+              quranTextVersion: 'uthmani_hafs_v1',
+            },
+            providerInput: { reciterSlug: reciter.quranUniversalSlug },
+          });
+          if (!cancelled && universal.timingMap?.validationStatus === 'approved') {
+            const universalMap = universal.timingMap as TimingMap;
+            const offsets = (universalMap.compositionOffsets || []).map((offset) => ({
+              verse_key: `${surahNumber}:${offset.ayahNumber}`,
+              timestamp_from: offset.startMs,
+              timestamp_to: offset.endMs,
+            }));
+            const first = offsets[0];
+            const last = offsets[offsets.length - 1];
+            if (!first || !last || !(last.timestamp_to > first.timestamp_from)) throw new Error('UNIVERSAL_ALIGNMENT_RANGE_INVALID');
+            setAudioUrl(universal.audioUrl);
+            setAyahTimings(offsets);
+            setRangeMs({ from: first.timestamp_from, to: last.timestamp_to });
+            setDuration((last.timestamp_to - first.timestamp_from) / 1000);
+            setPlaybackMode('qf');
+            timingMapRegistry.register(universalMap);
+            setActiveTimingMap(universalMap);
+            activeTimingMapRef.current = universalMap;
+            console.log(`✅ QUA word+letter map loaded [${reciter.quranUniversalSlug}]`);
+            setTimingsLoading(false);
+            return;
+          }
+        } catch (universalError) {
+          console.info('QUA alignment unavailable for this range; trying exact EveryAyah fallback', universalError);
+        }
+      }
 
       // Legacy Quran Foundation strategy is intentionally disabled. Production
       // audio uses the internal alignment pipeline or an explicitly unaligned
@@ -1027,7 +1069,7 @@ export default function PreviewPage() {
 
     load();
     return () => { cancelled = true; };
-  }, [isIbtahalatMode, ibtAudioUrl, isAuthenticated, reciter?.id, reciter?.quranFoundationId, reciter?.everyAyahSubfolder, surahNumber, startAyah, endAyah, totalAyahsInSurah]);
+  }, [isIbtahalatMode, ibtAudioUrl, isAuthenticated, reciter, reciter?.id, reciter?.quranFoundationId, reciter?.everyAyahSubfolder, reciter?.quranUniversalSlug, surahNumber, startAyah, endAyah, totalAyahsInSurah, ayahs.length, ayahs]);
 
   // ── Audio effects init ──────────────────────────────────────────────────────
   useEffect(() => {

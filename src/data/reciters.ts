@@ -15,6 +15,8 @@ export interface Reciter {
   /** @deprecated legacy source metadata; not used for alignment or rendering. */
   quranFoundationId?: number;
   everyAyahSubfolder?: string;
+  /** QUA v2.2.0 timing package slug; the resolver supplies its matching audio URL. */
+  quranUniversalSlug?: string;
   isOpenLicense?: boolean;
   moshafId?: number;
   previewSurah?: number;
@@ -58,6 +60,7 @@ export const reciters: Reciter[] = [
     server: "https://server8.mp3quran.net/afs",
     quranFoundationId: 7,
     everyAyahSubfolder: "Alafasy_128kbps",
+    quranUniversalSlug: 'mishary_rashid_al_afasy_mp3quran',
     isOpenLicense: true,
     moshafId: 1,
   },
@@ -72,6 +75,7 @@ export const reciters: Reciter[] = [
     // quran-align release-2016-11-24 is paired with this exact EveryAyah
     // source folder; keeping the folder unchanged would invalidate timings.
     everyAyahSubfolder: "Abdul_Basit_Murattal_64kbps",
+    quranUniversalSlug: 'abdulbasit_abdulsamad_tarteel',
     isOpenLicense: true,
     moshafId: 5,
   },
@@ -85,6 +89,7 @@ export const reciters: Reciter[] = [
     quranFoundationId: 6,
     // Exact source identity for the pinned quran-align timing release.
     everyAyahSubfolder: "Husary_64kbps",
+    quranUniversalSlug: 'mahmoud_khalil_al_husary_mp3quran',
     isOpenLicense: true,
     moshafId: 2,
   },
@@ -97,6 +102,7 @@ export const reciters: Reciter[] = [
     server: "https://server10.mp3quran.net/minsh",
     quranFoundationId: 9,
     everyAyahSubfolder: "Minshawy_Murattal_128kbps",
+    quranUniversalSlug: 'mohammed_siddiq_al_minshawi_mp3quran',
     isOpenLicense: true,
     moshafId: 3,
   },
@@ -108,6 +114,7 @@ export const reciters: Reciter[] = [
     description: "إمام الحرم المكي",
     server: "https://server12.mp3quran.net/maher",
     everyAyahSubfolder: "MaherAlMuaiqly128kbps",
+    quranUniversalSlug: 'maher_al_muaiqly_qdc',
     isOpenLicense: true,
     moshafId: 6,
   },
@@ -120,6 +127,7 @@ export const reciters: Reciter[] = [
     server: "https://server7.mp3quran.net/shur",
     quranFoundationId: 10,
     everyAyahSubfolder: "Saood_ash-Shuraym_128kbps",
+    quranUniversalSlug: 'saud_al_shuraim_mp3quran',
     isOpenLicense: true,
     moshafId: 7,
   },
@@ -144,6 +152,7 @@ export const reciters: Reciter[] = [
     server: "https://server11.mp3quran.net/shatri",
     quranFoundationId: 4,
     everyAyahSubfolder: "Abu_Bakr_Ash-Shaatree_128kbps",
+    quranUniversalSlug: 'abu_bakr_al_shatri_tarteel',
     isOpenLicense: true,
     moshafId: 1,
   },
@@ -212,6 +221,7 @@ export const reciters: Reciter[] = [
     description: "تلاوة مؤثرة للقلوب",
     server: "https://server6.mp3quran.net/qtm",
     everyAyahSubfolder: "Nasser_Alqatami_128kbps",
+    quranUniversalSlug: 'nasser_al_qatami_mp3quran',
     isOpenLicense: true,
     moshafId: 14,
   },
@@ -316,6 +326,7 @@ export const reciters: Reciter[] = [
     style: "مرتل",
     description: "صوت شاب مؤثر",
     server: "https://server14.mp3quran.net/islam",
+    quranUniversalSlug: 'islam_sobhi_mp3quran',
     isOpenLicense: true,
     moshafId: 25,
   },
@@ -363,6 +374,7 @@ export const reciters: Reciter[] = [
     server: "https://server7.mp3quran.net/basit",
     quranFoundationId: 1,
     everyAyahSubfolder: "Abdul_Basit_Mujawwad_128kbps",
+    quranUniversalSlug: 'abdulbasit_abdulsamad_mujawwad_tarteel',
     isOpenLicense: true,
     moshafId: 28,
   },
@@ -375,6 +387,7 @@ export const reciters: Reciter[] = [
     server: "https://server13.mp3quran.net/husr",
     quranFoundationId: 6, // FIXED: was 3 (Sudais)
     everyAyahSubfolder: "Husary_128kbps_Mujawwad",
+    quranUniversalSlug: 'mahmoud_khalil_al_husary_mujawwad_tarteel',
     isOpenLicense: true,
     moshafId: 29,
   },
@@ -497,6 +510,7 @@ export const reciters: Reciter[] = [
     description: "من أعلام دولة التلاوة المصرية الخالدة",
     server: "https://server8.mp3quran.net/bna",
     everyAyahSubfolder: "Mahmoud_Ali_Al-Banna_32kbps",
+    quranUniversalSlug: 'mahmoud_ali_al_banna_qdc',
     isOpenLicense: true,
     moshafId: 1,
   },
@@ -529,6 +543,7 @@ export const reciters: Reciter[] = [
     description: "أمير المقرئين ورائد المقامات القرآنية",
     server: "https://server8.mp3quran.net/mustafa",
     everyAyahSubfolder: "Mustafa_Ismail_128kbps",
+    quranUniversalSlug: 'mustafa_ismail_mp3quran',
     isOpenLicense: true,
     moshafId: 1,
   },
@@ -552,6 +567,7 @@ export const reciters: Reciter[] = [
     description: "تلاوة عذبة ومتقنة برواية حفص",
     server: "https://server12.mp3quran.net/tnjy",
     everyAyahSubfolder: "khalefa_al_tunaiji_64kbps",
+    quranUniversalSlug: 'khalifa_al_tunaiji_tarteel',
     isOpenLicense: true,
     moshafId: 1,
   },
@@ -564,6 +580,65 @@ export const reciters: Reciter[] = [
     server: "https://server6.mp3quran.net/wdee",
     isOpenLicense: true,
     moshafId: 1,
+  },
+
+  // =====================================================================
+  // QUA v2.2.0 catalogue reciters (word + letter timing available)
+  // =====================================================================
+  {
+    id: 'abdullah_al_qarafi', name: 'عبد الله القرافي', englishName: 'Abdullah Al-Qarafi', style: 'مرتل',
+    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    server: 'https://server16.mp3quran.net/a_alqrafi/Rewayat-Hafs-A-n-Assem', quranUniversalSlug: 'abdullah_al_qarafi_mp3quran', isOpenLicense: true,
+  },
+  {
+    id: 'abdulwadood_haneef', name: 'عبد الودود حنيف', englishName: 'Abdulwadood Haneef', style: 'مرتل',
+    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    server: 'https://server8.mp3quran.net/wdod', quranUniversalSlug: 'abdulwadood_haneef_mp3quran', isOpenLicense: true,
+  },
+  {
+    id: 'abdur_rashid_sufi', name: 'عبد الرشيد صوفي', englishName: 'Abdur-Rashid Sufi', style: 'مرتل',
+    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    server: 'https://download.quranicaudio.com/quran/abdurrashid_sufi', quranUniversalSlug: 'abdur_rashid_sufi_qdc', isOpenLicense: true,
+  },
+  {
+    id: 'ahmed_amer', name: 'أحمد عامر', englishName: 'Ahmed Amer', style: 'مرتل',
+    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    server: 'https://download.tvquran.com/download/recitations/197/143', quranUniversalSlug: 'ahmed_amer_tvquran', isOpenLicense: true,
+  },
+  {
+    id: 'ahmed_issa_al_maasaraawi', name: 'أحمد عيسى المعصراوي', englishName: 'Ahmed Issa Al-Maasaraawi', style: 'مرتل',
+    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    server: 'https://server16.mp3quran.net/a_maasaraawi/Rewayat-Hafs-A-n-Assem', quranUniversalSlug: 'ahmed_issa_al_maasaraawi_mp3quran', isOpenLicense: true,
+  },
+  {
+    id: 'ahmed_shaheen', name: 'أحمد خليل شاهين', englishName: 'Ahmed Khalil Shaheen', style: 'مرتل',
+    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    server: 'https://server16.mp3quran.net/shaheen/Rewayat-Hafs-A-n-Assem', quranUniversalSlug: 'ahmed_shaheen_mp3quran', isOpenLicense: true,
+  },
+  {
+    id: 'ali_al_huthaifi', name: 'علي بن عبد الرحمن الحذيفي', englishName: 'Ali Al-Huthaifi', style: 'مرتل',
+    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    server: 'https://server9.mp3quran.net/hthfi', quranUniversalSlug: 'ali_al_huthaifi_mp3quran', isOpenLicense: true,
+  },
+  {
+    id: 'ayman_swed', name: 'أيمن سويد', englishName: 'Ayman Suwayd', style: 'ترتيل',
+    description: 'المصحف المعلم مع توقيت الكلمات والحروف',
+    server: 'https://download.tvquran.com/download/recitations/346/270', quranUniversalSlug: 'ayman_swed_muallim_tvquran', isOpenLicense: true,
+  },
+  {
+    id: 'mahmoud_abdul_hakam', name: 'محمود عبدالحكم', englishName: 'Mahmoud Abdul Hakam', style: 'مرتل',
+    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    server: 'https://server16.mp3quran.net/m_abdelhakam/Rewayat-Hafs-A-n-Assem', quranUniversalSlug: 'mahmoud_abdul_hakam_mp3quran', isOpenLicense: true,
+  },
+  {
+    id: 'mohammed_alghazali', name: 'محمد الغزالي', englishName: 'Mohammed Al-Ghazali', style: 'مرتل',
+    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    server: 'https://ia601406.us.archive.org/16/items/Mohammed-Al-Ghazali', quranUniversalSlug: 'mohammed_alghazali_archive', isOpenLicense: true,
+  },
+  {
+    id: 'mustafa_ismail_murattal', name: 'مصطفى إسماعيل', englishName: 'Mustafa Ismail', style: 'مرتل',
+    description: 'تلاوة مرتلة موثقة مع توقيت الكلمات والحروف',
+    server: 'https://server8.mp3quran.net/mustafa', quranUniversalSlug: 'mustafa_ismail_mp3quran', isOpenLicense: true,
   },
 ];
 
