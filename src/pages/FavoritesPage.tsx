@@ -12,7 +12,7 @@ import {
   Heart, BookOpen, Mic, Video, Loader2, Trash2, Music,
 } from 'lucide-react';
 import { surahs } from '@/data/surahs';
-import { reciters } from '@/data/reciters';
+import { reciters, isAccreditedReciter, getReciterRiwayah } from '@/data/reciters';
 import { performers } from '@/data/ibtahalat';
 import { toast } from 'sonner';
 import { ErrorState } from '@/components/ErrorState';
@@ -206,8 +206,13 @@ export default function FavoritesPage() {
                               <Mic className="h-5 w-5 text-accent" />
                             </div>
                             <div>
-                              <h3 className="font-bold">{r.name}</h3>
-                              <p className="text-xs text-muted-foreground">{r.style}</p>
+                              <h3 className="font-bold text-sm">{r.name}</h3>
+                              <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
+                                {isAccreditedReciter(r) && (
+                                  <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">⚡ معتمد</span>
+                                )}
+                                <span className="text-xs text-muted-foreground">{getReciterRiwayah(r)} • {r.style}</span>
+                              </div>
                             </div>
                           </div>
                           <Button variant="ghost" size="icon" aria-label={`إزالة القارئ ${r.name} من المفضلة`} className="h-8 w-8" onClick={() => removeFavReciter(r.id)}>

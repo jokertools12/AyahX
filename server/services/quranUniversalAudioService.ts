@@ -365,7 +365,7 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
     if (!reference || reference.numberInSurah !== ayahNumber) throw new Error('UNIVERSAL_ALIGNMENT_REFERENCE_INVALID');
     const text = reference.text;
     // Standalone waqf symbols are presentation marks, not independently timed words.
-    const tokens = tokenizeQuranicText(text);
+    let tokens = tokenizeQuranicText(text);
     if (tokens.length === 0) throw new Error('UNIVERSAL_ALIGNMENT_TEXT_MISMATCH');
 
     const key = `${surahNumber}:${ayahNumber}`;
@@ -376,6 +376,9 @@ export async function resolveUniversalQuranAudio(input: UniversalAlignmentInput)
     const letterRows = letterData?.rows.filter((row) => Array.isArray(row) && row[0] === key && row[3] === true) || [];
     const startMs = Number(rawStart) + chapterOffsetMs;
     const endMs = Number(rawEnd) + chapterOffsetMs;
+    if (ayahNumber === 1 && surahNumber !== 1 && surahNumber !== 9 && Array.isArray(sourceWords) && tokens.length === sourceWords.length + 4) {
+      tokens = tokens.slice(4);
+    }
     if (rowKey !== key || !Number.isFinite(startMs) || !Number.isFinite(endMs) || startMs < 0 || !(endMs > startMs)
       || !Array.isArray(sourceWords) || sourceWords.length !== tokens.length) {
       throw new Error('UNIVERSAL_ALIGNMENT_TEXT_MISMATCH');

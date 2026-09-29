@@ -56,8 +56,8 @@ function publicDocument(document: any, userId: string) {
   };
 }
 
-/** Provider discovery is explicit so the UI cannot accidentally fall back. */
-router.get('/providers', requireAuth, async (_req: AuthenticatedRequest, res: Response) => {
+/** Provider discovery is explicit and publicly available so the preview can display accredited providers without blocking unauthenticated visitors. */
+router.get('/providers', async (_req: any, res: Response) => {
   return res.json({
     providers: getAlignmentProviderDescriptors(),
   });
@@ -113,7 +113,7 @@ router.post('/resolve', requireAuth, aiRateLimiter, async (req: AuthenticatedReq
  * no proportional fallback, and rejects ranges containing ambiguous
  * multi-word source segments.
  */
-router.post('/resolve-known', requireAuth, aiRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
+router.post('/resolve-known', aiRateLimiter, async (req: any, res: Response) => {
   try {
     const body = req.body || {};
     const input = {
@@ -148,7 +148,7 @@ router.post('/resolve-known', requireAuth, aiRateLimiter, async (req: Authentica
  * separate from model providers so a missing remote package fails closed and
  * never turns into a guessed word duration.
  */
-router.post('/resolve-universal', requireAuth, aiRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
+router.post('/resolve-universal', aiRateLimiter, async (req: any, res: Response) => {
   try {
     const body = req.body || {};
     const reference = body.reference || {};
