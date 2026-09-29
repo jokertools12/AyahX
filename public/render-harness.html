@@ -128,6 +128,29 @@
         }
         return { opacity: Math.min(1, Math.max(0, opacity)), emphasis, scale, translateY, isActive };
       }
+      function resolveVerseWordWindow(mode, totalWords, activeWordIndex) {
+        const safeTotal = Number.isFinite(totalWords) ? Math.max(0, Math.floor(totalWords)) : 0;
+        if (mode === 'full') return { startIndex: 0, wordCount: safeTotal };
+        const safeActive = Number.isInteger(activeWordIndex) ? activeWordIndex : null;
+        if (safeTotal === 0 || safeActive === null || safeActive < 0 || safeActive >= safeTotal) {
+          return { startIndex: 0, wordCount: 0 };
+        }
+        if (mode === 'wordByWord') return { startIndex: safeActive, wordCount: 1 };
+        if (mode === 'twoWords') {
+          const startIndex = Math.floor(safeActive / 2) * 2;
+          return { startIndex, wordCount: Math.min(2, safeTotal - startIndex) };
+        }
+        const pattern = [3, 2];
+        let startIndex = 0;
+        let patternIndex = 0;
+        while (startIndex < safeTotal) {
+          const wordCount = Math.min(pattern[patternIndex % pattern.length], safeTotal - startIndex);
+          if (safeActive < startIndex + wordCount) return { startIndex, wordCount };
+          startIndex += wordCount;
+          patternIndex += 1;
+        }
+        return { startIndex: 0, wordCount: 0 };
+      }
 
       // Rosette / Ayah Badge Drawing with full shape support
       function drawAyahBadge(ctx, x, y, ayahNum, size, shape, colorScheme) {
@@ -1578,10 +1601,10 @@
               if (wAyahNum === activeAyah.numberInSurah) {
                 activeWordIndexInAyah = wIndex1Based - 1;
               } else if (wAyahNum < activeAyah.numberInSurah) {
-                // If activeWord was held from previous ayah, but screen has transitioned to new ayah,
-                // start on the first word of the new verse so it glows immediately
-                activeWordIndexInAyah = 0;
-                activeWordProgress = 0.25;
+                // Hold the previous ayah's event through the inter-ayah pause;
+                // never reveal the next ayah's first word before its own span.
+                activeWordIndexInAyah = null;
+                activeWordProgress = 0;
               }
             } else if (activeWord && typeof activeWord.displayWordIndex === 'number') {
               activeWordIndexInAyah = activeWord.displayWordIndex % Math.max(ayahWords.length, 1);
@@ -1749,50 +1772,21 @@
           if (!lyricLines) {
           const requestedVerseMode = displaySettings.verseDisplayMode || 'full';
           const verseMode = hasTrustedWordTiming ? requestedVerseMode : 'full';
-          let displayWords = ayahWords;
-          let chunkStartWordIdx = 0;
+          const verseWordWindow = resolveVerseWordWindow(verseMode, ayahWords.length, activeWordIndexInAyah);
+          let chunkStartWordIdx = verseWordWindow.startIndex;
+          let displayWords = ayahWords.slice(
+            verseWordWindow.startIndex,
+            verseWordWindow.startIndex + verseWordWindow.wordCount,
+          );
 
-          if (verseMode === 'wordByWord') {
-            const wIdx = activeWordIndexInAyah != null ? Math.min(Math.max(activeWordIndexInAyah, 0), ayahWords.length - 1) : 0;
-            displayWords = ayahWords[wIdx] ? [ayahWords[wIdx]] : ayahWords.slice(0, 1);
-            chunkStartWordIdx = wIdx;
-          } else if (verseMode === 'twoWords') {
-            const chunkSize = 2;
-            const cIdx = activeWordIndexInAyah != null ? Math.floor(activeWordIndexInAyah / chunkSize) : 0;
-            chunkStartWordIdx = cIdx * chunkSize;
-            displayWords = ayahWords.slice(chunkStartWordIdx, chunkStartWordIdx + chunkSize);
-          } else if (verseMode === 'threeTwo') {
-            const pattern = [3, 2];
-            let pos = 0, pIdx = 0;
-            const chunks = [];
-            const starts = [];
-            while (pos < ayahWords.length) {
-              const sz = pattern[pIdx % pattern.length];
-              starts.push(pos);
-              chunks.push(ayahWords.slice(pos, pos + sz));
-              pos += sz;
-              pIdx++;
-            }
-            let cIdx = 0;
-            if (activeWordIndexInAyah != null) {
-              let p = 0;
-              for (let k = 0; k < chunks.length; k++) {
-                if (activeWordIndexInAyah < p + chunks[k].length) { cIdx = k; break; }
-                p += chunks[k].length;
-              }
-            }
-            displayWords = chunks[cIdx] || ayahWords.slice(0, 3);
-            chunkStartWordIdx = starts[cIdx] || 0;
-          }
-
-          // Animate profiles can select a deterministic reading window
-          // independently from the legacy chunking control. This makes a
-          // teleprompter/isolate profile useful even when verseMode is full.
-          if (hasTrustedWordTiming && animationProfile === 'teleprompter' && ayahWords.length > 0) {
+          // Teleprompter/isolate choose their own reading window only when the
+          // user asked for a full ayah. An explicit word/chunk mode stays the
+          // controlling layout; the profile then changes only its visual state.
+          if (hasTrustedWordTiming && verseMode === 'full' && animationProfile === 'teleprompter' && ayahWords.length > 0) {
             const center = activeWordIndexInAyah == null ? 0 : Math.max(0, Math.min(activeWordIndexInAyah, ayahWords.length - 1));
             chunkStartWordIdx = Math.max(0, Math.min(center - 2, ayahWords.length - 5));
             displayWords = ayahWords.slice(chunkStartWordIdx, chunkStartWordIdx + 5);
-          } else if (hasTrustedWordTiming && animationProfile === 'isolate' && activeWordIndexInAyah != null && ayahWords[activeWordIndexInAyah]) {
+          } else if (hasTrustedWordTiming && verseMode === 'full' && animationProfile === 'isolate' && activeWordIndexInAyah != null && ayahWords[activeWordIndexInAyah]) {
             chunkStartWordIdx = activeWordIndexInAyah;
             displayWords = [ayahWords[activeWordIndexInAyah]];
           }

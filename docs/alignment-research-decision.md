@@ -78,6 +78,15 @@ repeat. Every row still has no matched audio hash/duration and all policy gates
 remain false. The pilot demonstrates catalog/schema compatibility only; it is
 not an accuracy benchmark or render-ready provider.
 
+The same pinned archive's v3 letter tier was then parsed into 346,459 candidate
+paint events across those 6,236 ayahs, preserving its exact row text,
+Unicode-scalar ranges, word-occurrence references, sound-ownership flags, and
+timestamps. A real zero-duration event was present and is retained as an
+instantaneous event rather than rejected or widened. This validates the
+producer schema and importer against the actual release, not the event-to-audio
+accuracy or AyahX's Arabic glyph mapping. Letter events remain unbound,
+unreviewed, non-renderable candidates.
+
 **Quran Foundation policy gate:** the current [Developer Terms](https://api-docs.quran.foundation/legal/developer-terms/)
 permit in-app display under the stated constraints, forbid changing Quran text,
 and limit storage/caching of QF Content to one week unless expressly permitted

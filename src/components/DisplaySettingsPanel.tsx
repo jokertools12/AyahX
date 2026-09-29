@@ -185,7 +185,7 @@ const verseDisplayModeOptions = [
   { value: 'full', label: 'الآية كاملة', description: 'عرض الآية كاملة مع التمرير والالتفاف' },
   { value: 'twoWords', label: 'كلمتان', description: 'عرض كلمتين كلمتين بالتناوب' },
   { value: 'threeTwo', label: 'ثلاث ثم اثنتان', description: 'تقسيم إيقاعي ديناميكي' },
-  { value: 'wordByWord', label: 'كلمة كلمة', description: 'عرض كلمة تلو الأخرى (تيك توك ترند)' },
+  { value: 'wordByWord', label: 'كلمة بكلمة', description: 'تظهر كل كلمة عند توقيتها؛ وتثبت السابقة أثناء الوقفة' },
 ];
 
 const animationProfileOptions: Array<{ value: AnimationProfile; label: string; description: string }> = [
@@ -789,7 +789,7 @@ export function DisplaySettingsPanel({ settings, onChange }: DisplaySettingsPane
                   وضع Animate الاحترافي
                 </Label>
                 <p className="text-[11px] text-muted-foreground">
-                  هذه أوضاع عرض حتمية مشتركة بين المعاينة والتسجيل والريندر السحابي.
+                  تتبع خريطة توقيت معتمدة في المعاينة والتسجيل والتصدير؛ بدونها يبقى النص كاملاً بلا توقيت مُختلق.
                 </p>
                 <RadioOptionGrid
                   options={animationProfileOptions}

@@ -42,10 +42,51 @@ export interface AnimationTimelineOptions {
   windowSize?: number;
 }
 
+export type VerseDisplayMode = 'full' | 'twoWords' | 'threeTwo' | 'wordByWord';
+
+export interface VerseWordWindow {
+  startIndex: number;
+  wordCount: number;
+}
+
 export function normalizeAnimationProfile(value: unknown): AnimationProfile {
   return ANIMATION_PROFILES.includes(value as AnimationProfile)
     ? value as AnimationProfile
     : 'karaoke';
+}
+
+/**
+ * Select the visible word chunk without inferring an index when the audio clock
+ * is between the current ayah boundary and its first approved word event.
+ */
+export function resolveVerseWordWindow(
+  mode: VerseDisplayMode,
+  totalWords: number,
+  activeWordIndex: number | null,
+): VerseWordWindow {
+  const safeTotal = Number.isFinite(totalWords) ? Math.max(0, Math.floor(totalWords)) : 0;
+  if (mode === 'full') return { startIndex: 0, wordCount: safeTotal };
+  const safeActive = Number.isInteger(activeWordIndex) ? activeWordIndex : null;
+  if (safeTotal === 0 || safeActive === null || safeActive < 0 || safeActive >= safeTotal) {
+    return { startIndex: 0, wordCount: 0 };
+  }
+
+  if (mode === 'wordByWord') return { startIndex: safeActive, wordCount: 1 };
+  if (mode === 'twoWords') {
+    const startIndex = Math.floor(safeActive / 2) * 2;
+    return { startIndex, wordCount: Math.min(2, safeTotal - startIndex) };
+  }
+
+  const pattern = [3, 2] as const;
+  let startIndex = 0;
+  let patternIndex = 0;
+  while (startIndex < safeTotal) {
+    const wordCount = Math.min(pattern[patternIndex % pattern.length], safeTotal - startIndex);
+    if (safeActive < startIndex + wordCount) return { startIndex, wordCount };
+    startIndex += wordCount;
+    patternIndex += 1;
+  }
+  return { startIndex: 0, wordCount: 0 };
 }
 
 function clamp(value: number, min = 0, max = 1): number {

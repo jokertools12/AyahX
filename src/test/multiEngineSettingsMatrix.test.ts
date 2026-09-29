@@ -351,6 +351,46 @@ describe('Multi-Engine Settings Matrix & Verification Test', () => {
     }
   }, 90000);
 
+  it('All engines: keep explicit word-by-word layout tied to a trusted word event', async () => {
+    const engines = [
+      { name: 'ffmpeg', renderEngine: 'ffmpeg_ass' as const, render: renderFfmpegAssVideo },
+      { name: 'skia', renderEngine: 'skia_canvas' as const, render: renderSkiaCanvasVideo },
+      { name: 'browser', renderEngine: 'browser_cloud' as const, render: renderDeterministicVideo },
+    ];
+    const base = getBaseManifest();
+    const words = base.timingMap.words;
+    const manifest: RenderManifest = {
+      ...base,
+      animationProfile: 'teleprompter',
+      animationReducedMotion: true,
+      timingMap: {
+        ...base.timingMap,
+        words: [
+          { ...words[0], startMs: 200, endMs: 400 },
+          { ...words[1], startMs: 400, endMs: 700 },
+          { ...words[2], startMs: 700, endMs: 1000 },
+        ],
+      },
+      displaySettings: {
+        ...base.displaySettings,
+        verseDisplayMode: 'wordByWord',
+      },
+    };
+
+    for (const engine of engines) {
+      const outputPath = path.join(tempDir, `word_by_word_${engine.name}.mp4`);
+      const result = await engine.render({
+        manifest: { ...manifest, renderEngine: engine.renderEngine },
+        audioFilePath: sampleAudioPath,
+        outputPath,
+      });
+      const probe = await probeMediaFile(outputPath);
+      expect(fs.existsSync(outputPath), `${engine.name} output exists`).toBe(true);
+      expect(result.fileSizeBytes, `${engine.name} output is non-empty`).toBeGreaterThan(1000);
+      expect(probe.durationSeconds, `${engine.name} preserves the clip duration`).toBeGreaterThanOrEqual(0.9);
+    }
+  }, 90000);
+
   it('All engines: Render local image and slideshow backgrounds without blank frames', async () => {
     const engines = [
       { name: 'ffmpeg', renderEngine: 'ffmpeg_ass' as const, render: renderFfmpegAssVideo },

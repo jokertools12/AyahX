@@ -80,6 +80,11 @@ audio or invent timings. The same `render-harness.html` scene is used by live
 preview and all export engines; `animationReducedMotion` removes pulse/scale
 while preserving the exact event clock.
 
+The explicit verse layout (`full`, word-by-word, two-word, or three-then-two)
+remains authoritative over profile-specific windows. A trusted map holds its
+last word through pauses, but a word/chunk layout shows no guessed first word
+between an ayah transition and the next exact word onset.
+
 The current profile clock is word-occurrence based. Letter-level timing is not
 yet a supported render tier. In particular, QUA's letter data is a set of
 script-specific paint ranges over DigitalKhatt Unicode scalars, not ordinary

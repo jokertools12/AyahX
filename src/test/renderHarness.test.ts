@@ -46,7 +46,8 @@ describe('Browser render harness', () => {
     expect(source).toContain("'isolate'");
     expect(source).toContain('hasTrustedWordTiming ? animationProfile : \'static\'');
     expect(source).toContain("const verseMode = hasTrustedWordTiming ? requestedVerseMode : 'full';");
-    expect(source).toContain("hasTrustedWordTiming && animationProfile === 'teleprompter'");
+    expect(source).toContain("hasTrustedWordTiming && verseMode === 'full' && animationProfile === 'teleprompter'");
+    expect(source).toContain("hasTrustedWordTiming && verseMode === 'full' && animationProfile === 'isolate'");
     expect(source).toContain('animationReducedMotion');
   });
 

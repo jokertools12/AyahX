@@ -93,33 +93,38 @@ byte-identity match against the exact selected clip, duration/offset checks,
 and human review are still required. Do not use this export as training audio
 or as permission to fetch/redistribute the referenced recordings.
 
-### Quranic Universal Audio v3.2.0 word candidates (metadata only)
+### Quranic Universal Audio v3.2.0 word and letter-paint candidates (metadata only)
 
-`qua_release_catalog.py` exports selected Hafs word timelines from the pinned
-Quranic Universal Audio release. Download only `manifest.json`, `catalog.json`,
-and the chosen recitation ZIP from the [v3.2.0 release]; this importer never
-fetches linked recitation audio. For example:
+`qua_release_catalog.py` exports selected Hafs word timelines and, when present,
+the release's letter-paint events from the pinned Quranic Universal Audio
+release. Download only `manifest.json`, `catalog.json`, and the chosen
+recitation ZIP from the [v3.2.0 release]; this importer never fetches linked
+recitation audio. For example:
 
 ```bash
 python qua_release_catalog.py \
   mahmoud_khalil_al_husary_qdc_128k \
   data/mahmoud_khalil_al_husary_qdc_128k.zip \
-  data/husary-candidates.json \
+  data/husary-candidates.json.gz \
   --manifest data/manifest.json \
   --catalog data/catalog.json
 ```
 
 The tool verifies pinned SHA-256 digests for the release manifest/catalog and
 the selected ZIP, then checks the archive's script projection and timeline
-schema. It exports CC-BY-4.0 attribution, but every result remains
+schema. Letter-tier rows become candidate `letterTiming` events that preserve
+the source text, Unicode-scalar paint ranges, zero-based word-occurrence
+references, `ownsSound` flags, and millisecond spans. These are not phoneme
+boundaries or timestamps for every character, and are not yet consumed by the
+AyahX renderer. A `.json.gz` output path writes a compact compressed bundle,
+which is recommended for full-recitation imports. It exports CC-BY-4.0 attribution, but every result remains
 `needs_review`: audio hash and duration are empty, upstream recording rights
 are uncleared, and `providerVerified`, `renderEligible`, and `trainingEligible`
-are all false. Letter-tier availability is provenance only; it is not converted
-into AyahX letter-animation events. Exact audio binding and human review are
-required before word-synchronous rendering. Repeated source word indexes are
-preserved as separate audio occurrences (with a source index and an occurrence
-index); the importer reports them instead of flattening a repeated recitation
-into a single event.
+are all false. Exact audio binding, exact script/font mapping, renderer parity,
+and human review are required before word- or letter-synchronous rendering.
+Repeated source word indexes are preserved as separate audio occurrences (with
+a source index and an occurrence index); the importer reports them instead of
+flattening a repeated recitation into a single event.
 
 [v3.2.0 release]: https://github.com/QUD-Technologies/quranic-universal-audio/releases/tag/v3.2.0
 

@@ -37,7 +37,7 @@ MAX_MANIFEST_BYTES = 1_000_000
 MAX_CATALOG_BYTES = 2_000_000
 MAX_ARCHIVE_BYTES = 20_000_000
 MAX_ARCHIVE_MEMBER_BYTES = 100_000_000
-MAX_WORD_JSON_BYTES = 64_000_000
+MAX_TIMING_JSON_BYTES = 64_000_000
 ALLOWED_ARCHIVE_MEMBERS = {
     "catalog.json",
     "verse_timestamps.json.gz",
@@ -100,18 +100,18 @@ def _safe_audio_reference(value: Any) -> str:
     return value
 
 
-def _read_gzip_json(data: bytes) -> dict[str, Any]:
+def _read_gzip_json(data: bytes, *, tier: str) -> dict[str, Any]:
     try:
         with gzip.GzipFile(fileobj=io.BytesIO(data), mode="rb") as stream:
-            decoded = stream.read(MAX_WORD_JSON_BYTES + 1)
+            decoded = stream.read(MAX_TIMING_JSON_BYTES + 1)
     except (OSError, EOFError) as error:
-        raise QuaImportError("word timestamp archive is not valid gzip data") from error
-    if len(decoded) > MAX_WORD_JSON_BYTES:
-        raise QuaImportError("word timestamp JSON exceeds the decompressed size limit")
+        raise QuaImportError(f"{tier} timestamp archive is not valid gzip data") from error
+    if len(decoded) > MAX_TIMING_JSON_BYTES:
+        raise QuaImportError(f"{tier} timestamp JSON exceeds the decompressed size limit")
     return _json_document(
         decoded,
-        field="word timestamp JSON",
-        max_bytes=MAX_WORD_JSON_BYTES,
+        field=f"{tier} timestamp JSON",
+        max_bytes=MAX_TIMING_JSON_BYTES,
     )
 
 
@@ -149,9 +149,27 @@ def _chapter_audio(catalog_entry: dict[str, Any], surah: int) -> tuple[str, floa
     return source_url, offset_ms
 
 
+def _validate_letter_row_alignment(word_row: list[Any], letter_row: Any) -> None:
+    if not isinstance(letter_row, list) or len(letter_row) != 8:
+        raise QuaImportError("each QUA letter row must have eight fields")
+    if (
+        letter_row[0] != word_row[0]
+        or letter_row[1] != word_row[1]
+        or letter_row[2] != word_row[2]
+        or letter_row[3] is not word_row[3]
+        or letter_row[5] != word_row[5]
+    ):
+        raise QuaImportError("letter row does not align with its word timing row")
+    if not isinstance(letter_row[6], str) or not letter_row[6] or len(letter_row[6]) > 4096:
+        raise QuaImportError("letter row text must be non-empty and within the verse limit")
+    if not isinstance(letter_row[7], list):
+        raise QuaImportError("letter row tokens must be an array")
+
+
 def _candidate_for_row(
     row: Any,
     *,
+    letter_row: Any | None,
     slug: str,
     catalog_entry: dict[str, Any],
     script_sha256: str,
@@ -168,6 +186,10 @@ def _candidate_for_row(
     ayah = int(ayah_text)
     if surah > 114:
         raise QuaImportError("surah number is outside the Quran")
+    if not isinstance(canonical, bool):
+        raise QuaImportError("word row canonical flag must be a boolean")
+    if letter_row is not None:
+        _validate_letter_row_alignment(row, letter_row)
     if canonical is not True:
         return None
 
@@ -214,6 +236,89 @@ def _candidate_for_row(
             "endMs": end_ms + source_offset_ms,
         })
 
+    letter_timing = None
+    if letter_row is not None:
+        (
+            letter_verse_key,
+            letter_verse_start,
+            letter_verse_end,
+            letter_canonical,
+            _letter_silence_after,
+            letter_words,
+            letter_text,
+            raw_tokens,
+        ) = letter_row
+        # These fields were checked before canonical-row filtering as well.
+        assert letter_verse_key == verse_key
+        assert letter_verse_start == verse_start
+        assert letter_verse_end == verse_end
+        assert letter_canonical is canonical
+        assert letter_words == raw_words
+
+        paint_events: list[dict[str, Any]] = []
+        previous_token_start = local_verse_start
+        for token_index, token in enumerate(raw_tokens):
+            if not isinstance(token, list) or len(token) != 5:
+                raise QuaImportError(f"letter token {token_index} must have five fields")
+            word_occurrence, local_start, local_end, owns_sound, raw_paint_ranges = token
+            if (
+                isinstance(word_occurrence, bool)
+                or not isinstance(word_occurrence, int)
+                or not 0 <= word_occurrence < len(words)
+            ):
+                raise QuaImportError("letter token word occurrence is outside the verse word list")
+            start_ms = _finite_ms(local_start, f"letter token {token_index} start")
+            end_ms = _finite_ms(local_end, f"letter token {token_index} end")
+            if (
+                start_ms < local_verse_start
+                or end_ms > local_verse_end
+                or end_ms < start_ms
+                or start_ms < previous_token_start
+            ):
+                raise QuaImportError("letter token intervals must be non-negative, ordered, and inside the verse")
+            if not isinstance(owns_sound, bool):
+                raise QuaImportError("letter token owns_sound must be a boolean")
+            if not isinstance(raw_paint_ranges, list):
+                raise QuaImportError("letter token paint ranges must be an array")
+
+            paint_ranges: list[list[int]] = []
+            previous_paint_end = 0
+            for range_index, paint_range in enumerate(raw_paint_ranges):
+                if not isinstance(paint_range, list) or len(paint_range) != 2:
+                    raise QuaImportError(f"letter paint range {range_index} must have two scalar offsets")
+                scalar_start, scalar_end = paint_range
+                if (
+                    isinstance(scalar_start, bool)
+                    or isinstance(scalar_end, bool)
+                    or not isinstance(scalar_start, int)
+                    or not isinstance(scalar_end, int)
+                    or scalar_start < previous_paint_end
+                    or scalar_end <= scalar_start
+                    or scalar_end > len(letter_text)
+                ):
+                    raise QuaImportError("letter paint ranges must be ordered, non-empty Unicode scalar spans in the verse text")
+                paint_ranges.append([scalar_start, scalar_end])
+                previous_paint_end = scalar_end
+
+            previous_token_start = start_ms
+            paint_events.append({
+                # The source indexes tokens by zero-based word occurrence, not
+                # canonical Quran word number; retain both meanings explicitly.
+                "wordOccurrenceIndex": word_occurrence,
+                "occurrenceIndex": word_occurrence + 1,
+                "sourceWordIndex": words[word_occurrence]["sourceWordIndex"],
+                "startMs": start_ms + source_offset_ms,
+                "endMs": end_ms + source_offset_ms,
+                "ownsSound": owns_sound,
+                "paintRanges": paint_ranges,
+            })
+        letter_timing = {
+            "schema": "qua-v3-letter-paint-candidate-v1",
+            "unicodeIndexing": "scalar",
+            "text": letter_text,
+            "events": paint_events,
+        }
+
     return {
         "schemaVersion": "qua-timing-candidate-v1",
         "id": f"qua:{PINNED_RELEASE}:{slug}:{verse_key}",
@@ -251,6 +356,7 @@ def _candidate_for_row(
             "upstreamAudioRightsCleared": False,
         },
         "words": words,
+        "letterTiming": letter_timing,
         "policy": {
             "providerVerified": False,
             "renderEligible": False,
@@ -266,7 +372,7 @@ def import_release(
     release_catalog_bytes: bytes,
     archive_bytes: bytes,
 ) -> dict[str, Any]:
-    """Validate a local pinned release bundle and export word candidates."""
+    """Validate a local pinned release bundle and export word/letter candidates."""
     if not re.fullmatch(r"[a-z0-9]+(?:_[a-z0-9]+)*", slug):
         raise QuaImportError("slug must be a lowercase QUA recitation id")
     if len(archive_bytes) > MAX_ARCHIVE_BYTES:
@@ -327,7 +433,12 @@ def import_release(
                 field="recitation catalog",
                 max_bytes=MAX_CATALOG_BYTES,
             )
-            word_data = _read_gzip_json(archive.read("word_timestamps.json.gz"))
+            word_data = _read_gzip_json(archive.read("word_timestamps.json.gz"), tier="word")
+            letter_data = (
+                _read_gzip_json(archive.read("letter_timestamps.json.gz"), tier="letter")
+                if "letter" in asset_tiers
+                else None
+            )
     except zipfile.BadZipFile as error:
         raise QuaImportError("recitation archive is not a valid ZIP file") from error
 
@@ -364,6 +475,27 @@ def import_release(
     if asset.get("coverage_ayahs") != len(rows):
         raise QuaImportError("word timestamp coverage does not match the pinned release manifest")
 
+    letter_rows: list[Any] | None = None
+    if letter_data is not None:
+        letter_meta = _record(letter_data.get("_meta"), "letter timing metadata")
+        if (
+            letter_meta.get("schema_version") != 3
+            or letter_meta.get("slug") != slug
+            or letter_meta.get("units") != "ms"
+            or letter_meta.get("tier") != "letter"
+            or letter_meta.get("script") != timing_meta.get("script")
+            or letter_meta.get("script_sha256") != script_sha256
+            or letter_meta.get("riwayah") != timing_meta.get("riwayah")
+            or letter_meta.get("audio_category") != timing_meta.get("audio_category")
+            or letter_meta.get("unicode_indexing") != "scalar"
+            or letter_meta.get("verse_count") != len(rows)
+        ):
+            raise QuaImportError("letter timestamp metadata does not match the pinned Hafs letter schema")
+        letter_rows_value = letter_data.get("rows")
+        if not isinstance(letter_rows_value, list) or len(letter_rows_value) != len(rows):
+            raise QuaImportError("letter timestamp rows do not match the word row count")
+        letter_rows = letter_rows_value
+
     candidates: list[dict[str, Any]] = []
     skipped_noncanonical = 0
     source_word_index_anomalies = 0
@@ -374,6 +506,7 @@ def import_release(
         try:
             candidate = _candidate_for_row(
                 row,
+                letter_row=letter_rows[index] if letter_rows is not None else None,
                 slug=slug,
                 catalog_entry=archive_catalog,
                 script_sha256=script_sha256,
@@ -420,6 +553,7 @@ def import_release(
         "skippedNoncanonicalCount": skipped_noncanonical,
         "sourceWordIndexAnomalyCount": source_word_index_anomalies,
         "letterTierAvailable": "letter" in tiers,
+        "letterTierImported": letter_rows is not None,
         "candidates": candidates,
         "policy": {
             "providerVerified": False,
@@ -434,11 +568,11 @@ def import_release(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Export pinned QUA v3.2.0 word annotations as untrusted candidates"
+        description="Export pinned QUA v3.2.0 word and letter-paint annotations as untrusted candidates"
     )
     parser.add_argument("slug", help="pinned QUA recitation slug")
     parser.add_argument("archive", type=Path, help="local <slug>.zip from the pinned release")
-    parser.add_argument("output", type=Path, help="output JSON candidate bundle")
+    parser.add_argument("output", type=Path, help="output JSON candidate bundle (.json or .json.gz)")
     parser.add_argument("--manifest", required=True, type=Path, help="local pinned manifest.json")
     parser.add_argument("--catalog", required=True, type=Path, help="local pinned catalog.json")
     args = parser.parse_args()
@@ -450,12 +584,23 @@ def main() -> int:
             release_catalog_bytes=args.catalog.read_bytes(),
             archive_bytes=args.archive.read_bytes(),
         )
-        args.output.write_text(
-            json.dumps(bundle, ensure_ascii=False, indent=2) + "\n",
-            encoding="utf-8",
+        if args.output.suffix.lower() == ".gz":
+            with gzip.open(args.output, mode="wt", encoding="utf-8", newline="\n") as output:
+                json.dump(bundle, output, ensure_ascii=False, separators=(",", ":"))
+                output.write("\n")
+        else:
+            args.output.write_text(
+                json.dumps(bundle, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+        letter_status = (
+            "with letter-paint candidates"
+            if bundle["letterTierImported"]
+            else "without a letter tier"
         )
         print(
-            f"exported {bundle['candidateCount']} untrusted word candidates; "
+            f"exported {bundle['candidateCount']} untrusted word candidates "
+            f"{letter_status}; "
             "audio was not downloaded and none are render-eligible"
         )
         return 0

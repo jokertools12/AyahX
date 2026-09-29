@@ -6,6 +6,7 @@ import gzip
 import hashlib
 import io
 import json
+import copy
 import unittest
 import zipfile
 from unittest.mock import patch
@@ -57,9 +58,57 @@ def sample_word_data(*, rows: list[list[object]] | None = None) -> dict[str, obj
     }
 
 
+def sample_letter_data(word_data: dict[str, object] | None = None) -> dict[str, object]:
+    selected_word_data = word_data or sample_word_data()
+    word_rows = selected_word_data["rows"]
+    letter_rows = []
+    for index, word_row in enumerate(word_rows):
+        verse_key, start, end, canonical, silence_after, words = word_row
+        text = "بِسْمِ اللَّهِ" if index == 0 else "لَمْ يَلِدْ"
+        tokens = (
+            [
+                [0, 110, 125, True, [[0, 2]]],
+                [0, 125, 150, False, [[2, 6]]],
+                [1, 150, 190, True, [[7, 13]]],
+            ]
+            if index == 0
+            else [
+                [0, 310, 350, True, [[0, 4]]],
+                [1, 350, 400, True, [[5, 9]]],
+            ]
+        )
+        letter_rows.append([
+            verse_key,
+            start,
+            end,
+            canonical,
+            silence_after,
+            copy.deepcopy(words),
+            text,
+            tokens,
+        ])
+    return {
+        "_meta": {
+            "schema_version": 3,
+            "slug": SLUG,
+            "audio_category": selected_word_data["_meta"]["audio_category"],
+            "units": "ms",
+            "verse_count": len(letter_rows),
+            "occurrence_count": len(letter_rows),
+            "script": "digital_khatt_v2",
+            "script_sha256": SCRIPT_SHA256,
+            "riwayah": "hafs",
+            "unicode_indexing": "scalar",
+            "tier": "letter",
+        },
+        "rows": letter_rows,
+    }
+
+
 def make_archive(
     catalog: dict[str, object] | None = None,
     word_data: dict[str, object] | None = None,
+    letter_data: dict[str, object] | None = None,
     *,
     include_letter_tier: bool = True,
 ) -> bytes:
@@ -72,7 +121,12 @@ def make_archive(
         )
         archive.writestr("verse_timestamps.json.gz", gzip.compress(b"{}"))
         if include_letter_tier:
-            archive.writestr("letter_timestamps.json.gz", gzip.compress(b"{}"))
+            selected_word_data = word_data or sample_word_data()
+            selected_letter_data = letter_data or sample_letter_data(selected_word_data)
+            archive.writestr(
+                "letter_timestamps.json.gz",
+                gzip.compress(json.dumps(selected_letter_data).encode("utf-8")),
+            )
     return buffer.getvalue()
 
 
@@ -81,12 +135,13 @@ def build_bundle_inputs(
     slug: str = SLUG,
     catalog: dict[str, object] | None = None,
     word_data: dict[str, object] | None = None,
+    letter_data: dict[str, object] | None = None,
     archive_bytes: bytes | None = None,
     riwayah: str = "hafs",
     tiers: list[str] | None = None,
 ) -> tuple[bytes, bytes, bytes]:
     selected_catalog = catalog or sample_catalog()
-    selected_archive = archive_bytes or make_archive(selected_catalog, word_data)
+    selected_archive = archive_bytes or make_archive(selected_catalog, word_data, letter_data)
     manifest = {
         "release_version": qua.PINNED_RELEASE,
         "license": qua.TIMING_LICENSE,
@@ -144,11 +199,17 @@ class QuaReleaseCatalogTests(unittest.TestCase):
         self.assertEqual(bundle["candidateCount"], 2)
         self.assertFalse(bundle["audioBytesDownloaded"])
         self.assertTrue(bundle["letterTierAvailable"])
+        self.assertTrue(bundle["letterTierImported"])
         self.assertEqual(candidate["dataset"]["attribution"], qua.ATTRIBUTION)
         self.assertEqual(candidate["reference"]["quranEdition"], "digital-khatt-v2-hafs")
         self.assertEqual(candidate["words"][0]["canonicalWordKey"], "1:1:1")
         self.assertEqual(candidate["words"][0]["occurrenceIndex"], 1)
         self.assertEqual(candidate["words"][0]["sourceWordIndex"], 1)
+        self.assertEqual(candidate["letterTiming"]["unicodeIndexing"], "scalar")
+        self.assertEqual(candidate["letterTiming"]["text"], "بِسْمِ اللَّهِ")
+        self.assertEqual(candidate["letterTiming"]["events"][0]["wordOccurrenceIndex"], 0)
+        self.assertEqual(candidate["letterTiming"]["events"][0]["paintRanges"], [[0, 2]])
+        self.assertFalse(candidate["letterTiming"]["events"][1]["ownsSound"])
         self.assertFalse(candidate["sourceWordIndicesNonSequential"])
         self.assertIsNone(candidate["audioBinding"]["sha256"])
         self.assertFalse(candidate["audioBinding"]["byteIdentityVerified"])
@@ -231,6 +292,41 @@ class QuaReleaseCatalogTests(unittest.TestCase):
         word_data["rows"][0][5][1][1] = 140
         with self.assertRaisesRegex(qua.QuaImportError, "ordered, and inside the verse"):
             import_fixture(word_data=word_data)
+
+    def test_rejects_letter_paint_ranges_outside_unicode_scalar_text(self) -> None:
+        word_data = sample_word_data()
+        letter_data = sample_letter_data(word_data)
+        letter_data["rows"][0][7][0][4] = [[0, 99]]
+
+        with self.assertRaisesRegex(qua.QuaImportError, "Unicode scalar spans"):
+            import_fixture(word_data=word_data, letter_data=letter_data)
+
+    def test_rejects_letter_rows_that_do_not_match_word_occurrences(self) -> None:
+        word_data = sample_word_data()
+        letter_data = sample_letter_data(word_data)
+        letter_data["rows"][0][5][0][0] = 2
+
+        with self.assertRaisesRegex(qua.QuaImportError, "does not align with its word timing row"):
+            import_fixture(word_data=word_data, letter_data=letter_data)
+
+    def test_preserves_zero_duration_letter_events_as_instantaneous_paint(self) -> None:
+        word_data = sample_word_data()
+        letter_data = sample_letter_data(word_data)
+        letter_data["rows"][0][7][0][2] = letter_data["rows"][0][7][0][1]
+
+        bundle = import_fixture(word_data=word_data, letter_data=letter_data)
+
+        instant_event = bundle["candidates"][0]["letterTiming"]["events"][0]
+        self.assertEqual(instant_event["startMs"], instant_event["endMs"])
+
+    def test_checks_letter_alignment_even_for_noncanonical_rows(self) -> None:
+        word_data = sample_word_data()
+        word_data["rows"][0][3] = False
+        letter_data = sample_letter_data(word_data)
+        letter_data["rows"][0][5][0][0] = 2
+
+        with self.assertRaisesRegex(qua.QuaImportError, "does not align with its word timing row"):
+            import_fixture(word_data=word_data, letter_data=letter_data)
 
     def test_rejects_catalog_mismatch_and_missing_combined_offset(self) -> None:
         manifest_bytes, release_catalog_bytes, archive_bytes = build_bundle_inputs()

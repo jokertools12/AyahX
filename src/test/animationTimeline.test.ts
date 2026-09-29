@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   ANIMATION_PROFILES,
+  resolveVerseWordWindow,
   resolveAnimationStates,
   normalizeAnimationProfile,
 } from '../lib/animationTimeline';
@@ -46,6 +47,19 @@ describe('deterministic animation timeline', () => {
     expect(consume[2].opacity).toBeGreaterThan(0);
   });
 
+  it('shows no guessed first word while a trusted map is between verses and the next word has not begun', () => {
+    expect(resolveVerseWordWindow('wordByWord', 4, null)).toEqual({ startIndex: 0, wordCount: 0 });
+    expect(resolveVerseWordWindow('twoWords', 4, null)).toEqual({ startIndex: 0, wordCount: 0 });
+    expect(resolveVerseWordWindow('threeTwo', 4, null)).toEqual({ startIndex: 0, wordCount: 0 });
+    expect(resolveVerseWordWindow('full', 4, null)).toEqual({ startIndex: 0, wordCount: 4 });
+  });
+
+  it('selects deterministic word, pair, and three-two chunks around the current timed word', () => {
+    expect(resolveVerseWordWindow('wordByWord', 5, 4)).toEqual({ startIndex: 4, wordCount: 1 });
+    expect(resolveVerseWordWindow('twoWords', 5, 2)).toEqual({ startIndex: 2, wordCount: 2 });
+    expect(resolveVerseWordWindow('threeTwo', 5, 3)).toEqual({ startIndex: 3, wordCount: 2 });
+  });
+
   it('removes pulse motion without changing emphasis', () => {
     const animated = resolveAnimationStates(words, 1, 0.5, 'karaoke');
     const reduced = resolveAnimationStates(words, 1, 0.5, 'karaoke', { reducedMotion: true });
@@ -63,11 +77,16 @@ describe('deterministic animation timeline', () => {
 
     const sandbox: Record<string, unknown> = {};
     runInNewContext(
-      `${html.slice(start, end)}\nglobalThis.__animation = { ANIMATION_PROFILES, normalizeAnimationProfile, getAnimationState };`,
+      `${html.slice(start, end)}\nglobalThis.__animation = { ANIMATION_PROFILES, normalizeAnimationProfile, getAnimationState, resolveVerseWordWindow };`,
       sandbox,
     );
     const harness = sandbox.__animation as {
       ANIMATION_PROFILES: string[];
+      resolveVerseWordWindow: (
+        mode: 'full' | 'twoWords' | 'threeTwo' | 'wordByWord',
+        totalWords: number,
+        activeWordIndex: number | null,
+      ) => { startIndex: number; wordCount: number };
       getAnimationState: (
         index: number,
         activeIndex: number,
@@ -79,6 +98,12 @@ describe('deterministic animation timeline', () => {
     };
 
     expect(harness.ANIMATION_PROFILES).toEqual(ANIMATION_PROFILES);
+    for (const mode of ['full', 'twoWords', 'threeTwo', 'wordByWord'] as const) {
+      for (const activeIndex of [null, -1, 0, 2, 4, 5] as const) {
+        expect(harness.resolveVerseWordWindow(mode, words.length, activeIndex))
+          .toEqual(resolveVerseWordWindow(mode, words.length, activeIndex));
+      }
+    }
     for (const profile of ANIMATION_PROFILES) {
       for (const activeIndex of [null, 0, 2, words.length] as const) {
         for (const progress of [0, 0.5, 1]) {
