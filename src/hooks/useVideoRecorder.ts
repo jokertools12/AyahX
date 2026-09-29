@@ -433,6 +433,10 @@ export function useVideoRecorder() {
   const downloadWebm = useCallback((filename: string = 'quran-reel.webm') => {
     const blob = videoBlobRef.current ?? state.videoBlob;
     if (!blob) { setState((prev) => ({ ...prev, error: 'لا يوجد فيديو WebM للتحميل' })); return; }
+    if (!blob.type.toLowerCase().includes('webm')) {
+      setState((prev) => ({ ...prev, error: 'ملف WebM غير متاح؛ أعد التسجيل بعد اختيار صيغة WebM' }));
+      return;
+    }
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
