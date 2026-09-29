@@ -558,7 +558,12 @@ export default function PreviewPage() {
       contentKind: isIbtahalatMode ? 'lyrics' : 'quran',
       lyrics: isIbtahalatMode ? transcribedLines : undefined,
       audio: {
-        sourceMode: isIbtahalatMode ? 'single_url' : playbackMode === 'qf' ? 'qf' : playbackMode === 'everyayah' ? 'everyayah' : 'single_url',
+        // QUA uses the same chapter-clock playback path as the legacy QF
+        // adapter, but it must remain a distinct source in the manifest so
+        // the renderer never labels QUA output as Quran Foundation content.
+        sourceMode: isIbtahalatMode || activeTimingMap?.sourceId === 'quranic_universal_audio'
+          ? 'single_url'
+          : playbackMode === 'qf' ? 'qf' : playbackMode === 'everyayah' ? 'everyayah' : 'single_url',
         audioUrl: audioUrl || ibtAudioUrl || resolvedEveryAyahUrls?.[0] || '',
         audioContentHash: timingMap.audioContentHash,
         durationSeconds: effectiveDuration,
@@ -1692,7 +1697,11 @@ export default function PreviewPage() {
         contentKind: isIbtahalatMode ? 'lyrics' : 'quran',
         lyrics: isIbtahalatMode ? transcribedLines : undefined,
         audio: {
-          sourceMode: playbackMode === 'qf' ? 'qf' : playbackMode === 'everyayah' ? 'everyayah' : 'single_url',
+          // Keep QUA on the chapter-clock path while preserving its own
+          // provenance in the manifest; qf is reserved for legacy QF maps.
+          sourceMode: activeTimingMap?.sourceId === 'quranic_universal_audio'
+            ? 'single_url'
+            : playbackMode === 'qf' ? 'qf' : playbackMode === 'everyayah' ? 'everyayah' : 'single_url',
           audioUrl: resolvedAudioUrl || '',
           audioContentHash: resolvedTimingMap.audioContentHash,
           durationSeconds: effectiveDuration,

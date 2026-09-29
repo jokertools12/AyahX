@@ -2361,13 +2361,13 @@
             ctx.restore();
           }
 
-          // Quran Foundation requires source attribution for exported QF
-          // content. Keep this credit in the canonical scene so preview,
-          // FFmpeg, Skia, and Browser Cloud cannot silently omit it.
-          const requiresQfCredit = manifest.timingMap?.sourceId === 'quran_foundation'
+          // Keep required attribution tied to the actual dataset. QUA is not
+          // Quran Foundation and must never inherit the legacy QF label.
+          const isQuaTiming = manifest.timingMap?.sourceId === 'quranic_universal_audio';
+          const requiresQfCredit = !isQuaTiming && (manifest.timingMap?.sourceId === 'quran_foundation'
             || manifest.timingMap?.alignment?.provider === 'quran_foundation'
-            || manifest.audio?.sourceMode === 'qf';
-          if (requiresQfCredit) {
+            || manifest.audio?.sourceMode === 'qf');
+          if (requiresQfCredit || isQuaTiming) {
             const logoCorner = displaySettings.logoWatermarkPosition || 'topRight';
             const socialCorner = displaySettings.socialWatermarkPosition || displaySettings.watermarkPosition || 'bottomCenter';
             const headerCorner = displaySettings.surahNamePosition || 'top';
@@ -2378,7 +2378,9 @@
               && ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'].includes(headerCorner)) occupiedCorners.add(headerCorner);
             const creditCorner = ['bottomLeft', 'topLeft', 'bottomRight', 'topRight']
               .find((corner) => !occupiedCorners.has(corner)) || 'bottomCenter';
-            const creditText = 'Source: Quran Foundation';
+            const creditText = isQuaTiming
+              ? 'Source: Quranic Universal Audio'
+              : 'Source: Quran Foundation';
             const creditFontSize = Math.max(12, 13 * S);
             const creditPadX = Math.max(7, 8 * S);
             const creditPadY = Math.max(4, 5 * S);
