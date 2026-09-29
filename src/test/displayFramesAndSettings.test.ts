@@ -1,21 +1,20 @@
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, afterAll, beforeAll } from 'vitest';
 import path from 'path';
 import fs from 'fs';
+import os from 'os';
 import { spawnSync } from 'child_process';
 import ffmpegPath from 'ffmpeg-static';
 import { renderDeterministicVideo } from '../../server/services/deterministicVideoRenderer';
 import { RenderManifest } from '../../server/models/renderManifest';
 
 describe('Display Settings, Surah & Reciter Frames Rendering Test', () => {
-  const tmpDir = path.resolve(process.cwd(), 'uploads/test_frames_out');
+  let tmpDir = '';
   let audioFile = '';
 
   beforeAll(() => {
-    if (!fs.existsSync(tmpDir)) {
-      fs.mkdirSync(tmpDir, { recursive: true });
-    }
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ayahx-display-frames-'));
     audioFile = path.join(tmpDir, 'synth_test_audio.m4a');
-    spawnSync(ffmpegPath!, [
+    const generatedAudio = spawnSync(ffmpegPath!, [
       '-y',
       '-f', 'lavfi', '-i', 'sine=frequency=440:duration=2.0',
       '-c:a', 'aac',
@@ -23,6 +22,24 @@ describe('Display Settings, Surah & Reciter Frames Rendering Test', () => {
       '-ar', '44100',
       audioFile,
     ]);
+    expect(generatedAudio.status, generatedAudio.stderr.toString()).toBe(0);
+    expect(fs.existsSync(audioFile)).toBe(true);
+  });
+
+  afterAll(() => {
+    if (!tmpDir) return;
+    const resolvedTempRoot = path.resolve(os.tmpdir());
+    const resolvedTarget = path.resolve(tmpDir);
+    const relativeTarget = path.relative(resolvedTempRoot, resolvedTarget);
+    if (
+      !relativeTarget
+      || relativeTarget.startsWith('..')
+      || path.isAbsolute(relativeTarget)
+      || !path.basename(resolvedTarget).startsWith('ayahx-display-frames-')
+    ) {
+      throw new Error('Refusing to remove a display-render test directory outside its unique OS temp folder.');
+    }
+    fs.rmSync(resolvedTarget, { recursive: true, force: true });
   });
 
   it('renders correctly with classic surah badge, elegant reciter, and golden frame', async () => {
