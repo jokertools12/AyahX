@@ -69,7 +69,9 @@ export const reciters: Reciter[] = [
     description: "تلاوة مرتلة كلاسيكية",
     server: "https://server8.mp3quran.net/basit",
     quranFoundationId: 2,
-    everyAyahSubfolder: "Abdul_Basit_Murattal_192kbps",
+    // quran-align release-2016-11-24 is paired with this exact EveryAyah
+    // source folder; keeping the folder unchanged would invalidate timings.
+    everyAyahSubfolder: "Abdul_Basit_Murattal_64kbps",
     isOpenLicense: true,
     moshafId: 5,
   },
@@ -81,7 +83,8 @@ export const reciters: Reciter[] = [
     description: "شيخ عموم المقارئ المصرية - تلاوة مرتلة متقنة",
     server: "https://server13.mp3quran.net/husr",
     quranFoundationId: 6,
-    everyAyahSubfolder: "Husary_128kbps",
+    // Exact source identity for the pinned quran-align timing release.
+    everyAyahSubfolder: "Husary_64kbps",
     isOpenLicense: true,
     moshafId: 2,
   },

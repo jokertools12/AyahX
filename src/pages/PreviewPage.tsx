@@ -942,9 +942,9 @@ export default function PreviewPage() {
           setPlaybackMode('everyayah');
           everyAyahIndexRef.current = 0;
 
-          // EveryAyah has verse boundaries, but lacks verified word-level ground truth
-          // Generate a TimingMap marked truthfully as 'needs_review'
-          const eaTimingMap = buildAudioAlignedTimingMap({
+          // Start with verse boundaries so playback remains usable even when
+          // the pinned word dataset has no exact row for this range.
+          let eaTimingMap = buildAudioAlignedTimingMap({
             reciterId: String(reciter.id),
             surahNumber,
             startAyah,
@@ -961,6 +961,41 @@ export default function PreviewPage() {
               audioEndMs: ts.to * 1000,
             })),
           });
+
+          // quran-align is a pinned CC-BY word dataset for the exact
+          // EveryAyah folders it names. It is deliberately opt-in and
+          // fail-closed: the server rejects multi-word source segments rather
+          // than inventing proportional boundaries.
+          if (isAuthenticated && reciter.everyAyahSubfolder) {
+            try {
+              const known = await api.alignments.resolveKnown({
+                reciterId: String(reciter.id),
+                audio: {
+                  contentHash: result.audioContentHash,
+                  durationMs: result.totalDuration * 1000,
+                  sampleRate: 44100,
+                  channels: 2,
+                },
+                reference: {
+                  surahNumber,
+                  startAyah,
+                  endAyah,
+                  ayahs,
+                  quranTextVersion: 'uthmani_hafs_v1',
+                },
+                providerInput: {
+                  everyAyahSubfolder: reciter.everyAyahSubfolder,
+                  audioTimestamps: result.timestamps,
+                },
+              });
+              if (!cancelled && known.timingMap?.validationStatus === 'approved') {
+                eaTimingMap = known.timingMap as TimingMap;
+                console.log(`✅ quran-align word map loaded [${reciter.everyAyahSubfolder}]`);
+              }
+            } catch (knownAlignmentError) {
+              console.info('Pinned word map unavailable for this range; keeping verse-only timing', knownAlignmentError);
+            }
+          }
           timingMapRegistry.register(eaTimingMap);
           setActiveTimingMap(eaTimingMap);
           activeTimingMapRef.current = eaTimingMap;
