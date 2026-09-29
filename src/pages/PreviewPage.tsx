@@ -85,6 +85,10 @@ import { toast } from 'sonner';
 import { isBasicBackground, isFreeBackgroundAsset } from '../../shared/planEntitlements';
 import { getVisualDirection, type VisualDirectionId } from '@/data/visualDirections';
 
+// Kept as a non-configurable feature gate so legacy timing code cannot be
+// re-enabled accidentally by a provider or browser response.
+const legacyQuranFoundationEnabled = (): boolean => false;
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────────────────────
@@ -803,7 +807,7 @@ export default function PreviewPage() {
       // Legacy Quran Foundation strategy is intentionally disabled. Production
       // audio uses the internal alignment pipeline or an explicitly unaligned
       // fallback; no external timing source is accepted here.
-      if (false && reciter.quranFoundationId) {
+      if (legacyQuranFoundationEnabled() && reciter.quranFoundationId) {
         try {
           const audioFile = await fetchChapterRecitationAudioById(reciter.quranFoundationId, surahNumber, true);
           const all = audioFile.timestamps ?? [];
