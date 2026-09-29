@@ -538,7 +538,8 @@ export function getAlignmentProviderRegistry(): AlignmentProviderRegistry {
   return defaultRegistry;
 }
 
-export function getAlignmentProviderDescriptors(): AlignmentProviderDescriptor[] {
+export function getAlignmentProviderDescriptors(options: { quranFoundationConfigured?: boolean } = {}): AlignmentProviderDescriptor[] {
+  const quranFoundationConfigured = options.quranFoundationConfigured === true;
   const external = (id: 'internal_ctc' | 'quranic_universal_aligner' | 'lafzize'): AlignmentProviderDescriptor => {
     const config = externalProviderConfig[id];
     const endpointConfigured = Boolean(process.env[config.envUrl] || (config.altEnvUrl && process.env[config.altEnvUrl]));
@@ -562,10 +563,11 @@ export function getAlignmentProviderDescriptors(): AlignmentProviderDescriptor[]
     {
       id: 'quran_foundation',
       label: 'Quran Foundation word segments',
-      configured: true,
+      configured: quranFoundationConfigured,
       supports: ['word'],
       requiresHumanReview: false,
       legalStatus: 'first_party_data',
+      ...(quranFoundationConfigured ? {} : { unavailableReason: 'يتطلب إعداد بيانات OAuth الخاصة بـ Quran Foundation في هذه البيئة' }),
     },
     {
       id: 'manual',
