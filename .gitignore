@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+*.tsbuildinfo
 
 # Local secrets and runtime artifacts — never commit these to GitHub.
 .env

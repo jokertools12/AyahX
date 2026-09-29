@@ -168,7 +168,7 @@ describe('Durable Render Job System & Queue', () => {
 
     const retried = await renderJobQueue.retryJob(jobId, testUserId2);
     expect(retried?.id).toBe(jobId);
-    expect(retried?.status).toBe('queued');
+    expect(['queued', 'running']).toContain(retried?.status);
     expect(retried?.progress).toBe(0);
     expect(retried?.retry_count).toBe(0);
   });

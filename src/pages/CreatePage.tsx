@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Layout } from '@/components/Layout';
@@ -60,7 +60,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { ErrorState } from '@/components/ErrorState';
-import { normalizeArabicText } from '@/lib/utils';
+import { normalizeArabicText, cn } from '@/lib/utils';
 
 type AspectRatio = '9:16' | '16:9';
 type ContentMode = 'surah' | 'famous' | 'ibtahalat';

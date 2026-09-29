@@ -74,7 +74,8 @@ describe('Quranic Universal Audio catalogue', () => {
       const scalars = Array.from(letterText);
       const events: Array<[number, number, number, boolean, Array<[number, number]>]> = [];
       let scalarIndex = 0;
-      row[5].forEach((sourceWord, wordIndex) => {
+      const sourceWords = row[5] as Array<[number, number, number]>;
+      sourceWords.forEach((sourceWord, wordIndex) => {
         while (scalars[scalarIndex] === ' ') scalarIndex += 1;
         const tokenScalars = Array.from(letterText.split(/\s+/)[wordIndex]);
         const startMs = sourceWord[1];
