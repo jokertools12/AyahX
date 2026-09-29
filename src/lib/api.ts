@@ -807,6 +807,7 @@ export const api = {
         quranTextVersion?: string;
       };
       providerInput: { reciterSlug: string };
+      granularity?: 'word' | 'letter';
     }) {
       return request<{
         accepted: boolean;

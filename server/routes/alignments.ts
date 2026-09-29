@@ -163,8 +163,12 @@ router.post('/resolve-universal', requireAuth, aiRateLimiter, async (req: Authen
     const input = {
       reciterId: String(body.reciterId || ''),
       reciterSlug: String(body.providerInput?.reciterSlug || ''),
+      granularity: body.granularity === 'letter' ? 'letter' : 'word',
       reference,
     };
+    if (body.granularity !== undefined && body.granularity !== 'word' && body.granularity !== 'letter') {
+      return res.status(400).json({ error: 'مستوى المحاذاة غير صالح', code: 'UNIVERSAL_ALIGNMENT_GRANULARITY_INVALID' });
+    }
     if (!input.reciterId || !input.reciterSlug || !input.reference) {
       return res.status(400).json({ error: 'بيانات QUA غير مكتملة', code: 'UNIVERSAL_ALIGNMENT_INPUT_REQUIRED' });
     }
@@ -179,6 +183,7 @@ router.post('/resolve-universal', requireAuth, aiRateLimiter, async (req: Authen
   } catch (error: any) {
     const code = String(error?.message || error || 'UNIVERSAL_ALIGNMENT_FAILED');
     const status = code.includes('NOT_AVAILABLE') || code.includes('NOT_SUPPORTED') || code.includes('MISSING')
+      || code.includes('LETTER_TIER') || code.includes('LETTER_TEXT_MISMATCH')
       || code.includes('AUDIO_URL_') || code.includes('TIMING_INVALID')
       ? 422
       : code.includes('REQUIRED') || code.includes('INPUT') || code.includes('MISMATCH')

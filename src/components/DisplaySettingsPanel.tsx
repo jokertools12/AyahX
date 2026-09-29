@@ -92,6 +92,7 @@ export interface DisplaySettings {
 interface DisplaySettingsPanelProps {
   settings: DisplaySettings;
   onChange: (settings: DisplaySettings) => void;
+  letterTimingStatus?: 'idle' | 'loading' | 'available' | 'unavailable' | 'requires-auth' | 'unsupported';
 }
 
 const highlightOptions = [
@@ -496,7 +497,7 @@ function RadioOptionGrid({
   );
 }
 
-export function DisplaySettingsPanel({ settings, onChange }: DisplaySettingsPanelProps) {
+export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 'idle' }: DisplaySettingsPanelProps) {
   const { canUseFeature } = useSubscription();
   const [userTemplates, setUserTemplates] = useState<SavedTemplate[]>(loadTemplates);
   const [templateName, setTemplateName] = useState('');
@@ -810,6 +811,19 @@ export function DisplaySettingsPanel({ settings, onChange }: DisplaySettingsPane
                   onChange={(v) => updateSetting('verseDisplayMode', v as DisplaySettings['verseDisplayMode'])}
                   idPrefix="vdm"
                 />
+                {settings.verseDisplayMode === 'letterByLetter' && letterTimingStatus !== 'idle' && (
+                  <p
+                    role="status"
+                    aria-live="polite"
+                    className={`text-[11px] ${letterTimingStatus === 'available' ? 'text-emerald-500' : letterTimingStatus === 'loading' ? 'text-muted-foreground' : 'text-amber-500'}`}
+                  >
+                    {letterTimingStatus === 'available' && 'توقيت الحروف المعتمد جاهز لهذا القارئ والنطاق.'}
+                    {letterTimingStatus === 'loading' && 'جارٍ تحميل توقيت الحروف من الحزمة المعتمدة؛ تبقى مزامنة الكلمات فعالة أثناء التحميل.'}
+                    {letterTimingStatus === 'unavailable' && 'لا تتوفر طبقة حروف كاملة لهذا النطاق؛ سيبقى العرض على الكلمة الموقّتة دون اختلاق توقيت.'}
+                    {letterTimingStatus === 'requires-auth' && 'سجّل الدخول لتحميل طبقة الحروف المعتمدة لهذا القارئ.'}
+                    {letterTimingStatus === 'unsupported' && 'هذا القارئ لا يوفّر حالياً طبقة حروف موثقة؛ سيبقى العرض على الكلمة الموقّتة.'}
+                  </p>
+                )}
               </div>
 
               {/* Deterministic animation profile. This is deliberately

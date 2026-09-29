@@ -152,6 +152,97 @@
         return { startIndex: 0, wordCount: 0 };
       }
 
+      // Select the verse on the shared audio clock. Explicit composition
+      // offsets outrank the static no-timing fallback; that fallback must
+      // never reset a correctly resolved verse to index zero.
+      function resolveActiveAyahTimeline(input) {
+        const allAyahs = Array.isArray(input.allAyahs) ? input.allAyahs : [];
+        const timingMap = input.timingMap;
+        let activeAyahIndex = 0;
+        let currentAyahStartSec = 0;
+        let currentAyahEndSec = input.audioDurationSeconds;
+        const timestamps = Array.isArray(input.everyAyahTimestamps) ? input.everyAyahTimestamps : [];
+        const hasEveryAyahTimeline = timestamps.length > 0;
+
+        if (hasEveryAyahTimeline) {
+          for (let i = timestamps.length - 1; i >= 0; i--) {
+            const from = Number(timestamps[i].from);
+            const to = Number(timestamps[i].to);
+            const fromSec = from > 1000 ? from / 1000 : from;
+            if (input.frameTimeSeconds >= fromSec) {
+              activeAyahIndex = i;
+              currentAyahStartSec = fromSec;
+              currentAyahEndSec = to > 1000 ? to / 1000 : to;
+              break;
+            }
+          }
+        }
+
+        const compositionOffsets = !hasEveryAyahTimeline && timingMap && Array.isArray(timingMap.compositionOffsets)
+          ? timingMap.compositionOffsets.filter((offset) => (
+            offset && Number.isFinite(offset.startMs) && Number.isFinite(offset.endMs) && offset.endMs > offset.startMs
+          ))
+          : [];
+        let activeCompositionOffset = null;
+        for (let i = compositionOffsets.length - 1; i >= 0; i--) {
+          const offset = compositionOffsets[i];
+          if (input.lookupTimeMs >= offset.startMs && input.lookupTimeMs < offset.endMs) {
+            activeCompositionOffset = offset;
+            const foundIdx = allAyahs.findIndex((ayah) => ayah.numberInSurah === offset.ayahNumber);
+            if (foundIdx !== -1) activeAyahIndex = foundIdx;
+            currentAyahStartSec = Math.max(0, (offset.startMs - (input.isTimingMapAbsolute ? input.rangeOffsetMs : 0)) / 1000);
+            currentAyahEndSec = Math.min(input.audioDurationSeconds, (offset.endMs - (input.isTimingMapAbsolute ? input.rangeOffsetMs : 0)) / 1000);
+            break;
+          }
+        }
+
+        if (!hasEveryAyahTimeline && !activeCompositionOffset && timingMap?.words?.length > 0) {
+          const words = timingMap.words;
+          let foundWord = null;
+          for (let i = words.length - 1; i >= 0; i--) {
+            if (input.lookupTimeMs >= words[i].startMs) {
+              foundWord = words[i];
+              break;
+            }
+          }
+          if (foundWord?.canonicalWordKey) {
+            const parts = foundWord.canonicalWordKey.split(':');
+            if (parts.length >= 2) {
+              const ayahNum = parseInt(parts[1], 10);
+              const foundIdx = allAyahs.findIndex((ayah) => ayah.numberInSurah === ayahNum);
+              if (foundIdx !== -1) activeAyahIndex = foundIdx;
+            }
+          }
+
+          const activeAyah = allAyahs[activeAyahIndex] || allAyahs[0];
+          const ayahWordsInMap = words.filter((word) => {
+            if (!word.canonicalWordKey) return false;
+            const parts = word.canonicalWordKey.split(':');
+            return parseInt(parts[1], 10) === activeAyah?.numberInSurah;
+          });
+          if (ayahWordsInMap.length > 0) {
+            const firstMs = ayahWordsInMap[0].startMs;
+            const lastMs = ayahWordsInMap[ayahWordsInMap.length - 1].endMs;
+            currentAyahStartSec = Math.max(0, (firstMs - (input.isTimingMapAbsolute ? input.rangeOffsetMs : 0)) / 1000);
+            currentAyahEndSec = Math.min(input.audioDurationSeconds, (lastMs - (input.isTimingMapAbsolute ? input.rangeOffsetMs : 0)) / 1000);
+          }
+        } else if (!hasEveryAyahTimeline && !activeCompositionOffset && allAyahs.length > 1) {
+          activeAyahIndex = 0;
+          currentAyahStartSec = 0;
+          currentAyahEndSec = input.audioDurationSeconds;
+        }
+
+        return { activeAyahIndex, currentAyahStartSec, currentAyahEndSec, activeCompositionOffset, hasEveryAyahTimeline };
+      }
+
+      function resolveRevealedLetters(letterSpans, lookupTimeMs) {
+        if (!Array.isArray(letterSpans) || !Number.isFinite(lookupTimeMs)) return '';
+        return letterSpans
+          .filter((letter) => Number.isFinite(letter.startMs) && lookupTimeMs >= letter.startMs)
+          .map((letter) => typeof letter.token === 'string' ? letter.token : '')
+          .join('');
+      }
+
       // Rosette / Ayah Badge Drawing with full shape support
       function drawAyahBadge(ctx, x, y, ayahNum, size, shape, colorScheme) {
         ctx.save();
@@ -1462,94 +1553,29 @@
           }
 
           // 6. Active Ayah Selection & Timeline Synchronization
-          let activeAyahIndex = 0;
-          let currentAyahStartSec = 0;
-          let currentAyahEndSec = manifest.audio.durationSeconds;
-
-          // Method A: Exact EveryAyah timestamps
-          const hasEveryAyahTimeline = Boolean(manifest.audio.everyAyahTimestamps && manifest.audio.everyAyahTimestamps.length > 0);
-          if (hasEveryAyahTimeline) {
-            const ts = manifest.audio.everyAyahTimestamps;
-            for (let i = ts.length - 1; i >= 0; i--) {
-              const fromSec = ts[i].from > 1000 ? ts[i].from / 1000 : ts[i].from;
-              if (frameTimeSeconds >= fromSec) {
-                activeAyahIndex = i;
-                currentAyahStartSec = fromSec;
-                currentAyahEndSec = ts[i].to > 1000 ? ts[i].to / 1000 : ts[i].to;
-                break;
-              }
-            }
-          }
-          // Method B: Canonical verse ranges stay valid even if one damaged
-          // upstream word span is absent. They also prevent early ayah changes
-          // while the reciter is still holding the previous verse.
-          const compositionOffsets = !hasEveryAyahTimeline && timingMap && Array.isArray(timingMap.compositionOffsets)
-            ? timingMap.compositionOffsets.filter(offset => (
-              offset && Number.isFinite(offset.startMs) && Number.isFinite(offset.endMs) && offset.endMs > offset.startMs
-            ))
-            : [];
-          let activeCompositionOffset = null;
-          for (let i = compositionOffsets.length - 1; i >= 0; i--) {
-            const offset = compositionOffsets[i];
-            if (lookupTimeMs >= offset.startMs && lookupTimeMs < offset.endMs) {
-              activeCompositionOffset = offset;
-              const foundIdx = allAyahs.findIndex(a => a.numberInSurah === offset.ayahNumber);
-              if (foundIdx !== -1) activeAyahIndex = foundIdx;
-              currentAyahStartSec = Math.max(0, (offset.startMs - (isTimingMapAbsolute ? rangeOffsetMs : 0)) / 1000);
-              currentAyahEndSec = Math.min(manifest.audio.durationSeconds, (offset.endMs - (isTimingMapAbsolute ? rangeOffsetMs : 0)) / 1000);
-              break;
-            }
-          }
-          // Method C: TimingMap words with canonicalWordKey using lookupTimeMs.
-          if (!hasEveryAyahTimeline && !activeCompositionOffset && timingMap && timingMap.words && timingMap.words.length > 0) {
-            const words = timingMap.words;
-            let foundWord = null;
-            for (let i = words.length - 1; i >= 0; i--) {
-              if (lookupTimeMs >= words[i].startMs) {
-                foundWord = words[i];
-                break;
-              }
-            }
-            if (foundWord && foundWord.canonicalWordKey) {
-              const parts = foundWord.canonicalWordKey.split(':');
-              if (parts.length >= 2) {
-                const ayahNum = parseInt(parts[1], 10);
-                const foundIdx = allAyahs.findIndex(a => a.numberInSurah === ayahNum);
-                if (foundIdx !== -1) {
-                  activeAyahIndex = foundIdx;
-                }
-              }
-            }
-
-            // Bound currentAyahStartSec and currentAyahEndSec based on timing map words
-            const activeAyahObj = allAyahs[activeAyahIndex] || allAyahs[0];
-            const ayahWordsInMap = words.filter(w => {
-              if (!w.canonicalWordKey) return false;
-              const p = w.canonicalWordKey.split(':');
-              return parseInt(p[1], 10) === activeAyahObj.numberInSurah;
-            });
-            if (ayahWordsInMap.length > 0) {
-              const firstMs = ayahWordsInMap[0].startMs;
-              const lastMs = ayahWordsInMap[ayahWordsInMap.length - 1].endMs;
-              currentAyahStartSec = Math.max(0, (firstMs - (isTimingMapAbsolute ? rangeOffsetMs : 0)) / 1000);
-              currentAyahEndSec = Math.min(manifest.audio.durationSeconds, (lastMs - (isTimingMapAbsolute ? rangeOffsetMs : 0)) / 1000);
-            }
-          }
-          // Method D: No timing evidence. Keep a stable static verse rather
-          // than slicing duration across ayahs and presenting that estimate as
-          // recitation synchronization. Word animation remains disabled below.
-          else if (!hasEveryAyahTimeline && allAyahs.length > 1) {
-            activeAyahIndex = 0;
-            currentAyahStartSec = 0;
-            currentAyahEndSec = manifest.audio.durationSeconds;
-          }
+          const activeAyahTimeline = resolveActiveAyahTimeline({
+            allAyahs,
+            everyAyahTimestamps: manifest.audio.everyAyahTimestamps,
+            timingMap,
+            frameTimeSeconds,
+            lookupTimeMs,
+            isTimingMapAbsolute,
+            rangeOffsetMs,
+            audioDurationSeconds: manifest.audio.durationSeconds,
+          });
+          const { activeAyahIndex, currentAyahStartSec, currentAyahEndSec, hasEveryAyahTimeline } = activeAyahTimeline;
 
           const activeAyah = allAyahs[activeAyahIndex] || allAyahs[0];
           const activeAyahDurationSec = Math.max(currentAyahEndSec - currentAyahStartSec, 0.5);
           const timeInAyahSec = Math.max(frameTimeSeconds - currentAyahStartSec, 0);
 
           // 7. Word-Level Highlighting Resolution
-          const ayahWords = (activeAyah.text || '').split(/\s+/).filter(word => stripTashkeel(word).replace(/[\u0640\s]/g, '').length > 0);
+          // Quran editions may encode dagger-alif positioning with an
+          // invisible hair/zero-width character inside a single word.
+          const ayahWords = (activeAyah.text || '')
+            .replace(/[\u200A\u200B\u2060\u2063]/g, '')
+            .split(/\s+/)
+            .filter(word => stripTashkeel(word).replace(/[\u0640\s]/g, '').length > 0);
           let activeWordIndexInAyah = null;
           let activeWordProgress = 0;
           const animationProfile = normalizeAnimationProfile(
@@ -1796,11 +1822,10 @@
             const letterSpans = activeTimingWord && Array.isArray(activeTimingWord.letters) ? activeTimingWord.letters : [];
             const sourceWord = ayahWords[activeWordIndexInAyah] || activeTimingWord?.displayToken || '';
             if (letterSpans.length > 0) {
-              const revealed = letterSpans
-                .filter(letter => lookupTimeMs >= letter.startMs)
-                .map(letter => letter.token)
-                .join('');
-              displayWords = [revealed || sourceWord.charAt(0) || sourceWord];
+              const revealed = resolveRevealedLetters(letterSpans, lookupTimeMs);
+              // Do not expose an estimated first glyph before QUA's first
+              // verified paint event. An empty word is a short, honest gap.
+              displayWords = revealed ? [revealed] : [];
             } else {
               displayWords = [sourceWord];
             }
