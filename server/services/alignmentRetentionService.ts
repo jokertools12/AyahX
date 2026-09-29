@@ -16,18 +16,25 @@ export async function purgeExpiredAlignmentData(): Promise<{ documentsDeleted: n
   let documentsDeleted = 0;
 
   while (true) {
-    const result = await query<DeleteResult>(
-      `DELETE e FROM alignment_review_events e
+    const expiredEvents = await query<Array<{ id: string }>>(
+      `SELECT e.id FROM alignment_review_events e
        LEFT JOIN alignment_documents d ON d.id = e.document_id
        LEFT JOIN alignment_documents p ON p.id = e.parent_document_id
        WHERE (e.expires_at IS NOT NULL AND e.expires_at <= CURRENT_TIMESTAMP)
           OR (d.expires_at IS NOT NULL AND d.expires_at <= CURRENT_TIMESTAMP)
           OR (p.expires_at IS NOT NULL AND p.expires_at <= CURRENT_TIMESTAMP)
+       ORDER BY e.created_at ASC
        LIMIT ${CLEANUP_BATCH_SIZE}`,
+    );
+    if (expiredEvents.length === 0) break;
+    const eventIds = expiredEvents.map((event) => event.id);
+    const result = await query<DeleteResult>(
+      `DELETE FROM alignment_review_events WHERE id IN (${eventIds.map(() => '?').join(', ')})`,
+      eventIds,
     );
     const deleted = Number(result?.affectedRows || 0);
     reviewEventsDeleted += deleted;
-    if (deleted < CLEANUP_BATCH_SIZE) break;
+    if (expiredEvents.length < CLEANUP_BATCH_SIZE) break;
   }
 
   while (true) {

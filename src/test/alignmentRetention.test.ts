@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import type { PoolConnection } from 'mysql2/promise';
 
 vi.mock('../../server/db', () => ({
   query: vi.fn(),
@@ -88,7 +89,8 @@ describe('alignment retention', () => {
     const connectionQuery = vi.fn()
       .mockResolvedValueOnce([{ affectedRows: 1 }, []])
       .mockResolvedValueOnce([{ affectedRows: 1 }, []]);
-    transactionMock.mockImplementation(async (callback: any) => callback({ query: connectionQuery } as any));
+    const mockConnection = { query: connectionQuery } as unknown as PoolConnection;
+    transactionMock.mockImplementation((callback) => callback(mockConnection));
     const document = { ...qfDocument(), documentId: 'qf-review-revision', parentDocumentId: 'qf-document' };
 
     await saveReviewEvent({
@@ -105,7 +107,8 @@ describe('alignment retention', () => {
 
   it('rejects a review if the source expires between read and transaction', async () => {
     const connectionQuery = vi.fn().mockResolvedValueOnce([{ affectedRows: 0 }, []]);
-    transactionMock.mockImplementation(async (callback: any) => callback({ query: connectionQuery } as any));
+    const mockConnection = { query: connectionQuery } as unknown as PoolConnection;
+    transactionMock.mockImplementation((callback) => callback(mockConnection));
 
     await expect(saveReviewEvent({
       userId: 'reviewer-1',
@@ -118,6 +121,7 @@ describe('alignment retention', () => {
 
   it('purges review events before their expired documents', async () => {
     queryMock
+      .mockResolvedValueOnce([{ id: 'review-event-1' }, { id: 'review-event-2' }] as never)
       .mockResolvedValueOnce({ affectedRows: 2 } as never)
       .mockResolvedValueOnce({ affectedRows: 1 } as never);
 
@@ -125,7 +129,8 @@ describe('alignment retention', () => {
       documentsDeleted: 1,
       reviewEventsDeleted: 2,
     });
-    expect(queryMock.mock.calls[0][0]).toContain('DELETE e FROM alignment_review_events');
-    expect(queryMock.mock.calls[1][0]).toContain('DELETE FROM alignment_documents');
+    expect(queryMock.mock.calls[0][0]).toContain('SELECT e.id FROM alignment_review_events');
+    expect(queryMock.mock.calls[1][0]).toContain('DELETE FROM alignment_review_events WHERE id IN');
+    expect(queryMock.mock.calls[2][0]).toContain('DELETE FROM alignment_documents');
   });
 });
