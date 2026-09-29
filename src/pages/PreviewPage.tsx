@@ -1791,9 +1791,14 @@ export default function PreviewPage() {
       // locally into a constant-frame-rate MP4.
       const requiresDeterministicMp4 = exportSettingsForPlan.format === 'mp4'
         && (selectedFps === 60 || selectedAudioBitrate === '320k');
-      const preferredMimeCandidates = requiresDeterministicMp4
-        ? ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm', 'video/mp4;codecs=avc1,mp4a.40.2', 'video/mp4']
-        : ['video/mp4;codecs=avc1,mp4a.40.2', 'video/mp4', 'video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm'];
+      // A WebM selection must never silently produce an MP4 blob with a
+      // `.webm` filename. Keep MP4 first for the recommended MP4 path, but
+      // make the explicit WebM choice deterministic and honest.
+      const preferredMimeCandidates = exportSettingsForPlan.format === 'webm'
+        ? ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm']
+        : requiresDeterministicMp4
+          ? ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm', 'video/mp4;codecs=avc1,mp4a.40.2', 'video/mp4']
+          : ['video/mp4;codecs=avc1,mp4a.40.2', 'video/mp4', 'video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm'];
 
       const attemptsByMode: Record<RecordingAttemptKey, RecordingAttempt> = {
         quality: {
