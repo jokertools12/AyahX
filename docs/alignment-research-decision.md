@@ -154,13 +154,13 @@ counts, model confidence alone, or a visual animation profile.
 
 ## AyahX staging status
 
-- Staging commit `b14445770b72dd5a1b4895ec7439d62427b85fa6` is live on all five
-  repo-linked services (AyahX, render-control, and the FFmpeg, Skia, and Browser
-  workers). Railway reports all 8/8 Staging services online, zero recent
-  failures, and no pending work. The public `/api/health/ready` probe returned
-  HTTP 200 with MySQL connected. Production was independently checked: 7/7
-  services online, no pending work, and all repo-linked services still track
-  `main`.
+- At the 2026-09-29 verification point, Staging commit `edb60acc322c` was live
+  on all five repo-linked services (AyahX, render-control, and the FFmpeg, Skia,
+  and Browser workers). Railway reported 8/8 Staging services online, zero
+  recent failures, and no pending work. The public `/api/health/ready` probe
+  returned HTTP 200 with MySQL connected, and the alignment-table migration
+  logged success. Production was independently checked: 7/7 services online,
+  no pending work, and all five repo-linked services track `main`.
 - OpenRouter is configured for the single free text model
   `qwen/qwen3.8-27b:free`, strict JSON Schema, `data_collection=deny`, and both
   model/provider fallback disabled. The free model lists ModelRun as its current
@@ -189,19 +189,19 @@ counts, model confidence alone, or a visual animation profile.
   for CTC training, requires separately reviewed gold spans for boundary
   evaluation, splits by connected reciter/audio groups, evaluates the held-out
   test split only, and counts missing/unexpected predictions against coverage.
-- Current local checks: 317 Vitest tests across 48 files, the production Vite
-  build, and both TypeScript project checks passed; 24 alignment-worker pytest
-  tests passed (one warning). ESLint exits successfully with 521 warnings and
-  no errors. The display-render test now writes artifacts to a unique OS temp
+- Current local checks: 322 Vitest tests across 49 files, the production Vite
+  build, and TypeScript checks for the app and server passed; the 24
+  alignment-worker pytest tests passed earlier (one warning). The modified
+  retention implementation and tests pass targeted ESLint without warnings.
+  The display-render test now writes artifacts to a unique OS temp
   directory instead of the user-owned `uploads/test_frames_out` files. These
   local checks do not imply model accuracy or general-audio alignment quality.
 
-- The latest Staging commit only changed that test's artifact isolation; the two
-  pre-existing user-owned MP4 modifications were deliberately excluded from the
-  commit and remain untouched by the isolated test. API keys previously pasted
-  into chat must be treated as exposed: revoke/rotate them, then enter a fresh
-  key directly in the Staging admin settings. Never reuse or repeat the pasted
-  values.
+- A name-only Staging variable check confirmed `OPENROUTER_API_KEY` exists, but
+  its value was withheld and no live OpenRouter request was made. The two keys
+  previously pasted into chat must be treated as exposed: revoke/rotate them,
+  then enter a fresh key directly in Staging. The two pre-existing user-owned
+  MP4 modifications remain outside all commits.
 
 The remaining release decisions are permission to use training audio (linked
 audio rights are not granted by the QuranLab timing license) and, if using
