@@ -37,6 +37,16 @@ function toggle(title: string) { fireEvent.click(screen.getByText(title, { selec
 function radio(id: string) { return document.getElementById(id)!; }
 
 describe('export settings progressive disclosure', () => {
+  it('selects WebM locally and restores MP4 for cloud production', () => {
+    render(<Harness ready />);
+    fireEvent.click(radio('format-webm'));
+    expect(radio('format-webm')).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByRole('button', { name: 'تحميل WEBM' })).toBeEnabled();
+    toggle('طريقة إنتاج الفيديو');
+    fireEvent.click(radio('engine-skia-canvas'));
+    expect(document.getElementById('format-webm')).toBeNull();
+    expect(radio('format-mp4')).toHaveAttribute('aria-checked', 'true');
+  });
   it('only offers deployed cloud engines and applies free cloud output limits', () => {
     subscription.cloudPolicy = { enabledEngines: ['skia_canvas'] };
     render(<Harness />);
@@ -107,7 +117,7 @@ describe('export settings progressive disclosure', () => {
       expect(buttons).toHaveLength(Number(count));
       if (count) {
         fireEvent.click(screen.getByRole('button', { name: 'تحميل MP4' }));
-        expect(screen.queryByText('WebM')).not.toBeInTheDocument();
+        expect(screen.getByText('WebM')).toBeInTheDocument();
         expect(download.mock.calls).toEqual([['mp4']]);
       }
     },

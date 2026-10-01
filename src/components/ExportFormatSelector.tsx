@@ -33,7 +33,8 @@ interface ExportFormatSelectorProps {
 }
 
 const FORMAT_OPTIONS: { id: ExportFormat; label: string; description: string; icon: typeof FileVideo }[] = [
-  { id: 'mp4', label: 'MP4 (موصى به)', description: 'ترميز H.264 عالي التوافق لإنستجرام وتيك توك وفيسبوك والواتساب', icon: Film },
+  { id: 'mp4', label: 'MP4', description: '', icon: Film },
+  { id: 'webm', label: 'WebM', description: '', icon: FileVideo },
 ];
 
 const RECORDING_METHOD_OPTIONS: { id: RecordingMethod; label: string; description: string }[] = [
@@ -69,12 +70,14 @@ export function ExportFormatSelector({
   const browserCloudRemaining = dailyUsage.browserCloudRenderRemaining ?? browserCloudLimit;
 
   const updateSetting = <K extends keyof ExportSettings>(key: K, value: ExportSettings[K]) => {
+    if (isRecording || isConverting) return;
     onChange({ ...settings, [key]: value });
   };
 
   const canExport = (format: ExportFormat) => {
     if (isRecording || isConverting) return false;
     if (format === 'mp4') return !!mp4Blob;
+    if (format === 'webm') return settings.format === 'webm' && !!videoBlob?.type.includes('webm');
     return false;
   };
 
@@ -98,16 +101,15 @@ export function ExportFormatSelector({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium">صيغة ملف الفيديو</Label>
-            <span className="text-xs text-primary font-medium">MP4 هو الأنسب للريلز</span>
           </div>
           <RadioGroup
-            value="mp4"
+            value={isCloud ? 'mp4' : settings.format === 'webm' ? 'webm' : 'mp4'}
             onValueChange={(value) => updateSetting('format', value as ExportFormat)}
-            className="space-y-2"
+            className="grid grid-cols-2 gap-2"
           >
-            {FORMAT_OPTIONS.map((option) => (
+            {FORMAT_OPTIONS.filter(option => !isCloud || option.id === 'mp4').map((option) => (
               <div key={option.id} className="relative">
-                <RadioGroupItem value={option.id} id={`format-${option.id}`} className="peer sr-only" />
+                <RadioGroupItem value={option.id} id={`format-${option.id}`} disabled={isRecording || isConverting} className="peer sr-only" />
                 <Label
                   htmlFor={`format-${option.id}`}
                   className="flex items-center gap-3 rounded-xl border-2 border-muted p-3 hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer transition-all"
@@ -115,9 +117,8 @@ export function ExportFormatSelector({
                   <option.icon className="h-5 w-5 text-primary shrink-0" />
                   <div className="flex-1">
                     <span className="font-semibold text-sm">{option.label}</span>
-                    <p className="text-xs text-muted-foreground">{option.description}</p>
                   </div>
-                  {canExport(option.id) && (
+                  {settings.format === option.id && canExport(option.id) && (
                     <Button
                       size="sm"
                       variant="outline"
@@ -289,6 +290,7 @@ export function ExportFormatSelector({
 
           <RadioGroup
             value={effectiveEngine}
+            disabled={isRecording || isConverting}
             onValueChange={(val) => {
               const cloud = val !== 'browser';
               const safeQuality = cloud && (settings.quality === 'ultra' || !isPremium && settings.quality === 'high')
@@ -296,7 +298,7 @@ export function ExportFormatSelector({
               if (cloud && (safeQuality !== settings.quality || settings.fps === 60)) {
                 toast.info('تم ضبط الدقة ومعدل الإطارات ضمن حدود الإنتاج السحابي.');
               }
-              onChange({ ...settings, renderEngine: val as RenderEngine, quality: safeQuality, fps: cloud ? 30 : settings.fps });
+              onChange({ ...settings, renderEngine: val as RenderEngine, format: cloud ? 'mp4' : settings.format, quality: safeQuality, fps: cloud ? 30 : settings.fps });
             }}
             className="space-y-2.5"
           >

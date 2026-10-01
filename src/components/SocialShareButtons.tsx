@@ -9,6 +9,7 @@ interface SocialShareButtonsProps {
   title: string;
   text: string;
   filename: string;
+  format?: 'mp4' | 'webm';
 }
 
 // TikTok icon component
@@ -31,8 +32,10 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 );
 
 
-export function SocialShareButtons({ videoBlob, mp4Blob, title, text, filename }: SocialShareButtonsProps) {
-  const activeBlob = mp4Blob || (videoBlob?.type.includes('mp4') ? videoBlob : null);
+export function SocialShareButtons({ videoBlob, mp4Blob, title, text, filename, format = 'mp4' }: SocialShareButtonsProps) {
+  const activeBlob = format === 'webm' ? (videoBlob?.type.includes('webm') ? videoBlob : null) : mp4Blob || (videoBlob?.type.includes('mp4') ? videoBlob : null);
+  const extension = format === 'webm' ? 'webm' : 'mp4';
+  const formatLabel = format === 'webm' ? 'WebM' : 'MP4';
   const [caption, setCaption] = useState(text + '\n\n#قرآن_كريم #تلاوة #quran');
   const [busy, setBusy] = useState(false);
   useEffect(() => { setCaption(text + '\n\n#قرآن_كريم #تلاوة #quran'); }, [text]);
@@ -40,24 +43,24 @@ export function SocialShareButtons({ videoBlob, mp4Blob, title, text, filename }
     if (!activeBlob) return;
     const url = URL.createObjectURL(activeBlob);
     const a = document.createElement('a');
-    a.href = url; a.download = filename.replace(/\.[^.]+$/, '') + '.mp4';
+    a.href = url; a.download = filename.replace(/\.[^.]+$/, '') + '.' + extension;
     document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 3000);
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
   };
   const share = async (platform: string) => {
     if (!activeBlob || busy) return;
     setBusy(true);
     try {
-      const file = new File([activeBlob], filename.replace(/\.[^.]+$/, '') + '.mp4', { type: 'video/mp4' });
+      const file = new File([activeBlob], filename.replace(/\.[^.]+$/, '') + '.' + extension, { type: `video/${extension}` });
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
         await navigator.share({ title, text: caption, files: [file] });
         toast.success('تم إرسال الفيديو إلى تطبيق المشاركة');
       } else {
         download();
-        toast.info('تم تحميل MP4. افتح ' + platform + ' وارفع الفيديو، ثم الصق وصف المشاركة.', { duration: 6000 });
+        toast.info('بدأ تنزيل الفيديو.', { duration: 3000 });
       }
     } catch (error) {
-      if ((error as Error).name !== 'AbortError') toast.error('تعذرت المشاركة. استخدم تحميل MP4 ونسخ الوصف.');
+      if ((error as Error).name !== 'AbortError') toast.error('تعذرت المشاركة. حمّل الفيديو.');
     } finally { setBusy(false); }
   };
   return <div className="space-y-3 rounded-xl border border-border/60 p-3">
@@ -67,7 +70,7 @@ export function SocialShareButtons({ videoBlob, mp4Blob, title, text, filename }
     </label>
     <div className="grid grid-cols-2 gap-2">
       <Button size="sm" variant="outline" onClick={async () => { try { await navigator.clipboard.writeText(caption); toast.success('تم نسخ الوصف'); } catch { toast.error('تعذر النسخ. حدد الوصف وانسخه يدوياً.'); } }}><Copy className="h-4 w-4 ml-2" />نسخ الوصف</Button>
-      <Button size="sm" variant="outline" disabled={!activeBlob || busy} onClick={download}><Download className="h-4 w-4 ml-2" />تحميل MP4</Button>
+      <Button size="sm" variant="outline" disabled={!activeBlob || busy} onClick={download}><Download className="h-4 w-4 ml-2" />تحميل {formatLabel}</Button>
     </div>
     <div className="grid grid-cols-5 gap-2">
       {[
@@ -76,6 +79,6 @@ export function SocialShareButtons({ videoBlob, mp4Blob, title, text, filename }
       ].map(({ name, Icon }) => <Button key={name} size="sm" variant="outline" className="h-auto flex-col gap-1 px-1 py-2" disabled={!activeBlob || busy} onClick={() => void share(name)}><Icon className="h-4 w-4" /><span className="text-[9px]">{name}</span></Button>)}
     </div>
     <p className="text-[11px] leading-relaxed text-muted-foreground">على الأجهزة الداعمة تظهر نافذة المشاركة؛ اختر التطبيق المطلوب. على الكمبيوتر حمّل الفيديو وانشره من التطبيق. لا يتم النشر تلقائياً.</p>
-    {!activeBlob && <p className="text-xs text-amber-500">تتاح مشاركة الملف بعد اكتمال تجهيز MP4.</p>}
+    {!activeBlob && <p className="text-xs text-amber-500">الملف غير جاهز بعد.</p>}
   </div>;
 }

@@ -81,11 +81,11 @@ describe('Preview action states remain direct and functional',()=>{
     const p=fixture();p.videoRecorder.isRecording=state==='recording';p.videoRecorder.isConverting=state==='converting';p.videoRecorder.videoBlob=state==='converting'?new Blob(['local']):null;
     render(<Panel {...p}/>);expect(screen.getByRole('progressbar')).toBeInTheDocument();expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
-  it.each(['mp4','webm'])('exports only MP4, including legacy saved format=%s',format=>{
-    const p=fixture();p.videoRecorder.videoBlob=new Blob(['local']);p.exportSettings.format=format;render(<Panel {...p}/>);
-    fireEvent.click(screen.getByRole('button',{name:'تحميل الفيديو (MP4)'}));
-    expect(screen.queryByRole('button',{name:/WebM/})).not.toBeInTheDocument();
-    expect(p.videoRecorder.downloadMp4).toHaveBeenCalledWith('fixture.mp4');expect(p.videoRecorder.downloadWebm).not.toHaveBeenCalled();
+  it.each(['mp4','webm'])('downloads the chosen local format=%s',format=>{
+    const p=fixture();p.videoRecorder.videoBlob=new Blob(['local'],{type:`video/${format}`});p.exportSettings.format=format;p.downloadFilename=`fixture.${format}`;render(<Panel {...p}/>);
+    fireEvent.click(screen.getByRole('button',{name:`تحميل الفيديو (${format==='webm'?'WebM':'MP4'})`}));
+    expect(format==='webm'?p.videoRecorder.downloadWebm:p.videoRecorder.downloadMp4).toHaveBeenCalledWith(`fixture.${format}`);
+    expect(format==='webm'?p.videoRecorder.downloadMp4:p.videoRecorder.downloadWebm).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button',{name:'حفظ في المكتبة'}));expect(p.handleSave).toHaveBeenCalledOnce();
     fireEvent.click(screen.getByRole('button',{name:'إنشاء فيديو جديد'}));expect(p.videoRecorder.reset).toHaveBeenCalledOnce();
   });

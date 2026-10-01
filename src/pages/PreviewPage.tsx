@@ -407,7 +407,7 @@ export default function PreviewPage() {
   }, [canUseFeature, isPremium, setSearchParams]);
 
   const handleExportSettingsChange = useCallback((newSettings: ExportSettings) => {
-    setExportSettings({ ...newSettings, format: 'mp4' });
+    setExportSettings({ ...newSettings, format: (!newSettings.renderEngine || newSettings.renderEngine === 'browser') && newSettings.format === 'webm' ? 'webm' : 'mp4' });
   }, []);
 
   // ── Ayah data ───────────────────────────────────────────────────────────────
@@ -1980,8 +1980,10 @@ export default function PreviewPage() {
       // locally into a constant-frame-rate MP4.
       // Native MediaRecorder MP4 is variable-rate too. Always normalize the
       // final output to the selected FPS and audio bitrate before sharing.
-      const requiresDeterministicMp4 = true;
-      const preferredMimeCandidates = ['video/mp4;codecs=avc1,mp4a.40.2', 'video/mp4', 'video/webm;codecs=vp8,opus', 'video/webm;codecs=vp9,opus', 'video/webm'];
+      const requiresDeterministicMp4 = exportSettingsForPlan.format === 'mp4';
+      const preferredMimeCandidates = exportSettingsForPlan.format === 'webm'
+        ? ['video/webm;codecs=vp8,opus', 'video/webm;codecs=vp9,opus', 'video/webm']
+        : ['video/mp4;codecs=avc1,mp4a.40.2', 'video/mp4', 'video/webm;codecs=vp8,opus', 'video/webm;codecs=vp9,opus', 'video/webm'];
 
       const attemptsByMode: Record<RecordingAttemptKey, RecordingAttempt> = {
         quality: {
@@ -2215,8 +2217,8 @@ export default function PreviewPage() {
     const base = isIbtahalatMode
       ? `ibtahal-${ibtTrackTitle.slice(0, 30)}`
       : `${surah?.englishName || surah?.name || 'quran'}-${reciter?.id || 'reciter'}`;
-    return `${toSafeFilename(base)}.mp4`;
-  }, [isIbtahalatMode, ibtTrackTitle, surah?.englishName, surah?.name, reciter?.id, toSafeFilename]);
+    return `${toSafeFilename(base)}.${exportSettings.renderEngine === 'browser' && exportSettings.format === 'webm' ? 'webm' : 'mp4'}`;
+  }, [isIbtahalatMode, ibtTrackTitle, surah?.englishName, surah?.name, reciter?.id, toSafeFilename, exportSettings.format, exportSettings.renderEngine]);
 
   // ── Export ──────────────────────────────────────────────────────────────────
   const handleExport = useCallback((format: ExportFormat) => {
@@ -2226,13 +2228,16 @@ export default function PreviewPage() {
         : `${surah?.englishName || surah?.name || 'quran'}-${reciter?.id || 'reciter'}`
     );
     switch (format) {
+      case 'webm':
+        videoRecorder.downloadWebm(`${baseFilename}.webm`);
+        break;
       case 'mp4':
         if (videoRecorder.mp4Blob) videoRecorder.downloadMp4(`${baseFilename}.mp4`);
         else toast.error('ملف MP4 غير جاهز بعد');
         break;
 
     }
-  }, [surah, reciter, toSafeFilename, videoRecorder]);
+  }, [surah, reciter, toSafeFilename, videoRecorder, isIbtahalatMode, ibtTrackTitle]);
 
   // ── Save to library ─────────────────────────────────────────────────────────
   const handlePublishCloud = async () => {
@@ -2959,15 +2964,16 @@ export default function PreviewPage() {
                       <>
                         <div className="flex items-center justify-center gap-2 text-primary p-3 rounded-lg bg-primary/10">
                           <Check className="h-5 w-5" />
-                          <span className="font-medium">اكتمل التسجيل. الفيديو جاهز بصيغة MP4.</span>
+                          <span className="font-medium">اكتمل التسجيل.</span>
                         </div>
 
 
-                        <Button onClick={() => videoRecorder.downloadMp4(downloadFilename)} disabled={videoRecorder.isConverting} className="w-full gap-2" size="lg">
-                          <Download className="h-5 w-5" />تحميل الفيديو (MP4)
+                        <Button onClick={() => exportSettings.format === 'webm' ? videoRecorder.downloadWebm(downloadFilename) : videoRecorder.downloadMp4(downloadFilename)} disabled={videoRecorder.isConverting} className="w-full gap-2" size="lg">
+                          <Download className="h-5 w-5" />تحميل الفيديو ({exportSettings.format === 'webm' ? 'WebM' : 'MP4'})
                         </Button>
 
                         <SocialShareButtons
+                          format={exportSettings.format === 'webm' ? 'webm' : 'mp4'}
                           videoBlob={videoRecorder.videoBlob}
                           mp4Blob={videoRecorder.mp4Blob}
                           title={`${surah?.name || 'سورة'} - قرآن ريلز`}
@@ -2976,7 +2982,7 @@ export default function PreviewPage() {
                         />
 
                         {/* Public toggle */}
-                        <p className="text-xs text-muted-foreground leading-relaxed">حفظ المتصفح يحتفظ ببيانات المشروع فقط؛ نزّل MP4 للاحتفاظ بالفيديو. المشاركة في اكتشف متاحة للفيديو المحفوظ بالإنتاج السحابي.</p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">حفظ المتصفح يحتفظ ببيانات المشروع فقط.</p>
 
                         <Button
                           onClick={handleSave}

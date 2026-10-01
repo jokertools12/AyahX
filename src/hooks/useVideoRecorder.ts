@@ -165,6 +165,10 @@ export function useVideoRecorder() {
             return false;
           }
         });
+        if (!resolvedMime && options?.mimeTypeCandidates?.every(type => type.includes('webm'))) {
+          stopTracks();
+          throw new Error('WebM غير مدعوم في هذا المتصفح. اختر MP4.');
+        }
         const mimeType = resolvedMime || 'video/webm';
 
         const safeBitrate = Math.max(1_500_000, Math.round(qualitySettings.bitrate * Math.max(bitrateMultiplier, 0.85)));
@@ -207,7 +211,7 @@ export function useVideoRecorder() {
 
           setState((prev) => ({
             ...prev, isRecording: false, progress: 100, videoBlob: blob,
-            mp4Blob: isNativeMp4 && !forceMp4Transcode ? blob : null, isConverting: false, convertProgress: 0, error: null, stage: 'جاهز لتجهيز MP4',
+            mp4Blob: isNativeMp4 && !forceMp4Transcode ? blob : null, isConverting: false, convertProgress: 0, error: null, stage: 'اكتمل التسجيل',
           }));
           stopTracks();
           resolve(blob);
