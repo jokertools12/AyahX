@@ -1,10 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import fs from "node:fs";
+import { createHash } from "node:crypto";
 import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  define: {
+    __RENDER_SCENE_VERSION__: JSON.stringify(createHash('sha256').update(fs.readFileSync(path.resolve('public/render-harness.html'))).digest('hex').slice(0, 16)),
+  },
   server: {
     host: "::",
     port: 8080,

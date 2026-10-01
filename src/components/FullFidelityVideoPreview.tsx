@@ -333,7 +333,7 @@ export const FullFidelityVideoPreview = forwardRef<FullFidelityVideoPreviewRef, 
       {previewError && <p role="alert" className="absolute inset-x-4 top-4 rounded-xl bg-background/90 p-3 text-sm text-destructive">{previewError}</p>}
       <iframe
         ref={iframeRef}
-        src="/render-harness.html"
+        src={`/render-harness.html?v=${typeof __RENDER_SCENE_VERSION__ === 'string' ? __RENDER_SCENE_VERSION__ : 'development'}`}
         title=""
         aria-hidden="true"
         tabIndex={-1}

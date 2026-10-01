@@ -206,10 +206,18 @@ app.use('/api', (_req, res) => {
 // present yet.
 const staticDir = path.resolve(process.cwd(), 'dist');
 if (fs.existsSync(path.join(staticDir, 'index.html'))) {
-  app.use(express.static(staticDir, { index: false, maxAge: config.isProd ? '1h' : 0 }));
+  app.use(express.static(staticDir, {
+    index: false, maxAge: config.isProd ? '1h' : 0,
+    setHeaders: (res, filePath) => {
+      // Scene HTML executes for both preview and local recording. Never reuse
+      // an old controller after deploying a new frontend or worker scene.
+      if (path.extname(filePath) === '.html') res.setHeader('Cache-Control', 'no-store');
+    },
+  }));
   app.use((req, res, next) => {
     if (req.method !== 'GET' && req.method !== 'HEAD') return next();
     if (req.path.startsWith('/api') || req.path.startsWith('/internal')) return next();
+    res.setHeader('Cache-Control', 'no-store');
     return res.sendFile(path.join(staticDir, 'index.html'));
   });
 }

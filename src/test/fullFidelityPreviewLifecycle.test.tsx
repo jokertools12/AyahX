@@ -7,6 +7,7 @@ afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
 it('discards a scene that finished loading after its manifest was replaced', async () => {
   vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
+  vi.stubGlobal('__RENDER_SCENE_VERSION__', 'new-scene-fingerprint');
   vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => setTimeout(() => callback(0), 0));
   let finishOld!: (value: boolean) => void;
   const oldRender = vi.fn(); const newRender = vi.fn();
@@ -20,6 +21,7 @@ it('discards a scene that finished loading after its manifest was replaced', asy
   };
   const view = render(<FullFidelityVideoPreview {...props} />);
   const frame = view.container.querySelector('iframe')!;
+  expect(frame).toHaveAttribute('src', '/render-harness.html?v=new-scene-fingerprint');
   Object.defineProperty(frame.contentWindow, '__CREATE_RENDER_CONTROLLER__', { value: factory, configurable: true });
   fireEvent.load(frame);
   await waitFor(() => expect(factory).toHaveBeenCalledOnce());
