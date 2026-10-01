@@ -176,12 +176,6 @@ npm run dev
 - `GET /api/services/pexels/search`: بحث في فيديوهات Pexels مع كاش ذاكرة لمدة 15 دقيقة وإخفاء المفتاح عن الواجهة.
 - `GET /api/services/pexels/popular`: استعراض مقاطع Pexels الشائعة.
 
-### 8. لوحة الإدارة (Admin Panel)
-- `GET /api/admin/stats`: إحصائيات عامة للمنصة (المستخدمون، الفيديوهات، المشتركون، إجمالي الدخل).
-- `GET /api/admin/users`: إدارة وتصفح المستخدمين وترقية الصلاحيات.
-- `GET /api/admin/payment-requests`: مراجعة طلبات الدفع المعلقة والسابقة مع ترقيم محكم.
-- `POST /api/admin/payment-requests/:id/approve`: اعتماد الدفع وتفعيل الاشتراك ذرياً مع تمديد تراكمي للأيام المتبقية وتنسيق تواريخ MySQL قياسي.
-- `POST /api/admin/payment-requests/:id/reject`: رفض طلب دفع مع تدوين ملاحظة إدارية.
 
 ---
 

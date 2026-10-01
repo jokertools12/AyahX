@@ -110,13 +110,6 @@ async function runVerification() {
     if (!res.success) throw new Error('فشل استعادة كلمة المرور');
   });
 
-  await test('تسجيل دخول الأدمن الرئيسي (cpaziko@gmail.com)', async () => {
-    const res = await api.auth.login('cpaziko@gmail.com', 'admin123456');
-    if (!res.token || res.user.role !== 'admin') {
-      throw new Error(`حساب الأدمن غير مصادق أو الدور ليس admin: ${res.user?.role}`);
-    }
-  });
-
   // Switch back to test user
   setAuthToken(testUserToken);
 
@@ -279,45 +272,6 @@ async function runVerification() {
       throw new Error('فشل جلب خلاصة النشاط');
     }
   });
-
-  // 7. Admin Management Layer
-  console.log('\n--- 7. لوحة تحكم الإدارة (Admin Panel) ---');
-  // Login as admin
-  const adminLogin = await api.auth.login('cpaziko@gmail.com', 'admin123456');
-  setAuthToken(adminLogin.token);
-
-  await test('استعلام إحصائيات المنصة الشاملة (api.admin.getStats)', async () => {
-    const stats = await api.admin.getStats();
-    if (typeof stats.totalUsers !== 'number' || typeof stats.totalVideos !== 'number') {
-      throw new Error(`إحصائيات غير صالحة: ${JSON.stringify(stats)}`);
-    }
-  });
-
-  await test('استعراض إحصائيات الفيديوهات اليومية (api.admin.getDailyStats)', async () => {
-    const daily = await api.admin.getDailyStats();
-    if (!Array.isArray(daily)) throw new Error('فشل جلب إحصائيات الفيديوهات اليومية');
-  });
-
-  await test('استعراض قائمة مستخدمي المنصة (api.admin.getUsers)', async () => {
-    const users = await api.admin.getUsers();
-    if (!Array.isArray(users) || users.length === 0) throw new Error('فشل جلب قائمة المستخدمين');
-  });
-
-  let pendingPaymentId = '';
-  await test('استعراض طلبات الدفع المعلقة (api.admin.getPaymentRequests)', async () => {
-    const payments = await api.admin.getPaymentRequests('pending');
-    if (!Array.isArray(payments)) throw new Error('فشل جلب طلبات الدفع');
-    if (payments.length > 0) {
-      pendingPaymentId = payments[0].id;
-    }
-  });
-
-  if (pendingPaymentId) {
-    await test('اعتماد وترقية اشتراك المستخدم (api.admin.approvePayment)', async () => {
-      const res = await api.admin.approvePayment(pendingPaymentId);
-      if (!res.success) throw new Error('فشل اعتماد طلب الدفع وترقية المستخدم');
-    });
-  }
 
   // Final Cleanup
   await api.videos.delete(savedVideoId);

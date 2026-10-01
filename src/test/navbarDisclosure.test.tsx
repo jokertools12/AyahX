@@ -4,8 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Navbar } from '@/components/Navbar';
 
 const auth = vi.hoisted(() => ({ authenticated: false, admin: false, signOut: vi.fn() }));
-vi.mock('@/hooks/useAuth', () => ({ useAuth: () => ({ isAuthenticated: auth.authenticated, user: auth.authenticated ? { email: 'ui-test@example.invalid' } : null, signOut: auth.signOut }) }));
-vi.mock('@/hooks/useAdmin', () => ({ useAdmin: () => ({ isAdmin: auth.admin }) }));
+vi.mock('@/hooks/useAuth', () => ({ useAuth: () => ({ isAuthenticated: auth.authenticated, user: auth.authenticated ? { email: 'ui-test@example.invalid', role: auth.admin ? 'admin' : 'user' } : null, signOut: auth.signOut }) }));
 vi.mock('@/components/ThemeToggle', () => ({ ThemeToggle: () => null }));
 vi.mock('@/components/NotificationBell', () => ({ NotificationBell: () => null }));
 vi.mock('@/components/UsageQuotaBar', () => ({ UsageQuotaBar: () => null }));
@@ -25,12 +24,12 @@ describe('navigation disclosure retains route access', () => {
     expect(screen.getByRole('button', {name:'فتح قائمة التنقل'})).toHaveAttribute('aria-expanded','false');
   });
 
-  it.each([false,true])('preserves authenticated routes and admin condition: admin=%s', (admin) => {
+  it.each([false,true])('preserves account routes without the removed dashboard: admin=%s', (admin) => {
     auth.authenticated = true; auth.admin = admin;
     render(<MemoryRouter><Navbar /></MemoryRouter>);
     const menu = openMobile();
     for (const name of ['مكتبتي','الإعدادات','إحصائياتي','المفضلة','نشاط المتابَعين','الإنجازات']) expect(menu.getByRole('link',{name})).toBeInTheDocument();
-    expect(Boolean(menu.queryByRole('link',{name:'لوحة التحكم'}))).toBe(admin);
+    expect(menu.queryByRole('link',{name:'لوحة التحكم'})).not.toBeInTheDocument();
     expect(screen.getByRole('button',{name:'الحساب والإعدادات'})).toBeInTheDocument();
     expect(auth.signOut).not.toHaveBeenCalled();
   });

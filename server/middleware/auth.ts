@@ -62,13 +62,6 @@ export function requireAuth(req: AuthenticatedRequest, res: Response, next: Next
   next();
 }
 
-export function requireAdmin(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  if (!req.user || req.user.role !== 'admin') {
-    return res.status(403).json({ error: 'صلاحيات غير كافية - متاح للمدير فقط' });
-  }
-  next();
-}
-
 export function signToken(user: { id: string; email: string }): string {
   return jwt.sign(
     { id: user.id, email: user.email },

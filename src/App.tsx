@@ -18,7 +18,6 @@ const AuthPage = lazy(() => import("./pages/AuthPage"));
 const LibraryPage = lazy(() => import("./pages/LibraryPage"));
 const BrowsePage = lazy(() => import("./pages/BrowsePage"));
 const PricingPage = lazy(() => import("./pages/PricingPage"));
-const AdminPage = lazy(() => import("./pages/AdminPage"));
 const UserSettingsPage = lazy(() => import("./pages/UserSettingsPage"));
 const PaymentHistoryPage = lazy(() => import("./pages/PaymentHistoryPage"));
 const MyStatsPage = lazy(() => import("./pages/MyStatsPage"));
@@ -71,7 +70,6 @@ const App = () => (
             <Route path="/library" element={<ProtectedRoute><LibraryPage /></ProtectedRoute>} />
             <Route path="/browse" element={<BrowsePage />} />
             <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminPage /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><UserSettingsPage /></ProtectedRoute>} />
             <Route path="/payment-history" element={<ProtectedRoute><PaymentHistoryPage /></ProtectedRoute>} />
             <Route path="/my-stats" element={<ProtectedRoute><MyStatsPage /></ProtectedRoute>} />
