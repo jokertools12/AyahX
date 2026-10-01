@@ -500,7 +500,7 @@ router.post('/contact', contactRateLimiter, async (req: AuthenticatedRequest, re
 });
 
 /**
- * 6. Generate Luxury Islamic Calligraphic Logo with Gemini AI or Procedural Generator
+ * 6. Generate an SVG logo using the configured text provider.
  */
 router.post('/generate-logo', requireAuth, requirePremiumFeature('aiLogo'), aiMediaRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
   try {

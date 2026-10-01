@@ -1,12 +1,26 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { generateImageWithAi } from '../../server/services/aiService';
 import { extractSafeLogoSvg } from '../../server/services/aiLogoService';
+import { generateAiLogoSvg } from '../../server/services/aiLogoService';
+import * as openRouter from '../../server/services/openRouterService';
 import { getBestVideoUrl, searchPexelsVideos } from '../lib/pexelsApi';
 
 vi.mock('../lib/api', () => ({ getAuthToken: () => 'fixture-token' }));
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 describe('Media provider failures and actual settings', () => {
+  it('uses the explicitly selected text provider for actual logo generation', async () => {
+    const svg = '<svg viewBox="0 0 500 500"><text>آيات</text></svg>';
+    const request = vi.spyOn(openRouter, 'callOpenRouterChat').mockResolvedValue({ content: svg, model: 'fixture-model' } as any);
+    const result = await generateAiLogoSvg('آيات', '', 'goldMedallion', { type: 'openrouter', key: 'fixture', openRouter: {} as any });
+    expect(result).toMatchObject({ svg, modelUsed: 'fixture-model', provider: 'openrouter' });
+    expect(request).toHaveBeenCalledOnce();
+  });
+  it('reports logo provider throttling without a fabricated replacement', async () => {
+    const request = vi.spyOn(openRouter, 'callOpenRouterChat').mockRejectedValue(Object.assign(new Error('Provider returned error'), { status: 429 }));
+    await expect(generateAiLogoSvg('آيات', '', 'goldMedallion', { type: 'openrouter', key: 'fixture', openRouter: {} as any })).rejects.toMatchObject({ status: 429, code: 'AI_LOGO_RATE_LIMITED' });
+    expect(request).toHaveBeenCalledOnce();
+  });
   it('authenticates Pexels requests and drops unplayable entries', async () => {
     const request = vi.fn().mockResolvedValue(new Response(JSON.stringify({ videos: [
       { id: 1, video_files: [{ file_type: 'video/mp4', link: 'https://example.test/a.mp4' }] },

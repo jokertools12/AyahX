@@ -2,7 +2,8 @@
 
 ## Verified locally
 
-- 389 tests pass across 62 suites. The six database queue integration cases
+- 392 tests pass across 63 suites. Two additional idle notification polling
+  tests also pass. The six database queue integration cases
   require `RUN_DB_INTEGRATION_TESTS=true` and an isolated MySQL test database;
   they were not run against production or counted as passes.
 - The display audit renders 195 individual choices at four timestamps and
@@ -22,6 +23,9 @@
   locally by both native and browser renderers. Shadow intensity is applied.
   Disabled logos stay disabled; empty subtitles stay empty.
 - Removed the display/production summary card.
+- Preview rendering now coalesces requests received during scene loading,
+  discards stale manifests, shares font faces with the visible canvas document
+  and shows loading/error states instead of an unexplained blank canvas.
 - Image generation sends the selected aspect ratio/style to one configured
   Gemini model, uses a request deadline shorter than the client deadline, and
   returns structured quota/permission/empty-result errors. It does not retry
@@ -38,6 +42,13 @@ listing works, but actual image generation returned HTTP 429 on all four
 previously attempted image models. Code changes cannot supply missing provider
 quota. A successful live AI image remains unverified until the account has
 available image quota; no provider or paid plan was changed automatically.
+The selected OpenRouter text model also returned HTTP 429 during a live logo
+request. This is reported explicitly rather than replaced by a template.
+
+After deployment, the Pexels library showed 12 real thumbnails in the logged-in
+UI. The authenticated video proxy returned a 1,290,222-byte MP4; ffprobe verified
+H.264 video at 360x640, 24 fps and 20 seconds. These are properties of the chosen
+source clip, not the output render settings.
 
 ## Railway cost controls
 
@@ -47,6 +58,8 @@ retained and may still incur storage charges.
 
 Production API sleeping is enabled. API periodic maintenance moves to the
 dedicated control process and idle MySQL connections close promptly. This
-setting still needs live sleep/wake verification after deployment. Queue
+Notification polling stops in hidden tabs or after two minutes without
+interaction, and refreshes when the user returns. Live sleep/wake verification
+is still required after deployment. Queue
 workers, MySQL and Redis remain available for durable background processing;
 API sleeping does not make the entire project free while idle.

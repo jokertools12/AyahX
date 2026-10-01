@@ -101,15 +101,18 @@ export const FullFidelityVideoPreview = forwardRef<FullFidelityVideoPreviewRef, 
     promise: null,
   });
   const renderBusyRef = useRef(false);
+  const renderPendingRef = useRef(false);
   const manifestRef = useRef<RenderManifestLike | null>(sceneManifest || null);
   const timeGetterRef = useRef(getFrameTimeSeconds);
   const [harnessReady, setHarnessReady] = useState(false);
   const [sceneReady, setSceneReady] = useState(false);
+  const [previewError, setPreviewError] = useState<string | null>(null);
 
   useEffect(() => {
     manifestRef.current = sceneManifest || null;
     controllerEntriesRef.current.clear();
     setSceneReady(false);
+    setPreviewError(null);
     const sourceUrl = sceneManifest?.background?.type === 'video'
       ? String(sceneManifest.background.url || '')
       : '';
@@ -137,6 +140,9 @@ export const FullFidelityVideoPreview = forwardRef<FullFidelityVideoPreviewRef, 
         const factory = iframe.contentWindow?.__CREATE_RENDER_CONTROLLER__;
         if (typeof factory !== 'function') return;
         factoryRef.current = factory;
+        // The factory lives in the iframe, but its preview canvas lives in
+        // this document. Canvas font lookup uses the target document's fonts.
+        for (const face of iframe.contentDocument?.fonts || []) document.fonts.add(face);
         setHarnessReady(true);
       } catch (error) {
         console.error('Failed to connect to the full-fidelity render harness:', error);
@@ -182,7 +188,7 @@ export const FullFidelityVideoPreview = forwardRef<FullFidelityVideoPreviewRef, 
     const manifest = manifestRef.current;
     if (!factory || !manifest || !targetCanvas.width || !targetCanvas.height) return;
 
-    const signature = `${sceneSignature}:${targetCanvas.width}x${targetCanvas.height}`;
+    const signature = `${manifest.revision || 'scene'}:${manifest.fps || 30}:${targetCanvas.width}x${targetCanvas.height}`;
     let entry = controllerEntriesRef.current.get(targetCanvas);
     if (!entry || entry.signature !== signature) {
       const controller = factory(targetCanvas);
@@ -191,6 +197,9 @@ export const FullFidelityVideoPreview = forwardRef<FullFidelityVideoPreviewRef, 
         outputDimensions: { width: targetCanvas.width, height: targetCanvas.height },
       });
       if (!initialized) throw new Error('Full-fidelity render harness could not initialize the preview scene.');
+      // Audio/timing/settings can arrive while media is loading. Never install
+      // the old scene over a newer manifest that has already cleared the cache.
+      if (manifestRef.current !== manifest) return;
 
       const background = manifest.background;
       if (background?.type === 'video' && background.url && controller.getVideoBackgroundStatus?.() === 'fallback') {
@@ -231,14 +240,21 @@ export const FullFidelityVideoPreview = forwardRef<FullFidelityVideoPreviewRef, 
 
   const renderVisibleFrame = useCallback(async () => {
     const canvas = canvasRef.current;
-    if (!canvas || renderBusyRef.current) return;
+    if (!canvas) return;
+    if (renderBusyRef.current) { renderPendingRef.current = true; return; }
     renderBusyRef.current = true;
+    const startedManifest = manifestRef.current;
     try {
       await renderToCanvas(canvas, timeGetterRef.current?.() || 0);
     } catch (error) {
       console.error('Full-fidelity preview frame failed:', error);
+      setPreviewError('تعذر تحميل المعاينة. أعد فتح الصفحة أو اختر خلفية أخرى.');
     } finally {
       renderBusyRef.current = false;
+      if (renderPendingRef.current || startedManifest !== manifestRef.current) {
+        renderPendingRef.current = false;
+        requestAnimationFrame(() => { void renderVisibleFrame(); });
+      }
     }
   }, [renderToCanvas]);
 
@@ -312,7 +328,9 @@ export const FullFidelityVideoPreview = forwardRef<FullFidelityVideoPreviewRef, 
       ref={containerRef}
       className={`${containerClass} w-full mx-auto relative rounded-2xl overflow-hidden shadow-2xl bg-black`}
     >
-      <canvas ref={canvasRef} className="w-full h-full" style={{ display: 'block' }} />
+      <canvas ref={canvasRef} data-preview-state={!harnessReady ? 'loading-harness' : sceneReady ? 'ready' : 'loading-scene'} className="w-full h-full" style={{ display: 'block' }} />
+      {!sceneReady && !previewError && <p role="status" className="absolute inset-x-4 top-4 rounded-xl bg-background/90 p-3 text-center text-sm">جارٍ تجهيز المعاينة…</p>}
+      {previewError && <p role="alert" className="absolute inset-x-4 top-4 rounded-xl bg-background/90 p-3 text-sm text-destructive">{previewError}</p>}
       <iframe
         ref={iframeRef}
         src="/render-harness.html"

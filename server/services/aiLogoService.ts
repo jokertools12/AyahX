@@ -14,8 +14,13 @@ export function extractSafeLogoSvg(raw: string): string {
 export async function generateAiLogoSvg(brand: string, subtitle: string, style: string, config: AiConfig): Promise<{ svg: string; modelUsed: string; provider: string }> {
   const prompt = `Create one self-contained SVG logo, viewBox="0 0 500 500", for a Quran channel. Brand: ${JSON.stringify(brand)}. Subtitle: ${JSON.stringify(subtitle)}. Style: ${style}. Use elegant gold gradients and readable Arabic typography. Return only SVG, no markdown. Use vector shapes and text only, no images, links, scripts, foreignObject or external resources.`;
   if (config.type === 'openrouter' && config.openRouter) {
-    const result = await callOpenRouterChat(config.openRouter, { messages: [{ role: 'user', content: prompt }], maxTokens: 3000, timeoutMs: 45000 });
-    return { svg: extractSafeLogoSvg(result.content), modelUsed: result.model, provider: 'openrouter' };
+    try {
+      const result = await callOpenRouterChat(config.openRouter, { messages: [{ role: 'user', content: prompt }], maxTokens: 3000, timeoutMs: 45000 });
+      return { svg: extractSafeLogoSvg(result.content), modelUsed: result.model, provider: 'openrouter' };
+    } catch (error: any) {
+      if (error.status === 429) throw Object.assign(new Error('بلغ مزود الشعارات حد طلباته أو لا توجد سعة متاحة حاليًا. حاول لاحقًا؛ لم يتم توليد شعار.'), { status: 429, code: 'AI_LOGO_RATE_LIMITED' });
+      throw error;
+    }
   }
   if (config.type === 'gemini') {
     const model = GEMINI_TEXT_MODELS.includes('gemini-2.5-flash') ? 'gemini-2.5-flash' : GEMINI_TEXT_MODELS[0];

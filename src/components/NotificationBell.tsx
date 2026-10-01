@@ -12,6 +12,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { api, NotificationItem } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
+import { startActivePolling } from '@/lib/activePolling';
 
 type Notification = NotificationItem;
 
@@ -49,9 +50,7 @@ export function NotificationBell() {
       }
     };
 
-    fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000);
-    return () => clearInterval(interval);
+    return startActivePolling(() => { void fetchNotifications(); });
   }, [user]);
 
   const markAsRead = async (id: string) => {
