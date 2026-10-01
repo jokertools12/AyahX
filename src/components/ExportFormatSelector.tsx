@@ -53,14 +53,19 @@ export function ExportFormatSelector({
   isConverting,
   isRecording,
 }: ExportFormatSelectorProps) {
-  const { isPremium, entitlements, dailyUsage } = useSubscription();
+  const { isPremium, entitlements, dailyUsage, cloudPolicy } = useSubscription();
+  const engineAvailable = (engine: 'ffmpeg_ass' | 'skia_canvas' | 'browser_cloud') =>
+    cloudPolicy === undefined || cloudPolicy?.enabledEngines.includes(engine) === true;
+  const isCloud = settings.renderEngine !== undefined && settings.renderEngine !== 'browser';
+  const cloudQualityAllowed = (quality: ExportQuality) => !isCloud || quality === 'medium' || isPremium && quality === 'high';
 
   const browserLimit = dailyUsage.browserRenderLimit;
   const browserRemaining = dailyUsage.browserRenderRemaining;
-  const ffmpegAssLimit = entitlements.ffmpegAssDailyLimit ?? (isPremium ? 30 : 1);
-  const skiaCanvasLimit = entitlements.skiaCanvasDailyLimit ?? (isPremium ? 15 : 2);
-  const ffmpegAssRemaining = dailyUsage.ffmpegAssRenderRemaining ?? ffmpegAssLimit;
-  const skiaCanvasRemaining = dailyUsage.skiaCanvasRenderRemaining ?? skiaCanvasLimit;
+  const ffmpegAssLimit = entitlements.ffmpegAssDailyLimit;
+  const skiaCanvasLimit = entitlements.skiaCanvasDailyLimit;
+  const cloudRemaining = dailyUsage.cloudRenderRemaining ?? entitlements.cloudDailyLimit ?? 1;
+  const ffmpegAssRemaining = Math.min(cloudRemaining, dailyUsage.ffmpegAssRenderRemaining ?? ffmpegAssLimit);
+  const skiaCanvasRemaining = Math.min(cloudRemaining, dailyUsage.skiaCanvasRenderRemaining ?? skiaCanvasLimit);
   const browserCloudLimit = dailyUsage.browserCloudRenderLimit ?? (isPremium ? 20 : 0);
   const browserCloudRemaining = dailyUsage.browserCloudRenderRemaining ?? browserCloudLimit;
 
@@ -144,6 +149,10 @@ export function ExportFormatSelector({
           <RadioGroup
             value={settings.quality}
             onValueChange={(value) => {
+              if (!cloudQualityAllowed(value as ExportQuality)) {
+                toast.error(`الإنتاج السحابي يدعم حتى ${isPremium ? '1080p' : '720p'}.`);
+                return;
+              }
               if (!entitlements.allowedQualities.includes(value as ExportQuality)) {
                 toast.error('دقة 4K Ultra HD متاحة للعضوية المميزة فقط');
                 return;
@@ -154,7 +163,7 @@ export function ExportFormatSelector({
           >
             {(Object.entries(QUALITY_PRESETS) as [ExportQuality, typeof QUALITY_PRESETS[ExportQuality]][]).map(
               ([key, preset]) => {
-                const isLocked = !entitlements.allowedQualities.includes(key);
+                const isLocked = !entitlements.allowedQualities.includes(key) || !cloudQualityAllowed(key);
                 return (
                   <div key={key} className="relative">
                     <RadioGroupItem value={key} id={`quality-${key}`} disabled={isLocked} className="peer sr-only" />
@@ -189,6 +198,10 @@ export function ExportFormatSelector({
             value={(settings.fps || 30).toString()}
             onValueChange={(val) => {
               const fpsVal = parseInt(val) as 30 | 60;
+              if (isCloud && fpsVal > 30) {
+                toast.error('الإنتاج السحابي يدعم 30 إطارًا في الثانية.');
+                return;
+              }
               if (!entitlements.allowedFps.includes(fpsVal)) {
                 toast.error('معدل 60fps السينمائي يتطلب الترقية للباقة المميزة');
                 return;
@@ -208,7 +221,7 @@ export function ExportFormatSelector({
               </Label>
             </div>
             <div className="relative">
-              <RadioGroupItem value="60" id="fps-60" disabled={!entitlements.allowedFps.includes(60)} className="peer sr-only" />
+              <RadioGroupItem value="60" id="fps-60" disabled={isCloud || !entitlements.allowedFps.includes(60)} className="peer sr-only" />
               <Label
                 htmlFor="fps-60"
                 className={`flex h-full min-w-0 flex-col items-center gap-1.5 rounded-xl border-2 border-muted p-2.5 hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer text-center leading-relaxed ${
@@ -276,10 +289,15 @@ export function ExportFormatSelector({
 
           <RadioGroup
             value={effectiveEngine}
-            onValueChange={(val) => onChange({
-              ...settings,
-              renderEngine: val as RenderEngine,
-            })}
+            onValueChange={(val) => {
+              const cloud = val !== 'browser';
+              const safeQuality = cloud && (settings.quality === 'ultra' || !isPremium && settings.quality === 'high')
+                ? (isPremium ? 'high' : 'medium') : settings.quality;
+              if (cloud && (safeQuality !== settings.quality || settings.fps === 60)) {
+                toast.info('تم ضبط الدقة ومعدل الإطارات ضمن حدود الإنتاج السحابي.');
+              }
+              onChange({ ...settings, renderEngine: val as RenderEngine, quality: safeQuality, fps: cloud ? 30 : settings.fps });
+            }}
             className="space-y-2.5"
           >
             {/* Option 1: Browser Hybrid Engine */}
@@ -307,8 +325,8 @@ export function ExportFormatSelector({
             </div>
 
             {/* Option 2: Native FFmpeg ASS Superfast Engine (Idea 1) */}
-            <div className="relative">
-              <RadioGroupItem value="ffmpeg_ass" id="engine-ffmpeg-ass" className="peer sr-only" />
+            {engineAvailable('ffmpeg_ass') && <div className="relative">
+              <RadioGroupItem value="ffmpeg_ass" id="engine-ffmpeg-ass" disabled={ffmpegAssRemaining <= 0} className="peer sr-only" />
               <Label
                 htmlFor="engine-ffmpeg-ass"
                 className="flex items-start gap-3 rounded-xl border-2 border-muted p-3 hover:bg-muted/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-all"
@@ -341,9 +359,10 @@ export function ExportFormatSelector({
               </Label>
             </div>
 
+            }
             {/* Option 3: Skia/Rust Canvas Engine (Idea 2) */}
-            <div className="relative">
-              <RadioGroupItem value="skia_canvas" id="engine-skia-canvas" className="peer sr-only" />
+            {engineAvailable('skia_canvas') && <div className="relative">
+              <RadioGroupItem value="skia_canvas" id="engine-skia-canvas" disabled={skiaCanvasRemaining <= 0} className="peer sr-only" />
               <Label
                 htmlFor="engine-skia-canvas"
                 className="flex items-start gap-3 rounded-xl border-2 border-muted p-3 hover:bg-muted/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-all"
@@ -353,20 +372,21 @@ export function ExportFormatSelector({
                 </div>
                 <div className="min-w-0 flex-1 space-y-1">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-semibold text-sm">الإنتاج السحابي — Skia</span>
+                    <span className="font-semibold text-sm">الإنتاج السحابي</span>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600">
                       {skiaCanvasRemaining}/{skiaCanvasLimit} متبقي اليوم
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    ينتج الفيديو على الخادم باستخدام Skia مع إعدادات المشهد التي اخترتها.
+                    ينتج الفيديو ويحفظه في مكتبتك. تظهر حالة الطلب وترتيبه أثناء الانتظار.
                   </p>
                 </div>
               </Label>
             </div>
 
+            }
             {/* Option 4: Independent full-fidelity cloud browser engine (Idea 3) */}
-            <div className="relative">
+            {engineAvailable('browser_cloud') && <div className="relative">
               <RadioGroupItem
                 value="browser_cloud"
                 id="engine-browser-cloud"
@@ -398,7 +418,17 @@ export function ExportFormatSelector({
                 </div>
               </Label>
             </div>
+            }
           </RadioGroup>
+          {isCloud && !engineAvailable(settings.renderEngine as 'ffmpeg_ass' | 'skia_canvas' | 'browser_cloud') && (
+            <p role="alert" className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-sm">
+              طريقة الإنتاج المحفوظة غير متاحة حاليًا. اختر طريقة متاحة قبل بدء الإنتاج.
+            </p>
+          )}
+          <p className="text-xs leading-6 text-muted-foreground">
+            الإنتاج السحابي: حتى {isPremium ? '5 دقائق و1080p' : 'دقيقتين و720p'}، بمعدل 30 إطارًا/ثانية.
+            يتم تنفيذ الطلبات تباعًا. حصتك {entitlements.cloudDailyLimit} فيديو يوميًا.
+          </p>
         </div>
 
         {/* Client Recording Strategy (When Browser engine is used) */}

@@ -26,6 +26,7 @@ import { backgroundVideos, backgroundImages, slideshowBackgrounds, BackgroundIte
 import { useQuranApi } from '@/hooks/useQuranApi';
 import { useAuth } from '@/hooks/useAuth';
 import { useSubscription } from '@/hooks/useSubscription';
+import { validateCloudRenderLimits } from '../../shared/cloudRenderPolicy';
 import { useAudioEffects } from '@/hooks/useAudioEffects';
 import { useVideoRecorder, ExportQuality, getQualityDimensions } from '@/hooks/useVideoRecorder';
 import {
@@ -174,7 +175,7 @@ function getAudioCacheKey(url: string): string {
 
 function renderEngineLabel(engine: string | null | undefined): string {
   if (engine === 'ffmpeg_ass') return 'الإنتاج السحابي — FFmpeg';
-  if (engine === 'skia_canvas') return 'الإنتاج السحابي — Skia';
+  if (engine === 'skia_canvas') return 'الإنتاج السحابي';
   if (engine === 'browser_cloud') return 'الإنتاج السحابي — المتصفح';
   return 'محرك الإنتاج المحدد';
 }
@@ -184,7 +185,7 @@ export default function PreviewPage() {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const { fetchAyahs, fetchSurah } = useQuranApi();
-  const { incrementUsage, loading: subscriptionLoading, isPremium, canUseFeature, isFreeFont, refetchUsage } = useSubscription();
+  const { incrementUsage, loading: subscriptionLoading, isPremium, canUseFeature, isFreeFont, refetchUsage, plan, cloudPolicy } = useSubscription();
   const audioEffects = useAudioEffects();
   const videoRecorder = useVideoRecorder();
   const serverRenderJob = useServerRenderJob();
@@ -1851,7 +1852,12 @@ export default function PreviewPage() {
         userId: user?.id,
       });
 
-      toast.info('بدأ تجهيز الفيديو تلقائياً وسيُوزّع على وحدة الإنتاج المتاحة...');
+      const violations = validateCloudRenderLimits(plan, manifest);
+      if (violations.length) throw new Error(violations[0]);
+      if (!cloudPolicy?.enabledEngines.includes(manifest.renderEngine as any)) {
+        throw new Error('طريقة الإنتاج المختارة غير متاحة حاليًا. اختر طريقة متاحة من إعدادات التصدير.');
+      }
+      toast.info('جارٍ إرسال الفيديو إلى طابور الإنتاج السحابي...');
       // Keep an existing export alive. A second click must never cancel a
       // healthy render; the explicit cancel action is the user's choice.
       await serverRenderJob.startServerRender(manifest, undefined, {

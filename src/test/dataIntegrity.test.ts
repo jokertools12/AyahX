@@ -112,7 +112,7 @@ describe('Data Integrity & Schema Safety Tests', () => {
   });
 
   describe('DATA-03: Daily Video Quota Enforcement', () => {
-    it('uses the canonical 5/unlimited Browser Canvas and 1/15/25 cloud allowances', () => {
+    it('uses the canonical 5/unlimited Browser Canvas and 1/5/10 cloud allowances', () => {
       const free = getPlanEntitlements('free');
       const monthly = getPlanEntitlements('monthly');
       const yearly = getPlanEntitlements('yearly');
@@ -120,9 +120,9 @@ describe('Data Integrity & Schema Safety Tests', () => {
       expect(free.browserDailyLimit).toBe(5);
       expect(free.cloudDailyLimit).toBe(1);
       expect(monthly.browserDailyLimit).toBeNull();
-      expect(monthly.cloudDailyLimit).toBe(15);
+      expect(monthly.cloudDailyLimit).toBe(5);
       expect(yearly.browserDailyLimit).toBeNull();
-      expect(yearly.cloudDailyLimit).toBe(25);
+      expect(yearly.cloudDailyLimit).toBe(10);
     });
   });
 

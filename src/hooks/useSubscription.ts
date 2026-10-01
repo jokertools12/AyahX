@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { api, Subscription } from '@/lib/api';
+import type { CloudRenderPolicy } from '../../shared/cloudRenderPolicy';
 import { useAuth } from './useAuth';
 import {
   FREE_FONTS,
@@ -59,8 +60,8 @@ const FREE_USAGE: DailyUsage = {
   ffmpegAssRenderLimit: 1,
   ffmpegAssRenderRemaining: 1,
   skiaCanvasRenderCount: 0,
-  skiaCanvasRenderLimit: 2,
-  skiaCanvasRenderRemaining: 2,
+  skiaCanvasRenderLimit: 1,
+  skiaCanvasRenderRemaining: 1,
   browserCloudRenderCount: 0,
   browserCloudRenderLimit: 0,
   browserCloudRenderRemaining: 0,
@@ -142,6 +143,14 @@ export function useSubscription() {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [dailyUsage, setDailyUsage] = useState<DailyUsage>(FREE_USAGE);
+  const [cloudPolicy, setCloudPolicy] = useState<CloudRenderPolicy | null>(null);
+  useEffect(() => {
+    let active = true;
+    api.renderJobs.getPolicy().then(policy => { if (active) setCloudPolicy(policy); }).catch(() => {
+      if (active) setCloudPolicy({ enabledEngines: [], defaultEngine: null, maxBacklog: 0 });
+    });
+    return () => { active = false; };
+  }, []);
 
   const plan = normalizePlan(subscription?.plan);
   const entitlements = useMemo(() => getPlanEntitlements(plan), [plan]);
@@ -209,6 +218,7 @@ export function useSubscription() {
     entitlements,
     isPremium,
     dailyUsage,
+    cloudPolicy,
     videoLimit: entitlements.browserDailyLimit,
     incrementUsage,
     canUseFeature,

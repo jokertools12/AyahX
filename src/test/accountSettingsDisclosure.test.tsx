@@ -13,8 +13,8 @@ const fixtures = vi.hoisted(()=>({
 vi.mock('@/hooks/useAuth',()=>({useAuth:()=>({user:fixtures.user,isAuthenticated:true,loading:false})}));
 vi.mock('@/hooks/useSubscription',()=>({useSubscription:()=>({
   subscription:null,isPremium:fixtures.premium,
-  dailyUsage:{browserRenderLimit:fixtures.premium?null:5,browserRenderCount:1,browserRenderRemaining:4},
-  entitlements:{ffmpegAssDailyLimit:1,skiaCanvasDailyLimit:2,backgroundAsyncDailyLimit:0},
+  dailyUsage:{browserRenderLimit:fixtures.premium?null:5,browserRenderCount:1,browserRenderRemaining:4,cloudRenderCount:0,cloudRenderRemaining:fixtures.premium?5:1},
+  entitlements:{cloudDailyLimit:fixtures.premium?5:1,cloudMaxDurationSeconds:fixtures.premium?300:120},
 })}));
 vi.mock('@/lib/api',()=>({api:{auth:fixtures}}));
 vi.mock('@/components/Layout',()=>({Layout:({children}:{children:React.ReactNode})=><main>{children}</main>}));
@@ -46,7 +46,9 @@ describe('account settings disclosure',()=>{
     expect(screen.getByLabelText('كلمة المرور الجديدة')).toHaveValue('fixture-only-new');
     expect(screen.getByLabelText('الاسم')).toHaveValue('اسم معدل');
     toggle('تفاصيل الاستخدام');
-    for(const label of ['التسجيل على جهازك','الإنتاج السحابي — FFmpeg','الإنتاج السحابي — Skia','الإنتاج السحابي — المتصفح']) expect(screen.getByText(label)).toBeInTheDocument();
+    for(const label of ['التسجيل على جهازك','الإنتاج السحابي']) expect(screen.getByText(label)).toBeInTheDocument();
+    expect(screen.queryByText('الإنتاج السحابي — FFmpeg')).not.toBeInTheDocument();
+    expect(screen.getByText(/تُعالج الطلبات بالتتابع/)).toBeInTheDocument();
     expect(screen.getByRole('link',{name:'سجل المدفوعات'})).toHaveAttribute('href','/payment-history');
     toggle('حذف الحساب');
     fireEvent.click(screen.getByRole('button',{name:'حذف الحساب وجميع البيانات نهائياً'}));

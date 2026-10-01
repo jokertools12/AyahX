@@ -41,12 +41,12 @@ describe('Plan entitlement contract', () => {
     });
     expect(getPlanEntitlements('monthly')).toMatchObject({
       browserDailyLimit: null,
-      cloudDailyLimit: 15,
+      cloudDailyLimit: 5,
       allowedFps: [30, 60],
     });
     expect(getPlanEntitlements('yearly')).toMatchObject({
       browserDailyLimit: null,
-      cloudDailyLimit: 25,
+      cloudDailyLimit: 10,
       allowedFps: [30, 60],
     });
   });

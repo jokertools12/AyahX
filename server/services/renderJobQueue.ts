@@ -498,6 +498,7 @@ export class RenderJobQueue {
             },
           };
           for (const row of capacityRows) {
+            if (process.env.RAILWAY_AUTOSCALER_ENABLED !== 'true') continue;
             const rowEngine = resolveRenderQueueEngine(row.engine);
             capacity[rowEngine] = {
               replicas: Math.max(1, Number(row.replicas || capacity[rowEngine].replicas)),

@@ -134,6 +134,7 @@ export interface PlanEntitlements {
   /** null means unlimited. */
   browserDailyLimit: number | null;
   cloudDailyLimit: number;
+  cloudMaxDurationSeconds: number;
   /** Idea 1: Native FFmpeg ASS superfast renderer daily limit */
   ffmpegAssDailyLimit: number;
   /** Idea 2: Native Skia / Rust Canvas frame-by-frame studio daily limit */
@@ -185,8 +186,9 @@ export const PLAN_ENTITLEMENTS: Readonly<Record<SubscriptionPlan, PlanEntitlemen
     plan: 'free',
     browserDailyLimit: 5,
     cloudDailyLimit: 1,
+    cloudMaxDurationSeconds: 120,
     ffmpegAssDailyLimit: 1,
-    skiaCanvasDailyLimit: 2,
+    skiaCanvasDailyLimit: 1,
     backgroundAsyncDailyLimit: 0,
     allowedQualities: ['medium', 'high'],
     allowedFps: [30],
@@ -196,10 +198,11 @@ export const PLAN_ENTITLEMENTS: Readonly<Record<SubscriptionPlan, PlanEntitlemen
   monthly: {
     plan: 'monthly',
     browserDailyLimit: null,
-    cloudDailyLimit: 15,
-    ffmpegAssDailyLimit: 30,
-    skiaCanvasDailyLimit: 15,
-    backgroundAsyncDailyLimit: 20,
+    cloudDailyLimit: 5,
+    cloudMaxDurationSeconds: 300,
+    ffmpegAssDailyLimit: 5,
+    skiaCanvasDailyLimit: 5,
+    backgroundAsyncDailyLimit: 5,
     allowedQualities: ['medium', 'high', 'ultra'],
     allowedFps: [30, 60],
     allowedAudioBitrates: ['128k', '192k', '320k'],
@@ -208,10 +211,11 @@ export const PLAN_ENTITLEMENTS: Readonly<Record<SubscriptionPlan, PlanEntitlemen
   yearly: {
     plan: 'yearly',
     browserDailyLimit: null,
-    cloudDailyLimit: 25,
-    ffmpegAssDailyLimit: 60,
-    skiaCanvasDailyLimit: 30,
-    backgroundAsyncDailyLimit: 50,
+    cloudDailyLimit: 10,
+    cloudMaxDurationSeconds: 300,
+    ffmpegAssDailyLimit: 10,
+    skiaCanvasDailyLimit: 10,
+    backgroundAsyncDailyLimit: 10,
     allowedQualities: ['medium', 'high', 'ultra'],
     allowedFps: [30, 60],
     allowedAudioBitrates: ['128k', '192k', '320k'],

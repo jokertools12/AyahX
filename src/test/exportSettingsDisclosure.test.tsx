@@ -3,10 +3,11 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ExportFormatSelector, type ExportSettings } from '@/components/ExportFormatSelector';
 
-const subscription = vi.hoisted(() => ({ premium: false, cloudRemaining: 20 }));
+const subscription = vi.hoisted(() => ({ premium: false, cloudRemaining: 20, cloudPolicy: undefined as undefined | { enabledEngines: string[] } }));
 vi.mock('@/hooks/useSubscription', () => ({
   useSubscription: () => ({
     isPremium: subscription.premium,
+    cloudPolicy: subscription.cloudPolicy,
     entitlements: {
       allowedQualities: subscription.premium ? ['medium', 'high', 'ultra'] : ['medium', 'high'],
       allowedFps: subscription.premium ? [30, 60] : [30],
@@ -24,7 +25,7 @@ vi.mock('@/hooks/useVideoRecorder', () => ({
   },
 }));
 
-afterEach(() => { cleanup(); subscription.premium = false; subscription.cloudRemaining = 20; });
+afterEach(() => { cleanup(); subscription.premium = false; subscription.cloudRemaining = 20; subscription.cloudPolicy = undefined; });
 const initial: ExportSettings = { format: 'mp4', quality: 'high', motionSpeed: 1, recordingMethod: 'auto', renderEngine: 'browser' };
 function Harness({ onExport = vi.fn(), recording = false, converting = false, ready = false }) {
   const [settings, setSettings] = useState(initial);
@@ -36,6 +37,17 @@ function toggle(title: string) { fireEvent.click(screen.getByText(title, { selec
 function radio(id: string) { return document.getElementById(id)!; }
 
 describe('export settings progressive disclosure', () => {
+  it('only offers deployed cloud engines and applies free cloud output limits', () => {
+    subscription.cloudPolicy = { enabledEngines: ['skia_canvas'] };
+    render(<Harness />);
+    toggle('طريقة إنتاج الفيديو');
+    expect(document.getElementById('engine-ffmpeg-ass')).toBeNull();
+    expect(document.getElementById('engine-browser-cloud')).toBeNull();
+    fireEvent.click(radio('engine-skia-canvas'));
+    expect(radio('quality-medium')).toHaveAttribute('aria-checked', 'true');
+    expect(radio('quality-high')).toBeDisabled();
+    expect(radio('engine-browser')).toBeEnabled();
+  });
   it('keeps recording descriptions fully visible in container-responsive cards', () => {
     render(<Harness />);
     toggle('طريقة إنتاج الفيديو');

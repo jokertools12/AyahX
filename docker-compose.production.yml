@@ -5,11 +5,18 @@ services:
     env_file: .env
     environment:
       RENDER_QUEUE_DRIVER: bullmq
+      ENGINE_SKIA_ENABLED: 'true'
+      ENGINE_FFMPEG_ENABLED: 'false'
+      ENGINE_BROWSER_ENABLED: 'false'
+      RENDER_MAX_BACKLOG: 50
+      SKIA_RENDER_REPLICAS: 1
+      SKIA_RENDER_SLOTS_PER_REPLICA: 1
     depends_on: [redis]
     deploy:
-      replicas: 2
+      replicas: 1
 
   worker-ffmpeg:
+    profiles: [diagnostics]
     build:
       context: .
       dockerfile: Dockerfile.worker-lite
@@ -21,7 +28,7 @@ services:
       FFMPEG_RENDER_MAX_CONCURRENCY: auto
     depends_on: [redis]
     deploy:
-      replicas: 2
+      replicas: 1
 
   worker-skia:
     build:
@@ -32,12 +39,16 @@ services:
     environment:
       RENDER_QUEUE_DRIVER: bullmq
       RENDER_WORKER_ENGINE: skia_canvas
-      SKIA_RENDER_MAX_CONCURRENCY: auto
+      SKIA_RENDER_MAX_CONCURRENCY: 1
+      RENDER_CAPACITY_HARD_MAX: 1
+      RENDER_FFMPEG_THREADS: 1
+      RENDER_FFMPEG_PRESET: veryfast
     depends_on: [redis]
     deploy:
-      replicas: 2
+      replicas: 1
 
   worker-browser:
+    profiles: [diagnostics]
     build:
       context: .
       dockerfile: Dockerfile.worker-browser
@@ -49,7 +60,7 @@ services:
       BROWSER_RENDER_MAX_CONCURRENCY: auto
     depends_on: [redis]
     deploy:
-      replicas: 2
+      replicas: 1
 
   render-control:
     build:
@@ -59,6 +70,7 @@ services:
     env_file: .env
     environment:
       RENDER_QUEUE_DRIVER: bullmq
+      RAILWAY_AUTOSCALER_ENABLED: 'false'
     depends_on: [redis]
     deploy:
       replicas: 1

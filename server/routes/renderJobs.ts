@@ -13,8 +13,12 @@ import { getActivePlanForUser, getTodayCloudRenderUsage } from '../services/subs
 import { isObjectStoragePath, streamStoredRender } from '../services/objectStorage';
 import { recordRenderAudit } from '../services/renderObservability';
 import { verifyApprovedTimingMapAttestation } from '../services/alignmentAttestation';
+import { validateCloudRenderLimits } from '../../shared/cloudRenderPolicy';
+import { getCloudRenderPolicy } from '../services/cloudRenderPolicy';
 
 const router = Router();
+
+router.get('/policy', (_req, res) => res.json(getCloudRenderPolicy()));
 
 type QueueBacklogSnapshot = {
   at: number;
@@ -109,6 +113,10 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
     const plan = await getActivePlanForUser(userId);
     const entitlements = getPlanEntitlements(plan);
     const entitlementValidation = validateRenderEntitlements(plan, manifestValidation.manifest);
+    const cloudViolations = validateCloudRenderLimits(plan, manifestValidation.manifest);
+    if (cloudViolations.length) {
+      return res.status(403).json({ error: cloudViolations[0], entitlementViolation: true, violations: cloudViolations });
+    }
     if (!entitlementValidation.valid) {
       return res.status(403).json({
         error: entitlementValidation.violations[0],
@@ -123,10 +131,11 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       : selectedEngine === 'browser' || selectedEngine === 'browser_cloud'
       ? 'browser_cloud'
       : 'ffmpeg_ass';
-    const engineEnabled = process.env[`ENGINE_${queueEngine === 'ffmpeg_ass' ? 'FFMPEG' : queueEngine === 'skia_canvas' ? 'SKIA' : 'BROWSER'}_ENABLED`] !== 'false';
+    const policy = getCloudRenderPolicy();
+    const engineEnabled = policy.enabledEngines.includes(queueEngine);
     if (!engineEnabled) {
       return res.status(503).json({
-        error: 'المحرك المختار غير متاح مؤقتًا. اختر محركًا آخر ثم أعد المحاولة.',
+        error: 'طريقة الإنتاج المختارة غير متاحة حاليًا. اختر الإنتاج السحابي المتاح أو التسجيل على جهازك.',
         engine: queueEngine,
         engineUnavailable: true,
       });
@@ -145,12 +154,12 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
         : usage.ffmpegAss
     );
 
-    const maxBacklog = Math.max(1, Number(process.env.RENDER_MAX_BACKLOG || 2000));
+    const maxBacklog = policy.maxBacklog;
     const backlog = await getQueueBacklogSnapshot();
     if (backlog.counts[queueEngine] >= maxBacklog) {
       res.setHeader('Retry-After', '30');
       return res.status(429).json({
-        error: 'طابور المحرك المختار ممتلئ مؤقتًا. حاول بعد قليل أو اختر محركًا آخر.',
+        error: 'طابور الإنتاج السحابي ممتلئ مؤقتًا. حاول بعد قليل.',
         engine: queueEngine,
         backlogFull: true,
       });
@@ -241,6 +250,22 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
           activeError.activeJobId = activeRows[0].id;
           throw activeError;
         }
+      }
+
+      // Serialize the shared daily quota before incrementing an engine counter.
+      // Switching engines must never multiply a plan's daily cloud allowance.
+      await conn.query(
+        `INSERT IGNORE INTO daily_cloud_render_usage (id, user_id, date, count)
+         VALUES (UUID(), ?, CURDATE(), 0)`, [userId],
+      );
+      const [dailyRows] = await conn.query<any[]>(
+        'SELECT count FROM daily_cloud_render_usage WHERE user_id = ? AND date = CURDATE() FOR UPDATE', [userId],
+      );
+      if (Number(dailyRows[0]?.count || 0) >= entitlements.cloudDailyLimit) {
+        const quotaError: any = new Error('CLOUD_QUOTA_EXCEEDED');
+        quotaError.serverRenderLimit = entitlements.cloudDailyLimit;
+        quotaError.serverRenderCount = Number(dailyRows[0]?.count || 0);
+        throw quotaError;
       }
 
       // Fast, indexed per-user/day/engine admission counter. The previous
@@ -375,9 +400,11 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
         activeJobId: err.activeJobId,
       });
     }
-    if (err.message === 'ENGINE_QUOTA_EXCEEDED' || err.message === 'BACKGROUND_QUOTA_EXCEEDED') {
+    if (err.message === 'ENGINE_QUOTA_EXCEEDED' || err.message === 'BACKGROUND_QUOTA_EXCEEDED' || err.message === 'CLOUD_QUOTA_EXCEEDED') {
       return res.status(403).json({
-        error: err.message === 'BACKGROUND_QUOTA_EXCEEDED'
+        error: err.message === 'CLOUD_QUOTA_EXCEEDED'
+          ? `لقد استنفدت حصتك اليومية من الإنتاج السحابي (${err.serverRenderLimit} فيديو يوميًا).`
+          : err.message === 'BACKGROUND_QUOTA_EXCEEDED'
           ? `لقد استنفدت حصتك اليومية من الريندر في الخلفية (${err.serverRenderLimit} فيديو يومياً).`
           : `لقد استنفدت حصتك اليومية لمحرك ${err.engine === 'skia_canvas' ? 'Skia Canvas' : err.engine === 'browser_cloud' ? 'المتصفح السحابي' : 'FFmpeg ASS'} (${err.serverRenderLimit} فيديو يومياً).`,
         quotaExceeded: true,

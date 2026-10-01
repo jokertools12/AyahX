@@ -962,6 +962,9 @@ export const api = {
   },
 
   renderJobs: {
+    async getPolicy() {
+      return request<import('../../shared/cloudRenderPolicy').CloudRenderPolicy>('/api/render-jobs/policy');
+    },
     async createJob(manifest: any, idempotencyKey?: string, options?: { replaceActive?: boolean; backgroundAsync?: boolean }) {
       return request<{
         accepted: boolean;

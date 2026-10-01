@@ -434,7 +434,7 @@ export default function UserSettingsPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Video className="h-5 w-5" />
-                  استخدام اليوم وحصص المحركات
+                  استخدام اليوم والحصة السحابية
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -458,45 +458,18 @@ export default function UserSettingsPage() {
                   </p>
                 </div>
 
-                {/* Engine 1: FFmpeg ASS */}
                 <div className="space-y-1.5 pt-2 border-t border-border/40">
                   <div className="flex justify-between text-sm">
-                    <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-amber-500" />الإنتاج السحابي — FFmpeg</span>
-                    <Badge variant="outline" className="text-[11px] bg-amber-500/10 text-amber-500 border-amber-500/20">
-                      {entitlements.ffmpegAssDailyLimit} فيديو / يوم
+                    <span className="flex items-center gap-1.5"><Sparkles className="h-4 w-4 text-blue-500" />الإنتاج السحابي</span>
+                    <Badge variant="outline" className="text-[11px]">
+                      {dailyUsage.cloudRenderCount} / {entitlements.cloudDailyLimit} اليوم
                     </Badge>
                   </div>
+                  <Progress value={Math.min(100, dailyUsage.cloudRenderCount / entitlements.cloudDailyLimit * 100)} className="h-2" />
                   <p className="text-[11px] text-muted-foreground">
-                    إنتاج الفيديو على الخادم باستخدام إعدادات المشهد المختارة.
+                    تبقى {dailyUsage.cloudRenderRemaining} فيديوهات اليوم. حتى {entitlements.cloudMaxDurationSeconds / 60} دقائق، بدقة {isPremium ? '1080p' : '720p'} و30 إطارًا في الثانية. تُعالج الطلبات بالتتابع.
                   </p>
                 </div>
-
-                {/* Engine 2: Skia Rust */}
-                <div className="space-y-1.5 pt-2 border-t border-border/40">
-                  <div className="flex justify-between text-sm">
-                    <span className="flex items-center gap-1.5"><Sparkles className="h-4 w-4 text-blue-500" />الإنتاج السحابي — Skia</span>
-                    <Badge variant="outline" className="text-[11px] bg-blue-500/10 text-blue-500 border-blue-500/20">
-                      {entitlements.skiaCanvasDailyLimit} فيديو / يوم
-                    </Badge>
-                  </div>
-                  <p className="text-[11px] text-muted-foreground">
-                    إنتاج الفيديو على الخادم مع النصوص والإطارات المختارة.
-                  </p>
-                </div>
-
-                {/* Engine 3: Full-Fidelity Browser Cloud Render */}
-                <div className="space-y-1.5 pt-2 border-t border-border/40">
-                  <div className="flex justify-between text-sm">
-                    <span className="flex items-center gap-1.5"><Cpu className="h-4 w-4 text-primary" />الإنتاج السحابي — المتصفح</span>
-                    <Badge variant="outline" className="text-[11px] bg-primary/10 text-primary border-primary/20">
-                      {entitlements.backgroundAsyncDailyLimit} فيديو / يوم
-                    </Badge>
-                  </div>
-                  <p className="text-[11px] text-muted-foreground">
-                    يطابق معاينة المتصفح بكل الخلفيات والنصوص والإعدادات، ثم يحفظ الفيديو بمكتبتك مع إشعار تلقائي.
-                  </p>
-                </div>
-
                 {/* 48-Hour Retention Banner */}
                 <div className="p-3 rounded-lg bg-primary/5 border border-primary/15 flex items-start gap-2.5 text-xs text-muted-foreground">
                   <Clock3 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
