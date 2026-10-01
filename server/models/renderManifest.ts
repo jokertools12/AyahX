@@ -261,7 +261,7 @@ export const RenderManifestSchema = z.object({
 
     // Dual-mode Watermark: Logo
     logoWatermarkEnabled: z.boolean().optional().default(false),
-    logoWatermarkPreset: z.enum(['goldCalligraphy', 'circularMedallion', 'custom']).optional().default('goldCalligraphy'),
+    logoWatermarkPreset: z.enum(['goldCalligraphy', 'circularMedallion', 'geometricEmblem', 'glassMonogram', 'custom']).optional().default('goldCalligraphy'),
     logoWatermarkUrl: z.string().optional().default(''),
     logoWatermarkPosition: z.enum(['topRight', 'topLeft', 'bottomRight', 'bottomLeft']).optional().default('topRight'),
     logoWatermarkSize: z.number().min(20).max(300).optional().default(76),

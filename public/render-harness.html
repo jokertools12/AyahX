@@ -438,21 +438,29 @@
         return { titleX, titleY, reciterX, reciterY, separatorY: isBottom ? edgeY - gap * 0.65 : edgeY + gap * 0.65 };
       }
 
+      function fitBrandingText(ctx, text, maxWidth) {
+        const chars = Array.from(String(text));
+        if (ctx.measureText(chars.join('')).width <= maxWidth) return chars.join('');
+        while (chars.length && ctx.measureText(chars.join('') + '…').width > maxWidth) chars.pop();
+        return chars.join('') + '…';
+      }
+
       function getResponsiveBrandingLayout({ W, H, S, logoPosition, logoSize, socialPosition, socialSize, headerActive, headerPosition, headerSeparatorY, frameActive }) {
         const edge = Math.max(28 * S, W * 0.025) + (frameActive ? 18 * S : 0);
         const gap = Math.max(18 * S, H * 0.022);
-        const radius = logoSize * S / 2;
+        const radius = Math.min(logoSize * S / 2, W * 0.14, H * 0.09);
         const socialHeight = Math.max(30 * S, socialSize * S + 14 * S);
+        const bottomInset = Math.max(edge, H * 0.1);
         let logoX = W - edge - radius;
         let logoY = edge + radius;
         if (logoPosition === 'topLeft') logoX = edge + radius;
-        if (logoPosition === 'bottomRight') { logoX = W - edge - radius; logoY = H - edge - radius; }
-        if (logoPosition === 'bottomLeft') { logoX = edge + radius; logoY = H - edge - radius; }
+        if (logoPosition === 'bottomRight') { logoX = W - edge - radius; logoY = H - bottomInset - radius - 52 * S; }
+        if (logoPosition === 'bottomLeft') { logoX = edge + radius; logoY = H - bottomInset - radius - 52 * S; }
         const collidesWithTopCorner = headerActive && ((logoPosition === 'topRight' && headerPosition === 'topRight') || (logoPosition === 'topLeft' && headerPosition === 'topLeft'));
         if (collidesWithTopCorner) logoX = logoPosition === 'topRight' ? edge + radius : W - edge - radius;
 
         let socialX = W / 2;
-        let socialY = H - edge;
+        let socialY = H - bottomInset;
         if (socialPosition === 'bottomLeft') socialX = edge;
         if (socialPosition === 'bottomRight') socialX = W - edge;
         if (socialPosition === 'topCenter') {
@@ -2206,32 +2214,6 @@ ctx.fillStyle = typography.textColor || '#FFFFFF';
           }
           }
 
-          // 11. Sleek Audio Timeline Progress Indicator at Bottom
-          const audioTotalDur = Math.max(manifest.audio.durationSeconds, 1);
-          const timelineProgress = Math.min(Math.max(frameTimeSeconds / audioTotalDur, 0), 1);
-          const barWidth = W * 0.65;
-          const barHeight = 4 * S;
-          const barX = (W - barWidth) / 2;
-          const barY = H - 55 * S;
-
-          // Track background
-          ctx.save();
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-          ctx.beginPath();
-          if (ctx.roundRect) ctx.roundRect(barX, barY, barWidth, barHeight, 2 * S);
-          else ctx.fillRect(barX, barY, barWidth, barHeight);
-          ctx.fill();
-
-          // Active progress fill
-          ctx.fillStyle = '#D4AF37';
-          ctx.shadowColor = '#FFD700';
-          ctx.shadowBlur = 6 * S;
-          ctx.beginPath();
-          if (ctx.roundRect) ctx.roundRect(barX, barY, barWidth * timelineProgress, barHeight, 2 * S);
-          else ctx.fillRect(barX, barY, barWidth * timelineProgress, barHeight);
-          ctx.fill();
-          ctx.restore();
-
           // 12. Branding & Watermark (Dual Logo & Social Support)
           // 12.A: Circular / Custom Logo Watermark (Gold Medallion)
           const brandingLayout = getResponsiveBrandingLayout({
@@ -2248,7 +2230,7 @@ ctx.fillStyle = typography.textColor || '#FFFFFF';
           if (displaySettings.logoWatermarkEnabled === true) {
             ctx.save();
             const lPos = displaySettings.logoWatermarkPosition || 'topRight';
-            const lSize = (displaySettings.logoWatermarkSize || 85) * S;
+            const lSize = brandingLayout.logoRadius * 2;
             const lOpacity = displaySettings.logoWatermarkOpacity != null ? displaySettings.logoWatermarkOpacity : 0.95;
             const lx = brandingLayout.logoX;
             const ly = brandingLayout.logoY;
@@ -2256,12 +2238,16 @@ ctx.fillStyle = typography.textColor || '#FFFFFF';
             ctx.globalAlpha = lOpacity;
             const radius = brandingLayout.logoRadius;
 
-            if (logoWatermarkImage && logoWatermarkImage.complete && logoWatermarkImage.naturalWidth > 0) {
+            if (displaySettings.logoWatermarkPreset === 'custom' && logoWatermarkImage && logoWatermarkImage.complete && logoWatermarkImage.naturalWidth > 0) {
               ctx.save();
               ctx.beginPath();
               ctx.arc(lx, ly, radius, 0, Math.PI * 2);
               ctx.clip();
-              ctx.drawImage(logoWatermarkImage, lx - radius, ly - radius, lSize, lSize);
+              const imageScale = (lSize - 12 * S) / Math.max(logoWatermarkImage.naturalWidth, logoWatermarkImage.naturalHeight);
+              const imageWidth = logoWatermarkImage.naturalWidth * imageScale;
+              const imageHeight = logoWatermarkImage.naturalHeight * imageScale;
+              ctx.fillStyle = 'rgba(4,13,18,0.7)'; ctx.fill();
+              ctx.drawImage(logoWatermarkImage, lx - imageWidth / 2, ly - imageHeight / 2, imageWidth, imageHeight);
               ctx.restore();
 
               // Outer golden ring around custom/AI logo
@@ -2279,19 +2265,14 @@ ctx.fillStyle = typography.textColor || '#FFFFFF';
 
               const imageBrand = (displaySettings.logoBrandName || '').trim() || 'آيات قرآنية';
               const imageSubtitle = (displaySettings.logoSubtitle ?? 'تلاوات خاشعة').trim();
+              const labelWidth = Math.min(220 * S, W * 0.3);
+              const labelX = Math.min(W - brandingLayout.edge - labelWidth / 2, Math.max(brandingLayout.edge + labelWidth / 2, lx));
               ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-              ctx.fillStyle = 'rgba(4,13,18,0.68)'; ctx.beginPath();
-              ctx.roundRect(lx - radius * 0.78, ly - radius * 0.38, radius * 1.56, radius * 0.72, radius * 0.18); ctx.fill();
-              let imageBrandSize = Math.max(9 * S, radius * 0.24);
-              ctx.font = `bold ${imageBrandSize}px "Amiri", serif`;
-              while (ctx.measureText(imageBrand).width > radius * 1.42 && imageBrandSize > 7 * S) {
-                imageBrandSize -= 1 * S; ctx.font = `bold ${imageBrandSize}px "Amiri", serif`;
-              }
-              ctx.fillStyle = '#FFF1B8'; ctx.shadowColor = 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 5 * S;
-              ctx.fillText(imageBrand, lx, ly - radius * 0.08);
-              ctx.font = `600 ${Math.max(7 * S, radius * 0.14)}px "Cairo", sans-serif`;
-              ctx.fillStyle = '#FFFFFF';
-              ctx.fillText(imageSubtitle, lx, ly + radius * 0.28);
+              ctx.shadowColor = 'rgba(0,0,0,0.85)'; ctx.shadowBlur = 5 * S;
+              ctx.font = `700 ${18 * S}px "Cairo", sans-serif`; ctx.fillStyle = '#FFF1B8';
+              ctx.fillText(fitBrandingText(ctx, imageBrand, labelWidth), labelX, ly + radius + 17 * S);
+              ctx.font = `500 ${12 * S}px "Cairo", sans-serif`; ctx.fillStyle = 'rgba(255,255,255,0.88)';
+              ctx.fillText(fitBrandingText(ctx, imageSubtitle, labelWidth), labelX, ly + radius + 36 * S);
             } else {
               const logoPreset = displaySettings.logoWatermarkPreset || 'goldCalligraphy';
               const drawSealPath = (inset = 0) => {
@@ -2374,13 +2355,13 @@ ctx.fillStyle = typography.textColor || '#FFFFFF';
               ctx.fillStyle = '#FFE082';
               ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
               ctx.shadowBlur = 4 * S;
-              ctx.fillText(brandText, lx, ly - radius * 0.18);
+              ctx.fillText(fitBrandingText(ctx, brandText, radius * 1.42), lx, ly - radius * 0.18);
 
               const subFontSize = Math.max(8 * S, Math.round(radius * 0.24));
               ctx.font = `600 ${subFontSize}px "Cairo", sans-serif`;
               ctx.fillStyle = 'rgba(255, 248, 225, 0.85)';
               ctx.shadowBlur = 2 * S;
-              ctx.fillText(subText, lx, ly + radius * 0.32);
+              ctx.fillText(fitBrandingText(ctx, subText, radius * 1.4), lx, ly + radius * 0.32);
             }
             ctx.restore();
           }
@@ -2420,31 +2401,26 @@ ctx.fillStyle = typography.textColor || '#FFFFFF';
             } else if (sPos === 'bottomRight') {
               align = 'right';
             }
-            if (sPos === 'topCenter') sy = 40 * S + sSize;
-
-            ctx.textAlign = align;
-            ctx.textBaseline = 'bottom';
-
-            const platform = displaySettings.socialPlatform || 'facebook';
-            let icon = 'ⓕ ';
-            if (platform === 'instagram') icon = '📸 ';
-            else if (platform === 'tiktok') icon = '♪ ';
-            else if (platform === 'youtube') icon = '▶ ';
-            else if (platform === 'x') icon = '𝕏 ';
-            else if (platform === 'custom') icon = '';
-
-            ctx.direction = 'ltr';
-            const socialLabel = `${platform === 'custom' ? '' : platform + ' · '}${socHandle}`;
-            const socialWidth = ctx.measureText(socialLabel).width;
-            const pillHeight = Math.max(30 * S, sSize + 14 * S);
-            const pillWidth = socialWidth + 28 * S;
-            const pillX = align === 'left' ? sx - 14 * S : align === 'right' ? sx - pillWidth + 14 * S : sx - pillWidth / 2;
-            const pillY = sPos === 'topCenter' ? sy - sSize - 10 * S : sy - pillHeight + 5 * S;
-            ctx.fillStyle = 'rgba(4, 13, 18, 0.72)'; ctx.shadowBlur = 12 * S; ctx.beginPath();
+            const platform = displaySettings.socialPlatform || 'custom';
+            const cleanHandle = socHandle.replace(/^@+/, '').replace(/\s+/g, ' ').trim();
+            const socialLabel = platform === 'custom' ? socHandle : '@' + cleanHandle;
+            const mark = { facebook: 'f', instagram: 'IG', tiktok: '♪', youtube: '▶', x: 'X' }[platform] || '';
+            ctx.direction = 'ltr'; ctx.textBaseline = 'middle';
+            const maxWidth = W - brandingLayout.edge * 2;
+            const iconSpace = mark ? 30 * S : 0;
+            const label = fitBrandingText(ctx, socialLabel, maxWidth - iconSpace - 28 * S);
+            const pillHeight = Math.max(34 * S, sSize + 16 * S);
+            const pillWidth = Math.min(maxWidth, ctx.measureText(label).width + iconSpace + 28 * S);
+            const desiredX = align === 'left' ? sx : align === 'right' ? sx - pillWidth : sx - pillWidth / 2;
+            const pillX = Math.max(brandingLayout.edge, Math.min(W - brandingLayout.edge - pillWidth, desiredX));
+            const pillY = Math.max(brandingLayout.edge, Math.min(H - brandingLayout.edge - pillHeight, sy - pillHeight));
+            ctx.fillStyle = 'rgba(4,13,18,0.62)'; ctx.shadowBlur = 5 * S; ctx.beginPath();
             if (ctx.roundRect) ctx.roundRect(pillX, pillY, pillWidth, pillHeight, pillHeight / 2); else ctx.rect(pillX, pillY, pillWidth, pillHeight);
-            ctx.fill(); ctx.strokeStyle = 'rgba(212, 175, 55, 0.65)'; ctx.lineWidth = 1.2 * S; ctx.stroke();
-            ctx.fillStyle = '#FFF1B8'; ctx.shadowBlur = 6 * S;
-            ctx.fillText(socialLabel, sx, sy);
+            ctx.fill(); ctx.shadowBlur = 0; ctx.strokeStyle = 'rgba(212,175,55,0.4)'; ctx.lineWidth = S; ctx.stroke();
+            ctx.textAlign = 'left'; ctx.fillStyle = '#FFF1B8';
+            if (mark) { ctx.fillText(mark, pillX + 13 * S, pillY + pillHeight / 2); }
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText(label, pillX + 14 * S + iconSpace, pillY + pillHeight / 2);
             ctx.restore();
           }
 
@@ -2454,7 +2430,7 @@ ctx.fillStyle = typography.textColor || '#FFFFFF';
           const requiresQfCredit = !isQuaTiming && (manifest.timingMap?.sourceId === 'quran_foundation'
             || manifest.timingMap?.alignment?.provider === 'quran_foundation'
             || manifest.audio?.sourceMode === 'qf');
-          if (requiresQfCredit || isQuaTiming) {
+          if (requiresQfCredit) {
             const logoCorner = displaySettings.logoWatermarkPosition || 'topRight';
             const socialCorner = displaySettings.socialWatermarkPosition || displaySettings.watermarkPosition || 'bottomCenter';
             const headerCorner = displaySettings.surahNamePosition || 'top';
@@ -2465,9 +2441,7 @@ ctx.fillStyle = typography.textColor || '#FFFFFF';
               && ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'].includes(headerCorner)) occupiedCorners.add(headerCorner);
             const creditCorner = ['bottomLeft', 'topLeft', 'bottomRight', 'topRight']
               .find((corner) => !occupiedCorners.has(corner)) || 'bottomCenter';
-            const creditText = isQuaTiming
-              ? 'Source: Quranic Universal Audio'
-              : 'Source: Quran Foundation';
+            const creditText = 'Source: Quran Foundation';
             const creditFontSize = Math.max(12, 13 * S);
             const creditPadX = Math.max(7, 8 * S);
             const creditPadY = Math.max(4, 5 * S);

@@ -971,7 +971,7 @@ export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextS
                     </div>
                     <div>
                       <Label htmlFor="logoWatermarkEnabled" className="font-semibold text-sm cursor-pointer block">
-                        الشعار وهوية القناة (Channel Logo & Seal)
+                        الشعار وهوية القناة
                       </Label>
                       <span className="text-[11px] text-muted-foreground">
                         ختم وهوية خاصة بك مصممة باسمك أو بالذكاء الاصطناعي
@@ -1170,7 +1170,7 @@ export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextS
                     </div>
                     <div>
                       <Label htmlFor="socialWatermarkEnabled" className="font-semibold text-sm cursor-pointer block">
-                        معرف التواصل الاجتماعي (Social Handle)
+                        معرف التواصل الاجتماعي
                       </Label>
                       <span className="text-[11px] text-muted-foreground">
                         نص المعرف مع أيقونة المنصة مثل ⓕ Quran1minute

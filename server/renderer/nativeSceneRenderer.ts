@@ -173,9 +173,13 @@ function createNativeImageConstructor(): new () => CanvasImage {
           const requested = String(value || '');
           image.__nativeSceneSrc = requested;
           void readImageSource(requested)
-            .then((bytes) => {
+            .then(async (bytes) => {
               if (image.__nativeSceneSrc !== requested) return;
               sourceDescriptor.set!.call(image, bytes);
+              // Dimensions can be available before pixel decoding finishes.
+              // Signal readiness only after custom logos/backgrounds are drawable.
+              await image.decode();
+              if (image.__nativeSceneSrc !== requested) return;
               queueMicrotask(() => image.onload?.());
             })
             .catch(() => {

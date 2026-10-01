@@ -29,15 +29,16 @@ describe('Browser render harness', () => {
     expect(source).not.toContain('firstWordStart >= (rangeOffsetMs * 0.7)');
   });
 
-  it('keeps source attribution mandatory without mislabeling QUA as Quran Foundation', () => {
+  it('keeps QUA credits and playback progress out of the video scene', () => {
     const source = fs.readFileSync(path.resolve(process.cwd(), 'public/render-harness.html'), 'utf8');
     expect(source).toContain("manifest.timingMap?.sourceId === 'quran_foundation'");
     expect(source).toContain("manifest.timingMap?.alignment?.provider === 'quran_foundation'");
     expect(source).toContain("manifest.audio?.sourceMode === 'qf'");
     expect(source).toContain("const isQuaTiming = manifest.timingMap?.sourceId === 'quranic_universal_audio';");
-    expect(source).toContain("? 'Source: Quranic Universal Audio'");
-    expect(source).toContain(": 'Source: Quran Foundation';");
-    expect(source).toContain('if (requiresQfCredit || isQuaTiming)');
+    expect(source).not.toContain('Source: Quranic Universal Audio');
+    expect(source).not.toContain('timelineProgress');
+    expect(source).toContain("const creditText = 'Source: Quran Foundation';");
+    expect(source).toContain('if (requiresQfCredit)');
     expect(source).toContain('window.__CREATE_RENDER_CONTROLLER__ = createRenderController;');
   });
 
