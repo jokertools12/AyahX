@@ -38,6 +38,7 @@ import { cn } from '@/lib/utils';
 import { useSubscription } from '@/hooks/useSubscription';
 import { api } from '@/lib/api';
 import { PremiumBadge } from '@/components/PremiumBadge';
+import { TextSettingsPanel, type TextSettings } from '@/components/TextSettingsPanel';
 import type { AnimationProfile, VerseDisplayMode } from '@/lib/animationTimeline';
 import {
   type AyahNumberColor,
@@ -152,6 +153,8 @@ export interface DisplaySettings {
 }
 
 export interface DisplaySettingsPanelProps {
+  textSettings?: TextSettings;
+  onTextSettingsChange?: (settings: TextSettings) => void;
   settings: DisplaySettings;
   onChange: (settings: DisplaySettings) => void;
   letterTimingStatus?: LetterTimingTier;
@@ -446,7 +449,7 @@ function RadioOptionGrid({
   );
 }
 
-export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 'idle' }: DisplaySettingsPanelProps) {
+export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextSettingsChange, letterTimingStatus = 'idle' }: DisplaySettingsPanelProps) {
   const { canUseFeature } = useSubscription();
   const [userTemplates, setUserTemplates] = useState<SavedTemplate[]>(loadTemplates);
   const [templateName, setTemplateName] = useState('');
@@ -569,7 +572,7 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
   return (
     <Card className="border-border/60 shadow-lg">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center justify-between">
+        <CardTitle className="text-lg flex flex-wrap items-center justify-between gap-2">
           <span className="flex items-center gap-2">
             <Settings2 className="h-5 w-5 text-primary" />
             إعدادات العرض والمظهر الاحترافي
@@ -590,11 +593,11 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
                 استوديو العرض والإنتاج
               </p>
               <p className="mt-1 text-[11px] text-muted-foreground">
-                إعداد موحّد للمعاينة والتسجيل والتصدير؛ لا توجد إعدادات قديمة منفصلة عن هذا المصدر.
+                خصّص العناصر والحركة والهوية، وشاهد كل تغيير في المعاينة. تعتمد حركة الكلمات والحروف على التوقيت المتاح للتلاوة.
               </p>
             </div>
             <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-medium text-emerald-600 dark:text-emerald-300">
-              جاهز للإنتاج
+              معاينة مباشرة
             </span>
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] sm:grid-cols-4">
@@ -650,15 +653,16 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
           </AccordionItem>
 
           {/* ═══ Section 2: Text Styling & Shadow ═══ */}
-          <AccordionItem value="text-styling" className="border-b px-4">
+          <AccordionItem value="advanced-motion" className="border-b px-4">
             <AccordionTrigger className="text-sm font-semibold gap-2 py-3.5 hover:no-underline">
               <span className="flex items-center gap-2">
                 <Palette className="h-4 w-4 text-primary" />
-                نمط النصوص والظل والتوهج
+                أنماط الحركة وتأثيرات العرض القرآني المتقدمة
               </span>
             </AccordionTrigger>
             <AccordionContent className="space-y-5 pb-4">
               {/* Text Shadow Style - Default None */}
+              {textSettings && onTextSettingsChange && <TextSettingsPanel settings={textSettings} onChange={onTextSettingsChange} />}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <Label className="text-sm font-medium">نمط ظل النص القرآني</Label>
@@ -698,7 +702,7 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
                     'space-y-3 p-3.5 rounded-xl border transition-opacity',
                     glowColorEnabled
                       ? 'bg-gradient-to-r from-primary/5 via-muted/40 to-primary/5 border-primary/20'
-                      : 'bg-muted/20 border-border/40 opacity-60',
+                      : 'bg-muted/20 border-border/40',
                   )}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -710,7 +714,6 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
                       {glowColorEnabled ? 'مظهر سينمائي' : 'معطّل'}
                     </span>
                   </div>
-                  {glowColorEnabled ? (
                     <RadioOptionGrid
                       options={glowStyleOptions}
                       value={settings.glowStyle || 'golden'}
@@ -718,11 +721,7 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
                       idPrefix="glowstyle"
                       columns={3}
                     />
-                  ) : (
-                    <p className="rounded-lg border border-border/40 bg-muted/30 p-2.5 text-[11px] leading-relaxed text-muted-foreground">
-                      خيار «بدون توهج» مُفعَّل، فلا يوجد لون لونه الآن. اختر أي لون من القائمة أعلاه لتفعيل الهالة.
-                    </p>
-                  )}
+
                 </div>
               )}
 
@@ -771,18 +770,7 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
                   />
                 </div>
               )}
-            </AccordionContent>
-          </AccordionItem>
-
-          {/* ═══ Section 3: Verse Display & 3D Ayah Number ═══ */}
-          <AccordionItem value="verse-display" className="border-b px-4">
-            <AccordionTrigger className="text-sm font-semibold gap-2 py-3.5 hover:no-underline">
-              <span className="flex items-center gap-2">
-                <LayoutGrid className="h-4 w-4 text-primary" />
-                طريقة عرض الآيات ورقم الآية 3D
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className="space-y-5 pb-4">
+              <div className="border-t border-border/40 pt-4 text-sm font-semibold text-primary">الحركة وتقسيم الآيات وأرقامها</div>
               {/* ── Verse display mode ── */}
               <div className="space-y-3">
                 <Label className="text-xs font-medium text-muted-foreground">
@@ -1189,10 +1177,10 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
                       <div className="space-y-1">
                         <div className="flex justify-between text-xs">
                           <span>الشفافية</span>
-                          <span className="font-mono text-primary">{Math.round((settings.logoWatermarkOpacity || 0.95) * 100)}%</span>
+                          <span className="font-mono text-primary">{Math.round((settings.logoWatermarkOpacity ?? 0.95) * 100)}%</span>
                         </div>
                         <Slider
-                          value={[Math.round((settings.logoWatermarkOpacity || 0.95) * 100)]}
+                          value={[Math.round((settings.logoWatermarkOpacity ?? 0.95) * 100)]}
                           min={20}
                           max={100}
                           step={5}
@@ -1254,10 +1242,10 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
                     <div className="space-y-1">
                       <Label className="text-xs font-medium">اسم الحساب / المعرف</Label>
                       <Input
-                        value={settings.socialHandle || '@QuranReels'}
+                        value={settings.socialHandle ?? ''}
                         onChange={(e) => {
                           updateSetting('socialHandle', e.target.value);
-                          updateSetting('watermarkText', e.target.value);
+
                         }}
                         placeholder="@QuranReels أو @username"
                         className="text-sm font-mono h-9"
@@ -1271,7 +1259,7 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
                         value={settings.socialWatermarkPosition || 'bottomCenter'}
                         onValueChange={(val) => {
                           updateSetting('socialWatermarkPosition', val as DisplaySettings['socialWatermarkPosition']);
-                          updateSetting('watermarkPosition', val as DisplaySettings['watermarkPosition']);
+
                         }}
                         className="grid grid-cols-3 gap-2"
                       >
@@ -1311,7 +1299,7 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
             <AccordionTrigger className="text-sm font-semibold gap-2 py-3.5 hover:no-underline">
               <span className="flex items-center gap-2">
                 <Star className="h-4 w-4 text-primary" />
-                قوالب المظهر الجاهزة وحفظ النمط
+                تنسيقاتي المحفوظة
               </span>
             </AccordionTrigger>
             <AccordionContent className="space-y-5 pb-4">
@@ -1323,37 +1311,8 @@ export function DisplaySettingsPanel({ settings, onChange, letterTimingStatus = 
                 </div>
               ) : <>
               <p className="text-xs text-muted-foreground">
-                اختر قالباً بضغطة زر لتطبيق أفضل إعدادات التنسيق والهوية البصرية فوراً.
+                احفظ التنسيق الحالي لإعادة استخدامه. استعرض القوالب الجاهزة في تبويب «قوالب».
               </p>
-
-              {/* Built-in Luxury Templates */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {BUILTIN_DISPLAY_TEMPLATES.map((tpl) => (
-                  <div
-                    key={tpl.id}
-                    onClick={() => handleLoadTemplate(tpl)}
-                    className="p-3.5 rounded-xl border-2 border-border/60 hover:border-primary/80 bg-gradient-to-br from-card to-muted/40 cursor-pointer transition-all hover:shadow-md space-y-2 group"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-xs sm:text-sm group-hover:text-primary transition-colors">
-                        {tpl.name}
-                      </span>
-                      {tpl.badge && (
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">
-                          {tpl.badge}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                      <span>3D ﴿﴾</span>
-                      <span>•</span>
-                      <span>بدون ظل</span>
-                      <span>•</span>
-                      <span>لوجو ذهبي</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
 
               {/* User Saved Templates */}
               <div className="space-y-3 pt-3 border-t border-border/40">

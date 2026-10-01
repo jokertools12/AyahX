@@ -34,7 +34,6 @@ interface ExportFormatSelectorProps {
 
 const FORMAT_OPTIONS: { id: ExportFormat; label: string; description: string; icon: typeof FileVideo }[] = [
   { id: 'mp4', label: 'MP4 (موصى به)', description: 'ترميز H.264 عالي التوافق لإنستجرام وتيك توك وفيسبوك والواتساب', icon: Film },
-  { id: 'webm', label: 'WebM', description: 'الصيغة الفورية - جودة ممتازة وحجم مضغوط خفيف', icon: FileVideo },
 ];
 
 const RECORDING_METHOD_OPTIONS: { id: RecordingMethod; label: string; description: string }[] = [
@@ -75,8 +74,7 @@ export function ExportFormatSelector({
 
   const canExport = (format: ExportFormat) => {
     if (isRecording || isConverting) return false;
-    if (format === 'webm') return !!videoBlob;
-    if (format === 'mp4') return !!mp4Blob || !!videoBlob;
+    if (format === 'mp4') return !!mp4Blob;
     return false;
   };
 
@@ -103,7 +101,7 @@ export function ExportFormatSelector({
             <span className="text-xs text-primary font-medium">MP4 هو الأنسب للريلز</span>
           </div>
           <RadioGroup
-            value={settings.format}
+            value="mp4"
             onValueChange={(value) => updateSetting('format', value as ExportFormat)}
             className="space-y-2"
           >
@@ -230,13 +228,14 @@ export function ExportFormatSelector({
                 }`}
               >
                 <div className="flex items-center gap-1">
-                  <span className="font-semibold text-sm">60 FPS (سينمائي فائق)</span>
+                  <span className="font-semibold text-sm">60 FPS (حركة أكثر سلاسة)</span>
                   {(isCloud || !entitlements.allowedFps.includes(60)) && <Lock className="h-3 w-3 text-amber-500" />}
                 </div>
-                <span className="text-[11px] leading-5 text-muted-foreground">نعومة مطلقة لحركة الكلمات</span>
+                <span className="text-[11px] leading-5 text-muted-foreground">يتطلب جهازاً قادراً على رسم الإطارات بسرعة كافية</span>
               </Label>
             </div>
           </RadioGroup>
+          {!isCloud && <p className="text-[11px] leading-relaxed text-muted-foreground">إنتاج المتصفح يعتمد على قدرة جهازك. عند تقطيع الحركة، اختر 1080p أو 30 FPS؛ تحويل الملف إلى 60 FPS لا يعوّض الإطارات التي لم يتم رسمها أثناء التسجيل.</p>}
         </div>
 
         {/* 4. Audio Quality Bitrate */}

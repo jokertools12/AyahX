@@ -24,6 +24,20 @@ class Stream {
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.clearAllMocks(); });
 
 describe('recorded output settings survive MP4 conversion', () => {
+  it('stops owned recording clones while preserving audio for subsequent exports', async () => {
+    vi.stubGlobal('MediaRecorder', Recorder); vi.stubGlobal('MediaStream', Stream);
+    const owned = { stop: vi.fn() }, source = { stop: vi.fn(), clone: vi.fn(() => owned) };
+    const canvas = { captureStream: () => ({ getVideoTracks: () => [{ stop: vi.fn(), requestFrame: vi.fn() }] }) } as unknown as HTMLCanvasElement;
+    const audio = { getAudioTracks: () => [source] } as unknown as MediaStream;
+    const { result } = renderHook(() => useVideoRecorder());
+    for (let attempt = 0; attempt < 2; attempt++) await act(async () => {
+      const recording = result.current.startRecording(canvas, null, 2, audio);
+      result.current.stopRecording(); await recording;
+    });
+    expect(source.clone).toHaveBeenCalledTimes(2);
+    expect(owned.stop).toHaveBeenCalledTimes(2);
+    expect(source.stop).not.toHaveBeenCalled();
+  });
   it.each([{fps:60 as const,audioBitrate:'320k' as const,fallback:false}, {fps:30 as const,audioBitrate:'128k' as const,fallback:true}])(
     'converts using recorded $fps fps / $audioBitrate, fallback=$fallback', async ({fps,audioBitrate,fallback}) => {
       vi.stubGlobal('MediaRecorder',Recorder);
@@ -43,10 +57,10 @@ describe('recorded output settings survive MP4 conversion', () => {
       let converted: Blob | null = null;
       await act(async()=>{ converted=await result.current.convertToMp4('test clip.mp4'); });
       expect(fetchMock).toHaveBeenCalledTimes(1);
-      expect(fetchMock.mock.calls[0][0]).toBe(`/api/videos/process-mp4?fps=${fps}&audioBitrate=${audioBitrate}&filename=test%20clip.mp4`);
+      expect(fetchMock.mock.calls[0][0]).toBe(`/api/videos/process-mp4?fps=${fps}&audioBitrate=${audioBitrate}&filename=test%20clip.mp4&duration=30`);
       expect(converted).not.toBeNull();
       expect(result.current.error).toBeNull();
-      if (fallback) expect(convertWebmToMp4).toHaveBeenCalledWith(expect.any(Blob),expect.objectContaining({fps,audioBitrate,filename:'test clip.mp4'}));
+      if (fallback) expect(convertWebmToMp4).toHaveBeenCalledWith(expect.any(Blob),expect.objectContaining({fps,audioBitrate,filename:'test clip.mp4',durationSeconds:30}));
       else expect(convertWebmToMp4).not.toHaveBeenCalled();
       await act(async()=>{ await result.current.convertToMp4(); });
       expect(fetchMock).toHaveBeenCalledTimes(1);

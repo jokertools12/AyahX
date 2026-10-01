@@ -250,6 +250,7 @@
 
         const colors = {
           gold: { primary: '#D4AF37', secondary: '#F5E050', text: '#FFFFFF', border: '#AA820A' },
+          metallicGold3D: { primary: '#F5D061', secondary: '#FFF8E1', text: '#FFFFFF', border: '#8C6B1B' },
           emerald: { primary: '#10B981', secondary: '#34D399', text: '#FFFFFF', border: '#059669' },
           silver: { primary: '#9CA3AF', secondary: '#D1D5DB', text: '#FFFFFF', border: '#6B7280' },
           white: { primary: '#FFFFFF', secondary: '#F3F4F6', text: '#000000', border: '#E5E7EB' },
@@ -259,11 +260,11 @@
         // 3D Gilded Quranic Bracket / Medallion Style ﴿...﴾
         if (shape === 'quran3d') {
           const metalGrad = ctx.createLinearGradient(-size, -size, size, size);
-          metalGrad.addColorStop(0, '#FFE082');
-          metalGrad.addColorStop(0.3, '#D4AF37');
+          metalGrad.addColorStop(0, colors.secondary);
+          metalGrad.addColorStop(0.3, colors.primary);
           metalGrad.addColorStop(0.6, '#FFF8E1');
-          metalGrad.addColorStop(0.85, '#B78727');
-          metalGrad.addColorStop(1, '#8C6B1B');
+          metalGrad.addColorStop(0.85, colors.primary);
+          metalGrad.addColorStop(1, colors.border);
 
           ctx.shadowColor = 'rgba(0, 0, 0, 0.75)';
           ctx.shadowBlur = size * 0.4;
@@ -284,7 +285,7 @@
 
           const arabic = toArabicDigits(ayahNum);
           ctx.font = `bold ${Math.round(size * 1.15)}px "Noto Naskh Arabic", "Amiri", serif`;
-          ctx.fillStyle = '#FFFFFF';
+          ctx.fillStyle = colors.text;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
@@ -1298,7 +1299,14 @@
             ctx.save();
             const nameStyle = displaySettings.surahNameStyle || 'classic';
 
-            if (nameStyle === 'banner') {
+            if (nameStyle === 'goldenBadge') {
+              const bw = Math.min(370 * S, W * 0.65), bh = 72 * S;
+              const grad = ctx.createLinearGradient(bannerX, bannerY - bh / 2, bannerX, bannerY + bh / 2);
+              grad.addColorStop(0, '#FFF1B8'); grad.addColorStop(0.5, '#D4AF37'); grad.addColorStop(1, '#8C6B1B');
+              ctx.fillStyle = grad;
+              safeRoundRect(ctx, bannerX - bw / 2, bannerY - bh / 2, bw, bh, 12 * S); ctx.fill();
+              ctx.strokeStyle = '#FFF1B8'; ctx.lineWidth = 2 * S; ctx.stroke();
+            } else if (nameStyle === 'banner') {
               const bw = Math.min(520 * S, W * 0.8), bh = 88 * S;
               const grad = ctx.createLinearGradient(bannerX - bw / 2, bannerY, bannerX + bw / 2, bannerY);
               grad.addColorStop(0, 'rgba(212, 175, 55, 0)');
@@ -1860,7 +1868,10 @@
 
             if (transType === 'none') {
               // Direct display
-            } else if (transType === 'fade' || transType === 'blur') {
+            } else if (transType === 'blur') {
+              ctx.globalAlpha = easedEnter;
+              ctx.filter = `blur(${((1 - easedEnter) * 10 * S).toFixed(2)}px)`;
+            } else if (transType === 'fade') {
               ctx.globalAlpha = easedEnter;
             } else if (transType === 'slide') {
               ctx.translate(0, (1 - easedEnter) * 50 * S);
@@ -2050,7 +2061,10 @@
                     auraRgba = `rgba(168, 85, 247, ${0.24 + pulse * 0.26})`;
                   }
 
-                  if (hlStyle === 'glow') {
+                  if (glowStyle === 'none') {
+                    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+                    ctx.fillStyle = typography.textColor || '#FFFFFF'; ctx.fillText(w, cursorX, y);
+                  } else if (hlStyle === 'glow') {
                     // Ambient glow backdrop gradient
                     const gPadX = 24 * S;
                     const gPadY = 14 * S;
@@ -2117,7 +2131,12 @@
                   } else if (shadowStyle === 'glow') {
                     ctx.shadowColor = 'rgba(212, 175, 55, 0.55)';
                     ctx.shadowBlur = 16 * S;
-                  } else if (shadowStyle === '3d' || shadowStyle === 'double') {
+                  } else if (shadowStyle === 'double') {
+                    ctx.strokeStyle = 'rgba(212, 175, 55, 0.45)'; ctx.lineWidth = 2 * S;
+                    ctx.strokeText(w, cursorX - 2 * S, y - 2 * S);
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.95)'; ctx.shadowBlur = 10 * S;
+                    ctx.shadowOffsetX = 2 * S; ctx.shadowOffsetY = 3 * S;
+                  } else if (shadowStyle === '3d') {
                     ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
                     ctx.shadowBlur = 6 * S;
                     ctx.shadowOffsetX = 3 * S;
@@ -2342,9 +2361,20 @@
             ctx.restore();
           }
 
+          // Plain text watermark is independent from the social handle.
+          if (displaySettings.watermarkEnabled && displaySettings.watermarkText?.trim()) {
+            ctx.save();
+            const wPos = displaySettings.watermarkPosition || 'bottomCenter';
+            const left = wPos.endsWith('Left'), right = wPos.endsWith('Right');
+            const wx = left ? 40 * S : right ? W - 40 * S : W / 2;
+            const wy = wPos.startsWith('top') ? 100 * S : H - 100 * S;
+            ctx.direction = 'ltr'; ctx.textAlign = left ? 'left' : right ? 'right' : 'center';
+            ctx.font = `${Math.round(20 * S)}px "Cairo", sans-serif`;
+            ctx.fillStyle = '#FFFFFF'; ctx.shadowColor = '#000000'; ctx.shadowBlur = 4 * S;
+            ctx.fillText(displaySettings.watermarkText.trim(), wx, wy); ctx.restore();
+          }
           // 12.B: Social Media Handle Watermark (Only if enabled and handle provided)
-          const socHandle = (displaySettings.socialHandle || displaySettings.watermarkText || '').trim()
-            || (displaySettings.socialWatermarkEnabled ? '@QuranReels' : '');
+          const socHandle = (displaySettings.socialHandle ?? '').trim();
           if (displaySettings.socialWatermarkEnabled && socHandle) {
             ctx.save();
             const sPos = displaySettings.socialWatermarkPosition || displaySettings.watermarkPosition || 'bottomCenter';
@@ -2366,7 +2396,7 @@
             } else if (sPos === 'bottomRight') {
               align = 'right';
             }
-            if (sPos === 'topCenter') sy = padding + sSize;
+            if (sPos === 'topCenter') sy = 40 * S + sSize;
 
             ctx.textAlign = align;
             ctx.textBaseline = 'bottom';
@@ -2379,7 +2409,8 @@
             else if (platform === 'x') icon = '𝕏 ';
             else if (platform === 'custom') icon = '';
 
-            const socialLabel = `${icon}${socHandle}`;
+            ctx.direction = 'ltr';
+            const socialLabel = `${platform === 'custom' ? '' : platform + ' · '}${socHandle}`;
             const socialWidth = ctx.measureText(socialLabel).width;
             const pillHeight = Math.max(30 * S, sSize + 14 * S);
             const pillWidth = socialWidth + 28 * S;

@@ -53,18 +53,18 @@ export async function getFFmpeg(onProgress?: (ratio: number) => void): Promise<F
  * Broadcast-grade H.264 / AAC conversion arguments for social media (Reels, TikTok, Shorts)
  * and universal local media player hardware acceleration
  */
-export function getH264BroadcastArgs(fps: number = 30, audioBitrate: string = '192k') {
+export function getH264BroadcastArgs(fps: number = 30, audioBitrate: string = '192k', durationSeconds?: number) {
   const safeFps = fps === 60 ? 60 : 30;
   const audioSampleRate = audioBitrate === '320k' ? '96000' : '44100';
   return [
   '-c:v', 'libx264',
   '-profile:v', 'high',
-  '-level:v', safeFps === 60 ? '4.2' : '4.1',
+  // Let x264 select the level from the actual dimensions and frame rate, including 4K60.
   // Canvas MediaRecorder WebM is tagged full-range (pc). Convert levels
   // explicitly before marking the broadcast MP4 as video-range (tv); merely
   // changing the pixel format makes local exports visibly darker than the
   // shared Browser Cloud scene.
-  '-vf', 'scale=in_range=pc:out_range=tv,format=yuv420p',
+  '-vf', 'scale=in_range=pc:out_range=tv,format=yuv420p' + (durationSeconds && durationSeconds > 0 ? `,setpts=PTS-STARTPTS,fps=${safeFps},tpad=stop_mode=clone:stop_duration=${durationSeconds}` : ''),
   '-color_range', 'tv',
   '-pix_fmt', 'yuv420p',
   '-preset', 'veryfast',
@@ -87,13 +87,13 @@ export function getH264BroadcastArgs(fps: number = 30, audioBitrate: string = '1
 
 export const H264_BROADCAST_ARGS = getH264BroadcastArgs();
 
-export function getMpeg4FallbackArgs(fps: number = 30, audioBitrate: string = '192k') {
+export function getMpeg4FallbackArgs(fps: number = 30, audioBitrate: string = '192k', durationSeconds?: number) {
   const safeFps = fps === 60 ? 60 : 30;
   const audioSampleRate = audioBitrate === '320k' ? '96000' : '44100';
   return [
   '-c:v', 'mpeg4',
   '-q:v', '4',
-  '-vf', 'scale=in_range=pc:out_range=tv,format=yuv420p',
+  '-vf', 'scale=in_range=pc:out_range=tv,format=yuv420p' + (durationSeconds && durationSeconds > 0 ? `,setpts=PTS-STARTPTS,fps=${safeFps},tpad=stop_mode=clone:stop_duration=${durationSeconds}` : ''),
   '-color_range', 'tv',
   '-pix_fmt', 'yuv420p',
   '-r', safeFps.toString(),
@@ -125,10 +125,12 @@ export async function convertWebmToMp4(
     filename?: string;
     fps?: 30 | 60;
     audioBitrate?: '128k' | '192k' | '320k';
+    durationSeconds?: number;
   }
 ): Promise<Blob> {
   const fps = opts?.fps === 60 ? 60 : 30;
   const audioBitrate = opts?.audioBitrate || '192k';
+  const durationArgs = opts?.durationSeconds && opts.durationSeconds > 0 ? ['-t', String(opts.durationSeconds)] : [];
   const ffmpeg = await getFFmpeg(opts?.onProgress);
 
   const inName = input.type.includes('mp4') ? 'input.mp4' : 'input.webm';
@@ -138,9 +140,9 @@ export async function convertWebmToMp4(
 
   // Try H.264 + AAC with +faststart first; if not available in this build, fallback to MPEG-4.
   try {
-    await ffmpeg.exec(['-i', inName, ...getH264BroadcastArgs(fps, audioBitrate), outName]);
+    await ffmpeg.exec(['-i', inName, ...getH264BroadcastArgs(fps, audioBitrate, opts?.durationSeconds), ...durationArgs, outName]);
   } catch {
-    await ffmpeg.exec(['-i', inName, ...getMpeg4FallbackArgs(fps, audioBitrate), outName]);
+    await ffmpeg.exec(['-i', inName, ...getMpeg4FallbackArgs(fps, audioBitrate, opts?.durationSeconds), ...durationArgs, outName]);
   }
 
   const data = (await ffmpeg.readFile(outName)) as unknown as Uint8Array;

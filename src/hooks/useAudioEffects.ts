@@ -44,6 +44,7 @@ export function useAudioEffects() {
   const dryGainRef = useRef<GainNode | null>(null);
   const echoGainRef = useRef<GainNode | null>(null);
   const masterGainRef = useRef<GainNode | null>(null);
+  const compressorRef = useRef<DynamicsCompressorNode | null>(null);
   const recordingDestRef = useRef<MediaStreamAudioDestinationNode | null>(null);
   const biquadFilterRef = useRef<BiquadFilterNode | null>(null);
   const highShelfRef = useRef<BiquadFilterNode | null>(null);
@@ -97,6 +98,13 @@ export function useAudioEffects() {
       const reverbGain = ctx.createGain();
       const echoGain = ctx.createGain();
       const masterGain = ctx.createGain();
+      const compressor = ctx.createDynamicsCompressor();
+      compressor.threshold.value = effects.normalizeEnabled ? -24 : 0;
+      compressor.knee.value = effects.normalizeEnabled ? 24 : 0;
+      compressor.ratio.value = effects.normalizeEnabled ? 4 : 1;
+      compressor.attack.value = 0.003;
+      compressor.release.value = 0.25;
+      compressorRef.current = compressor;
       const recordingDest = ctx.createMediaStreamDestination();
       const biquadFilter = ctx.createBiquadFilter();
       const highShelf = ctx.createBiquadFilter();
@@ -147,8 +155,9 @@ export function useAudioEffects() {
       feedback.gain.value = effects.echoEnabled ? effects.echoFeedback : 0;
 
       // Mixdown: all paths -> master -> speakers + recording
-      masterGain.connect(ctx.destination);
-      masterGain.connect(recordingDest);
+      masterGain.connect(compressor);
+      compressor.connect(ctx.destination);
+      compressor.connect(recordingDest);
 
       // Dry path with the optional clarity filter chain
       sourceNodeRef.current.connect(biquadFilter);
@@ -178,6 +187,11 @@ export function useAudioEffects() {
   // Update effects in real-time
   useEffect(() => {
     if (!isInitialized) return;
+    if (compressorRef.current) {
+      compressorRef.current.threshold.value = effects.normalizeEnabled ? -24 : 0;
+      compressorRef.current.knee.value = effects.normalizeEnabled ? 24 : 0;
+      compressorRef.current.ratio.value = effects.normalizeEnabled ? 4 : 1;
+    }
 
     // Update master volume
     if (masterGainRef.current) {
@@ -240,6 +254,7 @@ export function useAudioEffects() {
         reverbGainRef.current?.disconnect();
         echoGainRef.current?.disconnect();
         masterGainRef.current?.disconnect();
+        compressorRef.current?.disconnect();
         recordingDestRef.current?.disconnect();
         biquadFilterRef.current?.disconnect();
         highShelfRef.current?.disconnect();

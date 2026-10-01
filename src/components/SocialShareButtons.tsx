@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Share2, Instagram, Facebook, Copy, Download } from 'lucide-react';
@@ -29,171 +30,52 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+
 export function SocialShareButtons({ videoBlob, mp4Blob, title, text, filename }: SocialShareButtonsProps) {
-  const shareToSocial = async (platform: 'instagram' | 'facebook' | 'tiktok' | 'whatsapp' | 'native') => {
-    const activeBlob = mp4Blob || videoBlob;
-    if (!activeBlob) {
-      toast.error('لا يوجد فيديو للمشاركة');
-      return;
-    }
-
-    // Determine accurate MIME type and extension
-    const mimeType = activeBlob.type || (mp4Blob ? 'video/mp4' : 'video/webm');
-    const ext = mimeType.includes('mp4') ? '.mp4' : '.webm';
-    const shareFilename = filename.replace(/\.[^/.]+$/, ext);
-    const file = new File([activeBlob], shareFilename, { type: mimeType });
-    const navAny = navigator as Navigator & { canShare?: (data: ShareData) => boolean };
-
-    // WhatsApp sharing
-    if (platform === 'whatsapp') {
-      if (navigator.share && navAny.canShare?.({ files: [file] })) {
-        try {
-          await navigator.share({
-            title,
-            text: `${text}\n\n#قرآن_كريم #quran`,
-            files: [file],
-          });
-          toast.success('تمت المشاركة بنجاح!');
-          return;
-        } catch (e) {
-          if ((e as Error).name === 'AbortError') return;
-        }
-      }
-      // Fallback - download and suggest
-      downloadFile(activeBlob, shareFilename);
-      toast.info('تم تحميل الفيديو. أرسله عبر واتساب');
-      return;
-    }
-
-    // For Instagram, TikTok, Facebook - use native share to send file
-    if (navigator.share && navAny.canShare?.({ files: [file] })) {
-      try {
-        const hashtags = '#قرآن_كريم #quran #islamic #reels #تلاوة';
-        await navigator.share({
-          title,
-          text: `${text}\n\n${hashtags}`,
-          files: [file],
-        });
-        toast.success('تمت المشاركة بنجاح!');
-        return;
-      } catch (e) {
-        if ((e as Error).name === 'AbortError') return;
-        console.error('Share failed:', e);
-      }
-    }
-    
-    // Fallback: download the file so user can upload manually
-    downloadFile(activeBlob, shareFilename);
-    
-    const platformMessages: Record<string, string> = {
-      instagram: '📱 تم تحميل الفيديو. افتح Instagram → أنشئ Reel جديد → اختر الفيديو المحمّل',
-      tiktok: '📱 تم تحميل الفيديو. افتح TikTok → اضغط + → اختر الفيديو المحمّل',
-      facebook: '📱 تم تحميل الفيديو. افتح Facebook → أنشئ Reel → اختر الفيديو المحمّل',
-      native: '📱 تم تحميل الفيديو',
-    };
-    
-    toast.info(platformMessages[platform] || platformMessages.native, { duration: 6000 });
-  };
-
-  const downloadFile = (blob: Blob, name: string) => {
-    const url = URL.createObjectURL(blob);
+  const activeBlob = mp4Blob || (videoBlob?.type.includes('mp4') ? videoBlob : null);
+  const [caption, setCaption] = useState(text + '\n\n#قرآن_كريم #تلاوة #quran');
+  const [busy, setBusy] = useState(false);
+  useEffect(() => { setCaption(text + '\n\n#قرآن_كريم #تلاوة #quran'); }, [text]);
+  const download = () => {
+    if (!activeBlob) return;
+    const url = URL.createObjectURL(activeBlob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 1500);
+    a.href = url; a.download = filename.replace(/\.[^.]+$/, '') + '.mp4';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
   };
-
-  const copyVideoToClipboard = async () => {
-    if (!videoBlob) return;
+  const share = async (platform: string) => {
+    if (!activeBlob || busy) return;
+    setBusy(true);
     try {
-      // Copy as file to clipboard if supported
-      const file = new File([videoBlob], filename, { type: videoBlob.type });
-      if (navigator.clipboard && 'write' in navigator.clipboard) {
-        await (navigator.clipboard as any).write([
-          new ClipboardItem({ [videoBlob.type]: videoBlob })
-        ]);
-        toast.success('تم نسخ الفيديو للحافظة');
-        return;
+      const file = new File([activeBlob], filename.replace(/\.[^.]+$/, '') + '.mp4', { type: 'video/mp4' });
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ title, text: caption, files: [file] });
+        toast.success('تم إرسال الفيديو إلى تطبيق المشاركة');
+      } else {
+        download();
+        toast.info('تم تحميل MP4. افتح ' + platform + ' وارفع الفيديو، ثم الصق وصف المشاركة.', { duration: 6000 });
       }
-    } catch {
-      // Clipboard write failed or is unsupported; fallback to download
-    }
-    // Fallback: download
-    downloadFile(videoBlob, filename);
-    toast.info('تم تحميل الفيديو');
+    } catch (error) {
+      if ((error as Error).name !== 'AbortError') toast.error('تعذرت المشاركة. استخدم تحميل MP4 ونسخ الوصف.');
+    } finally { setBusy(false); }
   };
-
-  return (
-    <div className="flex flex-col gap-3">
-      <p className="text-sm text-muted-foreground text-center">مشاركة مباشرة على:</p>
-      <div className="grid grid-cols-5 gap-2">
-        {/* Instagram Reels */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={(e) => { e.stopPropagation(); shareToSocial('instagram'); }}
-          disabled={!videoBlob}
-          className="flex flex-col items-center gap-1 h-auto py-2 bg-gradient-to-br from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white border-0"
-        >
-          <Instagram className="h-5 w-5" />
-          <span className="text-[10px]">Reels</span>
-        </Button>
-
-        {/* TikTok */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={(e) => { e.stopPropagation(); shareToSocial('tiktok'); }}
-          disabled={!videoBlob}
-          className="flex flex-col items-center gap-1 h-auto py-2 bg-black hover:bg-gray-900 text-white border-0"
-        >
-          <TikTokIcon className="h-5 w-5" />
-          <span className="text-[10px]">TikTok</span>
-        </Button>
-
-        {/* Facebook Reels */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={(e) => { e.stopPropagation(); shareToSocial('facebook'); }}
-          disabled={!videoBlob}
-          className="flex flex-col items-center gap-1 h-auto py-2 bg-blue-600 hover:bg-blue-700 text-white border-0"
-        >
-          <Facebook className="h-5 w-5" />
-          <span className="text-[10px]">Reels</span>
-        </Button>
-
-        {/* WhatsApp */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={(e) => { e.stopPropagation(); shareToSocial('whatsapp'); }}
-          disabled={!videoBlob}
-          className="flex flex-col items-center gap-1 h-auto py-2 bg-green-600 hover:bg-green-700 text-white border-0"
-        >
-          <WhatsAppIcon className="h-4 w-4" />
-          <span className="text-[10px]">واتساب</span>
-        </Button>
-
-        {/* Native Share */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={(e) => { e.stopPropagation(); shareToSocial('native'); }}
-          disabled={!videoBlob}
-          className="flex flex-col items-center gap-1 h-auto py-2"
-        >
-          <Share2 className="h-5 w-5" />
-          <span className="text-[10px]">المزيد</span>
-        </Button>
-      </div>
-      
-      <p className="text-[10px] text-muted-foreground text-center leading-relaxed">
-        💡 على الهاتف: يتم فتح نافذة المشاركة مباشرة مع الفيديو. اختر التطبيق وانشر
-      </p>
+  return <div className="space-y-3 rounded-xl border border-border/60 p-3">
+    <div className="flex items-center gap-2 text-sm font-semibold"><Share2 className="h-4 w-4 text-primary" />تجهيز المشاركة على المنصات</div>
+    <label className="block space-y-2 text-xs text-muted-foreground">وصف المشاركة والوسوم
+      <textarea aria-label="وصف المشاركة والوسوم" maxLength={2200} rows={3} value={caption} onChange={e => setCaption(e.target.value)} className="w-full resize-y rounded-lg border bg-background p-2 text-sm" />
+    </label>
+    <div className="grid grid-cols-2 gap-2">
+      <Button size="sm" variant="outline" onClick={async () => { try { await navigator.clipboard.writeText(caption); toast.success('تم نسخ الوصف'); } catch { toast.error('تعذر النسخ. حدد الوصف وانسخه يدوياً.'); } }}><Copy className="h-4 w-4 ml-2" />نسخ الوصف</Button>
+      <Button size="sm" variant="outline" disabled={!activeBlob || busy} onClick={download}><Download className="h-4 w-4 ml-2" />تحميل MP4</Button>
     </div>
-  );
+    <div className="grid grid-cols-5 gap-2">
+      {[
+        { name: 'Instagram', Icon: Instagram }, { name: 'TikTok', Icon: TikTokIcon },
+        { name: 'Facebook', Icon: Facebook }, { name: 'WhatsApp', Icon: WhatsAppIcon }, { name: 'المزيد', Icon: Share2 },
+      ].map(({ name, Icon }) => <Button key={name} size="sm" variant="outline" className="h-auto flex-col gap-1 px-1 py-2" disabled={!activeBlob || busy} onClick={() => void share(name)}><Icon className="h-4 w-4" /><span className="text-[9px]">{name}</span></Button>)}
+    </div>
+    <p className="text-[11px] leading-relaxed text-muted-foreground">على الأجهزة الداعمة تظهر نافذة المشاركة؛ اختر التطبيق المطلوب. على الكمبيوتر حمّل الفيديو وانشره من التطبيق. لا يتم النشر تلقائياً.</p>
+    {!activeBlob && <p className="text-xs text-amber-500">تتاح مشاركة الملف بعد اكتمال تجهيز MP4.</p>}
+  </div>;
 }

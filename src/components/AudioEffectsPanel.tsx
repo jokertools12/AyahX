@@ -7,6 +7,7 @@ import { PremiumBadge } from '@/components/PremiumBadge';
 import { useSubscription } from '@/hooks/useSubscription';
 import { Music, Waves, Timer, Volume2, Lock } from 'lucide-react';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 
 interface AudioEffectsPanelProps {
   effects: AudioEffects;
@@ -42,7 +43,7 @@ export function AudioEffectsPanel({ effects, onChange, disabled }: AudioEffectsP
         </CardHeader>
         <CardContent className="py-8 text-center space-y-3">
           <Lock className="h-9 w-9 mx-auto text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">الفلاتر الصوتية الهندسية وحماية الحقوق متاحة للعضوية المميزة فقط.</p>
+          <p className="text-sm text-muted-foreground">تحسين وضوح التلاوة وضبط مستواها والصدى متاح للعضوية المميزة.</p>
           <PremiumBadge showLock />
         </CardContent>
       </Card>
@@ -54,10 +55,16 @@ export function AudioEffectsPanel({ effects, onChange, disabled }: AudioEffectsP
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center gap-2">
           <Music className="h-5 w-5" />
-          المؤثرات الصوتية
+          استوديو الصوت
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
+        <p className="text-xs leading-relaxed text-muted-foreground">حسّن وضوح التلاوة مع الحفاظ على صوت القارئ وتوقيت الكلمات. المعالجة لا تنقل ملكية التسجيل ولا تضمن قبول نشره على المنصات.</p>
+        <div className="grid grid-cols-3 gap-2" aria-label="إعدادات الصوت الجاهزة">
+          <Button variant="outline" disabled={disabled} onClick={() => onChange({ ...effects, volume: 1, normalizeEnabled: false, eqEnabled: false, reverbEnabled: false, echoEnabled: false, speedAdjust: 1, pitchShift: 0, copyrightProtectionEnabled: false })}>الصوت الأصلي</Button>
+          <Button variant="outline" disabled={disabled} onClick={() => onChange({ ...effects, volume: 1, normalizeEnabled: true, eqEnabled: true, reverbEnabled: false, echoEnabled: false, speedAdjust: 1, pitchShift: 0, copyrightProtectionEnabled: false })}>وضوح متوازن</Button>
+          <Button variant="outline" disabled={disabled} onClick={() => onChange({ ...effects, volume: 1, normalizeEnabled: true, eqEnabled: true, reverbEnabled: true, reverbLevel: 0.2, echoEnabled: false, speedAdjust: 1, pitchShift: 0, copyrightProtectionEnabled: false })}>صدى خفيف</Button>
+        </div>
         {/* The old fingerprint-evasion toggle was intentionally retired. A
             licensed audio track and a stable audio clock are required for
             trustworthy Quran word timing. */}
@@ -105,7 +112,7 @@ export function AudioEffectsPanel({ effects, onChange, disabled }: AudioEffectsP
             />
           </div>
           <p className="text-xs text-muted-foreground pr-6">
-            تسوية مستوى الصوت تلقائياً لضمان وضوح ثابت
+            يضبط تفاوت المستوى ديناميكياً في المعاينة والتسجيل المحلي. يستخدم التصدير السحابي تسوية جهارة الصوت مع تحديد الذروة.
           </p>
         </div>
 
@@ -127,7 +134,7 @@ export function AudioEffectsPanel({ effects, onChange, disabled }: AudioEffectsP
             />
           </div>
           <p className="text-xs text-muted-foreground pr-6">
-            تحسين الوضوح وتقليل الضجيج للحصول على صوت أكثر نقاءً
+            موازنة الترددات لإبراز وضوح الصوت ودفئه؛ لا يزيل ضجيج التسجيل الأصلي.
           </p>
         </div>
 

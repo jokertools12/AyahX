@@ -684,7 +684,7 @@ export async function applyAudioEffects(
   let reverbFilter = '';
   if (effects.reverbEnabled) {
     const level = typeof effects.reverbLevel === 'number' ? effects.reverbLevel : 0.5;
-    const clampedLevel = Math.max(0.1, Math.min(1.0, level));
+    const clampedLevel = Math.max(0, Math.min(1.0, level));
     const r1 = (0.35 * clampedLevel).toFixed(3);
     const r2 = (0.28 * clampedLevel).toFixed(3);
     const r3 = (0.20 * clampedLevel).toFixed(3);
@@ -717,22 +717,18 @@ export async function applyAudioEffects(
   const userVolume = typeof effects.volume === 'number' ? effects.volume : 1.25;
   const userGainDb = 20 * Math.log10(Math.max(0.2, Math.min(3.0, userVolume)));
   
-  // Bring the recitation peak to standard -0.5 dB True Peak ceiling
-  // (e.g. if original max is -7.7 dB, peakHeadroomDb provides +7.2 dB clean boost)
-  const peakHeadroomDb = Math.max(0, -0.5 - metrics.maxVolumeDb);
-  const totalGainDb = peakHeadroomDb + userGainDb;
-
   if (effects.normalizeEnabled) {
     // Dynamic EBU R128 normalization for multi-verse recitations + volume boost + limiter
     postFilters.push(
       'loudnorm=I=-13:TP=-0.5:LRA=9',
-      `volume=${Math.max(1.0, userVolume).toFixed(2)}`,
+      `volume=${userVolume.toFixed(2)}`,
       'alimiter=level_in=1:level_out=1:limit=0.96:attack=5:release=50'
     );
   } else {
-    // Studio-grade peak headroom amplification + user volume boost + transparent brickwall limiter
+    // Respect the user's gain even with normalization disabled. A hidden
+    // peak boost made the "original" setting louder than the preview.
     postFilters.push(
-      `volume=${totalGainDb.toFixed(2)}dB`,
+      `volume=${userGainDb.toFixed(2)}dB`,
       'alimiter=level_in=1:level_out=1:limit=0.96:attack=5:release=50'
     );
   }

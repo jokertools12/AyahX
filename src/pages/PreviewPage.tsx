@@ -52,6 +52,7 @@ import { tokenizeQuranicText } from '@/lib/timingMap';
 import {
   Download,
   RotateCcw,
+  Share2,
   Loader2,
   Play,
   Pause,
@@ -383,11 +384,11 @@ export default function PreviewPage() {
       return;
     }
     setSelectedPresetId(preset.id);
-    setDisplaySettings((prev) => ({ ...prev, ...preset.displaySettings }));
+    setDisplaySettings((prev) => ({ ...DEFAULT_DISPLAY_SETTINGS, ...preset.displaySettings, watermarkEnabled: prev.watermarkEnabled, watermarkText: prev.watermarkText, watermarkPosition: prev.watermarkPosition, socialWatermarkEnabled: prev.socialWatermarkEnabled, socialHandle: prev.socialHandle, socialPlatform: prev.socialPlatform, socialWatermarkPosition: prev.socialWatermarkPosition, socialWatermarkSize: prev.socialWatermarkSize, socialWatermarkOpacity: prev.socialWatermarkOpacity, logoWatermarkUrl: prev.logoWatermarkUrl, logoWatermarkEnabled: prev.logoWatermarkEnabled, logoBrandName: prev.logoBrandName, logoSubtitle: prev.logoSubtitle, logoWatermarkPosition: prev.logoWatermarkPosition, logoWatermarkSize: prev.logoWatermarkSize, logoWatermarkOpacity: prev.logoWatermarkOpacity, logoWatermarkPreset: prev.logoWatermarkPreset }));
     if (preset.textSettings) {
       setTextSettings((prev) => ({ ...prev, ...preset.textSettings }));
     }
-    setExportSettings((prev) => ({ ...prev, quality: preset.exportQuality }));
+
     setAspectRatio(preset.recommendedAspectRatio);
     const recommended = [...backgroundVideos, ...backgroundImages, ...slideshowBackgrounds].find((item) => item.id === preset.recommendedBackground);
     if (recommended && (isPremium || isFreeBackgroundAsset(recommended))) {
@@ -406,7 +407,7 @@ export default function PreviewPage() {
   }, [canUseFeature, isPremium, setSearchParams]);
 
   const handleExportSettingsChange = useCallback((newSettings: ExportSettings) => {
-    setExportSettings(newSettings);
+    setExportSettings({ ...newSettings, format: 'mp4' });
   }, []);
 
   // ── Ayah data ───────────────────────────────────────────────────────────────
@@ -438,6 +439,10 @@ export default function PreviewPage() {
   const [currentTime, setCurrentTime] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const [isPublicVideo, setIsPublicVideo] = useState(false);
+  const [discoverTitle, setDiscoverTitle] = useState('');
+  const [localSavedVideoId, setLocalSavedVideoId] = useState<string | null>(null);
+  useEffect(() => { setIsPublicVideo(false); setDiscoverTitle(''); }, [serverRenderJob.jobId]);
+  useEffect(() => { setLocalSavedVideoId(null); }, [videoRecorder.videoBlob]);
   const [audioLoaded, setAudioLoaded] = useState(false);
   const [audioError, setAudioError] = useState(false);
   const [activeTab, setActiveTab] = useState('controls');
@@ -1973,16 +1978,10 @@ export default function PreviewPage() {
       // A native recorder may claim MP4 support while ignoring 60fps or AAC
       // bitrate requests. For those premium outputs we always post-process
       // locally into a constant-frame-rate MP4.
-      const requiresDeterministicMp4 = exportSettingsForPlan.format === 'mp4'
-        && (selectedFps === 60 || selectedAudioBitrate === '320k');
-      // A WebM selection must never silently produce an MP4 blob with a
-      // `.webm` filename. Keep MP4 first for the recommended MP4 path, but
-      // make the explicit WebM choice deterministic and honest.
-      const preferredMimeCandidates = exportSettingsForPlan.format === 'webm'
-        ? ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm']
-        : requiresDeterministicMp4
-          ? ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm', 'video/mp4;codecs=avc1,mp4a.40.2', 'video/mp4']
-          : ['video/mp4;codecs=avc1,mp4a.40.2', 'video/mp4', 'video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm'];
+      // Native MediaRecorder MP4 is variable-rate too. Always normalize the
+      // final output to the selected FPS and audio bitrate before sharing.
+      const requiresDeterministicMp4 = true;
+      const preferredMimeCandidates = ['video/mp4;codecs=avc1,mp4a.40.2', 'video/mp4', 'video/webm;codecs=vp8,opus', 'video/webm;codecs=vp9,opus', 'video/webm'];
 
       const attemptsByMode: Record<RecordingAttemptKey, RecordingAttempt> = {
         quality: {
@@ -2094,7 +2093,7 @@ export default function PreviewPage() {
           const renderIsolatedFrame = (now: number) => {
             if (stopped) return;
             rafId = requestAnimationFrame(renderIsolatedFrame);
-            if (now - lastFrameTime < frameInterval) return;
+            if (now - lastFrameTime + 0.5 < frameInterval) return;
             lastFrameTime = now;
             void drawIsolatedFrame();
           };
@@ -2231,17 +2230,21 @@ export default function PreviewPage() {
         if (videoRecorder.mp4Blob) videoRecorder.downloadMp4(`${baseFilename}.mp4`);
         else toast.error('ملف MP4 غير جاهز بعد');
         break;
-      case 'webm':
-        if (videoRecorder.videoBlob) videoRecorder.downloadWebm(`${baseFilename}.webm`);
-        else toast.error('لا يوجد فيديو للتحميل');
-        break;
-      case 'gif':
-        toast.info('تحميل GIF غير متاح حالياً');
-        break;
+
     }
   }, [surah, reciter, toSafeFilename, videoRecorder]);
 
   // ── Save to library ─────────────────────────────────────────────────────────
+  const handlePublishCloud = async () => {
+    if (!serverRenderJob.jobId || isSaving) return;
+    setIsSaving(true);
+    try {
+      await api.videos.update(serverRenderJob.jobId, { is_public: !isPublicVideo, ...(discoverTitle.trim() ? { surah_name: discoverTitle.trim() } : {}) });
+      setIsPublicVideo(!isPublicVideo);
+      toast.success(isPublicVideo ? 'أصبح الفيديو خاصاً' : 'تمت مشاركة الفيديو في اكتشف');
+    } catch (error: any) { toast.error(error?.message || 'تعذر تحديث المشاركة'); }
+    finally { setIsSaving(false); }
+  };
   const handleSave = async () => {
     if (!isAuthenticated || !user) {
       toast.error('الرجاء تسجيل الدخول لحفظ الفيديو');
@@ -2250,7 +2253,12 @@ export default function PreviewPage() {
     }
     setIsSaving(true);
     try {
-      await api.videos.create({
+      if (localSavedVideoId) {
+        await api.videos.update(localSavedVideoId, { is_public: false });
+        toast.success('المشروع محفوظ بالفعل في مكتبتك');
+        return;
+      }
+      const saved = await api.videos.create({
         surah_number: isIbtahalatMode ? 0 : surahNumber,
         surah_name: isIbtahalatMode ? `ابتهال: ${ibtTrackTitle}` : (surah?.name || ''),
         reciter_id: isIbtahalatMode ? 'ibtahalat' : reciterId,
@@ -2259,9 +2267,10 @@ export default function PreviewPage() {
         end_ayah: isIbtahalatMode ? 0 : endAyah,
         background_type: backgroundType,
         aspect_ratio: aspectRatio,
-        is_public: isPublicVideo,
+        is_public: false,
       });
-      toast.success('تم حفظ الفيديو في مكتبتك!');
+      setLocalSavedVideoId(saved.id);
+      toast.success('تم حفظ بيانات المشروع في مكتبتك. احتفظ بملف MP4 على جهازك.');
     } catch (err) {
       console.error('Error saving video:', err);
       toast.error('حدث خطأ في حفظ الفيديو');
@@ -2748,6 +2757,8 @@ export default function PreviewPage() {
                 <DisplaySettingsPanel
                   settings={displaySettings}
                   onChange={setDisplaySettings}
+                  textSettings={textSettings}
+                  onTextSettingsChange={setTextSettings}
                   letterTimingStatus={letterTimingStatus}
                 />
               </TabsContent>
@@ -2906,26 +2917,15 @@ export default function PreviewPage() {
                       />
                     )}
 
-                    {/* Public toggle */}
-                    <label className="flex items-center gap-2 px-1 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={isPublicVideo}
-                        onChange={(e) => setIsPublicVideo(e.target.checked)}
-                        className="rounded border-border"
-                      />
-                      <span className="text-sm text-muted-foreground">مشاركة في صفحة اكتشف</span>
+                    <p className="rounded-xl border border-primary/20 bg-primary/5 p-3 text-sm">حُفظ الفيديو تلقائياً في مكتبتك. التحميل متاح لمدة 48 ساعة.</p>
+                    <label className="block space-y-2 text-sm">
+                      عنوان العرض في اكتشف
+                      <input className="w-full rounded-lg border bg-background p-2" maxLength={100} value={discoverTitle} onChange={e => setDiscoverTitle(e.target.value)} placeholder={surah?.name || 'عنوان الفيديو'} />
                     </label>
-
-                    <Button
-                      onClick={handleSave}
-                      disabled={isSaving}
-                      variant="secondary"
-                      className="w-full gap-2"
-                    >
-                      {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                      حفظ في المكتبة
+                    <Button onClick={handlePublishCloud} disabled={isSaving} variant="secondary" className="w-full gap-2">
+                      <Share2 className="h-4 w-4" />{isPublicVideo ? 'إلغاء المشاركة في اكتشف' : 'مشاركة الفيديو في اكتشف'}
                     </Button>
+                    <p className="text-xs text-muted-foreground">يظهر الفيديو باسم حسابك مع اسم القارئ. يمكنك إلغاء المشاركة هنا أو من المكتبة.</p>
 
                     <Button onClick={serverRenderJob.reset} variant="ghost" className="w-full gap-2">
                       <RotateCcw className="h-4 w-4" />
@@ -2959,84 +2959,13 @@ export default function PreviewPage() {
                       <>
                         <div className="flex items-center justify-center gap-2 text-primary p-3 rounded-lg bg-primary/10">
                           <Check className="h-5 w-5" />
-                          <span className="font-medium">اكتمل التسجيل. اختر صيغة التحميل.</span>
+                          <span className="font-medium">اكتمل التسجيل. الفيديو جاهز بصيغة MP4.</span>
                         </div>
 
 
-                        {(() => {
-                          const baseFilename = toSafeFilename(
-                            isIbtahalatMode
-                              ? `ibtahal-${ibtTrackTitle.slice(0, 30)}`
-                              : `${surah?.englishName || surah?.name || 'quran'}-${reciter?.id || 'reciter'}`
-                          );
-                          const wantsMp4 = exportSettings.format === 'mp4';
-
-                          return (
-                            <div className="space-y-2">
-                              {wantsMp4 ? (
-                                <>
-                                  <Button
-                                    onClick={() => videoRecorder.downloadMp4(`${baseFilename}.mp4`)}
-                                    disabled={videoRecorder.isConverting}
-                                    className="w-full gap-2"
-                                    size="lg"
-                                  >
-                                    {videoRecorder.isConverting ? (
-                                      <>
-                                        <Loader2 className="h-5 w-5 animate-spin" />
-                                        جاري تجهيز MP4 ({Math.round(videoRecorder.convertProgress)}%)...
-                                      </>
-                                    ) : (
-                                      <>
-                                        <Download className="h-5 w-5" />
-                                        تحميل الفيديو (MP4)
-                                      </>
-                                    )}
-                                  </Button>
-                                  <Button
-                                    onClick={() => videoRecorder.downloadWebm(`${baseFilename}.webm`)}
-                                    variant="outline"
-                                    className="w-full gap-2 text-xs"
-                                    size="sm"
-                                  >
-                                    <Download className="h-4 w-4" />
-                                    تحميل بصيغة WebM (فوري)
-                                  </Button>
-                                </>
-                              ) : (
-                                <>
-                                  <Button
-                                    onClick={() => videoRecorder.downloadWebm(`${baseFilename}.webm`)}
-                                    className="w-full gap-2"
-                                    size="lg"
-                                  >
-                                    <Download className="h-5 w-5" />
-                                    تحميل الفيديو (WebM)
-                                  </Button>
-                                  <Button
-                                    onClick={() => videoRecorder.downloadMp4(`${baseFilename}.mp4`)}
-                                    disabled={videoRecorder.isConverting}
-                                    variant="outline"
-                                    className="w-full gap-2 text-xs"
-                                    size="sm"
-                                  >
-                                    {videoRecorder.isConverting ? (
-                                      <>
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                        جاري تجهيز MP4...
-                                      </>
-                                    ) : (
-                                      <>
-                                        <Download className="h-4 w-4" />
-                                        تحويل وتحميل بصيغة MP4
-                                      </>
-                                    )}
-                                  </Button>
-                                </>
-                              )}
-                            </div>
-                          );
-                        })()}
+                        <Button onClick={() => videoRecorder.downloadMp4(downloadFilename)} disabled={videoRecorder.isConverting} className="w-full gap-2" size="lg">
+                          <Download className="h-5 w-5" />تحميل الفيديو (MP4)
+                        </Button>
 
                         <SocialShareButtons
                           videoBlob={videoRecorder.videoBlob}
@@ -3047,15 +2976,7 @@ export default function PreviewPage() {
                         />
 
                         {/* Public toggle */}
-                        <label className="flex items-center gap-2 px-1 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={isPublicVideo}
-                            onChange={(e) => setIsPublicVideo(e.target.checked)}
-                            className="rounded border-border"
-                          />
-                          <span className="text-sm text-muted-foreground">مشاركة في صفحة اكتشف</span>
-                        </label>
+                        <p className="text-xs text-muted-foreground leading-relaxed">حفظ المتصفح يحتفظ ببيانات المشروع فقط؛ نزّل MP4 للاحتفاظ بالفيديو. المشاركة في اكتشف متاحة للفيديو المحفوظ بالإنتاج السحابي.</p>
 
                         <Button
                           onClick={handleSave}

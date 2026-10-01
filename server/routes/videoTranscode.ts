@@ -40,7 +40,9 @@ router.post('/process-mp4', async (req: AuthenticatedRequest, res: Response) => 
 
     const requestedFps = parseInt(req.query.fps as string, 10);
     const fps = requestedFps === 60 ? 60 : 30;
-    const audioBitrate = req.query.audioBitrate === '320k' ? '320k' : '192k';
+    const requestedDuration = Number(req.query.duration);
+    const durationSeconds = Number.isFinite(requestedDuration) && requestedDuration > 0 && requestedDuration <= 3600 ? requestedDuration : undefined;
+    const audioBitrate = req.query.audioBitrate === '320k' ? '320k' : req.query.audioBitrate === '128k' ? '128k' : '192k';
     const filename = (req.query.filename as string || 'quran-reel.mp4')
       .replace(/[^a-zA-Z0-9_.-]/g, '_')
       .replace(/_+/g, '_');
@@ -53,6 +55,7 @@ router.post('/process-mp4', async (req: AuthenticatedRequest, res: Response) => 
       preset: 'veryfast',
       crf: 19,
       audioBitrate,
+      durationSeconds,
     });
     const elapsedSeconds = ((Date.now() - startTime) / 1000).toFixed(2);
 

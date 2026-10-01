@@ -6,6 +6,7 @@ import type { TextSettings } from '@/components/TextSettingsPanel';
 import type { ExportQuality } from '@/hooks/useVideoRecorder';
 
 export interface VideoPreset {
+  schemaVersion?: 2;
   id: string;
   name: string;
   description: string;
@@ -21,7 +22,7 @@ export interface VideoPreset {
   previewGradient?: string;
 }
 
-export const VIDEO_PRESETS: VideoPreset[] = [
+const LEGACY_PRESETS: VideoPreset[] = [
   // Signature visual directions — surfaced only in the template library.
   {
     id: 'cinematic-dawn-gate',
@@ -464,6 +465,25 @@ export const VIDEO_PRESETS: VideoPreset[] = [
     exportQuality: 'ultra',
   },
 ];
+
+// Every template starts from a complete current baseline; settings from a
+// previously selected template must never silently leak into the next one.
+export const VIDEO_PRESETS: VideoPreset[] = LEGACY_PRESETS.map(preset => ({
+  ...preset,
+  schemaVersion: 2,
+  textSettings: { fontSize: 32, fontFamily: '"Amiri Quran", serif', textColor: '#ffffff', shadowIntensity: 0.35, overlayOpacity: 0.4, ...preset.textSettings },
+  displaySettings: {
+    visualDesign: 'editorial', showSurahName: false, showReciterName: false,
+    showAyahText: true, showAyahNumber: true, highlightStyle: 'glow',
+    frameStyle: 'none', screenBorderStyle: 'none', screenBorderColor: 'gold',
+    ayahNumberStyle: 'quran3d', ayahNumberColor: 'gold', verseDisplayMode: 'full',
+    animationProfile: 'karaoke', animationReducedMotion: false,
+    surahNamePosition: 'top', surahNameStyle: 'classic', reciterNameStyle: 'simple',
+    textShadowStyle: 'soft', ayahTransition: 'fade', glowStyle: 'golden',
+    lyricsDisplayStyle: 'scroll', slideshowTransition: 'crossfade',
+    ...preset.displaySettings,
+  },
+}));
 
 export const getPresetById = (id: string): VideoPreset | undefined => {
   return VIDEO_PRESETS.find((p) => p.id === id);

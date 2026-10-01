@@ -30,7 +30,7 @@ const initial: ExportSettings = { format: 'mp4', quality: 'high', motionSpeed: 1
 function Harness({ onExport = vi.fn(), recording = false, converting = false, ready = false }) {
   const [settings, setSettings] = useState(initial);
   return <ExportFormatSelector settings={settings} onChange={setSettings} onExport={onExport}
-    videoBlob={ready ? new Blob(['test']) : null} mp4Blob={null}
+    videoBlob={ready ? new Blob(['test'], { type: 'video/webm' }) : null} mp4Blob={ready ? new Blob(['mp4'], { type: 'video/mp4' }) : null}
     isRecording={recording} isConverting={converting} />;
 }
 function toggle(title: string) { fireEvent.click(screen.getByText(title, { selector: 'summary span.block' })); }
@@ -99,7 +99,7 @@ describe('export settings progressive disclosure', () => {
     for (const id of ['bitrate-128k', 'bitrate-192k', 'bitrate-320k']) expect(radio(id)).toBeEnabled();
   });
 
-  it.each([[false, false, true, 2], [true, false, true, 0], [false, true, true, 0], [false, false, false, 0]])(
+  it.each([[false, false, true, 1], [true, false, true, 0], [false, true, true, 0], [false, false, false, 0]])(
     'preserves download availability: recording=%s converting=%s ready=%s', (recording, converting, ready, count) => {
       const download = vi.fn();
       render(<Harness recording={Boolean(recording)} converting={Boolean(converting)} ready={Boolean(ready)} onExport={download} />);
@@ -107,8 +107,8 @@ describe('export settings progressive disclosure', () => {
       expect(buttons).toHaveLength(Number(count));
       if (count) {
         fireEvent.click(screen.getByRole('button', { name: 'تحميل MP4' }));
-        fireEvent.click(screen.getByRole('button', { name: 'تحميل WEBM' }));
-        expect(download.mock.calls).toEqual([['mp4'], ['webm']]);
+        expect(screen.queryByText('WebM')).not.toBeInTheDocument();
+        expect(download.mock.calls).toEqual([['mp4']]);
       }
     },
   );

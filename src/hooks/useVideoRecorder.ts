@@ -72,7 +72,7 @@ export function useVideoRecorder() {
   const conversionInProgressRef = useRef<boolean>(false);
   const mp4BlobRef = useRef<Blob | null>(null);
   const videoBlobRef = useRef<Blob | null>(null);
-  const recordingOutputRef = useRef<{ fps: ExportFps; audioBitrate: AudioBitrate }>({
+  const recordingOutputRef = useRef<{ fps: ExportFps; audioBitrate: AudioBitrate; durationSeconds?: number }>({
     fps: 30,
     audioBitrate: '192k',
   });
@@ -121,7 +121,7 @@ export function useVideoRecorder() {
           : options?.audioBitrate === '128k'
           ? '128k'
           : '192k';
-        recordingOutputRef.current = { fps: safeFps, audioBitrate: requestedAudioBitrate };
+        recordingOutputRef.current = { fps: safeFps, audioBitrate: requestedAudioBitrate, durationSeconds: duration };
 
         // Use captureStream(0) = manual frame capture mode.
         // Frames are only pushed when we call videoTrack.requestFrame().
@@ -133,12 +133,12 @@ export function useVideoRecorder() {
 
         const tracks = [...canvasStream.getVideoTracks()];
         if (audioStream && audioStream.getAudioTracks().length) {
-          tracks.push(...audioStream.getAudioTracks());
+          tracks.push(...audioStream.getAudioTracks().map(track => track.clone()));
         } else if (audioElement) {
           const anyAudio = audioElement as unknown as { captureStream?: () => MediaStream; mozCaptureStream?: () => MediaStream };
           const elStream = anyAudio.captureStream?.() ?? anyAudio.mozCaptureStream?.();
           if (elStream?.getAudioTracks().length) {
-            tracks.push(...elStream.getAudioTracks());
+            tracks.push(...elStream.getAudioTracks().map(track => track.clone()));
           }
         }
         const combinedStream = new MediaStream(tracks);
@@ -196,9 +196,10 @@ export function useVideoRecorder() {
           const elapsed = Date.now() - startTime;
           let blob: Blob;
           const isNativeMp4 = mimeType.includes('mp4');
+          const forceMp4Transcode = options?.forceMp4Transcode !== false;
           if (isNativeMp4) {
             blob = rawBlob;
-            if (!options?.forceMp4Transcode) mp4BlobRef.current = rawBlob;
+            if (!forceMp4Transcode) mp4BlobRef.current = rawBlob;
           } else {
             try { blob = await fixWebmDuration(rawBlob, elapsed, { logger: false }); } catch { blob = rawBlob; }
           }
@@ -206,7 +207,7 @@ export function useVideoRecorder() {
 
           setState((prev) => ({
             ...prev, isRecording: false, progress: 100, videoBlob: blob,
-            mp4Blob: isNativeMp4 && !options?.forceMp4Transcode ? blob : null, isConverting: false, convertProgress: 0, error: null, stage: 'جاهز للتحميل!',
+            mp4Blob: isNativeMp4 && !forceMp4Transcode ? blob : null, isConverting: false, convertProgress: 0, error: null, stage: 'جاهز لتجهيز MP4',
           }));
           stopTracks();
           resolve(blob);
@@ -321,7 +322,7 @@ export function useVideoRecorder() {
     const sourceVideo = videoBlobRef.current ?? state.videoBlob;
     if (!sourceVideo) return null;
     // Use the settings captured for this recording, not current UI selections.
-    const { fps, audioBitrate } = recordingOutputRef.current;
+    const { fps, audioBitrate, durationSeconds } = recordingOutputRef.current;
 
     if (conversionInProgressRef.current) {
       return new Promise((resolve) => {
@@ -344,7 +345,7 @@ export function useVideoRecorder() {
           error: null,
         }));
 
-        const transcodeUrl = `/api/videos/process-mp4?fps=${fps}&audioBitrate=${audioBitrate}&filename=${encodeURIComponent(targetFilename)}`;
+        const transcodeUrl = `/api/videos/process-mp4?fps=${fps}&audioBitrate=${audioBitrate}&filename=${encodeURIComponent(targetFilename)}&duration=${durationSeconds}`;
         const headers: Record<string, string> = {
           'Content-Type': sourceVideo.type || 'video/webm',
         };
@@ -372,9 +373,7 @@ export function useVideoRecorder() {
 
       // 2. Fallback to client converter if server transcode did not return a blob
       if (!mp4) {
-        if (sourceVideo.type.includes('mp4')) {
-          mp4 = sourceVideo;
-        } else {
+        {
           setState((prev) => ({
             ...prev,
             stage: `جاري المعالجة بمحرك FFmpeg المحلي (CFR ${fps}fps / ${audioBitrate})...`,
@@ -383,6 +382,7 @@ export function useVideoRecorder() {
             filename: targetFilename,
             fps,
             audioBitrate,
+            durationSeconds,
             onProgress: (ratio) => {
               setState((prev) => ({ ...prev, convertProgress: Math.round(Math.min(Math.max(ratio, 0), 1) * 100) }));
             },
@@ -405,9 +405,6 @@ export function useVideoRecorder() {
   const downloadMp4 = useCallback(async (filename: string = 'quran-reel.mp4') => {
     let blob = mp4BlobRef.current ?? state.mp4Blob;
     const sourceVideo = videoBlobRef.current ?? state.videoBlob;
-    if (!blob && sourceVideo && sourceVideo.type.includes('mp4')) {
-      blob = sourceVideo;
-    }
     if (!blob && sourceVideo) {
       blob = await convertToMp4(filename);
     }

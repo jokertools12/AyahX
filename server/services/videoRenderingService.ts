@@ -7,6 +7,7 @@ import { logger } from '../logger';
 import { getFfmpegBinary as resolveFfmpegBinary, getFfmpegResourceArgs, getFfmpegVideoEncoderArgs } from './ffmpegBinary';
 
 export interface RenderOptions {
+  durationSeconds?: number;
   fps?: number;
   crf?: number;
   preset?: 'ultrafast' | 'superfast' | 'veryfast' | 'faster' | 'fast' | 'medium' | 'slow';
@@ -18,25 +19,12 @@ export function getFfmpegBinary(): string {
   return resolveFfmpegBinary();
 }
 
-/**
- * Checks if the native FFmpeg binary is available and executable
- */
 export function isFfmpegAvailable(): boolean {
   const binary = resolveFfmpegBinary();
   return binary === 'ffmpeg' || fs.existsSync(binary);
 }
 
-
-/**
- * Renders / converts a recorded video buffer into a broadcast-grade, silky-smooth MP4.
- * 
- * Solves playback stutter, frame dropping, and high CPU decode lag by enforcing:
- * 1. Constant Frame Rate (CFR) at 30.0 fps (-r 30 -vsync cfr)
- * 2. Hardware-accelerated H.264 High Profile, Level 4.1, yuv420p (universally decoded with 0% CPU lag)
- * 3. Consistent 2-second Keyframe GOP (-g 60 -keyint_min 30 -sc_threshold 0) for instantaneous seeking
- * 4. Visually lossless CRF 19 for crisp Arabic calligraphy and diacritics
- * 5. Faststart moov-atom placement for immediate streaming and playback
- */
+/** Converts browser recordings to CFR H.264/AAC MP4; dropped frames cannot be recovered. */
 export async function processVideoToSmoothMp4(
   inputBuffer: Buffer,
   options: RenderOptions = {}
@@ -75,9 +63,10 @@ export async function processVideoToSmoothMp4(
       '-c:v', 'libx264',
       ...getFfmpegVideoEncoderArgs(),
       '-profile:v', 'high',
-      '-level:v', '4.1',
+      // x264 derives the correct level from dimensions and FPS (4K requires 5.x).
       '-preset', preset,
       '-crf', crf.toString(),
+      ...(options.durationSeconds && options.durationSeconds > 0 ? ['-vf', `setpts=PTS-STARTPTS,fps=${fps},tpad=stop_mode=clone:stop_duration=${options.durationSeconds}`] : []),
       // Frame Rate & Timestamp Normalization (CFR eliminates micro-stutter & jitter)
       '-r', fps.toString(),
       '-vsync', 'cfr',
@@ -100,6 +89,7 @@ export async function processVideoToSmoothMp4(
       // Container optimization
       '-movflags', '+faststart',
       '-max_muxing_queue_size', '2048',
+      ...(options.durationSeconds && options.durationSeconds > 0 ? ['-t', String(options.durationSeconds)] : []),
       tempOutPath
     ];
 

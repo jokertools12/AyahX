@@ -572,13 +572,20 @@ router.post('/:id/cancel', requireAuth, async (req: AuthenticatedRequest, res: R
 });
 
 // 4. Secure Download of Completed Video Artifact
-router.get('/:id/download', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
+router.get('/:id/download', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = req.user!.id;
-    const isAdmin = req.user!.role === 'admin';
+    const userId = req.user?.id;
+    const isAdmin = req.user?.role === 'admin';
     const jobId = req.params.id as string;
 
-    const job = await renderJobQueue.getJobById(jobId, userId, isAdmin);
+    // Public media access is explicitly tied to the owner's current Discover
+    // setting. Revoking publication also revokes anonymous downloads.
+    const publicRows = await query<Array<{ user_id: string }>>(
+      'SELECT user_id FROM saved_videos WHERE id = ? AND is_public = 1 AND (expires_at IS NULL OR expires_at > NOW()) LIMIT 1', [jobId],
+    );
+    const allowedUserId = publicRows[0]?.user_id || userId;
+    if (!allowedUserId) return res.status(404).json({ error: 'الفيديو غير متاح' });
+    const job = await renderJobQueue.getJobById(jobId, allowedUserId, isAdmin);
     if (!job) {
       return res.status(404).json({ error: 'مهمة الريندر غير موجودة' });
     }
