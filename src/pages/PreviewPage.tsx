@@ -2341,7 +2341,7 @@ export default function PreviewPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex-1 flex justify-center"
+            className="preview-scroll-rail w-full lg:flex-1 flex justify-center"
             ref={previewContainerRef}
           >
             <VideoPreview

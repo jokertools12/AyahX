@@ -253,3 +253,22 @@
     }
   }
 }
+/* Keep the complete preview beside long settings without resizing its canvas. */
+@media (min-width: 1024px) {
+  .preview-scroll-rail {
+    position: sticky;
+    top: 5rem;
+    min-width: 0;
+    align-self: flex-start;
+  }
+
+  .preview-scroll-rail > .aspect-\[9\/16\] {
+    max-width: min(360px, calc((100vh - 7rem) * 9 / 16));
+    max-width: min(360px, calc((100dvh - 7rem) * 9 / 16));
+  }
+
+  .preview-scroll-rail > .aspect-video {
+    max-width: min(640px, calc((100vh - 7rem) * 16 / 9));
+    max-width: min(640px, calc((100dvh - 7rem) * 16 / 9));
+  }
+}
