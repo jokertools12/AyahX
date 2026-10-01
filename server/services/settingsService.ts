@@ -162,7 +162,7 @@ export async function getAllSettingsMasked(): Promise<Record<string, { value: st
     { key: 'OPENROUTER_ALLOW_PROVIDER_FALLBACKS', isSecret: false, category: 'ai', defaultVal: process.env.OPENROUTER_ALLOW_PROVIDER_FALLBACKS || 'false' },
     { key: 'OPENROUTER_DATA_COLLECTION', isSecret: false, category: 'ai', defaultVal: process.env.OPENROUTER_DATA_COLLECTION || 'deny' },
     { key: 'OPENROUTER_SITE_URL', isSecret: false, category: 'ai', defaultVal: process.env.OPENROUTER_SITE_URL || '' },
-    { key: 'AI_IMAGE_PROVIDER', isSecret: false, category: 'ai', defaultVal: process.env.AI_IMAGE_PROVIDER || 'gemini' },
+    { key: 'AI_IMAGE_PROVIDER', isSecret: false, category: 'ai', defaultVal: process.env.AI_IMAGE_PROVIDER || 'openrouter' },
     { key: 'GEMINI_API_KEY', isSecret: true, category: 'ai', defaultVal: process.env.GEMINI_API_KEY || '' },
     { key: 'PEXELS_API_KEY', isSecret: true, category: 'media', defaultVal: process.env.PEXELS_API_KEY || process.env.VITE_PEXELS_API_KEY || '' },
     { key: 'REELS_DEFAULT_QUALITY', isSecret: false, category: 'reels', defaultVal: '1080p' },

@@ -379,11 +379,11 @@ describe('OpenRouter provider gateway', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it('does not advertise OpenRouter text credentials as a working image provider', () => {
+  it('configures image capability separately without promising free model availability', () => {
     expect(resolveImageAiConfigFromSettings({
       AI_IMAGE_PROVIDER: 'openrouter',
       OPENROUTER_API_KEY: 'or-test-secret',
-    })).toBeNull();
+    })).toMatchObject({ type: 'openrouter', key: 'or-test-secret' });
     expect(resolveImageAiConfigFromSettings({
       AI_IMAGE_PROVIDER: 'none',
       GEMINI_API_KEY: 'gemini-test-secret',

@@ -30,7 +30,7 @@ export function resolveRenderQueueEngine(value: unknown): RenderQueueEngine {
 function getConnection(): IORedis {
   if (!config.queue.redisUrl) throw new Error('REDIS_URL is required when RENDER_QUEUE_DRIVER=bullmq');
   if (!connection) {
-    connection = new IORedis(config.queue.redisUrl, { maxRetriesPerRequest: null, enableReadyCheck: true });
+    connection = new IORedis(config.queue.redisUrl, { maxRetriesPerRequest: null, enableReadyCheck: true, keepAlive: 0 });
     connection.on('error', (error) => logger.error('Render queue Redis error:', error));
   }
   return connection;

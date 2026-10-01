@@ -1,0 +1,22 @@
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, expect, it, vi } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
+import { NotificationBell } from '../components/NotificationBell';
+const mocks = vi.hoisted(() => ({ get: vi.fn(), read: vi.fn(), all: vi.fn() }));
+vi.mock('../hooks/useAuth', () => ({ useAuth: () => ({ user: { id: 'fixture' } }) }));
+vi.mock('../lib/api', () => ({ api: { social: { getNotifications: mocks.get, markNotificationRead: mocks.read, markAllNotificationsRead: mocks.all } } }));
+vi.mock('../lib/activePolling', () => ({ startActivePolling: (callback: () => void) => { callback(); return () => {}; } }));
+afterEach(() => { cleanup(); vi.resetAllMocks(); });
+it('keeps long notification lists scrollable and loads history beyond the first page', async () => {
+  const page = Array.from({ length: 30 }, (_, i) => ({ id: String(i), title: `تنبيه ${i}`, message: 'رسالة', type: 'system', is_read: true, created_at: new Date().toISOString() }));
+  mocks.get.mockImplementation(async (offset: number) => offset === 30 ? [{ ...page[0], id: 'older', title: 'إشعار قديم' }] : page);
+  render(<MemoryRouter><NotificationBell /></MemoryRouter>);
+  await waitFor(() => expect(mocks.get).toHaveBeenCalled());
+  fireEvent.click(screen.getByRole('button', { name: 'الإشعارات' }));
+  await screen.findByText('تنبيه 29');
+  expect(screen.getByRole('region', { name: 'قائمة الإشعارات' }).className).toContain('overflow-y-auto');
+  fireEvent.click(screen.getByRole('button', { name: 'عرض إشعارات أقدم' }));
+  await screen.findByText('إشعار قديم');
+  expect(mocks.get).toHaveBeenCalledWith(30, 30);
+  expect(screen.queryByRole('button', { name: 'عرض إشعارات أقدم' })).toBeNull();
+});

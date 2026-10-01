@@ -174,7 +174,7 @@ export function BackgroundSelector({
       : 'صور إسلامية وطبيعية أساسية ثابتة متاحة ضمن الخطة المجانية',
     slideshow: 'صور متغيرة ومتنوعة تتحرك وتتبدل تلقائياً',
     pexels: 'فيديوهات احترافية من Pexels',
-    ai: 'توليد خلفيات فنية سينمائية فريدة بنماذج Gemini Generative Media (Nano Banana)',
+    ai: 'توليد الصور بالذكاء الاصطناعي لتصميم خلفيات تناسب مقاطعك',
   };
 
   return (
@@ -280,12 +280,12 @@ export function BackgroundSelector({
                   <Wand2 className="h-4 w-4" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-foreground">توليد خلفيات بصرية بنماذج Gemini (Nano Banana)</h4>
+                  <h4 className="text-sm font-bold text-foreground">توليد الصور بالذكاء الاصطناعي</h4>
                   <p className="text-xs text-muted-foreground">صمم مشاهد إسلامية وطبيعية حصرية تناسب آياتك ومقاطعك</p>
                 </div>
               </div>
               <Badge variant="outline" className="text-xs border-purple-500/30 text-purple-300 bg-purple-500/10">
-                Gemini 3 Visual
+                تصميم مخصص
               </Badge>
             </div>
 

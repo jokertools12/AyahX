@@ -12,6 +12,7 @@ import {
   type OpenRouterSettingsSource,
 } from './openRouterService';
 import { getRawSettings } from './settingsService';
+import { generateOpenRouterImage } from './openRouterImageService';
 
 export interface AiConfig {
   type: 'openrouter' | 'gemini' | 'lovable' | 'openai';
@@ -63,6 +64,7 @@ const AI_RUNTIME_SETTING_KEYS = [
   'AI_PROVIDER',
   'AI_IMAGE_PROVIDER',
   'GEMINI_IMAGE_MODEL',
+  'OPENROUTER_IMAGE_MODEL',
   'OPENROUTER_API_KEY',
   'OPENROUTER_TEXT_MODEL',
   'OPENROUTER_TEXT_FALLBACK_MODELS',
@@ -154,7 +156,10 @@ export async function getAiProviderStatus(): Promise<Record<string, unknown>> {
 /** Image generation is a separate capability; OpenRouter is text-only here. */
 export function resolveImageAiConfigFromSettings(settings: AiSettingsSource): AiConfig | null {
   const requested = (settings.AI_IMAGE_PROVIDER || '').trim().toLowerCase();
-  if (requested === 'none' || requested === 'openrouter') return null;
+  if (requested === 'none') return null;
+  if (requested === 'openrouter' || (!requested && settings.OPENROUTER_API_KEY)) {
+    return settings.OPENROUTER_API_KEY ? { type: 'openrouter', key: settings.OPENROUTER_API_KEY.trim(), imageModel: settings.OPENROUTER_IMAGE_MODEL || undefined } : null;
+  }
   if (requested === 'gemini' || (!requested && settings.GEMINI_API_KEY)) {
     return settings.GEMINI_API_KEY ? { ...buildProviderConfig('gemini', settings.GEMINI_API_KEY.trim(), settings), imageModel: settings.GEMINI_IMAGE_MODEL || GEMINI_IMAGE_MODELS[0] } : null;
   }
@@ -478,6 +483,7 @@ export async function generateImageWithAi(
   aiConfig: AiConfig,
   options?: GenerateImageOptions
 ): Promise<GenerateImageResult> {
+  if (aiConfig.type === 'openrouter') return generateOpenRouterImage(prompt, aiConfig, options);
   if (aiConfig.type !== 'gemini') {
     throw new Error('توليد الصور بالذكاء الاصطناعي مدعوم حالياً عبر Google Gemini');
   }

@@ -1,15 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, Check, CheckCheck, Trash2, Info, CheckCircle, XCircle, AlertTriangle, Crown, Award, Heart } from 'lucide-react';
+import { Bell, Check, CheckCheck, Info, CheckCircle, Crown, Award, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { api, NotificationItem } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { startActivePolling } from '@/lib/activePolling';
@@ -35,30 +33,44 @@ export function NotificationBell() {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
+  const [error, setError] = useState('');
+  const fetching = useRef(false);
+  const offset = useRef(0);
+  const pageSize = 30;
+
+  const fetchNotifications = async (append = false) => {
+    if (fetching.current) return;
+    fetching.current = true;
+    setLoading(true);
+    setError('');
+    try {
+      const data = await api.social.getNotifications(append ? offset.current : 0, pageSize);
+      offset.current = (append ? offset.current : 0) + data.length;
+      setHasMore(data.length === pageSize);
+      setNotifications(prev => append ? [...prev, ...data.filter(n => !prev.some(p => p.id === n.id))] : data);
+    } catch {
+      setError('تعذر تحميل الإشعارات. حاول مرة أخرى.');
+    } finally { fetching.current = false; setLoading(false); }
+  };
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
 
   useEffect(() => {
     if (!user) return;
 
-    const fetchNotifications = async () => {
-      try {
-        const data = await api.social.getNotifications();
-        setNotifications(data);
-      } catch (e) {
-        console.error('Failed to fetch notifications:', e);
-      }
-    };
-
-    return startActivePolling(() => { void fetchNotifications(); });
-  }, [user]);
+    // Preserve loaded history while the list is open; opening explicitly refreshes it.
+    if (open) return;
+    return startActivePolling(() => { void fetchNotifications(); }, 120000, 60000);
+  }, [user?.id, open]);
 
   const markAsRead = async (id: string) => {
     try {
       await api.social.markNotificationRead(id);
       setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
     } catch (e) {
-      console.error(e);
+      setError('تعذر تحديث الإشعار. حاول مرة أخرى.');
     }
   };
 
@@ -68,14 +80,8 @@ export function NotificationBell() {
       await api.social.markAllNotificationsRead();
       setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
     } catch (e) {
-      console.error(e);
+      setError('تعذر تحديث الإشعارات. حاول مرة أخرى.');
     }
-  };
-
-  const deleteNotification = async (id: string) => {
-    // Treat as mark as read in UI
-    markAsRead(id);
-    setNotifications(prev => prev.filter(n => n.id !== id));
   };
 
   const handleNotificationClick = (n: Notification) => {
@@ -102,9 +108,9 @@ export function NotificationBell() {
   if (!user) return null;
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={value => { setOpen(value); if (value) void fetchNotifications(); }}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative rounded-full">
+        <Button variant="ghost" size="icon" aria-label="الإشعارات" className="relative rounded-full">
           <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
             <motion.span
@@ -117,7 +123,7 @@ export function NotificationBell() {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-80 p-0" dir="rtl">
+      <PopoverContent align="end" sideOffset={10} className="w-[min(24rem,calc(100vw-2rem))] p-0 overflow-hidden rounded-2xl shadow-xl" dir="rtl">
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
           <h4 className="font-semibold text-sm">الإشعارات</h4>
           {unreadCount > 0 && (
@@ -127,11 +133,12 @@ export function NotificationBell() {
             </Button>
           )}
         </div>
-        <ScrollArea className="max-h-80">
+        <div className="h-[min(26rem,60dvh)] overflow-y-auto overscroll-contain" role="region" aria-label="قائمة الإشعارات" tabIndex={0}>
+          {error && <div role="alert" className="p-3 text-sm text-destructive">{error}<Button variant="ghost" size="sm" onClick={() => void fetchNotifications()}>إعادة المحاولة</Button></div>}
           {notifications.length === 0 ? (
             <div className="p-8 text-center text-muted-foreground text-sm">
               <Bell className="h-8 w-8 mx-auto mb-2 opacity-30" />
-              لا توجد إشعارات
+              {loading ? 'جارٍ تحميل الإشعارات…' : 'لا توجد إشعارات'}
             </div>
           ) : (
             <AnimatePresence>
@@ -154,19 +161,17 @@ export function NotificationBell() {
                   </div>
                   <div className="flex flex-col gap-1">
                     {!n.is_read && (
-                      <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => markAsRead(n.id)}>
+                      <Button variant="ghost" size="icon" aria-label="تحديد الإشعار كمقروء" className="h-6 w-6" onClick={() => markAsRead(n.id)}>
                         <Check className="h-3 w-3" />
                       </Button>
                     )}
-                    <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-destructive" onClick={() => deleteNotification(n.id)}>
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
                   </div>
                 </motion.div>
               ))}
             </AnimatePresence>
           )}
-        </ScrollArea>
+          {hasMore && <div className="p-3"><Button variant="outline" className="w-full" disabled={loading} onClick={() => void fetchNotifications(true)}>{loading ? 'جارٍ التحميل…' : 'عرض إشعارات أقدم'}</Button></div>}
+        </div>
       </PopoverContent>
     </Popover>
   );

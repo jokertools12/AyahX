@@ -544,7 +544,7 @@ router.post('/generate-image', requireAuth, requirePremiumFeature('aiBackgrounds
     const aiConfig = await getImageAiConfig();
     if (!aiConfig) {
       return res.status(503).json({
-        error: 'مزود توليد الصور غير مهيأ. اضبط AI_IMAGE_PROVIDER=gemini وGEMINI_API_KEY في بيئة الخادم.',
+        error: 'خدمة توليد الصور غير متاحة حاليًا. اختر خلفية من المكتبة أو ارفع صورة.',
         code: 'AI_IMAGE_PROVIDER_NOT_CONFIGURED',
         configured: false,
       });
@@ -560,7 +560,9 @@ router.post('/generate-image', requireAuth, requirePremiumFeature('aiBackgrounds
 
     return res.status(200).json({
       success: true,
-      ...result,
+      base64: result.base64,
+      mimeType: result.mimeType,
+      dataUrl: result.dataUrl,
       prompt: safePrompt,
       aspectRatio: safeAspect,
     });

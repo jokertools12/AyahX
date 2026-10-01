@@ -108,6 +108,8 @@ function startResourceSampler(child: ChildProcess): { finish: () => RenderChildR
 }
 
 function childCommand(jobId: string, engine: RenderQueueEngine): { command: string; args: string[] } {
+  const compiled = path.resolve(process.cwd(), 'dist-server/renderChild.cjs');
+  if (fs.existsSync(compiled)) return { command: process.execPath, args: [compiled, jobId, engine] };
   const tsxCli = path.resolve(process.cwd(), 'node_modules/tsx/dist/cli.mjs');
   return { command: process.execPath, args: [tsxCli, path.resolve(process.cwd(), 'server/renderChild.ts'), jobId, engine] };
 }

@@ -10,7 +10,7 @@ function positiveIntegerEnv(name: string, fallback: number, maximum = 100_000): 
 
 function sharedLimiterRedis(): IORedis | null {
   if (!process.env.REDIS_URL || process.env.NODE_ENV !== 'production') return null;
-  if (!redis) redis = new IORedis(process.env.REDIS_URL, { maxRetriesPerRequest: 1 });
+  if (!redis) redis = new IORedis(process.env.REDIS_URL, { maxRetriesPerRequest: 1, keepAlive: 0 });
   return redis;
 }
 

@@ -559,8 +559,8 @@ export const api = {
       return request<any[]>('/api/social/feed');
     },
 
-    async getNotifications() {
-      return request<NotificationItem[]>('/api/social/notifications');
+    async getNotifications(offset = 0, limit = 30) {
+      return request<NotificationItem[]>(`/api/social/notifications?offset=${offset}&limit=${limit}`);
     },
 
     async markNotificationRead(id: string) {

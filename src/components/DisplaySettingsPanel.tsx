@@ -959,7 +959,7 @@ export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextS
                 </div>
               ) : <>
               <p className="text-xs text-muted-foreground">
-                خصص هوية قناتك بالكامل: اختر اسمك وعلامتك المميزة، أو قم بتوليد شعار إسلامي ملكي فاخر بالذكاء الاصطناعي (Gemini AI).
+                خصص هوية قناتك بالكامل: اختر اسمك وعلامتك المميزة، أو قم بتوليد شعار إسلامي ملكي فاخر بالذكاء الاصطناعي.
               </p>
 
               {/* Sub-Card A: Logo & Channel Identity with AI Generator */}
@@ -1014,7 +1014,7 @@ export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextS
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
                           <Bot className="h-4 w-4 text-primary" />
-                          <span className="text-xs font-bold text-foreground">مولد الشعارات بالذكاء الاصطناعي (Gemini AI)</span>
+                          <span className="text-xs font-bold text-foreground">مولد الشعارات بالذكاء الاصطناعي</span>
                         </div>
                         <span className="text-[10px] bg-primary/15 text-primary font-bold px-2 py-0.5 rounded-full">
                           تصميم فوري 3D

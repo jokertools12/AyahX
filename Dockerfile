@@ -19,6 +19,7 @@ COPY --from=build /app/package*.json ./
 RUN npm ci --include=dev
 ENV NODE_ENV=production
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/dist-server ./dist-server
 COPY --from=build /app/public ./public
 # The API runtime imports the canonical timing-map contract for verified
 # alignment maps. Keep the source module available alongside the tsx server
@@ -31,4 +32,4 @@ COPY --from=build /app/database ./database
 ENV FFMPEG_PATH=/usr/bin/ffmpeg
 ENV FFPROBE_PATH=/usr/bin/ffprobe
 ENV CHROME_BIN=/usr/bin/chromium
-CMD ["node", "node_modules/tsx/dist/cli.mjs", "server/index.ts"]
+CMD ["node", "dist-server/index.cjs"]

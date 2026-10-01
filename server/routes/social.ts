@@ -103,9 +103,11 @@ router.get('/feed', async (req: AuthenticatedRequest, res: Response) => {
 router.get('/notifications', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const userId = req.user!.id;
+    const offset = Math.min(100000, Math.max(0, Math.floor(Number(req.query.offset) || 0)));
+    const limit = Math.min(50, Math.max(1, Math.floor(Number(req.query.limit) || 30)));
     const notifications = await query<any[]>(
-      'SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 50',
-      [userId]
+      'SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC, id DESC LIMIT ? OFFSET ?',
+      [userId, limit, offset]
     );
     return res.json(notifications);
   } catch (err: any) {
