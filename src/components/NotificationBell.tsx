@@ -11,6 +11,7 @@ import {
 import { api, NotificationItem } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { startActivePolling } from '@/lib/activePolling';
+import { notificationTimeAgo } from '@/lib/notificationTime';
 
 type Notification = NotificationItem;
 
@@ -95,14 +96,7 @@ export function NotificationBell() {
   };
 
   const timeAgo = (dateStr: string) => {
-    const diff = Date.now() - new Date(dateStr).getTime();
-    const mins = Math.floor(diff / 60000);
-    if (mins < 1) return 'الآن';
-    if (mins < 60) return `منذ ${mins} دقيقة`;
-    const hours = Math.floor(mins / 60);
-    if (hours < 24) return `منذ ${hours} ساعة`;
-    const days = Math.floor(hours / 24);
-    return `منذ ${days} يوم`;
+    return notificationTimeAgo(dateStr);
   };
 
   if (!user) return null;
