@@ -19,6 +19,10 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  // FFmpeg resolves its worker beside its module; prebundling moves that URL
+  // into .vite/deps and leaves local conversion waiting on a missing worker.
+  optimizeDeps: { exclude: ['@ffmpeg/ffmpeg'] },
+  worker: { format: 'es' },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

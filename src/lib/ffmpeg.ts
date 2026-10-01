@@ -3,35 +3,38 @@ import { fetchFile, toBlobURL } from '@ffmpeg/util';
 
 let ffmpegSingleton: FFmpeg | null = null;
 let ffmpegLoading: Promise<FFmpeg> | null = null;
+let conversionQueue: Promise<unknown> = Promise.resolve();
 
-export async function getFFmpeg(onProgress?: (ratio: number) => void): Promise<FFmpeg> {
+export async function getFFmpeg(): Promise<FFmpeg> {
   if (ffmpegSingleton) return ffmpegSingleton;
   if (ffmpegLoading) return ffmpegLoading;
 
   ffmpegLoading = (async () => {
     try {
       const ffmpeg = new FFmpeg();
-      if (onProgress) {
-        ffmpeg.on('progress', ({ progress }) => onProgress(progress));
-      }
 
       // Lazy-load core from CDN to avoid bundling massive WASM into the app.
       // If one CDN is blocked, try another.
       const coreBases = [
-        'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd',
-        'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd',
+        'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm',
+        'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm',
       ];
 
       let lastErr: unknown = null;
       for (const coreBase of coreBases) {
         try {
-          await ffmpeg.load({
-            coreURL: await toBlobURL(`${coreBase}/ffmpeg-core.js`, 'text/javascript'),
-            wasmURL: await toBlobURL(`${coreBase}/ffmpeg-core.wasm`, 'application/wasm'),
-          });
+          const urls: string[] = [];
+          try {
+            urls.push(await toBlobURL(`${coreBase}/ffmpeg-core.js`, 'text/javascript'));
+            urls.push(await toBlobURL(`${coreBase}/ffmpeg-core.wasm`, 'application/wasm'));
+            await ffmpeg.load({ coreURL: urls[0], wasmURL: urls[1] }, { signal: AbortSignal.timeout(60000) });
+          } finally {
+            urls.forEach(url => URL.revokeObjectURL(url));
+          }
           lastErr = null;
           break;
         } catch (e) {
+          ffmpeg.terminate();
           lastErr = e;
         }
       }
@@ -128,34 +131,33 @@ export async function convertWebmToMp4(
     durationSeconds?: number;
   }
 ): Promise<Blob> {
-  const fps = opts?.fps === 60 ? 60 : 30;
-  const audioBitrate = opts?.audioBitrate || '192k';
-  const durationArgs = opts?.durationSeconds && opts.durationSeconds > 0 ? ['-t', String(opts.durationSeconds)] : [];
-  const ffmpeg = await getFFmpeg(opts?.onProgress);
-
-  const inName = input.type.includes('mp4') ? 'input.mp4' : 'input.webm';
-  const outName = 'output.mp4';
-
-  await ffmpeg.writeFile(inName, await fetchFile(input));
-
-  // Try H.264 + AAC with +faststart first; if not available in this build, fallback to MPEG-4.
-  try {
-    await ffmpeg.exec(['-i', inName, ...getH264BroadcastArgs(fps, audioBitrate, opts?.durationSeconds), ...durationArgs, outName]);
-  } catch {
-    await ffmpeg.exec(['-i', inName, ...getMpeg4FallbackArgs(fps, audioBitrate, opts?.durationSeconds), ...durationArgs, outName]);
-  }
-
-  const data = (await ffmpeg.readFile(outName)) as unknown as Uint8Array;
-  const copy = new Uint8Array(data.byteLength);
-  copy.set(data);
-
-  // Cleanup (best-effort)
-  try {
-    await ffmpeg.deleteFile(inName);
-    await ffmpeg.deleteFile(outName);
-  } catch {
-    // ignore
-  }
-
-  return new Blob([copy.buffer], { type: 'video/mp4' });
+  // A shared WASM filesystem cannot run two encodes concurrently.
+  const conversion = conversionQueue.then(async () => {
+    const fps = opts?.fps === 60 ? 60 : 30;
+    const audioBitrate = opts?.audioBitrate || '192k';
+    const durationArgs = opts?.durationSeconds && opts.durationSeconds > 0 ? ['-t', String(opts.durationSeconds)] : [];
+    const ffmpeg = await getFFmpeg();
+    const inName = input.type.includes('mp4') ? 'input.mp4' : 'input.webm';
+    const outName = 'output.mp4';
+    const progress = ({ progress: ratio }: { progress: number }) => {
+      if (Number.isFinite(ratio)) opts?.onProgress?.(Math.min(0.99, Math.max(0, ratio)));
+    };
+    ffmpeg.on('progress', progress);
+    try {
+      await ffmpeg.writeFile(inName, await fetchFile(input));
+      const status = await ffmpeg.exec(['-i', inName, ...getH264BroadcastArgs(fps, audioBitrate, opts?.durationSeconds), ...durationArgs, outName]);
+      if (status !== 0) throw new Error('تعذّر تجهيز فيديو MP4 على جهازك. أعد المحاولة بدقة أقل.');
+      const data = await ffmpeg.readFile(outName);
+      if (typeof data === 'string' || data.byteLength < 1000) throw new Error('ملف الفيديو الناتج غير صالح للتنزيل');
+      const copy = new Uint8Array(data.byteLength);
+      copy.set(data);
+      opts?.onProgress?.(1);
+      return new Blob([copy.buffer], { type: 'video/mp4' });
+    } finally {
+      ffmpeg.off('progress', progress);
+      await Promise.allSettled([ffmpeg.deleteFile(inName), ffmpeg.deleteFile(outName)]);
+    }
+  });
+  conversionQueue = conversion.catch(() => undefined);
+  return conversion;
 }

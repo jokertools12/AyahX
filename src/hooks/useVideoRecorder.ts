@@ -334,65 +334,21 @@ export function useVideoRecorder() {
 
     try {
       conversionInProgressRef.current = true;
-      // 1. Try instantaneous server-side FFmpeg transcode (1-2 seconds, broadcast CFR MP4)
-      let mp4: Blob | null = null;
-      try {
-        setState((prev) => ({
-          ...prev,
-          isConverting: true,
-          convertProgress: 25,
-          stage: 'جاري تلميع وترميز الفيديو بمحرك FFmpeg فائق السرعة...',
-          error: null,
-        }));
-
-        const transcodeUrl = `/api/videos/process-mp4?fps=${fps}&audioBitrate=${audioBitrate}&filename=${encodeURIComponent(targetFilename)}&duration=${durationSeconds}`;
-        const headers: Record<string, string> = {
-          'Content-Type': sourceVideo.type || 'video/webm',
-        };
-        const token = localStorage.getItem('auth_token');
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
-        }
-
-        const res = await fetch(transcodeUrl, {
-          method: 'POST',
-          headers,
-          body: sourceVideo,
-        });
-
-        if (res.ok) {
-          const buffer = await res.arrayBuffer();
-          if (buffer.byteLength > 1000) {
-            mp4 = new Blob([buffer], { type: 'video/mp4' });
-            setState((prev) => ({ ...prev, convertProgress: 100 }));
-          }
-        }
-      } catch (serverErr) {
-        console.warn('Server-side fast transcode fallback to local:', serverErr);
-      }
-
-      // 2. Fallback to client converter if server transcode did not return a blob
-      if (!mp4) {
-        {
-          setState((prev) => ({
-            ...prev,
-            stage: `جاري المعالجة بمحرك FFmpeg المحلي (CFR ${fps}fps / ${audioBitrate})...`,
-          }));
-          mp4 = await convertWebmToMp4(sourceVideo, {
-            filename: targetFilename,
-            fps,
-            audioBitrate,
-            durationSeconds,
-            onProgress: (ratio) => {
-              setState((prev) => ({ ...prev, convertProgress: Math.round(Math.min(Math.max(ratio, 0), 1) * 100) }));
-            },
-          });
-        }
-      }
+      setState((prev) => ({
+        ...prev, isConverting: true, convertProgress: 0,
+        stage: 'جاري تجهيز ملف MP4 على جهازك… أبقِ الصفحة مفتوحة', error: null,
+      }));
+      // On-device recording must never upload the video for cloud encoding.
+      const mp4 = await convertWebmToMp4(sourceVideo, {
+        filename: targetFilename, fps, audioBitrate, durationSeconds,
+        onProgress: (ratio) => setState((prev) => ({
+          ...prev, convertProgress: Math.round(Math.min(Math.max(ratio, 0), 1) * 100),
+        })),
+      });
 
       conversionInProgressRef.current = false;
       mp4BlobRef.current = mp4;
-      setState((prev) => ({ ...prev, isConverting: false, mp4Blob: mp4, error: null, stage: 'تم إنتاج الفيديو بنجاح! جاهز للتحميل والمشاركة' }));
+      setState((prev) => ({ ...prev, isConverting: false, mp4Blob: mp4, error: null, convertProgress: 100, stage: 'ملف MP4 جاهز للتنزيل والمشاركة' }));
       return mp4;
     } catch (e) {
       console.error('MP4 conversion failed:', e);
@@ -412,7 +368,7 @@ export function useVideoRecorder() {
       setState((prev) => ({
         ...prev,
         error: prev.isConverting || conversionInProgressRef.current ? null : 'ملف MP4 غير جاهز بعد',
-        stage: prev.isConverting || conversionInProgressRef.current ? 'جاري المعالجة بمحرك FFmpeg...' : 'MP4 غير متوفر بعد',
+        stage: prev.isConverting || conversionInProgressRef.current ? 'جاري تجهيز ملف MP4 على جهازك…' : 'MP4 غير متوفر بعد',
       }));
       return;
     }
@@ -423,8 +379,8 @@ export function useVideoRecorder() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    window.setTimeout(() => URL.revokeObjectURL(url), 1500);
-    setState((prev) => ({ ...prev, stage: 'تم تحميل فيديو MP4 فائق السلاسة!', error: null }));
+    window.setTimeout(() => URL.revokeObjectURL(url), 60000);
+    setState((prev) => ({ ...prev, stage: 'بدأ تنزيل ملف MP4 إلى جهازك', error: null }));
   }, [state.mp4Blob, state.videoBlob, convertToMp4]);
 
   const downloadWebm = useCallback((filename: string = 'quran-reel.webm') => {
@@ -441,7 +397,7 @@ export function useVideoRecorder() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    window.setTimeout(() => URL.revokeObjectURL(url), 1500);
+    window.setTimeout(() => URL.revokeObjectURL(url), 60000);
     setState((prev) => ({ ...prev, stage: 'تم تحميل WebM!', error: null }));
   }, [state.videoBlob]);
 

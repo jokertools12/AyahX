@@ -38,12 +38,12 @@ describe('recorded output settings survive MP4 conversion', () => {
     expect(owned.stop).toHaveBeenCalledTimes(2);
     expect(source.stop).not.toHaveBeenCalled();
   });
-  it.each([{fps:60 as const,audioBitrate:'320k' as const,fallback:false}, {fps:30 as const,audioBitrate:'128k' as const,fallback:true}])(
-    'converts using recorded $fps fps / $audioBitrate, fallback=$fallback', async ({fps,audioBitrate,fallback}) => {
+  it.each([{fps:60 as const,audioBitrate:'320k' as const}, {fps:30 as const,audioBitrate:'128k' as const}])(
+    'converts using recorded $fps fps / $audioBitrate locally', async ({fps,audioBitrate}) => {
       vi.stubGlobal('MediaRecorder',Recorder);
       vi.stubGlobal('MediaStream',Stream);
       const mp4 = new Blob([new Uint8Array(1200)],{type:'video/mp4'});
-      const fetchMock = vi.fn().mockResolvedValue({ok:!fallback,arrayBuffer:async()=>new ArrayBuffer(1200)});
+      const fetchMock = vi.fn().mockResolvedValue({ok:true,arrayBuffer:async()=>new ArrayBuffer(1200)});
       vi.stubGlobal('fetch',fetchMock);
       vi.mocked(convertWebmToMp4).mockResolvedValue(mp4);
       const canvas = {captureStream:()=>({getVideoTracks:()=>[{stop:vi.fn(),requestFrame:vi.fn()}]})} as unknown as HTMLCanvasElement;
@@ -56,14 +56,14 @@ describe('recorded output settings survive MP4 conversion', () => {
       });
       let converted: Blob | null = null;
       await act(async()=>{ converted=await result.current.convertToMp4('test clip.mp4'); });
-      expect(fetchMock).toHaveBeenCalledTimes(1);
-      expect(fetchMock.mock.calls[0][0]).toBe(`/api/videos/process-mp4?fps=${fps}&audioBitrate=${audioBitrate}&filename=test%20clip.mp4&duration=30`);
-      expect(converted).not.toBeNull();
+      expect(fetchMock).not.toHaveBeenCalled();
+      expect(converted).toBe(mp4);
       expect(result.current.error).toBeNull();
-      if (fallback) expect(convertWebmToMp4).toHaveBeenCalledWith(expect.any(Blob),expect.objectContaining({fps,audioBitrate,filename:'test clip.mp4',durationSeconds:30}));
-      else expect(convertWebmToMp4).not.toHaveBeenCalled();
+      expect(result.current.convertProgress).toBe(100);
+      expect(convertWebmToMp4).toHaveBeenCalledWith(expect.any(Blob),expect.objectContaining({fps,audioBitrate,filename:'test clip.mp4',durationSeconds:30}));
       await act(async()=>{ await result.current.convertToMp4(); });
-      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(fetchMock).not.toHaveBeenCalled();
+      expect(convertWebmToMp4).toHaveBeenCalledTimes(1);
     },
   );
 });
