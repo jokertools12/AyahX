@@ -43,3 +43,17 @@ Validation: app type-check and production build passed; full test suite
 399 passed, 6 integration cases skipped because they require an isolated DB.
 Notification pagination and free-only/no-paid-fallback regression tests passed.
 Live generation cannot be called successful until a free image model exists.
+
+## Verified idle connection corrections
+
+Network logs showed continuous packets to the object-storage endpoint after
+HTTP requests ended, plus Redis keepalive traffic. Request-only API storage
+agents now close connections after each transfer. Queue producer and limiter
+Redis connections close after 60 seconds idle and reconnect on demand; active
+enqueues and worker consumers remain protected. A real local HTTP socket test
+checks storage closure, and queue tests cover idle closure and closing races.
+MySQL now uses a verified 64 MiB buffer pool with a 16 MiB chunk size.
+
+Final local validation: 406 tests passed, 6 isolated-DB cases skipped;
+production build and app type-check passed. Physical Railway sleep and wake
+are verified separately after production deployment, not inferred from settings.

@@ -22,6 +22,22 @@ export const RENDER_QUEUE_NAMES: Record<RenderQueueEngine, string> = {
 
 let connection: IORedis | null = null;
 const queues: Partial<Record<RenderQueueEngine, Queue>> = {};
+let activeEnqueues = 0;
+let producerIdleTimer: ReturnType<typeof setTimeout> | null = null;
+let producerClosing: Promise<void> | null = null;
+let workerRunning = false;
+
+function scheduleProducerIdleClose(): void {
+  if (workerRunning || process.env.RENDER_BACKGROUND_MAINTENANCE !== 'false' || activeEnqueues > 0) return;
+  if (producerIdleTimer) clearTimeout(producerIdleTimer);
+  producerIdleTimer = setTimeout(() => {
+    producerIdleTimer = null;
+    if (activeEnqueues > 0) return;
+    producerClosing = closeRenderQueue().catch(error => logger.warn('Idle render producer close failed:', error))
+      .finally(() => { producerClosing = null; });
+  }, 60000);
+  producerIdleTimer.unref?.();
+}
 
 export function resolveRenderQueueEngine(value: unknown): RenderQueueEngine {
   return resolveRenderWorkerEngine(typeof value === 'string' ? value : undefined);
@@ -63,7 +79,15 @@ export async function enqueueRenderJob(
   // BullMQ reserves ':' for internal keys; use a textual prefix instead of a
   // numeric-only id while retaining a stable idempotency key.
   const options: JobsOptions = { jobId: `render-${jobId}`, priority, attempts: 2 };
-  return getRenderQueue(engine).add('render', { jobId }, options);
+  activeEnqueues += 1;
+  if (producerIdleTimer) clearTimeout(producerIdleTimer);
+  try {
+    await producerClosing;
+    return await getRenderQueue(engine).add('render', { jobId }, options);
+  } finally {
+    activeEnqueues -= 1;
+    scheduleProducerIdleClose();
+  }
 }
 
 function engineMaxConcurrency(engine: RenderQueueEngine): number {
@@ -78,6 +102,8 @@ export function startRenderWorker(
   processJob: (jobId: string, engine: RenderQueueEngine) => Promise<void>,
   requestedEngine?: RenderQueueEngine,
 ): Worker {
+  workerRunning = true;
+  if (producerIdleTimer) clearTimeout(producerIdleTimer);
   const engine = resolveRenderQueueEngine(requestedEngine || process.env.RENDER_WORKER_ENGINE);
   const maxConcurrency = engineMaxConcurrency(engine);
   let activeJobs = 0;
@@ -166,8 +192,11 @@ export function startRenderWorker(
 }
 
 export async function closeRenderQueue(): Promise<void> {
+  if (producerIdleTimer) clearTimeout(producerIdleTimer);
   await Promise.all(Object.values(queues).filter(Boolean).map((queue) => queue!.close()));
-  await connection?.quit();
+  // No pending producer operations remain. Disconnect also stops reconnect
+  // timers if Redis becomes unavailable while the API is idle.
+  connection?.disconnect();
   for (const engine of Object.keys(queues) as RenderQueueEngine[]) delete queues[engine];
   connection = null;
 }

@@ -2,6 +2,20 @@ import { Request, Response, NextFunction } from 'express';
 import IORedis from 'ioredis';
 
 let redis: IORedis | null = null;
+let activeRedisLimits = 0;
+let redisIdleTimer: ReturnType<typeof setTimeout> | null = null;
+
+function releaseIdleLimiterRedis(): void {
+  if (process.env.RENDER_BACKGROUND_MAINTENANCE !== 'false' || activeRedisLimits > 0) return;
+  if (redisIdleTimer) clearTimeout(redisIdleTimer);
+  redisIdleTimer = setTimeout(() => {
+    if (activeRedisLimits > 0) return;
+    const idle = redis;
+    redis = null;
+    idle?.disconnect();
+  }, 60000);
+  redisIdleTimer.unref?.();
+}
 
 function positiveIntegerEnv(name: string, fallback: number, maximum = 100_000): number {
   const value = Number.parseInt(process.env[name] || '', 10);
@@ -61,6 +75,8 @@ export function createRateLimiter(options: RateLimitOptions) {
 
     const shared = sharedLimiterRedis();
     if (shared) {
+      activeRedisLimits += 1;
+      if (redisIdleTimer) clearTimeout(redisIdleTimer);
       try {
         const bucket = Math.floor(Date.now() / windowMs);
         const key = `rl:${windowMs}:${max}:${clientKey}:${bucket}`;
@@ -80,6 +96,9 @@ export function createRateLimiter(options: RateLimitOptions) {
       } catch {
         // Redis outage must not take down the API; fall back to bounded local
         // protection for this process while health monitoring raises an alert.
+      } finally {
+        activeRedisLimits -= 1;
+        releaseIdleLimiterRedis();
       }
     }
 

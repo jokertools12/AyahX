@@ -1,5 +1,7 @@
 import fs from 'fs';
 import path from 'path';
+import { Agent as HttpAgent } from 'node:http';
+import { Agent as HttpsAgent } from 'node:https';
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { config } from '../config';
@@ -15,6 +17,12 @@ function getClient(): S3Client {
     endpoint: config.storage.endpoint,
     forcePathStyle: config.storage.forcePathStyle,
     credentials: { accessKeyId: config.storage.accessKeyId, secretAccessKey: config.storage.secretAccessKey },
+    // AWS SDK defaults to persistent sockets with TCP probes every second.
+    // Request-only API sockets must close after streaming so Railway can sleep.
+    requestHandler: {
+      httpAgent: new HttpAgent({ keepAlive: process.env.RENDER_BACKGROUND_MAINTENANCE !== 'false' }),
+      httpsAgent: new HttpsAgent({ keepAlive: process.env.RENDER_BACKGROUND_MAINTENANCE !== 'false' }),
+    },
   });
   return client;
 }
