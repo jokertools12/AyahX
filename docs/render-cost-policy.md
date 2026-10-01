@@ -32,6 +32,12 @@ Real Railway visual QA generated MP4s, checked H.264 dimensions/audio and compar
 
 Local artifacts: `qa-output/railway-cost-baseline/skia.mp4`, `comparison.jpg`, `lyrics-comparison.jpg`. These generated artifacts are not committed.
 
+The live public API smoke test also passed: over-duration, resolution and FPS requests returned 403; disabled FFmpeg returned 503; an idempotent replay returned the original job; the first Skia submission completed and downloaded successfully; a second free-plan submission returned 403 with `quotaExceeded`. The disposable QA account was deleted after testing. The downloaded 316,872-byte MP4 decoded successfully, with 150 H.264 frames at 720x1280 / 30 FPS and AAC audio, lasting 5.02 seconds. The fixture used static verse text and real EveryAyah audio; no unverified word alignment was represented as approved. Report: `qa-output/railway-cost-baseline/api-smoke.json`.
+
+A separate bounded benchmark on the actual 2 GB Skia worker rendered 30 seconds at 1080x1920 / 30 FPS in 26.08 seconds, using 44.14 CPU-seconds and a reported cgroup memory peak of 610,041,856 bytes (about 582 MiB). Its 679,088-byte artifact passed the renderer's media validation. This synthetic still-background workload is a capacity sanity check, not a forecast for complex backgrounds or five-minute videos.
+
+MySQL runtime verification confirmed `innodb_buffer_pool_size=134217728` and `max_connections=60`. Settled Railway health confirmed one running API replica, one running Skia replica, and both diagnostic engines offline. Verify health again after each subsequent release.
+
 ## Cost interpretation and operations
 
 The earlier $13.11 usage included idle infrastructure and engine experiments. Removing idle workers and duplicate replicas reduces ongoing resource consumption, but does not refund past usage. A fixed monthly bill or a percentage saving is not promised. Measure the following day's resource usage and a representative full-duration workload before pricing user video allowances or increasing concurrency. Hundreds of accounts do not imply hundreds of simultaneous render slots: this configuration queues their work and has limited throughput.

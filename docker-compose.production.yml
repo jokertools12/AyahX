@@ -11,6 +11,7 @@ services:
       RENDER_MAX_BACKLOG: 50
       SKIA_RENDER_REPLICAS: 1
       SKIA_RENDER_SLOTS_PER_REPLICA: 1
+      MYSQL_POOL_SIZE: 5
     depends_on: [redis]
     deploy:
       replicas: 1
@@ -43,6 +44,8 @@ services:
       RENDER_CAPACITY_HARD_MAX: 1
       RENDER_FFMPEG_THREADS: 1
       RENDER_FFMPEG_PRESET: veryfast
+      RENDER_ASSET_CACHE_MB: 64
+      MYSQL_POOL_SIZE: 3
     depends_on: [redis]
     deploy:
       replicas: 1

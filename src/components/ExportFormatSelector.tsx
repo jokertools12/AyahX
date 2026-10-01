@@ -144,7 +144,8 @@ export function ExportFormatSelector({
         <div className="space-y-3 pt-2 border-t border-border/40">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium">دقة وجودة الفيديو</Label>
-            {!isPremium && <span className="text-[11px] text-muted-foreground">المتاح: 720p و1080p فقط</span>}
+            {isCloud ? <span className="text-[11px] text-muted-foreground">السحابي: حتى {isPremium ? '1080p' : '720p'}</span>
+              : !isPremium && <span className="text-[11px] text-muted-foreground">المتاح: 720p و1080p فقط</span>}
           </div>
           <RadioGroup
             value={settings.quality}
@@ -225,12 +226,12 @@ export function ExportFormatSelector({
               <Label
                 htmlFor="fps-60"
                 className={`flex h-full min-w-0 flex-col items-center gap-1.5 rounded-xl border-2 border-muted p-2.5 hover:bg-muted/50 peer-data-[state=checked]:border-primary cursor-pointer text-center leading-relaxed ${
-                  !entitlements.allowedFps.includes(60) ? 'opacity-60 cursor-not-allowed' : ''
+                  isCloud || !entitlements.allowedFps.includes(60) ? 'opacity-60 cursor-not-allowed' : ''
                 }`}
               >
                 <div className="flex items-center gap-1">
                   <span className="font-semibold text-sm">60 FPS (سينمائي فائق)</span>
-                  {!entitlements.allowedFps.includes(60) && <Lock className="h-3 w-3 text-amber-500" />}
+                  {(isCloud || !entitlements.allowedFps.includes(60)) && <Lock className="h-3 w-3 text-amber-500" />}
                 </div>
                 <span className="text-[11px] leading-5 text-muted-foreground">نعومة مطلقة لحركة الكلمات</span>
               </Label>
