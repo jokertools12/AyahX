@@ -25,6 +25,7 @@ const PROMPT_SUGGESTIONS = [
 ];
 
 interface BackgroundSelectorProps {
+  aspectRatio?: '9:16' | '16:9' | '1:1';
   selectedBackground: BackgroundItem | null;
   onSelect: (background: BackgroundItem) => void;
   customBackground?: string | null;
@@ -33,6 +34,7 @@ interface BackgroundSelectorProps {
 }
 
 export function BackgroundSelector({ 
+  aspectRatio = '9:16',
   selectedBackground, 
   onSelect, 
   customBackground, 
@@ -41,7 +43,7 @@ export function BackgroundSelector({
 }: BackgroundSelectorProps) {
   const [activeTab, setActiveTab] = useState<'custom' | 'image' | 'slideshow' | 'pexels' | 'ai'>('image');
   const [aiPrompt, setAiPrompt] = useState('');
-  const [aiAspectRatio, setAiAspectRatio] = useState<'9:16' | '16:9'>('9:16');
+  const [aiAspectRatio, setAiAspectRatio] = useState<'9:16' | '16:9'>(aspectRatio === '16:9' ? '16:9' : '9:16');
   const [isGeneratingAi, setIsGeneratingAi] = useState(false);
   const [generatedAiImages, setGeneratedAiImages] = useState<Array<{ url: string; prompt: string }>>([]);
   const { canUseFeature, isPremium } = useSubscription();
@@ -259,7 +261,7 @@ export function BackgroundSelector({
               <PremiumBadge showLock />
             </div>
           ) : (
-            <PexelsVideoSelector onSelect={handlePexelsVideoSelect} />
+            <PexelsVideoSelector onSelect={handlePexelsVideoSelect} orientation={aspectRatio === '16:9' ? 'landscape' : aspectRatio === '1:1' ? 'square' : 'portrait'} />
           )}
         </TabsContent>
 

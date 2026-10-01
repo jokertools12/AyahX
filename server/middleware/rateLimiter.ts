@@ -63,7 +63,7 @@ export function createRateLimiter(options: RateLimitOptions) {
     if (shared) {
       try {
         const bucket = Math.floor(Date.now() / windowMs);
-        const key = `rl:${clientKey}:${bucket}`;
+        const key = `rl:${windowMs}:${max}:${clientKey}:${bucket}`;
         const count = await shared.incr(key);
         if (count === 1) await shared.expire(key, Math.ceil(windowMs / 1000));
         const remaining = Math.max(0, effectiveMax - count);
@@ -144,6 +144,12 @@ export const aiRateLimiter = createRateLimiter({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 60, // 60 requests per 10 minutes for text refinement, logos, images
   message: 'تم تجاوز الحد المسموح به من طلبات الذكاء الاصطناعي، يرجى الانتظار قليلاً.',
+});
+
+export const aiMediaRateLimiter = createRateLimiter({
+  windowMs: 10 * 60 * 1000,
+  max: 6,
+  message: 'تم بلوغ حد طلبات تصميم الصور والشعارات؛ حاول بعد قليل.',
 });
 
 export const transcribeRateLimiter = createRateLimiter({

@@ -40,26 +40,73 @@ function getHarnessSource(): string {
 
 function registerNativeFonts(): void {
   if (fontsRegistered) return;
-  const fontsDir = path.resolve(process.cwd(), 'server/assets/fonts');
+  const fontsDir = path.resolve(process.cwd(), fs.existsSync('public/fonts') ? 'public/fonts' : 'dist/fonts');
   const families: Array<[string, string]> = [
-    ['Amiri-Regular.ttf', 'Amiri'],
-    // Amiri Quran and the premium font labels retain an Arabic-capable local
-    // fallback when their web-font counterpart is unavailable in a worker.
-    ['Amiri-Regular.ttf', 'Amiri Quran'],
-    ['NotoNaskhArabic-Regular.ttf', 'Noto Naskh Arabic'],
-    ['NotoNaskhArabic-Regular.ttf', 'Scheherazade New'],
-    ['NotoNaskhArabic-Regular.ttf', 'Aref Ruqaa'],
-    ['NotoNaskhArabic-Regular.ttf', 'Reem Kufi'],
-    ['NotoNaskhArabic-Regular.ttf', 'Cairo'],
-    ['NotoNaskhArabic-Regular.ttf', 'El Messiri'],
-    ['NotoNaskhArabic-Regular.ttf', 'Lateef'],
-    ['NotoNaskhArabic-Regular.ttf', 'Mada'],
-    ['NotoNaskhArabic-Regular.ttf', 'Marhey'],
-    ['NotoNaskhArabic-Regular.ttf', 'Mirza'],
-    ['NotoNaskhArabic-Regular.ttf', 'Rakkas'],
-    ['NotoNaskhArabic-Regular.ttf', 'Lalezar'],
-    ['NotoNaskhArabic-Regular.ttf', 'Tajawal'],
-  ];
+  [
+    "amiri.ttf",
+    "Amiri"
+  ],
+  [
+    "amiriquran.ttf",
+    "Amiri Quran"
+  ],
+  [
+    "notonaskharabic.ttf",
+    "Noto Naskh Arabic"
+  ],
+  [
+    "scheherazadenew.ttf",
+    "Scheherazade New"
+  ],
+  [
+    "arefruqaa.ttf",
+    "Aref Ruqaa"
+  ],
+  [
+    "reemkufi.ttf",
+    "Reem Kufi"
+  ],
+  [
+    "cairo.ttf",
+    "Cairo"
+  ],
+  [
+    "elmessiri.ttf",
+    "El Messiri"
+  ],
+  [
+    "lateef.ttf",
+    "Lateef"
+  ],
+  [
+    "mada.ttf",
+    "Mada"
+  ],
+  [
+    "marhey.ttf",
+    "Marhey"
+  ],
+  [
+    "mirza.ttf",
+    "Mirza"
+  ],
+  [
+    "rakkas.ttf",
+    "Rakkas"
+  ],
+  [
+    "lalezar.ttf",
+    "Lalezar"
+  ],
+  [
+    "tajawal.ttf",
+    "Tajawal"
+  ],
+  [
+    "katibeh.ttf",
+    "Katibeh"
+  ]
+];
 
   for (const [filename, family] of families) {
     const fontPath = path.join(fontsDir, filename);

@@ -1,8 +1,14 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import express from 'express';
 import http from 'http';
 import authRouter from '../../server/routes/auth';
 import { authenticateToken, signToken } from '../../server/middleware/auth';
+
+// HTTP validation tests use a known role and an absent login account. Database
+// integration is covered separately; never connect these fixtures to production.
+vi.mock('../../server/db', () => ({
+  query: vi.fn(async (sql: string) => sql.includes('FROM user_roles') ? [{ role: 'user' }] : []),
+}));
 
 const app = express();
 app.use(express.json());

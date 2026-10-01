@@ -4,6 +4,7 @@ import { logger } from './logger';
 import { renderJobQueue } from './services/renderJobQueue';
 import { renderAutoscalerIntervalMs, runRenderAutoscalerTick } from './services/renderAutoscaler';
 import { closeRenderAlertProbe, runRenderAlertTick } from './services/renderAlerts';
+import { startAlignmentRetentionCleanup } from './services/alignmentRetentionService';
 
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
@@ -24,6 +25,7 @@ async function main(): Promise<void> {
   const lockName = process.env.RENDER_CONTROL_LEADER_LOCK || 'ayahx-render-control-leader-v1';
   const leaderConnection = await waitForLeader(lockName);
   await ensureRenderJobsTable();
+  const stopAlignmentRetentionCleanup = startAlignmentRetentionCleanup();
   await renderJobQueue.recoverStaleJobs(true);
   await renderJobQueue.reconcileQueuedJobs();
   await runRenderAutoscalerTick().catch((error) => logger.warn('Render autoscaler initial check failed:', error));
@@ -60,6 +62,7 @@ async function main(): Promise<void> {
     clearInterval(cleanupTimer);
     clearInterval(autoscalerTimer);
     clearInterval(alertTimer);
+    stopAlignmentRetentionCleanup();
     renderJobQueue.shutdown();
     await closeRenderAlertProbe().catch(() => {});
     await releaseMysqlAdvisoryLock(leaderConnection, lockName).catch(() => {});

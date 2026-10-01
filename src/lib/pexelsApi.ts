@@ -1,6 +1,23 @@
 // Pexels API client (Proxied via backend to eliminate client-side key exposure)
-const CLIENT_PEXELS_KEY = (import.meta.env.VITE_PEXELS_API_KEY as string) || '';
-const DIRECT_BASE_URL = 'https://api.pexels.com/videos';
+import { getAuthToken } from './api';
+
+async function fetchPexels(endpoint: string, params: URLSearchParams): Promise<PexelsVideo[]> {
+  const token = getAuthToken();
+  if (!token) throw new Error('سجّل الدخول لعرض فيديوهات Pexels');
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 20000);
+  try {
+    const response = await fetch(`/api/services/pexels/${endpoint}?${params}`, {
+      headers: { Authorization: `Bearer ${token}` }, signal: controller.signal,
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'تعذر تحميل فيديوهات Pexels');
+    return (data.videos || []).filter((video: PexelsVideo) => video.video_files?.some(file => file.file_type === 'video/mp4' && file.link));
+  } catch (error) {
+    if (controller.signal.aborted) throw new Error('استغرق تحميل الفيديوهات وقتًا طويلًا؛ أعد المحاولة');
+    throw error;
+  } finally { clearTimeout(timeout); }
+}
 
 export interface PexelsVideo {
   id: number;
@@ -66,82 +83,16 @@ export async function searchPexelsVideos(
 ): Promise<PexelsVideo[]> {
   const { orientation = 'portrait', size = 'medium', perPage = 15, page = 1 } = options || {};
 
-  try {
-    const params = new URLSearchParams({
-      query,
-      orientation,
-      size,
-      per_page: perPage.toString(),
-      page: page.toString(),
-    });
-
-    // 1. Prefer secure backend proxy to keep API key hidden
-    const proxyResponse = await fetch(`/api/services/pexels/search?${params}`);
-    if (proxyResponse.ok) {
-      const data: PexelsSearchResponse = await proxyResponse.json();
-      return data.videos || [];
-    }
-
-    // 2. Fallback to direct call only if custom frontend key is explicitly configured in .env
-    if (CLIENT_PEXELS_KEY) {
-      const directResponse = await fetch(`${DIRECT_BASE_URL}/search?${params}`, {
-        headers: { Authorization: CLIENT_PEXELS_KEY },
-      });
-      if (directResponse.ok) {
-        const data: PexelsSearchResponse = await directResponse.json();
-        return data.videos || [];
-      }
-    }
-
-    return [];
-  } catch (error) {
-    console.error('Error fetching Pexels videos:', error);
-    return [];
-  }
+  return fetchPexels('search', new URLSearchParams({ query, orientation, size, per_page: String(perPage), page: String(page) }));
 }
 
-export async function getPopularPexelsVideos(
-  options?: {
-    perPage?: number;
-    page?: number;
-  }
-): Promise<PexelsVideo[]> {
-  const { perPage = 15, page = 1 } = options || {};
-
-  try {
-    const params = new URLSearchParams({
-      per_page: perPage.toString(),
-      page: page.toString(),
-    });
-
-    // 1. Prefer secure backend proxy
-    const proxyResponse = await fetch(`/api/services/pexels/popular?${params}`);
-    if (proxyResponse.ok) {
-      const data: PexelsSearchResponse = await proxyResponse.json();
-      return data.videos || [];
-    }
-
-    // 2. Fallback to direct call only if client key configured
-    if (CLIENT_PEXELS_KEY) {
-      const directResponse = await fetch(`${DIRECT_BASE_URL}/popular?${params}`, {
-        headers: { Authorization: CLIENT_PEXELS_KEY },
-      });
-      if (directResponse.ok) {
-        const data: PexelsSearchResponse = await directResponse.json();
-        return data.videos || [];
-      }
-    }
-
-    return [];
-  } catch (error) {
-    console.error('Error fetching popular Pexels videos:', error);
-    return [];
-  }
+export async function getPopularPexelsVideos(options?: { perPage?: number; page?: number }): Promise<PexelsVideo[]> {
+  return fetchPexels('popular', new URLSearchParams({ per_page: String(options?.perPage || 15), page: String(options?.page || 1) }));
 }
 
 // Get optimal video URL — prefer SD/HD portrait, avoid UHD to reduce CPU load
 export function getBestVideoUrl(video: PexelsVideo, preferLowRes = false): string {
-  const files = [...video.video_files].sort((a, b) => {
+  const files = video.video_files.filter(file => file.file_type === 'video/mp4' && file.link).sort((a, b) => {
     // Prefer portrait orientation
     const aIsPortrait = a.height > a.width;
     const bIsPortrait = b.height > b.width;
@@ -160,5 +111,5 @@ export function getBestVideoUrl(video: PexelsVideo, preferLowRes = false): strin
     return (a.width * a.height) - (b.width * b.height);
   });
 
-  return files[0]?.link || video.video_files[0]?.link || '';
+  return files[0]?.link || '';
 }

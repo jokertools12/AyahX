@@ -194,8 +194,8 @@ describe('Video Pipeline Deep QA & Broadcast Engineering Suite', () => {
       expect(H264_BROADCAST_ARGS).toContain('+faststart');
       expect(H264_BROADCAST_ARGS).toContain('-profile:v');
       expect(H264_BROADCAST_ARGS).toContain('high');
-      expect(H264_BROADCAST_ARGS).toContain('-level:v');
-      expect(H264_BROADCAST_ARGS).toContain('4.1');
+      // Let the encoder choose the level: forcing 4.1 breaks 4K at 60 fps.
+      expect(H264_BROADCAST_ARGS).not.toContain('-level:v');
       expect(H264_BROADCAST_ARGS).toContain('-crf');
       expect(H264_BROADCAST_ARGS).toContain('20');
       expect(H264_BROADCAST_ARGS).toContain('-pix_fmt');

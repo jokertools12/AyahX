@@ -130,6 +130,10 @@ export class RenderJobQueue {
       fs.mkdirSync(this.storageDir, { recursive: true });
     }
 
+    // Dedicated control/worker processes own maintenance in production.
+    // A request-only API must go quiet between visits so Railway can sleep it.
+    if (process.env.RENDER_BACKGROUND_MAINTENANCE === 'false') return;
+
     // Start automated disk garbage collector (runs every 30 minutes, unref'd for test safety)
     const cleanupInterval = setInterval(() => {
       this.cleanupExpiredRenders().catch(() => {});

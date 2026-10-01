@@ -1,6 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { Readable } from 'stream';
-import { proxyRateLimiter, aiRateLimiter, transcribeRateLimiter, pexelsRateLimiter, contactRateLimiter } from '../middleware/rateLimiter';
+import { getRawSetting } from '../services/settingsService';
+import { generateAiLogoSvg } from '../services/aiLogoService';
+import { proxyRateLimiter, aiRateLimiter, aiMediaRateLimiter, transcribeRateLimiter, pexelsRateLimiter, contactRateLimiter } from '../middleware/rateLimiter';
 import { AuthenticatedRequest, requireAuth } from '../middleware/auth';
 import { canUseFeature, type PremiumFeature } from '../../shared/planEntitlements';
 import { getActivePlanForUser, syncExpiredSubscriptions } from '../services/subscriptionService';
@@ -12,7 +14,6 @@ import {
   transcribeAudioWithAi,
   refineTextWithAi,
   generateImageWithAi,
-  GEMINI_TEXT_MODELS,
 } from '../services/aiService';
 
 export { safeParseJson };
@@ -116,7 +117,8 @@ router.post('/video-proxy', requireAuth, requirePremiumFeature('pexelsVideos'), 
     // Abort controller to terminate upstream fetch if client disconnects early or after 25s timeout
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 25000);
-    req.on('close', () => {
+    res.on('close', () => {
+      if (res.writableEnded) return;
       clearTimeout(timeoutId);
       controller.abort();
     });
@@ -355,7 +357,7 @@ async function fetchCachedPexels(
   params: URLSearchParams,
   res: Response
 ) {
-  const pexelsKey = process.env.PEXELS_API_KEY || process.env.VITE_PEXELS_API_KEY;
+  const pexelsKey = (await getRawSetting('PEXELS_API_KEY')).trim();
   if (!pexelsKey) {
     return res.status(503).json({ error: 'مفتاح Pexels غير مهيأ في الخادم (PEXELS_API_KEY missing in .env)' });
   }
@@ -500,92 +502,39 @@ router.post('/contact', contactRateLimiter, async (req: AuthenticatedRequest, re
 /**
  * 6. Generate Luxury Islamic Calligraphic Logo with Gemini AI or Procedural Generator
  */
-router.post('/generate-logo', requireAuth, requirePremiumFeature('aiLogo'), aiRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
+router.post('/generate-logo', requireAuth, requirePremiumFeature('aiLogo'), aiMediaRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { brandName, subtitle, style } = req.body || {};
     const safeBrand = (brandName || 'آيات قرآنية').toString().trim().slice(0, 60);
     const safeSub = (subtitle || 'تلاوات خاشعة').toString().trim().slice(0, 60);
     const safeStyle = (style || 'goldMedallion') as any;
 
-    const { generateProceduralLogo } = await import('../services/logoGenerator');
-    const aiConfig = await getImageAiConfig();
-    let generatedSvg: string | null = null;
-
-    if (aiConfig && aiConfig.type === 'gemini') {
-      const prompt = `You are an elite Islamic calligrapher and vector artist specializing in luxury 3D Quran channel seals.
-Create a complete, valid SVG vector medallion seal for a Quranic video channel with:
-- Brand Name (Title): "${safeBrand}"
-- Subtitle: "${safeSub}"
-- Style Aesthetic: ${safeStyle}
-Requirements:
-1. Dimensions viewBox="0 0 500 500", circular medallion seal.
-2. Rich metallic gold gradients with dark luxury background.
-3. Authentic Islamic geometric motifs (Rub El Hizb 8-pointed star or arabesque floral vines or beaded pearls).
-4. Render the brand name "${safeBrand}" centrally in prominent Arabic typography.
-5. Return ONLY raw valid SVG code starting with <svg and ending with </svg>. No markdown formatting, no explanations.`;
-
-      for (const model of GEMINI_TEXT_MODELS) {
-        try {
-          const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${aiConfig.key}`;
-          const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 12000);
-
-          const response = await fetch(geminiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }],
-              generationConfig: { temperature: 0.4, maxOutputTokens: 2048 }
-            }),
-            signal: controller.signal
-          });
-          clearTimeout(timeout);
-
-          if (response.ok) {
-            const geminiData = await response.json();
-            const rawText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (rawText) {
-              const svgMatch = rawText.match(/<svg[\s\S]*<\/svg>/i);
-              if (svgMatch) {
-                generatedSvg = svgMatch[0];
-                break;
-              }
-            }
-          }
-        } catch (geminiErr) {
-          console.warn(`Gemini logo generation with ${model} failed, trying next:`, geminiErr);
-        }
-      }
-    }
-
-    // High quality procedural generator ensures 100% uptime and instant feedback
-    if (!generatedSvg) {
-      generatedSvg = generateProceduralLogo({
-        brandName: safeBrand,
-        subtitle: safeSub,
-        style: safeStyle
-      });
-    }
+    const aiConfig = await getAiConfig();
+    if (!aiConfig) return res.status(503).json({ error: 'مزود الذكاء الاصطناعي غير مهيأ لتصميم الشعار', code: 'AI_PROVIDER_NOT_CONFIGURED' });
+    const generated = await generateAiLogoSvg(safeBrand, safeSub, safeStyle, aiConfig);
+    const generatedSvg = generated.svg;
 
     const dataUrl = `data:image/svg+xml;base64,${Buffer.from(generatedSvg).toString('base64')}`;
 
     return res.status(200).json({
       success: true,
       svg: generatedSvg,
+      provider: generated.provider,
+      modelUsed: generated.modelUsed,
       dataUrl,
       brandName: safeBrand,
       style: safeStyle
     });
   } catch (err: any) {
     console.error('Generate logo endpoint error:', err);
-    return res.status(500).json({ error: 'حدث خطأ أثناء توليد الشعار' });
+    return res.status(err.status || 502).json({ error: err.message || 'حدث خطأ أثناء توليد الشعار', code: err.code || 'AI_LOGO_PROVIDER_FAILED' });
   }
 });
 
 /**
  * 7. Generate Visual Art & Background Images with Gemini Generative Media (Nano Banana)
  */
-router.post('/generate-image', requireAuth, requirePremiumFeature('aiBackgrounds'), aiRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
+router.post('/generate-image', requireAuth, requirePremiumFeature('aiBackgrounds'), aiMediaRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { prompt, aspectRatio, style } = req.body || {};
     if (!prompt || typeof prompt !== 'string' || !prompt.trim()) {
@@ -617,8 +566,9 @@ router.post('/generate-image', requireAuth, requirePremiumFeature('aiBackgrounds
     });
   } catch (err: any) {
     console.error('Generate image error:', err);
-    return res.status(502).json({
+    return res.status(err.status || 502).json({
       error: err.message || 'فشل توليد الصورة بالذكاء الاصطناعي',
+      code: err.code || 'AI_IMAGE_PROVIDER_FAILED',
     });
   }
 });

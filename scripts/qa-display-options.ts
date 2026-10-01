@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { createCanvas, ImageData } from '@napi-rs/canvas';
 import { NativeSceneRenderer } from '../server/renderer/nativeSceneRenderer';
 import * as options from '../src/data/displayOptions';
+import { ARABIC_FONT_CATALOG } from '../shared/planEntitlements';
 
 const output = path.resolve('qa-output/display-options');
 fs.mkdirSync(output, { recursive: true });
@@ -21,6 +22,8 @@ const base: any = {
   background: { type: 'color', url: '#162b3a', overlayOpacity: 0.35 },
   displaySettings: { visualDesign: 'moonlit', showSurahName: true, showReciterName: true, showAyahText: true, showAyahNumber: true, highlightStyle: 'glow', glowStyle: 'golden', frameStyle: 'ornate', screenBorderStyle: 'goldenTrim', screenBorderColor: 'gold', ayahNumberStyle: 'quran3d', ayahNumberColor: 'gold', verseDisplayMode: 'wordByWord', animationProfile: 'karaoke', ayahTransition: 'fade', textShadowStyle: 'soft', surahNameStyle: 'classic', surahNamePosition: 'top', reciterNameStyle: 'pill', watermarkEnabled: true, watermarkText: '@AyahX', watermarkPosition: 'bottomRight', socialWatermarkEnabled: true, socialHandle: '@AyahX', socialPlatform: 'youtube', socialWatermarkPosition: 'bottomCenter', logoWatermarkEnabled: true, logoWatermarkPreset: 'goldCalligraphy', logoBrandName: 'آيات', logoWatermarkPosition: 'topRight', logoWatermarkSize: 85, logoWatermarkOpacity: 0.9 },
 };
+// Synthetic letter spans are QA fixtures, never server-issued attestations.
+for (const word of base.timingMap.words) { const chars = Array.from(word.displayToken.normalize('NFC').replace(/[\u064b-\u065f\u0670]/g, '')); word.letters = chars.map((text, i) => ({ token: text, startMs: word.startMs + i * (word.endMs - word.startMs) / chars.length, endMs: word.startMs + (i + 1) * (word.endMs - word.startMs) / chars.length })); }
 const groups: Record<string, readonly { value: string }[]> = {
   verseDisplayMode: options.VERSE_DISPLAY_MODE_OPTIONS, animationProfile: options.ANIMATION_PROFILE_OPTIONS,
   ayahTransition: options.AYAH_TRANSITION_OPTIONS, highlightStyle: options.HIGHLIGHT_STYLE_OPTIONS,
@@ -33,13 +36,27 @@ const groups: Record<string, readonly { value: string }[]> = {
   socialPlatform: options.SOCIAL_PLATFORM_OPTIONS, logoWatermarkPosition: options.LOGO_WATERMARK_POSITION_OPTIONS,
   logoWatermarkPreset: options.LOGO_WATERMARK_PRESET_OPTIONS.filter(o => o.value !== 'custom'),
 };
+const values = (items: any[]) => items.map(value => ({ value: String(value) }));
+Object.assign(groups, {
+  fontFamily: values([...ARABIC_FONT_CATALOG]), fontSize: values([20,32,44,64]), shadowIntensity: values([0,.25,.5,.75,1]), overlayOpacity: values([0,.25,.5,.75,1]),
+  textColor: values(['#ffffff','#fef3c7','#fbbf24','#e0f2fe','#dcfce7','#fce7f3','#c0c0c0','#f59e0b','#38bdf8','#a78bfa','#d4af37','#2d6a4f','#1e3a5f','#e8d5b7','#ff6b6b']),
+  showSurahName: values([true,false]), showReciterName: values([true,false]), showAyahText: values([true,false]), showAyahNumber: values([true,false]),
+  animationReducedMotion: values([true,false]), logoWatermarkEnabled: values([true,false]), socialWatermarkEnabled: values([true,false]), watermarkEnabled: values([true,false]),
+  logoWatermarkSize: values([30,85,140,200]), logoWatermarkOpacity: values([0,.2,.5,1]), socialWatermarkSize: values([12,18,28]), socialWatermarkOpacity: values([0,.3,.7,1]),
+});
 const results: any[] = [];
 for (const [key, variants] of Object.entries(groups)) {
   const sheet = createCanvas(Math.min(4, variants.length)*180, Math.ceil(variants.length/4)*350);
   const sheetCtx = sheet.getContext('2d'); sheetCtx.fillStyle='#07121c'; sheetCtx.fillRect(0,0,sheet.width,sheet.height);
   const hashes = new Map<string,string>();
   for (const [index, variant] of variants.entries()) {
-    const manifest = structuredClone(base); manifest.displaySettings[key] = variant.value;
+    const manifest = structuredClone(base);
+    if (['fontFamily','textColor'].includes(key)) manifest.typography[key] = variant.value;
+    else if (['fontSize','shadowIntensity','overlayOpacity'].includes(key)) { manifest.typography[key] = Number(variant.value); if(key === 'overlayOpacity') manifest.background.overlayOpacity = Number(variant.value); }
+    else manifest.displaySettings[key] = variant.value === 'true' ? true : variant.value === 'false' ? false : Number.isFinite(Number(variant.value)) ? Number(variant.value) : variant.value;
+    if (key === 'textColor') { manifest.displaySettings.verseDisplayMode = 'full'; manifest.displaySettings.highlightStyle = 'none'; }
+    if (key === 'shadowIntensity') { manifest.displaySettings.verseDisplayMode = 'full'; manifest.displaySettings.highlightStyle = 'none'; }
+    if (key === 'animationReducedMotion') manifest.displaySettings.verseDisplayMode = 'full';
     if (['animationProfile','textShadowStyle','glowStyle'].includes(key)) manifest.displaySettings.verseDisplayMode = 'full';
     if (key === 'watermarkPosition') manifest.displaySettings.socialWatermarkEnabled = false;
     const scene = new NativeSceneRenderer(manifest); await scene.init();
@@ -53,6 +70,25 @@ for (const [key, variants] of Object.entries(groups)) {
     sheetCtx.drawImage(canvas,x,y,180,320); sheetCtx.fillStyle='#ffffff'; sheetCtx.font='12px sans-serif'; sheetCtx.fillText(variant.value,x+5,y+337);
   }
   fs.writeFileSync(path.join(output,`${key}.png`),sheet.toBuffer('image/png'));
+}
+// Exercise every layout/profile combination, including synthetic letter timing.
+// Some profiles deliberately share the same static frame in reduced/full modes;
+// these checks assert successful rendering rather than artificial uniqueness.
+for (const mode of options.VERSE_DISPLAY_MODE_OPTIONS) {
+  for (const profile of options.ANIMATION_PROFILE_OPTIONS) {
+    const manifest = structuredClone(base);
+    manifest.displaySettings.verseDisplayMode = mode.value;
+    manifest.displaySettings.animationProfile = profile.value;
+    const scene = new NativeSceneRenderer(manifest); await scene.init();
+    const hash = crypto.createHash('sha256');
+    for (const time of [.15,.55,1.05,1.5]) {
+      const frame = await scene.renderFrameRgbaBuffer(Math.round(time*30),time);
+      if (frame.length !== 720*1280*4) throw new Error(`Invalid frame for ${mode.value}/${profile.value}`);
+      hash.update(frame);
+    }
+    await scene.close();
+    results.push({key:'mode/profile',value:`${mode.value}/${profile.value}`,status:'rendered',digest:hash.digest('hex')});
+  }
 }
 fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(results,null,2));
 if (results.some(r => r.sameAs)) throw new Error(`Inert display options: ${JSON.stringify(results.filter(r => r.sameAs))}`);

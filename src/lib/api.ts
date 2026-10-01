@@ -152,7 +152,7 @@ export function notifyAuthListeners(user: User | null) {
   authListeners.forEach((l) => l(user));
 }
 
-async function request<T>(endpoint: string, options: RequestInit = {}, useEtagCache = false): Promise<T> {
+async function request<T>(endpoint: string, options: RequestInit = {}, useEtagCache = false, timeoutMs = 30000): Promise<T> {
   const token = getAuthToken();
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ async function request<T>(endpoint: string, options: RequestInit = {}, useEtagCa
 
   // Abort controller with 30s timeout to prevent indefinitely hung network requests
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000);
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const response = await fetch(endpoint, {
@@ -944,7 +944,7 @@ export const api = {
       }>('/api/services/generate-image', {
         method: 'POST',
         body: JSON.stringify({ prompt, aspectRatio, style }),
-      });
+      }, false, 60000);
     },
 
     async generateLogo(data: { brandName: string; subtitle?: string; style?: string }) {
@@ -957,7 +957,7 @@ export const api = {
       }>('/api/services/generate-logo', {
         method: 'POST',
         body: JSON.stringify(data),
-      });
+      }, false, 60000);
     },
   },
 

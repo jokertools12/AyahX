@@ -259,11 +259,11 @@ export const server = app.listen(config.port, () => {
 
   // Ensure render_jobs and system_settings tables are initialized
   Promise.all([
-    ensureRenderJobsTable().then(() => renderJobQueue.recoverStaleJobs()),
+    ensureRenderJobsTable().then(() => renderJobQueue.recoverStaleJobs(true)),
     ensurePlanEntitlementSchema(),
     ensureSettingsTable(),
     ensureAlignmentTables().then(() => {
-      if (!isShuttingDown && !stopAlignmentRetentionCleanup) {
+      if (process.env.RENDER_BACKGROUND_MAINTENANCE !== 'false' && !isShuttingDown && !stopAlignmentRetentionCleanup) {
         stopAlignmentRetentionCleanup = startAlignmentRetentionCleanup();
       }
     }),

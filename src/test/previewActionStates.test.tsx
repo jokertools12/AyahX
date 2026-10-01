@@ -33,10 +33,11 @@ function tags(node:ts.Node) {
 tags(action);
 const components: Record<string,unknown>={Button,Card,CardContent,Badge,Progress,SocialShareButtons:()=>React.createElement('div',{'data-testid':'sharing'})};
 for(const name of names) components[name] ??= ()=>null;
-const compiled=ts.transpileModule(`function Panel(p) { const {serverRenderJob,videoRecorder,renderEngineLabel,downloadFilename,toast,surah,reciter,isPublicVideo,setIsPublicVideo,handleSave,isSaving,isIbtahalatMode,ibtTrackTitle,toSafeFilename,exportSettings,handleStartExport,audioLoaded,audioError,timingsLoading}=p; return (${action.getText(tree)}); }`,{compilerOptions:{jsx:ts.JsxEmit.React,target:ts.ScriptTarget.ES2022}}).outputText;
+const compiled=ts.transpileModule(`function Panel(p) { const {serverRenderJob,videoRecorder,renderEngineLabel,downloadFilename,toast,surah,reciter,isPublicVideo,setIsPublicVideo,discoverTitle,setDiscoverTitle,handlePublishCloud,handleSave,isSaving,isIbtahalatMode,ibtTrackTitle,toSafeFilename,exportSettings,handleStartExport,audioLoaded,audioError,timingsLoading}=p; return (${action.getText(tree)}); }`,{compilerOptions:{jsx:ts.JsxEmit.React,target:ts.ScriptTarget.ES2022}}).outputText;
 const Panel=new Function('React',...Object.keys(components),`${compiled};return Panel;`)(React,...Object.values(components)) as React.ComponentType<Record<string,unknown>>;
 function fixture() {
   return {
+    discoverTitle:'',setDiscoverTitle:vi.fn(),handlePublishCloud:vi.fn(),
     serverRenderJob:{isRendering:false,error:null,isCompleted:false,status:'idle',progress:35,queuePosition:2,etaSeconds:10,engine:'browser_cloud',stage:'جاري الإنتاج',videoBlob:new Blob(['cloud']),cancelActiveRender:vi.fn(),cancelRender:vi.fn(),retryRender:vi.fn(),downloadRenderedMp4:vi.fn().mockResolvedValue(undefined),reset:vi.fn()},
     videoRecorder:{isRecording:false,videoBlob:null as Blob|null,mp4Blob:null as Blob|null,isConverting:false,progress:42,convertProgress:63,stage:'جاري التسجيل',downloadMp4:vi.fn(),downloadWebm:vi.fn(),reset:vi.fn()},
     renderEngineLabel:()=> 'الإنتاج السحابي',downloadFilename:'fixture.mp4',toast:{error:vi.fn()},surah:{name:'الفاتحة',englishName:'Al-Fatiha'},reciter:{id:'fixture-reciter',name:'قارئ'},isPublicVideo:false,setIsPublicVideo:vi.fn(),handleSave:vi.fn(),isSaving:false,isIbtahalatMode:false,ibtTrackTitle:'',toSafeFilename:(s:string)=>s,exportSettings:{format:'mp4'},handleStartExport:vi.fn(),audioLoaded:true,audioError:null,timingsLoading:false,
@@ -66,24 +67,25 @@ describe('Preview action states remain direct and functional',()=>{
     fireEvent.click(screen.getByRole('button',{name:'إعادة المحاولة'}));fireEvent.click(screen.getByRole('button',{name:'إلغاء وبدء من جديد'}));
     expect(p.serverRenderJob.retryRender).toHaveBeenCalledOnce();expect(p.serverRenderJob.cancelActiveRender).toHaveBeenCalledOnce();
   });
-  it('retains completed server download, share, publication, save and reset',()=>{
+  it('retains cloud download, title and publication without a duplicate library save',()=>{
     const p=fixture();p.serverRenderJob.isCompleted=true;render(<Panel {...p}/>);
     fireEvent.click(screen.getByRole('button',{name:'تحميل الفيديو (MP4 عالي الجودة)'}));
     expect(p.serverRenderJob.downloadRenderedMp4).toHaveBeenCalledWith('fixture.mp4');
     expect(screen.getByTestId('sharing')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('checkbox'));expect(p.setIsPublicVideo).toHaveBeenCalledWith(true);
-    fireEvent.click(screen.getByRole('button',{name:'حفظ في المكتبة'}));expect(p.handleSave).toHaveBeenCalledOnce();
+    fireEvent.change(screen.getByRole('textbox'),{target:{value:'عنوان جديد'}});expect(p.setDiscoverTitle).toHaveBeenCalledWith('عنوان جديد');
+    fireEvent.click(screen.getByRole('button',{name:'مشاركة الفيديو في اكتشف'}));expect(p.handlePublishCloud).toHaveBeenCalledOnce();
+    expect(screen.queryByRole('button',{name:'حفظ في المكتبة'})).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button',{name:'إنشاء فيديو جديد'}));expect(p.serverRenderJob.reset).toHaveBeenCalledOnce();
   });
   it.each(['recording','converting'])('keeps local progress state: %s',state=>{
     const p=fixture();p.videoRecorder.isRecording=state==='recording';p.videoRecorder.isConverting=state==='converting';p.videoRecorder.videoBlob=state==='converting'?new Blob(['local']):null;
     render(<Panel {...p}/>);expect(screen.getByRole('progressbar')).toBeInTheDocument();expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
-  it.each(['mp4','webm'])('keeps both download formats and save controls, selected=%s',format=>{
+  it.each(['mp4','webm'])('exports only MP4, including legacy saved format=%s',format=>{
     const p=fixture();p.videoRecorder.videoBlob=new Blob(['local']);p.exportSettings.format=format;render(<Panel {...p}/>);
-    fireEvent.click(screen.getByRole('button',{name:format==='mp4'?'تحميل الفيديو (MP4)':'تحويل وتحميل بصيغة MP4'}));
-    fireEvent.click(screen.getByRole('button',{name:format==='mp4'?'تحميل بصيغة WebM (فوري)':'تحميل الفيديو (WebM)'}));
-    expect(p.videoRecorder.downloadMp4).toHaveBeenCalledWith('Al-Fatiha-fixture-reciter.mp4');expect(p.videoRecorder.downloadWebm).toHaveBeenCalledWith('Al-Fatiha-fixture-reciter.webm');
+    fireEvent.click(screen.getByRole('button',{name:'تحميل الفيديو (MP4)'}));
+    expect(screen.queryByRole('button',{name:/WebM/})).not.toBeInTheDocument();
+    expect(p.videoRecorder.downloadMp4).toHaveBeenCalledWith('fixture.mp4');expect(p.videoRecorder.downloadWebm).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button',{name:'حفظ في المكتبة'}));expect(p.handleSave).toHaveBeenCalledOnce();
     fireEvent.click(screen.getByRole('button',{name:'إنشاء فيديو جديد'}));expect(p.videoRecorder.reset).toHaveBeenCalledOnce();
   });

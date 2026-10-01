@@ -137,6 +137,7 @@ export function TextSettingsPanel({ settings, onChange }: TextSettingsPanelProps
             <Palette className="h-4 w-4" />
             لون النص
           </Label>
+          <p className="text-xs text-muted-foreground">لون الكلمات غير المميزة. لون الكلمة النشطة يأتي من إعدادات التمييز والتوهج أدناه.</p>
           <RadioGroup
             value={settings.textColor}
             onValueChange={(value) => updateSetting('textColor', value)}

@@ -18,6 +18,7 @@ export interface AiConfig {
   key: string;
   /** Present only for the OpenRouter provider; never serialize this object to a client. */
   openRouter?: OpenRouterConfig;
+  imageModel?: string;
 }
 
 export interface TranscribeAudioResult {
@@ -61,6 +62,7 @@ export function safeParseJson(raw: string): any {
 const AI_RUNTIME_SETTING_KEYS = [
   'AI_PROVIDER',
   'AI_IMAGE_PROVIDER',
+  'GEMINI_IMAGE_MODEL',
   'OPENROUTER_API_KEY',
   'OPENROUTER_TEXT_MODEL',
   'OPENROUTER_TEXT_FALLBACK_MODELS',
@@ -154,7 +156,7 @@ export function resolveImageAiConfigFromSettings(settings: AiSettingsSource): Ai
   const requested = (settings.AI_IMAGE_PROVIDER || '').trim().toLowerCase();
   if (requested === 'none' || requested === 'openrouter') return null;
   if (requested === 'gemini' || (!requested && settings.GEMINI_API_KEY)) {
-    return settings.GEMINI_API_KEY ? buildProviderConfig('gemini', settings.GEMINI_API_KEY, settings) : null;
+    return settings.GEMINI_API_KEY ? { ...buildProviderConfig('gemini', settings.GEMINI_API_KEY.trim(), settings), imageModel: settings.GEMINI_IMAGE_MODEL || GEMINI_IMAGE_MODELS[0] } : null;
   }
   return null;
 }
@@ -481,71 +483,36 @@ export async function generateImageWithAi(
   }
 
   const aspectRatio = options?.aspectRatio || '9:16';
-  const enhancedPrompt = `${prompt}, peaceful Islamic aesthetic, divine atmospheric lighting, 8k resolution, elegant masterpiece composition, cinematic depth of field, ultra-detailed, no distorted artifacts, beautiful wallpaper quality`;
-
-  let lastErr = '';
-  let quotaHit = false;
-
-  for (const model of GEMINI_IMAGE_MODELS) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 35000);
-
-    try {
-      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${aiConfig.key}`;
-      const response = await fetch(geminiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal,
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [{ text: enhancedPrompt }],
-            },
-          ],
-          generationConfig: {
-            responseModalities: ['IMAGE'],
-          },
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const parts = data?.candidates?.[0]?.content?.parts || [];
-        for (const part of parts) {
-          const inlineData = part.inlineData || part.inline_data;
-          if (inlineData && inlineData.data) {
-            const mimeType = inlineData.mimeType || inlineData.mime_type || 'image/png';
-            const base64 = inlineData.data;
-            const dataUrl = `data:${mimeType};base64,${base64}`;
-            return {
-              base64,
-              mimeType,
-              dataUrl,
-              modelUsed: model,
-            };
-          }
-        }
-      }
-
-      const errText = await response.text().catch(() => '');
-      if (response.status === 429) {
-        quotaHit = true;
-      }
-      lastErr = `Model ${model} returned ${response.status}: ${errText.slice(0, 150)}`;
-      console.warn('Gemini image generation attempt failed:', lastErr);
-    } catch (err: any) {
-      if (err.name === 'AbortError') throw new Error('انتهت مهلة توليد الصورة بالذكاء الاصطناعي');
-      lastErr = err.message;
-      console.warn(`Error with image model ${model}:`, err.message);
-    } finally {
-      clearTimeout(timeoutId);
+  const styles = { photorealistic: 'natural photorealistic lighting', cinematic: 'cinematic light and depth of field', islamicArt: 'Islamic geometric art and ornamental motifs', minimalist: 'minimal composition and ample negative space' };
+  const enhancedPrompt = prompt + ', ' + styles[options?.style || 'cinematic'] + ', peaceful atmosphere, no text or watermarks';
+  const model = aiConfig.imageModel || GEMINI_IMAGE_MODELS[0];
+  if (!/^gemini-[a-z0-9.-]+$/.test(model)) throw Object.assign(new Error('اسم نموذج الصور غير صالح'), { code: 'AI_IMAGE_MODEL_INVALID', status: 503 });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 50000);
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': aiConfig.key.trim() }, signal: controller.signal,
+      body: JSON.stringify({ contents: [{ parts: [{ text: enhancedPrompt }] }], generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio } } }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      const quota = response.status === 429;
+      throw Object.assign(new Error(quota
+        ? 'حصة توليد الصور لدى Gemini غير متاحة أو تم بلوغ حد الطلبات. راجع الحصة والفوترة في Google AI Studio؛ لم يتم توليد صورة.'
+        : response.status === 401 || response.status === 403 ? 'مفتاح Gemini غير مصرح له بتوليد الصور'
+        : response.status === 404 ? 'نموذج الصور المحدد غير متاح لدى Gemini' : 'تعذر توليد الصورة لدى Gemini؛ حاول لاحقًا'), { status: quota ? 429 : 502, code: quota ? 'AI_IMAGE_QUOTA_EXCEEDED' : 'AI_IMAGE_PROVIDER_FAILED' });
     }
-  }
-
-  if (quotaHit) {
-    throw new Error('تم استهلاك حد الطلبات المجاني لتوليد الصور (Quota Limit) على Google AI Studio. يرجى التحقق من الخطة في AI Studio أو استخدام مكتبة الخلفيات الجاهزة.');
-  }
-
-  throw new Error(`فشل توليد الصورة بالذكاء الاصطناعي: ${lastErr || 'يرجى المحاولة لاحقاً'}`);
+    const parts = data?.candidates?.[0]?.content?.parts || [];
+    for (const part of parts) {
+      const inline = part.inlineData || part.inline_data;
+      const mimeType = inline?.mimeType || inline?.mime_type;
+      if (inline?.data && ['image/png', 'image/jpeg', 'image/webp'].includes(mimeType)) {
+        return { base64: inline.data, mimeType, dataUrl: `data:${mimeType};base64,${inline.data}`, modelUsed: model };
+      }
+    }
+    throw Object.assign(new Error('لم يُرجع Gemini صورة. جرّب وصفًا آخر.'), { status: 502, code: 'AI_IMAGE_EMPTY_RESULT' });
+  } catch (error: any) {
+    if (error.name === 'AbortError') throw Object.assign(new Error('انتهت مهلة توليد الصورة؛ حاول لاحقًا'), { status: 504, code: 'AI_IMAGE_TIMEOUT' });
+    throw error;
+  } finally { clearTimeout(timer); }
 }
-

@@ -1476,7 +1476,7 @@ export default function CreatePage() {
           {((contentMode !== 'ibtahalat' && currentStep === 4) || (contentMode === 'ibtahalat' && currentStep === 2)) && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2">
-                <BackgroundSelector selectedBackground={selectedBackground} onSelect={(background) => {
+                <BackgroundSelector aspectRatio={aspectRatio} selectedBackground={selectedBackground} onSelect={(background) => {
                   if (!isPremium && !isBasicBackground(background.category, background.type)) {
                     toast.error('الخلفيات المتحركة والفيديوهات متاحة للعضوية المميزة فقط');
                     return;

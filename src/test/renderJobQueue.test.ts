@@ -4,7 +4,9 @@ import { ensureRenderJobsTable } from '../../server/db/migrations/addRenderJobsT
 import { query } from '../../server/db';
 import crypto from 'crypto';
 
-describe('Durable Render Job System & Queue', () => {
+// This suite inserts and deletes database rows. Run explicitly against a test
+// database; the default unit suite must not require or mutate a developer DB.
+describe.runIf(process.env.RUN_DB_INTEGRATION_TESTS === 'true')('Durable Render Job System & Queue', () => {
   const testUserId1 = crypto.randomUUID();
   const testUserId2 = crypto.randomUUID();
 

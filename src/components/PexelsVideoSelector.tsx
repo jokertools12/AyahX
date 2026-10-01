@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2, Play, RefreshCw, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -14,30 +14,38 @@ import {
 } from '@/lib/pexelsApi';
 
 interface PexelsVideoSelectorProps {
+  orientation?: 'portrait' | 'landscape' | 'square';
   onSelect: (videoUrl: string, thumbnailUrl: string) => void;
 }
 
-export function PexelsVideoSelector({ onSelect }: PexelsVideoSelectorProps) {
+export function PexelsVideoSelector({ onSelect, orientation = 'portrait' }: PexelsVideoSelectorProps) {
   const [videos, setVideos] = useState<PexelsVideo[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<VideoCategory>('nature');
   const [selectedVideoId, setSelectedVideoId] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const requestId = useRef(0);
 
   const fetchVideos = useCallback(async (query: string) => {
+    const id = ++requestId.current;
     setLoading(true);
+    setError(null);
     try {
       const results = await searchPexelsVideos(query, {
-        orientation: 'portrait',
+        orientation,
         perPage: 12,
       });
-      setVideos(results);
+      if (id === requestId.current) setVideos(results);
     } catch (error) {
-      console.error('Error fetching videos:', error);
+      if (id === requestId.current) {
+        setVideos([]);
+        setError(error instanceof Error ? error.message : 'تعذر تحميل فيديوهات Pexels');
+      }
     } finally {
-      setLoading(false);
+      if (id === requestId.current) setLoading(false);
     }
-  }, []);
+  }, [orientation]);
 
   // Load initial videos
   useEffect(() => {
@@ -116,7 +124,7 @@ export function PexelsVideoSelector({ onSelect }: PexelsVideoSelectorProps) {
         ) : videos.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
             <Play className="h-12 w-12 mb-2 opacity-50" />
-            <p className="text-sm">لا توجد فيديوهات</p>
+            <p role={error ? 'alert' : undefined} className="text-sm text-center px-3">{error || 'لا توجد فيديوهات لهذا البحث؛ جرّب وصفًا آخر.'}</p>
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-2 p-1">

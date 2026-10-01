@@ -3,10 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <title>Offline Deterministic Render Harness</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;600;700;800&family=El+Messiri:wght@400;700&family=Katibeh&family=Lalezar&family=Lateef:wght@400;700&family=Mada:wght@400;700&family=Marhey:wght@400;700&family=Mirza:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Rakkas&family=Reem+Kufi:wght@400;700&family=Scheherazade+New:wght@400;700&family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet" />
   <style>
+@font-face{font-family:'Amiri';src:url('fonts/amiri.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Amiri Quran';src:url('fonts/amiriquran.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Noto Naskh Arabic';src:url('fonts/notonaskharabic.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Scheherazade New';src:url('fonts/scheherazadenew.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Aref Ruqaa';src:url('fonts/arefruqaa.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Reem Kufi';src:url('fonts/reemkufi.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Cairo';src:url('fonts/cairo.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'El Messiri';src:url('fonts/elmessiri.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Lateef';src:url('fonts/lateef.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Mada';src:url('fonts/mada.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Marhey';src:url('fonts/marhey.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Mirza';src:url('fonts/mirza.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Rakkas';src:url('fonts/rakkas.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Lalezar';src:url('fonts/lalezar.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Tajawal';src:url('fonts/tajawal.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+@font-face{font-family:'Katibeh';src:url('fonts/katibeh.ttf') format('truetype');font-style:normal;font-weight:100 900;font-display:block;}
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100%;
@@ -986,7 +1000,13 @@
 
           // Await web font readiness
           if (document.fonts && document.fonts.ready) {
-            try { await document.fonts.ready; } catch(e) {}
+            if (typeof document.fonts.load === 'function') {
+              await Promise.all([
+                document.fonts.load('32px ' + (manifest.typography?.fontFamily || 'Amiri')),
+                document.fonts.load('24px Cairo'), document.fonts.load('24px Amiri'),
+              ]);
+            }
+            await document.fonts.ready;
           }
 
           const bg = manifest.background || {};
@@ -2119,42 +2139,46 @@
                   }
                 } else {
                   // Non-highlighted word with customizable textShadowStyle
-                  const shadowStyle = displaySettings.textShadowStyle || 'soft';
+                  const shadowStrength = Math.max(0, Math.min(1, typography.shadowIntensity ?? 0.5)) * 2;
+                  const shadowStyle = shadowStrength === 0 ? 'none' : (displaySettings.textShadowStyle || 'soft');
                   if (shadowStyle === 'none') {
                     ctx.shadowColor = 'transparent';
                     ctx.shadowBlur = 0;
                   } else if (shadowStyle === 'strong') {
-                    ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+                    ctx.shadowColor = `rgba(0, 0, 0, ${Math.min(1, 0.95 * shadowStrength)})`;
                     ctx.shadowBlur = 16 * S;
                     ctx.shadowOffsetX = 2 * S;
                     ctx.shadowOffsetY = 2 * S;
                   } else if (shadowStyle === 'glow') {
-                    ctx.shadowColor = 'rgba(212, 175, 55, 0.55)';
+                    ctx.shadowColor = `rgba(212, 175, 55, ${Math.min(1, 0.55 * shadowStrength)})`;
                     ctx.shadowBlur = 16 * S;
                   } else if (shadowStyle === 'double') {
-                    ctx.strokeStyle = 'rgba(212, 175, 55, 0.45)'; ctx.lineWidth = 2 * S;
+                    ctx.strokeStyle = `rgba(212, 175, 55, ${Math.min(1, 0.45 * shadowStrength)})`; ctx.lineWidth = 2 * S;
                     ctx.strokeText(w, cursorX - 2 * S, y - 2 * S);
-                    ctx.shadowColor = 'rgba(0, 0, 0, 0.95)'; ctx.shadowBlur = 10 * S;
+                    ctx.shadowColor = `rgba(0, 0, 0, ${Math.min(1, 0.95 * shadowStrength)})`; ctx.shadowBlur = 10 * S;
                     ctx.shadowOffsetX = 2 * S; ctx.shadowOffsetY = 3 * S;
                   } else if (shadowStyle === '3d') {
-                    ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+                    ctx.shadowColor = `rgba(0, 0, 0, ${Math.min(1, 0.95 * shadowStrength)})`;
                     ctx.shadowBlur = 6 * S;
                     ctx.shadowOffsetX = 3 * S;
                     ctx.shadowOffsetY = 4 * S;
                   } else if (shadowStyle === 'outline') {
-                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.95)';
+                    ctx.strokeStyle = `rgba(0, 0, 0, ${Math.min(1, 0.95 * shadowStrength)})`;
                     ctx.lineWidth = 3.5 * S;
                     ctx.strokeText(w, cursorX, y);
                     ctx.shadowColor = 'transparent';
                     ctx.shadowBlur = 0;
                   } else {
                     // Soft
-                    ctx.shadowColor = 'rgba(0, 0, 0, 0.75)';
+                    ctx.shadowColor = `rgba(0, 0, 0, ${Math.min(1, 0.75 * shadowStrength)})`;
                     ctx.shadowBlur = 8 * S;
                     ctx.shadowOffsetX = 1 * S;
                     ctx.shadowOffsetY = 1 * S;
                   }
-                  ctx.fillStyle = typography.textColor || '#FFFFFF';
+                                    ctx.shadowBlur *= shadowStrength;
+                  ctx.shadowOffsetX *= shadowStrength;
+                  ctx.shadowOffsetY *= shadowStrength;
+ctx.fillStyle = typography.textColor || '#FFFFFF';
                   ctx.fillText(w, cursorX, y);
                 }
 
@@ -2221,7 +2245,7 @@
             headerSeparatorY: headerLayout.separatorY,
             frameActive: Boolean(displaySettings.frameStyle && displaySettings.frameStyle !== 'none'),
           });
-          if (displaySettings.logoWatermarkEnabled !== false) {
+          if (displaySettings.logoWatermarkEnabled === true) {
             ctx.save();
             const lPos = displaySettings.logoWatermarkPosition || 'topRight';
             const lSize = (displaySettings.logoWatermarkSize || 85) * S;
@@ -2254,7 +2278,7 @@
               ctx.stroke();
 
               const imageBrand = (displaySettings.logoBrandName || '').trim() || 'آيات قرآنية';
-              const imageSubtitle = (displaySettings.logoSubtitle || '').trim() || 'تلاوات خاشعة';
+              const imageSubtitle = (displaySettings.logoSubtitle ?? 'تلاوات خاشعة').trim();
               ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
               ctx.fillStyle = 'rgba(4,13,18,0.68)'; ctx.beginPath();
               ctx.roundRect(lx - radius * 0.78, ly - radius * 0.38, radius * 1.56, radius * 0.72, radius * 0.18); ctx.fill();
@@ -2338,7 +2362,7 @@
               ctx.restore();
 
               const brandText = (displaySettings.logoBrandName || '').trim() || 'آيات قرآنية';
-              const subText = (displaySettings.logoSubtitle || '').trim() || 'تلاوات خاشعة';
+              const subText = (displaySettings.logoSubtitle ?? 'تلاوات خاشعة').trim();
 
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
