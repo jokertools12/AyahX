@@ -2764,6 +2764,33 @@ export default function PreviewPage() {
                   onChange={setDisplaySettings}
                   textSettings={textSettings}
                   onTextSettingsChange={setTextSettings}
+                  templateConfiguration={{ exportSettings, audioEffects: audioEffects.effects, aspectRatio,
+                    background: background ? { id: background.id, type: background.type, url: background.url, thumbnail: background.thumbnail } : undefined,
+                    customBackground: permittedCustomBackground, customBackgroundType }}
+                  onTemplateConfigurationChange={(configuration) => {
+                    setSelectedPresetId(undefined);
+                    if (configuration.exportSettings) {
+                      const restored = { ...DEFAULT_EXPORT_SETTINGS, ...configuration.exportSettings };
+                      if (restored.renderEngine && restored.renderEngine !== 'browser' &&
+                          !cloudPolicy?.enabledEngines.includes(restored.renderEngine)) {
+                        restored.renderEngine = 'browser';
+                        toast.info('محرك القالب غير متاح حاليًا؛ تم اختيار الإنتاج على جهازك.');
+                      }
+                      handleExportSettingsChange(restored);
+                    }
+                    if (configuration.audioEffects) audioEffects.setEffects((current) => ({ ...current, ...configuration.audioEffects, pitchShift: 0, speedAdjust: 1 }));
+                    if (configuration.aspectRatio) setAspectRatio(configuration.aspectRatio);
+                    if (configuration.customBackground !== undefined) setCustomBackground(configuration.customBackground);
+                    if (configuration.customBackgroundType) setCustomBackgroundType(configuration.customBackgroundType);
+                    if (configuration.background) setSearchParams((previous) => {
+                      const next = new URLSearchParams(previous);
+                      next.set('background', configuration.background!.id);
+                      next.set('backgroundType', configuration.background!.type);
+                      next.set('backgroundUrl', configuration.background!.url);
+                      next.set('backgroundThumb', configuration.background!.thumbnail);
+                      return next;
+                    });
+                  }}
                   letterTimingStatus={letterTimingStatus}
                 />
               </TabsContent>

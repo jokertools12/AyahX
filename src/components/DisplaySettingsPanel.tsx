@@ -39,6 +39,7 @@ import { useSubscription } from '@/hooks/useSubscription';
 import { api } from '@/lib/api';
 import { PremiumBadge } from '@/components/PremiumBadge';
 import { TextSettingsPanel, type TextSettings } from '@/components/TextSettingsPanel';
+import { createSavedTemplate, loadSavedTemplates, TEMPLATES_KEY, type SavedTemplate, type VideoTemplateConfiguration } from '@/lib/savedVideoTemplates';
 import type { AnimationProfile, VerseDisplayMode } from '@/lib/animationTimeline';
 import {
   type AyahNumberColor,
@@ -153,6 +154,8 @@ export interface DisplaySettings {
 }
 
 export interface DisplaySettingsPanelProps {
+  templateConfiguration?: VideoTemplateConfiguration;
+  onTemplateConfigurationChange?: (configuration: VideoTemplateConfiguration) => void;
   textSettings?: TextSettings;
   onTextSettingsChange?: (settings: TextSettings) => void;
   settings: DisplaySettings;
@@ -214,16 +217,6 @@ const slideshowTransitionOptions = [
 
 const socialPlatformOptions = SOCIAL_PLATFORM_OPTIONS;
 
-
-const TEMPLATES_KEY = 'ayah-clip-display-templates';
-
-interface SavedTemplate {
-  id: string;
-  name: string;
-  settings: DisplaySettings;
-  createdAt: number;
-  badge?: string;
-}
 
 const BUILTIN_DISPLAY_TEMPLATES: SavedTemplate[] = [
   {
@@ -367,12 +360,7 @@ const BUILTIN_DISPLAY_TEMPLATES: SavedTemplate[] = [
 ];
 
 function loadTemplates(): SavedTemplate[] {
-  try {
-    const raw = localStorage.getItem(TEMPLATES_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
+  return loadSavedTemplates(localStorage);
 }
 
 function saveTemplates(templates: SavedTemplate[]) {
@@ -449,11 +437,12 @@ function RadioOptionGrid({
   );
 }
 
-export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextSettingsChange, letterTimingStatus = 'idle' }: DisplaySettingsPanelProps) {
+export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextSettingsChange, templateConfiguration, onTemplateConfigurationChange, letterTimingStatus = 'idle' }: DisplaySettingsPanelProps) {
   const { canUseFeature } = useSubscription();
   const [userTemplates, setUserTemplates] = useState<SavedTemplate[]>(loadTemplates);
   const [templateName, setTemplateName] = useState('');
   const [showSaveInput, setShowSaveInput] = useState(false);
+  const [isSavingTemplate, setIsSavingTemplate] = useState(false);
   const [isGeneratingLogo, setIsGeneratingLogo] = useState(false);
   const [logoAiStyle, setLogoAiStyle] = useState<'goldMedallion' | 'ottomanCrest' | 'modernGeometric' | 'classicCalligraphy'>('goldMedallion');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -533,24 +522,24 @@ export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextS
     reader.readAsDataURL(file);
   };
 
-  const handleSaveTemplate = () => {
+  const handleSaveTemplate = async () => {
     if (!canUseFeature('premiumTemplates')) {
       toast.error('حفظ القوالب الملكية متاح للعضوية المميزة فقط');
       return;
     }
-    if (!templateName.trim()) return;
-    const newTemplate: SavedTemplate = {
-      id: `tpl-${Date.now()}`,
-      name: templateName.trim(),
-      settings: { ...settings },
-      createdAt: Date.now(),
-    };
-    const updated = [...userTemplates, newTemplate];
-    setUserTemplates(updated);
-    saveTemplates(updated);
-    setTemplateName('');
-    setShowSaveInput(false);
-    toast.success(`تم حفظ القالب "${newTemplate.name}"`);
+    if (!templateName.trim() || isSavingTemplate) return;
+    setIsSavingTemplate(true);
+    try {
+      const newTemplate = await createSavedTemplate(templateName, settings, { ...templateConfiguration, textSettings });
+      const updated = [...userTemplates, newTemplate];
+      saveTemplates(updated);
+      setUserTemplates(updated);
+      setTemplateName('');
+      setShowSaveInput(false);
+      toast.success(`تم حفظ القالب "${newTemplate.name}"`);
+    } catch {
+      toast.error('تعذر حفظ القالب. تحقق من مساحة التخزين وحجم الملفات المرفقة.');
+    } finally { setIsSavingTemplate(false); }
   };
 
   const handleLoadTemplate = (tpl: SavedTemplate) => {
@@ -558,15 +547,19 @@ export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextS
       toast.error('القوالب الجاهزة الفاخرة متاحة للعضوية المميزة فقط');
       return;
     }
-    onChange({ ...tpl.settings });
+    onChange({ ...settings, ...tpl.settings });
+    if (tpl.textSettings && onTextSettingsChange) onTextSettingsChange({ ...textSettings, ...tpl.textSettings });
+    onTemplateConfigurationChange?.(tpl);
     toast.success(`تم تطبيق قالب "${tpl.name}" ✨`);
   };
 
   const handleDeleteTemplate = (id: string) => {
     const updated = userTemplates.filter((t) => t.id !== id);
-    setUserTemplates(updated);
-    saveTemplates(updated);
-    toast.success('تم حذف القالب');
+    try {
+      saveTemplates(updated);
+      setUserTemplates(updated);
+      toast.success('تم حذف القالب');
+    } catch { toast.error('تعذر حذف القالب من التخزين'); }
   };
 
   return (
@@ -1308,6 +1301,8 @@ export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextS
                           variant="ghost"
                           size="icon"
                           className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                          disabled={isSavingTemplate}
+                          aria-label={`حذف قالب ${tpl.name}`}
                           onClick={() => handleDeleteTemplate(tpl.id)}
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -1329,7 +1324,7 @@ export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextS
                       dir="auto"
                       onKeyDown={(e) => e.key === 'Enter' && handleSaveTemplate()}
                     />
-                    <Button size="sm" onClick={handleSaveTemplate} disabled={!templateName.trim()} className="gap-1.5 gradient-primary">
+                    <Button size="sm" onClick={handleSaveTemplate} disabled={!templateName.trim() || isSavingTemplate} className="gap-1.5 gradient-primary">
                       <Save className="h-3.5 w-3.5" />
                       حفظ
                     </Button>
