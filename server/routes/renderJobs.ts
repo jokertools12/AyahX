@@ -499,6 +499,21 @@ router.post('/:id/retry', requireAuth, async (req: AuthenticatedRequest, res: Re
   try {
     const userId = req.user!.id;
     const isAdmin = req.user!.role === 'admin';
+    const previous = await renderJobQueue.getJobById(req.params.id as string, userId, isAdmin);
+    if (!previous) return res.status(404).json({ error: 'مهمة الريندر غير موجودة' });
+    const retryManifest = typeof previous.manifest === 'string' ? JSON.parse(previous.manifest) : previous.manifest;
+    const retryEngine = retryManifest.renderEngine || 'ffmpeg_ass';
+    const policy = getCloudRenderPolicy();
+    if (!policy.enabledEngines.includes(retryEngine)) {
+      return res.status(503).json({ error: 'طريقة الإنتاج السابقة غير متاحة حاليًا. أنشئ فيديو جديدًا بالإنتاج السحابي المتاح.', engineUnavailable: true });
+    }
+    const retryPlan = await getActivePlanForUser(previous.user_id);
+    const violations = [...validateCloudRenderLimits(retryPlan, retryManifest), ...validateRenderEntitlements(retryPlan, retryManifest).violations];
+    if (violations.length) return res.status(403).json({ error: violations[0], entitlementViolation: true, violations });
+    if ((await getQueueBacklogSnapshot()).counts[retryEngine as keyof QueueBacklogSnapshot['counts']] >= policy.maxBacklog) {
+      res.setHeader('Retry-After', '30');
+      return res.status(429).json({ error: 'طابور الإنتاج السحابي ممتلئ مؤقتًا. حاول بعد قليل.', backlogFull: true });
+    }
     const job = await renderJobQueue.retryJob(req.params.id as string, userId, isAdmin);
     if (!job) {
       return res.status(409).json({ error: 'لا يمكن إعادة المحاولة لهذه المهمة؛ يجب أن تكون فاشلة أو ملغاة.' });
