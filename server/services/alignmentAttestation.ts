@@ -131,6 +131,14 @@ export function issueApprovedTimingMapAttestation(map: AttestableTimingMap, user
   return [ATTESTATION_PREFIX, expiresAt.toString(36), nonce, signature(secret, userId, map, expiresAt, nonce)].join('.');
 }
 
+/** Guest previews stay public; authenticated approved maps carry export proof. */
+export function attestTimingMapForUser<T extends AttestableTimingMap>(map: T, userId?: string): T {
+  if (!userId || map.validationStatus !== 'approved') return map;
+  const token = issueApprovedTimingMapAttestation(map, userId);
+  if (!token) throw new Error('ALIGNMENT_ATTESTATION_SECRET_NOT_CONFIGURED');
+  return { ...map, alignment: { ...map.alignment, providerResultId: token } } as T;
+}
+
 /** Rejects an altered approved map; non-approved maps remain static-renderable. */
 export function verifyApprovedTimingMapAttestation(map: AttestableTimingMap, userId: string, now = Date.now()): AlignmentAttestationVerification {
   if (map.validationStatus !== 'approved') return { valid: true };

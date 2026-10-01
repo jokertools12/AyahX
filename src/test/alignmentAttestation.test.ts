@@ -1,9 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   issueApprovedTimingMapAttestation,
+  attestTimingMapForUser,
   verifyApprovedTimingMapAttestation,
   type AttestableTimingMap,
 } from '../../server/services/alignmentAttestation';
+import { buildClientRenderManifest } from '../lib/renderManifest';
+import { validateRenderManifest } from '../../server/models/renderManifest';
 
 const previousSecret = process.env.ALIGNMENT_ATTESTATION_SECRET;
 const previousTtl = process.env.ALIGNMENT_ATTESTATION_TTL_SECONDS;
@@ -29,6 +32,41 @@ afterEach(() => {
 });
 
 describe('approved timing map attestation', () => {
+  it.each(['verified_dataset', 'quranic_universal_aligner', 'quran_foundation'])('preserves %s proof through browser serialization and server parsing', (provider) => {
+    process.env.ALIGNMENT_ATTESTATION_SECRET = 'r'.repeat(48);
+    const map = approvedMap();
+    map.sourceId = provider;
+    map.alignment!.provider = provider;
+    map.words![0].flags = ['verified'];
+    // Older dataset maps may omit occurrence ids. Serialization must not add
+    // evidence which was absent when the server signed the map.
+    delete map.words![0].occurrenceId;
+    const signed = attestTimingMapForUser(map, 'owner');
+    const manifest = buildClientRenderManifest({
+      aspectRatio: '9:16', quality: 'medium', fps: 30,
+      surah: { number: 1, name: 'الفاتحة' }, ayahRange: { start: 1, end: 1 },
+      ayahs: [{ numberInSurah: 1, text: 'قُلْ' }], reciter: { id: 'test', name: 'test' },
+      timingMap: { ...signed, createdAt: new Date().toISOString() } as any,
+      audio: { sourceMode: 'single_url', audioUrl: 'https://everyayah.com/data/Alafasy_128kbps/001001.mp3', audioContentHash: map.audioContentHash!, durationSeconds: 1 },
+      background: { id: 'test', type: 'color', url: '#123456' },
+      textSettings: { fontSize: 28, fontFamily: '"Amiri", serif', textColor: '#ffffff', shadowIntensity: 0.5, overlayOpacity: 0.4 },
+      displaySettings: {}, renderEngine: 'skia_canvas',
+    });
+    const parsed = validateRenderManifest(JSON.parse(JSON.stringify(manifest)));
+    expect(parsed.errors).toBeUndefined();
+    expect(verifyApprovedTimingMapAttestation(parsed.manifest!.timingMap, 'owner')).toEqual({ valid: true });
+    expect(verifyApprovedTimingMapAttestation(parsed.manifest!.timingMap, 'other')).toMatchObject({ valid: false });
+    parsed.manifest!.timingMap.words[0].endMs += 1;
+    expect(verifyApprovedTimingMapAttestation(parsed.manifest!.timingMap, 'owner')).toMatchObject({ valid: false, code: 'ALIGNMENT_ATTESTATION_INVALID' });
+  });
+
+  it('keeps guest preview maps unsigned without mutating the source map', () => {
+    process.env.ALIGNMENT_ATTESTATION_SECRET = 'r'.repeat(48);
+    const map = approvedMap();
+    expect(attestTimingMapForUser(map)).toBe(map);
+    expect(attestTimingMapForUser(map, 'owner').alignment?.providerResultId).toMatch(/^a1\./);
+    expect(map.alignment?.providerResultId).toBeUndefined();
+  });
   it('binds exact timing evidence to one user and expires it', () => {
     process.env.ALIGNMENT_ATTESTATION_SECRET = 's'.repeat(48);
     process.env.ALIGNMENT_ATTESTATION_TTL_SECONDS = '60';

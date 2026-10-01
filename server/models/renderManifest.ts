@@ -144,6 +144,8 @@ export const RenderManifestSchema = z.object({
         displayWordIndex: z.number().int().min(0),
         displayToken: z.string(),
         occurrenceId: z.string().min(1).max(180).optional(),
+        normalizedAlignmentToken: z.string().max(1000).optional(),
+        flags: z.array(z.string().max(100)).optional(),
         startMs: z.number().min(0),
         endMs: z.number().min(0),
         confidence: z.number().min(0).max(1).optional(),

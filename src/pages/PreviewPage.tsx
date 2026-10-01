@@ -1124,7 +1124,7 @@ export default function PreviewPage() {
 
     load();
     return () => { cancelled = true; };
-  }, [isIbtahalatMode, ibtAudioUrl, reciter, reciter?.id, reciter?.quranFoundationId, reciter?.everyAyahSubfolder, reciter?.quranUniversalSlug, surahNumber, startAyah, endAyah, totalAyahsInSurah, requestedAyahRangeKey, loadedAyahRangeKey, ayahs.length, ayahs]);
+  }, [isIbtahalatMode, ibtAudioUrl, reciter, reciter?.id, reciter?.quranFoundationId, reciter?.everyAyahSubfolder, reciter?.quranUniversalSlug, surahNumber, startAyah, endAyah, totalAyahsInSurah, requestedAyahRangeKey, loadedAyahRangeKey, ayahs.length, ayahs, user?.id]);
 
   // Letter animation is an opt-in precision tier. Load QUA's pinned letter
   // paint annotations only when selected; word playback remains fast and does

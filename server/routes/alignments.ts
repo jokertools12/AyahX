@@ -16,7 +16,7 @@ import {
   saveReviewEvent,
 } from '../services/alignmentRepository';
 import { alignmentDocumentToTimingMap } from '../services/alignmentProvider';
-import { issueApprovedTimingMapAttestation } from '../services/alignmentAttestation';
+import { attestTimingMapForUser } from '../services/alignmentAttestation';
 import { resolveKnownQuranAlign } from '../services/quranAlignService';
 import { resolveUniversalQuranAudio } from '../services/quranUniversalAudioService';
 
@@ -39,11 +39,7 @@ function errorStatus(error: unknown): number {
 }
 
 function publicDocument(document: any, userId: string) {
-  const timingMap = alignmentDocumentToTimingMap(document);
-  const attestation = issueApprovedTimingMapAttestation(timingMap, userId);
-  if (attestation && timingMap.alignment) {
-    timingMap.alignment = { ...timingMap.alignment, providerResultId: attestation };
-  }
+  const timingMap = attestTimingMapForUser(alignmentDocumentToTimingMap(document), userId);
   return {
     document,
     timingMap,
@@ -126,7 +122,7 @@ router.post('/resolve-known', aiRateLimiter, async (req: any, res: Response) => 
     if (!input.reciterId || !input.everyAyahSubfolder || !input.audio || !input.reference || !Array.isArray(input.audioTimestamps)) {
       return res.status(400).json({ error: 'بيانات المحاذاة المعروفة غير مكتملة', code: 'KNOWN_ALIGNMENT_INPUT_REQUIRED' });
     }
-    const timingMap = resolveKnownQuranAlign(input as any);
+    const timingMap = attestTimingMapForUser(resolveKnownQuranAlign(input as any), req.user?.id);
     return res.json({ accepted: true, timingMap, validation: { status: 'approved', errors: [], warnings: [] } });
   } catch (error: any) {
     const code = String(error?.message || error || 'KNOWN_ALIGNMENT_FAILED');
@@ -175,7 +171,7 @@ router.post('/resolve-universal', aiRateLimiter, async (req: any, res: Response)
     const result = await resolveUniversalQuranAudio(input as any);
     return res.json({
       accepted: true,
-      timingMap: result.timingMap,
+      timingMap: attestTimingMapForUser(result.timingMap, req.user?.id),
       audioUrl: result.audioUrl,
       reciter: { slug: result.reciter.slug, coverageAyahs: result.reciter.coverageAyahs },
       validation: { status: 'approved', errors: [], warnings: [] },
