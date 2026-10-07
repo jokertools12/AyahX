@@ -1,0 +1,27 @@
+# Generated, third-party, prompt-reference and credential-bearing material.
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+*.pem
+*.key
+litho*.toml
+litho.exe
+gpt-6.1-sol.md
+deepwiki-rs/**
+.agent/**
+.agents/**
+.autoclaw/**
+.litho/**
+.terrain/**
+tooling/runtime/**
+tooling/references/**
+tooling/node_modules/**
+node_modules/**
+dist/**
+dist-server/**
+uploads/**
+qa-output/**
+docs/ui-refactor/*inventory*.json
+docs/ui-refactor/element-map.json

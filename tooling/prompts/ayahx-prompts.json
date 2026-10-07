@@ -1,0 +1,6 @@
+[
+  { "id": "engineering", "inspiredBy": "f/prompts.chat", "prompt": "Review the named AyahX module against its actual source. Explain concrete issues, preserve current behavior, propose the smallest fix and verify it. Do not claim tests you did not run." },
+  { "id": "arabic-ui", "inspiredBy": "nextlevelbuilder/ui-ux-pro-max-skill", "prompt": "Review this AyahX UI at 390, 768 and 1280 pixels, in Arabic RTL and English LTR. Check focus, contrast, touch targets and diacritics. Keep existing colors and typography unless a change is requested." },
+  { "id": "render-review", "inspiredBy": "addyosmani/agent-skills", "prompt": "Verify the generated AyahX video with its actual artifact, worker logs, duration, audio, full-resolution frames and ayah switching. Report evidence and any remaining uncertainty." },
+  { "id": "background", "inspiredBy": "Comfy-Org/ComfyUI", "prompt": "Generate a serene background with a dark uncluttered area for Quran overlays. Do not generate Quran letters, Arabic text, watermarks or logos. Exact text is added later by AyahX." }
+]

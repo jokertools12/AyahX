@@ -8,3 +8,13 @@ uploads/renders
 *.mp4
 *.mp3
 *.wav
+
+# Engineering tools are not application runtime dependencies.
+.agents
+tooling
+.terrain
+deepwiki-rs
+.litho
+litho.exe
+litho*.toml
+gpt-6.1-sol.md

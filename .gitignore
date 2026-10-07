@@ -46,3 +46,17 @@ services/alignment-worker/.venv/
 services/alignment-worker/checkpoints/
 services/alignment-worker/reports/
 dist-server/
+
+# Optional project engineering toolkit and runtime archives.
+tooling/runtime/
+tooling/references/
+tooling/reports/
+.terrain/agent/repomix.md
+.terrain/agent/index.md
+
+# Existing local Litho installations and provider configuration.
+/deepwiki-rs/
+/.litho/
+/litho.exe
+/litho*.toml
+/gpt-6.1-sol.md

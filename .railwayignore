@@ -26,3 +26,13 @@ scratch/
 *.wav
 *.m4a
 *.mp4
+
+# Project-local engineering tools and optional service templates.
+.agents/
+tooling/
+.terrain/
+deepwiki-rs/
+.litho/
+litho.exe
+litho*.toml
+gpt-6.1-sol.md
