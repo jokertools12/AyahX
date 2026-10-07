@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Loader2, BookOpen, Mail, Lock, AlertCircle, Eye, EyeOff, User, KeyRound } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { BrandLogo } from '@/components/BrandLogo';
 
 const emailSchema = z.string().email('الرجاء إدخال بريد إلكتروني صحيح');
 const passwordSchema = z.string().min(6, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل').max(72, 'كلمة المرور يجب أن لا تزيد عن 72 حرفاً');
@@ -128,10 +129,10 @@ export default function AuthPage() {
         >
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary mb-4 shadow-lg shadow-primary/20">
-              <BookOpen className="h-8 w-8 text-primary-foreground" />
+            <div className="mx-auto mb-5 w-fit rounded-2xl bg-white p-4 ring-1 ring-border">
+              <BrandLogo variant="stacked" className="w-36" priority />
             </div>
-            <h1 className="text-2xl font-bold font-quran">مرحباً بك في قرآن ريلز</h1>
+            <h1 className="text-2xl font-bold">مرحباً بك في <bdi>AyahX</bdi></h1>
             <p className="text-muted-foreground mt-2 text-sm">
               سجل دخولك لحفظ مقاطعك ومشاركتها مع الجمهور
             </p>

@@ -1,6 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { AlertCircle, Home, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { BrandLogo } from '@/components/BrandLogo';
 
 interface AppErrorBoundaryProps {
   children: ReactNode;
@@ -28,6 +29,7 @@ export class AppErrorBoundary extends Component<AppErrorBoundaryProps, AppErrorB
     return (
       <main className="min-h-screen bg-background text-foreground flex items-center justify-center p-6" dir="rtl">
         <section className="w-full max-w-lg rounded-2xl border border-destructive/30 bg-card p-8 text-center shadow-xl" role="alert" aria-live="assertive">
+          <BrandLogo className="mb-6 w-36" priority />
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10 text-destructive">
             <AlertCircle className="h-7 w-7" aria-hidden="true" />
           </div>

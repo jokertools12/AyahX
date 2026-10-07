@@ -2943,7 +2943,7 @@ export default function PreviewPage() {
                       <SocialShareButtons
                         videoBlob={serverRenderJob.videoBlob}
                         mp4Blob={serverRenderJob.videoBlob}
-                        title={`${surah?.name || 'سورة'} - قرآن ريلز`}
+                        title={`${surah?.name || 'سورة'} - AyahX`}
                         text={`استمع لتلاوة ${surah?.name || ''} بصوت ${reciter?.name || ''}`}
                         filename={downloadFilename}
                       />
@@ -3003,7 +3003,7 @@ export default function PreviewPage() {
                           format={exportSettings.format === 'webm' ? 'webm' : 'mp4'}
                           videoBlob={videoRecorder.videoBlob}
                           mp4Blob={videoRecorder.mp4Blob}
-                          title={`${surah?.name || 'سورة'} - قرآن ريلز`}
+                          title={`${surah?.name || 'سورة'} - AyahX`}
                           text={`استمع لتلاوة ${surah?.name || ''} بصوت ${reciter?.name || ''}`}
                           filename={downloadFilename}
                         />

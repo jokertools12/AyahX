@@ -4,6 +4,7 @@ import { Layout } from "@/components/Layout";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Home, Sparkles, BookOpen, Search } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const NotFound = () => {
   const location = useLocation();
@@ -22,6 +23,7 @@ const NotFound = () => {
           className="max-w-lg text-center space-y-6"
         >
           {/* Decorative 404 badge */}
+          <BrandLogo variant="app" className="w-20" decorative priority />
           <div className="relative inline-flex items-center justify-center">
             <span className="text-8xl md:text-9xl font-black font-quran tracking-widest text-primary/15 select-none">
               ٤٠٤

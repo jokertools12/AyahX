@@ -209,7 +209,7 @@ export default function DiscoverPage() {
   const shareVideo = (video: PublicVideo) => {
     const text = `🎬 ${video.surah_name} | القارئ: ${video.reciter_name} | آيات ${video.start_ayah}-${video.end_ayah}`;
     if (navigator.share) {
-      navigator.share({ title: 'قرآن ريلز', text, url: window.location.origin });
+      navigator.share({ title: 'AyahX', text, url: window.location.origin });
     } else {
       navigator.clipboard.writeText(text);
       toast.success('تم نسخ معلومات الفيديو');

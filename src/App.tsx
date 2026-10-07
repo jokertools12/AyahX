@@ -8,6 +8,7 @@ import { AchievementUnlockOverlay } from "@/components/AchievementUnlockNotifica
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AppErrorBoundary } from "@/components/AppErrorBoundary";
 import { Loader2 } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const Index = lazy(() => import("./pages/Index"));
 const SurahsPage = lazy(() => import("./pages/SurahsPage"));
@@ -46,8 +47,9 @@ const queryClient = new QueryClient({
 });
 
 const PageLoader = () => (
-  <div className="flex items-center justify-center min-h-[60vh]">
-    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+  <div className="flex flex-col items-center justify-center gap-5 min-h-[60vh]" role="status" aria-label="جاري تحميل AyahX">
+    <BrandLogo variant="app" className="w-16" decorative priority />
+    <Loader2 className="h-6 w-6 animate-spin motion-reduce:animate-none text-primary" aria-hidden="true" />
   </div>
 );
 

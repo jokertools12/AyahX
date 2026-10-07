@@ -1,0 +1,70 @@
+{
+  "source": "AyahX Brand Studio",
+  "sourceProject": "appgprj_6ac0677201d88191932713b2334f0f64",
+  "sourceCommit": "1e2fc866352ea96cdda4eb3ea1c9db0a9c77b770",
+  "originals": [
+    {
+      "name": "01_Primary_Horizontal.png",
+      "sha256": "63b5cc4dbdc5653423397c0ad6e8e0588ef56b99a25ac18056209c57c313a3c2"
+    },
+    {
+      "name": "01_Primary_Horizontal.svg",
+      "sha256": "efb1424bb9bc11cac8764f84006420460f9125b39946e44b1dd04e62ed7b3c57"
+    },
+    {
+      "name": "02_Stacked_Logo.png",
+      "sha256": "160fd6199c2abde1baef13d66f90546b4dcf25ba920e6748ee45f808336659ba"
+    },
+    {
+      "name": "02_Stacked_Logo.svg",
+      "sha256": "3f1d2976a876950ac24dc22ff7ccbf519a79ccf67e3ad95c76d6efce5d08f5d8"
+    },
+    {
+      "name": "03_Symbol_Transparent.png",
+      "sha256": "a7585be560c98b5cc916dcde6f8fdaa525bebf7574e1a222acaaf3ba4ceb0c62"
+    },
+    {
+      "name": "03_Symbol_Transparent.svg",
+      "sha256": "32d61b0e743f1702fb9195dab280b1472563ba13d9f30a80a2ffdb8768dfddce"
+    },
+    {
+      "name": "04_App_Icon.svg",
+      "sha256": "f87f828b1678bede91f9c9f6e5e98cb8513c3eefe890ae305619dc8b2adc0c8e"
+    },
+    {
+      "name": "04_App_Icon_2048.png",
+      "sha256": "0a6a79643488fe2a5eb3ad5b5eba3b8222b6ca62367a7a72b23e0cba5642c5a8"
+    },
+    {
+      "name": "05_Favicon.svg",
+      "sha256": "7200bcae6233955260adac035326984d26f7835f418c49e1bb3aa4d64896edee"
+    },
+    {
+      "name": "06_Monochrome_Black.png",
+      "sha256": "c756978ddf7c7f6f493e5063d6a370814409066deeda40f8ad778f8c26fa109e"
+    },
+    {
+      "name": "06_Monochrome_Black.svg",
+      "sha256": "c43dafb5b51247df7006268bd151342cac02c9c6719426176494a6c38263d2bd"
+    },
+    {
+      "name": "06_Monochrome_White.png",
+      "sha256": "b18973edeae898969b1a10e073e6018ec87a5fc7fb5c5694f4df8fc97ddaaf60"
+    },
+    {
+      "name": "06_Monochrome_White.svg",
+      "sha256": "5c4399aa421fe5b22e5c8a3f684d396852deb052bf208247e9379d463b282caf"
+    },
+    {
+      "name": "favicon.ico",
+      "sha256": "119411ad0d4bfcebff2b3305dc1c50162a5d6355fe9b024c6b6de4520ea73895"
+    }
+  ],
+  "exports": [
+    "apple-touch-icon.png",
+    "app-icon-192.png",
+    "app-icon-512.png",
+    "social-preview.png"
+  ],
+  "exportScript": "scripts/export-brand-assets.mjs"
+}

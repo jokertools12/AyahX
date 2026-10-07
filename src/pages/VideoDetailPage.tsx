@@ -152,7 +152,7 @@ export default function VideoDetailPage() {
     const url = `${window.location.origin}/video?id=${videoId}`;
     const text = video ? `🎬 ${video.surah_name} | القارئ: ${video.reciter_name}` : '';
     if (navigator.share) {
-      navigator.share({ title: 'قرآن ريلز', text, url });
+      navigator.share({ title: 'AyahX', text, url });
     } else {
       navigator.clipboard.writeText(url);
       toast.success('تم نسخ رابط الفيديو');

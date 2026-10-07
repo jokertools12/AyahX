@@ -1,0 +1,14 @@
+{
+  "name": "AyahX — صانع المقاطع القرآنية والابتهالات",
+  "short_name": "AyahX",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F5F7F8",
+  "theme_color": "#056B4B",
+  "icons": [
+    { "src": "/brand/app-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/brand/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

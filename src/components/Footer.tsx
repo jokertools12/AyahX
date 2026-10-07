@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Heart, BookOpen, ShieldCheck, FileText, HelpCircle, Mail, Crown } from 'lucide-react';
+import { BrandLogo } from '@/components/BrandLogo';
 
 export function Footer() {
   return (
@@ -8,12 +9,9 @@ export function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Col 1: About */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-primary">
-                <BookOpen className="h-4 w-4 text-primary-foreground" />
-              </div>
-              <h3 className="font-bold text-lg gradient-text font-quran">قرآن ريلز</h3>
-            </div>
+            <Link to="/" className="inline-flex min-h-11 items-center rounded-md focus-visible:ring-2 focus-visible:ring-ring" aria-label="AyahX — الرئيسية">
+              <BrandLogo className="w-44" decorative />
+            </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
               المنصة المتكاملة لصناعة مقاطع وريلز القرآن الكريم والابتهالات بأصوات كبار القراء والمبتهلين مع خلفيات طبيعية متناسقة وتزامن لحظي للكلمات.
             </p>
@@ -103,7 +101,7 @@ export function Footer() {
 
         <div className="border-t border-border/50 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-right">
           <p className="text-muted-foreground text-xs">
-            جميع الحقوق محفوظة © {new Date().getFullYear()} قرآن ريلز (Ayah Clip Maker)
+            جميع الحقوق محفوظة © {new Date().getFullYear()} <bdi>AyahX</bdi>
           </p>
           <p className="text-muted-foreground text-xs flex items-center justify-center gap-1">
             صُنع بـ <Heart className="h-3.5 w-3.5 text-destructive fill-destructive" /> لوجه الله تعالى ونشر كلامه

@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { NotificationBell } from '@/components/NotificationBell';
 import { UsageQuotaBar } from '@/components/UsageQuotaBar';
+import { BrandLogo } from '@/components/BrandLogo';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,11 +43,8 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-primary">
-              <BookOpen className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-xl font-bold gradient-text">قرآن ريلز</span>
+          <Link to="/" aria-label="AyahX — الرئيسية" className="flex min-h-11 items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4">
+            <BrandLogo className="w-28 sm:w-36" priority decorative />
           </Link>
 
           {/* Desktop Navigation Links */}

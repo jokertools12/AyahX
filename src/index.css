@@ -4,117 +4,122 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Quran Reels Design System - Modern Islamic Theme */
+/* AyahX — approved emerald, gold and midnight identity. */
 
 @layer base {
   :root {
+    /* Approved AyahX Brand Studio signature colors. */
+    --brand-emerald: 161.18 91.07% 21.96%;
+    --brand-gold: 42.69 63.41% 51.76%;
+    --brand-midnight: 207.37 68.67% 16.27%;
+
     /* Main colors - Teal/Emerald Islamic theme */
-    --background: 180 25% 98%;
-    --foreground: 180 50% 10%;
+    --background: 200.00 17.65% 96.67%;
+    --foreground: 207.37 68.67% 16.27%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 180 50% 10%;
+    --card: 0.00 0.00% 100.00%;
+    --card-foreground: 207.37 68.67% 16.27%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 180 50% 10%;
+    --popover: 0.00 0.00% 100.00%;
+    --popover-foreground: 207.37 68.67% 16.27%;
 
     /* Primary - Deep Teal */
-    --primary: 170 60% 35%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 161.18 91.07% 21.96%;
+    --primary-foreground: 0.00 0.00% 100.00%;
 
     /* Secondary - Soft Gold */
-    --secondary: 45 70% 90%;
-    --secondary-foreground: 45 80% 25%;
+    --secondary: 44.00 62.50% 90.59%;
+    --secondary-foreground: 40.52 66.96% 22.55%;
 
     /* Muted */
-    --muted: 180 20% 94%;
-    --muted-foreground: 180 15% 45%;
+    --muted: 195.00 19.05% 91.76%;
+    --muted-foreground: 208.24 17.00% 39.22%;
 
     /* Accent - Gold */
-    --accent: 45 85% 55%;
-    --accent-foreground: 45 90% 15%;
+    --accent: 42.69 63.41% 51.76%;
+    --accent-foreground: 207.37 68.67% 16.27%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 180 20% 88%;
-    --input: 180 20% 88%;
-    --ring: 170 60% 35%;
+    --border: 198.46 20.00% 87.25%;
+    --input: 198.46 20.00% 87.25%;
+    --ring: 161.18 91.07% 21.96%;
 
     --radius: 0.75rem;
 
     /* Custom colors for Quran theme */
-    --quran-gold: 45 85% 55%;
-    --quran-emerald: 160 60% 40%;
-    --quran-teal: 170 60% 35%;
-    --quran-navy: 200 70% 20%;
-    --quran-cream: 40 40% 95%;
+    --quran-gold: 42.69 63.41% 51.76%;
+    --quran-emerald: 161.18 91.07% 21.96%;
+    --quran-teal: 161.18 91.07% 21.96%;
+    --quran-navy: 207.37 68.67% 16.27%;
+    --quran-cream: 44.00 62.50% 90.59%;
 
     /* Gradient colors */
-    --gradient-start: 170 60% 35%;
-    --gradient-end: 160 60% 40%;
+    --gradient-start: 161.18 91.07% 21.96%;
+    --gradient-end: 161.54 89.04% 28.63%;
 
-    --sidebar-background: 180 25% 97%;
-    --sidebar-foreground: 180 50% 10%;
-    --sidebar-primary: 170 60% 35%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 45 85% 55%;
-    --sidebar-accent-foreground: 45 90% 15%;
-    --sidebar-border: 180 20% 88%;
-    --sidebar-ring: 170 60% 35%;
+    --sidebar-background: 200.00 17.65% 96.67%;
+    --sidebar-foreground: 207.37 68.67% 16.27%;
+    --sidebar-primary: 161.18 91.07% 21.96%;
+    --sidebar-primary-foreground: 0.00 0.00% 100.00%;
+    --sidebar-accent: 44.00 62.50% 90.59%;
+    --sidebar-accent-foreground: 40.52 66.96% 22.55%;
+    --sidebar-border: 198.46 20.00% 87.25%;
+    --sidebar-ring: 161.18 91.07% 21.96%;
   }
 
   .dark {
-    --background: 200 50% 8%;
-    --foreground: 180 20% 95%;
+    --background: 202.11 37.25% 10.00%;
+    --foreground: 192.00 23.81% 91.76%;
 
-    --card: 200 45% 12%;
-    --card-foreground: 180 20% 95%;
+    --card: 200.00 35.29% 13.33%;
+    --card-foreground: 192.00 23.81% 91.76%;
 
-    --popover: 200 45% 12%;
-    --popover-foreground: 180 20% 95%;
+    --popover: 200.00 35.29% 13.33%;
+    --popover-foreground: 192.00 23.81% 91.76%;
 
     /* Primary - Brighter Teal for dark mode */
-    --primary: 170 65% 50%;
-    --primary-foreground: 200 50% 8%;
+    --primary: 158.24 41.46% 51.76%;
+    --primary-foreground: 158.18 40.74% 10.59%;
 
     /* Secondary - Warmer Gold */
-    --secondary: 45 60% 25%;
-    --secondary-foreground: 45 80% 85%;
+    --secondary: 41.25 48.98% 19.22%;
+    --secondary-foreground: 44.55 80.80% 75.49%;
 
     /* Muted */
-    --muted: 200 40% 18%;
-    --muted-foreground: 180 15% 60%;
+    --muted: 198.46 23.21% 21.96%;
+    --muted-foreground: 198.46 16.67% 69.41%;
 
     /* Accent - Gold */
-    --accent: 45 75% 50%;
-    --accent-foreground: 45 90% 10%;
+    --accent: 42.69 63.41% 51.76%;
+    --accent-foreground: 207.37 68.67% 16.27%;
 
     --destructive: 0 70% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 200 40% 20%;
-    --input: 200 40% 20%;
-    --ring: 170 65% 50%;
+    --border: 197.65 25.00% 26.67%;
+    --input: 197.65 25.00% 26.67%;
+    --ring: 158.24 41.46% 51.76%;
 
     /* Custom colors for dark mode */
-    --quran-gold: 45 75% 50%;
-    --quran-emerald: 160 55% 45%;
-    --quran-teal: 170 65% 50%;
-    --quran-navy: 200 60% 15%;
-    --quran-cream: 40 30% 90%;
+    --quran-gold: 42.69 63.41% 51.76%;
+    --quran-emerald: 158.24 41.46% 51.76%;
+    --quran-teal: 158.24 41.46% 51.76%;
+    --quran-navy: 207.37 68.67% 16.27%;
+    --quran-cream: 44.00 62.50% 90.59%;
 
-    --gradient-start: 170 65% 50%;
-    --gradient-end: 160 55% 45%;
+    --gradient-start: 158.24 41.46% 51.76%;
+    --gradient-end: 157.24 43.72% 60.98%;
 
-    --sidebar-background: 200 45% 10%;
-    --sidebar-foreground: 180 20% 95%;
-    --sidebar-primary: 170 65% 50%;
-    --sidebar-primary-foreground: 200 50% 8%;
-    --sidebar-accent: 45 75% 50%;
-    --sidebar-accent-foreground: 45 90% 10%;
-    --sidebar-border: 200 40% 20%;
-    --sidebar-ring: 170 65% 50%;
+    --sidebar-background: 200.00 35.29% 13.33%;
+    --sidebar-foreground: 192.00 23.81% 91.76%;
+    --sidebar-primary: 158.24 41.46% 51.76%;
+    --sidebar-primary-foreground: 158.18 40.74% 10.59%;
+    --sidebar-accent: 41.25 48.98% 19.22%;
+    --sidebar-accent-foreground: 44.55 80.80% 75.49%;
+    --sidebar-border: 197.65 25.00% 26.67%;
+    --sidebar-ring: 158.24 41.46% 51.76%;
   }
 }
 

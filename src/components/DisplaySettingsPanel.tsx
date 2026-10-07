@@ -37,6 +37,7 @@ import { useState, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useSubscription } from '@/hooks/useSubscription';
 import { api } from '@/lib/api';
+import { BRAND_WATERMARKS, loadBrandWatermark } from '@/lib/brand';
 import { PremiumBadge } from '@/components/PremiumBadge';
 import { TextSettingsPanel, type TextSettings } from '@/components/TextSettingsPanel';
 import { createSavedTemplate, loadSavedTemplates, TEMPLATES_KEY, type SavedTemplate, type VideoTemplateConfiguration } from '@/lib/savedVideoTemplates';
@@ -444,6 +445,9 @@ export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextS
   const [showSaveInput, setShowSaveInput] = useState(false);
   const [isSavingTemplate, setIsSavingTemplate] = useState(false);
   const [isGeneratingLogo, setIsGeneratingLogo] = useState(false);
+  const [isLoadingBrandLogo, setIsLoadingBrandLogo] = useState(false);
+  const currentSettingsRef = useRef(settings);
+  currentSettingsRef.current = settings;
   const [logoAiStyle, setLogoAiStyle] = useState<'goldMedallion' | 'ottomanCrest' | 'modernGeometric' | 'classicCalligraphy'>('goldMedallion');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -520,6 +524,24 @@ export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextS
       toast.success('تم رفع وتطبيق الشعار بنجاح! 🖼️');
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleBrandLogo = async (id: typeof BRAND_WATERMARKS[number]['id']) => {
+    if (!canUseFeature('customBranding')) {
+      toast.error('الشعار والهوية المخصصة متاحان للعضوية المميزة');
+      return;
+    }
+    setIsLoadingBrandLogo(true);
+    try {
+      const dataUrl = await loadBrandWatermark(id);
+      if (!currentSettingsRef.current.logoWatermarkEnabled) return;
+      onChange({ ...currentSettingsRef.current, logoWatermarkPreset: 'custom', logoWatermarkUrl: dataUrl, logoBrandName: 'AyahX' });
+      toast.success('تم اختيار شعار AyahX');
+    } catch {
+      toast.error('تعذر تحميل شعار AyahX. حاول مرة أخرى.');
+    } finally {
+      setIsLoadingBrandLogo(false);
+    }
   };
 
   const handleSaveTemplate = async () => {
@@ -980,6 +1002,24 @@ export function DisplaySettingsPanel({ settings, onChange, textSettings, onTextS
 
                 {(settings.logoWatermarkEnabled ?? false) && (
                   <div className="space-y-4 pt-2 border-t border-border/40">
+                    <fieldset className="rounded-xl border border-border/60 bg-muted/20 p-3" disabled={isLoadingBrandLogo || isGeneratingLogo}>
+                      <legend className="px-1 text-sm font-semibold">هوية <bdi>AyahX</bdi></legend>
+                      <p className="mb-3 text-xs text-muted-foreground">اختر شعارًا للفيديو. يمكنك تغييره أو إلغاء العلامة المائية في أي وقت.</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        {BRAND_WATERMARKS.map(asset => (
+                          <Button key={asset.id} type="button" variant="outline" className="h-auto min-h-20 flex-col gap-2 p-3"
+                            disabled={!canUseFeature('customBranding') || isLoadingBrandLogo || isGeneratingLogo}
+                            onClick={() => void handleBrandLogo(asset.id)}>
+                            <span className={cn('flex h-9 w-full items-center justify-center rounded-md px-2', asset.id === 'white' ? 'bg-[#0D2C46]' : 'bg-white')}>
+                              <img src={asset.url} alt="" width={asset.id === 'symbol' ? 36 : 112} height={36} className="h-9 max-w-full object-contain" loading="lazy" />
+                            </span>
+                            <span className="text-xs">{asset.label}</span>
+                          </Button>
+                        ))}
+                      </div>
+                      {!canUseFeature('customBranding') && <p className="mt-2 text-xs text-muted-foreground">متاح مع ميزة الهوية المخصصة في العضوية المميزة.</p>}
+                      <p role="status" className="sr-only">{isLoadingBrandLogo ? 'جاري تحميل الشعار' : ''}</p>
+                    </fieldset>
                     {/* Channel Name & Subtitle inputs */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-xl bg-muted/30 border border-border/40">
                       <div className="space-y-1.5">

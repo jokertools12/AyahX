@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Layout } from '@/components/Layout';
 import { BookOpen, Video, Sparkles, Play, Users, Download, Music, Mic, ArrowLeft, Globe, Cpu } from 'lucide-react';
 import { performers, getTracksByPerformer } from '@/data/ibtahalat';
+import { BrandLogo } from '@/components/BrandLogo';
 
 const features = [
   {
@@ -80,10 +81,11 @@ export default function Index() {
               <span>أنشئ مقاطع قرآنية وابتهالات بسهولة</span>
             </motion.div>
 
+            <div className="mb-7 flex justify-center">
+              <BrandLogo className="w-56 sm:w-72 md:w-80" priority />
+            </div>
             {/* Title */}
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              <span className="gradient-text">قرآن ريلز</span>
-              <br />
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
               <span className="text-foreground">مقاطع قرآنية وابتهالات احترافية</span>
             </h1>
 
@@ -245,14 +247,15 @@ export default function Index() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative overflow-hidden rounded-3xl gradient-primary p-8 md:p-16 text-center"
+            className="relative overflow-hidden rounded-3xl bg-[hsl(var(--brand-midnight))] p-8 md:p-16 text-center"
           >
             <div aria-hidden="true" className="pointer-events-none absolute inset-0 islamic-pattern opacity-10" />
             <div className="relative">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
+              <BrandLogo tone="white" decorative className="mb-6 w-40" />
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 جاهز لإنشاء مقطعك الأول؟
               </h2>
-              <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
+              <p className="text-white/80 mb-8 max-w-xl mx-auto">
                 ابدأ الآن بإنشاء مقاطع قرآنية احترافية في دقائق معدودة
               </p>
               <Button asChild size="lg" variant="secondary" className="text-lg px-8">

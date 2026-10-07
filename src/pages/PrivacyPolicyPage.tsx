@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage() {
             </div>
             <h1 className="text-3xl md:text-4xl font-bold font-quran">سياسة الخصوصية وحماية البيانات</h1>
             <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto">
-              نلتزم بحماية خصوصيتك واحترام بياناتك الشخصية عند استخدام منصة قرآن ريلز (Ayah Clip Maker)
+              نلتزم بحماية خصوصيتك واحترام بياناتك الشخصية عند استخدام منصة AyahX
             </p>
             <p className="text-xs text-muted-foreground">آخر تحديث: سبتمبر 2026</p>
           </div>
@@ -78,7 +78,7 @@ export default function PrivacyPolicyPage() {
                   <h2 className="text-xl font-bold">3. خصوصية المعالجة وسياسة حفظ وتخزين الفيديوهات</h2>
                 </div>
                 <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
-                  تتميز منصة قرآن ريلز بدعم بنية هجينة مرنة تجمع بين الأمان والسرعة:
+                  تتميز منصة AyahX بدعم بنية هجينة مرنة تجمع بين الأمان والسرعة:
                 </p>
                 <ul className="list-disc list-inside text-muted-foreground space-y-1.5 text-sm md:text-base mr-2">
                   <li><strong>المعالجة المحلية عبر المتصفح:</strong> تتم معظم عمليات المعاينة والتقاط الإطارات محلياً على جهازك دون إرسال وسائطك الخاصة إلى أي خوادم خارجية.</li>

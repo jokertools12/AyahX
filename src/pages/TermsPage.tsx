@@ -19,7 +19,7 @@ export default function TermsPage() {
             </div>
             <h1 className="text-3xl md:text-4xl font-bold font-quran">شروط الاستخدام والخدمة</h1>
             <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto">
-              القواعد والضوابط المنظمة لاستخدام منصة قرآن ريلز وإنتاج ومشاركة المقاطع القرآنية
+              القواعد والضوابط المنظمة لاستخدام منصة AyahX وإنتاج ومشاركة المقاطع القرآنية
             </p>
             <p className="text-xs text-muted-foreground">آخر تحديث: سبتمبر 2026</p>
           </div>
