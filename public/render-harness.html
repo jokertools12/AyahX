@@ -1851,23 +1851,32 @@
           );
 
           // QUA supplies an optional letter tier for the same word events. In
-          // letter-by-letter mode reveal only the letters whose trusted spans
-          // have started; if a different provider has no letter tier, fail
-          // closed to the complete active word rather than inventing timing.
+          // letter-by-letter mode this is a cumulative reveal: every word that
+          // has started stays visible, while only the current word is painted
+          // one trusted glyph at a time. This keeps the earlier part of the
+          // ayah on screen instead of replacing it with the active word.
           if (hasTrustedWordTiming && verseMode === 'letterByLetter' && activeWordIndexInAyah != null) {
-            const activeCanonical = `${manifest.canonicalAyahRange?.surahNumber}:${activeAyah.numberInSurah}:${activeWordIndexInAyah + 1}`;
-            const activeTimingWord = timingMap.words.find(word => word.canonicalWordKey === activeCanonical);
-            const letterSpans = activeTimingWord && Array.isArray(activeTimingWord.letters) ? activeTimingWord.letters : [];
-            const sourceWord = ayahWords[activeWordIndexInAyah] || activeTimingWord?.displayToken || '';
-            if (letterSpans.length > 0) {
-              const revealed = resolveRevealedLetters(letterSpans, lookupTimeMs);
-              // Do not expose an estimated first glyph before QUA's first
-              // verified paint event. An empty word is a short, honest gap.
-              displayWords = revealed ? [revealed] : [];
-            } else {
-              displayWords = [sourceWord];
+            const surahNumber = manifest.canonicalAyahRange?.surahNumber;
+            displayWords = [];
+            chunkStartWordIdx = 0;
+            for (let wordIndex = 0; wordIndex <= activeWordIndexInAyah; wordIndex += 1) {
+              const canonical = `${surahNumber}:${activeAyah.numberInSurah}:${wordIndex + 1}`;
+              const timingWord = timingMap.words.find(word => word.canonicalWordKey === canonical);
+              const sourceWord = ayahWords[wordIndex] || timingWord?.displayToken || '';
+              const letterSpans = timingWord && Array.isArray(timingWord.letters) ? timingWord.letters : [];
+              if (letterSpans.length > 0) {
+                const revealed = resolveRevealedLetters(letterSpans, lookupTimeMs);
+                // The current word can be empty before its first verified
+                // glyph; earlier words remain in the cumulative reveal.
+                if (revealed) displayWords.push(revealed);
+              } else if (wordIndex < activeWordIndexInAyah) {
+                // A trusted word-only map is not a letter tier. Preserve the
+                // established fail-closed behavior for already spoken words.
+                if (sourceWord) displayWords.push(sourceWord);
+              } else if (sourceWord) {
+                displayWords.push(sourceWord);
+              }
             }
-            chunkStartWordIdx = activeWordIndexInAyah;
           }
 
           // Teleprompter/isolate choose their own reading window only when the
