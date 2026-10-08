@@ -55,3 +55,14 @@ changes. Render changes require actual output inspection, audio/timing checks
 and worker logs. A successful build or health endpoint alone is not live
 acceptance. Railway completion requires terminal deployment SUCCESS plus the
 relevant live UI/assets/artifacts. Deployment is a separate explicit action.
+
+Public UI E2E tests use tester-army/e2e in `tooling/e2e` (separate lockfile).
+Install with `npm --prefix tooling/e2e ci`, then run `npm run test:e2e`.
+For a natural-language request to add, run, or repair a browser test, first read
+`.agents/skills/e2e/SKILL.md`; follow its AyahX workflow and report in Arabic.
+See `docs/e2e-guide.ar.md` for headed, remote smoke, and opt-in agent tests.
+New regular UI specs under `tooling/e2e/tests/**/*.e2e.ts` are discovered by the
+default suite; AI-backed specs belong under `tooling/e2e/tests/agent/` and run
+only with `npm run test:e2e:agent`. Keep the auth/API/report boundaries below.
+Keep reports/traces/cache private; never add credentials or authenticated
+storage to Git. Default tests have no model calls and no API writes.

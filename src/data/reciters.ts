@@ -556,7 +556,6 @@ export const reciters: Reciter[] = [
     server: "https://server7.mp3quran.net/basit",
     quranFoundationId: 1,
     everyAyahSubfolder: "Abdul_Basit_Mujawwad_128kbps",
-    quranUniversalSlug: 'abdulbasit_abdulsamad_mujawwad_tarteel',
     isOpenLicense: true,
     moshafId: 28,
   },
@@ -910,7 +909,9 @@ export const reciters: Reciter[] = [
 
 export function isAccreditedReciter(reciter?: Reciter | null): boolean {
   if (!reciter) return false;
-  return Boolean(reciter.quranUniversalSlug || reciter.everyAyahSubfolder);
+  // EveryAyah is an audio catalogue only. Accreditation requires a pinned,
+  // canonical QUA package whose word/letter timing can be validated server-side.
+  return Boolean(reciter.quranUniversalSlug);
 }
 
 export function getReciterRiwayah(reciter?: Reciter | null): string {

@@ -21,7 +21,6 @@ type UniversalReciter = { slug: string; zip: string; sha256: string };
 
 /** SHA-256 values copied from the pinned v3.2.0 manifest.json. */
 const QUA_PACKAGE_SHA256: Record<string, string> = {
-  abdulbasit_abdulsamad_mujawwad_tarteel: '41ef6119a81562f490a4373882a558b65341e568112e9f64988018d4fadc4f10',
   abdulbasit_abdulsamad_tarteel: 'd3646692f484fff29ea47ffc9b1edfd29198eab7ebdd3c2a132d0a068a46e6ec',
   abdullah_al_qarafi_mp3quran: '6034ed5b43bc0c684552dfad6e243b9e8401a23c4ceda5c112d118532d3a0101',
   abdulwadood_haneef_mp3quran: 'f257a676e492449b23845c43d02cca7355fc55a6c54c8020b2f970652b8affea',

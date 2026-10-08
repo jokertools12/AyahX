@@ -198,8 +198,8 @@ describe('Quranic Universal Audio catalogue', () => {
     })).rejects.toThrow('UNIVERSAL_ALIGNMENT_DATA_INVALID');
 
     await expect(resolveUniversalQuranAudio({
-      reciterId: 'abdulbasit',
-      reciterSlug: 'abdulbasit_abdulsamad_mujawwad_tarteel',
+      reciterId: 'saud',
+      reciterSlug: 'saud_al_shuraim_mp3quran',
       reference: {
         surahNumber: 1,
         startAyah: 1,

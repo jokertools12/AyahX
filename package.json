@@ -27,7 +27,13 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "auth:reset-password": "tsx server/scripts/resetPassword.ts"
+    "auth:reset-password": "tsx server/scripts/resetPassword.ts",
+    "test:e2e": "node tooling/e2e/run.mjs",
+    "test:e2e:headed": "node tooling/e2e/run.mjs --headed",
+    "test:e2e:agent": "node tooling/e2e/run.mjs --agent",
+    "e2e:explore": "node tooling/e2e/run.mjs --explore",
+    "e2e:login": "node tooling/e2e/run.mjs --login",
+    "e2e:models": "node tooling/e2e/run.mjs --models"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1135.0",

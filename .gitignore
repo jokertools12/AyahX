@@ -60,3 +60,6 @@ tooling/reports/
 /litho.exe
 /litho*.toml
 /gpt-6.1-sol.md
+
+# Browser reports, traces and replay caches can contain test-session data.
+tooling/e2e/.e2e/

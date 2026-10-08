@@ -1840,7 +1840,9 @@
           // visible until its first verified word starts.  This is a display
           // safety rule only; it never invents a highlight or a timestamp.
           const verseWordWindow = activeWordIndexInAyah == null && hasTrustedWordTiming
-            ? { startIndex: 0, wordCount: ayahWords.length }
+            ? (verseMode === 'letterByLetter'
+              ? { startIndex: 0, wordCount: 0 }
+              : { startIndex: 0, wordCount: ayahWords.length })
             : resolveVerseWordWindow(verseMode, ayahWords.length, activeWordIndexInAyah);
           let chunkStartWordIdx = verseWordWindow.startIndex;
           let displayWords = ayahWords.slice(

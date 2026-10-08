@@ -121,6 +121,7 @@ describe('Browser render harness', () => {
     expect(source).toContain('animationReducedMotion');
     expect(source).toMatch(/keep the complete current ayah\s*\/\/\s*visible until its first verified word starts/);
     expect(source).toContain('activeWordIndexInAyah == null && hasTrustedWordTiming');
+    expect(source).toMatch(/verseMode === 'letterByLetter'\s*\?\s*\{ startIndex: 0, wordCount: 0 \}/);
   });
 
   it('keeps direct video and timed lyric modes inside the shared scene contract', () => {
