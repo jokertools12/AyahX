@@ -110,11 +110,40 @@ describe('Browser render harness', () => {
     expect(resolveRevealedLetters(spans, 320)).toBe('ٱللَّهِ');
   });
 
+  it('retains spoken words while revealing only timed glyphs of the next word', () => {
+    const source = fs.readFileSync(path.resolve(process.cwd(), 'public/render-harness.html'), 'utf8');
+    const helperStart = source.indexOf('function resolveRevealedLetters(');
+    const helperEnd = source.indexOf('// Rosette / Ayah Badge Drawing', helperStart);
+    const blockStart = source.indexOf("if (hasTrustedWordTiming && verseMode === 'letterByLetter' && activeWordIndexInAyah != null)");
+    const blockEnd = source.indexOf('// Teleprompter/isolate', blockStart);
+    const reveal = new Function('lookupTimeMs', 'activeWordIndexInAyah', `
+      ${source.slice(helperStart, helperEnd)}
+      const hasTrustedWordTiming = true, verseMode = 'letterByLetter';
+      const manifest = { canonicalAyahRange: { surahNumber: 1 } };
+      const activeAyah = { numberInSurah: 1 };
+      const ayahWords = ['بِسْمِ', 'ٱللَّهِ', 'ٱلرَّحْمَـٰنِ'];
+      const timingMap = { words: [
+        { canonicalWordKey: '1:1:1', letters: [{ token: 'بِ', startMs: 100 }, { token: 'سْمِ', startMs: 200 }] },
+        { canonicalWordKey: '1:1:2', letters: [{ token: 'ٱللَّ', startMs: 500 }, { token: 'هِ', startMs: 700 }] }
+      ] };
+      let displayWords = [], chunkStartWordIdx = 0;
+      ${source.slice(blockStart, blockEnd)}
+      return displayWords;
+    `);
+    expect(reveal(99, 0)).toEqual([]);
+    expect(reveal(100, 0)).toEqual(['بِ']);
+    expect(reveal(450, 1)).toEqual(['بِسْمِ']);
+    expect(reveal(500, 1)).toEqual(['بِسْمِ', 'ٱللَّ']);
+    expect(reveal(700, 1)).toEqual(['بِسْمِ', 'ٱللَّهِ']);
+    // Seeking backwards derives the reveal from the audio clock, not history.
+    expect(reveal(100, 0)).toEqual(['بِ']);
+  });
+
   it('shares deterministic Animate profiles with the canonical timing map contract', () => {
     const source = fs.readFileSync(path.resolve(process.cwd(), 'public/render-harness.html'), 'utf8');
     expect(source).toContain("'teleprompter'");
     expect(source).toContain("'isolate'");
-    expect(source).toContain('hasTrustedWordTiming ? animationProfile : \'static\'');
+    expect(source).toContain("hasTrustedWordTiming ? (verseMode === 'letterByLetter' ? 'reveal' : animationProfile) : 'static'");
     expect(source).toContain("const verseMode = hasTrustedWordTiming ? requestedVerseMode : 'full';");
     expect(source).toContain("hasTrustedWordTiming && verseMode === 'full' && animationProfile === 'teleprompter'");
     expect(source).toContain("hasTrustedWordTiming && verseMode === 'full' && animationProfile === 'isolate'");

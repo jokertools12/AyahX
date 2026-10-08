@@ -52,7 +52,7 @@ export interface DisplayOption<TValue extends string = string> {
 export const VERSE_DISPLAY_MODE_OPTIONS: ReadonlyArray<DisplayOption<VerseDisplayMode>> = [
   { value: 'full', label: 'الآية كاملة', description: 'الآية كلها ظاهرة مع تمييز الكلمة المقروءة لحظياً' },
   { value: 'wordByWord', label: 'كلمة بكلمة', description: 'الكلمة الحالية وحدها، وتثبت أثناء الوقفة' },
-  { value: 'letterByLetter', label: 'حرفاً بحرف (Animate)', description: 'كشف الحروف بتوقيت معتمد من القارئ', badge: 'Animate' },
+  { value: 'letterByLetter', label: 'حرفاً بحرف (Animate)', description: 'كشف حروف الآية تدريجياً مع بقاء الكلمات السابقة', badge: 'Animate' },
   { value: 'twoWords', label: 'كلمتان كلمتان', description: 'مقطع ثنائي إيقاعي بالتناوب' },
   { value: 'threeTwo', label: 'ثلاث ثم اثنتان', description: 'تقسيم إيقاعي ٣-٢ على طول الآية' },
 ];

@@ -1944,7 +1944,7 @@
             }
 
             const fontFamily = resolveFontFamily(typography.fontFamily);
-            const modeScales = { letterByLetter: 2.9, wordByWord: 2.7, twoWords: 2.5, threeTwo: 2.3, full: 1.9 };
+            const modeScales = { letterByLetter: 1.9, wordByWord: 2.7, twoWords: 2.5, threeTwo: 2.3, full: 1.9 };
             const fontScale = modeScales[verseMode] || 1.9;
             const baseFontSize = (typography.fontSize || 28) * fontScale * S;
             let effectiveFontSize = baseFontSize;
@@ -2051,7 +2051,7 @@
                   globalWordIdx,
                   activeWordIndexInAyah,
                   activeWordProgress,
-                  hasTrustedWordTiming ? animationProfile : 'static',
+                  hasTrustedWordTiming ? (verseMode === 'letterByLetter' ? 'reveal' : animationProfile) : 'static',
                   ayahWords.length,
                   animationReducedMotion,
                 );
