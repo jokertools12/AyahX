@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import type { Connection } from 'mysql2/promise';
 import { QURAN_CATALOG_TABLES } from '../server/db/migrations/002_addQuranCatalogTables';
@@ -21,12 +22,26 @@ const inventory = await load<Inventory>('--inventory');
 const production = await load<Inventory>('--production-inventory');
 if (inventory.environment_id !== ENVIRONMENTS[target] || production.environment_id !== ENVIRONMENTS.production) throw new Error('INVENTORY_ENVIRONMENT_MISMATCH');
 if (target === 'staging' && inventory.server_uuid === production.server_uuid) throw new Error('STAGING_NOT_ISOLATED');
-const backup = await load<{ restored_and_verified: boolean; mysql_version: string; checked_at: string }>('--backup');
-const rehearsal = await load<{ mysql_version: string; import_twice: boolean; unverified_audio_publication_rejected: boolean; corrupted_catalog_rejected: boolean; reapply_after_rollback: boolean }>('--rehearsal');
+const backup = await load<{ restored_and_verified: boolean; mysql_version: string; checked_at: string; encrypted_path: string; encrypted_sha256: string; row_counts: Record<string, number> }>('--backup');
+const rehearsal = await load<{ mysql_version: string; sql_sha256: string; import_twice: boolean; unverified_audio_publication_rejected: boolean; corrupted_catalog_rejected: boolean; reapply_after_rollback: boolean }>('--rehearsal');
 if (!backup.restored_and_verified || backup.mysql_version !== '9.7.2' || rehearsal.mysql_version !== '9.7.2' || !rehearsal.import_twice || !rehearsal.unverified_audio_publication_rejected || !rehearsal.corrupted_catalog_rejected || !rehearsal.reapply_after_rollback) throw new Error('VERIFIED_BACKUP_AND_REHEARSAL_REQUIRED');
 const data = await load<CatalogDataset>('--dataset');
 const plan = generateCatalogSql(data);
 if (sha(await readFile(option('--sql'), 'utf8')) !== plan.sha256) throw new Error('SQL_IS_NOT_DETERMINISTIC_PLAN');
+if (rehearsal.sql_sha256 !== plan.sha256) throw new Error('REHEARSAL_MUST_VERIFY_THIS_EXACT_SQL');
+if (createHash('sha256').update(await readFile(backup.encrypted_path)).digest('hex') !== backup.encrypted_sha256) throw new Error('VERIFIED_ENCRYPTED_BACKUP_CHANGED');
+for (const [name, count] of Object.entries(production.critical_counts)) if (count !== null) assert.equal(backup.row_counts[name], count, `BACKUP_CRITICAL_COUNT_MISMATCH:${name}`);
+for (const row of data.recitations) {
+  const evidence = JSON.parse(String(row.verification_details)) as { reason?: string; attempts?: Array<{ started_epoch: number; finished_epoch: number }> };
+  if (row.verification_status === 'pending' || !evidence.attempts?.length) throw new Error('ALL_SOURCE_ATTEMPTS_REQUIRED_BEFORE_RAILWAY');
+  if (row.verification_status === 'source_unavailable' && evidence.reason?.startsWith('hf_')) {
+    if (evidence.attempts.length < 3 || evidence.attempts.some((attempt, i, attempts) => i > 0 && attempt.started_epoch - attempts[i - 1].finished_epoch < 1800)) throw new Error('HF_THREE_SPACED_WINDOWS_REQUIRED');
+  }
+}
+if (target === 'production' && !verifyOnly) {
+  const staging = await load<{ target: string; applied: boolean; mysql_version: string; sql_sha256: string; read_only_post_verification: boolean; canonical_checksum: string }>('--staging-verification');
+  if (staging.target !== 'staging' || !staging.applied || staging.mysql_version !== '9.7.2' || staging.sql_sha256 !== plan.sha256 || !staging.read_only_post_verification || staging.canonical_checksum !== production.canonical_checksum) throw new Error('VERIFIED_STAGING_REQUIRED_BEFORE_PRODUCTION');
+}
 const before = await captureInventory(ENVIRONMENTS[target]);
 const hafsMetadataSql = "SELECT JSON_OBJECT('id',id,'code',code,'name_ar',name_ar,'name_en',name_en,'aligner_code',aligner_code,'is_active',is_active,'created_at',created_at,'updated_at',updated_at) FROM riwayat WHERE code='hafs_an_asim';";
 const hafsMetadataBefore = (await readSql(environment, hafsMetadataSql)).trim();
@@ -35,9 +50,15 @@ assert.equal(before.server_uuid, inventory.server_uuid, 'DATABASE_IDENTITY_CHANG
 assert.deepEqual(before.critical_counts, inventory.critical_counts, 'PRE_APPLY_CRITICAL_COUNTS_CHANGED');
 assert.deepEqual(before.d1_counts, inventory.d1_counts, 'D1_COUNTS_CHANGED');
 assert.equal(before.canonical_checksum, inventory.canonical_checksum, 'D1_CANONICAL_CHANGED');
+const d1Tables = ['quran_surahs','quran_ayahs','quran_words','quran_text_versions','translations','translation_ayahs'];
+for (const table of d1Tables) assert.equal(before.checksums[table], inventory.checksums[table], `PRE_APPLY_D1_CHECKSUM_CHANGED:${table}`);
 const existing = before.tables.filter(({ name }) => (QURAN_CATALOG_TABLES as readonly string[]).includes(name));
 const replay = target === 'staging' && argv.includes('--replay-verified-staging');
 if (!verifyOnly && existing.length && !replay) throw new Error('D2_TABLE_COLLISION_STOP');
+if (!verifyOnly && !replay) {
+  assert.equal(before.row_counts.riwayat, inventory.row_counts.riwayat, 'PRE_APPLY_RIWAYAT_COUNT_CHANGED');
+  assert.equal(before.checksums.riwayat, inventory.checksums.riwayat, 'PRE_APPLY_RIWAYAT_METADATA_CHANGED');
+}
 
 async function verifyRemoteRows(): Promise<Record<string, number>> {
   const rows: Record<string, unknown[]> = {};
@@ -73,7 +94,6 @@ assert.equal(after.row_counts.riwayat, inventory.row_counts.riwayat + data.riway
 assert.deepEqual(after.critical_counts, inventory.critical_counts, 'POST_APPLY_CRITICAL_COUNTS_CHANGED');
 assert.deepEqual(after.d1_counts, inventory.d1_counts, 'POST_APPLY_D1_COUNTS_CHANGED');
 assert.equal(after.canonical_checksum, inventory.canonical_checksum, 'POST_APPLY_CANONICAL_CHECKSUM_CHANGED');
-const d1Tables = ['quran_surahs','quran_ayahs','quran_words','quran_text_versions','translations','translation_ayahs'];
 for (const table of d1Tables) assert.equal(after.checksums[table], inventory.checksums[table], `D1_CHECKSUM_TABLE_CHANGED:${table}`);
 const newTables = after.tables.filter(({ name }) => (QURAN_CATALOG_TABLES as readonly string[]).includes(name));
 assert.equal(newTables.length, QURAN_CATALOG_TABLES.length);

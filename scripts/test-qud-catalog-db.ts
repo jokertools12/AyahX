@@ -50,7 +50,7 @@ try {
   await db.query(plan.sql);
   await verifyCatalogRows(db, data);
   assert.equal(await canonical(), before);
-  const report = { mysql_version: version[0].version, counts: first, schema, d1_collations: d1, canonical_checksum: before,
+  const report = { mysql_version: version[0].version, sql_sha256: plan.sha256, catalog_sha256: data.catalog_sha256, counts: first, schema, d1_collations: d1, canonical_checksum: before,
     migration_twice: true, import_twice: true, replay_table_checksums_unchanged: true, existing_users_join: true, unverified_audio_publication_rejected: true,
     publication_without_audio_evidence_rejected: true, corrupted_catalog_rejected: true, rollback_remaining: remaining.length, reapply_after_rollback: true };
   await writeFile(option('--out'), JSON.stringify(report, null, 2) + '\n');

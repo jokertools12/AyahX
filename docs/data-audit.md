@@ -534,3 +534,31 @@ python scripts/check-quran-fonts.py --corpus <corpus.json> --fonts public/fonts 
 4. **ما لم يكتمل:** تصنيف المقدمات الصوتية غير المعلّقة لكل أوائل السور، رغم اكتمال جدول annotation والفهارس. طلب clip حديث من HF ثم فحص ثلاث configs مستقلة أعاد HTTP500: `The server is busier than usual and the response is not ready yet. Please retry later.` لا صوت نُزل، ولا absent صوتي استُنتج من annotation؛ [d1-hf-audio-access.json](data/d1-hf-audio-access.json). لذلك تطبيق بيانات D1 ناجح، لكن **إغلاق D1 الكامل معلق ولا يبدأ D2** قبل استكمال هذا البند. snapshot الجديد لم يتوفر؛ المحاولة الوحيدة أعادت INTERNAL_SERVER_ERROR، والقراءة بعدها أثبتت عدم إنشائه؛ النسخة المنطقية المتحققة متاحة.
 5. **المخاطر:** 7 صفوف توقيت معيبة تبقى needs_review؛ 10 خطوط متاحة للاختيار ناقصة رموز قرآنية، والإصلاح في D8/A4 بعد موافقة الربط. لا تلاوة نُشرت ولا بيانات توقيت اعتُمدت، ولا تدقيق annotation يعادل فحص الموجة الصوتية. dump خاص خارج Git/السحابة؛ يبقى حتى إغلاق D1 ثم يُحذف حسب قرار المستخدم، ولا تُحذف نسخة Railway القائمة.
 6. **الخطوة التالية:** استكمال فحص البسملة الصوتي عند استجابة المصدر، ثم إعلان إغلاق D1 وبدء D2 بالتصريح الحالي؛ D3/A1 غير مصرّح بهما. لا طلب نشر/دمج جديد ولا تعديل إعدادات مطلوب في هذه الخطوة.
+
+## D2 — كتالوج القراء والتلاوات (قيد التنفيذ، 2026-10-09)
+
+**قرار المستخدم الأخير يغلب بند التعليق التاريخي في تقرير D1 أعلاه:** D1 مقبول ومغلق وظيفيًا، و`basmala_audio_unverified` مفتوح للنشر/الريندر فقط. التصريح D2، لا D3/A1، ولا merge/deploy تطبيق.
+
+### المصدر والجداول والسياسات الفعلية
+
+مصدر metadata هو QUD Release v3.2.0؛ الملف الحالي SHA256 `b7ee26c2267b086d5758477e21144887c28c6ba884a6ff5157a55cf17df4eed4`. هو الإصدار نفسه، لكن الناشر صحح chapter_urls لتلاوة saber من مسارات scratch إلى روابط YouTube؛ البصمة القديمة والجديدة والفروق مثبتة في [d2-catalog-source.json](data/d2-catalog-source.json). لا يُستنتج رابط من مسار غير صالح، ولا fallback إلى HF كصوت إنتاج.
+
+الجداول الأربع: reciters، audio_providers، recitations، recitation_chapters. بيانات الملف تحسب 69 تلاوة،57 قارئًا بالـreciter_id،10 مزوّدين توثيقيين (بما فيهم EveryAyah/QDC القائمان)،7765 رابط سورة فعليًا. لا دمج بالأسماء ولا تخمين بلد؛ فحص الأسماء/البلدان عبر مصادر reciter_id المشتركة وجد صفر تعارض، [d2-reciter-metadata.json](data/d2-reciter-metadata.json). metadata بـutf8mb4_unicode_ci صريح، و3 FKs داخل الجديدة فقط. riwayah_id VARCHAR(36) دون FK قائم. الاستثناء القائم الوحيد INSERT الثلاثة غير حفص inactive في riwayat، دون تعديل صف حفص أو النص.
+
+التغطية من catalog ومقارنتها بآيات snapshot D1 الفعلية. فحص مجموعات معرّفات الآيات كلها في حفص: صفر معرّف غير قانوني؛ قائمة السور المكتملة والمفقود في [d2-ayah-coverage.json](data/d2-ayah-coverage.json). الروايات غير حفص imported/canonical_text_available=false، وexpected_ayahs وcoverage_mismatch=NULL لغياب مرجعها، دون إسقاط عدّ حفص. timing_complete/coverage_words=NULL وtiming_level=none، وis_complete مولد false حتى D3. وجود audio URL لا يعني اكتمال تغطية أو توقيت.
+
+basmala_mode يخص وجود1:1 فقط، وتفصل عنه حالة نص افتتاحات السور من annotation وحالة الصوت. كل حالة صوتية unverified؛ تحليل prefix (طول/RMS/صمت) دليل للمراجعة وليس تفريغًا أو ادعاء absence. importer يمنع published، وقيد DB يرفض النشر دون مراجعة صوت البسملة بدليل ومرجع قانوني وoffset وتوقيت معتمد. ثبت الرفض على MySQL9.7.2 الحقيقي؛ قيد is_complete لم يصبح true مع NULL.
+
+فحص source_offset محلي من catalog original كامل + HF Parquet audio ranges أولًا. NCC أقصى ±300ms؛ خمس آيات distinct موزعة من3 سور مختلفة الطول، score≥0.95 ومدة≤30ms وabs(lag)≤30ms لكل عينة. نتائج الفحص تُستأنف دون إعادة تحسين فشل مكتمل. lag ثابت غير صفري يسجل فقط ويبقي حفص needs_review حتى المراجعة. الصوت يُحذف بعد كل محاولة، ولا يُرفع أو يستضاف. روابط YouTube/Drive التي تعيد صفحة لا bytes صوت موثقة source_unavailable لمسار التدقيق الحالي، دون الادعاء أن التسجيل محذوف من المزوّد.
+
+اختيار السور اللاحق يسبق أي قياس صوت: أقصر/متوسطة/أطول أعداد آيات مختلفة في الثلث الأخير للمؤهلة من annotation، وخمس بداية/ربع/وسط/ثلاثة أرباع/نهاية؛ الأدلة الأولى بقيت كما هي. Parquet statistics وsurah predicate يحدان column reads دون تقليل العينة. تجربة seek HTTP Range لملف قصير نجحت، لكنها تعثّرت على طويل بعد120s؛ لذلك فحص القبول يستخدم تنزيلًا كاملاً. [الضبط الحقيقي الموجب والسالب](data/d2-real-offset-controls.json) أثبت score0.98880387/lag0.25ms/delta16.625ms نجاحًا وscore0.05202221 عند+1000ms رفضًا؛ مُعيقلي الكامل يبقى failed بسبب36:83(score0.93806561).
+
+### بروتوكول التشغيل ودليل الاختبارات الحالي
+
+جرد الإنتاج47 جدولًا وstaging86، كلاهماMySQL9.7.2 وUUID مختلف، دون تصادم D2. استعيد dump الإنتاج47 جدولًا محليًا وطابقت الأعداد وCHECKSUM جميعها، بما فيها الحرجة وD1. النسخة الحالية age X25519 خارجGit/cloud: `C:\Users\cpazi\AppData\Local\AyahX\private-backups\d2-production-20261009.sql.age`، ومفتاح منفصل بصلاحيات الحساب فقط. حُذف dump D1 فقط بعد تحقق D2. محاولة Snapshot الإضافية الوحيدة رفضت: `Manual backups and backup schedules are only available for Pro workspaces`؛ لا retry إضافيًا ولا تغيير volume. [d2-backup-verification.json](data/d2-backup-verification.json)، [d2-snapshot-attempt.json](data/d2-snapshot-attempt.json).
+
+المشغل يتحقق من سلامة الملف المشفر وبصمته، ويربط البروفة بـSQL SHA نفسه، ويرفض أي pending أو نقص سجل محاولات قبل Railway. إثبات staging ببصمة SQL نفسها إلزامي لأمر production مستقل مع --apply --confirm-production. البروفة المدمرة محلية فقط: up/import مرتان، CHECKSUM الأربع ثابت، corruption/publication رفض، rollback/reapply. التقرير الذي ينتهي pending مبدئي، وليس إثبات SQL النهائي أو تطبيق Railway.
+
+Vitest الحالي:451passed/6skipped/0failed؛ الستة تكامل DB/BullMQ opt-in، لا مهمة خلفية جديدة في D2. FFmpeg/Skia/Chromium واختبار corpus القائم شُغّلت. Python6/6؛ rootTS وstrict للمتغير ناجحان، lint للمتغير صفر errors/warnings. لا معالجة lint العام أو EPERM بتغيير lockfile. [d2-tests.json](data/d2-tests.json). فحص health/readiness الحالي للقراءة فقط أعاد200/ok و200/ready/database connected، ولوج MySQL/app صفر أخطاء في نافذته، [d2-service-readonly-smoke.json](data/d2-service-readonly-smoke.json). هذه قراءة baseline، وليست تحقق ما بعد التطبيق.
+
+**جدول التلاوات والنتائج النهائية وstaging/production سيضاف بعد اكتمال الفحص والبروفة النهائية؛ لا ادعاء إغلاق D2 في هذا القسم الجاري.** تفاصيل الأوامر في [railway-ops-log.md](railway-ops-log.md)، والسجل الملزم [DECISIONS.md](plan/DECISIONS.md)، وأوامر التشغيل/rollback في [qud-catalog-import.md](qud-catalog-import.md).

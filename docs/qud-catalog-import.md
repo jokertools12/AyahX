@@ -50,9 +50,19 @@ npx tsx scripts/apply-qud-catalog-railway.ts --target staging --inventory docs/d
 
 هذا dry-run فقط. التنفيذ أمر مستقل يضيف `--apply`. replay staging فقط بـ`--replay-verified-staging` وبعد تطابق كل البيانات الفعلية قبل الكتابة. الإنتاج `--target production` وinventory الإنتاج ونفس الأدلة؛ التنفيذ يتطلب **--apply --confirm-production** صراحة. `--verify-only` قراءة فقط بعد التطبيق ولا يقبل معه apply. لا تطبيق تلقائي من npm start أو GitHub push.
 
+للإنتاج أيضًا `--staging-verification docs/data/d2-staging-verification.json`؛ يُرفض مستند staging غير ناجح أو ببصمة SQL مختلفة. البروفة تحفظ sql_sha256، والملف المشفر يجب أن يكون موجودًا وببصمته المتحققة. يرفض المشغل pending/نقص المحاولات؛ HF source_unavailable يتطلب3نوافذ فعلية بفاصل≥1800s. قراءة ما بعد التطبيق مستقلة، وتحفظ تقريرها باسم آخر حتى لا تستبدل دليل applied=true المطلوب.
+
 الأسماء الأربع الجديدة يجب ألا تتصادم؛ critical counts وD1 counts/checksum/schema لا تتغير. `riwayat` استثناء metadata مصرح: INSERT ثلاث روايات غير حفص inactive، دون تعديل صف حفص أو النص. النشر يرفضه importer، وقيد DB يرفضه قبل مراجعة صوت البسملة بدليل/مرجع قانوني/offset وتوقيت معتمد؛ is_complete لا يصبح true بسبب NULL.
 
 توقف عند critical count change، backup/rehearsal failure، table collision، new production log error، أو حاجة networking/config؛ لا تصحح production ارتجاليًا، ولا تعيد كتابة نتيجة تنفيذها غير مؤكدة. سجّل النتيجة وابدأ قراءة فقط لحسم الحالة.
+
+فحص الخدمة للقراءة فقط قبل التطبيق وبعده؛ وقت البداية نفسه يغطي نافذة التطبيق كاملة:
+
+```powershell
+npx tsx scripts/check-qud-catalog-services.ts --production-read-only --since '<وقت ISO قبل التطبيق>' --out docs/data/d2-service-postcheck.json
+```
+
+يطلب health وready (200/ok و200/ready/database connected)، ثم لوج AyahX وMySQL محدد المشروع/البيئة/الخدمة/النافذة. يحفظ counts/error timestamps فقط، ويرفض مخرجًا غير مفهوم أو نافذة وصلت سقف500سطر بدل ادعاء سلامة فحص ناقص. أي خطأ جديد يوقف التنفيذ دون تعديل/نشر تطبيق.
 
 ## rollback
 

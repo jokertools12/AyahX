@@ -192,3 +192,13 @@ dry-run exit 0 أولًا؛ ثم apply المنفصل exit 0. SELECT DATABASE() 
 - dry-run/rehearsal التي تنتهي بـpending مبدئية فقط؛ SQL النهائي وstaging ثمproduction لم تُنفَّذ عند كتابة هذه الفقرة. لا إعلان إغلاق قبل الأدلة النهائية.
 
 اختبار إضافي بعد ضبط سياسة التصحيح الثابت:12/12 وحدات الكتالوج ضمن **451passed/6skipped/0failed (457total)**؛ strictTS/lint=0. مقدار correction غير صفري يبقي حفص needs_review حتى مراجعة المستخدم، ولا يغيّر chapter offset. source_unavailable حالة مستقلة عن acoustic failed. التقرير المحدّث `data/d2-tests.json`. جرى دفع commit `abdfe89` دون دمج/نشر.
+
+### فحوص قراءة وقيود أمر الإنتاج — D2 جارٍ
+
+`npx tsx scripts/check-qud-catalog-services.ts --production-read-only --since <ISO قبل الفحص> --out docs/data/d2-service-readonly-smoke.json` نجح في18:34:10Z:health=200/ok،ready=200/ready/database connected،app1سطر/0errors،MySQL0سطر/0errors. لا raw logs أو response bodies خاصة فيGit؛ script يرفض JSON malformed/CLI failure أو نافذة بلغت500سطر.
+
+المشغل يرفض دليل بروفة لا يحمل SQL SHA الفعلي (اختبار رفض قديم نجح قبل الاتصال/الكتابة)، ويرفض غياب/تغيّر encrypted backup، وpending أو محاولات ناقصة، وHF unavailable دون3windows موزعة≥1800s. production dry-run/apply يتطلب إثبات staging applied/readback بنفس SQL SHA وMySQL9.7.2. قبل الإنشاء يفحص أيضًا CHECKSUM جداول D1 الستة وmetadata riwayat القائمة؛ بعده استثناء3INSERT inactive فقط وصف حفص ثابت. TypeScript strict/lint لscripts الثلاثة الجديدة/المعدلة=0.
+
+إعادة قراءة إعدادات/حالة Railway بعد push الفرع في18:54Z:main Auto-deploy=true،project.prDeploys=false،environments production/staging فقط،zero changed deployment IDs لجميع الخدمات مقارنة الجرد الأول؛ لا PR environment أو نشر غير مقصود. `data/d2-auto-deploy-recheck.json`. لا تعديل إعدادات، لا حذف أو deploy.
+
+وُثّق فيdata-audit.md أن رفض إغلاق D1 التاريخي تجاوزه قرار المستخدم الأخير: D1 مغلق وD2 مصرح، وbasmala_audio_unverified حاجز نشر فقط. قسم D2 الجاري لا يدعي تطبيق Railway أو إغلاق المرحلة. حتى الآن بيانات D2 على Railway لم تُكتب.
