@@ -194,3 +194,7 @@ A market analysis of top Quranic reel generator tools (**Tashghil.Pro**, **Quran
 - **TypeScript Static Verification:** `tsc --noEmit` clean (0 errors).
 - **Production Asset Build:** `vite build` completed in 7.54s (All 51 assets chunked and optimized).
 - **End-to-End API Integration:** Registration, project creation, duplication, renaming, contact submission, and cascading account deletion validated via automated HTTP integration testing.
+
+## D2 — كتالوج البيانات، 2026-10-09 (التنفيذ جارٍ)
+
+الجداول الأربع الجديدة، المحوّل QUD Release المثبت، dry-run/SQL حتمي، وبروفة MySQL9.7.2 المحلية موجودة. لا تغيير UI/render/startup ولا نشر تلاوات. النشر محظور مع بسملة صوتية unverified وبدون دليل مستقل؛ timing_complete=NULL وis_complete=false. بيانات الروايات غير حفص inactive/imported دون إسقاط نص حفص. الدليل الحالي: docs/data/d2-tests.json وdocs/data/d2-local-rehearsal-pending.json؛ التقرير المبدئي ليس قبول Railway. المرجع النهائي سيُضاف عند اكتمال جدول docs/data-audit.md وstaging/production verification. اختبارات الريندر الحالية نجحت ضمن450 اختبارًا، والستة المتخطاة تكامل اختياري غير مستخدم في D2.

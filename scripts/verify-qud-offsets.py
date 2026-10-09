@@ -22,7 +22,7 @@ RATE = 8000
 
 
 def decode(ffmpeg, path):
-    process = subprocess.run([ffmpeg, '-v', 'error', '-i', str(path), '-f', 'f32le', '-ac', '1', '-ar', str(RATE), 'pipe:1'], capture_output=True)
+    process = subprocess.run([ffmpeg, '-v', 'error', '-i', str(path), '-f', 'f32le', '-ac', '1', '-ar', str(RATE), 'pipe:1'], capture_output=True, timeout=300)
     if process.returncode:
         raise ValueError('AUDIO_DECODE_FAILED')
     return np.frombuffer(process.stdout, dtype='<f4').astype(np.float64)
@@ -75,17 +75,23 @@ def sample_chapters(cache, record):
             row = json.loads(line)
             if row['ayah'] > 0 and str(row['surah']) in record['audio']['chapter_urls']:
                 counts.setdefault(row['surah'], set()).add(row['ayah'])
-    # Earliest eligible chapters keep requested rows close in Parquet, avoiding
-    # unnecessary audio column chunks. Distinct observed lengths, >=5 verses.
-    chapters, lengths = [], set()
-    for surah in sorted(counts):
-        length = len(counts[surah])
-        if length >= 5 and length not in lengths:
-            chapters.append(surah)
-            lengths.add(length)
-        if len(chapters) == 3:
-            return chapters
-    raise ValueError('INSUFFICIENT_THREE_DIFFERENT_LENGTH_CHAPTERS')
+    # Fix sampling BEFORE fetching audio or measuring correlation. The final
+    # third of eligible chapters keeps Parquet audio reads close together and
+    # avoids downloading the longest original recordings unnecessarily. Select
+    # short, median and long OBSERVED lengths in that pool, not audio scores.
+    # Completed earlier evidence is never replaced to improve a failed result.
+    eligible = sorted(surah for surah in counts if len(counts[surah]) >= 5)
+    pool = eligible[len(eligible) * 2 // 3:]
+    by_length = {}
+    for surah in pool:
+        by_length.setdefault(len(counts[surah]), surah)
+    if len(by_length) < 3:
+        for surah in eligible:
+            by_length.setdefault(len(counts[surah]), surah)
+    lengths = sorted(by_length)
+    if len(lengths) < 3:
+        raise ValueError('INSUFFICIENT_THREE_DIFFERENT_LENGTH_CHAPTERS')
+    return sorted(by_length[lengths[index]] for index in (0, len(lengths) // 2, len(lengths) - 1))
 
 
 def hf_rows(files, pairs, transport):
@@ -155,7 +161,7 @@ def audit(record, args, manifest, transport):
                 sources[surah] = decode(args.ffmpeg, path)
                 evidence.setdefault('catalog_source_sha256', {})[str(surah)] = hashlib.sha256(path.read_bytes()).hexdigest()
                 evidence.setdefault('decoded_source_duration_ms', {})[str(surah)] = len(sources[surah]) * 1000 / RATE
-            except (urllib.error.URLError, OSError, ValueError) as error:
+            except (urllib.error.URLError, OSError, ValueError, subprocess.TimeoutExpired) as error:
                 evidence['reason'] = 'catalog_audio_unavailable'
                 evidence['source_error'] = {'surah': surah, 'type': type(error).__name__, 'http_status': getattr(error, 'code', None)}
                 return evidence
@@ -221,7 +227,7 @@ def audit(record, args, manifest, transport):
         clip_path.write_bytes(payload)
         evidence['negative_control_plus_1000ms'] = compare(sources[first_pair[0]], decode(args.ffmpeg, clip_path), offset + 1000, duration)
         return evidence
-    except (ValueError, OSError) as error:
+    except (ValueError, OSError, subprocess.TimeoutExpired) as error:
         evidence['reason'] = str(error) if isinstance(error, ValueError) else type(error).__name__
         return evidence
     finally:

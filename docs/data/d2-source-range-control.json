@@ -1,0 +1,14 @@
+{
+  "config": "maher_al_muaiqly_qdc",
+  "surah": 1,
+  "method": "actual original MP3: FFmpeg HTTP Range seek vs complete decode",
+  "result": {
+    "score": 0.99777443,
+    "best_lag_ms": 0.0,
+    "duration_difference_ms": 0.0,
+    "passed": true
+  },
+  "received_range_bytes": 327680,
+  "decoded_window_ms": 6514.0,
+  "audio_scratch_deleted": true
+}

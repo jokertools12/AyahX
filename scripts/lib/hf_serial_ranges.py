@@ -34,6 +34,9 @@ class SerialTransport:
             self.stats['minimum_observed_interval_seconds'] = min(interval, self.stats.get('minimum_observed_interval_seconds', interval))
         self.last = now
         self.stats['requests'] += 1
+        self.progress()
+
+    def progress(self):
         if time.monotonic() - self.last_progress >= 30:
             self.last_progress = time.monotonic()
             print(f"range-audit progress: requests={self.stats['requests']}, received_bytes={self.stats['bytes']}", flush=True)
@@ -84,7 +87,14 @@ def range_proxy(files, transport):
                     if method != 'HEAD':
                         while data := response.read(65536):
                             transport.stats['bytes'] += len(data)
-                            self.wfile.write(data)
+                            transport.progress()
+                            try:
+                                self.wfile.write(data)
+                            except (ConnectionError, BrokenPipeError):
+                                # FFmpeg closes a range as soon as its requested
+                                # window is decoded, or before seeking again.
+                                transport.stats['client_range_closes'] = transport.stats.get('client_range_closes', 0) + 1
+                                return
             except (urllib.error.URLError, OSError, ValueError, IndexError) as error:
                 transport.stats['last_error'] = type(error).__name__
                 self.send_response(getattr(error, 'code', 502))
@@ -112,3 +122,5 @@ def download(transport, url, destination):
     with transport.open(url) as response, pathlib.Path(destination).open('wb') as output:
         while data := response.read(65536):
             output.write(data)
+            transport.stats['bytes'] += len(data)
+            transport.progress()

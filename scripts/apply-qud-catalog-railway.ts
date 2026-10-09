@@ -28,6 +28,9 @@ const data = await load<CatalogDataset>('--dataset');
 const plan = generateCatalogSql(data);
 if (sha(await readFile(option('--sql'), 'utf8')) !== plan.sha256) throw new Error('SQL_IS_NOT_DETERMINISTIC_PLAN');
 const before = await captureInventory(ENVIRONMENTS[target]);
+const hafsMetadataSql = "SELECT JSON_OBJECT('id',id,'code',code,'name_ar',name_ar,'name_en',name_en,'aligner_code',aligner_code,'is_active',is_active,'created_at',created_at,'updated_at',updated_at) FROM riwayat WHERE code='hafs_an_asim';";
+const hafsMetadataBefore = (await readSql(environment, hafsMetadataSql)).trim();
+if (!hafsMetadataBefore) throw new Error('EXISTING_HAFS_METADATA_REQUIRED');
 assert.equal(before.server_uuid, inventory.server_uuid, 'DATABASE_IDENTITY_CHANGED');
 assert.deepEqual(before.critical_counts, inventory.critical_counts, 'PRE_APPLY_CRITICAL_COUNTS_CHANGED');
 assert.deepEqual(before.d1_counts, inventory.d1_counts, 'D1_COUNTS_CHANGED');
@@ -45,7 +48,7 @@ async function verifyRemoteRows(): Promise<Record<string, number>> {
     const sql = `SELECT COALESCE(JSON_ARRAYAGG(JSON_OBJECT(${columns.map((column) => `'${column}',${column}`).join(',')})),JSON_ARRAY()) FROM ${table};`;
     rows[table] = JSON.parse((await readSql(environment, sql)).trim());
   }
-  rows.riwayat = JSON.parse((await readSql(environment, "SELECT JSON_ARRAYAGG(JSON_OBJECT('id',id,'code',code,'is_active',is_active)) FROM riwayat;")).trim());
+  rows.riwayat = JSON.parse((await readSql(environment, "SELECT JSON_ARRAYAGG(JSON_OBJECT('id',id,'code',code,'name_ar',name_ar,'name_en',name_en,'aligner_code',aligner_code,'is_active',is_active)) FROM riwayat;")).trim());
   // The common verifier receives REAL remote query results; this bridge cannot
   // fabricate data or execute mutations and accepts only four fixed reads.
   const query = async (sql: string): Promise<unknown> => {
@@ -65,6 +68,8 @@ if (apply) {
 }
 const counts = await verifyRemoteRows();
 const after = await captureInventory(environment);
+assert.equal((await readSql(environment, hafsMetadataSql)).trim(), hafsMetadataBefore, 'EXISTING_HAFS_METADATA_CHANGED');
+assert.equal(after.row_counts.riwayat, inventory.row_counts.riwayat + data.riwayat.length, 'RIWAYAT_EXTENSION_COUNT_MISMATCH');
 assert.deepEqual(after.critical_counts, inventory.critical_counts, 'POST_APPLY_CRITICAL_COUNTS_CHANGED');
 assert.deepEqual(after.d1_counts, inventory.d1_counts, 'POST_APPLY_D1_COUNTS_CHANGED');
 assert.equal(after.canonical_checksum, inventory.canonical_checksum, 'POST_APPLY_CANONICAL_CHECKSUM_CHANGED');
@@ -81,7 +86,8 @@ assert.equal(keys.length, 3);
 assert.ok(keys.every((row) => (QURAN_CATALOG_TABLES as readonly string[]).includes(row.referenced)));
 await readSql(environment, 'SELECT COUNT(*) FROM reciters r LEFT JOIN users u ON u.id=r.id;');
 const report = { target, mysql_version: after.mysql_version, applied: apply, read_only_post_verification: true, sql_sha256: plan.sha256, counts,
-  critical_counts: after.critical_counts, d1_counts: after.d1_counts, canonical_checksum: after.canonical_checksum, d1_table_checksums_unchanged: true,
+  critical_counts: after.critical_counts, d1_counts: after.d1_counts, canonical_checksum: after.canonical_checksum, d1_canonical_and_translation_table_checksums_unchanged: true,
+  existing_hafs_metadata_unchanged: true, riwayat_before: inventory.row_counts.riwayat, riwayat_after: after.row_counts.riwayat,
   d1_canonical_collations_unchanged: true, catalog_text_columns: newColumns.length, internal_foreign_keys: keys.length,
   source_unavailable: data.recitations.filter((row) => row.verification_status === 'source_unavailable').length,
   published: data.recitations.filter((row) => row.status === 'published').length, verified_at: new Date().toISOString(), existing_users_join: true };

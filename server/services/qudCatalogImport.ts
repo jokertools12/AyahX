@@ -179,13 +179,13 @@ export async function buildCatalogDataset(adapter: CatalogAdapter, input: {
         catalog_hf_ayah_difference: row.coverage.ayahs - audit.unique_ayahs, canonical_reference_scope: hafs ? 'hafs' : 'unavailable_for_this_riwayah',
         missing_surahs: missingSurahs, catalog_audio_chapters: recitationChapters.length, declared_available_surahs: row.coverage.surahs,
         license_status: 'not_verified; no license inferred from timing repository' }),
-      status: hafs && offset.verification_status === 'failed' ? 'needs_review' : 'imported' });
+      status: hafs && !offset.offset_verified ? 'needs_review' : 'imported' });
   }
   dataset.reciters = [...readers.values()];
   dataset.providers = [...channels].sort(([a], [b]) => a.localeCompare(b, 'en')).map(([code, hosts]) => ({ id: stableId('audio-provider', code), code, name: code,
     base_url: hosts.size === 1 ? `https://${[...hosts][0]}` : null, host_allowlist: JSON.stringify([...hosts].sort()), adapter_id: records.some((row) => row.channel === code) ? adapter.id : null,
     is_active: false, health_status: 'unchecked', license_text: null, attribution_text: `Documented source ${code}; existing runtime unchanged` }));
-  const labels: Record<string, [string, string, string]> = { warsh_an_nafi: ['ورش عن نافع', 'Warsh an Nafi', 'warsh'], qalon_an_nafi: ['قالون عن نافع', 'Qalon an Nafi', 'qalon'], shubah_an_asim: ['شعبة عن عاصم', 'Shubah an Asim', 'shuba'] };
+  const labels: Record<string, [string, string, string]> = { warsh_an_nafi: ['ورش عن نافع', 'Warsh an Nafi', 'warsh'], qalon_an_nafi: ['قالون عن نافع', 'Qalon an Nafi', 'qalun'], shubah_an_asim: ['شعبة عن عاصم', 'Shubah an Asim', 'shuba'] };
   for (const code of [...riwayat].sort()) {
     if (code === 'hafs_an_asim') continue;
     if (!labels[code]) throw new Error(`UNAPPROVED_RIWAYAH:${code}`);

@@ -1,0 +1,22 @@
+{
+  "tests": 456,
+  "passed": 450,
+  "failed": 0,
+  "skipped": 6,
+  "success": true,
+  "skipped_tests": [
+    "Durable Render Job System & Queue enqueues a valid job and sets initial state to queued",
+    "Durable Render Job System & Queue enforces idempotency: repeated submissions with same idempotencyKey return identical job",
+    "Durable Render Job System & Queue enforces IDOR / cross-user denial: user2 cannot read user1 job",
+    "Durable Render Job System & Queue supports job cancellation: sets status to cancelled",
+    "Durable Render Job System & Queue requeues a cancelled job without creating a second job or spending a new slot",
+    "Durable Render Job System & Queue recovers stale jobs after worker restart"
+  ],
+  "canonical_corpus_test_executed": true,
+  "targeted_typescript_exit": 0,
+  "root_tsc_no_emit_exit": 0,
+  "changed_files_lint_errors": 0,
+  "changed_files_lint_warnings": 0,
+  "acoustic_unit_tests_passed": 5,
+  "checked_at": "2026-10-09T18:13:41.609432Z"
+}

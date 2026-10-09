@@ -26,7 +26,7 @@ describe('D2 catalog identity and coverage', () => {
   });
   it('keeps timing unknown, audio unverified, and rejects automatic publication', async () => {
     const data = await build(adapterFor([record]), [record]);
-    expect(data.recitations[0]).toMatchObject({ status: 'imported', ayahs_complete: true, coverage_words: null, verification_status: 'pending', surah_start_basmala_audio_status: 'unverified' });
+    expect(data.recitations[0]).toMatchObject({ status: 'needs_review', ayahs_complete: true, coverage_words: null, verification_status: 'pending', surah_start_basmala_audio_status: 'unverified' });
     expect(data.chapters[0].timing_complete).toBeNull();
     data.recitations[0].status = 'published';
     expect(() => generateCatalogSql(data)).toThrow('D2_PUBLICATION_OR_TIMING_IMPORT_PROHIBITED');

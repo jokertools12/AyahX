@@ -35,7 +35,7 @@ export async function verifyCatalogRows(db: Pick<Connection, 'query'>, dataset: 
   const [riwayat] = await db.query<RowDataPacket[]>('SELECT * FROM riwayat');
   for (const expected of dataset.riwayat) {
     const actual = riwayat.find((row) => row.code === expected.code);
-    if (!actual || actual.id !== expected.id || Number(actual.is_active) !== 0) throw new Error('IMPORTED_RIWAYAH_ID_OR_ACTIVATION_MISMATCH');
+    if (!actual || Object.entries(expected).some(([column, value]) => canonical(column === 'is_active' ? Boolean(actual[column]) : actual[column]) !== canonical(value))) throw new Error('IMPORTED_RIWAYAH_METADATA_MISMATCH');
   }
   return counts;
 }

@@ -16,7 +16,12 @@ const db = await mysql.createConnection({ host: '127.0.0.1', port: 33319, user: 
 try {
   const [version] = await db.query<RowDataPacket[]>('SELECT VERSION() AS version');
   assert.equal(version[0].version, '9.7.2');
-  if (process.argv.includes('--reset-local-catalog')) await downQuranCatalogTables(db, 'local-rehearsal');
+  if (process.argv.includes('--reset-local-catalog')) {
+    await downQuranCatalogTables(db, 'local-rehearsal');
+    // Only the inactive metadata IDs introduced by this D2 plan, in the guarded
+    // restored LOCAL DB, are reset between development plans. Never Hafs.
+    if (data.riwayat.length) await db.query(`DELETE FROM riwayat WHERE is_active=0 AND id IN (${data.riwayat.map(() => '?').join(',')})`, data.riwayat.map((row) => row.id));
+  }
   const canonical = async (): Promise<string> => { const [rows] = await db.query<RowDataPacket[]>('SELECT surah,ayah,text_uthmani FROM quran_ayahs ORDER BY surah,ayah'); return sha(rows.map((row) => `${row.surah}:${row.ayah}\t${row.text_uthmani}`).join('\n')); };
   const before = await canonical();
   await upQuranCatalogTables(db);
