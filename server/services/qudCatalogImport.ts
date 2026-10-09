@@ -178,8 +178,9 @@ export async function buildCatalogDataset(adapter: CatalogAdapter, input: {
       audit_json: JSON.stringify({ annotation: audit, opening, review: input.reviews.find((item) => item.config === row.slug) || null,
         catalog_hf_ayah_difference: row.coverage.ayahs - audit.unique_ayahs, canonical_reference_scope: hafs ? 'hafs' : 'unavailable_for_this_riwayah',
         missing_surahs: missingSurahs, catalog_audio_chapters: recitationChapters.length, declared_available_surahs: row.coverage.surahs,
+        offset_correction_review_required: offset.offset_correction_ms !== null && offset.offset_correction_ms !== 0,
         license_status: 'not_verified; no license inferred from timing repository' }),
-      status: hafs && !offset.offset_verified ? 'needs_review' : 'imported' });
+      status: hafs && (!offset.offset_verified || (offset.offset_correction_ms !== null && offset.offset_correction_ms !== 0)) ? 'needs_review' : 'imported' });
   }
   dataset.reciters = [...readers.values()];
   dataset.providers = [...channels].sort(([a], [b]) => a.localeCompare(b, 'en')).map(([code, hosts]) => ({ id: stableId('audio-provider', code), code, name: code,

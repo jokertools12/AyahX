@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { QudReleaseAdapter, buildCatalogDataset, expandMissingVerses, expandRanges, sha, validateOffsetEvidence, type ReleaseRecitation, type CatalogAdapter } from '../../server/services/qudCatalogImport';
+import { QudReleaseAdapter, buildCatalogDataset, expandMissingVerses, expandRanges, sha, validateOffsetEvidence, type ReleaseRecitation, type CatalogAdapter, type OffsetEvidence } from '../../server/services/qudCatalogImport';
 import { generateCatalogSql } from '../../server/services/qudCatalogSql';
 
 const record: ReleaseRecitation = { slug: 'fixture_source', reciter_id: 'person_1', name_ar: 'اسم مطابق', name_en: 'Same Name', riwayah: 'hafs_an_asim', style: 'murattal', channel: 'fixture', audio_category: 'surah', audio: { chapter_urls: { '1': 'https://example.org/1.mp3' } }, coverage: { ayahs: 2, surahs: 1 } };
@@ -7,9 +7,9 @@ const adapterFor = (records: ReleaseRecitation[]): QudReleaseAdapter => {
   const raw = JSON.stringify({ schema_version: 3, recitations: records });
   return new QudReleaseAdapter(raw, sha(raw));
 };
-const build = (adapter: CatalogAdapter, records: ReleaseRecitation[]) => buildCatalogDataset(adapter, { version: 'fixture', catalogSha: 'fixture', sourceUrl: 'https://example.org/catalog.json', legalCounts: { '1': 2 },
+const build = (adapter: CatalogAdapter, records: ReleaseRecitation[], offsets: Record<string, OffsetEvidence> = {}) => buildCatalogDataset(adapter, { version: 'fixture', catalogSha: 'fixture', sourceUrl: 'https://example.org/catalog.json', legalCounts: { '1': 2 },
   annotations: records.map((row) => ({ config: row.slug, rows: 2, unique_ayahs: 2, basmala_mode: 'ayah_1_included', basmala_reason: '1:1 row exists', chapters: [{ surah: 1, available_ayahs: 2 }] })),
-  openings: records.map((row) => ({ config: row.slug, basmala_mode: 'ayah_1_included', basmala_reason: '1:1 row exists', groups: { basmala_not_in_recited_text: [2] } })), reviews: [], offsets: {} });
+  openings: records.map((row) => ({ config: row.slug, basmala_mode: 'ayah_1_included', basmala_reason: '1:1 row exists', groups: { basmala_not_in_recited_text: [2] } })), reviews: [], offsets });
 
 describe('D2 catalog identity and coverage', () => {
   it('merges only by reciter_id and keeps identical names with distinct IDs separate', async () => {
@@ -38,6 +38,13 @@ describe('D2 catalog identity and coverage', () => {
     expect(data.chapters[0].expected_ayahs).toBeNull();
     expect(data.chapters[0].coverage_mismatch).toBeNull();
     expect(data.riwayat[0].is_active).toBe(false);
+  });
+  it('keeps a measured constant correction under review without applying it', async () => {
+    const samples = [1, 2, 3].flatMap((surah) => Array.from({ length: 5 }, (_, i) => ({ surah, ayah: i + 1, source_offset_hypothesis: { passed: true, score: 1, duration_difference_ms: 0, best_lag_ms: 20 } })));
+    const data = await build(adapterFor([record]), [record], { fixture_source: { verification_status: 'passed', offset_verified: true, offset_check_score: 1, offset_correction_ms: 20, samples } });
+    expect(data.recitations[0]).toMatchObject({ status: 'needs_review', offset_verified: true, offset_correction_ms: 20 });
+    expect(JSON.parse(String(data.recitations[0].audit_json)).offset_correction_review_required).toBe(true);
+    expect(data.chapters[0].chapter_offset_ms).toBeNull();
   });
   it('marks missing verses and catalog/HF differences without claiming completeness', async () => {
     const records = [{ ...record, coverage: { ayahs: 1, surahs: 1, missing_verses: '1:1' } }];

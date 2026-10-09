@@ -27,6 +27,8 @@ pending/passed/failed/source_unavailable مستقلة عن publication. ملف �
 
 طول/طاقة/صمت prefix أدلة فقط؛ لا تثبت كلمات البسملة. كل surah_start_basmala_audio_status=unverified حتى مراجعة المستخدم. Aligner للبسملة فقط عند الحاجة ضمن التصريح؛ لا عميل D5 أو إعادة محاذاة عامة. كل scratch audio يحذف بعد المحاولة. `--resume-audio-dir` محصور في TEMP وبـ--config صريح لمحاولة interrupted، ثم يحذف أيضًا.
 
+إذا كانت الإزاحة الثابتة غير صفرية ضمن حدود القبول، يبقى حفص needs_review حتى يراجع المستخدم التصحيح المقترح. تُحفظ نتيجة المطابقة الناجحة كما هي؛ لا يُضاف التصحيح إلى chapter_offset_ms أو source_offset_ms ولا يُطبَّق في مسار التشغيل.
+
 ## dry-run والبروفة
 
 ```powershell
