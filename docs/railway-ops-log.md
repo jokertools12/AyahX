@@ -134,3 +134,7 @@ dry-run exit 0 أولًا؛ ثم apply المنفصل exit 0. SELECT DATABASE() 
 تطبيق النص على الإنتاج ناجح بالأدلة أعلاه، لكن هذا البند من إضافات تدقيق D1 غير مكتمل. لا انتقال إلى D2 قبل اكتمال D1 طبقًا لشرط المرحلة الواحدة. dump الخاص يبقى خارج المستودع والسحابة حتى إغلاق المرحلة؛ snapshot Railway القديم محفوظ. لا كتابة أخرى مطلوبة على الإنتاج لمعالجة هذا المانع، ولا يُنفذ rollback أو أي إصلاح ارتجالي عليه.
 
 مسار HF آخر `/first-rows` للتلاوة `maher_al_muaiqly_qdc` انقطع بـ`ECONNRESET` قبل تلقي HTTP؛ موثق في نفس دليل المصدر. أُوقف mysqld المحلي المملوك لهذه المهمة بأمر `mysqladmin --host=127.0.0.1 --port=33319 --user=root shutdown`، exit 0. نسخة البيانات الخاصة باقية خارج المستودع حتى إغلاق D1؛ لم تُحذف نسخة Railway ولم يُغير أي إعداد أو service.
+
+إعادة قراءة HF `/rows` بعد الانتظار، في `2026-10-09T12:33:28Z`، أعادت 500 ورسالة الانشغال نفسها؛ لا clip متاح للتحقق. بقي مانع الصوت دون تقليد أو قبول صامت.
+
+تحديث GitHub: `git commit -m "test: audit full Quran corpus and QUD repetition evidence"` =`2a74f38` ثم `git push` نجح؛ `git commit -m "docs: record verified D1 Railway import and pending audio audit"` =`1a0f41e` ثم `git push` نجح. فُحص status/diff/stat/secret patterns قبل كل commit وdiff --check بعد تصحيح whitespace في الوثائق. تحديث وصف [PR #9](https://github.com/jokertools12/AyahX/pull/9) بالعربية نجح؛ ظل مسودة دون merge. `git ls-remote` أثبت SHA الفرع البعيد مطابقًا للمحلي؛ لا ملفات خاصة/SQL كبير/corpus/cache/audio أو قيم أسرار رُفعت.
