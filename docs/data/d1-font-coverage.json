@@ -1,0 +1,337 @@
+{
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "codepoints_including_space": 70,
+  "fonts": [
+    {
+      "font": "amiri.ttf",
+      "checked_visible": 68,
+      "missing": [],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": true
+    },
+    {
+      "font": "amiriquran.ttf",
+      "checked_visible": 68,
+      "missing": [],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": true
+    },
+    {
+      "font": "arefruqaa.ttf",
+      "checked_visible": 68,
+      "missing": [
+        "U+065C",
+        "U+06D6",
+        "U+06D7",
+        "U+06D8",
+        "U+06DA",
+        "U+06DB",
+        "U+06DC",
+        "U+06DE",
+        "U+06DF",
+        "U+06E0",
+        "U+06E2",
+        "U+06E3",
+        "U+06E5",
+        "U+06E6",
+        "U+06E7",
+        "U+06E8",
+        "U+06E9",
+        "U+06EC",
+        "U+06ED",
+        "U+08F0",
+        "U+08F2",
+        "U+08F3"
+      ],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": false
+    },
+    {
+      "font": "cairo.ttf",
+      "checked_visible": 68,
+      "missing": [
+        "U+065C",
+        "U+06D6",
+        "U+06D7",
+        "U+06D8",
+        "U+06DA",
+        "U+06DB",
+        "U+06DC",
+        "U+06DE",
+        "U+06DF",
+        "U+06E0",
+        "U+06E2",
+        "U+06E3",
+        "U+06E5",
+        "U+06E6",
+        "U+06E7",
+        "U+06E8",
+        "U+06E9",
+        "U+06EC",
+        "U+06ED",
+        "U+08F0",
+        "U+08F1",
+        "U+08F2",
+        "U+08F3"
+      ],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": false
+    },
+    {
+      "font": "elmessiri.ttf",
+      "checked_visible": 68,
+      "missing": [
+        "U+065C",
+        "U+06D6",
+        "U+06D7",
+        "U+06D8",
+        "U+06DA",
+        "U+06DB",
+        "U+06DC",
+        "U+06DE",
+        "U+06DF",
+        "U+06E0",
+        "U+06E2",
+        "U+06E3",
+        "U+06E5",
+        "U+06E6",
+        "U+06E7",
+        "U+06E8",
+        "U+06E9",
+        "U+06EC",
+        "U+06ED",
+        "U+08F0",
+        "U+08F1",
+        "U+08F2",
+        "U+08F3"
+      ],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": false
+    },
+    {
+      "font": "katibeh.ttf",
+      "checked_visible": 68,
+      "missing": [
+        "U+06E5"
+      ],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": false
+    },
+    {
+      "font": "lalezar.ttf",
+      "checked_visible": 68,
+      "missing": [
+        "U+065C",
+        "U+06D7",
+        "U+06D8",
+        "U+06DA",
+        "U+06DB",
+        "U+06DC",
+        "U+06DE",
+        "U+06DF",
+        "U+06E0",
+        "U+06E2",
+        "U+06E3",
+        "U+06E5",
+        "U+06E6",
+        "U+06E7",
+        "U+06E8",
+        "U+06E9",
+        "U+06EC",
+        "U+06ED",
+        "U+08F0",
+        "U+08F1",
+        "U+08F2",
+        "U+08F3"
+      ],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": false
+    },
+    {
+      "font": "lateef.ttf",
+      "checked_visible": 68,
+      "missing": [],
+      "nonprinting_without_cmap": [],
+      "pass": true
+    },
+    {
+      "font": "mada.ttf",
+      "checked_visible": 68,
+      "missing": [],
+      "nonprinting_without_cmap": [],
+      "pass": true
+    },
+    {
+      "font": "marhey.ttf",
+      "checked_visible": 68,
+      "missing": [
+        "U+065C",
+        "U+06D6",
+        "U+06D7",
+        "U+06D8",
+        "U+06DA",
+        "U+06DB",
+        "U+06DC",
+        "U+06DE",
+        "U+06DF",
+        "U+06E0",
+        "U+06E2",
+        "U+06E3",
+        "U+06E5",
+        "U+06E6",
+        "U+06E7",
+        "U+06E8",
+        "U+06E9",
+        "U+06EC",
+        "U+06ED",
+        "U+08F0",
+        "U+08F1",
+        "U+08F2",
+        "U+08F3"
+      ],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": false
+    },
+    {
+      "font": "mirza.ttf",
+      "checked_visible": 68,
+      "missing": [
+        "U+06E5"
+      ],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": false
+    },
+    {
+      "font": "notonaskharabic.ttf",
+      "checked_visible": 68,
+      "missing": [],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": true
+    },
+    {
+      "font": "rakkas.ttf",
+      "checked_visible": 68,
+      "missing": [
+        "U+065C",
+        "U+06D6",
+        "U+06D7",
+        "U+06DA",
+        "U+06DB",
+        "U+06DC",
+        "U+06DE",
+        "U+06DF",
+        "U+06E0",
+        "U+06E2",
+        "U+06E3",
+        "U+06E5",
+        "U+06E6",
+        "U+06E7",
+        "U+06E8",
+        "U+06E9",
+        "U+06EC",
+        "U+08F0",
+        "U+08F1",
+        "U+08F2",
+        "U+08F3"
+      ],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": false
+    },
+    {
+      "font": "reemkufi.ttf",
+      "checked_visible": 68,
+      "missing": [
+        "U+065C",
+        "U+06D6",
+        "U+06D7",
+        "U+06D8",
+        "U+06DA",
+        "U+06DB",
+        "U+06DC",
+        "U+06DE",
+        "U+06DF",
+        "U+06E0",
+        "U+06E2",
+        "U+06E3",
+        "U+06E5",
+        "U+06E6",
+        "U+06E7",
+        "U+06E8",
+        "U+06E9",
+        "U+06EC",
+        "U+06ED",
+        "U+08F0",
+        "U+08F1",
+        "U+08F2",
+        "U+08F3"
+      ],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": false
+    },
+    {
+      "font": "scheherazadenew.ttf",
+      "checked_visible": 68,
+      "missing": [],
+      "nonprinting_without_cmap": [],
+      "pass": true
+    },
+    {
+      "font": "tajawal.ttf",
+      "checked_visible": 68,
+      "missing": [
+        "U+065C",
+        "U+0671",
+        "U+06D6",
+        "U+06D7",
+        "U+06D8",
+        "U+06DA",
+        "U+06DB",
+        "U+06DC",
+        "U+06DE",
+        "U+06DF",
+        "U+06E0",
+        "U+06E2",
+        "U+06E3",
+        "U+06E5",
+        "U+06E6",
+        "U+06E7",
+        "U+06E8",
+        "U+06E9",
+        "U+06EC",
+        "U+06ED",
+        "U+08F0",
+        "U+08F1",
+        "U+08F2",
+        "U+08F3"
+      ],
+      "nonprinting_without_cmap": [
+        "U+034F"
+      ],
+      "pass": false
+    }
+  ]
+}

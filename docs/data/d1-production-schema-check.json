@@ -1,0 +1,83 @@
+{
+  "tables": [
+    {
+      "name": "quran_ayahs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_surahs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_text_versions",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_words",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "riwayat",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "translation_ayahs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "translations",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    }
+  ],
+  "critical": {
+    "plans": null,
+    "users": 13,
+    "videos": null,
+    "user_roles": 13,
+    "render_jobs": 72,
+    "saved_videos": 7,
+    "notifications": 49,
+    "subscriptions": 16,
+    "system_settings": 13,
+    "payment_requests": 3
+  },
+  "database": "railway",
+  "foreign_keys": [
+    {
+      "table": "quran_ayahs",
+      "referenced": "quran_text_versions"
+    },
+    {
+      "table": "quran_text_versions",
+      "referenced": "riwayat"
+    },
+    {
+      "table": "quran_words",
+      "referenced": "quran_ayahs"
+    },
+    {
+      "table": "translation_ayahs",
+      "referenced": "quran_ayahs"
+    },
+    {
+      "table": "translation_ayahs",
+      "referenced": "translations"
+    }
+  ],
+  "checked_at": "2026-10-09T12:21:31.388Z",
+  "passed": true
+}

@@ -1,0 +1,22 @@
+{
+  "checked_at": "2026-10-09T12:16:17.484Z",
+  "phase": "before-production-import",
+  "services": [
+    {
+      "service": "AyahX",
+      "window": "10m",
+      "lines": 5,
+      "errors": 0,
+      "diagnostic_categories": [],
+      "timestamps": []
+    },
+    {
+      "service": "MySQL",
+      "window": "10m",
+      "lines": 0,
+      "errors": 0,
+      "diagnostic_categories": [],
+      "timestamps": []
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "mysql": "8.4.11",
+  "dryRun": {
+    "dryRun": true,
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433,
+    "checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4"
+  },
+  "first": {
+    "dryRun": false,
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433,
+    "checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4"
+  },
+  "second": {
+    "dryRun": false,
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433,
+    "checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4"
+  },
+  "counts": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433,
+    "versions": 1
+  },
+  "corruptionRejected": true,
+  "rollbackRemaining": 0,
+  "reapplyAfterRollback": true
+}

@@ -1,0 +1,353 @@
+{
+  "checked_at": "2026-10-09T11:40:59Z",
+  "scope": "staging-read-only",
+  "project_id": "6394b364-57bc-4736-8ce1-10dcf382c1e5",
+  "environment_id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+  "service_id": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+  "settings": {
+    "mysql_version": "9.7.2",
+    "database_name": "railway",
+    "max_allowed_packet": 67108864,
+    "max_connections": 151,
+    "time_zone": "SYSTEM",
+    "character_set_server": "utf8mb4",
+    "system_time_zone": "UTC",
+    "collation_server": "utf8mb4_0900_ai_ci",
+    "server_uuid": "a9d4ce5a-b463-11f1-b4a4-a2aa5c49cf2f",
+    "sql_mode": "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
+  },
+  "tables": [
+    {
+      "name": "achievements",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_account_roles",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_accounts",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_announcements",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_api_keys",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_audio_rights",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_audio_rights_reviews",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_audit_logs",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_background_media",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_background_publications",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_background_upload_parts",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_background_uploads",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_backgrounds",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_cms_pages",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_coupons",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_credit_ledger",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_feature_flags",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_invitations",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_ip_policy",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_moderation_reports",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_permission_exceptions",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_quran_correction_votes",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_quran_corrections",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_quran_import_verses",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_quran_imports",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_quran_rollback_votes",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_quran_rollbacks",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_reciter_catalog",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_redirects",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_render_retry_receipts",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_role_permissions",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_roles",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_saved_views",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_sessions",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_subscription_receipts",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_support_messages",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_support_tickets",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_templates",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_text_resource_entries",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_text_resource_reviews",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_text_resource_versions",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_text_resources",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "name": "admin_ticket_replies",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_trash",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_user_notes",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_user_restrictions",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "admin_webhooks",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "alignment_documents",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "alignment_review_events",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "daily_cloud_render_usage",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "daily_render_engine_usage",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "daily_video_usage",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "domain_events",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "dsr_requests",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "entity_notes",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "favorite_performers",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "favorite_reciters",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "favorite_surahs",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "notifications",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "payment_requests",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "profiles",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "quran_audio_assets",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "render_engine_capacity",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "render_job_audit",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "render_jobs",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "render_manifests",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "saved_videos",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "subscriptions",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "synthetic_canary_runs",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "system_settings",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "user_access_restrictions",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "user_achievements",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "user_follows",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "user_roles",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "user_sessions",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "user_subscription_versions",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "users",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "video_comments",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "video_likes",
+      "collation": "utf8mb4_unicode_ci"
+    }
+  ],
+  "critical_counts": {
+    "plans": null,
+    "users": 2,
+    "videos": null,
+    "user_roles": 3,
+    "render_jobs": 0,
+    "saved_videos": 1,
+    "notifications": 3,
+    "subscriptions": 4,
+    "system_settings": 13,
+    "payment_requests": 1
+  },
+  "separate_server_uuid": true,
+  "version_matches_9_7_x": true,
+  "writes_executed": false,
+  "d1_name_collisions": []
+}

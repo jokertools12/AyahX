@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-10-09T11:35:22.085Z",
+  "volume_instance_id": "185245f1-8237-489d-aff5-cada8c35617a",
+  "requested_name": "D1-pre-import-2026-10-09",
+  "create_error_code": "INTERNAL_SERVER_ERROR",
+  "creation_retried": false,
+  "backups": [
+    {
+      "id": "89f3cc8c-2a92-49f4-9c9a-79e789fa72c5",
+      "name": "Pre-Security-Patch Backup",
+      "createdAt": "2026-09-19T12:32:54.042Z",
+      "expiresAt": "2026-10-19T12:32:53.608Z",
+      "usedMB": 99,
+      "referencedMB": 172
+    }
+  ],
+  "read_errors": [],
+  "backup_list_verified": false
+}

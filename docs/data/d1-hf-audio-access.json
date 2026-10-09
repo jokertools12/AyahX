@@ -1,0 +1,36 @@
+{
+  "checked_at": "2026-10-09T12:26:05.004Z",
+  "operation": "fresh-HF-audio-row-read",
+  "results": [
+    {
+      "config": "abdul_hamid_ghraio_2025_yt",
+      "http_status": 500,
+      "error": "The server is busier than usual and the response is not ready yet. Please retry later."
+    },
+    {
+      "config": "maher_al_muaiqly_qdc",
+      "http_status": 500,
+      "error": "The server is busier than usual and the response is not ready yet. Please retry later."
+    },
+    {
+      "config": "al_hussayni_al_azazy_kids_qdc",
+      "http_status": 500,
+      "error": "The server is busier than usual and the response is not ready yet. Please retry later."
+    }
+  ],
+  "audio_downloaded": false,
+  "audio_prefix_validation": "blocked_by_source",
+  "canonical_modified": false,
+  "alternative_read": {
+    "endpoint": "first-rows",
+    "config": "maher_al_muaiqly_qdc",
+    "transport_error": "ECONNRESET",
+    "http_status": null,
+    "audio_downloaded": false
+  },
+  "final_retry": {
+    "checked_at": "2026-10-09T12:33:28.020Z",
+    "http_status": 500,
+    "error": "The server is busier than usual and the response is not ready yet. Please retry later."
+  }
+}

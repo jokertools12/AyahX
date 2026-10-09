@@ -1,0 +1,536 @@
+# جرد البيانات وخط الأساس — D0
+
+تاريخ الجرد: 2026-10-09 (Africa/Cairo)
+المستودع: `C:\Users\cpazi\Downloads\ayahX`
+المرجع التنفيذي: `docs/plan/00_MASTER_PROMPT.md` ثم `docs/plan/01_DATA_PLAN.md`
+الحالة: قراءة فقط؛ لم تُعدّل جداول أو كود المنتج، ولم تُشغّل خدمة إنتاج.
+
+## تقرير المرحلة D0 — جرد البيانات وخط الأساس
+
+### 1. ما الذي تغيّر (ملفات/جداول/endpoints)
+
+- أُضيف هذا الملف فقط لتسجيل جرد D0 والدليل القابل لإعادة الفحص.
+- لم تُطبّق migration، ولم تُنشأ قاعدة بيانات، ولم تُعدّل أي endpoint أو مكوّن.
+- ثبّت الفحص أن الفرع الحالي هو `main` عند commit `456d1da8b682dc907471e114743ae0983b1e2ca8`، مع ملفات الخطة المرفقة غير متتبعة أصلًا تحت `docs/plan/`.
+
+### 2. ما الذي تحققت منه فعلياً (أوامر + مخرجات/لقطات)
+
+#### جرد التنفيذ الحالي
+
+| المجال | الموجود فعلياً | الفجوة بالنسبة إلى الخطة |
+|---|---|---|
+| السور | `src/data/surahs.ts` قائمة ثابتة؛ واجهة الخادم `server/routes/quran.ts` تستدعي Quran Foundation | لا يوجد catalog محلي أو جدول `quran_surahs`/`quran_ayahs` |
+| القراء | `src/data/reciters.ts` قائمة ثابتة وروابط EveryAyah/QUA؛ خدمة QUA مثبتة على `v3.2.0` | لا توجد جداول القراء/الروايات/التسجيلات المقترحة |
+| النص | `src/hooks/useQuranApi.ts` يجلب Quran Foundation ثم AlQuran.cloud؛ يزيل بسملة افتتاحية في مسار fallback لبعض السور | لا توجد نسخة نصية canonical مخزنة أو سياسة basmala صريحة |
+| الصوت | `getAudioUrl` وEveryAyah في الواجهة، و`server/services/quranUniversalAudioService.ts` وQuran routes | لا توجد طبقة import موحدة لملفات الآيات أو manifest قابل للتدقيق |
+| التوقيت | `src/lib/timingMap.ts` و`server/services/quranAlignService.ts`؛ `wordTimingEngine.ts` مسار تقديري قديم وموسوم deprecated/diagnostic | لا توجد جداول `ayah_timings`/`alignment_jobs` أو بوابة اعتماد موحدة |
+| الريندر | مسارات FFmpeg/Skia/Browser الحالية تستقبل manifest والتوقيت؛ لا تغيير في D0 | ربط catalog/aligner/database الذي تصفه الخطة غير منفذ |
+| قاعدة البيانات | `database/schema.sql` يحوي الجداول الحالية، و`server/db/migrations` يحوي migrations للرندر/المحاذاة/الاشتراكات | لا توجد جداول catalog المقترحة في خطة البيانات |
+
+#### أدلة QUD الحية
+
+الأوامر المستخدمة:
+
+```text
+curl.exe -L https://api.github.com/repos/QUD-Technologies/quranic-universal-audio/releases/latest
+curl.exe -L https://github.com/QUD-Technologies/quranic-universal-audio/releases/download/v3.2.0/catalog.json -o %TEMP%\qud-catalog-v3.2.0.json
+```
+
+النتيجة الفعلية:
+
+- أحدث Release هو `v3.2.0`، منشور في 2026-09-26، بعنوان `v3.2.0 — 69 Recitations`.
+- `catalog.json`: `schema_version=3` و`recitations=69`.
+- المفاتيح الفعلية لكل سجل: `audio`, `audio_category`, `channel`, `country`, `coverage`, `name_ar`, `name_en`, `reciter_id`, `recording_context`, `recording_year`, `riwayah`, `schema_version`, `slug`, `style`, `variant_label`.
+- سجل Maher (`maher_al_muaiqly_qdc`) يعلن `coverage.ayahs=6236`, `surahs=114`، وملف السورة 2 من QuranicAudio.
+- سجل Abdul Hamid (`abdul_hamid_ghraio_2025_yt`) يعلن 6235 آية و`missing_verses=["1:1"]`، ويحتوي `chapter_offsets_ms`؛ هذا يثبت أن الإزاحات ليست موجودة بنفس الشكل لكل سجل.
+- سجل Abdulbasit Tarteel يعلن 6236 آية ورابط chapter مباشر.
+
+#### أدلة Hugging Face والـ schema
+
+```text
+https://datasets-server.huggingface.co/info?dataset=QUD-Technologies%2Fquranic-universal-ayahs
+https://datasets-server.huggingface.co/rows?dataset=QUD-Technologies%2Fquranic-universal-ayahs&config=<slug>&split=train&offset=0&length=100
+```
+
+- الاستجابة الحالية: `configs=94`, `partial=false`, `pending=0`, `failed=0`؛ الخطة تذكر 86 subset، وهو تعارض زمني يجب تحديثه قبل D1.
+- أعمدة الصف الفعلية: `audio`, `surah`, `ayah`, `duration_ms`, `text_uthmani`, `segments`, `word_timestamps`, `source_url`, `source_offset_ms`.
+- صف Abdul Hamid 2025 للآية 1:2: `duration_ms=3328`, النص `ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ`، segment واحد `[1,4,6,3328]`، و`source_offset_ms=3004`.
+- صف 1:1 مفقود في هذا config، بينما 1:1 موجود عند Abdulaziz (`duration_ms=5236`, offset 5904) وMaher (`duration_ms=6514`, offset 7523).
+
+#### النص المكرر والمرجع canonical
+
+تمت مقارنة صفوف حقيقية مع Quran.com API (`fields=text_uthmani`):
+
+- Abdul Hamid 2:22: 25 token مقابل 24 canonical؛ تكرارات فعلية لـ `فَأَخْرَجَ`, `بِهِۦ`, `مِنَ`.
+- Abdul Hamid 2:31: 17 token مقابل 15 canonical؛ تكرار `فَقَالَ` و`أَنۢبِـُٔونِي`.
+- Maher 2:22 و2:31 لا يحملان التكرار نفسه في الصف المفحوص.
+
+النتيجة: `text_uthmani` في dataset قد يمثل النص/التقطيع المنطوق للتسجيل، وليس مرجعاً canonical تلقائياً. لا يجوز استبداله بنص مولد أو تطبيق تصحيح صامت؛ يلزم policy صريحة للمصدر والـ review.
+
+#### تجربة `source_offset_ms` (3 قراءات × 3 آيات)
+
+اُستخدمت ملفات MP3 الأصلية وclips الآيات من ثلاث configs (`maher_al_muaiqly_qdc`, `mishary_rashid_al_afasy_mp3quran`, `abdulbasit_abdulsamad_tarteel`) مع فك الصوت إلى mono 16 kHz بواسطة FFmpeg محلي. لكل الأزواج التسعة كان `orig_samples == clip_samples` و`length_delta_ms=0`، لكن الارتباط Pearson اختلف:
+
+| القراءة | 1:1 | 1:2 | 2:22 |
+|---|---:|---:|---:|
+| Maher | 0.4271 | 0.5302 | 0.8348 |
+| Mishary | 0.9965 | 0.6827 | 0.6194 |
+| Abdulbasit | 0.3362 | 0.9417 | 0.1868 |
+
+الاستنتاج: تطابق المدة وحده لا يثبت أن القص من السورة الأصلية هو نفس clip الآية. لا تعتمد الخطة `source_offset_ms` عالمياً؛ استخدم clips الآيات أو تحققاً صريحاً لكل provider/recitation قبل أي استخدام.
+
+#### البسملة والرموز والخط
+
+- وجود 1:1 يختلف بين القراءات؛ لذلك يجب أن تكون `basmala_mode` صريحة (ولا تفترض بسملة عامة). مسار fallback الحالي يزيل افتتاحية غير الفاتحة/التوبة، وهو سلوك يحتاج policy موثقة قبل catalog import.
+- اختُبرت أول 100 صف لكل من ثلاث configs؛ مجموعة 62 code point تضمنت علامات قرآنية مثل U+06D6 وU+06DB وU+06DE وU+08F0..U+08F2. لم يظهر أي نقص في cmap لهذه العينة عند `amiri.ttf`, `amiriquran.ttf`, `notonaskharabic.ttf`, `scheherazadenew.ttf`.
+- هذه تغطية عينة cmap وليست إثباتاً لكل corpus؛ DigitalKhatt المرفق في Release ليس bundled في `public/fonts` حالياً، لذا يلزم اختبار corpus كامل بعد الاستيراد.
+
+#### Aligner
+
+```text
+GET https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations
+```
+
+رجع HTTP 200 وسجلات حقيقية تحوي `slug,label,reciter,riwayah,style,channel,source,chapters`. بعض السجلات بها فجوات chapters (مثل Abdulaziz)، لذلك لا يكفي وجود سجل recitation لإثبات تغطية كاملة.
+
+#### خط الأساس الفعلي
+
+| الأمر | النتيجة |
+|---|---|
+| `npm ci` | تعذر بسبب `EPERM` على `node_modules/@esbuild/win32-x64/esbuild.exe` أثناء وجود عمليات Node؛ لم نغيّر ملفات tracked. |
+| `npm install --no-save --ignore-scripts --prefer-offline vite@5.4.19 vitest@3.2.4 typescript@5.8.3 eslint@9.32.0` | نجح لتوفير أدوات الاختبار محلياً؛ التغيير غير متتبع. ثُبّت `ffmpeg-static` binary مؤقتاً محلياً لتفادي ENOENT. |
+| `npm test` | `77 passed | 1 skipped` test files؛ `426 passed | 6 skipped` tests؛ exit 0، مدة 48.39s. |
+| `npx tsc --noEmit` | exit 0. |
+| `npm run lint` | exit 1: إجمالي 1053 مشكلة، منها خطآن و1051 تحذيراً. الخطآن في `tooling/runtime/ayahx-brand-studio/app/page.tsx`: rule غير موجود `@next/next/no-img-element` و`no-empty`. |
+| `npm run test:e2e` | نجح محلياً: desktop 5/5 وmobile 5/5، المجموع 10/10 في ملفي public، دون model calls أو production. التقرير في `.e2e/`. |
+
+لم أشغّل `npm run db:setup` أو `npm run dev:all`: الأول ينشئ قاعدة البيانات ويطبق schema/ALTER، والثاني يبدأ server الذي ينفذ ensure migrations عند الإقلاع؛ تشغيلهما يخالف جرد القراءة فقط.
+
+#### migrations وworktrees
+
+- `server/db/migrations`: `addAlignmentTables.ts`, `addRenderJobsTable.ts`, `ensurePlanEntitlementSchema.ts`.
+- `database/schema.sql` لا يحتوي جداول catalog المقترحة في الخطة.
+- `git worktree list --porcelain`: checkout الحالي فقط؛ الدليل القديم `C:\Users\cpazi\.codex\worktrees\6def\ayahX` فارغ وغير صالح كـ worktree.
+- لا يوجد فرع أو worktree إداري فعّال. تاريخ git يثبت أن commit `1d5b42d38a409fc5da264e509c439b052ec52b66` أزال لوحة الأدمن وواجهاتها القديمة؛ الفرع البعيد `origin/codex/openrouter-quran-animate-staging` لا يعيدها.
+
+### 3. نتائج الاختبارات
+
+النتائج أعلاه هي التشغيل الفعلي. اختبارات Vitest وTypeScript وpublic E2E نجحت بعد توفير binary FFmpeg المحلي؛ lint بقي فاشلاً بسبب خطأين حقيقيين و1051 تحذيراً. كل تجارب `[تحقّق]` المطلوبة في D0 نُفذت بعينات حية وسُجلت هنا، مع إبقاء الملفات المؤقتة خارج المستودع.
+
+### 4. ما لم يكتمل أو يحتاج قراري، وسببه
+
+- لم تُستورد بيانات إلى قاعدة البيانات ولم تُنشأ migrations جديدة، لأن D0/A0 قراءة فقط.
+- لم تُشغّل خدمة Express أو `db:setup`، لأن startup يكتب إلى قاعدة البيانات.
+- اختبار الخط الكامل لكل 69/94 config، واختبار cmap لكل النصوص، واستماع بشري مقارن، مؤجل إلى D1 بعد اعتماد سياسة المصدر.
+
+### 5. المخاطر المعروفة
+
+- اختلاف live Release/HF عن أرقام الخطة (69 recitations و94 configs مقابل أرقام أقدم).
+- اختلاف `text_uthmani` والتكرار بين القراءات؛ خطر خلط النص المنطوق بالـ canonical.
+- `source_offset_ms` يطابق المدة لكنه لا يثبت التطابق الصوتي.
+- basmala والتغطية ناقصتان لبعض القراءات.
+- lint غير أخضر، ولا توجد قاعدة catalog/admin في checkout الحالي.
+
+### 6. الخطوة التالية المقترحة
+
+انتظار موافقة صريحة على نتائج D0 قبل D1: اعتماد provider/source policy، `basmala_mode`، سياسة canonical مقابل recited text، وقاعدة قبول `source_offset_ms`؛ ثم تصميم migrations idempotent واختبارات corpus كاملة. لا يبدأ أي تنفيذ D1 قبل هذه الموافقة.
+
+
+## تقرير المرحلة D1 — النص القانوني والسور والمصاحف
+
+### 1. ما الذي تغيّر (ملفات/جداول/endpoints)
+
+- migration `server/db/migrations/001_addQuranTextTables.ts` تضيف فقط: `riwayat`, `quran_text_versions`, `quran_surahs`, `quran_ayahs`, `quran_words`, `translations`, `translation_ayahs`. جدول نسخة النص يسجل `qud_version`؛ جداول الأدمن/التلاوات لم تُنشأ.
+- `scripts/import-quran-text.ts` و`server/services/quranTextImport.ts`: مصدر Release مثبت URL/SHA-256، dry-run افتراضي، import transaction، IDs حتمية، تحقق checksum للبيانات المخزنة قبل commit. لا تغيير في canonical من HF أو AI.
+- `scripts/audit-qud-configs.py`: تدقيق كل configs، تخزين recited text منفصل في cache، word diff يفشل مغلقاً عند الاستبدال/الحذف/الربط الغامض؛ يحفظ hamza في NFC ولا يغيّر النص القانوني.
+- `scripts/check-quran-fonts.py` وE2E corpus test واختبارات قبول MySQL فعلية.
+- حماية backend ضيقة في `/api/services/refine-text` ترفض مراجع `quran_ayahs`/`quran_words` الصريحة قبل استدعاء AI؛ طلبات الابتهالات/النصوص المخصصة بالشكل الحالي مستمرة. لم تُربط جداول النص بالواجهة أو الريندر.
+- `docs/dev-environment.md` و`docs/quran-text-import.md` يوثقان البيئة وrollback؛ الخطة أصبحت تذكر أن عدد configs يُحسب من المصدر وتوثق سياسات المستخدم.
+
+### 2. ما الذي تحققت منه فعلياً (أوامر + مخرجات/لقطات)
+
+```powershell
+npx tsx scripts/import-quran-text.ts --manifest server/data/quran-text/v3.2.0-source.json --output "$env:TEMP/ayahx-d1/corpus.json"
+npx tsx scripts/test-quran-text-db.ts --corpus "$env:TEMP/ayahx-d1/corpus.json" --db-host 127.0.0.1 --db-port 33317 --db-name ayahx_d1_acceptance --out "$env:TEMP/ayahx-d1/db-acceptance.json"
+```
+
+- مصدر script SHA-256: `19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86`؛ surah_info SHA-256: `e8e1f39b9fe73a121b61f9b4ec8eee4880e0f4333acf9f34671ac15ff581e77b`.
+- corpus: **114 سورة، 6236 آية، 77433 كلمة، 70 codepoints**. checksum القانوني: `eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4`.
+- MySQL **8.4.11** محلي معزول: up مرتان، import مرتان، نسخة واحدة وبدون صفوف مكررة؛ corruption test رفض النص المعدل؛ rollback ترك **0** من جداول D1؛ إعادة التطبيق والاستيراد نجحت. ملف الدليل: `docs/data/d1-db-acceptance.json`.
+- HF: **94 config** = **93 تلاوة** + `mushafs` (ميتاداتا 93 تلاوة). **571557 صفاً** فُحصت؛ أعداد الصفوف وchecksums للـ raw cache تطابقت مع معلومات المصدر. جميع **69** تلاوة في Release المثبّت مشمولة. هذه أرقام لقطة، لا ثوابت كود.
+- metadata الفعلية حددت **77 حفص** و**16 رواية أخرى**؛ لا استنتاج من slug. في حفص: رصد تكرار في **52207** صف آية و**1714** صفاً `needs_review` (قد تتداخل الفئتان؛ فشل أي ربط يعطل word highlighting في البيانات المستقبلية). الروايات الأخرى تحتاج مرجعها القانوني الخاص، وفرقها عن حفص تشخيصي فقط.
+- basmala: **72 ayah_1_included، 21 absent، 0 separate_clip معلن**. لا صوت يُصنع ولا بديل لـ 1:1 المفقودة.
+- عينة اتساق Maher من QUD/HF مقابل script: 1:2 = 4 كلمات/4 indexes، 2:7 = 12/12، 2:31 = 15/15، 2:32 = 12/12، 112:1 = 4/4؛ الربط mapped في الخمس.
+- فحص cmap على corpus الكامل: Amiri/Amiri Quran/Noto Naskh Arabic/Scheherazade New/Lateef/Mada تغطي كل الرموز المرئية. U+034F control غير مرئي بقي محفوظاً في النص؛ عدم وجود glyph مرئي له لا يساوي tofu. الخطوط الزخرفية الأخرى لها نقص مسجل في `docs/data/d1-font-coverage.json`.
+- E2E فحص **21202 كلمة فريدة** في UI و`render-harness.html`: لا كلمات فارغة الرسم؛ cmap كامل للرموز المرئية، ولقطتان فُحصتا بصرياً. يستخدم الاختبار bundled Amiri داخل fixture فقط، فلا يثبت توافر CDN الخارجي. الدليل الخاص: `tooling/e2e/.e2e/d1-corpus/report.json` وscreenshots داخله.
+
+لإعادة تدقيق configs من أعمدة Parquet دون الصوت:
+
+```text
+python scripts/audit-qud-configs.py --corpus <corpus.json> --catalog <catalog.json> --out <private-cache>
+python scripts/audit-qud-configs.py --corpus <corpus.json> --catalog <catalog.json> --out <private-cache> --finalize-cache
+python scripts/check-quran-fonts.py --corpus <corpus.json> --fonts public/fonts --out <font-coverage.json>
+```
+
+تتطلب أدوات التدقيق duckdb/fonttools محلياً، وليست dependency جديدة للمنتج. المصدر الرسمي يتيح القراءة العمودية عبر Parquet: [Hugging Face Parquet documentation](https://huggingface.co/docs/dataset-viewer/en/parquet). نسخة بيانات التقرير: `docs/data/d1-config-audit.json`، بما فيها coverage لكل سورة والتوفر الكامل المشروط.
+
+### 3. نتائج الاختبارات
+
+| الفحص | النتيجة الفعلية |
+|---|---|
+| `npm test -- --reporter=dot` مع corpus | **81 passed / 1 skipped** files؛ **436 passed / 6 skipped** tests؛ 80.72s |
+| اختبارات D1 المستهدفة بعد آخر تعديل | **10/10** في أربعة ملفات |
+| اختبارات Python diff/basmala | **3/3** |
+| `npx tsc --noEmit` | exit 0؛ كذلك typecheck صريح لكل ملفات D1 server/scripts/tests نجح |
+| lint الملفات الجديدة/المتغيرة الجديدة | exit 0، **0 errors / 0 warnings** |
+| lint `server/routes/services.ts` قبل/بعد | **0 errors / 15 warnings** في كليهما، ولا رسالة جديدة |
+| `npm run build` | exit 0؛ Vite 42.57s + server build |
+| E2E corpus desktop | **1/1** (UI + harness)، 15.55s |
+| MySQL import/replay/rollback/corruption | نجح على 8.4.11 محلي معزول، الدليل محفوظ |
+
+### 4. ما لم يكتمل أو يحتاج قراري، وسببه
+
+- migration/الاستيراد لم يطبقا على قاعدة التطبيق أو الإنتاج؛ التحقق الفعلي على قاعدة اختبار محلية فقط.
+- `recitations` غير موجود حتى D2؛ لذلك basmala/repetition/offset metadata محفوظة في تقرير D1 ولا تُنشأ جداول D2 مبكراً. الحقول والسياسات مُثبتة في الخطة لنقلها عند إنشاء جدول التلاوات.
+- لا تقييم offset بخمس آيات ولا نشر تلاوة في D1؛ `offset_verified=false`, score NULL. فحص الصوت الفعلي وقاعدة surah_slice في مرحلة الصوت، وإعادة محاذاة الفاشل في D5 فقط. توصية D0 القديمة باستعمال HF clips لا تنطبق على الإنتاج بعد قرارات المستخدم.
+- روايات غير حفص لا تُعتمد مقابل النص القانوني لحفص؛ تحتاج استيراد نسخة قانونية لكل رواية لاحقاً. translations موجودة كمخطط فقط بلا مصدر ترجمة مُخترع.
+- الإشعارات للمستخدم ورفض المدى الناقص وربط word highlighting تنتظر D7/D8؛ لا تغيير UI أو ريندر في D1.
+
+### 5. المخاطر المعروفة
+
+- diff آلي محافظ؛ الـ needs_review ليس خطأً نصياً مؤكداً. لا يفتح تظليل كلمات أو نشر التلاوة.
+- بعض الخطوط الزخرفية ناقصة التغطية؛ فحص D1 يثبت الخط القانوني Amiri والبدائل المذكورة فقط، ولا يغير خيارات التصميم الحالية.
+- HF مصدر تدقيق قابل للتغير؛ row checksums والأرقام هنا لقطة مؤرخة، والقانوني مثبت في Release URL/SHA-256.
+- DDL في MySQL له implicit commits؛ rollback الصريح يمس جداول D1 فقط ويحتاج backup للبيانات المراد حفظها.
+
+### 6. الخطوة التالية المقترحة
+
+التوقف عند تقرير D1 وانتظار موافقة صريحة قبل D2 أو A1. الخطوة اللاحقة المقترحة عند الموافقة: جداول التلاوات والمزوّدين مع نقل metadata التدقيق وoffset gates؛ لا استعادة للأدمن القديم ولا نشر.
+
+## جدول كل configs — تدقيق D1 الكامل
+
+هذه أرقام لقطة 2026-10-09، تُحسب من المصدر وليست ثوابت في التطبيق. mushafs ميتاداتا لا صفوف صوت. المقارنة القانونية المعتمدة هنا لحفص فقط؛ الروايات الأخرى فُحصت، لكن فرقها عن مرجع حفص تشخيصي ولا يعد تكراراً معتمداً. جميع التلاوات غير منشورة في D1، وoffset_verified=false حتى الفحص المستقل لاحقاً.
+
+| config | ضمن Release المثبّت | الصفوف | basmala_mode | الرواية | آيات رُصد بها تكرار | needs_review |
+|---|---|---:|---|---|---:|---:|
+| abdul_hamid_ghraio_2025_yt | نعم | 6235 | absent | hafs_an_asim | 159 | 3 |
+| abdul_hamid_ghraio_2026_yt | نعم | 6235 | absent | hafs_an_asim | 153 | 1 |
+| abdulaziz_al_turki_yt | نعم | 6115 | ayah_1_included | hafs_an_asim | 420 | 9 |
+| abdulbasit_abdulsamad_mujawwad_tarteel | نعم | 6236 | ayah_1_included | hafs_an_asim | 601 | 7 |
+| abdulbasit_abdulsamad_tarteel | نعم | 6236 | ayah_1_included | hafs_an_asim | 405 | 2 |
+| abdulbasit_abdulsamad_warsh_qdc | نعم | 6178 | ayah_1_included | warsh_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| abdullah_al_buaijan_2025_yt | نعم | 6235 | ayah_1_included | hafs_an_asim | 67 | 0 |
+| abdullah_al_mattrod_qdc | نعم | 6236 | ayah_1_included | hafs_an_asim | 334 | 2 |
+| abdullah_al_qarafi_mp3quran | نعم | 6223 | ayah_1_included | hafs_an_asim | 450 | 8 |
+| abdullah_basfar_qdc | لا | 6236 | ayah_1_included | hafs_an_asim | 1466 | 68 |
+| abdullah_kamel_way2quran | نعم | 6235 | absent | hafs_an_asim | 1628 | 52 |
+| abdulmohsin_al_qasim_qdc | لا | 6235 | absent | hafs_an_asim | 42 | 1 |
+| abdulrahman_al_sudais_tarteel | لا | 6235 | absent | hafs_an_asim | 643 | 5 |
+| abdulrahman_al_sudais_yt | لا | 6234 | ayah_1_included | hafs_an_asim | 661 | 20 |
+| abdulrahman_az_zawawi_way2quran | لا | 6235 | ayah_1_included | hafs_an_asim | 1099 | 21 |
+| abdulwadood_haneef_mp3quran | نعم | 6235 | absent | hafs_an_asim | 701 | 21 |
+| abdur_rashid_sufi_qdc | نعم | 6236 | ayah_1_included | hafs_an_asim | 239 | 1 |
+| abdur_rashid_sufi_shubah_qdc | نعم | 6230 | ayah_1_included | shubah_an_asim | تشخيصي فقط | يتطلب مرجع الرواية |
+| abu_bakr_al_shatri_tarteel | نعم | 6236 | ayah_1_included | hafs_an_asim | 1801 | 71 |
+| adel_al_karbalaei_archive_v2 | نعم | 6236 | ayah_1_included | hafs_an_asim | 181 | 1 |
+| ahmad_naseem_ali_ahmad_2019_yt | نعم | 6236 | ayah_1_included | hafs_an_asim | 751 | 7 |
+| ahmed_al_ajmi_qdc | نعم | 6235 | ayah_1_included | hafs_an_asim | 1444 | 21 |
+| ahmed_amer_tvquran | نعم | 6236 | ayah_1_included | hafs_an_asim | 340 | 2 |
+| ahmed_deban_qalon_mp3quran | نعم | 6190 | ayah_1_included | qalon_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| ahmed_issa_al_maasaraawi_mp3quran | نعم | 6234 | ayah_1_included | hafs_an_asim | 252 | 6 |
+| ahmed_kaseb_way2quran | نعم | 6235 | ayah_1_included | hafs_an_asim | 305 | 4 |
+| ahmed_khader_al_trabulsi_qalon_tvquran | لا | 6179 | ayah_1_included | qalon_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| ahmed_nuayna_qdc | نعم | 6236 | ayah_1_included | hafs_an_asim | 162 | 1 |
+| ahmed_saleh_rajab_qalon_way2quran | نعم | 6126 | ayah_1_included | qalon_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| ahmed_saud_mp3quran | نعم | 327 | absent | hafs_an_asim | 2 | 0 |
+| ahmed_shaheen_mp3quran | نعم | 6236 | ayah_1_included | hafs_an_asim | 723 | 7 |
+| ahmed_talib_bin_humaid_mp3quran | نعم | 5561 | ayah_1_included | hafs_an_asim | 586 | 17 |
+| akram_al_alaqmi_qdc | نعم | 6235 | absent | hafs_an_asim | 982 | 25 |
+| al_dokali_mohammed_alaalim_qalon_mp3quran | لا | 6214 | ayah_1_included | qalon_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| al_hussayni_al_azazy_kids_qdc | لا | 6234 | ayah_1_included | hafs_an_asim | 1461 | 815 |
+| ali_al_huthaifi_mp3quran | نعم | 6236 | ayah_1_included | hafs_an_asim | 929 | 8 |
+| ali_hajjaj_al_souasi_qdc | لا | 6236 | ayah_1_included | hafs_an_asim | 281 | 1 |
+| aloyoon_al_koshi_warsh_mp3quran | لا | 6214 | ayah_1_included | warsh_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| anas_almiman_yt | لا | 6236 | ayah_1_included | hafs_an_asim | 254 | 2 |
+| ayman_swed_muallim_yt | نعم | 6236 | ayah_1_included | hafs_an_asim | 1327 | 14 |
+| badr_al_turki_yt | نعم | 6236 | ayah_1_included | hafs_an_asim | 643 | 5 |
+| bandar_baleela_qdc | نعم | 6235 | absent | hafs_an_asim | 926 | 14 |
+| fatih_seferagic_way2quran | نعم | 6235 | absent | hafs_an_asim | 64 | 0 |
+| haitham_al_dukhain_mp3quran | نعم | 6236 | ayah_1_included | hafs_an_asim | 1104 | 12 |
+| hani_al_rifai_qdc_128k | نعم | 6233 | absent | hafs_an_asim | 517 | 12 |
+| hatem_fareed_al_waer_mp3quran | لا | 6235 | absent | hafs_an_asim | 402 | 9 |
+| ibrahim_al_akhdar_drive | نعم | 6236 | ayah_1_included | hafs_an_asim | 128 | 3 |
+| imad_zuhair_hafez_mp3quran | نعم | 6236 | ayah_1_included | hafs_an_asim | 581 | 0 |
+| islam_sobhi_mp3quran | نعم | 5275 | ayah_1_included | hafs_an_asim | 643 | 9 |
+| kamel_al_bayli_warsh_way2quran | لا | 6213 | ayah_1_included | warsh_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| khalid_al_mohana_drive | نعم | 6236 | ayah_1_included | hafs_an_asim | 260 | 2 |
+| khalid_al_qahtani_mp3quran | لا | 6234 | absent | hafs_an_asim | 876 | 18 |
+| khalifa_al_tunaiji_tarteel | نعم | 6236 | ayah_1_included | hafs_an_asim | 309 | 6 |
+| maher_al_muaiqly_qdc | نعم | 6236 | ayah_1_included | hafs_an_asim | 326 | 0 |
+| maher_al_muaiqly_tarteel | لا | 6235 | absent | hafs_an_asim | 1478 | 25 |
+| mahmoud_abdul_hakam_mp3quran | نعم | 6236 | ayah_1_included | hafs_an_asim | 568 | 8 |
+| mahmoud_ali_al_banna_qdc | نعم | 6236 | ayah_1_included | hafs_an_asim | 419 | 1 |
+| mahmoud_khalil_al_husary_mp3quran | نعم | 6236 | ayah_1_included | hafs_an_asim | 327 | 1 |
+| mahmoud_khalil_al_husary_mujawwad_tarteel | نعم | 6235 | ayah_1_included | hafs_an_asim | 571 | 9 |
+| mahmoud_khalil_al_husary_qdc_128k | نعم | 6236 | ayah_1_included | hafs_an_asim | 305 | 2 |
+| majed_al_zamil_yt | لا | 6236 | ayah_1_included | hafs_an_asim | 597 | 8 |
+| mishary_rashid_al_afasy_2008_qdc | نعم | 6236 | ayah_1_included | hafs_an_asim | 921 | 25 |
+| mishary_rashid_al_afasy_mp3quran | نعم | 6236 | ayah_1_included | hafs_an_asim | 817 | 18 |
+| moaz_mahmoud_hamed_qalon_way2quran | نعم | 6175 | ayah_1_included | qalon_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| mohammed_abdulkareem_qdc | نعم | 6235 | ayah_1_included | hafs_an_asim | 1266 | 9 |
+| mohammed_al_luhaidan_mp3quran | نعم | 6234 | absent | hafs_an_asim | 1118 | 25 |
+| mohammed_al_tablawi_qdc | لا | 6236 | ayah_1_included | hafs_an_asim | 89 | 1 |
+| mohammed_alghazali_archive | نعم | 6236 | ayah_1_included | hafs_an_asim | 1111 | 9 |
+| mohammed_ayyub_drive | نعم | 6236 | ayah_1_included | hafs_an_asim | 694 | 4 |
+| mohammed_burhaji_yt | نعم | 6236 | ayah_1_included | hafs_an_asim | 1054 | 29 |
+| mohammed_saayed_warsh_mp3quran | نعم | 6214 | ayah_1_included | warsh_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| mohammed_siddiq_al_minshawi_1967_drive | نعم | 6236 | ayah_1_included | hafs_an_asim | 539 | 8 |
+| mohammed_siddiq_al_minshawi_mp3quran | نعم | 6236 | ayah_1_included | hafs_an_asim | 467 | 3 |
+| mohammed_siddiq_al_minshawi_mujawwad_mp3quran | نعم | 6236 | ayah_1_included | hafs_an_asim | 896 | 12 |
+| muammar_zainal_al_sukaini_way2quran | نعم | 6229 | ayah_1_included | hafs_an_asim | 418 | 2 |
+| mustafa_ismail_mp3quran | نعم | 6236 | ayah_1_included | hafs_an_asim | 313 | 0 |
+| nabil_al_rifai_mp3quran | لا | 6236 | ayah_1_included | hafs_an_asim | 942 | 7 |
+| nasser_al_qatami_mp3quran | نعم | 6235 | absent | hafs_an_asim | 1660 | 53 |
+| omar_al_qazabri_warsh_mp3quran | لا | 6214 | ayah_1_included | warsh_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| saad_al_ghamdi_tarteel | نعم | 6235 | absent | hafs_an_asim | 740 | 15 |
+| saber_abdulhakam_qalon_way2quran | نعم | 6194 | ayah_1_included | qalon_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| saber_abdulhakam_shubah_way2quran | نعم | 6235 | ayah_1_included | shubah_an_asim | تشخيصي فقط | يتطلب مرجع الرواية |
+| saber_abdulhakam_warsh_way2quran | نعم | 6213 | ayah_1_included | warsh_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| saber_abdulhakam_yt | نعم | 6236 | ayah_1_included | hafs_an_asim | 603 | 3 |
+| salah_al_budair_qdc | لا | 6235 | absent | hafs_an_asim | 741 | 11 |
+| saud_al_shuraim_mp3quran | نعم | 6235 | absent | hafs_an_asim | 435 | 4 |
+| wadie_al_yamani_tvquran | لا | 6235 | absent | hafs_an_asim | 671 | 9 |
+| walid_al_naihi_qalon_mp3quran | نعم | 6195 | ayah_1_included | qalon_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| walid_atef_way2quran | نعم | 6235 | ayah_1_included | hafs_an_asim | 1261 | 11 |
+| yasser_al_dosari_archive | نعم | 6235 | absent | hafs_an_asim | 1073 | 12 |
+| yasser_al_dosari_yt | لا | 6236 | ayah_1_included | hafs_an_asim | 391 | 2 |
+| yassin_al_jazaery_warsh_mp3quran | لا | 6214 | ayah_1_included | warsh_an_nafi | تشخيصي فقط | يتطلب مرجع الرواية |
+| yusuf_bin_noah_ahmed_tvquran | لا | 6146 | ayah_1_included | hafs_an_asim | 2094 | 75 |
+| mushafs | لا | 93 | ميتاداتا | — | تشخيصي فقط | يتطلب مرجع الرواية |
+
+سبب ayah_1_included: وجود صف 1:1. سبب absent: غياب 1:1 وعدم وجود separate_clip معلن؛ لا يُستنتج محتوى صوت السورة ولا يُصنع مقطع. لم يظهر separate_clip معلن في هذه البيانات. النص المنطوق ومواقع diff محفوظة في cache منفصل خارج Git تحت %TEMP%/ayahx-d1/configs/*.recited.jsonl؛ لا يدخل quran_ayahs ولا production.
+
+التفاصيل حسب كل سورة (تغطية آيات/توقيت كلمات كاملة، مع رفض الربط الفاشل) في docs/data/d1-config-audit.json. غياب 1:1 يبقى عدم توفر لهذه التلاوة.
+
+## تقرير إغلاق D1 — توقف فحص Railway في 2026-10-09
+
+1. **ما تغيّر:** أُضيف `docs/railway-ops-log.md` و`docs/data/d1-railway-preflight.json` لتوثيق فحص الإنتاج للقراءة فقط. لا تغيير جديد في كود التطبيق أو migrations أو البيانات.
+2. **ما تحققت منه فعليًا:** CLI مسجل الدخول؛ قراءة SELECT داخل خدمة MySQL عبر SSH أعادت الإصدار **9.7.2** وcollation الخادم والقاعدة **utf8mb4_0900_ai_ci**. الترميز utf8mb4، packet=67108864 bytes، timezone=SYSTEM/system UTC، max_connections=60. لا قيم اتصال أو أسرار في الدليل.
+3. **نتائج الاختبارات:** استعلام الفحص نجح، exit 0. محاولة الاتصال المحلي لم تتجاوز حارس غياب MYSQL_PUBLIC_URL، exit 1، ثم نجح المسار الداخلي عبر SSH. لم تُعد اختبارات المرحلة في هذه الجلسة؛ النتائج السابقة في تقرير D1 أعلاه، وليست دليلًا على مطابقة الإنتاج.
+4. **ما لم يكتمل:** اختلاف collation يخالف شرط المستخدم، والإصدار الرئيسي يختلف عن اختبار 8.4.11؛ توقف التنفيذ عند البند الأول من بروتوكول Railway. لم يُنفذ جرد الجداول أو backup/restore أو البروفة أو الاستيراد؛ إضافات تدقيق البسملة/needs_review/عدّ الكلمات/الخطوط من الطلب الأخير ما زالت مطلوبة. لا push/PR أو بدء D2 في هذه الجلسة.
+5. **المخاطر:** لا يصح تعميم اختبار MySQL 8.4.11 على 9.7.2؛ اختلاف collation قد يغير المقارنات والمفاتيح الفريدة. لا توجد نتيجة بعد تطبيق الإنتاج لأن التطبيق لم يحدث. التلاوات لم تُنشر.
+6. **الخطوة التالية:** انتظار قرار المستخدم بشأن استثناء المطابقة: اختبار البروفة على 9.7.2 مع إبقاء collation الجداول الحالية واستخدام utf8mb4_unicode_ci للجداول الجديدة فقط. بعد الموافقة يُستأنف إغلاق D1 قبل D2؛ لا تعديل تلقائي على الإنتاج لمعالجة الفرق.
+
+
+## إضافات تدقيق D1 — 2026-10-09
+
+### أوائل السور 2–114 عدا 9، لكل تلاوة في Release
+
+الفحص شمل 69 تلاوة × 112 سورة = 7728 موضعًا من صفوف HF الفعلية، مع مقارنة أول كلمة منطوقة وفهرسها بالنص القانوني لحفص فقط. «غائبة من النص المنطوق» تعني أن annotation المقطع لا يحتوي البسملة؛ **المقدمة الصوتية غير الموقّتة لم تُفحص صوتيًا، فلا يُدّعى غيابها من الموجة الصوتية**. لم توجد صفوف ayah=0 تعلن مقطعًا منفصلًا. بيانات كل سورة، first_start_ms وfirst_index، في docs/data/d1-followup-audit.json. للروايات الأخرى لا يوجد مرجع قانوني مستورد، ويظهر ذلك صراحة. basmala_mode لوجود 1:1، وتدقيق أوائل السور حقل مستقل في السبب؛ لا اختلاق لـ1:1 أو مقطع منفصل.
+
+| التلاوة | البسملة داخل النص المنطوق: سور | مقاطع منفصلة معلنة | غائبة من annotation: سور | آية البداية غير متاحة: سور | مرجع أول فهرس كلمة |
+|---|---|---:|---|---|---|
+| abdul_hamid_ghraio_2025_yt | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| abdul_hamid_ghraio_2026_yt | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| abdulaziz_al_turki_yt | — | 0 | 2–8، 10–38، 40–78، 80–114 | 39، 79 | canonical_first_word: 2–8، 10–38، 40–78، 80–114; unavailable: 39، 79 |
+| abdulbasit_abdulsamad_mujawwad_tarteel | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| abdulbasit_abdulsamad_tarteel | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| abdulbasit_abdulsamad_warsh_qdc | — | 0 | 2–8، 10–114 | — | riwayah_canonical_reference_unavailable: 2–8، 10–114 |
+| abdullah_al_buaijan_2025_yt | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| abdullah_al_mattrod_qdc | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| abdullah_al_qarafi_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| abdullah_kamel_way2quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| abdulwadood_haneef_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| abdur_rashid_sufi_qdc | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| abdur_rashid_sufi_shubah_qdc | — | 0 | 2–8، 10–114 | — | riwayah_canonical_reference_unavailable: 2–8، 10–114 |
+| abu_bakr_al_shatri_tarteel | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| adel_al_karbalaei_archive_v2 | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| ahmad_naseem_ali_ahmad_2019_yt | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| ahmed_al_ajmi_qdc | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| ahmed_amer_tvquran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| ahmed_deban_qalon_mp3quran | — | 0 | 2–8، 10–114 | — | riwayah_canonical_reference_unavailable: 2–8، 10–114 |
+| ahmed_issa_al_maasaraawi_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| ahmed_kaseb_way2quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| ahmed_nuayna_qdc | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| ahmed_saleh_rajab_qalon_way2quran | — | 0 | 2–8، 10–114 | — | riwayah_canonical_reference_unavailable: 2–8، 10–114 |
+| ahmed_saud_mp3quran | — | 0 | 85–114 | 2–8، 10–84 | unavailable: 2–8، 10–84; canonical_first_word: 85–114 |
+| ahmed_shaheen_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| ahmed_talib_bin_humaid_mp3quran | — | 0 | 2–8، 10–13، 15، 18–22، 25–32، 34–114 | 14، 16–17، 23–24، 33 | canonical_first_word: 2–8، 10–13، 15، 18–22، 25–32، 34–114; unavailable: 14، 16–17، 23–24، 33 |
+| akram_al_alaqmi_qdc | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| ali_al_huthaifi_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| ayman_swed_muallim_yt | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| badr_al_turki_yt | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| bandar_baleela_qdc | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| fatih_seferagic_way2quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| haitham_al_dukhain_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| hani_al_rifai_qdc_128k | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| ibrahim_al_akhdar_drive | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| imad_zuhair_hafez_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| islam_sobhi_mp3quran | — | 0 | 2–3، 5–6، 8، 10–36، 38، 41–43، 46–64، 66–114 | 4، 7، 37، 39–40، 44–45، 65 | canonical_first_word: 2–3، 5–6، 8، 10–36، 38، 41–43، 46–64، 66–114; unavailable: 4، 7، 37، 39–40، 44–45، 65 |
+| khalid_al_mohana_drive | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| khalifa_al_tunaiji_tarteel | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| maher_al_muaiqly_qdc | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mahmoud_abdul_hakam_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mahmoud_ali_al_banna_qdc | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mahmoud_khalil_al_husary_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mahmoud_khalil_al_husary_mujawwad_tarteel | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mahmoud_khalil_al_husary_qdc_128k | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mishary_rashid_al_afasy_2008_qdc | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mishary_rashid_al_afasy_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| moaz_mahmoud_hamed_qalon_way2quran | — | 0 | 2–8، 10–44، 46–114 | 45 | riwayah_canonical_reference_unavailable: 2–8، 10–44، 46–114; unavailable: 45 |
+| mohammed_abdulkareem_qdc | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mohammed_al_luhaidan_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mohammed_alghazali_archive | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mohammed_ayyub_drive | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mohammed_burhaji_yt | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mohammed_saayed_warsh_mp3quran | — | 0 | 2–8، 10–114 | — | riwayah_canonical_reference_unavailable: 2–8، 10–114 |
+| mohammed_siddiq_al_minshawi_1967_drive | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mohammed_siddiq_al_minshawi_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| mohammed_siddiq_al_minshawi_mujawwad_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| muammar_zainal_al_sukaini_way2quran | — | 0 | 2–8، 10–76، 78–114 | 77 | canonical_first_word: 2–8، 10–76، 78–114; unavailable: 77 |
+| mustafa_ismail_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| nasser_al_qatami_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| saad_al_ghamdi_tarteel | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| saber_abdulhakam_qalon_way2quran | — | 0 | 2–8، 10–114 | — | riwayah_canonical_reference_unavailable: 2–8، 10–114 |
+| saber_abdulhakam_shubah_way2quran | — | 0 | 2–8، 10–114 | — | riwayah_canonical_reference_unavailable: 2–8، 10–114 |
+| saber_abdulhakam_warsh_way2quran | — | 0 | 2–8، 10–114 | — | riwayah_canonical_reference_unavailable: 2–8، 10–114 |
+| saber_abdulhakam_yt | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| saud_al_shuraim_mp3quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| walid_al_naihi_qalon_mp3quran | — | 0 | 2–8، 10–114 | — | riwayah_canonical_reference_unavailable: 2–8، 10–114 |
+| walid_atef_way2quran | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+| yasser_al_dosari_archive | — | 0 | 2–8، 10–114 | — | canonical_first_word: 2–8، 10–114 |
+
+### تصنيف الصفوف الـ1714 السابقة
+
+النتيجة: 1707 تكرار مع اتفاق كل كلمة منطوقة مع الكلمة القانونية ذات الفهرس المعطى من المصدر؛ 0 اختلاف نص/علامات؛ 0 فرق NFC؛ 7 حالات أخرى بقيت needs_review. الأطفال: 808 تكرار +7 حالات لها أحداث كلمة بمدة صفرية. المواضع المتبقية: 5:116، 7:44، 7:57، 9:72، 9:98، 10:104، 33:7. لم تُصحّح مددها ولم يُغيّر القانوني.
+
+كان SequenceMatcher يرفض إدراجًا طويلًا مكوّنًا من تكرارات عبارات متداخلة. الخوارزمية الحتمية الجديدة تتحقق من عدد أحداث المصدر مقابل الكلمات المنطوقة، ومن اتفاق كل token بعد NFC مع قانوني فهرسه، وتغطية جميع الكلمات وترتيب الزمن وصحة المدة. عند تحقق كل ذلك تُستخدم فهارس المصدر المثبتة؛ أي اختلاف يبقى needs_review. مقارنة NFC/إزالة العلامات تخص مفتاح المقارنة فقط، ولا تلمس النص المخزن. هذا تصحيح لحدّ matcher القديم؛ أسلوب التكرار مثبت في البيانات، وليس نصًا قانونيًا إضافيًا. اختبارات حقيقية البيانات لآيتي 2:22 (23 كلمة قانونية، 37 منطوقة/حدثًا) و2:31 (15 قانونية، 23 منطوقة/حدثًا) نجحت، مع رفض الفهرس الذي لا يطابق الكلمة. الأدلة الصغيرة في docs/data/d1-repetition-cases.json؛ لا corpus كامل في Git.
+
+| reciter_id من metadata | التلاوة | needs_review السابق | تكرار بفهرس متحقق | نص/علامات | Unicode | أخرى |
+|---|---|---:|---:|---:|---:|---:|
+| abdul_hamid_ghraio | abdul_hamid_ghraio_2025_yt | 3 | 3 | 0 | 0 | 0 |
+| abdul_hamid_ghraio | abdul_hamid_ghraio_2026_yt | 1 | 1 | 0 | 0 | 0 |
+| abdulaziz_al_turki | abdulaziz_al_turki_yt | 9 | 9 | 0 | 0 | 0 |
+| abdulbasit_abdulsamad | abdulbasit_abdulsamad_mujawwad_tarteel | 7 | 7 | 0 | 0 | 0 |
+| abdulbasit_abdulsamad | abdulbasit_abdulsamad_tarteel | 2 | 2 | 0 | 0 | 0 |
+| abdullah_al_mattrod | abdullah_al_mattrod_qdc | 2 | 2 | 0 | 0 | 0 |
+| abdullah_al_qarafi | abdullah_al_qarafi_mp3quran | 8 | 8 | 0 | 0 | 0 |
+| abdullah_basfar | abdullah_basfar_qdc | 68 | 68 | 0 | 0 | 0 |
+| abdullah_kamel | abdullah_kamel_way2quran | 52 | 52 | 0 | 0 | 0 |
+| abdulmohsin_al_qasim | abdulmohsin_al_qasim_qdc | 1 | 1 | 0 | 0 | 0 |
+| abdulrahman_al_sudais | abdulrahman_al_sudais_tarteel | 5 | 5 | 0 | 0 | 0 |
+| abdulrahman_al_sudais | abdulrahman_al_sudais_yt | 20 | 20 | 0 | 0 | 0 |
+| abdulrahman_az_zawawi | abdulrahman_az_zawawi_way2quran | 21 | 21 | 0 | 0 | 0 |
+| abdulwadood_haneef | abdulwadood_haneef_mp3quran | 21 | 21 | 0 | 0 | 0 |
+| abdur_rashid_sufi | abdur_rashid_sufi_qdc | 1 | 1 | 0 | 0 | 0 |
+| abu_bakr_al_shatri | abu_bakr_al_shatri_tarteel | 71 | 71 | 0 | 0 | 0 |
+| adel_al_karbalaei | adel_al_karbalaei_archive_v2 | 1 | 1 | 0 | 0 | 0 |
+| ahmad_naseem_ali_ahmad | ahmad_naseem_ali_ahmad_2019_yt | 7 | 7 | 0 | 0 | 0 |
+| ahmed_al_ajmi | ahmed_al_ajmi_qdc | 21 | 21 | 0 | 0 | 0 |
+| ahmed_amer | ahmed_amer_tvquran | 2 | 2 | 0 | 0 | 0 |
+| ahmed_issa_al_maasaraawi | ahmed_issa_al_maasaraawi_mp3quran | 6 | 6 | 0 | 0 | 0 |
+| ahmed_kaseb | ahmed_kaseb_way2quran | 4 | 4 | 0 | 0 | 0 |
+| ahmed_nuayna | ahmed_nuayna_qdc | 1 | 1 | 0 | 0 | 0 |
+| ahmed_shaheen | ahmed_shaheen_mp3quran | 7 | 7 | 0 | 0 | 0 |
+| ahmed_talib_bin_humaid | ahmed_talib_bin_humaid_mp3quran | 17 | 17 | 0 | 0 | 0 |
+| akram_al_alaqmi | akram_al_alaqmi_qdc | 25 | 25 | 0 | 0 | 0 |
+| al_hussayni_al_azazy | al_hussayni_al_azazy_kids_qdc | 815 | 808 | 0 | 0 | 7 |
+| ali_al_huthaifi | ali_al_huthaifi_mp3quran | 8 | 8 | 0 | 0 | 0 |
+| ali_hajjaj_al_souasi | ali_hajjaj_al_souasi_qdc | 1 | 1 | 0 | 0 | 0 |
+| anas_almiman | anas_almiman_yt | 2 | 2 | 0 | 0 | 0 |
+| ayman_swed | ayman_swed_muallim_yt | 14 | 14 | 0 | 0 | 0 |
+| badr_al_turki | badr_al_turki_yt | 5 | 5 | 0 | 0 | 0 |
+| bandar_baleela | bandar_baleela_qdc | 14 | 14 | 0 | 0 | 0 |
+| haitham_al_dukhain | haitham_al_dukhain_mp3quran | 12 | 12 | 0 | 0 | 0 |
+| hani_al_rifai | hani_al_rifai_qdc_128k | 12 | 12 | 0 | 0 | 0 |
+| hatem_fareed_al_waer | hatem_fareed_al_waer_mp3quran | 9 | 9 | 0 | 0 | 0 |
+| ibrahim_al_akhdar | ibrahim_al_akhdar_drive | 3 | 3 | 0 | 0 | 0 |
+| islam_sobhi | islam_sobhi_mp3quran | 9 | 9 | 0 | 0 | 0 |
+| khalid_al_mohana | khalid_al_mohana_drive | 2 | 2 | 0 | 0 | 0 |
+| khalid_al_qahtani | khalid_al_qahtani_mp3quran | 18 | 18 | 0 | 0 | 0 |
+| khalifa_al_tunaiji | khalifa_al_tunaiji_tarteel | 6 | 6 | 0 | 0 | 0 |
+| maher_al_muaiqly | maher_al_muaiqly_tarteel | 25 | 25 | 0 | 0 | 0 |
+| mahmoud_abdul_hakam | mahmoud_abdul_hakam_mp3quran | 8 | 8 | 0 | 0 | 0 |
+| mahmoud_ali_al_banna | mahmoud_ali_al_banna_qdc | 1 | 1 | 0 | 0 | 0 |
+| mahmoud_khalil_al_husary | mahmoud_khalil_al_husary_mp3quran | 1 | 1 | 0 | 0 | 0 |
+| mahmoud_khalil_al_husary | mahmoud_khalil_al_husary_mujawwad_tarteel | 9 | 9 | 0 | 0 | 0 |
+| mahmoud_khalil_al_husary | mahmoud_khalil_al_husary_qdc_128k | 2 | 2 | 0 | 0 | 0 |
+| majed_al_zamil | majed_al_zamil_yt | 8 | 8 | 0 | 0 | 0 |
+| mishary_rashid_al_afasy | mishary_rashid_al_afasy_2008_qdc | 25 | 25 | 0 | 0 | 0 |
+| mishary_rashid_al_afasy | mishary_rashid_al_afasy_mp3quran | 18 | 18 | 0 | 0 | 0 |
+| mohammed_abdulkareem | mohammed_abdulkareem_qdc | 9 | 9 | 0 | 0 | 0 |
+| mohammed_al_luhaidan | mohammed_al_luhaidan_mp3quran | 25 | 25 | 0 | 0 | 0 |
+| mohammed_al_tablawi | mohammed_al_tablawi_qdc | 1 | 1 | 0 | 0 | 0 |
+| mohammed_alghazali | mohammed_alghazali_archive | 9 | 9 | 0 | 0 | 0 |
+| mohammed_ayyub | mohammed_ayyub_drive | 4 | 4 | 0 | 0 | 0 |
+| mohammed_burhaji | mohammed_burhaji_yt | 29 | 29 | 0 | 0 | 0 |
+| mohammed_siddiq_al_minshawi | mohammed_siddiq_al_minshawi_1967_drive | 8 | 8 | 0 | 0 | 0 |
+| mohammed_siddiq_al_minshawi | mohammed_siddiq_al_minshawi_mp3quran | 3 | 3 | 0 | 0 | 0 |
+| mohammed_siddiq_al_minshawi | mohammed_siddiq_al_minshawi_mujawwad_mp3quran | 12 | 12 | 0 | 0 | 0 |
+| muammar_zainal_al_sukaini | muammar_zainal_al_sukaini_way2quran | 2 | 2 | 0 | 0 | 0 |
+| nabil_al_rifai | nabil_al_rifai_mp3quran | 7 | 7 | 0 | 0 | 0 |
+| nasser_al_qatami | nasser_al_qatami_mp3quran | 53 | 53 | 0 | 0 | 0 |
+| saad_al_ghamdi | saad_al_ghamdi_tarteel | 15 | 15 | 0 | 0 | 0 |
+| saber_abdulhakam | saber_abdulhakam_yt | 3 | 3 | 0 | 0 | 0 |
+| salah_al_budair | salah_al_budair_qdc | 11 | 11 | 0 | 0 | 0 |
+| saud_al_shuraim | saud_al_shuraim_mp3quran | 4 | 4 | 0 | 0 | 0 |
+| wadie_al_yamani | wadie_al_yamani_tvquran | 9 | 9 | 0 | 0 | 0 |
+| walid_atef | walid_atef_way2quran | 11 | 11 | 0 | 0 | 0 |
+| yasser_al_dosari | yasser_al_dosari_archive | 12 | 12 | 0 | 0 | 0 |
+| yasser_al_dosari | yasser_al_dosari_yt | 2 | 2 | 0 | 0 | 0 |
+| yusuf_bin_noah_ahmed | yusuf_bin_noah_ahmed_tvquran | 75 | 75 | 0 | 0 | 0 |
+
+### مرجع عدّ الكلمات
+
+المرجع digital_khatt_v2_script.json ومقادير num_words في surah_info.json، كلاهما مثبّت بـSHA-256 في source manifest. عدد الكلمات 77433 بعد استبعاد 6236 ornament نهائيًا لرقم الآية. فُحصت الكلمات كلها: 0 token مستقل بلا حرف؛ علامات الوقف والتشكيل الملحقة بالكلمة تبقى داخلها كما وردت. عدد الأحداث قد يزيد بسبب التكرار، وأعلى فهرس لا يمثل عدد الكلمات المنطوقة. لا تعديل للعدّ القانوني.
+
+| التلاوة | الآية | القانوني | كلمات المنطوق | أحداث توقيت | أعلى word index |
+|---|---|---:|---:|---:|---:|
+| abdul_hamid_ghraio_2025_yt | 2:22 | 23 | 25 | 25 | 23 |
+| abdul_hamid_ghraio_2025_yt | 2:31 | 15 | 17 | 17 | 15 |
+| abdul_hamid_ghraio_2025_yt | 112:1 | 4 | 4 | 4 | 4 |
+| abdul_hamid_ghraio_2026_yt | 2:22 | 23 | 23 | 23 | 23 |
+| abdul_hamid_ghraio_2026_yt | 2:31 | 15 | 17 | 17 | 15 |
+| abdul_hamid_ghraio_2026_yt | 112:1 | 4 | 4 | 4 | 4 |
+| abdulaziz_al_turki_yt | 1:1 | 4 | 4 | 4 | 4 |
+| abdulaziz_al_turki_yt | 2:22 | 23 | 24 | 24 | 23 |
+| abdulaziz_al_turki_yt | 2:31 | 15 | 17 | 17 | 15 |
+| abdulaziz_al_turki_yt | 112:1 | 4 | 4 | 4 | 4 |
+| abdulbasit_abdulsamad_mujawwad_tarteel | 1:1 | 4 | 4 | 4 | 4 |
+| abdulbasit_abdulsamad_mujawwad_tarteel | 2:22 | 23 | 29 | 29 | 23 |
+| abdulbasit_abdulsamad_mujawwad_tarteel | 2:31 | 15 | 19 | 19 | 15 |
+| abdulbasit_abdulsamad_mujawwad_tarteel | 112:1 | 4 | 4 | 4 | 4 |
+| abdulbasit_abdulsamad_tarteel | 1:1 | 4 | 4 | 4 | 4 |
+| abdulbasit_abdulsamad_tarteel | 2:22 | 23 | 23 | 23 | 23 |
+| abdulbasit_abdulsamad_tarteel | 2:31 | 15 | 15 | 15 | 15 |
+| abdulbasit_abdulsamad_tarteel | 112:1 | 4 | 4 | 4 | 4 |
+| abdullah_al_buaijan_2025_yt | 1:1 | 4 | 4 | 4 | 4 |
+| abdullah_al_buaijan_2025_yt | 2:22 | 23 | 23 | 23 | 23 |
+| abdullah_al_buaijan_2025_yt | 2:31 | 15 | 15 | 15 | 15 |
+| abdullah_al_buaijan_2025_yt | 112:1 | 4 | 4 | 4 | 4 |
+
+### الخطوط الناقصة القابلة للاختيار
+
+مصدر الاختيار الفعلي shared/planEntitlements.ts وTextSettingsPanel.tsx؛ القائمة نفسها متاحة لنص القرآن ولا توجد بوابة خاصة بتغطية رموزه. الجدول يعرض نقص cmap في ملفات render الموثوقة على كل رموز corpus المرئية الـ68. Cairo مجاني والبقية Premium. قد يخفي fallback نقص الخط في المتصفح؛ هذا ليس إثبات تغطية للخط المختار. U+034F تحكم غير مطبوع محفوظ في القانوني، ويُسجل منفصلًا. Amiri/Amiri Quran/Lateef/Mada/Noto Naskh Arabic/Scheherazade New تغطي corpus. لم تتغير الواجهة أو خياراتها. بند D8/A4: حصر نص القرآن في الخطوط المعتمدة فقط بعد الموافقة على الربط.
+
+| ملف الخط | قابل للاختيار للقرآن | الرموز المرئية الناقصة |
+|---|---|---|
+| arefruqaa.ttf | نعم (Premium) | U+065C U+06D6 U+06D7 U+06D8 U+06DA U+06DB U+06DC U+06DE U+06DF U+06E0 U+06E2 U+06E3 U+06E5 U+06E6 U+06E7 U+06E8 U+06E9 U+06EC U+06ED U+08F0 U+08F2 U+08F3 |
+| cairo.ttf | نعم (مجاني) | U+065C U+06D6 U+06D7 U+06D8 U+06DA U+06DB U+06DC U+06DE U+06DF U+06E0 U+06E2 U+06E3 U+06E5 U+06E6 U+06E7 U+06E8 U+06E9 U+06EC U+06ED U+08F0 U+08F1 U+08F2 U+08F3 |
+| elmessiri.ttf | نعم (Premium) | U+065C U+06D6 U+06D7 U+06D8 U+06DA U+06DB U+06DC U+06DE U+06DF U+06E0 U+06E2 U+06E3 U+06E5 U+06E6 U+06E7 U+06E8 U+06E9 U+06EC U+06ED U+08F0 U+08F1 U+08F2 U+08F3 |
+| katibeh.ttf | نعم (Premium) | U+06E5 |
+| lalezar.ttf | نعم (Premium) | U+065C U+06D7 U+06D8 U+06DA U+06DB U+06DC U+06DE U+06DF U+06E0 U+06E2 U+06E3 U+06E5 U+06E6 U+06E7 U+06E8 U+06E9 U+06EC U+06ED U+08F0 U+08F1 U+08F2 U+08F3 |
+| marhey.ttf | نعم (Premium) | U+065C U+06D6 U+06D7 U+06D8 U+06DA U+06DB U+06DC U+06DE U+06DF U+06E0 U+06E2 U+06E3 U+06E5 U+06E6 U+06E7 U+06E8 U+06E9 U+06EC U+06ED U+08F0 U+08F1 U+08F2 U+08F3 |
+| mirza.ttf | نعم (Premium) | U+06E5 |
+| rakkas.ttf | نعم (Premium) | U+065C U+06D6 U+06D7 U+06DA U+06DB U+06DC U+06DE U+06DF U+06E0 U+06E2 U+06E3 U+06E5 U+06E6 U+06E7 U+06E8 U+06E9 U+06EC U+08F0 U+08F1 U+08F2 U+08F3 |
+| reemkufi.ttf | نعم (Premium) | U+065C U+06D6 U+06D7 U+06D8 U+06DA U+06DB U+06DC U+06DE U+06DF U+06E0 U+06E2 U+06E3 U+06E5 U+06E6 U+06E7 U+06E8 U+06E9 U+06EC U+06ED U+08F0 U+08F1 U+08F2 U+08F3 |
+| tajawal.ttf | نعم (Premium) | U+065C U+0671 U+06D6 U+06D7 U+06D8 U+06DA U+06DB U+06DC U+06DE U+06DF U+06E0 U+06E2 U+06E3 U+06E5 U+06E6 U+06E7 U+06E8 U+06E9 U+06EC U+06ED U+08F0 U+08F1 U+08F2 U+08F3 |
+
+## تقرير المرحلة D1 — نتيجة الاستئناف على MySQL 9.7.2
+
+1. **ما تغيّر:** bin صريح لـtext_uthmani القانوني، وunicode_ci صريح لكل metadata/table/column وفق جرد القاعدة الفعلي. SQL حتمي ومشغل Railway مقيّد مستقل عن حارس اختبار loopback. الجداول السبعة طُبقت إضافيًا على staging ثم الإنتاج؛ لا FK إلى جدول قائم ولا ALTER ولا UI/render تغيير. الفرع `phase/d1-quran-text` و[PR #9](https://github.com/jokertools12/AyahX/pull/9)، دون merge/deploy.
+2. **ما تحقق فعليًا:** جرد 40 جدولًا و34 FK وصفر triggers/events قبل التطبيق. النسخة المنطقية استعيدت محليًا وتطابقت أعداد وCHECKSUM TABLE للجداول الأربعين. كامل اختبارات up/import مرتين وفساد النص وrollback/reapply نجحت على 9.7.2؛ actual collations وDISTINCT/unique للحركات وjoin مع users نجحت. staging منفصلة بإصدار 9.7.2 مثبت بالـserver_uuid. الإنتاج **114/6236/77433**، checksum القانوني `eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4`، كامل الكلمات مطابق أيضًا. أعداد الجداول الحرجة قبل/بعد متساوية، وhealth/ready=200، ولا errors جديدة في لوج MySQL/app منذ قبل التطبيق. كل الأوامر وSQL SHA في [railway-ops-log.md](railway-ops-log.md)؛ الأدلة المنظّمة في `docs/data/d1-railway-production-verification.json` و`d1-production-schema-check.json` و`d1-service-postcheck.json`.
+3. **نتائج الاختبارات:** Vitest 439 passed/6 skipped؛ Python 6/6؛ E2E 1/1 مع لقطتي UI/harness مفحوصتين، 21202 كلمة فريدة وcmap لكل corpus. TypeScript root والتحقق الصريح لملفات السيرفر ناجحان؛ lint الجديد صفر، ولم تزد تحذيرات services.ts الحالية. lint العام غير أخضر وخارج النطاق المعتمد. اختبارات الريندر القائمة شملت FFmpeg وSkia وChromium فعليًا.
+4. **ما لم يكتمل:** تصنيف المقدمات الصوتية غير المعلّقة لكل أوائل السور، رغم اكتمال جدول annotation والفهارس. طلب clip حديث من HF ثم فحص ثلاث configs مستقلة أعاد HTTP500: `The server is busier than usual and the response is not ready yet. Please retry later.` لا صوت نُزل، ولا absent صوتي استُنتج من annotation؛ [d1-hf-audio-access.json](data/d1-hf-audio-access.json). لذلك تطبيق بيانات D1 ناجح، لكن **إغلاق D1 الكامل معلق ولا يبدأ D2** قبل استكمال هذا البند. snapshot الجديد لم يتوفر؛ المحاولة الوحيدة أعادت INTERNAL_SERVER_ERROR، والقراءة بعدها أثبتت عدم إنشائه؛ النسخة المنطقية المتحققة متاحة.
+5. **المخاطر:** 7 صفوف توقيت معيبة تبقى needs_review؛ 10 خطوط متاحة للاختيار ناقصة رموز قرآنية، والإصلاح في D8/A4 بعد موافقة الربط. لا تلاوة نُشرت ولا بيانات توقيت اعتُمدت، ولا تدقيق annotation يعادل فحص الموجة الصوتية. dump خاص خارج Git/السحابة؛ يبقى حتى إغلاق D1 ثم يُحذف حسب قرار المستخدم، ولا تُحذف نسخة Railway القائمة.
+6. **الخطوة التالية:** استكمال فحص البسملة الصوتي عند استجابة المصدر، ثم إعلان إغلاق D1 وبدء D2 بالتصريح الحالي؛ D3/A1 غير مصرّح بهما. لا طلب نشر/دمج جديد ولا تعديل إعدادات مطلوب في هذه الخطوة.
