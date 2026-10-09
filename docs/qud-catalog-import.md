@@ -92,6 +92,8 @@ phase/d2-recitation-catalog من D1 ، PR مستقل دون merge. PR9 يظل dr
 
 السياسة الحالية في `plan/DECISIONS.md`؛ فقرات التوقف/عدم الدمج أدناه تاريخية. التصحيح الحالي يحفظ SQL القديم ويولد ملفًا جديدًا. الدليل: `data/d2-local-rehearsal-status-fixed.json` و`d2-staging-verification-status-fixed.json` و`d2-production-verification-status-fixed.json`.
 
-مشغل Railway يجمع pre/apply/post في جلسة SSH وmysql واحدة، مع gzip ودفعات250 وفحص الاتصالات قبل كلstatement. أدلة COMMIT وخروجSSH0 شرطا قبول staging ولا يقبل تقرير مصالحة بدل التطبيق. إعادة staging تتطلب صراحة`--staging-previous-dataset` و`--staging-previous-sql` و`--staging-existing-proof`؛ يثبت جميع القيم القديمة ولا يسمح إلا بتصحيحstatusالفشل في جداولD2. في الإنتاج لا يسمح بتصادم أسماء. `riwayat` يدرج الغائب بـNOT EXISTS دون أيUPDATEللصفوف القائمة.
+يجمع مشغل Railway خطوات pre/apply/post في جلسة SSH واحدة وعميل mysql واحد، مع gzip ودفعات من 250 صفًا وفحص الاتصالات قبل كل statement. يشترط قبول staging دليل COMMIT وخروج SSH0؛ ولا يُقبل تقرير مصالحة بدل التطبيق.
 
-عمر backup يحسب من أقدم وقت archive/نهاية التحقق، ويجب<24hمع مطابقةالحرجة؛ يجوز إعادة استعماله وفق التفويضالجديد. dry-runيحفظتقريره في`--out`ويعرض ما سينشأ/يدرج/يصحح فعليًا. تطبيق الإنتاج منفصل بـ`--apply --confirm-production`، بنفسSHAومصالحةstageمؤكدة؛ الدفعة لا تتطلب إذنًا جديدًا إلا عند نقطة توقف إلزامية.
+تتطلب إعادة staging صراحة `--staging-previous-dataset` و`--staging-previous-sql` و`--staging-existing-proof`. يثبت المشغل جميع القيم القديمة، ولا يسمح إلا بتصحيح status للفشل في جداول D2. لا يُسمح بتصادم الأسماء في الإنتاج. يدرج SQL صفوف `riwayat` الغائبة بـ NOT EXISTS، دون أي UPDATE للصفوف القائمة.
+
+يُحسب عمر backup من أقدم وقت بين archive ونهاية التحقق، ويجب أن يكون <24h مع مطابقة الجداول الحرجة؛ ويجوز إعادة استخدامه وفق التفويض الجديد. يحفظ dry-run تقريره في `--out`، ويعرض ما سيُنشأ ويُدرج ويُصحح فعليًا. تطبيق الإنتاج أمر منفصل مع `--apply --confirm-production`، بنفس SHA ومصالحة staging مؤكدة. لا تتطلب الدفعة إذنًا جديدًا إلا عند نقطة توقف إلزامية.
