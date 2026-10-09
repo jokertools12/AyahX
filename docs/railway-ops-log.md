@@ -241,3 +241,10 @@ Vitest457:451passed/6skipped/0failed ؛ Python7/7 ؛ rootTS و strict للسكر
 تحقق mysql المحلي من VERSION=9.7.2 و@@datadir مطابق لمسار acceptance-data المملوك لهذه البروفة على127.0.0.1:33319. حُذفت القاعدتان ayahx_d2_restored_972 وayahx_d1_restored_972 محليًا فقط، ثمmysqladmin shutdown نجح. لم تُمس Railway أو النسخة المشفرة.
 
 رفضت مراجعة الأوامر التلقائية تنظيف مجلد التخزين،ثم رفضت حذف قائمة ملفات صريحة أيضًا؛النص المعاد `blocked by policy` دون سبب تفصيلي. لا مزيد من محاولات الالتفاف. قد تبقى بيانات استعادة في binlog/undo/redo/صفحات التخزين بعدDROP؛لا نزعم محوها. أزيلت inheritance لصلاحيات المجلد ومنح الحساب الحالي التحكم؛icacls نجح189 ملفًا/0فشل. مجلد المتبقي يحتاج تنظيفًا يدويًا: `C:\Users\cpazi\AppData\Local\Temp\ayahx-d1-mysql-9.7.2\acceptance-data`. صفر مجلدات scratch صوتD2 باقية. النسخةage المتحققة محفوظة في private-backups خارجGit/cloud. الدليل `data/d2-local-private-data-cleanup.json`؛لا تعني حماية ACL أن البقايا مشفرة أو محذوفة.
+
+
+### Git وAuto-deploy بعد المسودة
+
+دُفعde667f0 للكود والبروفة و9919539 للأدلة؛ فُتحتPR10 مسودة stacked منphase/d2-recitation-catalog إلىphase/d1-quran-text وأُرفقت بالمهمة. قراءة20:00:00Z بعد الفتح أثبتت Auto-deploy=true/branchmain/repoGitHub، وPRdeploys=false، والبيئتينproduction/staging فقط، وصفر deployment IDs متغيرة. لا merge/main/deploy. الدليلdata/d2-auto-deploy-final.json. CI الأول بدأ فعلًا على9919539؛ نتيجته وأي head لاحق تُذكر في وصفPR والتقرير النهائي بعد التحقق، دون افتراض الأخضر.
+
+تنبيه حدود فحص البسملة:166 قياسprefix ل56تلاوة في سور العينات، وليس كل مقدمات114سورة. جميع حالات الصوتunverified. بياناتannotation لكلconfigs سبق تدقيقها فيD1؛ لا نساويها بفحص الموجة أو سماع المحتوى.
