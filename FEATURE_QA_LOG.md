@@ -1,5 +1,9 @@
 # FEATURE QA LOG & PRODUCT QUALITY AUDIT
 
+## 2026-10-09 — D1 Quran legal text data
+
+تمت إضافة مخطط النص القانوني والاستيراد المثبت من QUD v3.2.0، دون ربط UI/renderer. مرجع البروفة الحالي **MySQL 9.7.2**: كل القبول المدمّر نجح محليًا على قاعدة معزولة ثم نسخة الإنتاج المستعادة، بما فيه DISTINCT/unique للحركات وjoin مع users وactual collations. backup منطقي تحقق بالأعداد وCHECKSUM للجداول الأربعين؛ snapshot جديد تعذر بخطأ Railway داخلي. SQL حتمي عبر SSH stdin طُبق إضافيًا على staging مستقلة ثم الإنتاج: **114/6236/77433**، كامل النص والكلمات بالـchecksum، الأعداد الحرجة لم تتغير، health/ready=200، ولا errors جديدة في نافذة لوج التطبيق/MySQL. Vitest الحالي **439 passed /6 skipped**؛ TypeScript ناجح، lint الجديد بلا رسائل؛ الـ15 warning القديمة في services route باقية. Python **6/6** وE2E **1/1** على 21202 كلمة فريدة UI/harness، وفحص cmap كامل؛ 10 خطوط ناقصة وثقت لـD8/A4. تصنيف 1714 صفًا: 1707 تكرار مثبت و7 توقيتات معيبة؛ لا تعديل للقانوني. تدقيق annotation لكل افتتاحات 69 تلاوة اكتمل، لكن الفحص الصوتي للمقدمات غير المعلّقة **لم يكتمل**: HF rows أعاد HTTP500 في ثلاث تلاوات. لا إعلان إغلاق D1 كاملًا ولا بدء D2/A1 حتى استكمال ذلك. الأدلة في `docs/data-audit.md` و`docs/railway-ops-log.md` و`docs/data/d1-*.json`؛ [PR #9](https://github.com/jokertools12/AyahX/pull/9). لا merge ولا deploy لكود التطبيق.
+
 **Product:** Ayah Clip Maker (Quranic Reels & Short-Form Video Generator)  
 **Roles:** Senior QA Engineer, Product Manager & Full-Stack Developer  
 **Date:** September 6, 2026  

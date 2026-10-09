@@ -1,0 +1,259 @@
+{
+  "target": "railway-staging",
+  "database": "railway",
+  "mysql": "9.7.2",
+  "dryRun": false,
+  "creates": 7,
+  "surahs": 114,
+  "ayahs": 6236,
+  "words": 77433,
+  "checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "sql_sha256": "ea0c3d031fc35645c40e284bb614b2ceecad385fcdf156f5d11fc6d9ad995122",
+  "batch_size": 500,
+  "statements": 180,
+  "verified": true,
+  "counts": {
+    "ayahs": 6236,
+    "words": 77433,
+    "surahs": 114
+  },
+  "canonical_checksum_verified": true,
+  "words_checksum_verified": true,
+  "critical_counts_before": {
+    "plans": null,
+    "users": 2,
+    "videos": null,
+    "user_roles": 3,
+    "render_jobs": 0,
+    "saved_videos": 1,
+    "notifications": 3,
+    "subscriptions": 4,
+    "system_settings": 13,
+    "payment_requests": 1
+  },
+  "critical_counts_after": {
+    "plans": null,
+    "users": 2,
+    "videos": null,
+    "user_roles": 3,
+    "render_jobs": 0,
+    "saved_videos": 1,
+    "notifications": 3,
+    "subscriptions": 4,
+    "system_settings": 13,
+    "payment_requests": 1
+  },
+  "collations": [
+    {
+      "table": "quran_ayahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_ayahs",
+      "column": "text_version_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_ayahs",
+      "column": "text_uthmani",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "table": "quran_ayahs",
+      "column": "text_simple",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_surahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_surahs",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_surahs",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_surahs",
+      "column": "name_translit",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_surahs",
+      "column": "revelation_place",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_text_versions",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_text_versions",
+      "column": "riwayah_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_text_versions",
+      "column": "source",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_text_versions",
+      "column": "script",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_text_versions",
+      "column": "version_label",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_text_versions",
+      "column": "qud_version",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_text_versions",
+      "column": "checksum",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_words",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_words",
+      "column": "ayah_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "quran_words",
+      "column": "text_uthmani",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "table": "quran_words",
+      "column": "text_simple",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "riwayat",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "riwayat",
+      "column": "code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "riwayat",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "riwayat",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "riwayat",
+      "column": "aligner_code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "translation_ayahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "translation_ayahs",
+      "column": "translation_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "translation_ayahs",
+      "column": "ayah_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "translation_ayahs",
+      "column": "text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "translations",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "translations",
+      "column": "code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "translations",
+      "column": "lang",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "translations",
+      "column": "name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "translations",
+      "column": "translator",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "table": "translations",
+      "column": "license",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    }
+  ],
+  "checked_at": "2026-10-09T12:08:18.353Z"
+}

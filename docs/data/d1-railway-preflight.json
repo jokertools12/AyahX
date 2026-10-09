@@ -1,0 +1,39 @@
+{
+  "documented_at": "2026-10-09T10:40:17Z",
+  "scope": "railway-production-read-only",
+  "project_id": "6394b364-57bc-4736-8ce1-10dcf382c1e5",
+  "environment_id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+  "service_id": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+  "railway_cli_version": "5.57.9",
+  "local_test_mysql_version": "8.4.11",
+  "required_collation": "utf8mb4_unicode_ci",
+  "settings": {
+    "mysql_version": "9.7.2",
+    "sql_mode": "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION",
+    "character_set_server": "utf8mb4",
+    "collation_server": "utf8mb4_0900_ai_ci",
+    "max_allowed_packet": 67108864,
+    "global_time_zone": "SYSTEM",
+    "session_time_zone": "SYSTEM",
+    "system_time_zone": "UTC",
+    "max_connections": 60,
+    "max_user_connections": 0,
+    "schema_character_set": "utf8mb4",
+    "schema_collation": "utf8mb4_0900_ai_ci"
+  },
+  "database_query_exit_code": 0,
+  "database_query_count": 1,
+  "writes_executed": false,
+  "status": "stopped_at_preflight",
+  "blocking_reasons": [
+    "PRODUCTION_MYSQL_MAJOR_VERSION_DIFFERS_FROM_LOCAL_ACCEPTANCE",
+    "PRODUCTION_COLLATION_DIFFERS_FROM_REQUIRED_COLLATION"
+  ],
+  "table_inventory": null,
+  "critical_counts": null,
+  "d1_name_collisions": null,
+  "backup_verified": null,
+  "rehearsal_completed": false,
+  "production_import_applied": false,
+  "d2_started": false
+}
