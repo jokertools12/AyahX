@@ -52,6 +52,19 @@ def compare(source, clip, offset_ms, duration_ms):
             'passed': score >= .95 and delta <= 30 and abs(lag) <= 30}
 
 
+def measure_sample(source, clip, surah, ayah, duration, offset, payload, chapter_offset=None):
+    # QUD v3.2.0 qua_jobs/publish_hf.py:_iter_hf_records adds the chapter
+    # base to clip_start before emitting HF source_offset_ms. Catalog URLs
+    # reference that original source. Adding the base again is incorrect.
+    sample = {'surah': surah, 'ayah': ayah, 'duration_ms': duration, 'source_offset_ms': offset,
+              'hf_audio_sha256': hashlib.sha256(payload).hexdigest(),
+              'source_offset_hypothesis': compare(source, clip, offset, duration)}
+    if chapter_offset is not None:
+        sample['catalog_chapter_offset_ms'] = chapter_offset
+        sample['hf_offset_coordinate'] = 'absolute_in_catalog_source; chapter_base_already_included'
+    return sample
+
+
 def selected_rows(cache, slug, chapters):
     available = {}
     with (cache / f'{slug}.recited.jsonl').open(encoding='utf-8') as source:
@@ -190,14 +203,7 @@ def audit(record, args, manifest, transport):
             clip_path.write_bytes(payload)
             clip = decode(args.ffmpeg, clip_path)
             chapter_offset = record['audio'].get('chapter_offsets_ms', {}).get(str(surah))
-            sample = {'surah': surah, 'ayah': ayah, 'duration_ms': duration, 'source_offset_ms': offset,
-                      'hf_audio_sha256': hashlib.sha256(payload).hexdigest(),
-                      'source_offset_hypothesis': compare(sources[surah], clip, offset, duration)}
-            if chapter_offset is not None:
-                # Catalog offset is the chapter extraction origin, not a verse
-                # offset. Compare clip offset relative to that chapter origin.
-                sample['catalog_chapter_offset_ms'] = chapter_offset
-                sample['chapter_plus_source_hypothesis'] = compare(sources[surah], clip, chapter_offset + offset, duration)
+            sample = measure_sample(sources[surah], clip, surah, ayah, duration, offset, payload, chapter_offset)
             evidence['samples'].append(sample)
             if ayah == 1 and surah != 9:
                 first = timings[0][1] if timings else None

@@ -3,13 +3,39 @@
 References: https://huggingface.co/docs/dataset-viewer/en/parquet
 """
 import contextlib
+from datetime import datetime, timezone
 import email.utils
+import hashlib
 import http.server
+import json
 import pathlib
+import re
 import threading
 import time
 import urllib.error
 import urllib.request
+
+
+def safe_response_text(payload):
+    """Retain the error message while removing credentials and signed URLs."""
+    text = payload.decode('utf-8', errors='replace')
+    sensitive = re.compile(r'authorization|cookie|password|secret|token|signature|credential|access.?key', re.I)
+    def clean(value):
+        if isinstance(value, dict):
+            return {key: '[REDACTED]' if sensitive.search(key) else clean(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [clean(item) for item in value]
+        if isinstance(value, str):
+            value = re.sub(r'https?://[^\s\"\'<>]+', '[URL OMITTED]', value)
+            value = re.sub(r'\b(?:hf_[A-Za-z0-9]+|Bearer\s+[^\s\"\'<>]+)', '[REDACTED]', value, flags=re.I)
+            value = re.sub(r'("[^"\n]*(?:token|signature|password|secret|credential|access.?key)[^"\n]*"\s*:\s*)"[^"\n]*"', r'\1"[REDACTED]"', value, flags=re.I)
+            value = re.sub(r'((?:token|signature|password|secret|credential|access.?key|authorization|cookie)\s*[=:]\s*)[^\s\"\'<>;,]+', r'\1[REDACTED]', value, flags=re.I)
+            value = re.sub(r'<(\w*(?:Token|Signature|Credential|AccessKey|Password|Secret|Authorization|Cookie)\w*)>.*?</\1>', r'<\1>[REDACTED]</\1>', value, flags=re.I | re.S)
+        return value
+    try:
+        return json.dumps(clean(json.loads(text)), ensure_ascii=False)
+    except json.JSONDecodeError:
+        return clean(text)
 
 
 class SerialTransport:
@@ -58,6 +84,19 @@ class SerialTransport:
                 return response
             except urllib.error.HTTPError as error:
                 self.stats['statuses'].append(error.code)
+                if error.code == 500:
+                    event = {'checked_at': datetime.now(timezone.utc).isoformat(), 'status': 500,
+                             'attempt_in_request': attempt + 1, 'method': method}
+                    try:
+                        limit = 65536
+                        payload = error.read(limit + 1)
+                        event.update(response_text=safe_response_text(payload[:limit]), response_truncated=len(payload) > limit,
+                                     captured_body_sha256=hashlib.sha256(payload[:limit]).hexdigest())
+                    except (OSError, ValueError) as capture_error:
+                        event['response_read_error'] = type(capture_error).__name__
+                    finally:
+                        error.close()
+                    self.stats.setdefault('http_500_events', []).append(event)
                 if error.code not in (429, 500, 502, 503, 504) or attempt == 2:
                     raise
                 delay = 2 ** (attempt + 1)
