@@ -24,10 +24,30 @@ try {
   }
   const canonical = async (): Promise<string> => { const [rows] = await db.query<RowDataPacket[]>('SELECT surah,ayah,text_uthmani FROM quran_ayahs ORDER BY surah,ayah'); return sha(rows.map((row) => `${row.surah}:${row.ayah}\t${row.text_uthmani}`).join('\n')); };
   const before = await canonical();
+  const existingTables = ['users','subscriptions','payment_requests','saved_videos','render_jobs','system_settings','user_roles','notifications','quran_surahs','quran_ayahs','quran_words','quran_text_versions','translations','translation_ayahs'];
+  const criticalCounts = async (): Promise<Record<string, number>> => {
+    const counts: Record<string, number> = {};
+    for (const table of existingTables) {
+      const [rows] = await db.query<RowDataPacket[]>(`SELECT COUNT(*) AS count FROM ${table}`);
+      counts[table] = Number(rows[0].count);
+    }
+    return counts;
+  };
+  const criticalBefore = await criticalCounts();
+  let failedImportedBefore = 0;
+  if (process.argv.includes('--previous-sql')) {
+    // Reproduce the acknowledged staging pre-state only in this local clone.
+    await db.query(await readFile(option('--previous-sql'), 'utf8'));
+    const [rows] = await db.query<RowDataPacket[]>("SELECT COUNT(*) AS count FROM recitations WHERE verification_status='failed' AND status='imported'");
+    failedImportedBefore = Number(rows[0].count);
+    assert.ok(failedImportedBefore > 0, 'PREVIOUS_STATUS_BUG_NOT_REPRODUCED');
+  }
   await upQuranCatalogTables(db);
   await upQuranCatalogTables(db);
   await db.query(plan.sql);
   const first = await verifyCatalogRows(db, data);
+  const [failedImportedAfter] = await db.query<RowDataPacket[]>("SELECT COUNT(*) AS count FROM recitations WHERE verification_status='failed' AND status='imported'");
+  assert.equal(Number(failedImportedAfter[0].count), 0, 'FAILED_OFFSET_LEFT_IMPORTED');
   const [firstChecksums] = await db.query<RowDataPacket[]>(`CHECKSUM TABLE ${QURAN_CATALOG_TABLES.join(',')}`);
   await db.query(plan.sql);
   assert.deepEqual(await verifyCatalogRows(db, data), first);
@@ -51,13 +71,20 @@ try {
   const [remaining] = await db.query<RowDataPacket[]>(`SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN (${QURAN_CATALOG_TABLES.map(() => '?').join(',')})`, [...QURAN_CATALOG_TABLES]);
   assert.equal(remaining.length, 0);
   assert.equal(await canonical(), before);
+  assert.deepEqual(await criticalCounts(), criticalBefore, 'LOCAL_EXISTING_TABLE_COUNTS_CHANGED');
   await db.query(plan.sql);
   await verifyCatalogRows(db, data);
   assert.equal(await canonical(), before);
   const report = { mysql_version: version[0].version, sql_sha256: plan.sha256, catalog_sha256: data.catalog_sha256, counts: first, schema, d1_collations: d1, canonical_checksum: before,
     migration_twice: true, import_twice: true, replay_table_checksums_unchanged: true, existing_users_join: true, unverified_audio_publication_rejected: true,
     publication_without_audio_evidence_rejected: true, corrupted_catalog_rejected: true, rollback_remaining: remaining.length, reapply_after_rollback: true };
-  Object.assign(report, { unverified_surah_slice_rejected: true, offset_without_score_rejected: true });
+  Object.assign(report, { unverified_surah_slice_rejected: true, offset_without_score_rejected: true,
+    previous_failed_imported_rows: failedImportedBefore, failed_imported_after: 0, existing_table_counts_unchanged: true, critical_counts: criticalBefore });
   await writeFile(option('--out'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
+} catch (error) {
+  // mysql2 errors also contain the complete SQL payload. Expose the failure
+  // and a nonzero exit, never that payload (or user rows from the clone).
+  console.error(JSON.stringify({ rehearsal_passed: false, message: error instanceof Error ? error.message : 'UNKNOWN_REHEARSAL_ERROR' }));
+  process.exitCode = 1;
 } finally { await db.end(); }

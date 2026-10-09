@@ -81,8 +81,19 @@ describe('D2 catalog identity and coverage', () => {
     const data = await build(adapterFor([record]), [record]);
     const first = generateCatalogSql(data, 1);
     expect(first.sha256).toBe(generateCatalogSql(data, 1).sha256);
-    expect(first.sql).not.toMatch(/^(ALTER|DROP|DELETE|RENAME|UPDATE)\b/mu);
+    expect(first.sql).not.toMatch(/^(ALTER|DROP|DELETE|RENAME)\b/mu);
+    expect(first.statements.filter((sql) => sql.startsWith('UPDATE'))).toEqual(["UPDATE recitations SET status='needs_review' WHERE verification_status='failed' AND status='imported';"]);
+    expect(first.statements.filter((sql) => sql.startsWith('INSERT INTO riwayat')).every((sql) => !sql.includes('UPDATE'))).toBe(true);
     expect(() => generateCatalogSql(data, 1001)).toThrow('SQL_BATCH_LIMIT_EXCEEDED');
+  });
+  it('inserts absent non-Hafs metadata without any existing-table update', async () => {
+    const records = [{ ...record, riwayah: 'warsh_an_nafi' }];
+    const data = await build(adapterFor(records), records);
+    const inserts = generateCatalogSql(data).statements.filter((sql) => sql.startsWith('INSERT INTO riwayat'));
+    expect(inserts).toHaveLength(1);
+    expect(inserts[0]).toContain('WHERE NOT EXISTS');
+    expect(inserts[0]).toContain('COLLATE utf8mb4_unicode_ci');
+    expect(inserts[0]).not.toContain('UPDATE');
   });
   it('rejects a claimed offset pass without the distributed acoustic evidence', () => {
     expect(() => validateOffsetEvidence({ verification_status: 'passed', offset_verified: true, offset_check_score: 1, offset_correction_ms: 0 })).toThrow('OFFSET_EVIDENCE_INCONSISTENT');

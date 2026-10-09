@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-10-09T23:39:38.255Z",
+  "exact_statement_hash_sequence_matches": true,
+  "statements": 45,
+  "sql_sha256": "d3f0db3ece980af02af2b00b2c06f5e2ce890b3526e62050396571cd2cc42fe8",
+  "staging_max_connections_observed": 2,
+  "production_max_connections_observed": 2,
+  "full_unit_tests": {
+    "passed": 471,
+    "skipped": 6,
+    "failed": 0,
+    "total": 477
+  },
+  "targeted_tests": {
+    "passed": 32,
+    "failed": 0
+  },
+  "root_tsc_exit": 0,
+  "changed_files_lint_exit": 0,
+  "strict_tsc_exit": 0
+}

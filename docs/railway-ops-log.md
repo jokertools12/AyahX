@@ -266,3 +266,14 @@ Vitest457:451passed/6skipped/0failed ؛ Python7/7 ؛ rootTS و strict للسكر
 الاختبارات النهائية:451pass/6skip/0fail من457 مع corpus، وPython17/17 وrootTS/strict/lint ناجحة. تشغيل Vitest الأول450/7 بلا corpus أُعيد مع الملف المثبت؛ خطأ strict أولي TS7053 عولج بحفظ environment بعد تضييق النوع قبل closure. لم يتغير tooling/runtime أو الواجهة أو الريندر. تفصيل الأوامر في d2-followup-tests.json. D2 غير مغلق وPR10 مسودة؛ لا merge/deploy/بيئة جديدة/D3/A1.
 
 قراءة Auto-deploy الجديدة قبل دفع المتابعة: main مفعّل، وPR deploys=false، وproduction/staging فقط؛ لم تتغير deployment IDs أو مجموعة البيئات. الدليل data/d2-auto-deploy-followup.json. هذا تحقق إعداد وحالة، وليس نشرًا أو موافقة دمج.
+# تنفيذ التفويض الموسع — 2026-10-10 القاهرة
+
+نتائج فعلية UTC2026-10-09: backup age بُني16:33:52، استعادته المحلية47جدولًا وCHECKSUMنجحت ثانية، والحرجة ما زالت مطابقة عند23:30. حفظت النسخة الأصلية والمفتاح؛ لم ينشأ snapshot أو وصولDBعام.
+
+`scripts/apply-qud-catalog-railway.ts` يستخدم الآن `openRailwayMysqlSession`: جلسةواحدة وmysqlواحد لكل pre/apply/post، gzipعندgunzip، فحصThreads_connectedقبل كلstatement، COMMITACK ثم exit0 مطلوب قبل كتابةapplied=true. لا يزيّف المصالحة التاريخية. replayيسأل عنdataset/SQL/proofالقديمين ويطابقهما فعليًا، ولا يسمح باختلاف سوىfailed/imported→needs_review.
+
+SQLالجديدSHA `d3f0db3ece980af02af2b00b2c06f5e2ce890b3526e62050396571cd2cc42fe8` وُلد خارجGit وبُرهن على9.7.2. stagingdry-run ثمapply عند23:34:45 نجحا بالرمز0، 45فحصًا واتصالات1–2/151 وتصحيح8. productiondry-run ومقارنته ثمapplyمستقل بـ`--confirm-production` عند23:36:59 نجح بالرمز0، اتصالات1–2/60. المصالحة المستقلة23:37:39: كاملقيمالكتالوج/D1/الحرجة/collation/FKصحيحة؛ health/ready200واللوجبلاerrors. الملفنفسه SHAنفسه؛ لا retry مطلوب. لا تعديـل لأيuserdata/جدولقديم.
+
+الأوامر استعملت `--dataset %TEMP%\ayahx-d2\dataset-status-fixed.json --sql %TEMP%\ayahx-d2\d2-import-status-fixed.sql --rehearsal docs/data/d2-local-rehearsal-status-fixed.json --backup docs/data/d2-backup-verification.json`. stagingأضاف `--replay-verified-staging --staging-previous-dataset %TEMP%\ayahx-d2\dataset.json --staging-previous-sql %TEMP%\ayahx-d2\d2-import.sql --staging-existing-proof docs/data/d2-staging-readonly-reconciliation-followup.json`؛ الإنتاجأضافدليلstagingالجديد. تطبيق كلبيئة كان أمرًا مستقلًا مع`--apply`، وبروفاته في`docs/data`.
+
+رفض التنظيفالصريح فيالتفويضالجديدسجل بـblocked by policy؛لا تنفيذولا بديل، والعملمستمر وفقاستثناءالمستخدم. يوجدdatadirبروفةجديد مستقل؛التنظيفالمادي ما زال معلقًا. هذهالفقرةلا تثبتالنشر؛أدلةدمجPR9/10ومراقبةRailwayتأتيلاحقًا.

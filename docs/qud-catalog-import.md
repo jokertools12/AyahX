@@ -88,3 +88,10 @@ DROP TABLE IF EXISTS reciters;
 ## Git ومرحلة الربط
 
 phase/d2-recitation-catalog من D1 ، PR مستقل دون merge. PR9 يظل draft. main Auto-deploy=true و PR deploys=false كما أثبت الجرد، ويعاد التحقق بعد PR. لا يستنتج green CI من غياب runs. قبل أي merge يحتاج المستخدم CI أخضر وخطة health/logs بعد النشر. الحالية maps/providers/render/font UI لا تتغير؛ الربط D7/D8 والأدمن A1 بتصريح لاحق. الخطوط الستة وقيد CDN الإنتاج في DECISIONS ؛ لا ادعاء أن E2E D1 أثبت CDN الإنتاج.
+# تحديث بروتوكول التفويض الموسع
+
+السياسة الحالية في `plan/DECISIONS.md`؛ فقرات التوقف/عدم الدمج أدناه تاريخية. التصحيح الحالي يحفظ SQL القديم ويولد ملفًا جديدًا. الدليل: `data/d2-local-rehearsal-status-fixed.json` و`d2-staging-verification-status-fixed.json` و`d2-production-verification-status-fixed.json`.
+
+مشغل Railway يجمع pre/apply/post في جلسة SSH وmysql واحدة، مع gzip ودفعات250 وفحص الاتصالات قبل كلstatement. أدلة COMMIT وخروجSSH0 شرطا قبول staging ولا يقبل تقرير مصالحة بدل التطبيق. إعادة staging تتطلب صراحة`--staging-previous-dataset` و`--staging-previous-sql` و`--staging-existing-proof`؛ يثبت جميع القيم القديمة ولا يسمح إلا بتصحيحstatusالفشل في جداولD2. في الإنتاج لا يسمح بتصادم أسماء. `riwayat` يدرج الغائب بـNOT EXISTS دون أيUPDATEللصفوف القائمة.
+
+عمر backup يحسب من أقدم وقت archive/نهاية التحقق، ويجب<24hمع مطابقةالحرجة؛ يجوز إعادة استعماله وفق التفويضالجديد. dry-runيحفظتقريره في`--out`ويعرض ما سينشأ/يدرج/يصحح فعليًا. تطبيق الإنتاج منفصل بـ`--apply --confirm-production`، بنفسSHAومصالحةstageمؤكدة؛ الدفعة لا تتطلب إذنًا جديدًا إلا عند نقطة توقف إلزامية.

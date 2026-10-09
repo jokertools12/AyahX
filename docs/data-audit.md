@@ -889,3 +889,16 @@ HF logger يسجل الآن500 مع وقت UTC ونص استجابة محجوب 
 4. **لم يكتمل/قرار المستخدم:** اعتماد جدول المصالحة مع تصحيح statusالثماني في SQLجديد وبروفةstaging جديدة؛ ثم dumpإنتاج جديد مشفر ومستعاد9.7.2، وبعدهproductiondry-run، ثم إذن نهائي صريح في رسالة مستقلة. لا كتابة قبل موافقة المصالحة.
 5. **المخاطر:**48فشلًا حقيقيًا وفق المعايير القائمة،13مصدرًا غير متاح،بسملة الصوت غير مثبتة، بقايا استعادة محلية، وأمرstagingقديم بلا تأكيدexit0. لا تحسين شكلي لهذه الحالات.
 6. **الخطوة التالية:** انتظار اعتماد المستخدم للمصالحة ومعالجة تعارضstatus؛ بعدها فقط تسلسل البروتوكول الجديد. لاD3/A1/merge/deploy.
+# متابعة التفويض الموسع — تطبيق D2 على staging والإنتاج
+
+الرسالة الجديدة تجيز الدفعة D2 ثم التشخيص وD3–D6 بالترتيب؛ السياسات الحالية في `plan/DECISIONS.md` تغلب القيود التاريخية أدناه. D2 لا يغلق قبل دمج PR9/10 والتحقق من كل نشر.
+
+- أصلح importer حالة الفشل لجميع الروايات؛ النتيجة64needs_review و5imported، وكل69 غير منشورة. نتائج offset الأصلية8passed/48failed/13source_unavailable لم تتغير.
+- SQL القديم2498e681… محفوظ خارجGit. الجديد `d3f0db3ece980af02af2b00b2c06f5e2ce890b3526e62050396571cd2cc42fe8` يدرج metadata الغائبة دون UPDATE للـriwayat القائم، ويصحح failed/imported في recitations فقط.
+- استعادت البروفة47جدولًا من النسخة age القائمة وطابقت جميع الأعداد وCHECKSUM على MySQL9.7.2. فحص الإنتاج أثبت ثبات الحرجة؛ عمر النسخة نحو7h، لذلك أعيد استخدامها وفق التفويض. فشل أول SQL بمقارنة collation في NOT EXISTS؛ أصلح التعبير بـCOLLATEunicode_ci ثم نجحت البروفة كاملة، بما فيها إعادة إنتاج الحالات8 وتصحيحها، importمرتان وrollback/reapply.
+- staging: الجلسة الجديدة نجحت دون إعادة محاولة؛ COMMITACK وخروجSSH0، جلسةSSH واحدة/عميلmysql واحد/45فحص اتصال، دفعات≤250، Threads_connected بين1و2 من151. مطابقة كامل الحقول وD1/الحرجة و46عمودًا/3FK داخلية. لا إدراج جديد؛ تصحيح8حالات فقط.
+- الإنتاج: dry-run مطابق للبصمة والأعداد؛ فرق الإنشاء/الإدراج مفسر بغيابD2 قبل التطبيق. apply مستقل بـ`--confirm-production` نجح بالبصمة نفسها، ثم مصالحة قراءة فقط مستقلة نجحت. 57reciters/10providers/69recitations/7765chapters، riwayat1→4 بإدراج3غيرمفعّلة دون تعديل حفص، published=0. Threads_connected بين1و2 من60. D1=114/6236/77433 وبصمةeca6ed31…4fe4 وCHECKSUMوالحرجة ثابتة. health/ready200 ولوج التطبيق7أسطر/MySQL0 بلا أخطاء منذ23:35UTCحتى23:37UTC.
+- رفضت سياسة الأوامر محاولة التنظيف الصريحة الوحيدة بـblocked by policy؛ الأمر لم ينفذ. بقيmanual_cleanup_required؛ لا حذف بديل/نقل/ACL. البروفة الجديدة في datadir مستقل، وليست نقلًا للبقايا القديمة. snapshotPro لا يعاد.
+- الاختبارات الحالية: Vitest471passed/6skipped/0failed من477، ومنها32اختبارًا للكتالوج والنقل؛ rootTypeScript وstrictللملفات المعدلة وlintبلا رسائل. لا إصلاحlintالعام، لا UI/renderتغير. فحص diffلـPR9/10 لم يجد نمط أسرار أو ملفات خاصة أو migrationstartup؛ CIللرأس النهائي يعاد بعد الدفع.
+
+الأدلة: `data/d2-*status-fixed.json`، `d2-backup-reuse-precheck.json`، `d2-backup-reverification-status-fixed.json`، `d2-status-rehearsal-attempts.json`، `d2-serial-transport-readonly-precheck.json`، `d2-cleanup-expanded-authorization.json` و`progress.md`.

@@ -1,0 +1,18 @@
+{
+  "recorded_at": "2026-10-09T23:30:40.185Z",
+  "attempts": [
+    {
+      "passed": false,
+      "sql_sha256": "61c7ef59efe79bbde789f406f3de7f6b9cd72b453585e63e5355b8b990ac5ecf",
+      "error": "ER_CANT_AGGREGATE_2COLLATIONS",
+      "cause": "INSERT SELECT NOT EXISTS compared unicode_ci riwayat.id to CONVERT literal using connection 0900 collation",
+      "railway_writes": 0
+    },
+    {
+      "passed": true,
+      "sql_sha256": "d3f0db3ece980af02af2b00b2c06f5e2ce890b3526e62050396571cd2cc42fe8",
+      "fix": "Explicit unicode_ci on comparison literal; no ALTER existing column",
+      "evidence": "d2-local-rehearsal-status-fixed.json"
+    }
+  ]
+}

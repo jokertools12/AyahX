@@ -29,7 +29,7 @@ const dataset = await buildCatalogDataset(adapter, { version: source.qud_version
 const plan = generateCatalogSql(dataset);
 await writeFile(output, plan.sql);
 await writeFile(datasetOutput, JSON.stringify(dataset) + '\n');
-await writeFile('docs/data/d2-catalog-import.json', JSON.stringify({ qud_version: dataset.qud_version, catalog_sha256: dataset.catalog_sha256,
+await writeFile(argv.includes('--report-out') ? option('--report-out') : 'docs/data/d2-catalog-import.json', JSON.stringify({ qud_version: dataset.qud_version, catalog_sha256: dataset.catalog_sha256,
   sql_sha256: plan.sha256, sql_bytes: Buffer.byteLength(plan.sql), batch_size: plan.batchSize, counts: plan.counts,
   unmapped_sources: dataset.unmapped_sources, recitations: dataset.recitations.map((row) => ({ slug: row.slug, riwayah: row.riwayah_code, coverage_ayahs: row.coverage_ayahs,
     observed_hf_ayahs: JSON.parse(String(row.audit_json)).annotation.unique_ayahs, basmala_mode: row.basmala_mode,

@@ -56,8 +56,8 @@ export interface Inventory {
   row_counts: Record<string, number>; checksums: Record<string, string | null>;
   canonical_checksum: string; d1_counts: { surahs: number; ayahs: number; words: number }; checked_at: string;
 }
-export async function captureInventory(environment: string): Promise<Inventory> {
-  const raw = await readSql(environment, `SELECT JSON_OBJECT('database',DATABASE(),'server_uuid',@@server_uuid,'mysql_version',VERSION(),
+export async function captureInventory(environment: string, reader: (sql: string) => Promise<string> = (sql) => readSql(environment, sql)): Promise<Inventory> {
+  const raw = await reader(`SELECT JSON_OBJECT('database',DATABASE(),'server_uuid',@@server_uuid,'mysql_version',VERSION(),
     'settings',JSON_OBJECT('sql_mode',@@sql_mode,'collation_server',@@collation_server,'character_set_server',@@character_set_server,'max_connections',@@max_connections,'max_allowed_packet',@@max_allowed_packet,'time_zone',@@time_zone,'system_time_zone',@@system_time_zone),
     'tables',(SELECT JSON_ARRAYAGG(JSON_OBJECT('name',TABLE_NAME,'collation',TABLE_COLLATION,'engine',ENGINE,'row_format',ROW_FORMAT)) FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE()),
     'columns',(SELECT JSON_ARRAYAGG(JSON_OBJECT('table',TABLE_NAME,'column',COLUMN_NAME,'type',COLUMN_TYPE,'charset',CHARACTER_SET_NAME,'collation',COLLATION_NAME)) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE()),
@@ -66,12 +66,12 @@ export async function captureInventory(environment: string): Promise<Inventory> 
     'events',(SELECT COALESCE(JSON_ARRAYAGG(EVENT_NAME),JSON_ARRAY()) FROM information_schema.EVENTS WHERE EVENT_SCHEMA=DATABASE()));`);
   const inventory = JSON.parse(raw.trim()) as Inventory;
   if (inventory.database !== 'railway' || inventory.mysql_version !== '9.7.2') throw new Error('DATABASE_IDENTITY_OR_VERSION_MISMATCH');
-  const counts = await readSql(environment, inventory.tables.map(({ name }) => `SELECT '${name}',COUNT(*) FROM ${identifier(name)}`).join(' UNION ALL ') + ';');
+  const counts = await reader(inventory.tables.map(({ name }) => `SELECT '${name}',COUNT(*) FROM ${identifier(name)}`).join(' UNION ALL ') + ';');
   inventory.row_counts = Object.fromEntries(counts.trim().split(/\r?\n/u).map((line) => { const [name, count] = line.split('\t'); return [name, Number(count)]; }));
-  const checksums = await readSql(environment, `CHECKSUM TABLE ${inventory.tables.map(({ name }) => identifier(name)).join(',')};`);
+  const checksums = await reader(`CHECKSUM TABLE ${inventory.tables.map(({ name }) => identifier(name)).join(',')};`);
   inventory.checksums = Object.fromEntries(checksums.trim().split(/\r?\n/u).map((line) => { const [name, sum] = line.split('\t'); return [name.split('.').pop(), sum === 'NULL' ? null : sum]; }));
   inventory.critical_counts = Object.fromEntries(['users', 'subscriptions', 'plans', 'payment_requests', 'videos', 'saved_videos', 'render_jobs', 'system_settings', 'user_roles', 'notifications'].map((name) => [name, inventory.row_counts[name] ?? null]));
-  const text = await readSql(environment, 'SELECT surah,ayah,text_uthmani FROM quran_ayahs ORDER BY surah,ayah;');
+  const text = await reader('SELECT surah,ayah,text_uthmani FROM quran_ayahs ORDER BY surah,ayah;');
   inventory.canonical_checksum = checksumText(text.trimEnd().split(/\r?\n/u).map((line) => { const [surah, ayah, ...words] = line.split('\t'); return `${surah}:${ayah}\t${words.join('\t')}`; }).join('\n'));
   inventory.d1_counts = { surahs: inventory.row_counts.quran_surahs, ayahs: inventory.row_counts.quran_ayahs, words: inventory.row_counts.quran_words };
   inventory.environment_id = environment;
