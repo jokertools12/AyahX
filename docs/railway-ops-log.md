@@ -248,3 +248,21 @@ Vitest457:451passed/6skipped/0failed ؛ Python7/7 ؛ rootTS و strict للسكر
 دُفعde667f0 للكود والبروفة و9919539 للأدلة؛ فُتحتPR10 مسودة stacked منphase/d2-recitation-catalog إلىphase/d1-quran-text وأُرفقت بالمهمة. قراءة20:00:00Z بعد الفتح أثبتت Auto-deploy=true/branchmain/repoGitHub، وPRdeploys=false، والبيئتينproduction/staging فقط، وصفر deployment IDs متغيرة. لا merge/main/deploy. الدليلdata/d2-auto-deploy-final.json. CI الأول بدأ فعلًا على9919539؛ نتيجته وأي head لاحق تُذكر في وصفPR والتقرير النهائي بعد التحقق، دون افتراض الأخضر.
 
 تنبيه حدود فحص البسملة:166 قياسprefix ل56تلاوة في سور العينات، وليس كل مقدمات114سورة. جميع حالات الصوتunverified. بياناتannotation لكلconfigs سبق تدقيقها فيD1؛ لا نساويها بفحص الموجة أو سماع المحتوى.
+
+## متابعة D2 — 2026-10-10 القاهرة، قراءة فقط قبل الموافقة
+
+التفويض الجديد: تحليل الفشل ومصالحة وتشخيص أولًا، ثم انتظار الاعتماد. لم يُعَد تطبيق staging ولم تُنفَّذ نسخة dump جديدة أو production dry-run أو تطبيق إنتاج. كذلك لم تُنفَّذ محاولة snapshot أو حذف/نقل/تغيير ACL. DECISIONS يحفظ التسلسل الجديد والإذن النهائي المنفصل؛ snapshot رُفض لقيد Pro ولا مزيد من المحاولات. تعليمات التنظيف اليدوي تُقدَّم مرة واحدة في docs/d2-manual-cleanup.ar.md؛ بقايا التخزين ليست محذوفة.
+
+أوامر `diagnose-qud-connections-readonly.ts --target staging/production` نجحت؛ الدليلان d2-staging-connections-readonly.json وd2-production-connections-readonly.json. كل أمر يغلق اتصاله قبل اللقطة الثانية، وأثبتت الثانية غياب connection_id الأول. أوامر SHOW المطلوبة: staging عند1/151 وproduction عند1/60، ولا root محلي غير التشخيص في اللقطتين. Max_used=4/5 وConnection_errors_max_connections=0. Aborted_clients=6058/5849 تراكمية بلا نسبة سبب تخمينية. processlist يحفظ categories/fingerprints دون نصوص host/SQL. قراءة العمليات المحلية أظهرت خادمي railway mcp وصفر ssh clients؛ لم تُنهَ أي عملية أو جلسة.
+
+لا دليل على بلوغ max_connections حاليًا. رسالة Maximum SSH connections السابقة تخص حد Railway SSH؛ سبب exit1 الأصلي غير محسوم. لا KILL لجلسة مجهولة أو إعداد limits أو تغيير حارس staging. التنفيذ اللاحق يشترط اتصالًا واحدًا ودفعات≤1000 وفحص الاتصالات قبل **كل دفعة** والتوقف عند بلوغ/تجاوز الحد أو خطأ. لم يُختبَر هذا بتطبيق جديد بعد؛ لا ادعاء أن سكربت التطبيق الحالي ينفذه بالفعل.
+
+المصالحة الكاملة الجديدة باتصال واحد لكل بيئة: staging الساعة20:56:15Z يطابق57/10/69/7765 وriwayat=4؛ production الساعة21:05:54Z بلا جداول D2 وriwayat=1. جميع values/JSON في staging مطابقة، وD1/checksums/bin والجداول الحرجة ثابتة. المصدر8قنوات ومعهما2مزوّد موثق للـruntime القديم؛ riwayat=1+3inactive وصفر published. الأدلة d2-staging-readonly-reconciliation-followup.json وd2-production-readonly-reconciliation-followup.json وd2-followup-reconciliation-table.json. ملف SQL ثابت SHA2498e681f2be2e1e9398e7dcdcb9731e8861ac331087dad2bb3c65a4507958b8؛ لم يُنفَّذ مجددًا، والمصالحة ليست applied=true.
+
+التعارض مع القرار الجديد: ثماني تلاوات غير حفص تحمل verification_status=failed وstatus=imported؛ offset=false وكلها غير منشورة. الأسماء في data-audit والجدول JSON. تحويلها إلى needs_review يتطلب SQL جديدًا وبروفة محلية وإعادة staging من البداية بعد الموافقة. يلي ذلك dump إنتاج جديد مشفر واستعادة9.7.2 ومقارنة counts/CHECKSUM ثم dry-run مقارن؛ إذن الإنتاج النهائي برسالة مستقلة بعد الأدلة. لا يُستخدم SQL القديم في الإنتاج مع هذا التعارض.
+
+لم تتغير حالات offset الـ48 الفاشلة؛ التحليل175NCC/70duration/65lag في211عينة مع تداخل الأسباب، وσ>10 تشخيص فقط. أزيلت فرضية chapter+HF الخاطئة التي لم تُنفَّذ في أي من840عينة؛ HF offset مطلق بحسب كود QUD ومعايير.95/30/30 ثابتة. HTTP500 logger للمستقبل يسجل UTC/body محجوبًا وبصمة، واختُبر بـfixtures دون طلبات HF جديدة. لم يُعَد فحص كل الصوت أو بسملته، و166prefix للعينة فقط.
+
+الاختبارات النهائية:451pass/6skip/0fail من457 مع corpus، وPython17/17 وrootTS/strict/lint ناجحة. تشغيل Vitest الأول450/7 بلا corpus أُعيد مع الملف المثبت؛ خطأ strict أولي TS7053 عولج بحفظ environment بعد تضييق النوع قبل closure. لم يتغير tooling/runtime أو الواجهة أو الريندر. تفصيل الأوامر في d2-followup-tests.json. D2 غير مغلق وPR10 مسودة؛ لا merge/deploy/بيئة جديدة/D3/A1.
+
+قراءة Auto-deploy الجديدة قبل دفع المتابعة: main مفعّل، وPR deploys=false، وproduction/staging فقط؛ لم تتغير deployment IDs أو مجموعة البيئات. الدليل data/d2-auto-deploy-followup.json. هذا تحقق إعداد وحالة، وليس نشرًا أو موافقة دمج.

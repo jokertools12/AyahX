@@ -1,0 +1,22 @@
+{
+  "checked_at": "2026-10-09T21:09:20.324117+00:00",
+  "sources": [
+    {
+      "url": "https://github.com/QUD-Technologies/quranic-universal-audio/blob/v3.2.0/qua_jobs/publish_hf.py#L502",
+      "local_download_sha256": "d50a6dc65c20b68c3e341e9ef972b8c310899470f150e869d4ea34d723089f08",
+      "finding": "HF offset is clip_start + source_offset_base_ms; chapter base already included."
+    },
+    {
+      "url": "https://github.com/QUD-Technologies/quranic-universal-audio/blob/v3.2.0/docs/reference/dataset-and-releases.md#L225",
+      "local_download_sha256": "7b602ebae837cf35757a57d8355112ef7226c27c83eef14b75594008f3d42cf2",
+      "finding": "Release tier timestamp + chapter offset maps into original source; HF is absolute. MP3 frame snap and stitched clips are documented possibilities, not proven causes for these samples."
+    }
+  ],
+  "incorrect_chapter_plus_source_hypothesis_measurements_in_legacy_evidence": 0,
+  "original_results_replaced": false,
+  "full_audio_audit_rerun": false,
+  "reason_no_full_rerun": "Wrong alternative was never executed in retained evidence; no proven arithmetic bug affecting measured pass/fail. Independent direct Pearson, sign, boundaries and duration tests pass; original PCM/audio no longer available for offline replay.",
+  "legacy_http_500_entries_in_last_retained_stats": 1,
+  "legacy_http_500_body_and_request_timestamp_recorded": false,
+  "future_http_500_logging_tested_with_fixtures_only": true
+}

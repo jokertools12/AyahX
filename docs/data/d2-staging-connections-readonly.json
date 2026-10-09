@@ -1,0 +1,114 @@
+{
+  "target": "staging",
+  "read_only": true,
+  "sql_commands": [
+    "SHOW PROCESSLIST",
+    "SHOW STATUS LIKE 'Threads_connected'",
+    "SHOW VARIABLES LIKE 'max_connections'"
+  ],
+  "snapshots": [
+    {
+      "checked_at": "2026-10-09T20:55:41.255Z",
+      "identity": {
+        "database": "railway",
+        "server_uuid": "a9d4ce5a-b463-11f1-b4a4-a2aa5c49cf2f",
+        "connection_id": 6116,
+        "mysql_version": "9.7.2"
+      },
+      "status": {
+        "Threads_connected": 1,
+        "max_connections": 151,
+        "Aborted_clients": 6058,
+        "Aborted_connects": 0,
+        "Connection_errors_max_connections": 0,
+        "Max_used_connections": 4,
+        "Threads_running": 2
+      },
+      "processes": [
+        {
+          "id": 5,
+          "own_diagnostic": false,
+          "user_category": "event_scheduler",
+          "host_category": "local",
+          "host_fingerprint": "49960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d9763",
+          "database_category": null,
+          "command": "Daemon",
+          "idle_or_running_seconds": 35408,
+          "state_fingerprint": "93fb44294577a42db2da5016aa8b83a0d53ed30cf0a24c0ad8b3c4d499c7576d",
+          "operation": null,
+          "mentions_d2_tables": false
+        },
+        {
+          "id": 6116,
+          "own_diagnostic": true,
+          "user_category": "root",
+          "host_category": "local",
+          "host_fingerprint": "49960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d9763",
+          "database_category": "railway",
+          "command": "Query",
+          "idle_or_running_seconds": 0,
+          "state_fingerprint": "bb54068aea85faa7e487530083366be9962390af822e4c71ef1aca7033c83e66",
+          "operation": "SHOW",
+          "mentions_d2_tables": false
+        }
+      ],
+      "local_root_other_than_diagnostic": 0,
+      "d2_operations_other_than_diagnostic": 0
+    },
+    {
+      "checked_at": "2026-10-09T20:55:44.128Z",
+      "identity": {
+        "database": "railway",
+        "server_uuid": "a9d4ce5a-b463-11f1-b4a4-a2aa5c49cf2f",
+        "connection_id": 6117,
+        "mysql_version": "9.7.2"
+      },
+      "status": {
+        "Threads_connected": 1,
+        "max_connections": 151,
+        "Aborted_clients": 6058,
+        "Aborted_connects": 0,
+        "Connection_errors_max_connections": 0,
+        "Max_used_connections": 4,
+        "Threads_running": 2
+      },
+      "processes": [
+        {
+          "id": 5,
+          "own_diagnostic": false,
+          "user_category": "event_scheduler",
+          "host_category": "local",
+          "host_fingerprint": "49960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d9763",
+          "database_category": null,
+          "command": "Daemon",
+          "idle_or_running_seconds": 35411,
+          "state_fingerprint": "93fb44294577a42db2da5016aa8b83a0d53ed30cf0a24c0ad8b3c4d499c7576d",
+          "operation": null,
+          "mentions_d2_tables": false
+        },
+        {
+          "id": 6117,
+          "own_diagnostic": true,
+          "user_category": "root",
+          "host_category": "local",
+          "host_fingerprint": "49960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d9763",
+          "database_category": "railway",
+          "command": "Query",
+          "idle_or_running_seconds": 0,
+          "state_fingerprint": "bb54068aea85faa7e487530083366be9962390af822e4c71ef1aca7033c83e66",
+          "operation": "SHOW",
+          "mentions_d2_tables": false
+        }
+      ],
+      "local_root_other_than_diagnostic": 0,
+      "d2_operations_other_than_diagnostic": 0
+    }
+  ],
+  "maximum_concurrent_connections_opened_by_this_command": 1,
+  "first_diagnostic_closed_verified": true,
+  "second_client_exited": true,
+  "writes": 0,
+  "kill_statements": 0,
+  "privacy": "Host, state and SQL text are not saved; only categories/fingerprints/operation type.",
+  "historical_connection_ownership": "Old connection IDs were not recorded; no attribution or termination of other sessions."
+}

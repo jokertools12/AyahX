@@ -1,0 +1,55 @@
+{
+  "checked_at": "2026-10-09T21:12:47.641030+00:00",
+  "vitest": {
+    "numTotalTests": 457,
+    "numPassedTests": 451,
+    "numFailedTests": 0,
+    "numPendingTests": 6,
+    "success": true
+  },
+  "corpus_test_executed": true,
+  "initial_run_without_corpus": {
+    "passed": 450,
+    "skipped": 7,
+    "failed": 0,
+    "reason": "D1_QURAN_CORPUS absent; superseded by run with pinned corpus"
+  },
+  "python_unittest": {
+    "total": 17,
+    "passed": 17,
+    "failed": 0,
+    "acoustic_and_transport": 14,
+    "failure_analysis": 3
+  },
+  "root_tsc_no_emit_exit": 0,
+  "strict_diagnostic_script_tsc_exit": 0,
+  "changed_typescript_lint_exit": 0,
+  "lint_errors": 0,
+  "lint_warnings": 0,
+  "initial_strict_compile_failure": {
+    "code": "TS7053",
+    "resolved": "Capture narrowed environment before async snapshot closure"
+  },
+  "commands": [
+    "npm test -- --reporter=json --outputFile=<private>; D1_QURAN_CORPUS=<pinned private corpus>",
+    "python -X utf8 -m unittest discover -s scripts -p test_*qud_offset*.py -v",
+    "npx tsc --noEmit",
+    "npx tsc --noEmit --target ES2022 --module ESNext --moduleResolution bundler --strict --skipLibCheck --esModuleInterop scripts/diagnose-qud-connections-readonly.ts",
+    "npx eslint scripts/diagnose-qud-connections-readonly.ts --max-warnings 0"
+  ],
+  "skipped_tests": [
+    "Durable Render Job System & Queue enqueues a valid job and sets initial state to queued",
+    "Durable Render Job System & Queue enforces idempotency: repeated submissions with same idempotencyKey return identical job",
+    "Durable Render Job System & Queue enforces IDOR / cross-user denial: user2 cannot read user1 job",
+    "Durable Render Job System & Queue supports job cancellation: sets status to cancelled",
+    "Durable Render Job System & Queue requeues a cancelled job without creating a second job or spending a new slot",
+    "Durable Render Job System & Queue recovers stale jobs after worker restart"
+  ],
+  "database_writes_in_followup": 0,
+  "local_filesystem_cleanup_attempts_in_followup": 0,
+  "local_railway_processes_observed": {
+    "mcp_servers": 2,
+    "ssh_clients": 0,
+    "terminated": 0
+  }
+}
