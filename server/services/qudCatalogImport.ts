@@ -181,7 +181,7 @@ export async function buildCatalogDataset(adapter: CatalogAdapter, input: {
         missing_surahs: missingSurahs, catalog_audio_chapters: recitationChapters.length, declared_available_surahs: row.coverage.surahs,
         offset_correction_review_required: offset.offset_correction_ms !== null && offset.offset_correction_ms !== 0,
         license_status: 'not_verified; no license inferred from timing repository' }),
-      status: hafs && (!offset.offset_verified || (offset.offset_correction_ms !== null && offset.offset_correction_ms !== 0)) ? 'needs_review' : 'imported' });
+      status: offset.verification_status === 'failed' || (hafs && (!offset.offset_verified || (offset.offset_correction_ms !== null && offset.offset_correction_ms !== 0))) ? 'needs_review' : 'imported' });
   }
   dataset.reciters = [...readers.values()];
   dataset.providers = [...channels].sort(([a], [b]) => a.localeCompare(b, 'en')).map(([code, hosts]) => ({ id: stableId('audio-provider', code), code, name: code,

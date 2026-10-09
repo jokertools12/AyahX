@@ -41,6 +41,14 @@ describe('D2 catalog identity and coverage', () => {
     expect(data.chapters[0].coverage_mismatch).toBeNull();
     expect(data.riwayat[0].is_active).toBe(false);
   });
+  it.each(['hafs_an_asim', 'warsh_an_nafi', 'qalon_an_nafi', 'shubah_an_asim'])('keeps a failed offset under review for %s', async (riwayah) => {
+    const records = [{ ...record, riwayah }];
+    const failedOffset: OffsetEvidence = { verification_status: 'failed', offset_verified: false, offset_check_score: .5, offset_correction_ms: null, reason: 'acoustic acceptance failed' };
+    const data = await build(adapterFor(records), records, { fixture_source: failedOffset });
+    expect(data.recitations[0]).toMatchObject({ status: 'needs_review', verification_status: 'failed', offset_verified: false, audio_mode: 'unverified_source' });
+    expect(JSON.parse(String(data.recitations[0].verification_details))).toEqual(failedOffset);
+    expect(data.providers.every((row) => row.is_active === false)).toBe(true);
+  });
   it('keeps a measured constant correction under review without applying it', async () => {
     const samples = [1, 2, 3].flatMap((surah) => Array.from({ length: 5 }, (_, i) => ({ surah, ayah: i + 1, source_offset_hypothesis: { passed: true, score: 1, duration_difference_ms: 0, best_lag_ms: 20 } })));
     const data = await build(adapterFor([record]), [record], { fixture_source: { verification_status: 'passed', offset_verified: true, offset_check_score: 1, offset_correction_ms: 20, samples } });
