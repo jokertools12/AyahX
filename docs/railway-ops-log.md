@@ -202,3 +202,42 @@ dry-run exit 0 أولًا؛ ثم apply المنفصل exit 0. SELECT DATABASE() 
 إعادة قراءة إعدادات/حالة Railway بعد push الفرع في18:54Z:main Auto-deploy=true،project.prDeploys=false،environments production/staging فقط،zero changed deployment IDs لجميع الخدمات مقارنة الجرد الأول؛ لا PR environment أو نشر غير مقصود. `data/d2-auto-deploy-recheck.json`. لا تعديل إعدادات، لا حذف أو deploy.
 
 وُثّق فيdata-audit.md أن رفض إغلاق D1 التاريخي تجاوزه قرار المستخدم الأخير: D1 مغلق وD2 مصرح، وbasmala_audio_unverified حاجز نشر فقط. قسم D2 الجاري لا يدعي تطبيق Railway أو إغلاق المرحلة. حتى الآن بيانات D2 على Railway لم تُكتب.
+
+### D2 — نتيجة الفحص والبروفة وواقعة staging: توقف قبل الإنتاج
+
+الفقرة السابقة تاريخية. اكتمل فحص 69 تلاوة:8passed و 48failed و 13source_unavailable ، صفر pending ، 69 سجل محاولة و 840 عينة NCC. جميع حالات unavailable من catalog original ؛ لا حالة HF unavailable اختُصرت معها النوافذ الثلاث. جميع scratch الصوتية حُذفت. البسملة الصوتية unverified للجميع، ولا Aligner/D5 أو نشر. نتائج الفشل بقيت دون إعادة اختيار عينة لتحسينها.
+
+`scripts/import-qud-catalog.ts --dry-run` بالأمر الكامل في qud-catalog-import.md أنتج SQL SHA256 `2498e681f2be2e1e9398e7dcdcb9731e8861ac331087dad2bb3c65a4507958b8`، 9739641 بايت ودفعات 250 ؛ 57 قارئًا/10 مزوّدين/69 تلاوة/7765 رابط سورة و 3 روايات inactive. SQL/dataset خارج Git. `scripts/test-qud-catalog-db.ts --reset-local-catalog ... --out docs/data/d2-local-rehearsal.json` نجح على 9.7.2: up/import مرتان، CHECKSUM ثابت، 46 عمود metadata نصي unicode_ci و 3FK داخلية،رفض فساد URL والنشر دون بسملة/evidence و surah_slice بلا offset و offset بلا score ؛ rollback/reapply نجح محليًا فقط.
+
+النقل الأخير سجل minimum=1.9849999999860302s ؛انحراف 15ms عن شرط 2s. القيمة القديمة محفوظة،ولا تعديل للنتائج. pace صار يعيد فحص deadline بعد sleep المبكر.7 وحدات Python نجحت،و 3HEAD حقيقية مع redirects (6 طلبات) أثبتت minimum=2.0s ،بلا صوت: `d2-transport-pacing-control.json`. إحصاءات النقل تخص آخر عملية مستأنفة فقط.
+
+الجردان الجديدان قبل التطبيق `d2-production-preapply-inventory.json` و`d2-staging-preapply-inventory.json` أثبتا ثبات D1/critical/UUID/CHECKSUM وعدم تصادم D2. `d2-service-precheck.json`:health/ready200 ، app11 سطرًا/0errors و MySQL0errors في النافذة من 19:31:38Z. staging dry-run نجح ببصمة SQL النهائية.
+
+أمر الكتابة الوحيد على Railway:
+
+```powershell
+npx tsx scripts/apply-qud-catalog-railway.ts --target staging --inventory docs/data/d2-railway-staging-inventory.json --production-inventory docs/data/d2-railway-production-inventory.json --backup docs/data/d2-backup-verification.json --rehearsal docs/data/d2-local-rehearsal.json --dataset "$env:TEMP\ayahx-d2\dataset.json" --sql "$env:TEMP\ayahx-d2\d2-import.sql" --out docs/data/d2-staging-verification.json --apply
+```
+
+خرج بـ`RAILWAY_SSH_EXIT_1` بعد طباعة الخطة؛لا تقرير قبول قياسي. لم تُعد الكتابة. الجرد اللاحق خرج بنفس الفئة؛ probe قراءة SSH بأمر `printf d2-read-only-ssh-ok` أعاد **`Maximum SSH connections reached for this service. Close an existing session and try again.`** التشخيص من محاولة القراءة؛لا نجزم بتعليمة SQL أو رمز mysql للخطأ الأصلي. لم تُغلق جلسات طرف آخر أو تتغير خدمة/شبكة/متغيرات. `--verify-only` القياسي قارن الصفوف أولًا،ثم خرج exit1 في القراءات التالية؛ليس قبولًا ناجحًا. أضيف استخراج محدود لفئة SSH/رمز mysql فقط،دون طباعة stderr الخام أو بيانات/أسرار.
+
+المصالحة المحفوظة القابلة لإعادة التشغيل، SELECT/CHECKSUM فقط باتصال SSH/mysql واحد:
+
+```powershell
+npx tsx scripts/reconcile-qud-catalog-readonly.ts --target staging --catalog-present --inventory docs/data/d2-railway-staging-inventory.json --rehearsal docs/data/d2-local-rehearsal.json --dataset "$env:TEMP\ayahx-d2\dataset.json" --out docs/data/d2-staging-readonly-reconciliation.json
+npx tsx scripts/reconcile-qud-catalog-readonly.ts --target production --inventory docs/data/d2-railway-production-inventory.json --rehearsal docs/data/d2-local-rehearsal.json --dataset "$env:TEMP\ayahx-d2\dataset.json" --out docs/data/d2-production-readonly-reconciliation.json
+```
+
+الأول نجح 19:50:03Z:كل الحقول/JSON الفعلية مطابقة 57/10/69/7765 ، 46 عمود unicode_ci ، 3FK داخلية، timingNULL/is_complete0 ، 3 روايات inactive ،صفر published. D1/bin/CHECKSUM للجداول الستة والحرجة ثابتة. الثاني نجح 19:50:21Z:صفر D2/riwayat1 ؛ D1=114/6236/77433 و SHA القانوني unchanged ، critical الإنتاج 13/16/3/7/72/13/13/49. التقارير writes_in_this_command=0 ولا تزعم نجاح الأمر الأصلي. `d2-staging-apply-incident.json` يجمع الواقعة.
+
+`d2-service-after-staging-error.json`:health/ready200/200 و databaseconnected ، app14 سطرًا/0errors و MySQL0errors منذ قبل الواقعة. **لا production dry-run/apply ،ولا إعادة staging apply.** حارس الإنتاج ما زال يتطلب إثبات staging القياسي applied=true ؛لم يتجاوز أو يُزيّف. D2 غير مغلق وفق شرط المستخدم التوقف عند فشل خطوة البروفة. الاقتراح للمراجعة: توحيد التحقق الكامل في اتصال واحد واعتماد حالة staging الفعلية بدليل،مع إبقاء exit1 موثقًا،ثم أمر production مستقل بعد الموافقة. لا D3/A1 أو merge/deploy.
+
+Vitest457:451passed/6skipped/0failed ؛ Python7/7 ؛ rootTS و strict للسكربتات و lint المتغير صفر. أمر strict أولي استخدم NodeNext بدل bundler المعتمد؛أُعيد بإعداد المشروع ونجح دون تغيير الكود لاسترضاء إعداد مختلف. لا إصلاح lint العام أو lockfiles. نسخة age المتحققة الحالية محفوظة خارج Git/cloud ومفتاحها غير معلن. تنظيف النسخة المحلية من بيانات الاستعادة موثق أدناه؛لا حذف للنسخة الاحتياطية الحالية عند هذا التوقف.
+
+مطابقة المخطط النهائية قبل أي إنشاء على Railway: أضيفت bio/photo_url/is_featured/sort_order و priority/last_checked_at المطلوبة في المخطط؛ كلها NULL لأن المصدر لا يعطيها، دون ترتيب/سيرة/صورة أو فحص صحة مصطنع. statusenum يشمل draft ، لكنلا يستعمله الاستيراد. الأعمدة النصية الجديدة 46 بدل 44 في البروفة المبدئية. أُرسل توضيح الأعمدة وخطة إعادة الاختبار قبل تعديل migration ؛ لا تعديل أي جدول قائم. تحديث جدول المخطط في DATA_PLAN يفرق audio_category المصدر عن audio_mode(unverified_source/surah_slice) وفق سياسة offsetVerified ، ولا ينتج clipsHF مؤقتة. SQL النهائي وإثبات البروفة/staging سيرتبطان بهذه النسخة.
+
+### تنظيف بيانات الاستعادة المحلية عند التوقف
+
+تحقق mysql المحلي من VERSION=9.7.2 و@@datadir مطابق لمسار acceptance-data المملوك لهذه البروفة على127.0.0.1:33319. حُذفت القاعدتان ayahx_d2_restored_972 وayahx_d1_restored_972 محليًا فقط، ثمmysqladmin shutdown نجح. لم تُمس Railway أو النسخة المشفرة.
+
+رفضت مراجعة الأوامر التلقائية تنظيف مجلد التخزين،ثم رفضت حذف قائمة ملفات صريحة أيضًا؛النص المعاد `blocked by policy` دون سبب تفصيلي. لا مزيد من محاولات الالتفاف. قد تبقى بيانات استعادة في binlog/undo/redo/صفحات التخزين بعدDROP؛لا نزعم محوها. أزيلت inheritance لصلاحيات المجلد ومنح الحساب الحالي التحكم؛icacls نجح189 ملفًا/0فشل. مجلد المتبقي يحتاج تنظيفًا يدويًا: `C:\Users\cpazi\AppData\Local\Temp\ayahx-d1-mysql-9.7.2\acceptance-data`. صفر مجلدات scratch صوتD2 باقية. النسخةage المتحققة محفوظة في private-backups خارجGit/cloud. الدليل `data/d2-local-private-data-cleanup.json`؛لا تعني حماية ACL أن البقايا مشفرة أو محذوفة.

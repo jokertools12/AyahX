@@ -8,6 +8,8 @@ QUD Release v3.2.0، SHA الفعلي في `data/d2-catalog-source.json`. الم
 
 metadata/table/column: utf8mb4_unicode_ci صريح. D2 لا يخزن نصًا منطوقًا؛ `audit_json` إحصاءات D1، والتوقيتات لا تستورد حتى D3. أي عمود منطوق مستقبلي يجب utf8mb4_bin. source_reciter_id يحتفظ بقيمة المصدر، وcountry يحتفظ بالتسمية الفعلية دون تخمين ISO.
 
+bio/photo_url/is_featured/sort_order للقراء، وpriority/last_checked_at للمزوّدين، موجودة حسب مخطط الخطة لكنها NULL: لا مصدر لها في Release ولا ترتيب أو سيرة أو فحص صحة مخترع. لا controls أو حفظ إعدادات في D2. status يتضمن draft للمخطط، لكن الاستيراد الفعلي imported/needs_review فقط. جميع46 عمود metadata نصي unicode_ci، ولا FK إلى الجداول السابقة.
+
 `coverage_ayahs` عدد معلن من catalog؛ `available_ayahs` عدد مرصود في snapshot HF المقبول في D1، مع المقارنة وmissing ranges الموسعة. سورة بلا مرجع عدّ لروايتها: expected_ayahs/coverage_mismatch=NULL وayahs_complete=false. لا يسقط عدّ حفص على غيره. توقيت الكلمات غير مستورد: timing_level=none وcoverage_words/timing_complete=NULL، وis_complete مولّد=false. التوفر في D4/D8 لكل سورة/مدى، وليس مجرد وجود URL أو العدد الإجمالي.
 
 ## الفحص الصوتي المحلي
@@ -77,6 +79,12 @@ DROP TABLE IF EXISTS reciters;
 
 لا drop/ALTER لأي جدول D1 أو جدول مستخدمين، ولا حذف صفوف riwayat القائمة؛ الثلاث الجديدة تبقى inactive ويمكن إعادة D2 idempotently. **SQL أعلاه غير مصرح بتنفيذه على Railway** ضمن تفويض root الحالي (CREATE/INSERT/READ فقط). rollback إنتاجي يحتاج قرارًا مستقلًا بعد الجرد والbackup؛ لا تجعله fallback عند غموض SSH.
 
+## واقعة SSH وحالة D2 الحالية
+
+أمر staging الوحيد كتب بيانات D2 ثم خرج exit1 ؛التشخيص اللاحق بلغ حد اتصالات SSH. لم تُعد أي كتابة،ولم يُنفذ production. المصالحة للقراءة فقط في `scripts/reconcile-qud-catalog-readonly.ts` تجمع القراءات في اتصال واحد وتثبت كامل الحقول وال collations/FK و D1/CHECKSUM/الحرجة. الأوامر ونتائجها في railway-ops-log.md و data/d2-*-readonly-reconciliation.json. تمرير --catalog-present يحدد توقع وجود D2 صراحة؛بدونه يتوقع الغياب ولا يصلح لفحص قاعدة أُضيف D2 إليها.
+
+المصالحة لا تزيّف applied=true ولا تغيّر رمز خروج الأمر الأصلي. حارس الإنتاج ما زال يتطلب تقرير staging القياسي؛لم يُتجاوز. **D2 غير مغلق،والاستئناف يحتاج مراجعة هذا التوقف وفق بروتوكول المستخدم.** لا تعالج تعثر SSH بإعادة apply أو DROP/ALTER أو تغيير الخدمة. النسخة المشفرة المتحققة محفوظة عند التوقف،والمفتاح يبقى منفصلًا.
+
 ## Git ومرحلة الربط
 
-phase/d2-recitation-catalog من D1، PR مستقل دون merge. PR9 يظل draft. main Auto-deploy=true وPR deploys=false كما أثبت الجرد، ويعاد التحقق بعد PR. لا يستنتج green CI من غياب runs. قبل أي merge يحتاج المستخدم CI أخضر وخطة health/logs بعد النشر. الحالية maps/providers/render/font UI لا تتغير؛ الربط D7/D8 والأدمنA1 بتصريح لاحق. الخطوط الستة وقيد CDN الإنتاج في DECISIONS؛ لا ادعاء أن E2E D1 أثبت CDN الإنتاج.
+phase/d2-recitation-catalog من D1 ، PR مستقل دون merge. PR9 يظل draft. main Auto-deploy=true و PR deploys=false كما أثبت الجرد، ويعاد التحقق بعد PR. لا يستنتج green CI من غياب runs. قبل أي merge يحتاج المستخدم CI أخضر وخطة health/logs بعد النشر. الحالية maps/providers/render/font UI لا تتغير؛ الربط D7/D8 والأدمن A1 بتصريح لاحق. الخطوط الستة وقيد CDN الإنتاج في DECISIONS ؛ لا ادعاء أن E2E D1 أثبت CDN الإنتاج.

@@ -1,0 +1,36 @@
+{
+  "checked_at": "2026-10-09T19:39:24.170Z",
+  "health": [
+    {
+      "path": "/api/health",
+      "http_status": 200,
+      "status": "ok"
+    },
+    {
+      "path": "/api/health/ready",
+      "http_status": 200,
+      "status": "ready",
+      "database": "connected"
+    }
+  ],
+  "logs": [
+    {
+      "service": "AyahX",
+      "since": "2026-10-09T19:31:38.6014455Z",
+      "until": "2026-10-09T19:39:20.325Z",
+      "lines": 14,
+      "errors": 0,
+      "error_timestamps": []
+    },
+    {
+      "service": "MySQL",
+      "since": "2026-10-09T19:31:38.6014455Z",
+      "until": "2026-10-09T19:39:20.325Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": []
+    }
+  ],
+  "passed": true,
+  "read_only": true
+}

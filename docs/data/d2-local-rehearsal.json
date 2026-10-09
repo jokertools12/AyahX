@@ -1,0 +1,33 @@
+{
+  "mysql_version": "9.7.2",
+  "sql_sha256": "2498e681f2be2e1e9398e7dcdcb9731e8861ac331087dad2bb3c65a4507958b8",
+  "catalog_sha256": "b7ee26c2267b086d5758477e21144887c28c6ba884a6ff5157a55cf17df4eed4",
+  "counts": {
+    "reciters": 57,
+    "audio_providers": 10,
+    "recitations": 69,
+    "recitation_chapters": 7765
+  },
+  "schema": {
+    "tables": 4,
+    "text_columns": 46,
+    "internal_foreign_keys": 3
+  },
+  "d1_collations": {
+    "tableCount": 7,
+    "textColumnCount": 35,
+    "canonicalColumns": 2
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "migration_twice": true,
+  "import_twice": true,
+  "replay_table_checksums_unchanged": true,
+  "existing_users_join": true,
+  "unverified_audio_publication_rejected": true,
+  "publication_without_audio_evidence_rejected": true,
+  "corrupted_catalog_rejected": true,
+  "rollback_remaining": 0,
+  "reapply_after_rollback": true,
+  "unverified_surah_slice_rejected": true,
+  "offset_without_score_rejected": true
+}

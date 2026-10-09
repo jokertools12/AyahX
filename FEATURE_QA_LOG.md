@@ -195,6 +195,8 @@ A market analysis of top Quranic reel generator tools (**Tashghil.Pro**, **Quran
 - **Production Asset Build:** `vite build` completed in 7.54s (All 51 assets chunked and optimized).
 - **End-to-End API Integration:** Registration, project creation, duplication, renaming, contact submission, and cascading account deletion validated via automated HTTP integration testing.
 
-## D2 — كتالوج البيانات، 2026-10-09 (التنفيذ جارٍ)
+## D2 — كتالوج البيانات، 2026-10-09 (توقّف قبل الإنتاج)
 
-الجداول الأربع الجديدة، المحوّل QUD Release المثبت، dry-run/SQL حتمي، وبروفة MySQL9.7.2 المحلية موجودة. لا تغيير UI/render/startup ولا نشر تلاوات. النشر محظور مع بسملة صوتية unverified وبدون دليل مستقل؛ timing_complete=NULL وis_complete=false. بيانات الروايات غير حفص inactive/imported دون إسقاط نص حفص. الدليل الحالي: docs/data/d2-tests.json وdocs/data/d2-local-rehearsal-pending.json؛ التقرير المبدئي ليس قبول Railway. المرجع النهائي سيُضاف عند اكتمال جدول docs/data-audit.md وstaging/production verification. اختبارات الريندر الحالية نجحت ضمن450 اختبارًا، والستة المتخطاة تكامل اختياري غير مستخدم في D2.
+البيانات والبروفة المحلية اكتملتا؛ 457 اختبار Vitest:451passed/6skipped/0failed ، Python7/7 ، TS/lint المتغير صفر. SQL النهائي 2498e681…، أربع جداول/57 قارئًا/69 تلاوة/7765 رابطًا، وثلاث روايات inactive. D1 ثابت؛لا UI/render/startup تعديل. نتائج offset:8passed/48failed/13source_unavailable ، الجميع غير منشور وبسملةالصوت unverified.
+
+أمر staging بدأ كتابة ثمخرج RAILWAY_SSH_EXIT_1 ، و probe القراءةبلغحد SSH ؛لم تُعد الكتابة. المصالحةالمحفوظةباتصال واحدنجحت:كل حقول الصفوف مطابقة و collations/3FK/D1/checksums/الحرجةثابتة. production لا D2 فيه، counts/hash/collations ثابتة و health/ready200 بلا errors. **D2 غيرمغلق؛لم ينفذ production ،ولا تجاوزلحارسإثبات staging أو D3/A1.** الأدلة: docs/data/d2-local-rehearsal.json و d2-staging-apply-incident.json و d2-staging-readonly-reconciliation.json و d2-production-readonly-reconciliation.json ؛الجدول 69 والاستثناءاتفي docs/data-audit.md.

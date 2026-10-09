@@ -1,0 +1,28 @@
+{
+  "checked_at": "2026-10-09T19:41:35.982Z",
+  "read_only": true,
+  "d1": {
+    "ayahs": 6236,
+    "words": 77433,
+    "surahs": 114
+  },
+  "tables": [
+    "audio_providers",
+    "recitation_chapters",
+    "recitations",
+    "reciters"
+  ],
+  "riwayat": 4,
+  "critical": {
+    "users": 2,
+    "user_roles": 3,
+    "render_jobs": 0,
+    "saved_videos": 1,
+    "notifications": 3,
+    "subscriptions": 4,
+    "system_settings": 13,
+    "payment_requests": 1
+  },
+  "database": "railway",
+  "mysql_version": "9.7.2"
+}

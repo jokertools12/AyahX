@@ -535,30 +535,252 @@ python scripts/check-quran-fonts.py --corpus <corpus.json> --fonts public/fonts 
 5. **المخاطر:** 7 صفوف توقيت معيبة تبقى needs_review؛ 10 خطوط متاحة للاختيار ناقصة رموز قرآنية، والإصلاح في D8/A4 بعد موافقة الربط. لا تلاوة نُشرت ولا بيانات توقيت اعتُمدت، ولا تدقيق annotation يعادل فحص الموجة الصوتية. dump خاص خارج Git/السحابة؛ يبقى حتى إغلاق D1 ثم يُحذف حسب قرار المستخدم، ولا تُحذف نسخة Railway القائمة.
 6. **الخطوة التالية:** استكمال فحص البسملة الصوتي عند استجابة المصدر، ثم إعلان إغلاق D1 وبدء D2 بالتصريح الحالي؛ D3/A1 غير مصرّح بهما. لا طلب نشر/دمج جديد ولا تعديل إعدادات مطلوب في هذه الخطوة.
 
-## D2 — كتالوج القراء والتلاوات (قيد التنفيذ، 2026-10-09)
+## D2 — كتالوج القراء والتلاوات (توقّف قبل الإنتاج، 2026-10-09)
 
-**قرار المستخدم الأخير يغلب بند التعليق التاريخي في تقرير D1 أعلاه:** D1 مقبول ومغلق وظيفيًا، و`basmala_audio_unverified` مفتوح للنشر/الريندر فقط. التصريح D2، لا D3/A1، ولا merge/deploy تطبيق.
+**قرار المستخدم الأخير يغلب بند التعليق التاريخي في تقرير D1 أعلاه:** D1 مقبول ومغلق وظيفيًا، و`basmala_audio_unverified` مفتوح للنشر/الريندر فقط. التصريح D2 ، لا D3/A1 ، ولا merge/deploy تطبيق.
 
 ### المصدر والجداول والسياسات الفعلية
 
-مصدر metadata هو QUD Release v3.2.0؛ الملف الحالي SHA256 `b7ee26c2267b086d5758477e21144887c28c6ba884a6ff5157a55cf17df4eed4`. هو الإصدار نفسه، لكن الناشر صحح chapter_urls لتلاوة saber من مسارات scratch إلى روابط YouTube؛ البصمة القديمة والجديدة والفروق مثبتة في [d2-catalog-source.json](data/d2-catalog-source.json). لا يُستنتج رابط من مسار غير صالح، ولا fallback إلى HF كصوت إنتاج.
+مصدر metadata هو QUD Release v3.2.0 ؛ الملف الحالي SHA256 `b7ee26c2267b086d5758477e21144887c28c6ba884a6ff5157a55cf17df4eed4`. هو الإصدار نفسه، لكن الناشر صحح chapter_urls لتلاوة saber من مسارات scratch إلى روابط YouTube ؛ البصمة القديمة والجديدة والفروق مثبتة في [d2-catalog-source.json](data/d2-catalog-source.json). لا يُستنتج رابط من مسار غير صالح، ولا fallback إلى HF كصوت إنتاج.
 
-الجداول الأربع: reciters، audio_providers، recitations، recitation_chapters. بيانات الملف تحسب 69 تلاوة،57 قارئًا بالـreciter_id،10 مزوّدين توثيقيين (بما فيهم EveryAyah/QDC القائمان)،7765 رابط سورة فعليًا. لا دمج بالأسماء ولا تخمين بلد؛ فحص الأسماء/البلدان عبر مصادر reciter_id المشتركة وجد صفر تعارض، [d2-reciter-metadata.json](data/d2-reciter-metadata.json). metadata بـutf8mb4_unicode_ci صريح، و3 FKs داخل الجديدة فقط. riwayah_id VARCHAR(36) دون FK قائم. الاستثناء القائم الوحيد INSERT الثلاثة غير حفص inactive في riwayat، دون تعديل صف حفص أو النص.
+الجداول الأربع: reciters ، audio_providers ، recitations ، recitation_chapters. بيانات الملف تحسب 69 تلاوة، 57 قارئًا بالـ reciter_id ، 10 مزوّدين توثيقيين (بما فيهم EveryAyah/QDC القائمان)، 7765 رابط سورة فعليًا. لا دمج بالأسماء ولا تخمين بلد؛ فحص الأسماء/البلدان عبر مصادر reciter_id المشتركة وجد صفر تعارض، [d2-reciter-metadata.json](data/d2-reciter-metadata.json). metadata بـ utf8mb4_unicode_ci صريح، و 3 FKs داخل الجديدة فقط. riwayah_id VARCHAR(36) دون FK قائم. الاستثناء القائم الوحيد INSERT الثلاثة غير حفص inactive في riwayat ، دون تعديل صف حفص أو النص.
 
-التغطية من catalog ومقارنتها بآيات snapshot D1 الفعلية. فحص مجموعات معرّفات الآيات كلها في حفص: صفر معرّف غير قانوني؛ قائمة السور المكتملة والمفقود في [d2-ayah-coverage.json](data/d2-ayah-coverage.json). الروايات غير حفص imported/canonical_text_available=false، وexpected_ayahs وcoverage_mismatch=NULL لغياب مرجعها، دون إسقاط عدّ حفص. timing_complete/coverage_words=NULL وtiming_level=none، وis_complete مولد false حتى D3. وجود audio URL لا يعني اكتمال تغطية أو توقيت.
+التغطية من catalog ومقارنتها بآيات snapshot D1 الفعلية. فحص مجموعات معرّفات الآيات كلها في حفص: صفر معرّف غير قانوني؛ قائمة السور المكتملة والمفقود في [d2-ayah-coverage.json](data/d2-ayah-coverage.json). الروايات غير حفص imported/canonical_text_available=false ، و expected_ayahs و coverage_mismatch=NULL لغياب مرجعها، دون إسقاط عدّ حفص. timing_complete/coverage_words=NULL و timing_level=none ، و is_complete مولد false حتى D3. وجود audio URL لا يعني اكتمال تغطية أو توقيت.
 
-basmala_mode يخص وجود1:1 فقط، وتفصل عنه حالة نص افتتاحات السور من annotation وحالة الصوت. كل حالة صوتية unverified؛ تحليل prefix (طول/RMS/صمت) دليل للمراجعة وليس تفريغًا أو ادعاء absence. importer يمنع published، وقيد DB يرفض النشر دون مراجعة صوت البسملة بدليل ومرجع قانوني وoffset وتوقيت معتمد. ثبت الرفض على MySQL9.7.2 الحقيقي؛ قيد is_complete لم يصبح true مع NULL.
+basmala_mode يخص وجود 1:1 فقط، وتفصل عنه حالة نص افتتاحات السور من annotation وحالة الصوت. كل حالة صوتية unverified ؛ تحليل prefix (طول/RMS/صمت) دليل للمراجعة وليس تفريغًا أو ادعاء absence. importer يمنع published ، وقيد DB يرفض النشر دون مراجعة صوت البسملة بدليل ومرجع قانوني و offset وتوقيت معتمد. ثبت الرفض على MySQL9.7.2 الحقيقي؛ قيد is_complete لم يصبح true مع NULL.
 
-فحص source_offset محلي من catalog original كامل + HF Parquet audio ranges أولًا. NCC أقصى ±300ms؛ خمس آيات distinct موزعة من3 سور مختلفة الطول، score≥0.95 ومدة≤30ms وabs(lag)≤30ms لكل عينة. نتائج الفحص تُستأنف دون إعادة تحسين فشل مكتمل. lag ثابت غير صفري يسجل فقط ويبقي حفص needs_review حتى المراجعة. الصوت يُحذف بعد كل محاولة، ولا يُرفع أو يستضاف. روابط YouTube/Drive التي تعيد صفحة لا bytes صوت موثقة source_unavailable لمسار التدقيق الحالي، دون الادعاء أن التسجيل محذوف من المزوّد.
+فحص source_offset محلي من catalog original كامل + HF Parquet audio ranges أولًا. NCC أقصى ±300ms ؛ خمس آيات distinct موزعة من 3 سور مختلفة الطول، score≥0.95 ومدة≤30ms و abs(lag)≤30ms لكل عينة. نتائج الفحص تُستأنف دون إعادة تحسين فشل مكتمل. lag ثابت غير صفري يسجل فقط ويبقي حفص needs_review حتى المراجعة. الصوت يُحذف بعد كل محاولة، ولا يُرفع أو يستضاف. روابط YouTube/Drive التي تعيد صفحة لا bytes صوت موثقة source_unavailable لمسار التدقيق الحالي، دون الادعاء أن التسجيل محذوف من المزوّد.
 
-اختيار السور اللاحق يسبق أي قياس صوت: أقصر/متوسطة/أطول أعداد آيات مختلفة في الثلث الأخير للمؤهلة من annotation، وخمس بداية/ربع/وسط/ثلاثة أرباع/نهاية؛ الأدلة الأولى بقيت كما هي. Parquet statistics وsurah predicate يحدان column reads دون تقليل العينة. تجربة seek HTTP Range لملف قصير نجحت، لكنها تعثّرت على طويل بعد120s؛ لذلك فحص القبول يستخدم تنزيلًا كاملاً. [الضبط الحقيقي الموجب والسالب](data/d2-real-offset-controls.json) أثبت score0.98880387/lag0.25ms/delta16.625ms نجاحًا وscore0.05202221 عند+1000ms رفضًا؛ مُعيقلي الكامل يبقى failed بسبب36:83(score0.93806561).
+اختيار السور اللاحق يسبق أي قياس صوت: أقصر/متوسطة/أطول أعداد آيات مختلفة في الثلث الأخير للمؤهلة من annotation ، وخمس بداية/ربع/وسط/ثلاثة أرباع/نهاية؛ الأدلة الأولى بقيت كما هي. Parquet statistics و surah predicate يحدان column reads دون تقليل العينة. تجربة seek HTTP Range لملف قصير نجحت، لكنها تعثّرت على طويل بعد 120s ؛ لذلك فحص القبول يستخدم تنزيلًا كاملاً. [الضبط الحقيقي الموجب والسالب](data/d2-real-offset-controls.json) أثبت score0.98880387/lag0.25ms/delta16.625ms نجاحًا و score0.05202221 عند+1000ms رفضًا؛ مُعيقلي الكامل يبقى failed بسبب 36:83(score0.93806561).
 
 ### بروتوكول التشغيل ودليل الاختبارات الحالي
 
-جرد الإنتاج47 جدولًا وstaging86، كلاهماMySQL9.7.2 وUUID مختلف، دون تصادم D2. استعيد dump الإنتاج47 جدولًا محليًا وطابقت الأعداد وCHECKSUM جميعها، بما فيها الحرجة وD1. النسخة الحالية age X25519 خارجGit/cloud: `C:\Users\cpazi\AppData\Local\AyahX\private-backups\d2-production-20261009.sql.age`، ومفتاح منفصل بصلاحيات الحساب فقط. حُذف dump D1 فقط بعد تحقق D2. محاولة Snapshot الإضافية الوحيدة رفضت: `Manual backups and backup schedules are only available for Pro workspaces`؛ لا retry إضافيًا ولا تغيير volume. [d2-backup-verification.json](data/d2-backup-verification.json)، [d2-snapshot-attempt.json](data/d2-snapshot-attempt.json).
+جرد الإنتاج 47 جدولًا و staging86 ، كلاهما MySQL9.7.2 و UUID مختلف، دون تصادم D2. استعيد dump الإنتاج 47 جدولًا محليًا وطابقت الأعداد و CHECKSUM جميعها، بما فيها الحرجة و D1. النسخة الحالية age X25519 خارج Git/cloud: `C:\Users\cpazi\AppData\Local\AyahX\private-backups\d2-production-20261009.sql.age`، ومفتاح منفصل بصلاحيات الحساب فقط. حُذف dump D1 فقط بعد تحقق D2. محاولة Snapshot الإضافية الوحيدة رفضت: `Manual backups and backup schedules are only available for Pro workspaces`؛ لا retry إضافيًا ولا تغيير volume. [d2-backup-verification.json](data/d2-backup-verification.json)، [d2-snapshot-attempt.json](data/d2-snapshot-attempt.json).
 
-المشغل يتحقق من سلامة الملف المشفر وبصمته، ويربط البروفة بـSQL SHA نفسه، ويرفض أي pending أو نقص سجل محاولات قبل Railway. إثبات staging ببصمة SQL نفسها إلزامي لأمر production مستقل مع --apply --confirm-production. البروفة المدمرة محلية فقط: up/import مرتان، CHECKSUM الأربع ثابت، corruption/publication رفض، rollback/reapply. التقرير الذي ينتهي pending مبدئي، وليس إثبات SQL النهائي أو تطبيق Railway.
+المشغل يتحقق من سلامة الملف المشفر وبصمته، ويربط البروفة بـ SQL SHA نفسه، ويرفض أي pending أو نقص سجل محاولات قبل Railway. إثبات staging ببصمة SQL نفسها إلزامي لأمر production مستقل مع --apply --confirm-production. البروفة المدمرة محلية فقط: up/import مرتان، CHECKSUM الأربع ثابت، corruption/publication رفض، rollback/reapply. التقرير الذي ينتهي pending مبدئي، وليس إثبات SQL النهائي أو تطبيق Railway.
 
-Vitest الحالي:451passed/6skipped/0failed؛ الستة تكامل DB/BullMQ opt-in، لا مهمة خلفية جديدة في D2. FFmpeg/Skia/Chromium واختبار corpus القائم شُغّلت. Python6/6؛ rootTS وstrict للمتغير ناجحان، lint للمتغير صفر errors/warnings. لا معالجة lint العام أو EPERM بتغيير lockfile. [d2-tests.json](data/d2-tests.json). فحص health/readiness الحالي للقراءة فقط أعاد200/ok و200/ready/database connected، ولوج MySQL/app صفر أخطاء في نافذته، [d2-service-readonly-smoke.json](data/d2-service-readonly-smoke.json). هذه قراءة baseline، وليست تحقق ما بعد التطبيق.
+Vitest الحالي:451passed/6skipped/0failed ؛ الستة تكامل DB/BullMQ opt-in ، لا مهمة خلفية جديدة في D2. FFmpeg/Skia/Chromium واختبار corpus القائم شُغّلت. Python6/6 ؛ rootTS و strict للمتغير ناجحان، lint للمتغير صفر errors/warnings. لا معالجة lint العام أو EPERM بتغيير lockfile. [d2-tests.json](data/d2-tests.json). فحص health/readiness الحالي للقراءة فقط أعاد 200/ok و 200/ready/database connected ، ولوج MySQL/app صفر أخطاء في نافذته، [d2-service-readonly-smoke.json](data/d2-service-readonly-smoke.json). هذه قراءة baseline ، وليست تحقق ما بعد التطبيق.
 
-**جدول التلاوات والنتائج النهائية وstaging/production سيضاف بعد اكتمال الفحص والبروفة النهائية؛ لا ادعاء إغلاق D2 في هذا القسم الجاري.** تفاصيل الأوامر في [railway-ops-log.md](railway-ops-log.md)، والسجل الملزم [DECISIONS.md](plan/DECISIONS.md)، وأوامر التشغيل/rollback في [qud-catalog-import.md](qud-catalog-import.md).
+### نتيجة D2 عند التوقف
+
+**D2 غير مغلق: الإنتاج لم يُطبّق.** اكتملت البيانات والبروفة المحلية، ونُفّذ أمر staging مرة واحدة. خرج الأمر بـ`RAILWAY_SSH_EXIT_1`، وأعادت قراءة SSH التشخيصية لاحقًا `Maximum SSH connections reached for this service. Close an existing session and try again.` تعذّر الجرد الكامل الأول والتحقق القياسي اللاحق أيضًا. لم يُعد أي أمر كتابة. لا يُنسب الخطأ إلى SQL معيّن دون دليل؛ التشخيص يثبت حد اتصالات القراءة اللاحقة.
+
+المصالحة اللاحقة للقراءة فقط **نجحت** باتصال mysql/SSH واحد، عبر السكربت المحفوظ `scripts/reconcile-qud-catalog-readonly.ts`: جميع حقول/JSON الصفوف الأربعة مطابقة، والتوقيت NULL ، و is_complete=false ، والروايات الثلاث inactive. ثبتت 4 جداول/46 عمود metadata نصي unicode_ci/3FK داخلية، و D1/bin/CHECKSUM للجداول الستة النصية والترجمة والجداول الحرجة ثابتة. هذه نتيجة قراءة فعلية، ولا تغيّر رمز خروج أمر التطبيق الأصلي أو تصنع `applied=true` له. [مصالحة staging](data/d2-staging-readonly-reconciliation.json)، [سجل الواقعة](data/d2-staging-apply-incident.json).
+
+قراءة production اللاحقة أثبتت **صفر جداول D2** و riwayat=1 ، وبقاء النص/الـ CHECKSUM/الـ collations والجداول الحرجة. لم يُنفذ production dry-run/apply ولم يجر deploy أو merge أو تعديل إعداد خدمة. أمر production ما زال يتطلب إثبات staging القياسي `applied=true`، ولا جرى تجاوز حارسه أو إعادة تصنيف ملف المصالحة إليه. [مصالحة production](data/d2-production-readonly-reconciliation.json).
+
+SQL الحتمي النهائي SHA256 `2498e681f2be2e1e9398e7dcdcb9731e8861ac331087dad2bb3c65a4507958b8`؛ 9739641 بايت، دفعات 250 ، خارج Git. up/import مرتان و rollback/reapply ، رفض فساد URL ، ورفض النشر مع بسملة غير متحققة أو بلا evidence ، ورفض surah_slice بلا offset و offset بلا score: نجحت على MySQL9.7.2. [البروفة النهائية](data/d2-local-rehearsal.json).
+
+### جدول التلاوات الكامل عند D2
+
+التغطية = عدّ catalog / الآيات الفريدة المرصودة في HF D1 ، وليست تغطية توقيت الكلمات. ayahs_complete33 لحفص فقط؛ غير حفص لا مرجع قانوني لها هنا. basmala_mode=absent يخص فقد 1:1 ، ولا يعني غياب البسملة من صوت أول السورة. text_status يخص annotation فقط. جميع حالات الصوت unverified ، وجميع الصفوف غير منشورة؛ coverage_words/timing_complete=NULL و is_complete=false.
+
+| التلاوة | الرواية | تغطية catalog / HF | basmala_mode | حالة نص افتتاح السورة | حالة الصوت | offset_verified | verification_status | ayahs_complete | status |
+|---|---|---:|---|---|---|---|---|---|---|
+| abdul_hamid_ghraio_2025_yt | hafs_an_asim | 6235 / 6235 | absent | basmala_not_in_recited_text | unverified | لا | source_unavailable | لا | needs_review |
+| abdul_hamid_ghraio_2026_yt | hafs_an_asim | 6235 / 6235 | absent | basmala_not_in_recited_text | unverified | لا | source_unavailable | لا | needs_review |
+| abdulaziz_al_turki_yt | hafs_an_asim | 6115 / 6115 | ayah_1_included | mixed_or_unavailable | unverified | لا | source_unavailable | لا | needs_review |
+| abdulbasit_abdulsamad_mujawwad_tarteel | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| abdulbasit_abdulsamad_tarteel | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| abdulbasit_abdulsamad_warsh_qdc | warsh_an_nafi | 6214 / 6178 | ayah_1_included | basmala_not_in_recited_text | unverified | نعم | passed | لا | imported |
+| abdullah_al_buaijan_2025_yt | hafs_an_asim | 6235 / 6235 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | source_unavailable | لا | needs_review |
+| abdullah_al_mattrod_qdc | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| abdullah_al_qarafi_mp3quran | hafs_an_asim | 6223 / 6223 | ayah_1_included | basmala_not_in_recited_text | unverified | نعم | passed | لا | imported |
+| abdullah_kamel_way2quran | hafs_an_asim | 6235 / 6235 | absent | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| abdulwadood_haneef_mp3quran | hafs_an_asim | 6235 / 6235 | absent | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| abdur_rashid_sufi_qdc | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| abdur_rashid_sufi_shubah_qdc | shubah_an_asim | 6236 / 6230 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | لا | imported |
+| abu_bakr_al_shatri_tarteel | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| adel_al_karbalaei_archive_v2 | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| ahmad_naseem_ali_ahmad_2019_yt | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | source_unavailable | نعم | needs_review |
+| ahmed_al_ajmi_qdc | hafs_an_asim | 6235 / 6235 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| ahmed_amer_tvquran | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| ahmed_deban_qalon_mp3quran | qalon_an_nafi | 6214 / 6190 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | لا | imported |
+| ahmed_issa_al_maasaraawi_mp3quran | hafs_an_asim | 6234 / 6234 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| ahmed_kaseb_way2quran | hafs_an_asim | 6235 / 6235 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| ahmed_nuayna_qdc | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| ahmed_saleh_rajab_qalon_way2quran | qalon_an_nafi | 6213 / 6126 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | لا | imported |
+| ahmed_saud_mp3quran | hafs_an_asim | 327 / 327 | absent | mixed_or_unavailable | unverified | لا | failed | لا | needs_review |
+| ahmed_shaheen_mp3quran | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| ahmed_talib_bin_humaid_mp3quran | hafs_an_asim | 5561 / 5561 | ayah_1_included | mixed_or_unavailable | unverified | لا | failed | لا | needs_review |
+| akram_al_alaqmi_qdc | hafs_an_asim | 6235 / 6235 | absent | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| ali_al_huthaifi_mp3quran | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | نعم | passed | نعم | imported |
+| ayman_swed_muallim_yt | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | source_unavailable | نعم | needs_review |
+| badr_al_turki_yt | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | source_unavailable | نعم | needs_review |
+| bandar_baleela_qdc | hafs_an_asim | 6235 / 6235 | absent | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| fatih_seferagic_way2quran | hafs_an_asim | 6235 / 6235 | absent | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| haitham_al_dukhain_mp3quran | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | نعم | passed | نعم | needs_review |
+| hani_al_rifai_qdc_128k | hafs_an_asim | 6234 / 6233 | absent | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| ibrahim_al_akhdar_drive | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | source_unavailable | نعم | needs_review |
+| imad_zuhair_hafez_mp3quran | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | نعم | passed | نعم | imported |
+| islam_sobhi_mp3quran | hafs_an_asim | 5334 / 5275 | ayah_1_included | mixed_or_unavailable | unverified | لا | failed | لا | needs_review |
+| khalid_al_mohana_drive | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | source_unavailable | نعم | needs_review |
+| khalifa_al_tunaiji_tarteel | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| maher_al_muaiqly_qdc | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| mahmoud_abdul_hakam_mp3quran | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| mahmoud_ali_al_banna_qdc | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| mahmoud_khalil_al_husary_mp3quran | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| mahmoud_khalil_al_husary_mujawwad_tarteel | hafs_an_asim | 6235 / 6235 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| mahmoud_khalil_al_husary_qdc_128k | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| mishary_rashid_al_afasy_2008_qdc | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| mishary_rashid_al_afasy_mp3quran | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| moaz_mahmoud_hamed_qalon_way2quran | qalon_an_nafi | 6177 / 6175 | ayah_1_included | mixed_or_unavailable | unverified | لا | failed | لا | imported |
+| mohammed_abdulkareem_qdc | hafs_an_asim | 6235 / 6235 | ayah_1_included | basmala_not_in_recited_text | unverified | نعم | passed | لا | needs_review |
+| mohammed_al_luhaidan_mp3quran | hafs_an_asim | 6234 / 6234 | absent | basmala_not_in_recited_text | unverified | نعم | passed | لا | needs_review |
+| mohammed_alghazali_archive | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| mohammed_ayyub_drive | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | source_unavailable | نعم | needs_review |
+| mohammed_burhaji_yt | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | source_unavailable | نعم | needs_review |
+| mohammed_saayed_warsh_mp3quran | warsh_an_nafi | 6214 / 6214 | ayah_1_included | basmala_not_in_recited_text | unverified | نعم | passed | لا | imported |
+| mohammed_siddiq_al_minshawi_1967_drive | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | source_unavailable | نعم | needs_review |
+| mohammed_siddiq_al_minshawi_mp3quran | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| mohammed_siddiq_al_minshawi_mujawwad_mp3quran | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| muammar_zainal_al_sukaini_way2quran | hafs_an_asim | 6229 / 6229 | ayah_1_included | mixed_or_unavailable | unverified | لا | failed | لا | needs_review |
+| mustafa_ismail_mp3quran | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | نعم | needs_review |
+| nasser_al_qatami_mp3quran | hafs_an_asim | 6235 / 6235 | absent | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| saad_al_ghamdi_tarteel | hafs_an_asim | 6235 / 6235 | absent | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| saber_abdulhakam_qalon_way2quran | qalon_an_nafi | 6214 / 6194 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | لا | imported |
+| saber_abdulhakam_shubah_way2quran | shubah_an_asim | 6236 / 6235 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | لا | imported |
+| saber_abdulhakam_warsh_way2quran | warsh_an_nafi | 6214 / 6213 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | لا | imported |
+| saber_abdulhakam_yt | hafs_an_asim | 6236 / 6236 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | source_unavailable | نعم | needs_review |
+| saud_al_shuraim_mp3quran | hafs_an_asim | 6235 / 6235 | absent | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| walid_al_naihi_qalon_mp3quran | qalon_an_nafi | 6214 / 6195 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | لا | imported |
+| walid_atef_way2quran | hafs_an_asim | 6235 / 6235 | ayah_1_included | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+| yasser_al_dosari_archive | hafs_an_asim | 6235 / 6235 | absent | basmala_not_in_recited_text | unverified | لا | failed | لا | needs_review |
+
+### الاستثناءات والأدلة الصوتية
+
+نتيجة 69 تلاوة:8passed و 48failed و 13source_unavailable ، صفر pending ، 69 سجل محاولة و 840 عينة NCC فعلية (15 عينة للتلاوات الـ 56 القابلة للتدقيق). المحاولة غير المتاحة للمصدر لا تُعد فشلًا صوتيًا. جميع 13 من روابط catalog الأصلية؛ لم تُصنّف أي حالة HF unavailable تُختصر معها سياسة النوافذ الثلاث. Parquet كان المسار الفعلي؛ signed clips/audio scratch حُذفت جميعها. [نتائج كل عينة](data/d2-offset-verification.json)، [الاستثناءات](data/d2-exceptions.json).
+
+8 نتائج offset متحققة لا تعني 8 تلاوات صالحة للنشر. التصحيح الثابت غير الصفري مسجّل فقط؛ حفص الذي يحتاجه يبقى needs_review ، وغير حفص imported بلا نص قانوني. 10 تلاوات غير حفص، 13imported و 56needs_review ؛ الجميع غير منشور. basmala_mode:55ayah_1_included و 14absent ؛ لا دليل separate_clip. حالة annotation:63basmala_not_in_recited_text و 6mixed_or_unavailable. لا تقرير غياب صوت البسملة، ولا تشغيل Aligner أو D5 في هذه المرحلة.
+
+**انحراف النقل الموثّق:** أقل فاصل فعلي في آخر عملية تدقيق مستأنفة 1.985s ، أقل من شرط 2s بنحو 15ms. لم تُغيّر القيمة القديمة ولم تُعد عينات فاشلة لتحسين نتيجتها. جرى إصلاح pace بإعادة فحص deadline ؛ 7/7 وحدات Python ، و 3HEAD حقيقية مع redirects (6 طلبات) أثبتت أقل فاصل 2.0s دون تنزيل صوت. [دليل التصحيح](data/d2-transport-pacing-control.json). إحصاءات النقل الأخيرة تخص عملية الاستئناف الأخيرة وليست مجموع عمليات الفحص التاريخية.
+
+التلاوات التي فشلت لها خيار D5 لاحق: المحاذاة على الصوت الذي سيُخدم فعلًا. لا تطبيق correction أو timing تقريبي. تفاصيل mismatch/missing ranges ومعرّفات الآيات في [d2-ayah-coverage.json](data/d2-ayah-coverage.json). تراخيص الصوت والـ attribution لم تثبت من المصدر:NULL ، والمزوّدون غير مفعّلين/healthunchecked. bio/photo/is_featured/sort_order/priority/last_checked_at أيضًا NULL دون معلومات مصطنعة.
+
+| failed config | أدنى NCC | عدد العينات المرفوضة |
+|---|---:|---:|
+| abdulbasit_abdulsamad_mujawwad_tarteel | 0.56377778 | 7 |
+| abdulbasit_abdulsamad_tarteel | 0.37945573 | 7 |
+| abdullah_al_mattrod_qdc | 0.23156619 | 1 |
+| abdullah_kamel_way2quran | 0.14085619 | 6 |
+| abdulwadood_haneef_mp3quran | 0.82327665 | 6 |
+| abdur_rashid_sufi_qdc | 0.93475225 | 1 |
+| abdur_rashid_sufi_shubah_qdc | 0.32600671 | 2 |
+| abu_bakr_al_shatri_tarteel | 0.20549451 | 3 |
+| adel_al_karbalaei_archive_v2 | 0.20222689 | 3 |
+| ahmed_al_ajmi_qdc | 0.27977153 | 5 |
+| ahmed_amer_tvquran | 0.97377819 | 1 |
+| ahmed_deban_qalon_mp3quran | 0.92241244 | 5 |
+| ahmed_issa_al_maasaraawi_mp3quran | 0.9368733 | 2 |
+| ahmed_kaseb_way2quran | 0.19738515 | 15 |
+| ahmed_nuayna_qdc | 0.30031817 | 4 |
+| ahmed_saleh_rajab_qalon_way2quran | 0.13331352 | 1 |
+| ahmed_saud_mp3quran | 0.89284286 | 5 |
+| ahmed_shaheen_mp3quran | 0.80653435 | 7 |
+| ahmed_talib_bin_humaid_mp3quran | 0.89251828 | 2 |
+| akram_al_alaqmi_qdc | 0.30281426 | 4 |
+| bandar_baleela_qdc | 0.21324602 | 4 |
+| fatih_seferagic_way2quran | 0.17826191 | 3 |
+| hani_al_rifai_qdc_128k | 0.31115219 | 4 |
+| islam_sobhi_mp3quran | 0.94425559 | 1 |
+| khalifa_al_tunaiji_tarteel | 0.24713172 | 15 |
+| maher_al_muaiqly_qdc | 0.93806561 | 1 |
+| mahmoud_abdul_hakam_mp3quran | 0.93613915 | 4 |
+| mahmoud_ali_al_banna_qdc | 0.9441084 | 1 |
+| mahmoud_khalil_al_husary_mp3quran | 0.89306233 | 4 |
+| mahmoud_khalil_al_husary_mujawwad_tarteel | 0.14771115 | 6 |
+| mahmoud_khalil_al_husary_qdc_128k | 0.28092874 | 7 |
+| mishary_rashid_al_afasy_2008_qdc | 0.16867719 | 7 |
+| mishary_rashid_al_afasy_mp3quran | 0.94327183 | 1 |
+| moaz_mahmoud_hamed_qalon_way2quran | 0.15092399 | 5 |
+| mohammed_alghazali_archive | 0.91330988 | 5 |
+| mohammed_siddiq_al_minshawi_mp3quran | 0.87437985 | 5 |
+| mohammed_siddiq_al_minshawi_mujawwad_mp3quran | 0.64401192 | 8 |
+| muammar_zainal_al_sukaini_way2quran | 0.92592441 | 2 |
+| mustafa_ismail_mp3quran | 0.93735887 | 2 |
+| nasser_al_qatami_mp3quran | 0.9731941 | 1 |
+| saad_al_ghamdi_tarteel | 0.1997949 | 7 |
+| saber_abdulhakam_qalon_way2quran | 0.202516 | 3 |
+| saber_abdulhakam_shubah_way2quran | 0.93022949 | 1 |
+| saber_abdulhakam_warsh_way2quran | 0.90106301 | 4 |
+| saud_al_shuraim_mp3quran | 0.74639432 | 4 |
+| walid_al_naihi_qalon_mp3quran | 0.19377974 | 8 |
+| walid_atef_way2quran | 0.29440389 | 5 |
+| yasser_al_dosari_archive | 0.16456753 | 6 |
+
+| source_unavailable config | السبب المسجّل |
+|---|---|
+| abdul_hamid_ghraio_2025_yt | catalog_audio_unavailable ({'surah': 2, 'type': 'ValueError', 'http_status': None}) |
+| abdul_hamid_ghraio_2026_yt | catalog_audio_unavailable ({'surah': 2, 'type': 'ValueError', 'http_status': None}) |
+| abdulaziz_al_turki_yt | catalog_audio_unavailable ({'surah': 2, 'type': 'ValueError', 'http_status': None}) |
+| abdullah_al_buaijan_2025_yt | catalog_audio_unavailable ({'surah': 1, 'type': 'ValueError', 'http_status': None}) |
+| ahmad_naseem_ali_ahmad_2019_yt | catalog_audio_unavailable ({'surah': 74, 'type': 'ValueError', 'http_status': None}) |
+| ayman_swed_muallim_yt | catalog_audio_unavailable ({'surah': 74, 'type': 'ValueError', 'http_status': None}) |
+| badr_al_turki_yt | catalog_audio_unavailable ({'surah': 74, 'type': 'ValueError', 'http_status': None}) |
+| ibrahim_al_akhdar_drive | catalog_audio_unavailable ({'surah': 74, 'type': 'ValueError', 'http_status': None}) |
+| khalid_al_mohana_drive | catalog_audio_unavailable ({'surah': 74, 'type': 'ValueError', 'http_status': None}) |
+| mohammed_ayyub_drive | catalog_audio_unavailable ({'surah': 74, 'type': 'ValueError', 'http_status': None}) |
+| mohammed_burhaji_yt | catalog_audio_unavailable ({'surah': 74, 'type': 'ValueError', 'http_status': None}) |
+| mohammed_siddiq_al_minshawi_1967_drive | catalog_audio_unavailable ({'surah': 74, 'type': 'ValueError', 'http_status': None}) |
+| saber_abdulhakam_yt | catalog_audio_unavailable ({'surah': 74, 'type': 'ValueError', 'http_status': None}) |
+
+### unmapped_sources خارج Release
+
+هذه 24config موجودة في HF snapshot فقط ولا تُستورد من خارجه، و mushafs metadata مستبعد. [القائمة المنفصلة](data/d2-unmapped-sources.json).
+
+| config | صفوف HF |
+|---|---:|
+| abdullah_basfar_qdc | 6236 |
+| abdulmohsin_al_qasim_qdc | 6235 |
+| abdulrahman_al_sudais_tarteel | 6235 |
+| abdulrahman_al_sudais_yt | 6234 |
+| abdulrahman_az_zawawi_way2quran | 6235 |
+| ahmed_khader_al_trabulsi_qalon_tvquran | 6179 |
+| al_dokali_mohammed_alaalim_qalon_mp3quran | 6214 |
+| al_hussayni_al_azazy_kids_qdc | 6234 |
+| ali_hajjaj_al_souasi_qdc | 6236 |
+| aloyoon_al_koshi_warsh_mp3quran | 6214 |
+| anas_almiman_yt | 6236 |
+| hatem_fareed_al_waer_mp3quran | 6235 |
+| kamel_al_bayli_warsh_way2quran | 6213 |
+| khalid_al_qahtani_mp3quran | 6234 |
+| maher_al_muaiqly_tarteel | 6235 |
+| majed_al_zamil_yt | 6236 |
+| mohammed_al_tablawi_qdc | 6236 |
+| nabil_al_rifai_mp3quran | 6236 |
+| omar_al_qazabri_warsh_mp3quran | 6214 |
+| salah_al_budair_qdc | 6235 |
+| wadie_al_yamani_tvquran | 6235 |
+| yasser_al_dosari_yt | 6236 |
+| yassin_al_jazaery_warsh_mp3quran | 6214 |
+| yusuf_bin_noah_ahmed_tvquran | 6146 |
+
+### الجداول الحرجة وإجابة Auto-deploy
+
+| الجدول | production قبل / آخر قراءة | staging قبل / آخر قراءة |
+|---|---:|---:|
+| users | 13 / 13 | 2 / 2 |
+| user_roles | 13 / 13 | 3 / 3 |
+| render_jobs | 72 / 72 | 0 / 0 |
+| saved_videos | 7 / 7 | 1 / 1 |
+| notifications | 49 / 49 | 3 / 3 |
+| subscriptions | 16 / 16 | 4 / 4 |
+| system_settings | 13 / 13 | 13 / 13 |
+| payment_requests | 3 / 3 | 1 / 1 |
+
+saved_videos هو الاسم الحقيقي؛ videos/plans غير موجودين. D1 في البيئتين 114/6236/77433 ، SHA القانوني `eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4`، و CHECKSUM الجداول النصية الستة ثابت. health/ready بعد واقعة staging=200/200 و app/MySQL بلا errors في النافذة من 19:31:38Z. [فحص الخدمة](data/d2-service-after-staging-error.json).
+
+Auto-deploy مفعّل فعلًا للخدمة/فرع main من GitHub ؛ PRdeploys=false ، البيئتان production/staging فقط، ولم تتغير deployment IDs بعد دفع الفروع. أحدث قراءة إضافية بعد PR تُحفظ في `d2-auto-deploy-final.json` وتُذكر في التقرير؛ لا تساوي مسودة PR دمجًا أو نشرًا. PR9 باقٍ مسودة.
+
+### تقرير المرحلة D2 — نتيجة التوقف
+
+1. **ما تغيّر:** أربع جداول، محوّل Release ، مستورد dry-run و SQL حتمي، حراس النشر والـ offset ، تدقيق صوت قابل للاستئناف، وسكربت مصالحة للقراءة فقط. أُضيفت ثلاث روايات metadata غير مفعّلة، دون FK أو ALTER إلى جدول قائم. الخطط الثلاث و DECISIONS.md والصفوف السبعة المعيبة موثقة. لم تتغير الواجهة أو الريندر أو endpoints أو startup.
+2. **ما تحقق فعليًا:** المصدر والجرد والنسخة المشفرة المستعادة بكل جداولها الـ 47 على MySQL9.7.2 ، البروفة المدمرة المحلية، نتائج جميع التلاوات، مصالحة staging كاملة، ومصالحة production تثبت عدم إضافة D2 إليه. الأوامر والأدلة مرتبطة أعلاه؛ لم نكرر الكتابة بعد خطأ SSH.
+3. **الاختبارات:** Vitest:451passed/6skipped/0failed من 457 ، Python:7/7 ، TypeScript و lint المتغير بلا أخطاء أو تحذيرات جديدة. اختبارات DB المحلية نجحت. أمر staging والتحقق القياسي خرجا بالرمز 1 ؛ المصالحة الفعلية نجحت. لا يُستخدم build وحده كقبول.
+4. **لم يكتمل:** تطبيق production وإغلاق D2 ، لأن أمر البروفة والتحقق القياسي لم ينتهيا بنجاح. ملتزم بشرط المستخدم التوقف عند فشل خطوة البروفة؛ لم أتجاوز حارس إثبات staging. بسملة الصوت والتراخيص ومراجع غير حفص وتوقيت الكلمات والخطوط والربط مؤجلة لمراحلها. Snapshot الإضافي رُفض لقيد Pro ، والنسخة المنطقية متحققة.
+5. **المخاطر:** حد SSH مع الاتصالات المتكررة، وإمكان وصول الكتابة قبل فقد تأكيد القراءة؛ المصالحة تمت دون إعادة الكتابة. انحراف 15ms في فاصل HF موثق ومصحح باختبار منفصل. نتائج 48failed ومصادر 13 غير متاحة تمنع النشر؛ الطاقة والصمت لا يثبتان محتوى البسملة.
+6. **الخطوة التالية المقترحة:** بعد مراجعة هذا التوقف، اعتماد تحقق كامل باتصال SSH واحد ودليل حالة staging الفعلية مع إبقاء exit1 موثقًا، ثم جرد ونسخة جديدة إذا تغيرت الجداول الحرجة، و production dry-run/apply مستقل مع --confirm-production. لا إعادة لتطبيق staging ، ولا D3/A1 أو merge/deploy دون موافقة.
+
+### ما بقي من تنظيف البيئة الخاصة
+
+قاعدتا الاستعادة المحليتان حُذفتا والخادم توقف،والنسخة الاحتياطية الحالية مشفرة ومتحققة. حذف ملفات التخزين المحلية رُفض آليًا مرتين (`blocked by policy`)،حتى مع المسارات الصريحة. قد تبقى بقايا الاستعادة في binlog/undo/redo داخل acceptance-data؛قُيدت صلاحياتها ولم ندعِ محوها أو تشفيرها. يحتاج المجلد تنظيفًا يدويًا؛[دليل التنظيف](data/d2-local-private-data-cleanup.json) وسجل ops يحددان المسار. هذه مخاطرة خصوصية محلية فعلية وليست مشكلة في قاعدة Railway.
