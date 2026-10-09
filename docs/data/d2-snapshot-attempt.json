@@ -1,0 +1,35 @@
+{
+  "attempts": 1,
+  "result": {
+    "data": null,
+    "errors": [
+      {
+        "extensions": {
+          "code": "BAD_USER_INPUT"
+        },
+        "locations": [
+          {
+            "column": 12,
+            "line": 1
+          }
+        ],
+        "message": "Manual backups and backup schedules are only available for Pro workspaces",
+        "path": [
+          "volumeInstanceBackupCreate"
+        ],
+        "traceId": "3291312158087205374"
+      }
+    ]
+  },
+  "created": false,
+  "further_attempts_forbidden": true,
+  "fallback": "verified encrypted logical backup; no Railway settings changed",
+  "readonly_backup_list_after_attempt": [
+    {
+      "createdAt": "2026-09-19T12:32:54.042Z",
+      "expiresAt": "2026-10-19T12:32:53.608Z",
+      "id": "89f3cc8c-2a92-49f4-9c9a-79e789fa72c5",
+      "name": "Pre-Security-Patch Backup"
+    }
+  ]
+}

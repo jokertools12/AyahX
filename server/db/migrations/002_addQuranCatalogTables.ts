@@ -38,12 +38,12 @@ export const quranCatalogMigrationSql: readonly string[] = [
     "CONSTRAINT chk_catalog_offset CHECK (offset_verified=FALSE OR (verification_status='passed' AND offset_check_score>=0.95 AND offset_check_score IS NOT NULL))",
     // A reviewed audio claim needs a separate evidence reference. Passing NCC
     // is not an assertion about the spoken content of the chapter prefix.
-    "CONSTRAINT chk_catalog_publish CHECK (status <> 'published' OR (canonical_text_available=TRUE AND ayahs_complete=TRUE AND offset_verified=TRUE AND verification_status='passed' AND timing_quality='verified' AND timing_level IN ('word','letter') AND surah_start_basmala_audio_status IN ('verified','not_applicable') AND JSON_CONTAINS_PATH(verification_details,'one','$.basmala_audio_evidence')=1 AND JSON_TYPE(JSON_EXTRACT(verification_details,'$.basmala_audio_evidence'))='OBJECT'))"]),
+    "CONSTRAINT chk_catalog_publish CHECK (status <> 'published' OR (canonical_text_available=TRUE AND offset_verified=TRUE AND verification_status='passed' AND timing_quality='verified' AND timing_level IN ('word','letter') AND surah_start_basmala_audio_status IN ('verified','not_applicable') AND JSON_CONTAINS_PATH(verification_details,'one','$.basmala_audio_evidence')=1 AND JSON_TYPE(JSON_EXTRACT(verification_details,'$.basmala_audio_evidence'))='OBJECT'))"]),
   create('recitation_chapters', [text('id', 'VARCHAR(36)'), text('recitation_id', 'VARCHAR(36)'), 'surah SMALLINT UNSIGNED NOT NULL',
     text('audio_url', 'TEXT'), 'chapter_offset_ms INT DEFAULT NULL', 'duration_ms INT UNSIGNED DEFAULT NULL',
     text('audio_status', "ENUM('unverified','available','source_unavailable')", "NOT NULL DEFAULT 'unverified'"), 'last_verified_at TIMESTAMP NULL DEFAULT NULL',
     'expected_ayahs SMALLINT UNSIGNED DEFAULT NULL', 'available_ayahs SMALLINT UNSIGNED NOT NULL', 'missing_verses JSON NOT NULL',
-    'coverage_mismatch BOOLEAN NOT NULL', 'ayahs_complete BOOLEAN NOT NULL DEFAULT FALSE', 'timing_complete BOOLEAN DEFAULT NULL',
+    'coverage_mismatch BOOLEAN DEFAULT NULL', 'ayahs_complete BOOLEAN NOT NULL DEFAULT FALSE', 'timing_complete BOOLEAN DEFAULT NULL',
     'is_complete BOOLEAN GENERATED ALWAYS AS (ayahs_complete AND COALESCE(timing_complete,FALSE)) STORED', ...times,
     'PRIMARY KEY (id)', 'UNIQUE KEY uk_catalog_chapter (recitation_id,surah)',
     'CONSTRAINT fk_catalog_chapter FOREIGN KEY (recitation_id) REFERENCES recitations(id) ON DELETE CASCADE',

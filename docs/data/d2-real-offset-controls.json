@@ -1,0 +1,22 @@
+{
+  "config": "maher_al_muaiqly_qdc",
+  "surah": 1,
+  "ayah": 1,
+  "original_catalog_url_sha256": "9f2d5a4d1a5e39de8eafab63b74de399fcb4c470cb75b30d1a81ff6eda2a0850",
+  "original_audio_sha256": "0398f12cb02c00de00e8699f8bc1c44119c7f3254f1c5bce00c021b09dcf3906",
+  "hf_audio_sha256": "1b5fc87b3fdbfa2927edcb64d77e1b11df9aad8a607afb79ca74d6402a143b30",
+  "positive": {
+    "score": 0.98880387,
+    "best_lag_ms": 0.25,
+    "duration_difference_ms": 16.625,
+    "passed": true
+  },
+  "negative_plus_1000ms": {
+    "score": 0.05202221,
+    "best_lag_ms": -195.5,
+    "duration_difference_ms": 16.625,
+    "passed": false
+  },
+  "source": "fresh original catalog URL + actual HF Parquet row",
+  "audio_deleted_after_control": true
+}

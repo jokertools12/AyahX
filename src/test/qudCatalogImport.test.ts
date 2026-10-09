@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { QudReleaseAdapter, buildCatalogDataset, expandMissingVerses, expandRanges, sha, type ReleaseRecitation, type CatalogAdapter } from '../../server/services/qudCatalogImport';
+import { QudReleaseAdapter, buildCatalogDataset, expandMissingVerses, expandRanges, sha, validateOffsetEvidence, type ReleaseRecitation, type CatalogAdapter } from '../../server/services/qudCatalogImport';
 import { generateCatalogSql } from '../../server/services/qudCatalogSql';
 
 const record: ReleaseRecitation = { slug: 'fixture_source', reciter_id: 'person_1', name_ar: 'اسم مطابق', name_en: 'Same Name', riwayah: 'hafs_an_asim', style: 'murattal', channel: 'fixture', audio_category: 'surah', audio: { chapter_urls: { '1': 'https://example.org/1.mp3' } }, coverage: { ayahs: 2, surahs: 1 } };
@@ -36,6 +36,7 @@ describe('D2 catalog identity and coverage', () => {
     const data = await build(adapterFor(records), records);
     expect(data.recitations[0]).toMatchObject({ canonical_text_available: false, ayahs_complete: false, status: 'imported' });
     expect(data.chapters[0].expected_ayahs).toBeNull();
+    expect(data.chapters[0].coverage_mismatch).toBeNull();
     expect(data.riwayat[0].is_active).toBe(false);
   });
   it('marks missing verses and catalog/HF differences without claiming completeness', async () => {
@@ -65,5 +66,19 @@ describe('D2 catalog identity and coverage', () => {
     expect(first.sha256).toBe(generateCatalogSql(data, 1).sha256);
     expect(first.sql).not.toMatch(/^(ALTER|DROP|DELETE|RENAME|UPDATE)\b/mu);
     expect(() => generateCatalogSql(data, 1001)).toThrow('SQL_BATCH_LIMIT_EXCEEDED');
+  });
+  it('rejects a claimed offset pass without the distributed acoustic evidence', () => {
+    expect(() => validateOffsetEvidence({ verification_status: 'passed', offset_verified: true, offset_check_score: 1, offset_correction_ms: 0 })).toThrow('OFFSET_EVIDENCE_INCONSISTENT');
+    const samples = Array.from({ length: 5 }, (_, i) => ({ surah: 1, ayah: i + 1, source_offset_hypothesis: { passed: true, score: 1, duration_difference_ms: 0, best_lag_ms: 0 } }));
+    expect(() => validateOffsetEvidence({ verification_status: 'passed', offset_verified: true, offset_check_score: 1, offset_correction_ms: 0, samples })).toThrow('OFFSET_DISTRIBUTED_SAMPLE_REQUIRED');
+  });
+  it('rejects unapproved riwayah activation and SQL identifier corruption', async () => {
+    const records = [{ ...record, riwayah: 'warsh_an_nafi' }];
+    const data = await build(adapterFor(records), records);
+    data.riwayat[0].is_active = true;
+    expect(() => generateCatalogSql(data)).toThrow('D2_RIWAYAH_INSERT_NOT_APPROVED');
+    data.riwayat[0].is_active = false;
+    data.reciters[0]['id); DROP TABLE users; --'] = 'bad';
+    expect(() => generateCatalogSql(data)).toThrow('SQL_FIXED_COLUMNS_REQUIRED');
   });
 });

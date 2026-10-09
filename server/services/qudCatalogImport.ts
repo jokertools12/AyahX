@@ -68,6 +68,24 @@ export interface OffsetEvidence {
   verification_status: 'pending' | 'passed' | 'failed' | 'source_unavailable'; offset_verified: boolean;
   offset_check_score: number | null; offset_correction_ms: number | null; [key: string]: unknown;
 }
+
+export function validateOffsetEvidence(offset: OffsetEvidence): void {
+  if (!offset.offset_verified) return;
+  type Sample = { surah: number; ayah: number; source_offset_hypothesis: { passed: boolean; score: number; duration_difference_ms: number; best_lag_ms: number } };
+  const samples = offset.samples as Sample[] | undefined;
+  if (offset.verification_status !== 'passed' || offset.offset_check_score === null || offset.offset_check_score < .95 || !Array.isArray(samples)) throw new Error('OFFSET_EVIDENCE_INCONSISTENT');
+  const chapters = new Map<number, Set<number>>();
+  for (const sample of samples) {
+    const result = sample.source_offset_hypothesis;
+    if (!Number.isSafeInteger(sample.surah) || !Number.isSafeInteger(sample.ayah) || !result?.passed || !Number.isFinite(result.score) || result.score < .95 || !Number.isFinite(result.duration_difference_ms) || result.duration_difference_ms < 0 || result.duration_difference_ms > 30 || !Number.isFinite(result.best_lag_ms) || Math.abs(result.best_lag_ms) > 30) throw new Error('OFFSET_SAMPLE_ACCEPTANCE_FAILED');
+    const verses = chapters.get(sample.surah) || new Set<number>();
+    if (verses.has(sample.ayah)) throw new Error('OFFSET_SAMPLE_DUPLICATE');
+    verses.add(sample.ayah);
+    chapters.set(sample.surah, verses);
+  }
+  if (chapters.size < 3 || [...chapters.values()].some((verses) => verses.size < 5)) throw new Error('OFFSET_DISTRIBUTED_SAMPLE_REQUIRED');
+  if (Math.abs(Math.min(...samples.map((sample) => sample.source_offset_hypothesis.score)) - offset.offset_check_score) > 1e-8) throw new Error('OFFSET_AGGREGATE_SCORE_MISMATCH');
+}
 export interface CatalogDataset {
   qud_version: string; catalog_sha256: string; reciters: CatalogRow[]; providers: CatalogRow[];
   recitations: CatalogRow[]; chapters: CatalogRow[]; riwayat: CatalogRow[];
@@ -125,7 +143,7 @@ export async function buildCatalogDataset(adapter: CatalogAdapter, input: {
     const opening = input.openings.find((item) => item.config === row.slug);
     if (!audit || !opening) throw new Error(`ANNOTATION_AUDIT_REQUIRED:${row.slug}`);
     const offset: OffsetEvidence = input.offsets[row.slug] || { verification_status: 'pending', offset_verified: false, offset_check_score: null, offset_correction_ms: null, reason: 'verify-offset not yet run' };
-    if (offset.offset_verified && (offset.verification_status !== 'passed' || offset.offset_check_score === null || offset.offset_check_score < .95)) throw new Error('OFFSET_EVIDENCE_INCONSISTENT');
+    validateOffsetEvidence(offset);
     const textGroups = Object.entries(opening.groups).filter(([, surahs]) => surahs.length > 0).map(([status]) => status);
     const hafs = row.riwayah === 'hafs_an_asim';
     const id = stableId('recitation', row.slug);
@@ -137,7 +155,7 @@ export async function buildCatalogDataset(adapter: CatalogAdapter, input: {
       const observed = audit.chapters.find((item) => item.surah === chapter.surah)?.available_ayahs ?? 0;
       const declaredMissing = missing.filter((key) => key.startsWith(`${chapter.surah}:`));
       const declaredAvailable = expected === null ? null : missingSurahs.includes(chapter.surah) ? 0 : expected - declaredMissing.length;
-      const mismatch = declaredAvailable !== null && observed !== declaredAvailable;
+      const mismatch = declaredAvailable === null ? null : observed !== declaredAvailable;
       const complete = expected !== null && observed === expected && !declaredMissing.length && !missingSurahs.includes(chapter.surah) && !mismatch;
       recitationChapters.push({ id: stableId('recitation-chapter', `${id}:${chapter.surah}`), recitation_id: id, surah: chapter.surah,
         audio_url: chapter.audio_url, chapter_offset_ms: chapter.chapter_offset_ms, duration_ms: null, audio_status: 'unverified', last_verified_at: null,

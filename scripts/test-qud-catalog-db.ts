@@ -23,8 +23,11 @@ try {
   await upQuranCatalogTables(db);
   await db.query(plan.sql);
   const first = await verifyCatalogRows(db, data);
+  const [firstChecksums] = await db.query<RowDataPacket[]>(`CHECKSUM TABLE ${QURAN_CATALOG_TABLES.join(',')}`);
   await db.query(plan.sql);
   assert.deepEqual(await verifyCatalogRows(db, data), first);
+  const [secondChecksums] = await db.query<RowDataPacket[]>(`CHECKSUM TABLE ${QURAN_CATALOG_TABLES.join(',')}`);
+  assert.deepEqual(secondChecksums, firstChecksums, 'REPLAY_CHANGED_CATALOG_TABLE_CHECKSUM');
   const schema = await verifyCatalogSchema(db);
   const d1 = await verifyQuranTextSchemaCollations(db);
   await db.query('SELECT COUNT(*) FROM reciters r LEFT JOIN users u ON u.id=r.id');
@@ -43,7 +46,7 @@ try {
   await verifyCatalogRows(db, data);
   assert.equal(await canonical(), before);
   const report = { mysql_version: version[0].version, counts: first, schema, d1_collations: d1, canonical_checksum: before,
-    migration_twice: true, import_twice: true, existing_users_join: true, unverified_audio_publication_rejected: true,
+    migration_twice: true, import_twice: true, replay_table_checksums_unchanged: true, existing_users_join: true, unverified_audio_publication_rejected: true,
     publication_without_audio_evidence_rejected: true, corrupted_catalog_rejected: true, rollback_remaining: remaining.length, reapply_after_rollback: true };
   await writeFile(option('--out'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
