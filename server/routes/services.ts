@@ -15,6 +15,7 @@ import {
   refineTextWithAi,
   generateImageWithAi,
 } from '../services/aiService';
+import { containsQuranReference } from '../services/quranTextBoundary';
 
 export { safeParseJson };
 
@@ -277,6 +278,9 @@ router.post('/transcribe-audio', requireAuth, transcribeRateLimiter, async (req:
  */
 router.post('/refine-text', requireAuth, aiRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
   try {
+    if (containsQuranReference(req.body)) {
+      return res.status(400).json({ code: 'QURAN_TEXT_AI_REFINEMENT_FORBIDDEN', error: 'النص القرآني القانوني لا يُعدّل بالذكاء الاصطناعي' });
+    }
     const { lines } = req.body;
     if (!lines || !Array.isArray(lines) || lines.length === 0) {
       return res.status(400).json({ error: 'lines مطلوب' });
