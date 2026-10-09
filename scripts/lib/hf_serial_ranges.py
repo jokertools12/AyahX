@@ -27,7 +27,14 @@ class SerialTransport:
         self.opener = urllib.request.build_opener(Redirect())
 
     def pace(self):
-        time.sleep(max(0, 2 - (time.monotonic() - self.last)))
+        # Windows timers can return a few milliseconds early. Recheck the
+        # monotonic deadline instead of trusting a single sleep call.
+        deadline = self.last + 2
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                break
+            time.sleep(remaining)
         now = time.monotonic()
         if self.last:
             interval = now - self.last

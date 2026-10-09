@@ -19,13 +19,21 @@ export async function ssh(environment: string, command: string, input?: string):
   const child = spawn(railwayBinary, sshArgs(environment, command), { env: railwayEnv, stdio: ['pipe', 'pipe', 'pipe'] });
   const output: Buffer[] = [];
   child.stdout.on('data', (bytes: Buffer) => output.push(bytes));
-  // Do not print diagnostics that might contain SQL data or credentials.
-  child.stderr.resume();
+  // Keep only a bounded in-memory diagnostic. Never print raw SQL, URLs,
+  // credentials or service output; expose fixed connection/MySQL error codes.
+  let diagnostic = '';
+  child.stderr.on('data', (bytes: Buffer) => { diagnostic = (diagnostic + bytes.toString('utf8')).slice(0, 8192); });
   let stdinError = false;
   child.stdin.on('error', () => { stdinError = true; });
   const done = new Promise<void>((accept, reject) => {
     child.once('error', () => reject(new Error('RAILWAY_SSH_START_FAILED')));
-    child.once('close', (code) => code === 0 ? accept() : reject(new Error(`RAILWAY_SSH_EXIT_${code}`)));
+    child.once('close', (code) => {
+      if (code === 0) { accept(); return; }
+      const mysqlError = /ERROR (\d+) \(([A-Z0-9]+)\)/u.exec(diagnostic);
+      const reason = diagnostic.includes('Maximum SSH connections reached for this service') ? ':SSH_CONNECTION_LIMIT'
+        : mysqlError ? `:MYSQL_ERROR_${mysqlError[1]}_${mysqlError[2]}` : '';
+      reject(new Error(`RAILWAY_SSH_EXIT_${code}${reason}`));
+    });
   });
   child.stdin.end(input);
   await done;

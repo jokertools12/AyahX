@@ -134,7 +134,8 @@ export async function buildCatalogDataset(adapter: CatalogAdapter, input: {
     const sourceId = row.reciter_id || null;
     const readerKey = sourceId ? `source:${sourceId}` : `isolated:${row.slug}`;
     if (!readers.has(readerKey)) readers.set(readerKey, { id: stableId('reciter', readerKey), source_reciter_id: sourceId,
-      slug: sourceId || `unmapped-${row.slug}`, name_ar: row.name_ar, name_en: row.name_en, country: row.country || null, status: sourceId ? 'imported' : 'needs_review' });
+      slug: sourceId || `unmapped-${row.slug}`, name_ar: row.name_ar, name_en: row.name_en, country: row.country || null,
+      bio: null, photo_url: null, is_featured: null, sort_order: null, status: sourceId ? 'imported' : 'needs_review' });
     riwayat.add(row.riwayah);
     const hosts = channels.get(row.channel) || new Set<string>();
     for (const url of Object.values(row.audio.chapter_urls)) hosts.add(new URL(url).hostname);
@@ -185,7 +186,7 @@ export async function buildCatalogDataset(adapter: CatalogAdapter, input: {
   dataset.reciters = [...readers.values()];
   dataset.providers = [...channels].sort(([a], [b]) => a.localeCompare(b, 'en')).map(([code, hosts]) => ({ id: stableId('audio-provider', code), code, name: code,
     base_url: hosts.size === 1 ? `https://${[...hosts][0]}` : null, host_allowlist: JSON.stringify([...hosts].sort()), adapter_id: records.some((row) => row.channel === code) ? adapter.id : null,
-    is_active: false, health_status: 'unchecked', license_text: null, attribution_text: `Documented source ${code}; existing runtime unchanged` }));
+    is_active: false, health_status: 'unchecked', priority: null, last_checked_at: null, license_text: null, attribution_text: `Documented source ${code}; existing runtime unchanged` }));
   const labels: Record<string, [string, string, string]> = { warsh_an_nafi: ['ورش عن نافع', 'Warsh an Nafi', 'warsh'], qalon_an_nafi: ['قالون عن نافع', 'Qalon an Nafi', 'qalun'], shubah_an_asim: ['شعبة عن عاصم', 'Shubah an Asim', 'shuba'] };
   for (const code of [...riwayat].sort()) {
     if (code === 'hafs_an_asim') continue;

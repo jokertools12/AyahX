@@ -28,6 +28,8 @@ describe('D2 catalog identity and coverage', () => {
     const data = await build(adapterFor([record]), [record]);
     expect(data.recitations[0]).toMatchObject({ status: 'needs_review', ayahs_complete: true, coverage_words: null, verification_status: 'pending', surah_start_basmala_audio_status: 'unverified' });
     expect(data.chapters[0].timing_complete).toBeNull();
+    expect(data.reciters[0]).toMatchObject({ bio: null, photo_url: null, is_featured: null, sort_order: null });
+    expect(data.providers.every((row) => row.priority === null && row.last_checked_at === null && row.health_status === 'unchecked')).toBe(true);
     data.recitations[0].status = 'published';
     expect(() => generateCatalogSql(data)).toThrow('D2_PUBLICATION_OR_TIMING_IMPORT_PROHIBITED');
   });

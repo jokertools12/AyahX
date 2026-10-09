@@ -40,6 +40,10 @@ try {
   const [publish] = await db.query<RowDataPacket[]>('SELECT id FROM recitations LIMIT 1');
   await assert.rejects(db.query("UPDATE recitations SET status='published',canonical_text_available=1,ayahs_complete=1,offset_verified=1,offset_check_score=1,verification_status='passed',timing_quality='verified',timing_level='word',verification_details=JSON_OBJECT('basmala_audio_evidence',JSON_OBJECT('review','local-test')) WHERE id=?", [publish[0].id]), /chk_catalog_publish/u);
   await assert.rejects(db.query("UPDATE recitations SET status='published',canonical_text_available=1,ayahs_complete=1,offset_verified=1,offset_check_score=1,verification_status='passed',timing_quality='verified',timing_level='word',surah_start_basmala_audio_status='verified' WHERE id=?", [publish[0].id]), /chk_catalog_publish/u);
+  const [unverified] = await db.query<RowDataPacket[]>('SELECT id FROM recitations WHERE offset_verified=0 LIMIT 1');
+  assert.ok(unverified.length, 'ACTUAL_UNVERIFIED_SOURCE_REQUIRED_FOR_NEGATIVE_CONTROL');
+  await assert.rejects(db.query("UPDATE recitations SET audio_mode='surah_slice' WHERE id=?", [unverified[0].id]), /chk_catalog_slice/u);
+  await assert.rejects(db.query("UPDATE recitations SET offset_verified=1,verification_status='passed',offset_check_score=NULL WHERE id=?", [unverified[0].id]), /chk_catalog_offset/u);
   const [chapter] = await db.query<RowDataPacket[]>('SELECT id FROM recitation_chapters LIMIT 1');
   await db.query("UPDATE recitation_chapters SET audio_url='https://example.org/corruption-fixture' WHERE id=?", [chapter[0].id]);
   await assert.rejects(verifyCatalogRows(db, data), /STORED_CATALOG_VALUE_MISMATCH/u);
@@ -53,6 +57,7 @@ try {
   const report = { mysql_version: version[0].version, sql_sha256: plan.sha256, catalog_sha256: data.catalog_sha256, counts: first, schema, d1_collations: d1, canonical_checksum: before,
     migration_twice: true, import_twice: true, replay_table_checksums_unchanged: true, existing_users_join: true, unverified_audio_publication_rejected: true,
     publication_without_audio_evidence_rejected: true, corrupted_catalog_rejected: true, rollback_remaining: remaining.length, reapply_after_rollback: true };
+  Object.assign(report, { unverified_surah_slice_rejected: true, offset_without_score_rejected: true });
   await writeFile(option('--out'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
 } finally { await db.end(); }

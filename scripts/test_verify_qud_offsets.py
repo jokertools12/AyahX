@@ -4,6 +4,7 @@ import pathlib
 import json
 import tempfile
 import unittest
+from unittest.mock import patch
 import numpy as np
 
 spec = importlib.util.spec_from_file_location('offset_audit', pathlib.Path(__file__).with_name('verify-qud-offsets.py'))
@@ -15,6 +16,19 @@ class OffsetGateTests(unittest.TestCase):
     def setUp(self):
         self.source = np.random.default_rng(17).normal(size=32000)
         self.clip = self.source[8000:12000].copy()
+
+    def test_early_sleep_return_still_waits_two_seconds(self):
+        clock = [10.0]
+        sleeps = []
+        def early_sleep(seconds):
+            sleeps.append(seconds)
+            clock[0] += seconds / 2 if len(sleeps) == 1 else seconds
+        transport = audit.SerialTransport()
+        transport.last = clock[0]
+        with patch('lib.hf_serial_ranges.time.monotonic', side_effect=lambda: clock[0]), patch('lib.hf_serial_ranges.time.sleep', side_effect=early_sleep):
+            transport.pace()
+        self.assertEqual(len(sleeps), 2)
+        self.assertGreaterEqual(transport.stats['minimum_observed_interval_seconds'], 2)
 
     def test_exact_match_passes(self):
         result = audit.compare(self.source, self.clip, 1000, 500)
