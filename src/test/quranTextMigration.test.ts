@@ -38,6 +38,18 @@ describe('D1 Quran text migration', () => {
 
   it('keeps legal text tables separate from future recitation tables', () => {
     expect(quranTextMigrationSql.join('\n')).not.toContain('CREATE TABLE IF NOT EXISTS recitations');
-    expect(quranTextMigrationSql.join('\n')).toContain('text_uthmani TEXT NOT NULL');
+    expect(quranTextMigrationSql.join('\n')).toContain('text_uthmani TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL');
+  });
+
+  it('specifies every text column collation and references only new tables', () => {
+    for (const sql of quranTextMigrationSql) {
+      for (const line of sql.split('\n').filter((value) => /^\s+\w+ (?:VARCHAR|CHAR|TEXT|ENUM)/u.test(value))) {
+        expect(line).toContain('CHARACTER SET utf8mb4 COLLATE');
+        expect(line).toContain(line.trimStart().startsWith('text_uthmani ') ? 'COLLATE utf8mb4_bin' : 'COLLATE utf8mb4_unicode_ci');
+      }
+      for (const reference of sql.matchAll(/REFERENCES (\w+)/gu)) {
+        expect(QURAN_TEXT_TABLES).toContain(reference[1]);
+      }
+    }
   });
 });

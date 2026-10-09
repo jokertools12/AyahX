@@ -1,10 +1,11 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { resolve } from 'node:path';
+import { resolve, relative, isAbsolute } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import mysql from 'mysql2/promise';
 import { buildQuranTextCorpus, checksumText, importQuranText, type ScriptWord, type SourceSurah } from '../server/services/quranTextImport';
-import { upQuranTextTables, downQuranTextTables } from '../server/db/migrations/001_addQuranTextTables';
+import { upQuranTextTables, downQuranTextTables, quranTextMigrationSql } from '../server/db/migrations/001_addQuranTextTables';
+import { generateQuranTextSql } from '../server/services/quranTextSql';
 
 function option(name: string): string | undefined {
   const index = process.argv.indexOf(name);
@@ -43,6 +44,16 @@ export async function main(): Promise<void> {
   if (output) await writeFile(output, JSON.stringify(corpus, null, 2), 'utf8');
   const apply = process.argv.includes('--apply');
   const rollback = process.argv.includes('--rollback-schema');
+  const sqlOutput = option('--sql-output');
+  if (sqlOutput) {
+    if (apply || rollback) throw new Error('SQL_EXPORT_IS_DRY_RUN_ONLY');
+    const outside = relative(process.cwd(), resolve(sqlOutput));
+    if (!outside.startsWith('..') && !isAbsolute(outside)) throw new Error('RAW_SQL_MUST_STAY_OUTSIDE_REPOSITORY');
+    const plan = generateQuranTextSql(corpus);
+    await writeFile(sqlOutput, plan.sql, 'utf8');
+    console.log(JSON.stringify({ dryRun: true, creates: quranTextMigrationSql.length, ...plan.counts, checksum: corpus.checksum, sql_sha256: plan.sha256, batch_size: plan.batchSize, statements: plan.statements }, null, 2));
+    return;
+  }
   if (!apply && !rollback) {
     console.log(JSON.stringify({ dryRun: true, qud_version: corpus.version, surahs: Object.keys(corpus.surahs).length, ayahs: corpus.ayahs.length, words: corpus.wordCount, checksum: corpus.checksum, codepoints: corpus.codepoints.length }, null, 2));
     return;
