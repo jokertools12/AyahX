@@ -23,3 +23,7 @@
 استُبدلت البروفة السابقة بـ **MySQL 9.7.2 بالضبط** دون تغيير dependencies أو ملفات tracked للبيئة. ZIP رسمي خارج المستودع: `%TEMP%/ayahx-d1-mysql-9.7.2`، SHA-256 `5592ea38e53edd67f5baa68303e7fcf2f0a40fc08978fdb4a7b0c38d12baea17`. bind محلي `127.0.0.1:33319` وmysqlx=0، max_connections=60 وpacket=64MiB، UTC؛ لا إعدادات `.env`. server collation افتراضي 0900 كما في Railway، بينما migration تصرح unicode/bin على الجداول والأعمدة. Windows يستخدم lower_case_table_names=1، وtimezone المحلي +00:00 مقابل SYSTEM/UTC في الإنتاج؛ أسماء الجداول lowercase والتوقيت UTC في الحالتين. الأدلة الجديدة `data/d1-mysql-9.7.2-acceptance.json` و`data/d1-restored-rehearsal.json`. نتائج 8.4.11 أعلاه تاريخية فقط.
 
 `duckdb` و`fonttools` مثبتان في `%TEMP%/ayahx-d1-python` لتدقيق أعمدة HF Parquet وفحص cmap الكامل. لم يتغير requirements أو package-lock. corpus/cache/raw recited text خارج Git. E2E يستخدم Amiri المحلي داخل fixture فقط لتجنب الاعتماد على تحميل Google Fonts أثناء الفحص.
+
+## أدوات D2 المحلية فقط
+
+numpy/scipy في `%TEMP%/ayahx-d2-python` لفحص NCC؛ لا تعديل requirements/lockfile. age v1.3.2 من asset Windows الرسمي وبصمة GitHub المطابقة: `f48d8f8f9ebe903ab5027ed067652f2cc1db94bc206976430133b905dcd8e8c7`. الثنائية في TEMP؛ dump المشفر في `%LOCALAPPDATA%/AyahX/private-backups` خارج Git/cloud، ومفتاح منفصل في backup-keys بصلاحيات الحساب فقط، دون نشر قيمته. D2 استعادة 47 جدولاً على نفس MySQL9.7.2 المحلي/33319 والتحقق لكل الأعداد وCHECKSUM. لم تتغير ملفات tracked لمعالجة EPERM أو FFmpeg. الأدلة التشغيلية الجديدة في railway-ops-log وتقارير D2.

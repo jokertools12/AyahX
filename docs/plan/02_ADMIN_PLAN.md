@@ -20,7 +20,7 @@
 - **كل endpoint إداري:** تحقق JWT ← فحص الدور/الصلاحية ← Zod validation ← تنفيذ ← تسجيل في `audit_logs`.
 - **اتفاقيات API موحّدة:** ترقيم (`page`,`limit` ≤ 100)، ترتيب (`sort`), فلاتر، بحث، استجابة `{data, meta}`، أخطاء `{code, message, detail}`، ترويسة `X-Request-Id`.
 - **حالة الواجهة:** TanStack Query (مفاتيح موحّدة + إبطال بعد التعديل)، نماذج بـ react-hook-form + Zod مشتركة من `shared/`.
-- **الحذف:** soft delete حيث يلزم (users, videos, recitations)، تأكيد مزدوج للحذف الدائم، سلة قابلة للاستعادة 30 يوماً.
+- **الحذف:** soft delete حيث يلزم (users, saved_videos, recitations)، تأكيد مزدوج للحذف الدائم، سلة قابلة للاستعادة 30 يوماً.
 - **العمليات الثقيلة** (استيراد، محاذاة، ريندر، تنظيف): عبر BullMQ ولها شاشة تقدّم، لا تعمل داخل طلب HTTP.
 - **كل إعداد قابل للتعديل** يخزَّن في `app_settings` (مفتاح/قيمة/نوع/مجموعة/عام أم سري) ويُقرأ عبر طبقة كاش مع إبطال فوري.
 
@@ -214,7 +214,7 @@
 | نشر/إخفاء تلاوة | `recitations.status` | الكتالوج + `AudioResolver` | خيارات التلاوة والشارة | API+E2E |
 | اعتماد توقيت | `ayah_timings.quality` | تجميع `timingMap` للريندر | تظليل الكلمات + شارة | Integration + ffprobe |
 | تعطيل مزوّد صوت | `audio_providers.is_active` | `AudioResolver` | رسالة/استبدال حسب السياسة | Integration |
-| تعديل حصة خطة | `plans.quota_*` | فحص الحصة الذري | عداد "المتبقي اليوم" | API+E2E |
+| تعديل حصة خطة | حقول الخطط في `subscriptions` ومصدر الكتالوج الفعلي؛ لا جدول `plans` قائم | فحص الحصة الذري | عداد "المتبقي اليوم" | API+E2E |
 | قبول دفع | `payment_requests`, `subscriptions` | `my-subscription` | فتح الميزات المميزة فوراً | E2E |
 | حظر مستخدم | `users.status` | middleware المصادقة | تسجيل خروج/رفض | API |
 | نمط توهج جديد | `style_options` | `GET /api/options` | قائمة النمط + الريندر | Contract (مفتاح معروف للـ harness) |
@@ -231,7 +231,7 @@
 
 ## 5. جداول إضافية للأدمن (بجانب جداول 01_DATA_PLAN)
 
-`audit_logs`, `permissions`, `role_permissions`, `user_roles`, `admin_sessions`, `app_settings`, `feature_flags`, `cms_pages`, `announcements`, `notification_templates`, `notifications_outbox`, `payment_methods`, `payment_requests` (موجود: راجِعه), `coupons`, `coupon_redemptions`, `plans` (موجود؟), `style_options`, `style_presets`, `backgrounds`, `background_categories`, `font_files`, `ai_providers`, `ai_call_logs`, `prompt_templates`, `reports` (بلاغات), `storage_objects`, `backup_runs`, `job_runs` (عام لمهام الخلفية), `featured_ayah_sets`.
+`audit_logs`, `permissions`, `role_permissions`, `user_roles`, `admin_sessions`, `system_settings` (قائم، يُوسّع), `feature_flags`, `cms_pages`, `announcements`, `notification_templates`, `notifications` (قائم، يُوسّع), `notifications_outbox`, `payment_methods`, `payment_requests` (قائم، يُوسّع), `coupons`, `coupon_redemptions`, `style_options`, `style_presets`, `backgrounds`, `background_categories`, `font_files`, `ai_providers`, `ai_call_logs`, `prompt_templates`, `reports` (بلاغات), `storage_objects`, `backup_runs`, `job_runs` (عام لمهام الخلفية), `featured_ayah_sets`. لا جدول `plans` قائم؛ `subscriptions` تحمل حقول الخطة؛ الفيديوهات في `saved_videos`. الجرد الفعلي يغلب هذه القائمة قبل A1، ولا تُكرر الجداول القائمة. الأدمن يُبنى من الصفر؛ commit 1d5b42d مرجع ولا استعادة.
 
 > **D0/A0:** اجرد ما هو موجود فعلاً (الـ 16 جدولاً المذكورة في README + ما في worktree الأدمن) ثم أنشئ فقط الناقص. لا تكرر.
 
