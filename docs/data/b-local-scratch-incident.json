@@ -1,0 +1,20 @@
+{
+  "checked_at": "2026-10-10T02:22:53.403229+00:00",
+  "checkpoint_sha256": "7439794d4faecd3f9f7a7e280737044d947f88344013622308c94c2cc754d104",
+  "complete_measured_configs": 34,
+  "diagnostic_error_config": "mohammed_alghazali_archive",
+  "phase": "download_catalog_source",
+  "reason": "FileNotFoundError",
+  "error_detail": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\cpazi\\\\AppData\\\\Local\\\\Temp\\\\ayahx-d3-acoustic-sfs2utc9\\\\74.audio'",
+  "finished_at": "2026-10-10T02:17:10.155651+00:00",
+  "completed_samples_for_failed_step": 0,
+  "directory_exists_at_root_inspection": false,
+  "cause": "unproven; missing scratch directory observed, no deletion by root attempted",
+  "private_snapshot_path": "C:\\Users\\cpazi\\AppData\\Local\\Temp\\ayahx-b-root-resume-20261010T022253Z\\checkpoint-before-root-resume.json",
+  "local_write_preflight_passed": true,
+  "v1_results_replaced": false,
+  "calculator_changed": false,
+  "network_requests_during_preflight": 0,
+  "database_writes": 0,
+  "manual_cleanup_required": true
+}

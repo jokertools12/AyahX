@@ -51,6 +51,30 @@ def boundary_support(source_count, clip_count, offset_ms, selected_start):
             'causal_drift_requires_packet_clock_review': overrun > 0}
 
 
+def mask_runs(mask):
+    """Lossless half-open runs of speech frame indices; no PCM retained."""
+    runs, start = [], None
+    for index, value in enumerate(mask):
+        if bool(value) and start is None:
+            start = index
+        if not bool(value) and start is not None:
+            runs.append([start, index])
+            start = None
+    if start is not None:
+        runs.append([start, len(mask)])
+    return runs
+
+
+def input_fingerprints(record):
+    return {'config': record['config'], 'source_sha256': record['source_sha256'],
+            'samples': [{'surah': row['surah'], 'ayah': row['ayah'],
+                         'hf_audio_sha256': row['hf_audio_sha256'],
+                         'source_offset_ms': row['source_offset_ms'], 'hf_duration_ms': row['hf_duration_ms'],
+                         'supplied_segments_sha256': row['supplied_segments_sha256'],
+                         'source_sample_start': row['envelope'].get('source_sample_start')}
+                        for row in record['samples']]}
+
+
 def lag_trends(rows):
     """Closed-form least squares per chapter, separate from calculator/polyfit."""
     grouped, trends = defaultdict(list), []
@@ -269,8 +293,15 @@ def replay_pcm(record, ffmpeg):
                              'source_clip_speech_iou': speech_iou, 'complete_source_window': True,
                              'reported_source_clip_vad_available': row['vad'].get('source_clip_speech_iou') is not None,
                              'reported_segments_vad_unavailable_reason': row['vad'].get('reason'),
+                             'vad_mask_runs': {'hop_ms': 1, 'frame_count': len(clip_speech),
+                                               'source_speech': mask_runs(source_speech), 'clip_speech': mask_runs(clip_speech)},
                              'boundary_support': boundary_support(source_count, len(clip), row['source_offset_ms'], start)})
+            if digest(scratch / f'clip-{key[0]}-{key[1]}.mp3') != row['hf_audio_sha256']:
+                raise RuntimeError('retained_clip_changed_during_replay')
+        if digest(source_path) != record['source_sha256'][str(surah)]:
+            raise RuntimeError('retained_source_changed_during_replay')
     return {'config': record['config'], 'errors': errors, 'samples': evidence,
+            'input_fingerprints': input_fingerprints(record),
             'duration_definition': 'abs(decoded_HF_clip_duration_ms - HF_duration_ms); not independently measured source duration',
             'supplied_segments_IoU_replayed': False}
 
@@ -290,6 +321,8 @@ def main():
     review = check_checkpoint(report, original, args.cache)
     review['report_sha256'] = hashlib.sha256(raw).hexdigest()
     review['original_sha256'] = digest(args.original)
+    review['original_semantic_sha256'] = hashlib.sha256(json.dumps(original, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode()).hexdigest()
+    review['review_script_sha256'] = digest(Path(__file__))
     if args.decode_config:
         if args.ffmpeg is None:
             parser.error('--ffmpeg required in local decode mode')
