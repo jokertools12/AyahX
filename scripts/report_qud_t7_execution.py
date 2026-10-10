@@ -4,6 +4,7 @@ from collections import Counter
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 from pathlib import Path
 
 
@@ -29,7 +30,7 @@ def report(manifest, checkpoint, checkpoint_sha):
     sample_fields = ['surah', 'ayah', 'source_offset_ms', 'hf_duration_ms', 'decoded_full_clip_duration_ms',
                      'duration_difference_ms', 'full_v1_diagnostic', 'interior_v1', 'full_source_window_complete',
                      't7_v1_passed', 'envelope', 'vad', 'spectral', 'log_mel', 'encoded_identity', 'interior_pcm',
-                     'catalog_source_sha256', 'hf_clip_sha256', 'audio_measurement_scope']
+                     'catalog_source_sha256', 'hf_clip_sha256', 'audio_measurement_scope', 'v2_numeric_candidate']
     for slug, selection in manifest['results'].items():
         measured = state['results'].get(slug, {})
         samples = [{key: sample[key] for key in sample_fields if key in sample}
@@ -46,12 +47,31 @@ def report(manifest, checkpoint, checkpoint_sha):
                     failure['full_duration_difference_above_30ms'] += 1
                 if not sample.get('full_source_window_complete'):
                     failure['source_window_incomplete'] += 1
+        def numbers(values):
+            return [value for value in values if isinstance(value, (int, float))
+                    and not isinstance(value, bool) and math.isfinite(value)]
+        interior_scores = numbers(sample.get('interior_v1', {}).get('score') for sample in samples)
+        full_scores = numbers(sample.get('full_v1_diagnostic', {}).get('score') for sample in samples)
+        interior_lags = numbers(sample.get('interior_v1', {}).get('best_lag_ms') for sample in samples)
+        full_lags = numbers(sample.get('full_v1_diagnostic', {}).get('best_lag_ms') for sample in samples)
+        durations = numbers(sample.get('duration_difference_ms') for sample in samples)
+        summary = {'sample_count': len(samples), 'expected_sample_count': len(selection['samples']),
+                   'surah_count': len({sample['surah'] for sample in samples}),
+                   'minimum_interior_NCC_raw': min(interior_scores) if interior_scores else None,
+                   'minimum_full_NCC_raw': min(full_scores) if full_scores else None,
+                   'maximum_absolute_interior_lag_ms': max(map(abs, interior_lags)) if interior_lags else None,
+                   'maximum_absolute_full_lag_ms': max(map(abs, full_lags)) if full_lags else None,
+                   'maximum_full_duration_difference_ms': max(durations) if durations else None,
+                   'sample_v1_pass_count': sum(sample.get('t7_v1_passed') is True for sample in samples),
+                   'sample_v2_numeric_candidate_count': sum(sample.get('v2_numeric_candidate') is True for sample in samples),
+                   'full_source_window_complete_count': sum(sample.get('full_source_window_complete') is True for sample in samples)}
         rows[slug] = {**{key: measured[key] for key in fields if key in measured},
                       'verification_status': measured.get('verification_status', 'not_started'),
                       'cohort': selection['cohort'], 'channel': selection['channel'], 'riwayah': selection['riwayah'],
                       'retained_v1_status': selection['retained_v1_status'],
                       'expected_sample_ids': [[sample['surah'], sample['ayah']] for sample in selection['samples']],
-                      'measured_samples': len(samples), 'samples': samples, 'overlapping_v1_failure_counts': dict(failure),
+                      'measured_samples': len(samples), 'samples': samples, 'measurement_summary': summary,
+                      'overlapping_v1_failure_counts': dict(failure),
                       'hf_windows': measured.get('hf_windows', []), 'publication_changed': False,
                       'database_offset_verified_changed': False, 'surah_start_basmala_audio_status': 'unverified'}
     bindings = {key: value for key, value in checkpoint['bindings'].items() if key != 'scratch'}
