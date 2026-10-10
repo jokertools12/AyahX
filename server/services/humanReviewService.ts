@@ -27,6 +27,12 @@ export function validateReviewInput(input:ReviewInput):void{
 /** No routes. The A2 RBAC adapter must supply a real authenticated actor. */
 export class HumanReviewService {
   constructor(private readonly db:CatalogDatabase){}
+  async list(actor:CatalogActor,filter:{status?:'pending'|'approved'|'rejected'|'deferred';type?:HumanReviewType;limit?:number;offset?:number}={}):Promise<CatalogRow[]>{
+    requireCatalogPermission(actor,'reviews.read');const limit=filter.limit??100,offset=filter.offset??0;
+    if((filter.status&&!['pending','approved','rejected','deferred'].includes(filter.status))||(filter.type&&!reviewTypes.includes(filter.type))||!Number.isSafeInteger(limit)||limit<1||limit>1000||!Number.isSafeInteger(offset)||offset<0)throw new CatalogError('REVIEW_INPUT_INVALID',422);
+    const where:string[]=[],params:unknown[]=[];if(filter.status){where.push('status=?');params.push(filter.status);}if(filter.type){where.push('type=?');params.push(filter.type);}
+    return this.db.read(`SELECT id,type,subject_type,subject_id,evidence,priority,status,decided_by,decided_at,notes,decision,created_at,updated_at FROM human_review_items ${where.length?'WHERE '+where.join(' AND '):''} ORDER BY priority DESC,created_at,id LIMIT ${limit} OFFSET ${offset}`,params);
+  }
   async enqueue(actor:CatalogActor,input:ReviewInput):Promise<{id:string;changed:boolean}>{
     requireCatalogPermission(actor,'reviews.enqueue');validateReviewInput(input);
     return this.db.transaction(async tx=>{
@@ -63,7 +69,8 @@ export class HumanReviewService {
     }else if(row.type==='provider_license'){
       requireCatalogPermission(actor,'providers.license.review',true);if(row.subject_type!=='audio_provider')throw new CatalogError('REVIEW_SUBJECT_INVALID',422);
       const status=input.status==='rejected'?'restricted':input.decision?.license_status;
-      if(!['permitted','restricted'].includes(String(status))||(status==='permitted'&&!input.decision?.rights_evidence_ref))throw new CatalogError('LICENSE_EVIDENCE_REQUIRED',422);
+      const reference=input.decision?.rights_evidence_ref;
+      if(!['permitted','restricted'].includes(String(status))||(status==='permitted'&&(typeof reference!=='string'||!reference.trim()||reference.length>2000)))throw new CatalogError('LICENSE_EVIDENCE_REQUIRED',422);
       const [subject]=await tx.read('SELECT id,license_status FROM audio_providers WHERE id=? FOR UPDATE',[row.subject_id]);if(!subject)throw new CatalogError('PROVIDER_NOT_FOUND',404);
       await tx.execute('UPDATE audio_providers SET license_status=? WHERE id=?',[status,subject.id]);await appendCatalogAudit(tx,actor,'provider.license_review','audio_provider',String(subject.id),{license_status:subject.license_status},{license_status:status,evidence:input.decision??{},review_item:row.id});
     }else if(row.type==='label_review'){
@@ -72,6 +79,12 @@ export class HumanReviewService {
         const ar=input.decision?.display_label_ar,en=input.decision?.display_label_en;if(typeof ar!=='string'||!ar.trim()||ar.length>255||(en!==undefined&&(typeof en!=='string'||en.length>255)))throw new CatalogError('LABEL_DECISION_REQUIRED',422);
         const [subject]=await tx.read('SELECT display_label_ar,display_label_en,needs_label_review FROM recitations WHERE id=? FOR UPDATE',[row.subject_id]);if(!subject)throw new CatalogError('RECITATION_NOT_FOUND',404);
         await tx.execute('UPDATE recitations SET display_label_ar=?,display_label_en=?,needs_label_review=0 WHERE id=?',[ar,en??null,row.subject_id]);await appendCatalogAudit(tx,actor,'recitation.label_review','recitation',String(row.subject_id),subject,{display_label_ar:ar,display_label_en:en??null,needs_label_review:false});
+      }
+    }else if(row.type==='youtube_rights'||row.type==='storage_rights'){
+      requireCatalogPermission(actor,'recitations.sources.manage',true);
+      if(input.status==='approved'){
+        const reference=input.decision?.rights_evidence_ref;
+        if(!['owner_permission','cc_licensed','own_content'].includes(String(input.decision?.rights_status))||typeof reference!=='string'||!reference.trim()||reference.length>2000)throw new CatalogError('RIGHTS_EVIDENCE_REQUIRED',422);
       }
     }
     // All other approvals record a human decision only. No hidden timing, rights,
