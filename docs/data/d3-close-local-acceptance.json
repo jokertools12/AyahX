@@ -1,0 +1,411 @@
+{
+  "checked_at": "2026-10-10T05:22:20.259Z",
+  "mysql": "9.7.2",
+  "local_only": true,
+  "volatile_timestamps_excluded_from_semantic_hash": true,
+  "uninterrupted": {
+    "ayah_timings": "061e235f93af8af2de7b6e6fd9fd9829eacd4b90ed59997f1dd75ba49d7f5ad5",
+    "import_jobs": "0502798d8d1413cb5ba065b6d2519214f462980a78e6922c3ebef215cf05ecdb",
+    "ayah_timing_history": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "recitation_chapters": "fa64be160a552c959b6b0842188e674d1eea072780b7ec5e4e3b100ed1a7607d",
+    "recitations": "e36e1144044c9250d699232393a84a4784df5382c842523f2d8f849c161d9497"
+  },
+  "idempotent_twice": {
+    "passed": true,
+    "checkpoints_verified_and_skipped": 69
+  },
+  "real_termination": {
+    "checkpoint": {
+      "pid": 41044,
+      "target": "local",
+      "checkpoint": 250,
+      "slug": "abdul_hamid_ghraio_2025_yt"
+    },
+    "exit": {
+      "code": null,
+      "signal": "SIGKILL"
+    },
+    "windows_termination": "ChildProcess.kill(SIGKILL): native TerminateProcess",
+    "rows_after_kill": 250
+  },
+  "kill_resume": {
+    "passed": true,
+    "final_hashes": {
+      "ayah_timings": "061e235f93af8af2de7b6e6fd9fd9829eacd4b90ed59997f1dd75ba49d7f5ad5",
+      "import_jobs": "0502798d8d1413cb5ba065b6d2519214f462980a78e6922c3ebef215cf05ecdb",
+      "ayah_timing_history": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "recitation_chapters": "fa64be160a552c959b6b0842188e674d1eea072780b7ec5e4e3b100ed1a7607d",
+      "recitations": "e36e1144044c9250d699232393a84a4784df5382c842523f2d8f849c161d9497"
+    }
+  },
+  "corruption": {
+    "passed": true,
+    "cli_failed": true,
+    "silent_repair": false,
+    "history_rows": 1,
+    "timing_id": "f2a05446-e793-2e61-e80e-e53e33b84975"
+  },
+  "rehearsal_resume_reason": "A newly added verification guard incorrectly counted null unmapped spoken IDs as covered legal words. Fixed without changing prepared values.",
+  "down": {
+    "passed": true,
+    "dropped_tables": [
+      "ayah_timing_history",
+      "ayah_timings",
+      "import_jobs"
+    ],
+    "dropped_columns": [
+      "coverage_words",
+      "expected_words",
+      "coverage_details"
+    ]
+  },
+  "reapply": {
+    "passed": true,
+    "sql_sha256": "bddda76d806308dc9a8b21f83e0801a3ff4be5489e52b272121e999717aa0d0e"
+  },
+  "index": {
+    "passed": true,
+    "plan": {
+      "query": "/* select#1 */ select `ayahx_d2_d3_cli_20261010`.`ayah_timings`.`id` AS `id`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`recitation_id` AS `recitation_id`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`ayah_id` AS `ayah_id`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`surah` AS `surah`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`ayah` AS `ayah`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`source` AS `source`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`quality` AS `quality`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`qud_version` AS `qud_version`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`source_sha256` AS `source_sha256`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`canonical_checksum` AS `canonical_checksum`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`coordinate` AS `coordinate`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`source_offset_ms` AS `source_offset_ms`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`start_ms` AS `start_ms`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`end_ms` AS `end_ms`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`segments` AS `segments`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`words` AS `words`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`spoken_text` AS `spoken_text`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`source_rows` AS `source_rows`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`review_status` AS `review_status`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`review_reasons` AS `review_reasons`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`word_highlight_enabled` AS `word_highlight_enabled`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`repetition_display_mode` AS `repetition_display_mode`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`coverage_words` AS `coverage_words`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`expected_words` AS `expected_words`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`missing_words` AS `missing_words`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`version_hash` AS `version_hash`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`import_job_id` AS `import_job_id`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`created_at` AS `created_at`,`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`updated_at` AS `updated_at` from `ayahx_d2_d3_cli_20261010`.`ayah_timings` where ((`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`surah` = 2) and (`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`recitation_id` = '829763f8-1faa-4a26-15ff-86f934c4bceb') and (`ayahx_d2_d3_cli_20261010`.`ayah_timings`.`ayah` between 1 and 20))",
+      "query_plan": {
+        "ranges": [
+          "(recitation_id = '829763f8-1faa-4a26-15ff-86f934c4bceb' AND surah = 2 AND 1 <= ayah <= 20)"
+        ],
+        "covering": false,
+        "operation": "Index range scan on ayah_timings using uk_timing_ayah over (recitation_id = '829763f8-1faa-4a26-15ff-86f934c4bceb' AND surah = 2 AND 1 <= ayah <= 20), with index condition: ((ayah_timings.surah = 2) and (ayah_timings.recitation_id = '829763f8-1faa-4a26-15ff-86f934c4bceb') and (ayah_timings.ayah between 1 and 20))",
+        "index_name": "uk_timing_ayah",
+        "table_name": "ayah_timings",
+        "access_type": "index",
+        "key_columns": [
+          "recitation_id",
+          "surah",
+          "ayah"
+        ],
+        "schema_name": "ayahx_d2_d3_cli_20261010",
+        "used_columns": [
+          "id",
+          "recitation_id",
+          "ayah_id",
+          "surah",
+          "ayah",
+          "source",
+          "quality",
+          "qud_version",
+          "source_sha256",
+          "canonical_checksum",
+          "coordinate",
+          "source_offset_ms",
+          "start_ms",
+          "end_ms",
+          "segments",
+          "words",
+          "spoken_text",
+          "source_rows",
+          "review_status",
+          "review_reasons",
+          "word_highlight_enabled",
+          "repetition_display_mode",
+          "coverage_words",
+          "expected_words",
+          "missing_words",
+          "version_hash",
+          "import_job_id",
+          "created_at",
+          "updated_at"
+        ],
+        "estimated_rows": 20,
+        "index_access_type": "index_range_scan",
+        "estimated_total_cost": 24.494951250529887,
+        "pushed_index_condition": "((ayah_timings.surah = 2) and (ayah_timings.recitation_id = '829763f8-1faa-4a26-15ff-86f934c4bceb') and (ayah_timings.ayah between 1 and 20))"
+      },
+      "query_type": "select",
+      "json_schema_version": "2.0"
+    },
+    "rows": 20,
+    "elapsed_ms": 10.127300000051036
+  },
+  "acceptance_counts": {
+    "passed": true,
+    "total": 422463,
+    "word_accounting_violations": 0,
+    "recitations": [
+      {
+        "slug": "abdul_hamid_ghraio_2025_yt",
+        "count": 6236
+      },
+      {
+        "slug": "abdul_hamid_ghraio_2026_yt",
+        "count": 6236
+      },
+      {
+        "slug": "abdulaziz_al_turki_yt",
+        "count": 6115
+      },
+      {
+        "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+        "count": 6236
+      },
+      {
+        "slug": "abdulbasit_abdulsamad_tarteel",
+        "count": 6236
+      },
+      {
+        "slug": "abdulbasit_abdulsamad_warsh_qdc",
+        "count": 6214
+      },
+      {
+        "slug": "abdullah_al_buaijan_2025_yt",
+        "count": 6236
+      },
+      {
+        "slug": "abdullah_al_mattrod_qdc",
+        "count": 6236
+      },
+      {
+        "slug": "abdullah_al_qarafi_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "abdullah_kamel_way2quran",
+        "count": 6236
+      },
+      {
+        "slug": "abdulwadood_haneef_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "abdur_rashid_sufi_qdc",
+        "count": 6236
+      },
+      {
+        "slug": "abdur_rashid_sufi_shubah_qdc",
+        "count": 6236
+      },
+      {
+        "slug": "abu_bakr_al_shatri_tarteel",
+        "count": 6236
+      },
+      {
+        "slug": "adel_al_karbalaei_archive_v2",
+        "count": 6236
+      },
+      {
+        "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+        "count": 6236
+      },
+      {
+        "slug": "ahmed_al_ajmi_qdc",
+        "count": 6236
+      },
+      {
+        "slug": "ahmed_amer_tvquran",
+        "count": 6236
+      },
+      {
+        "slug": "ahmed_deban_qalon_mp3quran",
+        "count": 6214
+      },
+      {
+        "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "ahmed_kaseb_way2quran",
+        "count": 6236
+      },
+      {
+        "slug": "ahmed_nuayna_qdc",
+        "count": 6236
+      },
+      {
+        "slug": "ahmed_saleh_rajab_qalon_way2quran",
+        "count": 6213
+      },
+      {
+        "slug": "ahmed_saud_mp3quran",
+        "count": 327
+      },
+      {
+        "slug": "ahmed_shaheen_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "ahmed_talib_bin_humaid_mp3quran",
+        "count": 5561
+      },
+      {
+        "slug": "akram_al_alaqmi_qdc",
+        "count": 6236
+      },
+      {
+        "slug": "ali_al_huthaifi_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "ayman_swed_muallim_yt",
+        "count": 6236
+      },
+      {
+        "slug": "badr_al_turki_yt",
+        "count": 6236
+      },
+      {
+        "slug": "bandar_baleela_qdc",
+        "count": 6236
+      },
+      {
+        "slug": "fatih_seferagic_way2quran",
+        "count": 6236
+      },
+      {
+        "slug": "haitham_al_dukhain_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "hani_al_rifai_qdc_128k",
+        "count": 6236
+      },
+      {
+        "slug": "ibrahim_al_akhdar_drive",
+        "count": 6236
+      },
+      {
+        "slug": "imad_zuhair_hafez_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "islam_sobhi_mp3quran",
+        "count": 5334
+      },
+      {
+        "slug": "khalid_al_mohana_drive",
+        "count": 6236
+      },
+      {
+        "slug": "khalifa_al_tunaiji_tarteel",
+        "count": 6236
+      },
+      {
+        "slug": "maher_al_muaiqly_qdc",
+        "count": 6236
+      },
+      {
+        "slug": "mahmoud_abdul_hakam_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "mahmoud_ali_al_banna_qdc",
+        "count": 6236
+      },
+      {
+        "slug": "mahmoud_khalil_al_husary_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+        "count": 6236
+      },
+      {
+        "slug": "mahmoud_khalil_al_husary_qdc_128k",
+        "count": 6236
+      },
+      {
+        "slug": "mishary_rashid_al_afasy_2008_qdc",
+        "count": 6236
+      },
+      {
+        "slug": "mishary_rashid_al_afasy_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "moaz_mahmoud_hamed_qalon_way2quran",
+        "count": 6177
+      },
+      {
+        "slug": "mohammed_abdulkareem_qdc",
+        "count": 6236
+      },
+      {
+        "slug": "mohammed_al_luhaidan_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "mohammed_alghazali_archive",
+        "count": 6236
+      },
+      {
+        "slug": "mohammed_ayyub_drive",
+        "count": 6236
+      },
+      {
+        "slug": "mohammed_burhaji_yt",
+        "count": 6236
+      },
+      {
+        "slug": "mohammed_saayed_warsh_mp3quran",
+        "count": 6214
+      },
+      {
+        "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+        "count": 6236
+      },
+      {
+        "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "muammar_zainal_al_sukaini_way2quran",
+        "count": 6236
+      },
+      {
+        "slug": "mustafa_ismail_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "nasser_al_qatami_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "saad_al_ghamdi_tarteel",
+        "count": 6236
+      },
+      {
+        "slug": "saber_abdulhakam_qalon_way2quran",
+        "count": 6214
+      },
+      {
+        "slug": "saber_abdulhakam_shubah_way2quran",
+        "count": 6236
+      },
+      {
+        "slug": "saber_abdulhakam_warsh_way2quran",
+        "count": 6214
+      },
+      {
+        "slug": "saber_abdulhakam_yt",
+        "count": 6236
+      },
+      {
+        "slug": "saud_al_shuraim_mp3quran",
+        "count": 6236
+      },
+      {
+        "slug": "walid_al_naihi_qalon_mp3quran",
+        "count": 6214
+      },
+      {
+        "slug": "walid_atef_way2quran",
+        "count": 6236
+      },
+      {
+        "slug": "yasser_al_dosari_archive",
+        "count": 6236
+      }
+    ]
+  },
+  "passed": true
+}

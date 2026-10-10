@@ -34,7 +34,18 @@ export function verifyImportedRows(expected: PreparedTiming[], actual: Array<Rec
   for (const row of actual) {
     const want = wanted.get(String(row.id));
     if (!want) throw new Error('CHECKPOINT_UNEXPECTED_ROW');
-    verifyTimingRow(want, row); wanted.delete(want.id);
+    verifyTimingRow(want, row);
+    if (want.expected_words !== null) {
+      const words = (typeof row.words === 'string' ? JSON.parse(row.words) : row.words) as Array<[number | null, number, number, number]>;
+      const missing = (typeof row.missing_words === 'string' ? JSON.parse(row.missing_words) : row.missing_words) as Array<[number, string]>;
+      const coveredIds = new Set(words.flatMap((word) => word[0] === null ? [] : [word[0]]));
+      const missingIds = new Set(missing.map((word) => word[0]));
+      if (coveredIds.size !== Number(row.coverage_words) || missingIds.size !== missing.length || coveredIds.size + missingIds.size !== want.expected_words || missing.some((word) => typeof word[1] !== 'string' || !word[1].length)) throw new Error('CANONICAL_WORD_ACCOUNTING_MISMATCH');
+      for (let index = 1; index <= want.expected_words; index++) {
+        if (coveredIds.has(index) === missingIds.has(index)) throw new Error('CANONICAL_WORD_ACCOUNTING_MISMATCH');
+      }
+    }
+    wanted.delete(want.id);
   }
   if (wanted.size) throw new Error('CHECKPOINT_MISSING_ROW');
   return timingHash(JSON.stringify(expected.slice(0, checkpoint).map((r) => r.version_hash)));

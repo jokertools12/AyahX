@@ -53,7 +53,8 @@ const db: TimingDatabase = {
     await local!.query(sql);
   },
 };
-const report: { target: string; sql_sha256: string; dry_run: boolean; results: unknown[]; elapsed_ms?: number; serial?: unknown; event_loop_delay_ms?: unknown; completed?: boolean; failure?: string; disk_before?: unknown; disk_after?: unknown } = { target, sql_sha256: '', dry_run: !apply, results: [] };
+const wallStarted = Date.now();
+const report: { target: string; sql_sha256: string; dry_run: boolean; results: unknown[]; elapsed_ms?: number; serial?: unknown; event_loop_delay_ms?: unknown; completed?: boolean; failure?: string; disk_before?: unknown; disk_after?: unknown; started_at: string; wall_clock_ms?: number } = { target, sql_sha256: '', dry_run: !apply, results: [], started_at: new Date(wallStarted).toISOString() };
 const loop = monitorEventLoopDelay({ resolution: 10 });
 loop.enable();
 await new Promise<void>((accept) => setImmediate(accept));
@@ -117,5 +118,6 @@ try {
   report.event_loop_delay_ms = { p50: loop.percentile(50) / 1e6, p99: loop.percentile(99) / 1e6, max: loop.max / 1e6, samples: loop.count };
   if (session) report.serial = await session.close();
   await local?.end();
+  report.wall_clock_ms = Date.now() - wallStarted;
   writeFileSync(option('--report'), JSON.stringify(report, null, 2) + '\n');
 }

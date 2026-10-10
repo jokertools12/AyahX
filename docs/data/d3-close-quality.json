@@ -1,0 +1,28 @@
+{
+  "checked_at": "2026-10-10T05:51:48.7075665Z",
+  "tests": {
+    "report": "d3-close-tests.json",
+    "total": 500,
+    "passed": 494,
+    "skipped": 6,
+    "failed": 0
+  },
+  "typescript": {
+    "strict_changed_server_scripts": "pass",
+    "project": "pass"
+  },
+  "build": {
+    "status": "pass",
+    "vite_seconds": 9.65,
+    "vite_modules": 3041,
+    "server_bundle": "pass"
+  },
+  "lint": {
+    "files": 25,
+    "baseline_warnings": 2,
+    "new_messages": 0
+  },
+  "golden_real_inputs": "pass",
+  "mysql": "9.7.2",
+  "queue_real_redis": "7.2.14"
+}

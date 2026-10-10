@@ -1,0 +1,15 @@
+{
+  "target": "local",
+  "sql_sha256": "9978113755d1e8e9a951faafbf2567e53f28a6458928e449b0c1ab1491c65bfe",
+  "dry_run": false,
+  "results": [],
+  "started_at": "2026-10-10T05:37:24.447Z",
+  "failure": "STORED_TIMING_MISMATCH:f2a05446-e793-2e61-e80e-e53e33b84975",
+  "event_loop_delay_ms": {
+    "p50": 10.592255,
+    "p99": 16.924671,
+    "max": 544.735231,
+    "samples": 176
+  },
+  "wall_clock_ms": 2900
+}

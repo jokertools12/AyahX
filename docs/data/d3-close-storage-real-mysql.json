@@ -1,0 +1,34 @@
+{
+  "checked_at": "2026-10-10T05:31:20.376Z",
+  "mysql": "9.7.2",
+  "real_database": true,
+  "actual": {
+    "status": "ok",
+    "totalBytes": 5000000000,
+    "allocatedTableBytes": 1358413824,
+    "baseTableBytes": 43237376,
+    "timingTableBytes": 1315176448,
+    "availableBytes": 3641586176,
+    "freePercent": 72.83,
+    "observedAt": "2026-10-10T05:31:20.373Z",
+    "source": "information_schema",
+    "limitation": "Table allocation estimate; excludes redo, undo, binlog and other filesystem files."
+  },
+  "warning": {
+    "status": "warning",
+    "totalBytes": 1,
+    "allocatedTableBytes": 1358413824,
+    "baseTableBytes": 43237376,
+    "timingTableBytes": 1315176448,
+    "availableBytes": 0,
+    "freePercent": 0,
+    "observedAt": "2026-10-10T05:31:20.376Z",
+    "source": "information_schema",
+    "limitation": "Table allocation estimate; excludes redo, undo, binlog and other filesystem files."
+  },
+  "missing": {
+    "status": "unavailable",
+    "reason": "volume_size_missing_or_invalid"
+  },
+  "passed": true
+}

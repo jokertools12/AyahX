@@ -7,13 +7,15 @@ import { join } from 'node:path';
 import mysql, { type RowDataPacket } from 'mysql2/promise';
 import { downQuranTimingTables, TIMING_TABLES, timingChapterColumns } from '../server/db/migrations/003_addQuranTimingTables';
 import { timingColumns } from '../server/services/qudTimingSql';
+import { chapterTimingVerificationQueries, reconcileChapterTimingCoverage } from '../server/services/qudTimingVerification';
 const option = (name: string): string => { const i = process.argv.indexOf(name); if (i < 0 || !process.argv[i + 1]) throw new Error('REQUIRED_OPTION:' + name); return process.argv[i + 1]; };
 const database = option('--local-db'), killedDatabase = option('--kill-db');
 for (const name of [database,killedDatabase]) assert.match(name, /^ayahx_d2_[a-z0-9_]+$/u, 'PRIVATE_REHEARSAL_ONLY');
 const connection = (name: string) => mysql.createConnection({ host: '127.0.0.1', port: 33319, user: 'root', database: name, charset: 'utf8mb4', multipleStatements: true });
 const db = await connection(database); const killedDb = await connection(killedDatabase);
 const preparation = JSON.parse(readFileSync(option('--manifest'), 'utf8')) as { results: Array<{slug: string; rows: number}> };
-const report: Record<string, unknown> = { checked_at: new Date().toISOString(), mysql: '9.7.2', local_only: true, volatile_timestamps_excluded_from_semantic_hash: true };
+const resumeAfterCorruption = process.argv.includes('--resume-after-corruption');
+const report: Record<string, unknown> = resumeAfterCorruption ? JSON.parse(readFileSync(option('--report'),'utf8')) : { checked_at: new Date().toISOString(), mysql: '9.7.2', local_only: true, volatile_timestamps_excluded_from_semantic_hash: true };
 const save = () => writeFileSync(option('--report'), JSON.stringify(report, null, 2) + '\n');
 const argsFor = (name: string, tag: string, extra: string[] = []) => {
   const args = ['--import','tsx','scripts/import-qud-timings.ts','--target','local','--apply','--local-db',name,'--report','docs/data/' + tag + '.json','--sql',join(process.env.TEMP!, tag + '.sql'), ...extra];
@@ -41,7 +43,15 @@ try {
   const [identity] = await db.query<RowDataPacket[]>('SELECT VERSION() v, DATABASE() d'); assert.equal(identity[0].v,'9.7.2'); assert.equal(identity[0].d,database);
   const initial = JSON.parse(readFileSync(option('--first-report'),'utf8')) as {completed: boolean;results: Array<{slug: string;rows: number}>}; assert.equal(initial.completed,true);
   assert.equal(initial.results.reduce((n,r)=>n+r.rows,0),preparation.results.reduce((n,r)=>n+r.rows,0));
-  const baseline = await fingerprint(db); report.uninterrupted = baseline; save();
+  const baseline = resumeAfterCorruption ? report.uninterrupted as Record<string,string> : await fingerprint(db);
+  if (resumeAfterCorruption) {
+    assert.equal((report.idempotent_twice as {passed:boolean}).passed,true);
+    assert.equal((report.kill_resume as {passed:boolean}).passed,true);
+    assert.equal((report.corruption as {passed:boolean}).passed,true);
+    assert.deepEqual(await fingerprint(killedDb),baseline,'RESUME_PROOF_BASELINE');
+    report.rehearsal_resume_reason='A newly added verification guard incorrectly counted null unmapped spoken IDs as covered legal words. Fixed without changing prepared values.';
+  } else {
+  report.uninterrupted = baseline; save();
   const second = await run(database,'d3-close-cli-second'); assert.ok((second.results as Array<{rows:number;resumed_from:number}>).every((r)=>r.rows===r.resumed_from));
   assert.deepEqual(await fingerprint(db),baseline,'IDEMPOTENT_FINGERPRINT'); report.idempotent_twice = { passed:true, checkpoints_verified_and_skipped: preparation.results.length }; save();
   const child = spawn(process.execPath,argsFor(killedDatabase,'d3-close-cli-kill',['--pause-after-first-batch']),{stdio:['ignore','pipe','pipe']});child.stdout.resume();child.stderr.resume();
@@ -63,6 +73,8 @@ try {
   const [still]=await db.query<RowDataPacket[]>('SELECT end_ms FROM ayah_timings WHERE id=?',[victim.id]);assert.equal(Number(still[0].end_ms),Number(victim.end_ms)+1);
   report.corruption={passed:true,cli_failed:true,silent_repair:false,history_rows:history.length,timing_id:victim.id};save();
   await db.query('UPDATE ayah_timings SET end_ms=? WHERE id=?',[victim.end_ms,victim.id]);await run(database,'d3-close-cli-corruption-restored',['--one',slug]);
+  }
+  if (resumeAfterCorruption) await run(database,'d3-close-cli-corruption-restored',['--one',preparation.results[0].slug]);
   await downQuranTimingTables(db,'local-rehearsal');
   const [remaining]=await db.query<RowDataPacket[]>('SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA=? AND TABLE_NAME IN (?,?,?)',[database,...TIMING_TABLES]);assert.equal(remaining.length,0);
   const [columns]=await db.query<RowDataPacket[]>("SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=? AND TABLE_NAME='recitation_chapters' AND COLUMN_NAME IN (?,?,?)",[database,...Object.keys(timingChapterColumns)]);assert.equal(columns.length,0);
@@ -73,5 +85,6 @@ try {
   const started=performance.now();const [found]=await db.query<RowDataPacket[]>('SELECT * FROM ayah_timings WHERE recitation_id=? AND surah=2 AND ayah BETWEEN 1 AND 20',[id]);const elapsed=performance.now()-started;assert.equal(found.length,20);assert.ok(elapsed<50,'INDEX_LATENCY');report.index={passed:true,plan,rows:found.length,elapsed_ms:elapsed};
   const [totals]=await db.query<RowDataPacket[]>('SELECT COUNT(*) count,SUM(expected_words IS NOT NULL AND coverage_words+JSON_LENGTH(missing_words)<>expected_words) violations FROM ayah_timings');assert.equal(Number(totals[0].count),preparation.results.reduce((n,r)=>n+r.rows,0));assert.equal(Number(totals[0].violations),0);
   const [counts]=await db.query<RowDataPacket[]>('SELECT r.slug,COUNT(*) count FROM ayah_timings t JOIN recitations r ON r.id=t.recitation_id GROUP BY r.slug');for(const expected of preparation.results)assert.equal(Number(counts.find(r=>r.slug===expected.slug)?.count),expected.rows);
-  report.acceptance_counts={passed:true,total:Number(totals[0].count),word_accounting_violations:0,recitations:counts};report.passed=true;save();
+  const aggregates: Array<Array<Record<string,unknown>>> = []; for (const query of chapterTimingVerificationQueries) { const [values]=await db.query<RowDataPacket[]>(query); aggregates.push(values.map(r=>typeof r.record==='string'?JSON.parse(r.record):r.record)); } const chapterValues=reconcileChapterTimingCoverage(aggregates[0],aggregates[1],aggregates[2]);assert.equal(Number(chapterValues.coverage_errors),0,'CHAPTER_COVERAGE_INVARIANT');
+  report.acceptance_counts={passed:true,total:Number(totals[0].count),word_accounting_violations:0,chapter_coverage_violations:Number(chapterValues.coverage_errors),recitations:counts};report.passed=true;save();
 } finally {await db.end();await killedDb.end();save();}

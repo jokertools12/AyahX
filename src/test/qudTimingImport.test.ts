@@ -32,4 +32,10 @@ describe('D3 resume guard and chapter acceptance', () => {
     const bad = { ...rows[0], review_status: 'needs_review' as const, review_reasons: ['INVALID_WORD_INTERVAL'] };
     expect(chapterCoverageSql([bad], [1], corpus)).toContain('timing_complete=CASE surah WHEN 1 THEN 0');
   });
+  it('accounts for unmapped spoken words as missing legal words without counting null as an ID', () => {
+    const unmapped = prepareTimingRows({ rows: [['1:1', 0, 100, true, 0, [[1, 0, 100]], 'آخر']], slug: 'unit', sourceSha: 'b'.repeat(64), version: 'v3.2.0', corpus, canonicalAvailable: true, chapters: [1] });
+    expect(unmapped[0].words[0][0]).toBeNull();
+    expect(unmapped[0].missing_words).toEqual([[1, 'NO_VALID_MAPPED_SOURCE_INTERVAL']]);
+    expect(() => verifyImportedRows(unmapped, unmapped.map(timingValues))).not.toThrow();
+  });
 });

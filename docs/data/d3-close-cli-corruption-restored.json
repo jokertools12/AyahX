@@ -1,0 +1,24 @@
+{
+  "target": "local",
+  "sql_sha256": "9978113755d1e8e9a951faafbf2567e53f28a6458928e449b0c1ab1491c65bfe",
+  "dry_run": false,
+  "results": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "rows": 6236,
+      "sha256": "854cedfc62a6d6d888725bbfdfae17bdbf340379f52398c411438e8076fa6715",
+      "resumed_from": 6236,
+      "elapsed_ms": 9165
+    }
+  ],
+  "started_at": "2026-10-10T05:39:42.121Z",
+  "elapsed_ms": 10129,
+  "completed": true,
+  "event_loop_delay_ms": {
+    "p50": 11.149311,
+    "p99": 40.435711,
+    "max": 2594.177023,
+    "samples": 400
+  },
+  "wall_clock_ms": 12140
+}
