@@ -1,0 +1,22 @@
+{
+  "url": "https://ayahx.com",
+  "read_only": true,
+  "agent_mode": false,
+  "api_writes_blocked": true,
+  "run_id": "01a124b8-b92d-7ffe-a51b-ac341d20702d",
+  "started_at": "2026-10-10T07:30:50.942Z",
+  "finished_at": "2026-10-10T07:31:20.882Z",
+  "status": "passed",
+  "exit_code": 0,
+  "summary": {
+    "discovered": 12,
+    "selected": 10,
+    "executed": 10,
+    "passed": 10,
+    "failed": 0,
+    "interrupted": 0,
+    "flaky": 0,
+    "skipped": 0
+  },
+  "raw_reports_private": true
+}

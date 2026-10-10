@@ -1,0 +1,53 @@
+{
+  "checked_at": "2026-10-10T08:02:25.073Z",
+  "read_only": true,
+  "protected_and_d3_checksums_unchanged": true,
+  "critical_counts_unchanged": true,
+  "all_table_checksums_unchanged": false,
+  "global_checksum_probe_passed": false,
+  "required_d3_admin_d1_invariants_passed": true,
+  "changed_tables": [
+    "render_jobs",
+    "saved_videos"
+  ],
+  "details": [
+    {
+      "table": "render_jobs",
+      "before_rows": 72,
+      "after_rows": 72,
+      "changed_rows": 1,
+      "changed_columns": [
+        "output_path",
+        "stage",
+        "updated_at"
+      ],
+      "same_row_keys": true,
+      "matches_existing_expiry_cleanup_pattern": true
+    },
+    {
+      "table": "saved_videos",
+      "before_rows": 7,
+      "after_rows": 7,
+      "changed_rows": 1,
+      "changed_columns": [
+        "video_url"
+      ],
+      "same_row_keys": true,
+      "matches_existing_expiry_cleanup_pattern": true
+    }
+  ],
+  "values_and_identifiers_not_exported": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 2,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 1363,
+    "transport_response_bytes": 159041
+  }
+}

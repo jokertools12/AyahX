@@ -1,0 +1,43 @@
+{
+  "checked_at": "2026-10-10T08:02:36.5999294Z",
+  "limit": {
+    "workspaceUsage": {
+      "currentUsageDollars": 17.885108505751422,
+      "usageLimit": {
+        "hardLimit": 30,
+        "isOverLimit": false,
+        "softLimit": 20
+      }
+    }
+  },
+  "usage": {
+    "estimatedBillDollars": 22.984223058028782,
+    "billingPeriod": {
+      "end": "2026-10-19T03:53:56+03:00",
+      "start": "2026-09-19T03:53:56+03:00"
+    },
+    "lineItems": [
+      {
+        "currentUsageDollars": 0.8787302255787037,
+        "label": "CPU"
+      },
+      {
+        "currentUsageDollars": 16.810723039715555,
+        "label": "Memory"
+      },
+      {
+        "currentUsageDollars": 0.08825072275000001,
+        "label": "Egress"
+      },
+      {
+        "currentUsageDollars": 0.09718293034666667,
+        "label": "Volume"
+      },
+      {
+        "currentUsageDollars": 0.010224731733333332,
+        "label": "Backup"
+      }
+    ],
+    "currentUsageDollars": 17.885108505751422
+  }
+}

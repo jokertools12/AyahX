@@ -1,0 +1,12 @@
+{
+  "read_only": true,
+  "baseline_deployment": "42b9264d-4797-4f6c-ba00-322071289cc0",
+  "baseline_commit": "802720bad9aa8152fe93394f187fbb19e9879846",
+  "records": [],
+  "filtered_lines": 0,
+  "source_files_unchanged": [
+    "server/routes/alignments.ts",
+    "server/services/quranAlignService.ts",
+    "src/lib/timingMap.ts"
+  ]
+}

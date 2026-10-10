@@ -1,0 +1,82 @@
+{
+  "checked_at": "2026-10-10T07:41:03.152Z",
+  "health": [
+    {
+      "path": "/api/health",
+      "http_status": 200,
+      "status": "ok"
+    },
+    {
+      "path": "/api/health/ready",
+      "http_status": 200,
+      "status": "ready",
+      "database": "connected",
+      "storage": {
+        "status": "ok",
+        "totalBytes": 5000000000,
+        "allocatedTableBytes": 1372880896,
+        "baseTableBytes": 57622528,
+        "timingTableBytes": 1315258368,
+        "availableBytes": 3627119104,
+        "freePercent": 72.54,
+        "observedAt": "2026-10-10T07:40:51.766Z",
+        "source": "information_schema",
+        "limitation": "Table allocation estimate; excludes redo, undo, binlog and other filesystem files."
+      }
+    }
+  ],
+  "logs": [
+    {
+      "service": "AyahX",
+      "since": "2026-10-10T07:30:18Z",
+      "until": "2026-10-10T07:40:51.648Z",
+      "lines": 391,
+      "errors": 1,
+      "error_timestamps": [
+        "2026-10-10T07:34:16.990Z"
+      ]
+    },
+    {
+      "service": "MySQL",
+      "since": "2026-10-10T07:30:18Z",
+      "until": "2026-10-10T07:40:51.648Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": []
+    },
+    {
+      "service": "render-control",
+      "since": "2026-10-10T07:30:18Z",
+      "until": "2026-10-10T07:40:51.648Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": []
+    },
+    {
+      "service": "render-worker-skia",
+      "since": "2026-10-10T07:30:18Z",
+      "until": "2026-10-10T07:40:51.648Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": []
+    },
+    {
+      "service": "alignment-worker",
+      "since": "2026-10-10T07:30:18Z",
+      "until": "2026-10-10T07:40:51.648Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": []
+    },
+    {
+      "service": "Redis",
+      "since": "2026-10-10T07:30:18Z",
+      "until": "2026-10-10T07:40:51.648Z",
+      "lines": 50,
+      "errors": 0,
+      "error_timestamps": []
+    }
+  ],
+  "passed": false,
+  "read_only": true
+}
