@@ -59,7 +59,7 @@ function validateTargets(targets: readonly CatalogLinkTarget[]): void {
   const keys = new Set<string>();
   for (const t of targets) {
     if (keys.has(t.key) || !t.key || !t.id || !t.recitationId || !t.reciterId || !Array.isArray(t.allowedHosts) ||
-      t.allowedHosts.some(h => typeof h !== 'string' || !/^[a-z0-9.-]+$/iu.test(h)) ||
+      t.allowedHosts.some(h => typeof h !== 'string' || (!/^[a-z0-9.-]+$/iu.test(h)&&h!=='*.us.archive.org')) ||
       (t.kind === 'chapter' && (!Number.isSafeInteger(t.surah) || Number(t.surah) < 1)) ||
       !['chapter', 'alternate'].includes(t.kind)) throw new Error('CATALOG_LINK_INVENTORY_INVALID');
     keys.add(t.key);
