@@ -245,6 +245,33 @@ class SyntheticMetricTests(unittest.TestCase):
         self.assertAlmostEqual(result['score'], coefficient, places=10)
         self.assertFalse(result['passed'])
 
+    def test_previous_rounded_t7_path_passes_but_raw_path_rejects(self):
+        from lib import t7_offset_execution as kernel
+        rng = np.random.default_rng(905)
+        source = rng.normal(0, .05, 80000)
+        clip = source[16000:32000].copy()
+        reference = clip[2400:-2400].copy()
+        mean = reference.mean()
+        reference -= mean
+        norm = np.linalg.norm(reference)
+        reference /= norm
+        noise = rng.normal(size=len(reference))
+        noise -= noise.mean()
+        noise -= np.dot(noise, reference) * reference
+        noise /= np.linalg.norm(noise)
+        coefficient = 0.949999997
+        clip[2400:-2400] = (coefficient * reference + np.sqrt(1 - coefficient ** 2) * noise) * norm + mean
+        def measure():
+            return kernel.measured_sample(source, clip, 2000, 2000, [[0, 1, 0, 1900]],
+                                          b'synthetic-source', b'synthetic-clip', self.v1)
+        fixed = measure()
+        with patch.object(kernel, 'raw_compare', self.v1.compare):
+            previous = measure()
+        self.assertTrue(previous['t7_v1_passed'])
+        self.assertEqual(previous['interior_v1']['score'], .95)
+        self.assertFalse(fixed['t7_v1_passed'])
+        self.assertAlmostEqual(fixed['interior_v1']['score'], coefficient, places=10)
+
     def test_fixed_position_minimum_duration_and_wrong_position(self):
         self.assertFalse(fixed_position_interior(self.source, self.clip[:10000], 16000)['measured'])
         self.assertTrue(fixed_position_interior(self.source, self.clip, 16000)['passed'])
