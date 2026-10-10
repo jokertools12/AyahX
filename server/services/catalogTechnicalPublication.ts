@@ -17,9 +17,26 @@ export function technicalPublicationDecision(row:CatalogRow,facts:PublicationFac
   if(['hidden','deprecated'].includes(String(row.status)))reasons.push('ADMIN_STATUS_PROTECTED');
   return {eligible:reasons.length===0,reasons};
 }
-// D4 policy supersedes the old basmala gate. It remains unverified and is never fabricated.
-// COALESCE makes absent JSON evidence reject rather than UNKNOWN (accepted by MySQL CHECK).
-export const D4_OFFSET_CHECK="COALESCE(offset_verified=FALSE OR (verification_status='passed' AND offset_check_score BETWEEN 0 AND 1 AND ((verification_method='v1' AND offset_check_score>=0.95) OR (verification_method='v2' AND offset_check_score>=0.90 AND JSON_UNQUOTE(JSON_EXTRACT(verification_details,'$.v2_acceptance.cause'))='codec_processing_only' AND JSON_UNQUOTE(JSON_EXTRACT(verification_details,'$.v2_acceptance.decision'))='accepted_for_data_pipeline_verification' AND JSON_TYPE(JSON_EXTRACT(verification_details,'$.v2_acceptance.sample_count'))='INTEGER' AND JSON_EXTRACT(verification_details,'$.v2_acceptance.sample_count')>=5 AND JSON_EXTRACT(verification_details,'$.v2_acceptance.minimum_VAD_agreement') BETWEEN 0.90 AND 1 AND JSON_EXTRACT(verification_details,'$.v2_acceptance.maximum_absolute_lag_ms') BETWEEN 0 AND 30 AND JSON_EXTRACT(verification_details,'$.v2_acceptance.maximum_duration_difference_ms') BETWEEN 0 AND 30 AND JSON_TYPE(JSON_EXTRACT(verification_details,'$.v2_acceptance.review_blockers'))='ARRAY' AND JSON_LENGTH(JSON_EXTRACT(verification_details,'$.v2_acceptance.review_blockers'))=0))),FALSE)";
-export const D4_PUBLISH_CHECK="COALESCE(status<>'published' OR (riwayah_code='hafs_an_asim' AND canonical_text_available=TRUE AND audio_mode='surah_slice' AND offset_verified=TRUE AND verification_status='passed' AND timing_quality='verified' AND timing_level IN ('word','letter') AND verification_method IN ('v1','v2')),FALSE)";
-/** Separate reviewed T6 operation, never part of additive migration004. */
-export const D4_PUBLICATION_CONSTRAINT_SQL=`ALTER TABLE recitations DROP CHECK chk_catalog_offset, DROP CHECK chk_catalog_publish, ADD CONSTRAINT chk_catalog_offset CHECK (${D4_OFFSET_CHECK}), ADD CONSTRAINT chk_catalog_publish CHECK (${D4_PUBLISH_CHECK});`;
+// MySQL requires a boolean top-level operator. Each nullable predicate compares IFNULL to 1,
+// so missing evidence is FALSE rather than UNKNOWN (which CHECK would otherwise accept).
+const every=(conditions:readonly string[]):string=>conditions.map(c=>`IFNULL((${c}),0)=1`).join(' AND ');
+const v2=every(["verification_method='v2'","offset_check_score>=0.90",
+  "JSON_UNQUOTE(JSON_EXTRACT(verification_details,'$.v2_acceptance.cause'))='codec_processing_only'",
+  "JSON_UNQUOTE(JSON_EXTRACT(verification_details,'$.v2_acceptance.decision'))='accepted_for_data_pipeline_verification'",
+  "JSON_TYPE(JSON_EXTRACT(verification_details,'$.v2_acceptance.sample_count'))='INTEGER'",
+  "JSON_EXTRACT(verification_details,'$.v2_acceptance.sample_count')>=5",
+  "JSON_EXTRACT(verification_details,'$.v2_acceptance.minimum_VAD_agreement') BETWEEN 0.90 AND 1",
+  "JSON_EXTRACT(verification_details,'$.v2_acceptance.maximum_absolute_lag_ms') BETWEEN 0 AND 30",
+  "JSON_EXTRACT(verification_details,'$.v2_acceptance.maximum_duration_difference_ms') BETWEEN 0 AND 30",
+  "JSON_TYPE(JSON_EXTRACT(verification_details,'$.v2_acceptance.review_blockers'))='ARRAY'",
+  "JSON_LENGTH(JSON_EXTRACT(verification_details,'$.v2_acceptance.review_blockers'))=0"]);
+export const D4_OFFSET_CHECK=`IFNULL(offset_verified,0)=0 OR (${every(["verification_status='passed'","offset_check_score BETWEEN 0 AND 1",`(verification_method='v1' AND offset_check_score>=0.95) OR (${v2})`])})`;
+export const D4_PUBLISH_CHECK=`status<>'published' OR (${every(["riwayah_code='hafs_an_asim'","canonical_text_available=1","audio_mode='surah_slice'","offset_verified=1","verification_status='passed'","timing_quality='verified'","timing_level IN ('word','letter')","verification_method IN ('v1','v2')"])})`;
+export const PUBLICATION_CONSTRAINTS={chk_recitations_offset_gate_v1:D4_OFFSET_CHECK,chk_recitations_publish_gate_v1:D4_PUBLISH_CHECK} as const;
+export function publicationConstraintSql(existing:readonly string[]):string[]{
+  const added=Object.entries(PUBLICATION_CONSTRAINTS).filter(([name])=>!existing.includes(name)).map(([name,expr])=>`ADD CONSTRAINT ${name} CHECK (${expr})`);
+  const removed=['chk_catalog_offset','chk_catalog_publish'].filter(n=>existing.includes(n)).map(n=>`DROP CHECK ${n}`);
+  return added.length||removed.length?[`ALTER TABLE recitations ${[...removed,...added].join(', ')};`]:[];
+}
+/** Separate reviewed K1 operation, never part of additive migration004. */
+export const D4_PUBLICATION_CONSTRAINT_SQL=publicationConstraintSql(['chk_catalog_offset','chk_catalog_publish'])[0];
