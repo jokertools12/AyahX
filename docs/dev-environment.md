@@ -27,3 +27,9 @@
 ## أدوات D2 المحلية فقط
 
 numpy/scipy في `%TEMP%/ayahx-d2-python` لفحص NCC؛ لا تعديل requirements/lockfile. age v1.3.2 من asset Windows الرسمي وبصمة GitHub المطابقة: `f48d8f8f9ebe903ab5027ed067652f2cc1db94bc206976430133b905dcd8e8c7`. الثنائية في TEMP؛ dump المشفر في `%LOCALAPPDATA%/AyahX/private-backups` خارج Git/cloud، ومفتاح منفصل في backup-keys بصلاحيات الحساب فقط، دون نشر قيمته. D2 استعادة 47 جدولاً على نفس MySQL9.7.2 المحلي/33319 والتحقق لكل الأعداد وCHECKSUM. لم تتغير ملفات tracked لمعالجة EPERM أو FFmpeg. الأدلة التشغيلية الجديدة في railway-ops-log وتقارير D2.
+
+## أدوات التشخيص B — 2026-10-10
+
+أمر `python` العام هو Windows Store alias غير متاح. استُخدم التنفيذ المضمّن `C:\Users\cpazi\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe`، مع `PYTHONDONTWRITEBYTECODE=1` و`OPENBLAS_NUM_THREADS=1`، و`PYTHONPATH` بالترتيب: `%TEMP%/ayahx-d2-python` ثم `%TEMP%/ayahx-d1-python` ثم `%TEMP%/ayahx-d3-python`.
+
+توقّف الرسم الحقيقي الأول بسبب غياب matplotlib، بعد نقطة حفظ واحدة؛ ليس فشل مصدر أو تغييرًا في نتائج v1. ثبّت الجذر matplotlib3.11.2 إلى target الثالث بأمر pip isolated مع PyPI العام، بلا تعديل package/requirements/lockfile. بقي NumPy2.5.3 محمّلًا من target D2 كما قبل التثبيت. نجح إخراج PNG فعلي في TEMP ثم31 اختبار حساب/تصنيف، و7 اختبارات المراجعة المستقلة. استؤنف التقرير بنفس script/kernel SHA؛ لا إعادة قبول لنقاط غير محفوظة ولا حذف scratch بديل. رسمة preflight اصطناعية موسومة، ولا تُحسب ضمن الرسوم الخمسة المطلوبة للعينات الحقيقية.

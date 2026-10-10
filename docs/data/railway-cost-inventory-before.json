@@ -1,0 +1,746 @@
+{
+  "recorded_at": "2026-10-10T04:29:56.756Z",
+  "inventory": {
+    "production": {
+      "buckets": [
+        {
+          "id": "2276364d-5bfc-495e-aff6-56218af7aa71",
+          "name": "renderstorage",
+          "region": "sjc",
+          "stagedChangeCount": 0,
+          "state": "live"
+        }
+      ],
+      "environment": {
+        "id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+        "isEphemeral": false,
+        "name": "production"
+      },
+      "project": {
+        "id": "6394b364-57bc-4736-8ce1-10dcf382c1e5",
+        "name": "courteous-recreation",
+        "workspaceName": "jokertools12's Projects"
+      },
+      "region": null,
+      "services": [
+        {
+          "cronSchedule": null,
+          "id": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+          "latestDeployment": {
+            "createdAt": "2026-10-09T04:54:59.698Z",
+            "id": "79cf206c-7ecc-4de1-b409-c41f13c24ecc",
+            "status": "SUCCESS",
+            "url": null
+          },
+          "name": "Redis",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": {
+            "branch": null,
+            "image": "redis:8.2",
+            "repo": null
+          },
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": [
+            {
+              "mountPath": "/data",
+              "volumeId": "28c0e477-e545-4a20-b861-0a1d786d63e4",
+              "volumeName": "redis-volume"
+            }
+          ]
+        },
+        {
+          "cronSchedule": null,
+          "id": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+          "latestDeployment": {
+            "createdAt": "2026-10-10T00:02:50.105Z",
+            "id": "0dcab870-6e04-47c9-9ea4-772213794b99",
+            "status": "SUCCESS",
+            "url": null
+          },
+          "name": "alignment-worker",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": {
+            "branch": "main",
+            "image": null,
+            "repo": "jokertools12/AyahX"
+          },
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": []
+        },
+        {
+          "cronSchedule": null,
+          "id": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+          "latestDeployment": {
+            "createdAt": "2026-10-09T11:04:38.810Z",
+            "id": "5688ebb9-d685-4c31-b378-10b1fef748d0",
+            "status": "SUCCESS",
+            "url": null
+          },
+          "name": "MySQL",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": {
+            "branch": null,
+            "image": "mysql:9.7.2",
+            "repo": null
+          },
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": [
+            {
+              "mountPath": "/var/lib/mysql",
+              "volumeId": "53929c74-e4b1-4777-8135-e6301637dbb6",
+              "volumeName": "mysql-volume"
+            }
+          ]
+        },
+        {
+          "cronSchedule": null,
+          "id": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+          "latestDeployment": {
+            "createdAt": "2026-10-10T00:02:50.106Z",
+            "id": "42b9264d-4797-4f6c-ba00-322071289cc0",
+            "status": "SLEEPING",
+            "url": null
+          },
+          "name": "AyahX",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": {
+            "branch": "main",
+            "image": null,
+            "repo": "jokertools12/AyahX"
+          },
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": []
+        },
+        {
+          "cronSchedule": null,
+          "id": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+          "latestDeployment": {
+            "createdAt": "2026-10-10T00:02:50.102Z",
+            "id": "f6b20af1-6ef9-47ba-9432-9f6ed9f51c1d",
+            "status": "SUCCESS",
+            "url": null
+          },
+          "name": "render-control",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": {
+            "branch": "main",
+            "image": null,
+            "repo": "jokertools12/AyahX"
+          },
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": []
+        },
+        {
+          "cronSchedule": null,
+          "id": "18de6ea4-108a-4346-8474-c7b05b81943b",
+          "latestDeployment": {
+            "createdAt": "2026-10-10T00:02:50.103Z",
+            "id": "f8c9e4e7-3d0c-4473-ba5b-3bbd5160e2ca",
+            "status": "SUCCESS",
+            "url": null
+          },
+          "name": "render-worker-skia",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": {
+            "branch": "main",
+            "image": null,
+            "repo": "jokertools12/AyahX"
+          },
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": []
+        }
+      ],
+      "sharedVariableNames": [],
+      "staged": null,
+      "volumes": [
+        {
+          "id": "28c0e477-e545-4a20-b861-0a1d786d63e4",
+          "mountedOn": {
+            "mountPath": "/data",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+            "serviceName": "Redis"
+          },
+          "name": "redis-volume",
+          "region": "sfo",
+          "sizeMB": 500,
+          "stagedChangeCount": 0,
+          "state": "live"
+        },
+        {
+          "id": "53929c74-e4b1-4777-8135-e6301637dbb6",
+          "mountedOn": {
+            "mountPath": "/var/lib/mysql",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+            "serviceName": "MySQL"
+          },
+          "name": "mysql-volume",
+          "region": "sfo",
+          "sizeMB": 5000,
+          "stagedChangeCount": 0,
+          "state": "live"
+        }
+      ]
+    },
+    "staging": {
+      "buckets": [
+        {
+          "id": "2276364d-5bfc-495e-aff6-56218af7aa71",
+          "name": "renderstorage",
+          "region": "sjc",
+          "stagedChangeCount": 0,
+          "state": "live"
+        },
+        {
+          "id": "1959535a-0b7b-41ef-b30a-1b296e4e5243",
+          "name": "admin-media-staging",
+          "region": "sjc",
+          "stagedChangeCount": 0,
+          "state": "live"
+        }
+      ],
+      "environment": {
+        "id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+        "isEphemeral": false,
+        "name": "staging"
+      },
+      "project": {
+        "id": "6394b364-57bc-4736-8ce1-10dcf382c1e5",
+        "name": "courteous-recreation",
+        "workspaceName": "jokertools12's Projects"
+      },
+      "region": null,
+      "services": [
+        {
+          "cronSchedule": null,
+          "id": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e",
+          "latestDeployment": {
+            "createdAt": "2026-10-09T04:54:59.798Z",
+            "id": "5a5e583f-c63e-4a4a-b0ad-37ab2101d835",
+            "status": "SUCCESS",
+            "url": null
+          },
+          "name": "admin-media-scanner",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": null,
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": [
+            {
+              "mountPath": "/var/lib/clamav",
+              "volumeId": "94c7220c-7aec-49b7-a382-f8a9ee8aed3f",
+              "volumeName": "staging-scanner-signatures"
+            }
+          ]
+        },
+        {
+          "cronSchedule": null,
+          "id": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+          "latestDeployment": {
+            "createdAt": "2026-10-09T05:16:33.604Z",
+            "id": "3fa35ec2-ab12-493d-954d-db31cf78f58a",
+            "status": "SUCCESS",
+            "url": null
+          },
+          "name": "alignment-worker",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": null,
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": []
+        },
+        {
+          "cronSchedule": null,
+          "id": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+          "latestDeployment": null,
+          "name": "Redis",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": {
+            "branch": null,
+            "image": "redis:8.2",
+            "repo": null
+          },
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": [
+            {
+              "mountPath": "/data",
+              "volumeId": "28c0e477-e545-4a20-b861-0a1d786d63e4",
+              "volumeName": "redis-volume"
+            }
+          ]
+        },
+        {
+          "cronSchedule": null,
+          "id": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+          "latestDeployment": {
+            "createdAt": "2026-10-09T11:04:55.772Z",
+            "id": "c9294f14-81be-441c-93bf-1fa5823718c8",
+            "status": "SUCCESS",
+            "url": null
+          },
+          "name": "MySQL",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": {
+            "branch": null,
+            "image": "mysql:9.7.2",
+            "repo": null
+          },
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": [
+            {
+              "mountPath": "/var/lib/mysql",
+              "volumeId": "53929c74-e4b1-4777-8135-e6301637dbb6",
+              "volumeName": "mysql-volume"
+            }
+          ]
+        },
+        {
+          "cronSchedule": null,
+          "id": "18de6ea4-108a-4346-8474-c7b05b81943b",
+          "latestDeployment": {
+            "createdAt": "2026-10-09T05:21:10.326Z",
+            "id": "b60ac42a-b111-462f-9b3e-c45f286aed37",
+            "status": "SUCCESS",
+            "url": null
+          },
+          "name": "render-worker-skia",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": {
+            "branch": "codex/openrouter-quran-animate-staging",
+            "image": null,
+            "repo": "jokertools12/AyahX"
+          },
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": []
+        },
+        {
+          "cronSchedule": null,
+          "id": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+          "latestDeployment": {
+            "createdAt": "2026-10-09T05:16:35.709Z",
+            "id": "76296f93-0b9d-402b-9172-e3c175233b13",
+            "status": "SUCCESS",
+            "url": null
+          },
+          "name": "render-control",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": {
+            "branch": "codex/openrouter-quran-animate-staging",
+            "image": null,
+            "repo": "jokertools12/AyahX"
+          },
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": []
+        },
+        {
+          "cronSchedule": null,
+          "id": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+          "latestDeployment": {
+            "createdAt": "2026-10-10T00:02:50.106Z",
+            "id": "cdc231d4-9fdb-4ba3-932e-5f5444b38c8d",
+            "status": "SLEEPING",
+            "url": null
+          },
+          "name": "AyahX",
+          "numReplicas": 1,
+          "regions": [
+            "sfo"
+          ],
+          "source": {
+            "branch": "main",
+            "image": null,
+            "repo": "jokertools12/AyahX"
+          },
+          "stagedChangeCount": 0,
+          "state": "live",
+          "volumeMounts": []
+        }
+      ],
+      "sharedVariableNames": [],
+      "staged": null,
+      "volumes": [
+        {
+          "id": "28c0e477-e545-4a20-b861-0a1d786d63e4",
+          "mountedOn": {
+            "mountPath": "/data",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+            "serviceName": "Redis"
+          },
+          "name": "redis-volume",
+          "region": "sfo",
+          "sizeMB": 5000,
+          "stagedChangeCount": 0,
+          "state": "live"
+        },
+        {
+          "id": "53929c74-e4b1-4777-8135-e6301637dbb6",
+          "mountedOn": {
+            "mountPath": "/var/lib/mysql",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+            "serviceName": "MySQL"
+          },
+          "name": "mysql-volume",
+          "region": "sfo",
+          "sizeMB": 5000,
+          "stagedChangeCount": 0,
+          "state": "live"
+        },
+        {
+          "id": "94c7220c-7aec-49b7-a382-f8a9ee8aed3f",
+          "mountedOn": {
+            "mountPath": "/var/lib/clamav",
+            "serviceId": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e",
+            "serviceName": "admin-media-scanner"
+          },
+          "name": "staging-scanner-signatures",
+          "region": "sfo",
+          "sizeMB": 1024,
+          "stagedChangeCount": 0,
+          "state": "live"
+        }
+      ]
+    }
+  },
+  "metrics": [
+    {
+      "environment": {
+        "id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+        "name": "staging"
+      },
+      "metrics": [
+        {
+          "average": 0.000050044808743169416,
+          "current": 0.000027283333333333337,
+          "max": 0.00009656666666666666,
+          "measurement": "CPU_USAGE",
+          "min": 0.000025433333333333333,
+          "sampleCount": 61
+        },
+        {
+          "average": 1.0371194880000014,
+          "current": 1.037119488,
+          "max": 1.037119488,
+          "measurement": "MEMORY_USAGE_GB",
+          "min": 1.037119488,
+          "sampleCount": 61
+        }
+      ],
+      "service": {
+        "id": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e",
+        "name": "admin-media-scanner"
+      }
+    },
+    {
+      "environment": {
+        "id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+        "name": "staging"
+      },
+      "metrics": [
+        {
+          "average": 0.00126842868852459,
+          "current": 0.0007720166666666667,
+          "max": 0.0017007833333333334,
+          "measurement": "CPU_USAGE",
+          "min": 0,
+          "sampleCount": 61
+        },
+        {
+          "average": 0.04064306360655738,
+          "current": 0.041320448,
+          "max": 0.041320448,
+          "measurement": "MEMORY_USAGE_GB",
+          "min": 0,
+          "sampleCount": 61
+        }
+      ],
+      "service": {
+        "id": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+        "name": "alignment-worker"
+      }
+    },
+    {
+      "environment": {
+        "id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+        "name": "staging"
+      },
+      "metrics": [
+        {
+          "average": 0,
+          "current": 0,
+          "max": 0,
+          "measurement": "CPU_USAGE",
+          "min": 0,
+          "sampleCount": 61
+        },
+        {
+          "average": 0,
+          "current": 0,
+          "max": 0,
+          "measurement": "MEMORY_USAGE_GB",
+          "min": 0,
+          "sampleCount": 61
+        }
+      ],
+      "service": {
+        "id": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+        "name": "Redis"
+      }
+    },
+    {
+      "environment": {
+        "id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+        "name": "staging"
+      },
+      "metrics": [
+        {
+          "average": 0.003624058469945354,
+          "current": 0,
+          "max": 0.005292966666666666,
+          "measurement": "CPU_USAGE",
+          "min": 0,
+          "sampleCount": 61
+        },
+        {
+          "average": 0.4662929038688524,
+          "current": 0.474333184,
+          "max": 0.474570752,
+          "measurement": "MEMORY_USAGE_GB",
+          "min": 0,
+          "sampleCount": 61
+        }
+      ],
+      "service": {
+        "id": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+        "name": "MySQL"
+      }
+    },
+    {
+      "environment": {
+        "id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+        "name": "staging"
+      },
+      "metrics": [
+        {
+          "average": 0.0038271322404371585,
+          "current": 0.0020840333333333335,
+          "max": 0.005387916666666667,
+          "measurement": "CPU_USAGE",
+          "min": 0.001973833333333333,
+          "sampleCount": 61
+        },
+        {
+          "average": 0.13602255318032788,
+          "current": 0.136278016,
+          "max": 0.136798208,
+          "measurement": "MEMORY_USAGE_GB",
+          "min": 0.13570048,
+          "sampleCount": 61
+        }
+      ],
+      "service": {
+        "id": "18de6ea4-108a-4346-8474-c7b05b81943b",
+        "name": "render-worker-skia"
+      }
+    },
+    {
+      "error": [
+        "You are querying metrics too fast. Try again in 5s."
+      ]
+    },
+    {
+      "environment": {
+        "id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+        "name": "staging"
+      },
+      "metrics": [
+        {
+          "average": 0,
+          "current": 0,
+          "max": 0,
+          "measurement": "CPU_USAGE",
+          "min": 0,
+          "sampleCount": 61
+        },
+        {
+          "average": 0,
+          "current": 0,
+          "max": 0,
+          "measurement": "MEMORY_USAGE_GB",
+          "min": 0,
+          "sampleCount": 61
+        }
+      ],
+      "service": {
+        "id": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+        "name": "AyahX"
+      }
+    },
+    {
+      "environment": {
+        "id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+        "name": "production"
+      },
+      "metrics": [
+        {
+          "average": 0.002162306010928962,
+          "current": 0.0013593,
+          "max": 0.0029691666666666664,
+          "measurement": "CPU_USAGE",
+          "min": 0,
+          "sampleCount": 61
+        },
+        {
+          "average": 0.016485359213114753,
+          "current": 0.016850944,
+          "max": 0.016982016,
+          "measurement": "MEMORY_USAGE_GB",
+          "min": 0,
+          "sampleCount": 61
+        }
+      ],
+      "service": {
+        "id": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+        "name": "Redis"
+      }
+    },
+    {
+      "error": [
+        "You are querying metrics too fast. Try again in 5s."
+      ]
+    },
+    {
+      "environment": {
+        "id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+        "name": "production"
+      },
+      "metrics": [
+        {
+          "average": 0.00303942786885246,
+          "current": 0,
+          "max": 0.009721216666666668,
+          "measurement": "CPU_USAGE",
+          "min": 0,
+          "sampleCount": 61
+        },
+        {
+          "average": 0.4186276847213115,
+          "current": 0.42625024,
+          "max": 0.426381312,
+          "measurement": "MEMORY_USAGE_GB",
+          "min": 0,
+          "sampleCount": 61
+        }
+      ],
+      "service": {
+        "id": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+        "name": "MySQL"
+      }
+    },
+    {
+      "environment": {
+        "id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+        "name": "production"
+      },
+      "metrics": [
+        {
+          "average": 0.0011297868852459018,
+          "current": 0,
+          "max": 0.00921855,
+          "measurement": "CPU_USAGE",
+          "min": 0,
+          "sampleCount": 61
+        },
+        {
+          "average": 0.050791709377049195,
+          "current": 0.052600832,
+          "max": 0.052600832,
+          "measurement": "MEMORY_USAGE_GB",
+          "min": 0.049225728,
+          "sampleCount": 61
+        }
+      ],
+      "service": {
+        "id": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+        "name": "AyahX"
+      }
+    },
+    {
+      "environment": {
+        "id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+        "name": "production"
+      },
+      "metrics": [
+        {
+          "average": 0.0025688262295081965,
+          "current": 0.0013687166666666666,
+          "max": 0.003877733333333333,
+          "measurement": "CPU_USAGE",
+          "min": 0,
+          "sampleCount": 61
+        },
+        {
+          "average": 0.04901434754098358,
+          "current": 0.049156096,
+          "max": 0.050507776,
+          "measurement": "MEMORY_USAGE_GB",
+          "min": 0,
+          "sampleCount": 61
+        }
+      ],
+      "service": {
+        "id": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+        "name": "render-control"
+      }
+    },
+    {
+      "error": [
+        "You are querying metrics too fast. Try again in 5s."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,347 @@
+{
+  "query": "/* select#1 */ select json_object('coverage_errors',count(0)) AS `record` from `ayahx_d2_d3_kill_20261010`.`recitation_chapters` `c` join `ayahx_d2_d3_kill_20261010`.`recitations` `r` left join (/* select#2 */ select `ayahx_d2_d3_kill_20261010`.`ayah_timings`.`recitation_id` AS `recitation_id`,`ayahx_d2_d3_kill_20261010`.`ayah_timings`.`surah` AS `surah`,count(0) AS `rows_count`,sum(`ayahx_d2_d3_kill_20261010`.`ayah_timings`.`coverage_words`) AS `covered`,sum(json_length(`ayahx_d2_d3_kill_20261010`.`ayah_timings`.`missing_words`)) AS `missing`,sum((`ayahx_d2_d3_kill_20261010`.`ayah_timings`.`review_status` <> 'ready')) AS `review` from `ayahx_d2_d3_kill_20261010`.`ayah_timings` group by `ayahx_d2_d3_kill_20261010`.`ayah_timings`.`recitation_id`,`ayahx_d2_d3_kill_20261010`.`ayah_timings`.`surah`) `t` on(((`t`.`surah` = `c`.`surah`) and (`t`.`recitation_id` = `r`.`id`))) left join (/* select#3 */ select `a`.`surah` AS `surah`,count(0) AS `words_count` from `ayahx_d2_d3_kill_20261010`.`quran_words` `w` join `ayahx_d2_d3_kill_20261010`.`quran_ayahs` `a` where (`w`.`ayah_id` = `a`.`id`) group by `a`.`surah`) `w` on((`w`.`surah` = `c`.`surah`)) left join (/* select#4 */ select `ayahx_d2_d3_kill_20261010`.`quran_ayahs`.`surah` AS `surah`,count(0) AS `ayah_count` from `ayahx_d2_d3_kill_20261010`.`quran_ayahs` group by `ayahx_d2_d3_kill_20261010`.`quran_ayahs`.`surah`) `a` on((`a`.`surah` = `c`.`surah`)) where ((`c`.`recitation_id` = `r`.`id`) and ((not((`c`.`coverage_words` <=> coalesce(`t`.`covered`,0)))) or (not((`c`.`expected_words` <=> if((`r`.`canonical_text_available` = 1),`w`.`words_count`,NULL)))) or (not((`c`.`timing_complete` <=> if(((`r`.`canonical_text_available` = 1) and (`t`.`rows_count` = `a`.`ayah_count`) and (`t`.`covered` = `w`.`words_count`) and (`t`.`missing` = 0) and (`t`.`review` = 0)),1,0)))) or (not((`c`.`is_complete` <=> ((0 <> `c`.`ayahs_complete`) and (0 <> coalesce(`c`.`timing_complete`,0))))))))",
+  "query_plan": {
+    "inputs": [
+      {
+        "inputs": [
+          {
+            "inputs": [
+              {
+                "inputs": [
+                  {
+                    "inputs": [
+                      {
+                        "inputs": [
+                          {
+                            "alias": "r",
+                            "operation": "Table scan on r",
+                            "table_name": "recitations",
+                            "access_type": "table",
+                            "schema_name": "ayahx_d2_d3_kill_20261010",
+                            "used_columns": [
+                              "id",
+                              "canonical_text_available"
+                            ],
+                            "estimated_rows": 35.0,
+                            "estimated_total_cost": 355.62043189368774
+                          },
+                          {
+                            "alias": "c",
+                            "covering": false,
+                            "operation": "Index lookup on c using uk_catalog_chapter (recitation_id = r.id)",
+                            "index_name": "uk_catalog_chapter",
+                            "table_name": "recitation_chapters",
+                            "access_type": "index",
+                            "key_columns": [
+                              "recitation_id"
+                            ],
+                            "schema_name": "ayahx_d2_d3_kill_20261010",
+                            "used_columns": [
+                              "recitation_id",
+                              "surah",
+                              "ayahs_complete",
+                              "timing_complete",
+                              "is_complete",
+                              "coverage_words",
+                              "expected_words"
+                            ],
+                            "estimated_rows": 124.57376861572266,
+                            "lookup_condition": "recitation_id = r.id",
+                            "index_access_type": "index_lookup",
+                            "lookup_references": [
+                              "ayahx_d2_d3_kill_20261010.r.id"
+                            ],
+                            "estimated_total_cost": 119.85195853511738
+                          }
+                        ],
+                        "join_type": "inner join",
+                        "operation": "Nested loop inner join",
+                        "access_type": "join",
+                        "estimated_rows": 4360.081901550293,
+                        "join_algorithm": "nested_loop",
+                        "estimated_total_cost": 4973.989793916254
+                      },
+                      {
+                        "inputs": [
+                          {
+                            "inputs": [
+                              {
+                                "inputs": [
+                                  {
+                                    "covering": false,
+                                    "operation": "Index scan on ayah_timings using uk_timing_ayah",
+                                    "index_name": "uk_timing_ayah",
+                                    "table_name": "ayah_timings",
+                                    "access_type": "index",
+                                    "schema_name": "ayahx_d2_d3_kill_20261010",
+                                    "used_columns": [
+                                      "id",
+                                      "recitation_id",
+                                      "surah",
+                                      "review_status",
+                                      "coverage_words",
+                                      "missing_words"
+                                    ],
+                                    "estimated_rows": 350075.0,
+                                    "index_access_type": "index_scan",
+                                    "estimated_total_cost": 110825.63909874039
+                                  }
+                                ],
+                                "group_by": true,
+                                "functions": [
+                                  "count(0)",
+                                  "sum(ayah_timings.coverage_words)",
+                                  "sum(json_length(ayah_timings.missing_words))",
+                                  "sum((ayah_timings.review_status <> 'ready'))"
+                                ],
+                                "operation": "Group aggregate: count(0), sum(ayah_timings.coverage_words), sum(json_length(ayah_timings.missing_words)), sum((ayah_timings.review_status <> 'ready'))",
+                                "access_type": "aggregate",
+                                "estimated_rows": 6525.0,
+                                "estimated_total_cost": 191488.08149505375
+                              }
+                            ],
+                            "operation": "Materialize",
+                            "access_type": "materialize",
+                            "estimated_rows": 6525.0,
+                            "estimated_total_cost": 192991.5377162519,
+                            "estimated_first_row_cost": 192991.5377162519
+                          }
+                        ],
+                        "covering": false,
+                        "operation": "Index lookup on t using <auto_key0> (recitation_id = r.id, surah = c.surah)",
+                        "index_name": "<auto_key0>",
+                        "table_name": "t",
+                        "access_type": "index",
+                        "key_columns": [
+                          "recitation_id",
+                          "surah"
+                        ],
+                        "used_columns": [
+                          "recitation_id",
+                          "surah",
+                          "rows_count",
+                          "covered",
+                          "missing",
+                          "review"
+                        ],
+                        "estimated_rows": 3500.75,
+                        "lookup_condition": "recitation_id = r.id, surah = c.surah",
+                        "index_access_type": "index_lookup",
+                        "lookup_references": [
+                          "ayahx_d2_d3_kill_20261010.r.id",
+                          "ayahx_d2_d3_kill_20261010.c.surah"
+                        ],
+                        "estimated_total_cost": 193866.80550717487,
+                        "estimated_first_row_cost": 192991.78773918728
+                      }
+                    ],
+                    "join_type": "left join",
+                    "operation": "Nested loop left join",
+                    "access_type": "join",
+                    "estimated_rows": 28449534.40761566,
+                    "join_algorithm": "nested_loop",
+                    "estimated_total_cost": 6665816.609768529
+                  },
+                  {
+                    "inputs": [
+                      {
+                        "inputs": [
+                          {
+                            "inputs": [
+                              {
+                                "inputs": [
+                                  {
+                                    "alias": "a",
+                                    "covering": true,
+                                    "operation": "Covering index scan on a using idx_quran_ayah_location",
+                                    "index_name": "idx_quran_ayah_location",
+                                    "table_name": "quran_ayahs",
+                                    "access_type": "index",
+                                    "schema_name": "ayahx_d2_d3_kill_20261010",
+                                    "used_columns": [
+                                      "id",
+                                      "surah"
+                                    ],
+                                    "estimated_rows": 5759.0,
+                                    "index_access_type": "index_scan",
+                                    "estimated_total_cost": 799.9975935828877
+                                  },
+                                  {
+                                    "alias": "w",
+                                    "covering": true,
+                                    "operation": "Covering index lookup on w using uk_quran_word_position (ayah_id = a.id)",
+                                    "index_name": "uk_quran_word_position",
+                                    "table_name": "quran_words",
+                                    "access_type": "index",
+                                    "key_columns": [
+                                      "ayah_id"
+                                    ],
+                                    "schema_name": "ayahx_d2_d3_kill_20261010",
+                                    "used_columns": [
+                                      "id",
+                                      "ayah_id"
+                                    ],
+                                    "estimated_rows": 11.890090942382812,
+                                    "lookup_condition": "ayah_id = a.id",
+                                    "index_access_type": "index_lookup",
+                                    "lookup_references": [
+                                      "ayahx_d2_d3_kill_20261010.a.id"
+                                    ],
+                                    "estimated_total_cost": 1.3872163267801254
+                                  }
+                                ],
+                                "join_type": "inner join",
+                                "operation": "Nested loop inner join",
+                                "access_type": "join",
+                                "estimated_rows": 68475.03373718262,
+                                "join_algorithm": "nested_loop",
+                                "estimated_total_cost": 15635.290784133653
+                              }
+                            ],
+                            "group_by": true,
+                            "functions": [
+                              "count(0)"
+                            ],
+                            "operation": "Group aggregate: count(0)",
+                            "access_type": "aggregate",
+                            "estimated_rows": 114.0,
+                            "estimated_total_cost": 31412.948327263286
+                          }
+                        ],
+                        "operation": "Materialize",
+                        "access_type": "materialize",
+                        "estimated_rows": 114.0,
+                        "estimated_total_cost": 31439.215608369275,
+                        "estimated_first_row_cost": 31439.215608369275
+                      }
+                    ],
+                    "covering": false,
+                    "operation": "Index lookup on w using <auto_key0> (surah = c.surah)",
+                    "index_name": "<auto_key0>",
+                    "table_name": "w",
+                    "access_type": "index",
+                    "key_columns": [
+                      "surah"
+                    ],
+                    "used_columns": [
+                      "surah",
+                      "words_count"
+                    ],
+                    "estimated_rows": 10.000730246823426,
+                    "lookup_condition": "surah = c.surah",
+                    "index_access_type": "index_lookup",
+                    "lookup_references": [
+                      "ayahx_d2_d3_kill_20261010.c.surah"
+                    ],
+                    "estimated_total_cost": 31441.715790996503,
+                    "estimated_first_row_cost": 31439.465608375827
+                  }
+                ],
+                "join_type": "left join",
+                "operation": "Nested loop left join",
+                "access_type": "join",
+                "estimated_rows": 3243246922.4681854,
+                "join_algorithm": "nested_loop",
+                "estimated_total_cost": 369152187.1896692
+              },
+              {
+                "inputs": [
+                  {
+                    "inputs": [
+                      {
+                        "inputs": [
+                          {
+                            "covering": true,
+                            "operation": "Covering index scan on quran_ayahs using idx_quran_ayah_location",
+                            "index_name": "idx_quran_ayah_location",
+                            "table_name": "quran_ayahs",
+                            "access_type": "index",
+                            "schema_name": "ayahx_d2_d3_kill_20261010",
+                            "used_columns": [
+                              "id",
+                              "surah"
+                            ],
+                            "estimated_rows": 5759.0,
+                            "index_access_type": "index_scan",
+                            "estimated_total_cost": 799.9975935828877
+                          }
+                        ],
+                        "group_by": true,
+                        "functions": [
+                          "count(0)"
+                        ],
+                        "operation": "Group aggregate: count(0)",
+                        "access_type": "aggregate",
+                        "estimated_rows": 114.0,
+                        "estimated_total_cost": 2126.9561189285096
+                      }
+                    ],
+                    "operation": "Materialize",
+                    "access_type": "materialize",
+                    "estimated_rows": 114.0,
+                    "estimated_total_cost": 2153.2234000345,
+                    "estimated_first_row_cost": 2153.2234000345
+                  }
+                ],
+                "covering": false,
+                "operation": "Index lookup on a using <auto_key0> (surah = c.surah)",
+                "index_name": "<auto_key0>",
+                "table_name": "a",
+                "access_type": "index",
+                "key_columns": [
+                  "surah"
+                ],
+                "used_columns": [
+                  "surah",
+                  "ayah_count"
+                ],
+                "estimated_rows": 10.015652173913043,
+                "lookup_condition": "surah = c.surah",
+                "index_access_type": "index_lookup",
+                "lookup_references": [
+                  "ayahx_d2_d3_kill_20261010.c.surah"
+                ],
+                "estimated_total_cost": 2155.7273130845397,
+                "estimated_first_row_cost": 2153.4734000351555
+              }
+            ],
+            "join_type": "left join",
+            "operation": "Nested loop left join",
+            "access_type": "join",
+            "estimated_rows": 369730149161.37317,
+            "join_algorithm": "nested_loop",
+            "estimated_total_cost": 37724381199.883896
+          }
+        ],
+        "condition": "((not((c.coverage_words <=> coalesce(t.covered,0)))) or (not((c.expected_words <=> if((r.canonical_text_available = 1),w.words_count,NULL)))) or (not((c.timing_complete <=> if(((r.canonical_text_available = 1) and (t.rows_count = a.ayah_count) and (t.covered = w.words_count) and (t.missing = 0) and (t.review = 0)),1,0)))) or (not((c.is_complete <=> ((0 <> c.ayahs_complete) and (0 <> coalesce(c.timing_complete,0)))))))",
+        "operation": "Filter: ((not((c.coverage_words <=> coalesce(t.covered,0)))) or (not((c.expected_words <=> if((r.canonical_text_available = 1),w.words_count,NULL)))) or (not((c.timing_complete <=> if(((r.canonical_text_available = 1) and (t.rows_count = a.ayah_count) and (t.covered = w.words_count) and (t.missing = 0) and (t.review = 0)),1,0)))) or (not((c.is_complete <=> ((0 <> c.ayahs_complete) and (0 <> coalesce(c.timing_complete,0)))))))",
+        "access_type": "filter",
+        "estimated_rows": 369730149161.37317,
+        "filter_columns": [
+          "a.ayah_count",
+          "c.ayahs_complete",
+          "c.coverage_words",
+          "c.expected_words",
+          "c.is_complete",
+          "c.timing_complete",
+          "r.canonical_text_available",
+          "t.covered",
+          "t.missing",
+          "t.review",
+          "t.rows_count",
+          "w.words_count"
+        ],
+        "estimated_total_cost": 37724381199.883896
+      }
+    ],
+    "functions": [
+      "count(0)"
+    ],
+    "operation": "Aggregate: count(0)",
+    "access_type": "aggregate",
+    "estimated_rows": 1.0,
+    "estimated_total_cost": 122915659808.49522
+  },
+  "query_type": "select",
+  "json_schema_version": "2.0"
+}

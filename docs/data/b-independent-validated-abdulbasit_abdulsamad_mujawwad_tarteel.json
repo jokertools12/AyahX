@@ -1,0 +1,2301 @@
+{
+  "errors": [],
+  "reviewed": [
+    {
+      "config": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "abdulbasit_abdulsamad_tarteel",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "abdullah_al_mattrod_qdc",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "abdullah_kamel_way2quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "abdulwadood_haneef_mp3quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "abdur_rashid_sufi_qdc",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "abdur_rashid_sufi_shubah_qdc",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "abu_bakr_al_shatri_tarteel",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "adel_al_karbalaei_archive_v2",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "ahmed_al_ajmi_qdc",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "ahmed_amer_tvquran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": true,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "codec_processing_only",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "ahmed_deban_qalon_mp3quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "ahmed_issa_al_maasaraawi_mp3quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "ahmed_kaseb_way2quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "constant_lag",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "ahmed_nuayna_qdc",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "ahmed_saleh_rajab_qalon_way2quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "ahmed_saud_mp3quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": true,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "ahmed_shaheen_mp3quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "ahmed_talib_bin_humaid_mp3quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "akram_al_alaqmi_qdc",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "bandar_baleela_qdc",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "fatih_seferagic_way2quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "hani_al_rifai_qdc_128k",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "islam_sobhi_mp3quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "khalifa_al_tunaiji_tarteel",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "maher_al_muaiqly_qdc",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": false,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "mahmoud_abdul_hakam_mp3quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "mahmoud_ali_al_banna_qdc",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "mahmoud_khalil_al_husary_mp3quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "mahmoud_khalil_al_husary_qdc_128k",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "mishary_rashid_al_afasy_2008_qdc",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "mishary_rashid_al_afasy_mp3quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": true,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    },
+    {
+      "config": "moaz_mahmoud_hamed_qalon_way2quran",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": false,
+      "encoded_all_proven": false,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    }
+  ],
+  "segments_IoU_replayed": false,
+  "segments_limitation": "intervals unavailable; SHA/count alone do not permit replay",
+  "report_sha256": "7439794d4faecd3f9f7a7e280737044d947f88344013622308c94c2cc754d104",
+  "original_sha256": "e071bf483c7b44c9157c49cc15287c9aa11ed598d777bfff2bdcb1e8a449a0b9",
+  "original_semantic_sha256": "c0b221a802abf540415adde6c28914e4e8bd40532c302f2f428fd7b9d1e1255f",
+  "review_script_sha256": "60e34039c371b4730871c9d3b16b22c329db999e4ca238336cb2447d23a65ab1",
+  "pcm_replay": {
+    "config": "abdulbasit_abdulsamad_mujawwad_tarteel",
+    "errors": [],
+    "samples": [
+      {
+        "surah": 1,
+        "ayah": 1,
+        "clip_decoded_duration_ms": 6373.875,
+        "hf_duration_ms": 6349,
+        "duration_difference_ms": 24.875,
+        "lag_ms": -25.5,
+        "envelope_score": 0.999989346305399,
+        "interior_pcm_score": 0.9502150986390256,
+        "source_clip_speech_iou": 1.0,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 6374,
+          "source_speech": [
+            [
+              578,
+              5168
+            ],
+            [
+              5176,
+              5328
+            ],
+            [
+              5332,
+              5548
+            ]
+          ],
+          "clip_speech": [
+            [
+              578,
+              5168
+            ],
+            [
+              5176,
+              5328
+            ],
+            [
+              5332,
+              5548
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 626843,
+          "clip_decoded_sample_count": 50991,
+          "nominal_source_start_sample": 1048,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 71876.0,
+          "latest_complete_source_start_sample": 575852,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 1,
+        "ayah": 3,
+        "clip_decoded_duration_ms": 7627.75,
+        "hf_duration_ms": 7606,
+        "duration_difference_ms": 21.75,
+        "lag_ms": -25.5,
+        "envelope_score": 0.9999991335256829,
+        "interior_pcm_score": 0.9963240683652613,
+        "source_clip_speech_iou": 0.9996765847347995,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 7628,
+          "source_speech": [
+            [
+              524,
+              6684
+            ],
+            [
+              6716,
+              6720
+            ],
+            [
+              6726,
+              6727
+            ],
+            [
+              6766,
+              6768
+            ],
+            [
+              6769,
+              6781
+            ],
+            [
+              6782,
+              6783
+            ],
+            [
+              6784,
+              6787
+            ]
+          ],
+          "clip_speech": [
+            [
+              524,
+              6684
+            ],
+            [
+              6716,
+              6720
+            ],
+            [
+              6725,
+              6727
+            ],
+            [
+              6766,
+              6767
+            ],
+            [
+              6769,
+              6781
+            ],
+            [
+              6782,
+              6783
+            ],
+            [
+              6784,
+              6787
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 626843,
+          "clip_decoded_sample_count": 61022,
+          "nominal_source_start_sample": 137512,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 53564.125,
+          "latest_complete_source_start_sample": 565821,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 1,
+        "ayah": 4,
+        "clip_decoded_duration_ms": 7105.375,
+        "hf_duration_ms": 7104,
+        "duration_difference_ms": 1.375,
+        "lag_ms": -25.0,
+        "envelope_score": 0.999993156455438,
+        "interior_pcm_score": 0.9563761997946808,
+        "source_clip_speech_iou": 0.999320882852292,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 7106,
+          "source_speech": [
+            [
+              522,
+              6113
+            ],
+            [
+              6126,
+              6239
+            ],
+            [
+              6471,
+              6475
+            ],
+            [
+              6476,
+              6608
+            ],
+            [
+              6609,
+              6614
+            ],
+            [
+              6615,
+              6656
+            ],
+            [
+              6661,
+              6663
+            ]
+          ],
+          "clip_speech": [
+            [
+              522,
+              6113
+            ],
+            [
+              6126,
+              6239
+            ],
+            [
+              6471,
+              6475
+            ],
+            [
+              6476,
+              6614
+            ],
+            [
+              6615,
+              6652
+            ],
+            [
+              6653,
+              6656
+            ],
+            [
+              6661,
+              6662
+            ],
+            [
+              6664,
+              6665
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 626843,
+          "clip_decoded_sample_count": 56843,
+          "nominal_source_start_sample": 203128,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 45884.0,
+          "latest_complete_source_start_sample": 570000,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 1,
+        "ayah": 5,
+        "clip_decoded_duration_ms": 10762.5,
+        "hf_duration_ms": 10741,
+        "duration_difference_ms": 21.5,
+        "lag_ms": -24.625,
+        "envelope_score": 0.999993275711626,
+        "interior_pcm_score": 0.9497318560713528,
+        "source_clip_speech_iou": 0.9997837370242214,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 10763,
+          "source_speech": [
+            [
+              556,
+              9748
+            ],
+            [
+              9808,
+              9810
+            ],
+            [
+              9811,
+              9821
+            ],
+            [
+              9972,
+              9998
+            ],
+            [
+              10000,
+              10002
+            ],
+            [
+              10022,
+              10026
+            ],
+            [
+              10027,
+              10031
+            ],
+            [
+              10033,
+              10036
+            ],
+            [
+              10039,
+              10041
+            ],
+            [
+              10044,
+              10047
+            ]
+          ],
+          "clip_speech": [
+            [
+              556,
+              9748
+            ],
+            [
+              9808,
+              9810
+            ],
+            [
+              9811,
+              9820
+            ],
+            [
+              9972,
+              9998
+            ],
+            [
+              10000,
+              10002
+            ],
+            [
+              10022,
+              10026
+            ],
+            [
+              10027,
+              10031
+            ],
+            [
+              10033,
+              10036
+            ],
+            [
+              10039,
+              10040
+            ],
+            [
+              10044,
+              10047
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 626843,
+          "clip_decoded_sample_count": 86100,
+          "nominal_source_start_sample": 265192,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 34468.5,
+          "latest_complete_source_start_sample": 540743,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 1,
+        "ayah": 7,
+        "clip_decoded_duration_ms": 22674.375,
+        "hf_duration_ms": 22656,
+        "duration_difference_ms": 18.375,
+        "lag_ms": -25.5,
+        "envelope_score": 0.9999980795432695,
+        "interior_pcm_score": 0.9908685286707735,
+        "source_clip_speech_iou": 1.0,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 22675,
+          "source_speech": [
+            [
+              568,
+              21679
+            ],
+            [
+              21680,
+              21684
+            ],
+            [
+              22233,
+              22251
+            ],
+            [
+              22270,
+              22388
+            ],
+            [
+              22398,
+              22410
+            ]
+          ],
+          "clip_speech": [
+            [
+              568,
+              21679
+            ],
+            [
+              21680,
+              21684
+            ],
+            [
+              22233,
+              22251
+            ],
+            [
+              22270,
+              22388
+            ],
+            [
+              22398,
+              22410
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 626843,
+          "clip_decoded_sample_count": 181395,
+          "nominal_source_start_sample": 434472,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 1397.5,
+          "latest_complete_source_start_sample": 445448,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 2,
+        "ayah": 1,
+        "clip_decoded_duration_ms": 9639.25,
+        "hf_duration_ms": 9620,
+        "duration_difference_ms": 19.25,
+        "lag_ms": 0.0,
+        "envelope_score": 0.9851565197643045,
+        "interior_pcm_score": 0.5441916287266219,
+        "source_clip_speech_iou": 0.9865741267493457,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 9640,
+          "source_speech": [
+            [
+              27,
+              8622
+            ],
+            [
+              9095,
+              9104
+            ],
+            [
+              9134,
+              9244
+            ],
+            [
+              9250,
+              9266
+            ]
+          ],
+          "clip_speech": [
+            [
+              52,
+              8647
+            ],
+            [
+              9120,
+              9129
+            ],
+            [
+              9159,
+              9269
+            ],
+            [
+              9275,
+              9291
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 125573860,
+          "clip_decoded_sample_count": 77114,
+          "nominal_source_start_sample": 0,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 15687093.25,
+          "latest_complete_source_start_sample": 125496746,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 2,
+        "ayah": 72,
+        "clip_decoded_duration_ms": 23640.75,
+        "hf_duration_ms": 23636,
+        "duration_difference_ms": 4.75,
+        "lag_ms": -25.375,
+        "envelope_score": 0.9999996576928752,
+        "interior_pcm_score": 0.9971313531110462,
+        "source_clip_speech_iou": 0.9999553212402824,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 23641,
+          "source_speech": [
+            [
+              564,
+              1042
+            ],
+            [
+              1139,
+              22868
+            ],
+            [
+              22879,
+              22880
+            ],
+            [
+              22882,
+              22902
+            ],
+            [
+              23023,
+              23044
+            ],
+            [
+              23130,
+              23262
+            ]
+          ],
+          "clip_speech": [
+            [
+              564,
+              1042
+            ],
+            [
+              1139,
+              22868
+            ],
+            [
+              22879,
+              22880
+            ],
+            [
+              22882,
+              22902
+            ],
+            [
+              23023,
+              23044
+            ],
+            [
+              23130,
+              23263
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 125573860,
+          "clip_decoded_sample_count": 189126,
+          "nominal_source_start_sample": 22913152,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 12808973.125,
+          "latest_complete_source_start_sample": 125384734,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 2,
+        "ayah": 143,
+        "clip_decoded_duration_ms": 109165.75,
+        "hf_duration_ms": 109148,
+        "duration_difference_ms": 17.75,
+        "lag_ms": -24.875,
+        "envelope_score": 0.9999871112264632,
+        "interior_pcm_score": 0.8882285915596452,
+        "source_clip_speech_iou": 0.9999221997465935,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 109166,
+          "source_speech": [
+            [
+              543,
+              26498
+            ],
+            [
+              26500,
+              26501
+            ],
+            [
+              26517,
+              26718
+            ],
+            [
+              26744,
+              26757
+            ],
+            [
+              30682,
+              53309
+            ],
+            [
+              53318,
+              59117
+            ],
+            [
+              59119,
+              59182
+            ],
+            [
+              59343,
+              59381
+            ],
+            [
+              59382,
+              59384
+            ],
+            [
+              59399,
+              59430
+            ],
+            [
+              59431,
+              59434
+            ],
+            [
+              59675,
+              59710
+            ],
+            [
+              59719,
+              59730
+            ],
+            [
+              63632,
+              65056
+            ],
+            [
+              65137,
+              78432
+            ],
+            [
+              78457,
+              78543
+            ],
+            [
+              78747,
+              78773
+            ],
+            [
+              78806,
+              78875
+            ],
+            [
+              78965,
+              78973
+            ],
+            [
+              79001,
+              79048
+            ],
+            [
+              79052,
+              79068
+            ],
+            [
+              81630,
+              90619
+            ],
+            [
+              90632,
+              90633
+            ],
+            [
+              90655,
+              90663
+            ],
+            [
+              90664,
+              90665
+            ],
+            [
+              90666,
+              90667
+            ],
+            [
+              90669,
+              90670
+            ],
+            [
+              90696,
+              90697
+            ],
+            [
+              90699,
+              90700
+            ],
+            [
+              96835,
+              108051
+            ],
+            [
+              108053,
+              108055
+            ]
+          ],
+          "clip_speech": [
+            [
+              543,
+              26498
+            ],
+            [
+              26500,
+              26501
+            ],
+            [
+              26517,
+              26718
+            ],
+            [
+              26744,
+              26757
+            ],
+            [
+              30682,
+              53310
+            ],
+            [
+              53318,
+              59117
+            ],
+            [
+              59119,
+              59182
+            ],
+            [
+              59343,
+              59381
+            ],
+            [
+              59382,
+              59384
+            ],
+            [
+              59399,
+              59430
+            ],
+            [
+              59431,
+              59432
+            ],
+            [
+              59433,
+              59434
+            ],
+            [
+              59675,
+              59710
+            ],
+            [
+              59719,
+              59730
+            ],
+            [
+              63632,
+              65056
+            ],
+            [
+              65137,
+              78433
+            ],
+            [
+              78457,
+              78543
+            ],
+            [
+              78747,
+              78773
+            ],
+            [
+              78806,
+              78876
+            ],
+            [
+              78965,
+              78973
+            ],
+            [
+              79001,
+              79048
+            ],
+            [
+              79053,
+              79068
+            ],
+            [
+              81630,
+              90619
+            ],
+            [
+              90632,
+              90633
+            ],
+            [
+              90655,
+              90663
+            ],
+            [
+              90664,
+              90665
+            ],
+            [
+              90696,
+              90697
+            ],
+            [
+              90699,
+              90700
+            ],
+            [
+              96835,
+              108051
+            ],
+            [
+              108053,
+              108055
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 125573860,
+          "clip_decoded_sample_count": 873326,
+          "nominal_source_start_sample": 51546696,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 9144254.625,
+          "latest_complete_source_start_sample": 124700534,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 2,
+        "ayah": 215,
+        "clip_decoded_duration_ms": 52715.125,
+        "hf_duration_ms": 52697,
+        "duration_difference_ms": 18.125,
+        "lag_ms": -24.75,
+        "envelope_score": 0.9999849675084725,
+        "interior_pcm_score": 0.9406666116942912,
+        "source_clip_speech_iou": 0.9999337836048205,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 52716,
+          "source_speech": [
+            [
+              551,
+              669
+            ],
+            [
+              965,
+              13268
+            ],
+            [
+              13271,
+              29926
+            ],
+            [
+              29930,
+              29968
+            ],
+            [
+              29979,
+              30058
+            ],
+            [
+              30069,
+              32768
+            ],
+            [
+              32794,
+              32814
+            ],
+            [
+              32914,
+              32915
+            ],
+            [
+              32916,
+              32927
+            ],
+            [
+              32965,
+              32990
+            ],
+            [
+              38385,
+              51622
+            ],
+            [
+              51701,
+              51787
+            ],
+            [
+              51788,
+              51789
+            ],
+            [
+              51790,
+              51791
+            ],
+            [
+              51855,
+              51856
+            ],
+            [
+              51857,
+              51885
+            ]
+          ],
+          "clip_speech": [
+            [
+              551,
+              669
+            ],
+            [
+              965,
+              13268
+            ],
+            [
+              13271,
+              29926
+            ],
+            [
+              29930,
+              29969
+            ],
+            [
+              29979,
+              30060
+            ],
+            [
+              30069,
+              32768
+            ],
+            [
+              32794,
+              32814
+            ],
+            [
+              32914,
+              32915
+            ],
+            [
+              32916,
+              32927
+            ],
+            [
+              32965,
+              32990
+            ],
+            [
+              38385,
+              51622
+            ],
+            [
+              51701,
+              51787
+            ],
+            [
+              51788,
+              51789
+            ],
+            [
+              51790,
+              51791
+            ],
+            [
+              51855,
+              51856
+            ],
+            [
+              51857,
+              51885
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 125573860,
+          "clip_decoded_sample_count": 421721,
+          "nominal_source_start_sample": 81807984,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 5418044.125,
+          "latest_complete_source_start_sample": 125152139,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 2,
+        "ayah": 286,
+        "clip_decoded_duration_ms": 104568.25,
+        "hf_duration_ms": 104559,
+        "duration_difference_ms": 9.25,
+        "lag_ms": -24.875,
+        "envelope_score": 0.9999881333514912,
+        "interior_pcm_score": 0.8794533437971697,
+        "source_clip_speech_iou": 0.9999040502776545,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 104569,
+          "source_speech": [
+            [
+              567,
+              10409
+            ],
+            [
+              10410,
+              10412
+            ],
+            [
+              10413,
+              10415
+            ],
+            [
+              10422,
+              10456
+            ],
+            [
+              10467,
+              10480
+            ],
+            [
+              10482,
+              10487
+            ],
+            [
+              12759,
+              20881
+            ],
+            [
+              20882,
+              20883
+            ],
+            [
+              20885,
+              20890
+            ],
+            [
+              20894,
+              20895
+            ],
+            [
+              20896,
+              20925
+            ],
+            [
+              25293,
+              38597
+            ],
+            [
+              41732,
+              60358
+            ],
+            [
+              60363,
+              60368
+            ],
+            [
+              65346,
+              85456
+            ],
+            [
+              85457,
+              85459
+            ],
+            [
+              85501,
+              85530
+            ],
+            [
+              85536,
+              85627
+            ],
+            [
+              90596,
+              103604
+            ],
+            [
+              103650,
+              103743
+            ],
+            [
+              103898,
+              103945
+            ]
+          ],
+          "clip_speech": [
+            [
+              567,
+              10409
+            ],
+            [
+              10410,
+              10412
+            ],
+            [
+              10413,
+              10415
+            ],
+            [
+              10422,
+              10456
+            ],
+            [
+              10467,
+              10480
+            ],
+            [
+              10482,
+              10487
+            ],
+            [
+              12759,
+              20881
+            ],
+            [
+              20882,
+              20883
+            ],
+            [
+              20884,
+              20890
+            ],
+            [
+              20894,
+              20895
+            ],
+            [
+              20897,
+              20925
+            ],
+            [
+              25293,
+              38597
+            ],
+            [
+              41732,
+              60357
+            ],
+            [
+              60363,
+              60368
+            ],
+            [
+              65346,
+              85459
+            ],
+            [
+              85499,
+              85530
+            ],
+            [
+              85536,
+              85627
+            ],
+            [
+              90596,
+              103605
+            ],
+            [
+              103650,
+              103743
+            ],
+            [
+              103897,
+              103945
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 125573860,
+          "clip_decoded_sample_count": 836546,
+          "nominal_source_start_sample": 124735528,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 248.125,
+          "latest_complete_source_start_sample": 124737314,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 3,
+        "ayah": 1,
+        "clip_decoded_duration_ms": 8829.375,
+        "hf_duration_ms": 8826,
+        "duration_difference_ms": 3.375,
+        "lag_ms": -24.75,
+        "envelope_score": 0.9999963918492761,
+        "interior_pcm_score": 0.9642537462032753,
+        "source_clip_speech_iou": 1.0,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 8830,
+          "source_speech": [
+            [
+              545,
+              7910
+            ],
+            [
+              7921,
+              8042
+            ],
+            [
+              8210,
+              8211
+            ],
+            [
+              8212,
+              8216
+            ]
+          ],
+          "clip_speech": [
+            [
+              545,
+              7910
+            ],
+            [
+              7921,
+              8042
+            ],
+            [
+              8210,
+              8211
+            ],
+            [
+              8212,
+              8216
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 73764761,
+          "clip_decoded_sample_count": 70635,
+          "nominal_source_start_sample": 7312,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 9210876.5,
+          "latest_complete_source_start_sample": 73694126,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 3,
+        "ayah": 51,
+        "clip_decoded_duration_ms": 27167.375,
+        "hf_duration_ms": 27152,
+        "duration_difference_ms": 15.375,
+        "lag_ms": -24.625,
+        "envelope_score": 0.9999954989069217,
+        "interior_pcm_score": 0.9246174293338323,
+        "source_clip_speech_iou": 0.9998442529332364,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 27168,
+          "source_speech": [
+            [
+              564,
+              10824
+            ],
+            [
+              10845,
+              10968
+            ],
+            [
+              11009,
+              11098
+            ],
+            [
+              11163,
+              11191
+            ],
+            [
+              11295,
+              11300
+            ],
+            [
+              11565,
+              11579
+            ],
+            [
+              17749,
+              22711
+            ],
+            [
+              22725,
+              22771
+            ],
+            [
+              22795,
+              26336
+            ],
+            [
+              26345,
+              26428
+            ],
+            [
+              26430,
+              26431
+            ],
+            [
+              26452,
+              26553
+            ],
+            [
+              26571,
+              26575
+            ],
+            [
+              26604,
+              26608
+            ]
+          ],
+          "clip_speech": [
+            [
+              564,
+              10824
+            ],
+            [
+              10845,
+              10968
+            ],
+            [
+              11009,
+              11098
+            ],
+            [
+              11163,
+              11191
+            ],
+            [
+              11295,
+              11300
+            ],
+            [
+              11565,
+              11579
+            ],
+            [
+              17749,
+              22711
+            ],
+            [
+              22725,
+              22771
+            ],
+            [
+              22795,
+              26336
+            ],
+            [
+              26345,
+              26428
+            ],
+            [
+              26430,
+              26431
+            ],
+            [
+              26452,
+              26552
+            ],
+            [
+              26570,
+              26575
+            ],
+            [
+              26604,
+              26605
+            ],
+            [
+              26606,
+              26608
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 73764761,
+          "clip_decoded_sample_count": 217339,
+          "nominal_source_start_sample": 18332104,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 6901939.375,
+          "latest_complete_source_start_sample": 73547422,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 3,
+        "ayah": 101,
+        "clip_decoded_duration_ms": 41769.875,
+        "hf_duration_ms": 41765,
+        "duration_difference_ms": 4.875,
+        "lag_ms": -25.0,
+        "envelope_score": 0.9999846966718975,
+        "interior_pcm_score": 0.8599625522112256,
+        "source_clip_speech_iou": 0.9998604404499399,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 41770,
+          "source_speech": [
+            [
+              544,
+              19306
+            ],
+            [
+              19312,
+              19333
+            ],
+            [
+              19422,
+              19474
+            ],
+            [
+              23906,
+              37080
+            ],
+            [
+              37084,
+              37169
+            ],
+            [
+              37173,
+              37215
+            ],
+            [
+              37227,
+              37228
+            ],
+            [
+              37229,
+              37314
+            ],
+            [
+              37432,
+              41012
+            ],
+            [
+              41037,
+              41038
+            ],
+            [
+              41040,
+              41056
+            ],
+            [
+              41075,
+              41077
+            ],
+            [
+              41078,
+              41081
+            ]
+          ],
+          "clip_speech": [
+            [
+              544,
+              19306
+            ],
+            [
+              19312,
+              19333
+            ],
+            [
+              19422,
+              19474
+            ],
+            [
+              23905,
+              37080
+            ],
+            [
+              37084,
+              37169
+            ],
+            [
+              37173,
+              37215
+            ],
+            [
+              37227,
+              37228
+            ],
+            [
+              37229,
+              37314
+            ],
+            [
+              37432,
+              41013
+            ],
+            [
+              41040,
+              41056
+            ],
+            [
+              41075,
+              41080
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 73764761,
+          "clip_decoded_sample_count": 334159,
+          "nominal_source_start_sample": 36282200,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 4643575.25,
+          "latest_complete_source_start_sample": 73430602,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 3,
+        "ayah": 150,
+        "clip_decoded_duration_ms": 14080.0,
+        "hf_duration_ms": 14075,
+        "duration_difference_ms": 5.0,
+        "lag_ms": -24.75,
+        "envelope_score": 0.9999998622946414,
+        "interior_pcm_score": 0.9999900397583468,
+        "source_clip_speech_iou": 1.0,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 14080,
+          "source_speech": [
+            [
+              488,
+              12896
+            ],
+            [
+              12935,
+              12961
+            ],
+            [
+              13037,
+              13085
+            ]
+          ],
+          "clip_speech": [
+            [
+              488,
+              12896
+            ],
+            [
+              12935,
+              12961
+            ],
+            [
+              13037,
+              13085
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 73764761,
+          "clip_decoded_sample_count": 112640,
+          "nominal_source_start_sample": 52485640,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 2645834.875,
+          "latest_complete_source_start_sample": 73652121,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      },
+      {
+        "surah": 3,
+        "ayah": 200,
+        "clip_decoded_duration_ms": 24085.0,
+        "hf_duration_ms": 24076,
+        "duration_difference_ms": 9.0,
+        "lag_ms": -24.875,
+        "envelope_score": 0.9999998604108488,
+        "interior_pcm_score": 0.9998600181450621,
+        "source_clip_speech_iou": 1.0,
+        "complete_source_window": true,
+        "reported_source_clip_vad_available": true,
+        "reported_segments_vad_unavailable_reason": null,
+        "vad_mask_runs": {
+          "hop_ms": 1,
+          "frame_count": 24085,
+          "source_speech": [
+            [
+              553,
+              15103
+            ],
+            [
+              15126,
+              15146
+            ],
+            [
+              15148,
+              15152
+            ],
+            [
+              15157,
+              15159
+            ],
+            [
+              15164,
+              15166
+            ],
+            [
+              15171,
+              15173
+            ],
+            [
+              15177,
+              24085
+            ]
+          ],
+          "clip_speech": [
+            [
+              553,
+              15103
+            ],
+            [
+              15126,
+              15146
+            ],
+            [
+              15148,
+              15152
+            ],
+            [
+              15157,
+              15159
+            ],
+            [
+              15164,
+              15166
+            ],
+            [
+              15171,
+              15173
+            ],
+            [
+              15177,
+              24085
+            ]
+          ]
+        },
+        "boundary_support": {
+          "source_decoded_sample_count": 73764761,
+          "clip_decoded_sample_count": 192680,
+          "nominal_source_start_sample": 73559352,
+          "nominal_source_end_overrun_ms": 0.0,
+          "selected_source_end_margin_ms": 1616.0,
+          "latest_complete_source_start_sample": 73572081,
+          "selected_at_latest_complete_start": false,
+          "nominal_interval_extends_source_EOF": false,
+          "causal_drift_requires_packet_clock_review": false
+        }
+      }
+    ],
+    "input_fingerprints": {
+      "config": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "source_sha256": {
+        "1": "caff970e5ecd84cd109d55e5dfdc1d31c19eb543083e1267ff36fc14a2be4163",
+        "2": "b83e3276b4f1ed0b172e6ba33f4b2517e7ddd7398c685838c974f47b5e71526b",
+        "3": "8a1a76c36c3a00da288edb1857d8d2ffef1eb5f50d2654773d82e9d3292ed80b"
+      },
+      "samples": [
+        {
+          "surah": 1,
+          "ayah": 1,
+          "hf_audio_sha256": "37d11a1a53d187c23d57e526a0b01071c3b066f76055cf624b9008452ecb0164",
+          "source_offset_ms": 131,
+          "hf_duration_ms": 6349,
+          "supplied_segments_sha256": "629e42757d82583ea04cc172673903abb8aef1db598376d37c0edbc93c4baca6",
+          "source_sample_start": 844
+        },
+        {
+          "surah": 1,
+          "ayah": 3,
+          "hf_audio_sha256": "e24ddf531bf8bbf629c8cfebdf329a999a50f537a2bb24e66407de49c199a157",
+          "source_offset_ms": 17189,
+          "hf_duration_ms": 7606,
+          "supplied_segments_sha256": "e45e5bf2ba10626dfc3d4c3f6b52b1d3a7650dfbdebcb93507ecbfba6243fef8",
+          "source_sample_start": 137308
+        },
+        {
+          "surah": 1,
+          "ayah": 4,
+          "hf_audio_sha256": "580f9cefd20309b428b80008da6fc07e1612aae3353d9b9263b85c7fab91e149",
+          "source_offset_ms": 25391,
+          "hf_duration_ms": 7104,
+          "supplied_segments_sha256": "c2a1d87d3f66f9ef933260bf06ab1e5eaf1c5777aef091e17b3091fcb6337dcf",
+          "source_sample_start": 202928
+        },
+        {
+          "surah": 1,
+          "ayah": 5,
+          "hf_audio_sha256": "e50bd39312adb20489dbb9ef141059acaebca88ebfc4a38e6afdeed872b52b7d",
+          "source_offset_ms": 33149,
+          "hf_duration_ms": 10741,
+          "supplied_segments_sha256": "061dce0dec340a1baf777e5c4a7b283ee31bcb7a50b494e55f1565adf9ee222a",
+          "source_sample_start": 264995
+        },
+        {
+          "surah": 1,
+          "ayah": 7,
+          "hf_audio_sha256": "52c4eefbc90422a5eee44c50497490e6ea20140ed107b480c243ff17d53099f3",
+          "source_offset_ms": 54309,
+          "hf_duration_ms": 22656,
+          "supplied_segments_sha256": "baaffc2eb9189fba7bf6f425de4cecd376633489d50b636f8e7525f86ff12691",
+          "source_sample_start": 434268
+        },
+        {
+          "surah": 2,
+          "ayah": 1,
+          "hf_audio_sha256": "8a8fecb831dd9770fa26310696138305202f9ec435793bfd18f8701f1e4f5d9e",
+          "source_offset_ms": 0,
+          "hf_duration_ms": 9620,
+          "supplied_segments_sha256": "dff42dbd1a362316b2995fe476fed8c4ed9a7146d2fdd8bc33f792575a7f9488",
+          "source_sample_start": 0
+        },
+        {
+          "surah": 2,
+          "ayah": 72,
+          "hf_audio_sha256": "75707db016867188ed3f5832b03a2cf41018deaf16bb0c3e7cbf9db2361d16e8",
+          "source_offset_ms": 2864144,
+          "hf_duration_ms": 23636,
+          "supplied_segments_sha256": "eda776502971f911783a18e4910244301d058cffab58049a3e5b2dc47215f5d1",
+          "source_sample_start": 22912949
+        },
+        {
+          "surah": 2,
+          "ayah": 143,
+          "hf_audio_sha256": "997be6acb03e4476d7242040b58f5cf5d409eb0911c5dcc88aeabe26e6947f44",
+          "source_offset_ms": 6443337,
+          "hf_duration_ms": 109148,
+          "supplied_segments_sha256": "ad67f6c82dbddfe9abd049cff9c6baf511acabf07021305aa68ccd0af7e42098",
+          "source_sample_start": 51546497
+        },
+        {
+          "surah": 2,
+          "ayah": 215,
+          "hf_audio_sha256": "578b55aa98617c16f11da05b472e2f703a89cfec6f7945195c3c63af7b339478",
+          "source_offset_ms": 10225998,
+          "hf_duration_ms": 52697,
+          "supplied_segments_sha256": "8d219a83266d2a5f8949c4283a1c748620825b5f38c5332b1edd481be62b07d2",
+          "source_sample_start": 81807786
+        },
+        {
+          "surah": 2,
+          "ayah": 286,
+          "hf_audio_sha256": "a48b5da586696ff013a0b913cb0be43a56e25c1913fd5d3cab1f9a67e61af295",
+          "source_offset_ms": 15591941,
+          "hf_duration_ms": 104559,
+          "supplied_segments_sha256": "08b3a457ae5210d5fc1710e79661ae486c5eaf4695560b73d0e31c24cf06217b",
+          "source_sample_start": 124735329
+        },
+        {
+          "surah": 3,
+          "ayah": 1,
+          "hf_audio_sha256": "f24f9d7a783493b5692a9086d21e54a069b335b86a716eb024adde843066c191",
+          "source_offset_ms": 914,
+          "hf_duration_ms": 8826,
+          "supplied_segments_sha256": "96564481e25ee9b011df6f4f2941d3287a1aa82dacb9f12391eb92d77750a63a",
+          "source_sample_start": 7114
+        },
+        {
+          "surah": 3,
+          "ayah": 51,
+          "hf_audio_sha256": "d02a4ec1fbd524aa88a952b55b284affdf6a1a1358b0bfae67baf6bd041d580f",
+          "source_offset_ms": 2291513,
+          "hf_duration_ms": 27152,
+          "supplied_segments_sha256": "0fe2439a2db35477e64e9fbecc8a7e13870ee03b29493517490f4f765fd8521a",
+          "source_sample_start": 18331907
+        },
+        {
+          "surah": 3,
+          "ayah": 101,
+          "hf_audio_sha256": "837b0bc3e6c5d59cc4226b2379b4ead62b198e508d0fa5e759fe594338a8a553",
+          "source_offset_ms": 4535275,
+          "hf_duration_ms": 41765,
+          "supplied_segments_sha256": "5d2f1c627852f78b137da8063b6646a51a21b951ba790c0aaa20f2e9ffd53d97",
+          "source_sample_start": 36282000
+        },
+        {
+          "surah": 3,
+          "ayah": 150,
+          "hf_audio_sha256": "7eb34ce0d911f2af2ed137a1fc50897d7baf0f2f72df373a4f83d1d3af795f5b",
+          "source_offset_ms": 6560705,
+          "hf_duration_ms": 14075,
+          "supplied_segments_sha256": "2c8c4352d86a111a7193923ed1f4cdc8f098c0709aea5ec7d616246bb8eb66aa",
+          "source_sample_start": 52485442
+        },
+        {
+          "surah": 3,
+          "ayah": 200,
+          "hf_audio_sha256": "fa0df94649315e4dbef0e8ea306da23091fa1f8b3f63c0340cd0322d11e2d13a",
+          "source_offset_ms": 9194919,
+          "hf_duration_ms": 24076,
+          "supplied_segments_sha256": "5db85cf8e984f635e6a1bb05d59149c31b52431080e5dfa5b05ce7a1dc1d3c08",
+          "source_sample_start": 73559153
+        }
+      ]
+    },
+    "duration_definition": "abs(decoded_HF_clip_duration_ms - HF_duration_ms); not independently measured source duration",
+    "supplied_segments_IoU_replayed": false
+  }
+}

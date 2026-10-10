@@ -1,0 +1,31 @@
+{
+  "synthetic_only": true,
+  "network_calls": 0,
+  "database_calls": 0,
+  "audio_files_written": false,
+  "live_calculator_changed": false,
+  "thresholds_changed": false,
+  "source_sample_rate_hz": 8000,
+  "source_sample_count": 240000,
+  "source_tail_silence_ms": 250,
+  "true_spoken_pcm_clock_drift": false,
+  "samples": [
+    { "source_offset_ms": 0, "clip_sample_count": 40000, "best_lag_ms": 0, "envelope_score": 0.9999999999999998 },
+    { "source_offset_ms": 12500, "clip_sample_count": 40000, "best_lag_ms": 0, "envelope_score": 1.0 },
+    { "source_offset_ms": 25000, "clip_sample_count": 40320, "best_lag_ms": -40, "envelope_score": 0.9623952357052539,
+      "only_change": "append_40ms_decoder_tail_padding", "nominal_EOF_overrun_ms": 40,
+      "selected_source_sample_start": 199680, "latest_complete_source_sample_start": 199680,
+      "duration_difference_ms": 0 }
+  ],
+  "raw_B_trend": {
+    "reliable_sample_count": 3,
+    "slope_ms_per_second": -1.5999999999999992,
+    "fitted_lag_change_ms": 39.99999999999998,
+    "residual_std_ms": 9.428090415820634,
+    "increasing_drift_evidence": true
+  },
+  "independent_causal_review": "EOF-constrained complete-window peak can mimic drift; no genuine clock drift is proven",
+  "v1_Pearson_modified": false,
+  "v2_acceptance_modified": false,
+  "regression": "scripts/test_acoustic_review_regression.py::test_trailing_padding_can_constrain_peak_and_mimic_drift"
+}

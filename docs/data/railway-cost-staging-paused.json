@@ -1,0 +1,33 @@
+{
+  "checked_at": "2026-10-10T04:32:47.201Z",
+  "commands": [
+    {
+      "service": "admin-media-scanner",
+      "service_id": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e",
+      "removed_deployment": "5a5e583f-c63e-4a4a-b0ad-37ab2101d835",
+      "watch_patterns": [
+        "/__staging_disabled__/**"
+      ],
+      "volumes_deleted": false
+    },
+    {
+      "service": "alignment-worker",
+      "service_id": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "removed_deployment": "3fa35ec2-ab12-493d-954d-db31cf78f58a",
+      "watch_patterns": [
+        "/__staging_disabled__/**"
+      ],
+      "volumes_deleted": false
+    },
+    {
+      "service": "MySQL",
+      "service_id": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+      "removed_deployment": "c9294f14-81be-441c-93bf-1fa5823718c8",
+      "watch_patterns": [
+        "/__staging_disabled__/**"
+      ],
+      "volumes_deleted": false
+    }
+  ],
+  "production_changed": false
+}

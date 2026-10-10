@@ -10,6 +10,7 @@ export interface SerialSqlStatement { sql: string; rowCount: number }
 export interface SerialBatchEvidence {
   ordinal: number; row_count: number; sql_sha256: string;
   threads_connected: number; max_connections: number;
+  sql_bytes?: number; wire_request_bytes?: number; elapsed_ms?: number;
 }
 export interface SerialSessionEvidence {
   ssh_exit_code: number | null; ssh_signal: string | null;
@@ -17,6 +18,7 @@ export interface SerialSessionEvidence {
   mysql_close_acknowledged: boolean; commit_acknowledged: boolean;
   acknowledged_commands: number; writes_halted: boolean;
   batches: SerialBatchEvidence[];
+  transport_request_bytes: number; transport_response_bytes: number;
 }
 export class SerialMysqlError extends Error {
   constructor(public readonly code: string, public readonly evidence: SerialSessionEvidence) {
@@ -34,7 +36,7 @@ export interface SerialSessionOptions {
   spawnChild?: SerialChildFactory;
 }
 interface PendingCommand {
-  marker: string; kind: 'read' | 'write' | 'commit' | 'close'; begun: boolean;
+  marker: string; kind: 'read' | 'write' | 'commit' | 'close' | 'storage'; begun: boolean;
   lines: string[]; bytes: number; timer: ReturnType<typeof setTimeout>;
   resolve: (result: string) => void; reject: (error: SerialMysqlError) => void;
 }
@@ -79,6 +81,9 @@ export class RailwayMysqlSession {
   private acknowledged = 0;
   private writesHalted = false;
   private batches: SerialBatchEvidence[] = [];
+  private requestBytes = 0;
+  private responseBytes = 0;
+  private lastRequestBytes = 0;
   private readonly readyPromise: Promise<void>;
   private readonly exitPromise: Promise<void>;
   private resolveReady!: () => void;
@@ -94,7 +99,7 @@ export class RailwayMysqlSession {
     this.readyPromise = new Promise<void>((resolve, reject) => { this.resolveReady = resolve; this.rejectReady = reject; });
     this.exitPromise = new Promise<void>((resolve) => { this.resolveExit = resolve; });
     this.readyTimer = setTimeout(() => this.fail('RAILWAY_SERIAL_READY_TIMEOUT', true), this.timeoutMs);
-    child.stdout.on('data', (bytes: Buffer) => this.onOutput(this.decoder.write(bytes)));
+    child.stdout.on('data', (bytes: Buffer) => { this.responseBytes += bytes.length; this.onOutput(this.decoder.write(bytes)); });
     child.stderr.on('data', (bytes: Buffer) => { this.diagnostic = (this.diagnostic + bytes.toString('utf8')).slice(0, 8192); });
     child.stdin.on('error', () => this.fail('RAILWAY_SERIAL_STDIN_FAILED', true));
     child.once('error', () => { this.fail('RAILWAY_SSH_START_FAILED', true); this.ended = true; this.resolveExit(); });
@@ -117,6 +122,7 @@ export class RailwayMysqlSession {
       mysql_close_acknowledged: this.closeAcknowledged, commit_acknowledged: this.commitWasAcknowledged,
       acknowledged_commands: this.acknowledged, writes_halted: this.writesHalted,
       batches: this.batches.map((row) => ({ ...row })),
+      transport_request_bytes: this.requestBytes, transport_response_bytes: this.responseBytes,
     };
   }
 
@@ -184,14 +190,17 @@ export class RailwayMysqlSession {
     if (this.failure) throw new SerialMysqlError(this.failure, this.evidence);
     if (this.ended || (this.closing && kind !== 'close')) throw new SerialMysqlError('RAILWAY_SERIAL_SESSION_CLOSED', this.evidence);
     if (this.pending) throw new SerialMysqlError('RAILWAY_SERIAL_CONCURRENT_COMMAND_PROHIBITED', this.evidence);
-    if (kind !== 'close' && !sql.trimEnd().endsWith(';')) throw new SerialMysqlError('RAILWAY_SERIAL_SQL_TERMINATOR_REQUIRED', this.evidence);
+    if (kind !== 'close' && kind !== 'storage' && !sql.trimEnd().endsWith(';')) throw new SerialMysqlError('RAILWAY_SERIAL_SQL_TERMINATOR_REQUIRED', this.evidence);
     const marker = `${this.nonce}_${++this.sequence}`;
-    const payload = kind === 'close' ? '-' : (this.compression === 'gzip' ? gzipSync(Buffer.from(sql)) : Buffer.from(sql)).toString('base64');
-    const mode = kind === 'close' ? 'C' : this.compression === 'gzip' ? 'G' : 'P';
+    const payload = kind === 'close' || kind === 'storage' ? '-' : (this.compression === 'gzip' ? gzipSync(Buffer.from(sql)) : Buffer.from(sql)).toString('base64');
+    const mode = kind === 'close' ? 'C' : kind === 'storage' ? 'D' : this.compression === 'gzip' ? 'G' : 'P';
     return new Promise<string>((resolve, reject) => {
       const timer = setTimeout(() => this.fail('RAILWAY_SERIAL_COMMAND_TIMEOUT', true), this.timeoutMs);
       this.pending = { marker, kind, begun: false, lines: [], bytes: 0, timer, resolve, reject };
-      this.child.stdin.write(`${mode}\t${marker}\t${payload}\n`, (error) => { if (error) this.fail('RAILWAY_SERIAL_STDIN_FAILED', true); });
+      const frame = `${mode}\t${marker}\t${payload}\n`;
+      this.lastRequestBytes = Buffer.byteLength(frame);
+      this.requestBytes += this.lastRequestBytes;
+      this.child.stdin.write(frame, (error) => { if (error) this.fail('RAILWAY_SERIAL_STDIN_FAILED', true); });
     });
   }
 
@@ -200,6 +209,13 @@ export class RailwayMysqlSession {
       throw new SerialMysqlError('READ_ONLY_SQL_REQUIRED', this.evidence);
     }
     return this.command(sql, 'read');
+  }
+
+  /** Actual MySQL filesystem observation inside this same SSH session. No additional connection. */
+  async storage(): Promise<{ total_bytes: number; used_bytes: number; available_bytes: number }> {
+    const value = JSON.parse((await this.command('', 'storage')).trim()) as { total_bytes: number; used_bytes: number; available_bytes: number };
+    if (![value.total_bytes, value.used_bytes, value.available_bytes].every((n) => Number.isSafeInteger(n) && n >= 0) || value.total_bytes <= 0 || value.available_bytes > value.total_bytes) throw new SerialMysqlError('MYSQL_STORAGE_MEASUREMENT_INVALID', this.evidence);
+    return value;
   }
 
   async executeStatements(statements: readonly SerialSqlStatement[], beforeBatch?: (row: SerialBatchEvidence) => void | Promise<void>): Promise<void> {
@@ -218,7 +234,7 @@ export class RailwayMysqlSession {
         this.writesHalted = true;
         throw new SerialMysqlError('MYSQL_CONNECTION_STATUS_INVALID', this.evidence);
       }
-      const observation = { ordinal: this.batches.length + 1, row_count: row.rowCount,
+      const observation: SerialBatchEvidence = { ordinal: this.batches.length + 1, row_count: row.rowCount,
         sql_sha256: createHash('sha256').update(row.sql).digest('hex'), threads_connected: threads, max_connections: maximum };
       this.batches.push(observation);
       if (threads >= maximum) {
@@ -227,7 +243,11 @@ export class RailwayMysqlSession {
       }
       await beforeBatch?.({ ...observation });
       const isCommit = /^\s*COMMIT\s*;\s*$/iu.test(row.sql);
+      const started = Date.now();
       await this.command(row.sql, isCommit ? 'commit' : 'write');
+      observation.elapsed_ms = Date.now() - started;
+      observation.sql_bytes = Buffer.byteLength(row.sql);
+      observation.wire_request_bytes = this.lastRequestBytes;
     }
   }
 

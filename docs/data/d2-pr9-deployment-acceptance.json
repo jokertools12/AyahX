@@ -1,0 +1,91 @@
+{
+  "pr": 9,
+  "merge_sha": "099d8e76fa80eadd35e1d7770b37bbd0feceeca4",
+  "services": [
+    {
+      "service": "AyahX",
+      "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "id": "cde2103f-2f7d-440f-8572-27ca52d9efc3",
+      "status": "SUCCESS",
+      "sha": "099d8e76fa80eadd35e1d7770b37bbd0feceeca4",
+      "updatedAt": "2026-10-09T23:47:24.537Z",
+      "expected_id": "cde2103f-2f7d-440f-8572-27ca52d9efc3"
+    },
+    {
+      "service": "render-control",
+      "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "id": "128a8077-2b0f-4f57-bb74-50225fda71be",
+      "status": "SUCCESS",
+      "sha": "099d8e76fa80eadd35e1d7770b37bbd0feceeca4",
+      "updatedAt": "2026-10-09T23:45:58.237Z",
+      "expected_id": "128a8077-2b0f-4f57-bb74-50225fda71be"
+    },
+    {
+      "service": "render-worker-skia",
+      "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "id": "148ac87f-fba1-419a-96ef-8d89a3b9e8e7",
+      "status": "SUCCESS",
+      "sha": "099d8e76fa80eadd35e1d7770b37bbd0feceeca4",
+      "updatedAt": "2026-10-09T23:50:07.535Z",
+      "expected_id": "148ac87f-fba1-419a-96ef-8d89a3b9e8e7"
+    },
+    {
+      "service": "alignment-worker",
+      "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "id": "c9e8c7b3-a232-40b4-bea2-fc3e7f18793b",
+      "status": "SUCCESS",
+      "sha": "099d8e76fa80eadd35e1d7770b37bbd0feceeca4",
+      "updatedAt": "2026-10-09T23:42:12.904Z",
+      "expected_id": "c9e8c7b3-a232-40b4-bea2-fc3e7f18793b"
+    }
+  ],
+  "window_start": "2026-10-09T23:52:05.000Z",
+  "minimum_elapsed_seconds": 604,
+  "worker_logs": [
+    {
+      "service": "render-control",
+      "id": "128a8077-2b0f-4f57-bb74-50225fda71be",
+      "status": "SUCCESS",
+      "since": "2026-10-09T23:52:05.000Z",
+      "until": "2026-10-10T00:02:09.000Z",
+      "elapsed_seconds": 604,
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": [],
+      "complete": true
+    },
+    {
+      "service": "render-worker-skia",
+      "id": "148ac87f-fba1-419a-96ef-8d89a3b9e8e7",
+      "status": "SUCCESS",
+      "since": "2026-10-09T23:52:05.000Z",
+      "until": "2026-10-10T00:02:09.000Z",
+      "elapsed_seconds": 604,
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": [],
+      "complete": true
+    },
+    {
+      "service": "alignment-worker",
+      "id": "c9e8c7b3-a232-40b4-bea2-fc3e7f18793b",
+      "status": "SUCCESS",
+      "since": "2026-10-09T23:52:05.000Z",
+      "until": "2026-10-10T00:02:09.000Z",
+      "elapsed_seconds": 604,
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": [],
+      "complete": true
+    }
+  ],
+  "app_mysql_health_report": "d2-pr9-health-window.json",
+  "production_readonly_report": "d2-pr9-production-readonly.json",
+  "worker_startup_info_baseline": "d2-pr9-worker-log-classification.json",
+  "remote_e2e": {
+    "passed": 10,
+    "failed": 0,
+    "read_only": true
+  },
+  "passed": true
+}

@@ -1,0 +1,127 @@
+{
+  "checked_at": "2026-10-10T04:48:25.774Z",
+  "mysql_version": "9.7.2",
+  "read_only": true,
+  "counts": [
+    {
+      "name": "ayah_timings",
+      "rows_count": 316539
+    },
+    {
+      "name": "import_jobs",
+      "rows_count": 52
+    },
+    {
+      "name": "quran_timing_audit_fixtures",
+      "rows_count": 7
+    }
+  ],
+  "jobs": [
+    {
+      "status": "completed",
+      "jobs": 52,
+      "imported_rows": "316539"
+    }
+  ],
+  "audit": [
+    {
+      "config": "al_hussayni_al_azazy_kids_qdc",
+      "surah": 5,
+      "ayah": 116,
+      "review_status": "needs_review",
+      "review_reasons": [
+        "NON_POSITIVE_WORD_DURATION",
+        "HF_AUDIT_OUTSIDE_PINNED_RELEASE"
+      ]
+    },
+    {
+      "config": "al_hussayni_al_azazy_kids_qdc",
+      "surah": 7,
+      "ayah": 44,
+      "review_status": "needs_review",
+      "review_reasons": [
+        "NON_POSITIVE_WORD_DURATION",
+        "HF_AUDIT_OUTSIDE_PINNED_RELEASE"
+      ]
+    },
+    {
+      "config": "al_hussayni_al_azazy_kids_qdc",
+      "surah": 7,
+      "ayah": 57,
+      "review_status": "needs_review",
+      "review_reasons": [
+        "NON_POSITIVE_WORD_DURATION",
+        "HF_AUDIT_OUTSIDE_PINNED_RELEASE"
+      ]
+    },
+    {
+      "config": "al_hussayni_al_azazy_kids_qdc",
+      "surah": 9,
+      "ayah": 72,
+      "review_status": "needs_review",
+      "review_reasons": [
+        "NON_POSITIVE_WORD_DURATION",
+        "HF_AUDIT_OUTSIDE_PINNED_RELEASE"
+      ]
+    },
+    {
+      "config": "al_hussayni_al_azazy_kids_qdc",
+      "surah": 9,
+      "ayah": 98,
+      "review_status": "needs_review",
+      "review_reasons": [
+        "NON_POSITIVE_WORD_DURATION",
+        "HF_AUDIT_OUTSIDE_PINNED_RELEASE"
+      ]
+    },
+    {
+      "config": "al_hussayni_al_azazy_kids_qdc",
+      "surah": 10,
+      "ayah": 104,
+      "review_status": "needs_review",
+      "review_reasons": [
+        "NON_POSITIVE_WORD_DURATION",
+        "HF_AUDIT_OUTSIDE_PINNED_RELEASE"
+      ]
+    },
+    {
+      "config": "al_hussayni_al_azazy_kids_qdc",
+      "surah": 33,
+      "ayah": 7,
+      "review_status": "needs_review",
+      "review_reasons": [
+        "NON_POSITIVE_WORD_DURATION",
+        "HF_AUDIT_OUTSIDE_PINNED_RELEASE"
+      ]
+    }
+  ],
+  "word_accounting_violations": 0,
+  "partial_table_sizes": [
+    {
+      "TABLE_NAME": "ayah_timing_history",
+      "DATA_LENGTH": 16384,
+      "INDEX_LENGTH": 16384
+    },
+    {
+      "TABLE_NAME": "ayah_timings",
+      "DATA_LENGTH": 19480576,
+      "INDEX_LENGTH": 2080768
+    },
+    {
+      "TABLE_NAME": "import_jobs",
+      "DATA_LENGTH": 16384,
+      "INDEX_LENGTH": 16384
+    },
+    {
+      "TABLE_NAME": "quran_storage_health",
+      "DATA_LENGTH": 16384,
+      "INDEX_LENGTH": 0
+    },
+    {
+      "TABLE_NAME": "quran_timing_audit_fixtures",
+      "DATA_LENGTH": 16384,
+      "INDEX_LENGTH": 16384
+    }
+  ],
+  "explain_acceptance_completed": false
+}

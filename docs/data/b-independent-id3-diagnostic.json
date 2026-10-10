@@ -1,0 +1,62 @@
+{
+  "checked_at": "2026-10-10T02:43:52.779786+00:00",
+  "config": "ahmed_talib_bin_humaid_mp3quran",
+  "initial_failure": "strict reviewer rejected nonempty stderr despite FFmpeg exit 0",
+  "observed_source_chapters": [
+    77,
+    85,
+    97
+  ],
+  "observed_messages": [
+    "Incorrect BOM value",
+    "Error reading frame GEOB, skipped"
+  ],
+  "all_source_sha256_matches_retained": true,
+  "official_pinned_source": "https://github.com/FFmpeg/FFmpeg/blob/n6.1.1/libavformat/id3v2.c",
+  "diagnosis": "ID3 GEOB metadata character decoding error; no generic audio decoder error exemption",
+  "remedy": "record only this exact observed pair and its digest; unknown diagnostics, truncation and nonzero exit still stop replay",
+  "four_numeric_v2_gates_changed": false,
+  "live_calculator_changed": false,
+  "v1_results_replaced": false,
+  "successful_replay_report_sha256": "2b8dfacf1781de2a22115a4884b34cd06914472afe5601bdeb36f1c33c4122a1",
+  "successful_replay_errors": [],
+  "recorded_decoder_diagnostics": [
+    {
+      "file": "77.audio",
+      "exit_code": 0,
+      "stderr_sha256": "61ea454a04bd0b41c903e4f79ad7ec10684c1ce7d8c7d6cc513a62e222250120",
+      "diagnostic": "ID3_GEOB_METADATA_PAIR",
+      "messages": [
+        "Incorrect BOM value",
+        "Error reading frame GEOB, skipped"
+      ],
+      "audio_decode_diagnostic_accepted": false,
+      "metadata_source": "https://github.com/FFmpeg/FFmpeg/blob/n6.1.1/libavformat/id3v2.c"
+    },
+    {
+      "file": "85.audio",
+      "exit_code": 0,
+      "stderr_sha256": "61ea454a04bd0b41c903e4f79ad7ec10684c1ce7d8c7d6cc513a62e222250120",
+      "diagnostic": "ID3_GEOB_METADATA_PAIR",
+      "messages": [
+        "Incorrect BOM value",
+        "Error reading frame GEOB, skipped"
+      ],
+      "audio_decode_diagnostic_accepted": false,
+      "metadata_source": "https://github.com/FFmpeg/FFmpeg/blob/n6.1.1/libavformat/id3v2.c"
+    },
+    {
+      "file": "97.audio",
+      "exit_code": 0,
+      "stderr_sha256": "61ea454a04bd0b41c903e4f79ad7ec10684c1ce7d8c7d6cc513a62e222250120",
+      "diagnostic": "ID3_GEOB_METADATA_PAIR",
+      "messages": [
+        "Incorrect BOM value",
+        "Error reading frame GEOB, skipped"
+      ],
+      "audio_decode_diagnostic_accepted": false,
+      "metadata_source": "https://github.com/FFmpeg/FFmpeg/blob/n6.1.1/libavformat/id3v2.c"
+    }
+  ],
+  "database_writes": 0
+}

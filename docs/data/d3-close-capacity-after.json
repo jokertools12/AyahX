@@ -1,0 +1,50 @@
+{
+  "checked_at": "2026-10-10T07:18:17.299Z",
+  "read_only": true,
+  "measurements": [
+    {
+      "kind": "df",
+      "total_bytes": 4685873152,
+      "used_bytes": 1666068480,
+      "available_bytes": 3009740800
+    },
+    {
+      "kind": "allocated",
+      "name": "railway",
+      "bytes": 1440833536
+    },
+    {
+      "kind": "allocated",
+      "name": "#innodb_redo",
+      "bytes": 104861696
+    },
+    {
+      "kind": "allocated",
+      "name": "undo_001",
+      "bytes": 16777216
+    },
+    {
+      "kind": "allocated",
+      "name": "undo_002",
+      "bytes": 16777216
+    },
+    {
+      "kind": "table_file",
+      "name": "ayah_timings",
+      "logical_bytes": 1337982976,
+      "allocated_bytes": 1337987072
+    },
+    {
+      "kind": "table_file",
+      "name": "import_jobs",
+      "logical_bytes": 147456,
+      "allocated_bytes": 147456
+    },
+    {
+      "kind": "table_file",
+      "name": "ayah_timing_history",
+      "logical_bytes": 131072,
+      "allocated_bytes": 131072
+    }
+  ]
+}

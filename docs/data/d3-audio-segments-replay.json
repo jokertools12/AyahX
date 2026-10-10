@@ -1,0 +1,431 @@
+{
+  "read_only": true,
+  "audio_bytes_requested": false,
+  "intervals_transformed": false,
+  "selected_fields": [
+    "surah",
+    "ayah",
+    "segments",
+    "duration_ms",
+    "source_offset_ms"
+  ],
+  "identity": {
+    "method_version": "B-segments-only-replay-1",
+    "diagnosis_snapshot_sha256": "a4b3a518d3daf416e7ce88228450e9634c21b59dcd2c454d899f873410f4fd43",
+    "original_evidence_sha256": "c9b2439639d19261e82efdfd1a14a2c5a9387bede380e3f3312efafd6837df82",
+    "manifest_sha256": "751ad0d95bbcd5e72662ebcfa18e7d3aebac45490a4929fe44161fb49c289cb8",
+    "script_sha256": "1fb15cfc1c064f9708fabafee7c9e6076d3d7a1c745e38eb469189f3ffe17e46",
+    "transport_sha256": "41533931c3228c9d64259e1a6725805fc67336ca2c2781dd9e3619ef2e6482b9",
+    "diagnosis_calculator": {
+      "method_version": "B-v2-diagnostics-gridfix-1",
+      "script_sha256": "507b5b4046ce9a46f3b9f9f178db41d7b81ea9b9afde5f47a806a9a458299985",
+      "kernel_sha256": "5f43e008c2333a328739e313274369200442915a450fcdae0e4e08c67076bcf1",
+      "retained_v1_calculator_sha256": "282fc30c527a8ed1f35687ee90dd268cf114153e0fad30a3ff90c9cd922de6b8"
+    }
+  },
+  "samples": {
+    "abdulbasit_abdulsamad_mujawwad_tarteel": {
+      "1:1": {
+        "segments": [
+          [
+            1,
+            4,
+            9,
+            6349
+          ]
+        ],
+        "supplied_segments_sha256": "629e42757d82583ea04cc172673903abb8aef1db598376d37c0edbc93c4baca6",
+        "retained_segments_sha256": "629e42757d82583ea04cc172673903abb8aef1db598376d37c0edbc93c4baca6",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 6349,
+        "source_offset_ms": 131,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "1:3": {
+        "segments": [
+          [
+            1,
+            2,
+            11,
+            7606
+          ]
+        ],
+        "supplied_segments_sha256": "e45e5bf2ba10626dfc3d4c3f6b52b1d3a7650dfbdebcb93507ecbfba6243fef8",
+        "retained_segments_sha256": "e45e5bf2ba10626dfc3d4c3f6b52b1d3a7650dfbdebcb93507ecbfba6243fef8",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 7606,
+        "source_offset_ms": 17189,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "1:4": {
+        "segments": [
+          [
+            1,
+            3,
+            4,
+            7104
+          ]
+        ],
+        "supplied_segments_sha256": "c2a1d87d3f66f9ef933260bf06ab1e5eaf1c5777aef091e17b3091fcb6337dcf",
+        "retained_segments_sha256": "c2a1d87d3f66f9ef933260bf06ab1e5eaf1c5777aef091e17b3091fcb6337dcf",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 7104,
+        "source_offset_ms": 25391,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "1:5": {
+        "segments": [
+          [
+            1,
+            4,
+            26,
+            10741
+          ]
+        ],
+        "supplied_segments_sha256": "061dce0dec340a1baf777e5c4a7b283ee31bcb7a50b494e55f1565adf9ee222a",
+        "retained_segments_sha256": "061dce0dec340a1baf777e5c4a7b283ee31bcb7a50b494e55f1565adf9ee222a",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 10741,
+        "source_offset_ms": 33149,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "1:7": {
+        "segments": [
+          [
+            1,
+            9,
+            21,
+            22656
+          ]
+        ],
+        "supplied_segments_sha256": "baaffc2eb9189fba7bf6f425de4cecd376633489d50b636f8e7525f86ff12691",
+        "retained_segments_sha256": "baaffc2eb9189fba7bf6f425de4cecd376633489d50b636f8e7525f86ff12691",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 22656,
+        "source_offset_ms": 54309,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "2:1": {
+        "segments": [
+          [
+            1,
+            1,
+            0,
+            9620
+          ]
+        ],
+        "supplied_segments_sha256": "dff42dbd1a362316b2995fe476fed8c4ed9a7146d2fdd8bc33f792575a7f9488",
+        "retained_segments_sha256": "dff42dbd1a362316b2995fe476fed8c4ed9a7146d2fdd8bc33f792575a7f9488",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 9620,
+        "source_offset_ms": 0,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "2:72": {
+        "segments": [
+          [
+            1,
+            10,
+            21,
+            23636
+          ]
+        ],
+        "supplied_segments_sha256": "eda776502971f911783a18e4910244301d058cffab58049a3e5b2dc47215f5d1",
+        "retained_segments_sha256": "eda776502971f911783a18e4910244301d058cffab58049a3e5b2dc47215f5d1",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 23636,
+        "source_offset_ms": 2864144,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "2:143": {
+        "segments": [
+          [
+            1,
+            12,
+            13,
+            26943
+          ],
+          [
+            13,
+            27,
+            30643,
+            60703
+          ],
+          [
+            28,
+            35,
+            63623,
+            78743
+          ],
+          [
+            36,
+            40,
+            81583,
+            90393
+          ],
+          [
+            41,
+            45,
+            96803,
+            109148
+          ]
+        ],
+        "supplied_segments_sha256": "ad67f6c82dbddfe9abd049cff9c6baf511acabf07021305aa68ccd0af7e42098",
+        "retained_segments_sha256": "ad67f6c82dbddfe9abd049cff9c6baf511acabf07021305aa68ccd0af7e42098",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 109148,
+        "source_offset_ms": 6443337,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "2:215": {
+        "segments": [
+          [
+            1,
+            14,
+            7,
+            33547
+          ],
+          [
+            15,
+            22,
+            38347,
+            52697
+          ]
+        ],
+        "supplied_segments_sha256": "8d219a83266d2a5f8949c4283a1c748620825b5f38c5332b1edd481be62b07d2",
+        "retained_segments_sha256": "8d219a83266d2a5f8949c4283a1c748620825b5f38c5332b1edd481be62b07d2",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 52697,
+        "source_offset_ms": 10225998,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "2:286": {
+        "segments": [
+          [
+            1,
+            6,
+            24,
+            10734
+          ],
+          [
+            7,
+            12,
+            12734,
+            21374
+          ],
+          [
+            13,
+            19,
+            25244,
+            39374
+          ],
+          [
+            20,
+            30,
+            41684,
+            60494
+          ],
+          [
+            31,
+            43,
+            65394,
+            85764
+          ],
+          [
+            44,
+            49,
+            90574,
+            104559
+          ]
+        ],
+        "supplied_segments_sha256": "08b3a457ae5210d5fc1710e79661ae486c5eaf4695560b73d0e31c24cf06217b",
+        "retained_segments_sha256": "08b3a457ae5210d5fc1710e79661ae486c5eaf4695560b73d0e31c24cf06217b",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 104559,
+        "source_offset_ms": 15591941,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "3:1": {
+        "segments": [
+          [
+            1,
+            1,
+            26,
+            8826
+          ]
+        ],
+        "supplied_segments_sha256": "96564481e25ee9b011df6f4f2941d3287a1aa82dacb9f12391eb92d77750a63a",
+        "retained_segments_sha256": "96564481e25ee9b011df6f4f2941d3287a1aa82dacb9f12391eb92d77750a63a",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 8826,
+        "source_offset_ms": 914,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "3:51": {
+        "segments": [
+          [
+            1,
+            5,
+            17,
+            11257
+          ],
+          [
+            6,
+            8,
+            17717,
+            27152
+          ]
+        ],
+        "supplied_segments_sha256": "0fe2439a2db35477e64e9fbecc8a7e13870ee03b29493517490f4f765fd8521a",
+        "retained_segments_sha256": "0fe2439a2db35477e64e9fbecc8a7e13870ee03b29493517490f4f765fd8521a",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 27152,
+        "source_offset_ms": 2291513,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "3:101": {
+        "segments": [
+          [
+            1,
+            9,
+            15,
+            18765
+          ],
+          [
+            10,
+            17,
+            23865,
+            41765
+          ]
+        ],
+        "supplied_segments_sha256": "5d2f1c627852f78b137da8063b6646a51a21b951ba790c0aaa20f2e9ffd53d97",
+        "retained_segments_sha256": "5d2f1c627852f78b137da8063b6646a51a21b951ba790c0aaa20f2e9ffd53d97",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 41765,
+        "source_offset_ms": 4535275,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "3:150": {
+        "segments": [
+          [
+            1,
+            6,
+            15,
+            14075
+          ]
+        ],
+        "supplied_segments_sha256": "2c8c4352d86a111a7193923ed1f4cdc8f098c0709aea5ec7d616246bb8eb66aa",
+        "retained_segments_sha256": "2c8c4352d86a111a7193923ed1f4cdc8f098c0709aea5ec7d616246bb8eb66aa",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 14075,
+        "source_offset_ms": 6560705,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "3:200": {
+        "segments": [
+          [
+            1,
+            10,
+            26,
+            24076
+          ]
+        ],
+        "supplied_segments_sha256": "5db85cf8e984f635e6a1bb05d59149c31b52431080e5dfa5b05ce7a1dc1d3c08",
+        "retained_segments_sha256": "5db85cf8e984f635e6a1bb05d59149c31b52431080e5dfa5b05ce7a1dc1d3c08",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 24076,
+        "source_offset_ms": 9194919,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      }
+    }
+  },
+  "configs": {
+    "abdulbasit_abdulsamad_mujawwad_tarteel": {
+      "checked_at": "2026-10-10T02:50:46.854688+00:00",
+      "main_audio_status": "measured",
+      "status": "collected",
+      "sample_count": 15,
+      "all_replay_inputs_verified": true,
+      "attempts": [
+        {
+          "finished_epoch": 1791600780.7762706,
+          "status": "collected",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "target_config_count": 48,
+  "checked_at": "2026-10-10T02:53:00.776270+00:00",
+  "transport_stats": {
+    "requests": 60,
+    "bytes": 1867107,
+    "statuses": [
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206
+    ],
+    "minimum_interval_seconds": 2,
+    "minimum_observed_interval_seconds": 2.0
+  },
+  "status_counts": {
+    "collected": 1
+  }
+}

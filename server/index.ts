@@ -8,6 +8,7 @@ import { config } from './config';
 import { logger, requestLogger } from './logger';
 import { authenticateToken } from './middleware/auth';
 import { pingDatabase, closePool } from './db';
+import { readQuranStorageHealth } from './services/quranStorageHealth';
 
 import authRouter from './routes/auth';
 import videosRouter from './routes/videos';
@@ -125,7 +126,7 @@ app.get('/api/health/live', (_req, res) => {
 app.get('/api/health/ready', async (_req, res) => {
   const dbPing = await pingDatabase();
   if (dbPing.ok) {
-    return res.json({ status: 'ready', database: 'connected', latencyMs: dbPing.latencyMs });
+    return res.json({ status: 'ready', database: 'connected', latencyMs: dbPing.latencyMs, storage: await readQuranStorageHealth() });
   }
   return res.status(503).json({
     status: 'not_ready',
@@ -153,6 +154,7 @@ app.get('/api/health', async (_req, res) => {
       heapTotalMb: Math.round(memory.heapTotal / (1024 * 1024)),
     },
     checks: {
+      mysqlVolume: dbPing.ok ? await readQuranStorageHealth() : { status: 'unavailable', reason: 'database_disconnected' },
       database: {
         status: dbPing.ok ? 'connected' : 'disconnected',
         latencyMs: dbPing.latencyMs,

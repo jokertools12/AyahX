@@ -1,0 +1,694 @@
+{
+  "read_only": true,
+  "audio_bytes_requested": false,
+  "intervals_transformed": false,
+  "selected_fields": [
+    "surah",
+    "ayah",
+    "segments",
+    "duration_ms",
+    "source_offset_ms"
+  ],
+  "identity": {
+    "method_version": "B-segments-only-replay-1",
+    "diagnosis_snapshot_sha256": "a4b3a518d3daf416e7ce88228450e9634c21b59dcd2c454d899f873410f4fd43",
+    "original_evidence_sha256": "c9b2439639d19261e82efdfd1a14a2c5a9387bede380e3f3312efafd6837df82",
+    "manifest_sha256": "751ad0d95bbcd5e72662ebcfa18e7d3aebac45490a4929fe44161fb49c289cb8",
+    "script_sha256": "67613189859fb3ce8180b441bcabf58d7941cf25e35168c241cbf2140a77cfa3",
+    "transport_sha256": "41533931c3228c9d64259e1a6725805fc67336ca2c2781dd9e3619ef2e6482b9",
+    "diagnosis_calculator": {
+      "method_version": "B-v2-diagnostics-gridfix-1",
+      "script_sha256": "507b5b4046ce9a46f3b9f9f178db41d7b81ea9b9afde5f47a806a9a458299985",
+      "kernel_sha256": "5f43e008c2333a328739e313274369200442915a450fcdae0e4e08c67076bcf1",
+      "retained_v1_calculator_sha256": "282fc30c527a8ed1f35687ee90dd268cf114153e0fad30a3ff90c9cd922de6b8"
+    },
+    "requested_failed_configs": [
+      "mohammed_alghazali_archive",
+      "saber_abdulhakam_warsh_way2quran"
+    ]
+  },
+  "samples": {
+    "mohammed_alghazali_archive": {
+      "74:1": {
+        "segments": [
+          [
+            1,
+            2,
+            22,
+            6014
+          ]
+        ],
+        "supplied_segments_sha256": "ee88639ed7adfc97704c7d8fcc48090ee0281a8d5a7798616f57161660a94683",
+        "retained_segments_sha256": "ee88639ed7adfc97704c7d8fcc48090ee0281a8d5a7798616f57161660a94683",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 6014,
+        "source_offset_ms": 2508,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "74:15": {
+        "segments": [
+          [
+            1,
+            4,
+            10,
+            5204
+          ]
+        ],
+        "supplied_segments_sha256": "aeb33d4d94fe8f65b2ab09c9c9351911451fa5cf66554c4a0c496df77d06d2ea",
+        "retained_segments_sha256": "aeb33d4d94fe8f65b2ab09c9c9351911451fa5cf66554c4a0c496df77d06d2ea",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 5204,
+        "source_offset_ms": 63530,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "74:29": {
+        "segments": [
+          [
+            1,
+            2,
+            8,
+            3238
+          ]
+        ],
+        "supplied_segments_sha256": "c2a36662610e2029d8abd85aa7dcbbc091501cad81e7778d339870114e6d1889",
+        "retained_segments_sha256": "c2a36662610e2029d8abd85aa7dcbbc091501cad81e7778d339870114e6d1889",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 3238,
+        "source_offset_ms": 135236,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "74:42": {
+        "segments": [
+          [
+            1,
+            4,
+            16,
+            3629
+          ]
+        ],
+        "supplied_segments_sha256": "bcb9125b18ea501b66e249e24b0228feda4f240acfca032e40ecaa4cac895519",
+        "retained_segments_sha256": "bcb9125b18ea501b66e249e24b0228feda4f240acfca032e40ecaa4cac895519",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 3629,
+        "source_offset_ms": 287608,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "74:56": {
+        "segments": [
+          [
+            1,
+            6,
+            21,
+            10667
+          ],
+          [
+            7,
+            11,
+            10781,
+            16927
+          ]
+        ],
+        "supplied_segments_sha256": "94eb78fec16a6a5e07d14cca52f814f499e35b3c979ab4f9fc836274076131d7",
+        "retained_segments_sha256": "94eb78fec16a6a5e07d14cca52f814f499e35b3c979ab4f9fc836274076131d7",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 16927,
+        "source_offset_ms": 377678,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "85:1": {
+        "segments": [
+          [
+            1,
+            3,
+            2,
+            5848
+          ]
+        ],
+        "supplied_segments_sha256": "e99f08001e2e9f330f69be4fc779f8d8e0f6591cff07994fd66b07bab911a712",
+        "retained_segments_sha256": "e99f08001e2e9f330f69be4fc779f8d8e0f6591cff07994fd66b07bab911a712",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 5848,
+        "source_offset_ms": 2508,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "85:6": {
+        "segments": [
+          [
+            1,
+            4,
+            26,
+            4215
+          ]
+        ],
+        "supplied_segments_sha256": "2f502758b6b3e2f5eb6096aff2f46cd629011d9b13f49ddd6ff56a72bfa88abb",
+        "retained_segments_sha256": "2f502758b6b3e2f5eb6096aff2f46cd629011d9b13f49ddd6ff56a72bfa88abb",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 4215,
+        "source_offset_ms": 26436,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "85:11": {
+        "segments": [
+          [
+            1,
+            6,
+            9,
+            7689
+          ],
+          [
+            6,
+            11,
+            8119,
+            17074
+          ],
+          [
+            12,
+            14,
+            17179,
+            21768
+          ]
+        ],
+        "supplied_segments_sha256": "deadd5de7b3af319482aecea55b98ae23a84b4a2dfad78bd179dd1697c38ff40",
+        "retained_segments_sha256": "deadd5de7b3af319482aecea55b98ae23a84b4a2dfad78bd179dd1697c38ff40",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 21768,
+        "source_offset_ms": 85185,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "85:17": {
+        "segments": [
+          [
+            1,
+            4,
+            25,
+            5728
+          ]
+        ],
+        "supplied_segments_sha256": "6df178841de15a181664c9ed61c5e7f832d37fd319854e916701d24a3905a2da",
+        "retained_segments_sha256": "6df178841de15a181664c9ed61c5e7f832d37fd319854e916701d24a3905a2da",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 5728,
+        "source_offset_ms": 131474,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "85:22": {
+        "segments": [
+          [
+            1,
+            3,
+            25,
+            6406
+          ]
+        ],
+        "supplied_segments_sha256": "52aeb939541eef8ff85658d04e03e04171d117215dfe7d5f5e53cc77058b38e4",
+        "retained_segments_sha256": "52aeb939541eef8ff85658d04e03e04171d117215dfe7d5f5e53cc77058b38e4",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 6406,
+        "source_offset_ms": 161254,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "97:1": {
+        "segments": [
+          [
+            1,
+            5,
+            26,
+            7542
+          ]
+        ],
+        "supplied_segments_sha256": "475c7d339915ae1983e86f03e94114e44f68fb4fa36fc6fe1aea350fdb432a3f",
+        "retained_segments_sha256": "475c7d339915ae1983e86f03e94114e44f68fb4fa36fc6fe1aea350fdb432a3f",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 7542,
+        "source_offset_ms": 2664,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "97:2": {
+        "segments": [
+          [
+            1,
+            5,
+            23,
+            5430
+          ]
+        ],
+        "supplied_segments_sha256": "03864c18b9ca1b6e566f2771941878e59a831b0d92073efe400ff090e1449609",
+        "retained_segments_sha256": "03864c18b9ca1b6e566f2771941878e59a831b0d92073efe400ff090e1449609",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 5430,
+        "source_offset_ms": 10214,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "97:3": {
+        "segments": [
+          [
+            1,
+            6,
+            2,
+            5546
+          ]
+        ],
+        "supplied_segments_sha256": "7fd032000bb3c3aec11cc3a342315bf8174af0565b087819d4d02567dbce2c51",
+        "retained_segments_sha256": "7fd032000bb3c3aec11cc3a342315bf8174af0565b087819d4d02567dbce2c51",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 5546,
+        "source_offset_ms": 15673,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "97:4": {
+        "segments": [
+          [
+            1,
+            9,
+            12,
+            11798
+          ]
+        ],
+        "supplied_segments_sha256": "d1f8d1ba0e6170e387b5875775a02ba1dfe257f8d594da79d23cc8e2ead72df8",
+        "retained_segments_sha256": "d1f8d1ba0e6170e387b5875775a02ba1dfe257f8d594da79d23cc8e2ead72df8",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 11798,
+        "source_offset_ms": 21238,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "97:5": {
+        "segments": [
+          [
+            1,
+            5,
+            22,
+            5590
+          ]
+        ],
+        "supplied_segments_sha256": "e8f962ed55996cfb57648a4f3a48c689e8f29292c94e8451368ddda161a18568",
+        "retained_segments_sha256": "e8f962ed55996cfb57648a4f3a48c689e8f29292c94e8451368ddda161a18568",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 5590,
+        "source_offset_ms": 33045,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      }
+    },
+    "saber_abdulhakam_warsh_way2quran": {
+      "74:1": {
+        "segments": [
+          [
+            1,
+            2,
+            0,
+            6725
+          ]
+        ],
+        "supplied_segments_sha256": "c9cd7424ec56f0ed9d8f2bd8e367d13d80fe31df3e88ef8e78c8402fd8aa6d6a",
+        "retained_segments_sha256": "c9cd7424ec56f0ed9d8f2bd8e367d13d80fe31df3e88ef8e78c8402fd8aa6d6a",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 6725,
+        "source_offset_ms": 14420,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "74:15": {
+        "segments": [
+          [
+            1,
+            4,
+            12,
+            6032
+          ]
+        ],
+        "supplied_segments_sha256": "0afe3c708358e51ee89deeb127536393394dfd2f8f1724b69e75b75eed30527c",
+        "retained_segments_sha256": "0afe3c708358e51ee89deeb127536393394dfd2f8f1724b69e75b75eed30527c",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 6032,
+        "source_offset_ms": 87693,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "74:28": {
+        "segments": [
+          [
+            1,
+            4,
+            0,
+            4290
+          ]
+        ],
+        "supplied_segments_sha256": "8cafed4720be4d964c2d3405841ce32d3dba63aed9ae16f4178be8953b9fe4fe",
+        "retained_segments_sha256": "8cafed4720be4d964c2d3405841ce32d3dba63aed9ae16f4178be8953b9fe4fe",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 4290,
+        "source_offset_ms": 167680,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "74:41": {
+        "segments": [
+          [
+            1,
+            4,
+            1,
+            4056
+          ]
+        ],
+        "supplied_segments_sha256": "847c8f1c177f0c2f6025ecf2324f9ca737fae1491b92861309bc66a4e89a032d",
+        "retained_segments_sha256": "847c8f1c177f0c2f6025ecf2324f9ca737fae1491b92861309bc66a4e89a032d",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 4056,
+        "source_offset_ms": 361404,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "74:55": {
+        "segments": [
+          [
+            1,
+            6,
+            24,
+            13559
+          ],
+          [
+            7,
+            11,
+            13849,
+            20019
+          ]
+        ],
+        "supplied_segments_sha256": "a915434b0b21140df25bee786be3a141e4791d0e9786d598cffd0139b3f46d14",
+        "retained_segments_sha256": "a915434b0b21140df25bee786be3a141e4791d0e9786d598cffd0139b3f46d14",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 20019,
+        "source_offset_ms": 471301,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "84:1": {
+        "segments": [
+          [
+            1,
+            3,
+            5,
+            7605
+          ]
+        ],
+        "supplied_segments_sha256": "1a71c489926058ef32bd6d932e5660aa606bb538ae3936c64cc6e0af056cd433",
+        "retained_segments_sha256": "1a71c489926058ef32bd6d932e5660aa606bb538ae3936c64cc6e0af056cd433",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 7605,
+        "source_offset_ms": 14315,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "84:7": {
+        "segments": [
+          [
+            1,
+            5,
+            24,
+            8334
+          ]
+        ],
+        "supplied_segments_sha256": "b02f3c87045206688b2ab5bae0034042dcaa347e5420658146b4167a5f0af3c8",
+        "retained_segments_sha256": "b02f3c87045206688b2ab5bae0034042dcaa347e5420658146b4167a5f0af3c8",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 8334,
+        "source_offset_ms": 56451,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "84:13": {
+        "segments": [
+          [
+            1,
+            5,
+            8,
+            9668
+          ]
+        ],
+        "supplied_segments_sha256": "8cc711188d8ccaf1f9e66db631ed3e569bd6f9db51ce0e9b602a6bc6908360c8",
+        "retained_segments_sha256": "8cc711188d8ccaf1f9e66db631ed3e569bd6f9db51ce0e9b602a6bc6908360c8",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 9668,
+        "source_offset_ms": 100807,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "84:19": {
+        "segments": [
+          [
+            1,
+            4,
+            23,
+            7248
+          ]
+        ],
+        "supplied_segments_sha256": "c07cc949169c57a077bc83386471c8e674084bc8a32d8829559dec9f26b8a4b7",
+        "retained_segments_sha256": "c07cc949169c57a077bc83386471c8e674084bc8a32d8829559dec9f26b8a4b7",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 7248,
+        "source_offset_ms": 141897,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "84:25": {
+        "segments": [
+          [
+            1,
+            9,
+            15,
+            15460
+          ]
+        ],
+        "supplied_segments_sha256": "2d616ecca4f17f0f1452bbbd17a44d9a661462e0c640eb1cab3e8e922cac1a46",
+        "retained_segments_sha256": "2d616ecca4f17f0f1452bbbd17a44d9a661462e0c640eb1cab3e8e922cac1a46",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 15460,
+        "source_offset_ms": 187820,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "97:1": {
+        "segments": [
+          [
+            1,
+            5,
+            13,
+            9998
+          ]
+        ],
+        "supplied_segments_sha256": "da8a0562e32d9bafd84e9a1537f69ed50323d20d244e9c3a065e8387f106409e",
+        "retained_segments_sha256": "da8a0562e32d9bafd84e9a1537f69ed50323d20d244e9c3a065e8387f106409e",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 9998,
+        "source_offset_ms": 12147,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "97:2": {
+        "segments": [
+          [
+            1,
+            5,
+            15,
+            7410
+          ]
+        ],
+        "supplied_segments_sha256": "4e7feca4070a101d9804f5af23d5d93f5b1e9aeb43cb36d339c6695330cd087a",
+        "retained_segments_sha256": "4e7feca4070a101d9804f5af23d5d93f5b1e9aeb43cb36d339c6695330cd087a",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 7410,
+        "source_offset_ms": 22230,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "97:3": {
+        "segments": [
+          [
+            1,
+            6,
+            7,
+            6267
+          ]
+        ],
+        "supplied_segments_sha256": "920341e44451070798cbcee1e6418a5a85ca5d2d4600faf8d4543ddabd9d493c",
+        "retained_segments_sha256": "920341e44451070798cbcee1e6418a5a85ca5d2d4600faf8d4543ddabd9d493c",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 6267,
+        "source_offset_ms": 29753,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "97:4": {
+        "segments": [
+          [
+            1,
+            9,
+            1,
+            13601
+          ]
+        ],
+        "supplied_segments_sha256": "e32cba38576103efdcaf2a1f722ab815d3f753dbe11782d6e8481a20a80c4bcd",
+        "retained_segments_sha256": "e32cba38576103efdcaf2a1f722ab815d3f753dbe11782d6e8481a20a80c4bcd",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 13601,
+        "source_offset_ms": 36519,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      },
+      "97:5": {
+        "segments": [
+          [
+            1,
+            5,
+            0,
+            5540
+          ]
+        ],
+        "supplied_segments_sha256": "7c0abbda087a2b3633caba5771375ebc839fdecb40f05f1ccaa817fd4d3ce312",
+        "retained_segments_sha256": "7c0abbda087a2b3633caba5771375ebc839fdecb40f05f1ccaa817fd4d3ce312",
+        "hash_matches_retained": true,
+        "metadata_matches_retained": true,
+        "duration_ms": 5540,
+        "source_offset_ms": 50260,
+        "replay_input_verified": true,
+        "mismatch_reason": null
+      }
+    }
+  },
+  "configs": {
+    "mohammed_alghazali_archive": {
+      "checked_at": "2026-10-10T02:56:21.195611+00:00",
+      "main_audio_status": "measured",
+      "status": "collected",
+      "sample_count": 15,
+      "all_replay_inputs_verified": true,
+      "attempts": [
+        {
+          "finished_epoch": 1791601064.8500009,
+          "status": "collected",
+          "reason": null
+        }
+      ]
+    },
+    "saber_abdulhakam_warsh_way2quran": {
+      "checked_at": "2026-10-10T02:57:44.852873+00:00",
+      "main_audio_status": "measured",
+      "status": "collected",
+      "sample_count": 15,
+      "all_replay_inputs_verified": true,
+      "attempts": [
+        {
+          "finished_epoch": 1791601179.0979788,
+          "status": "collected",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "target_config_count": 2,
+  "complete_main_failed_config_count": 48,
+  "scope": "explicit independent replay subset; full B measurements remain in diagnosis",
+  "checked_at": "2026-10-10T02:59:39.097978+00:00",
+  "transport_stats": {
+    "requests": 99,
+    "bytes": 3327996,
+    "statuses": [
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206
+    ],
+    "minimum_interval_seconds": 2,
+    "minimum_observed_interval_seconds": 2.0
+  },
+  "status_counts": {
+    "collected": 2
+  }
+}

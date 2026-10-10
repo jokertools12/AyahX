@@ -1,0 +1,1455 @@
+{
+  "read_only": true,
+  "original_results_replaced": false,
+  "catalog_sha256": "b7ee26c2267b086d5758477e21144887c28c6ba884a6ff5157a55cf17df4eed4",
+  "original_evidence_sha256": "c9b2439639d19261e82efdfd1a14a2c5a9387bede380e3f3312efafd6837df82",
+  "results": {
+    "abdulbasit_abdulsamad_mujawwad_tarteel": {
+      "config": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "channel": "tarteel",
+      "provider": "tarteel",
+      "audio_category": "by_surah",
+      "style": "mujawwad",
+      "riwayah": "hafs_an_asim",
+      "original_v1_status": "failed",
+      "samples": [
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.9999893463054009,
+            "best_lag_ms": -25.5,
+            "resolution_ms": 0.125,
+            "source_sample_start": 844,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9996788772123825,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9986440607493964,
+            "best_lag_ms": -25.5,
+            "source_sample_start": 844,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9946142970245924,
+              "best_lag_ms": -21.0,
+              "resolution_ms": 10,
+              "source_feature_start": 11
+            }
+          },
+          "duration_difference_ms": 24.875,
+          "v2_numeric_candidate": false,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 1.0,
+            "source_segments_speech_iou": 0.782018927444795,
+            "clip_segments_speech_iou": 0.782018927444795,
+            "agreement": 0.782018927444795,
+            "source_threshold": 0.0032477036898422235,
+            "clip_threshold": 0.003249823507600173,
+            "clip_speech_frames": 4958,
+            "segment_frames": 6340
+          },
+          "surah": 1,
+          "ayah": 1,
+          "source_offset_ms": 131,
+          "hf_duration_ms": 6349,
+          "hf_audio_sha256": "37d11a1a53d187c23d57e526a0b01071c3b066f76055cf624b9008452ecb0164",
+          "original_hf_audio_sha256": "37d11a1a53d187c23d57e526a0b01071c3b066f76055cf624b9008452ecb0164",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.95021511,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 24.875,
+            "passed": true
+          },
+          "v1_remeasured": {
+            "score": 0.95021511,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 24.875,
+            "passed": true
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.9799180247494655,
+            "source_byte_position": 3742
+          },
+          "supplied_segments_sha256": "629e42757d82583ea04cc172673903abb8aef1db598376d37c0edbc93c4baca6",
+          "word_timestamp_count": 4,
+          "segment_count": 1,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 844,
+            "score": 0.9502150986390253,
+            "interior_duration_ms": 5973.875,
+            "passed": true
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.9999991335256827,
+            "best_lag_ms": -25.5,
+            "resolution_ms": 0.125,
+            "source_sample_start": 137308,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9995905744609137,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9966248778325547,
+            "best_lag_ms": -25.5,
+            "source_sample_start": 137308,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9940998412785743,
+              "best_lag_ms": -29.0,
+              "resolution_ms": 10,
+              "source_feature_start": 1716
+            }
+          },
+          "duration_difference_ms": 21.75,
+          "v2_numeric_candidate": false,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 0.9996765847347995,
+            "source_segments_speech_iou": 0.8140882159315339,
+            "clip_segments_speech_iou": 0.8140882159315339,
+            "agreement": 0.8140882159315339,
+            "source_threshold": 0.003597679071988625,
+            "clip_threshold": 0.0035957268822185418,
+            "clip_speech_frames": 6183,
+            "segment_frames": 7595
+          },
+          "surah": 1,
+          "ayah": 3,
+          "source_offset_ms": 17189,
+          "hf_duration_ms": 7606,
+          "hf_audio_sha256": "e24ddf531bf8bbf629c8cfebdf329a999a50f537a2bb24e66407de49c199a157",
+          "original_hf_audio_sha256": "e24ddf531bf8bbf629c8cfebdf329a999a50f537a2bb24e66407de49c199a157",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.99632403,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 21.75,
+            "passed": true
+          },
+          "v1_remeasured": {
+            "score": 0.99632403,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 21.75,
+            "passed": true
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.9832191668578546,
+            "source_byte_position": 276670
+          },
+          "supplied_segments_sha256": "e45e5bf2ba10626dfc3d4c3f6b52b1d3a7650dfbdebcb93507ecbfba6243fef8",
+          "word_timestamp_count": 2,
+          "segment_count": 1,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 137308,
+            "score": 0.9963240683652621,
+            "interior_duration_ms": 7227.75,
+            "passed": true
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.9999931564554378,
+            "best_lag_ms": -25.0,
+            "resolution_ms": 0.125,
+            "source_sample_start": 202928,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9999934410230986,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9971646041051458,
+            "best_lag_ms": -25.0,
+            "source_sample_start": 202928,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9939543561189222,
+              "best_lag_ms": -21.0,
+              "resolution_ms": 10,
+              "source_feature_start": 2537
+            }
+          },
+          "duration_difference_ms": 1.375,
+          "v2_numeric_candidate": false,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 0.999320882852292,
+            "source_segments_speech_iou": 0.8292957746478873,
+            "clip_segments_speech_iou": 0.8292957746478873,
+            "agreement": 0.8292957746478873,
+            "source_threshold": 0.004907698313003829,
+            "clip_threshold": 0.004910993071760479,
+            "clip_speech_frames": 5888,
+            "segment_frames": 7100
+          },
+          "surah": 1,
+          "ayah": 4,
+          "source_offset_ms": 25391,
+          "hf_duration_ms": 7104,
+          "hf_audio_sha256": "580f9cefd20309b428b80008da6fc07e1612aae3353d9b9263b85c7fab91e149",
+          "original_hf_audio_sha256": "580f9cefd20309b428b80008da6fc07e1612aae3353d9b9263b85c7fab91e149",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.95637626,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 1.375,
+            "passed": true
+          },
+          "v1_remeasured": {
+            "score": 0.95637626,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 1.375,
+            "passed": true
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.981985310287197,
+            "source_byte_position": 407909
+          },
+          "supplied_segments_sha256": "c2a1d87d3f66f9ef933260bf06ab1e5eaf1c5777aef091e17b3091fcb6337dcf",
+          "word_timestamp_count": 3,
+          "segment_count": 1,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 202928,
+            "score": 0.9563761997946798,
+            "interior_duration_ms": 6705.375,
+            "passed": true
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.9999932757116247,
+            "best_lag_ms": -24.625,
+            "resolution_ms": 0.125,
+            "source_sample_start": 264995,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9998672209723604,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9978789604930982,
+            "best_lag_ms": -24.625,
+            "source_sample_start": 264995,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9929472150665564,
+              "best_lag_ms": -29.0,
+              "resolution_ms": 10,
+              "source_feature_start": 3312
+            }
+          },
+          "duration_difference_ms": 21.5,
+          "v2_numeric_candidate": false,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 0.9997837370242214,
+            "source_segments_speech_iou": 0.8630891273915072,
+            "clip_segments_speech_iou": 0.8629024731684555,
+            "agreement": 0.8629024731684555,
+            "source_threshold": 0.005755689232009765,
+            "clip_threshold": 0.005765305463781473,
+            "clip_speech_frames": 9246,
+            "segment_frames": 10715
+          },
+          "surah": 1,
+          "ayah": 5,
+          "source_offset_ms": 33149,
+          "hf_duration_ms": 10741,
+          "hf_audio_sha256": "e50bd39312adb20489dbb9ef141059acaebca88ebfc4a38e6afdeed872b52b7d",
+          "original_hf_audio_sha256": "e50bd39312adb20489dbb9ef141059acaebca88ebfc4a38e6afdeed872b52b7d",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.94973188,
+            "best_lag_ms": -24.625,
+            "duration_difference_ms": 21.5,
+            "passed": false
+          },
+          "v1_remeasured": {
+            "score": 0.94973188,
+            "best_lag_ms": -24.625,
+            "duration_difference_ms": 21.5,
+            "passed": false
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.988106783430798,
+            "source_byte_position": 532043
+          },
+          "supplied_segments_sha256": "061dce0dec340a1baf777e5c4a7b283ee31bcb7a50b494e55f1565adf9ee222a",
+          "word_timestamp_count": 4,
+          "segment_count": 1,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 264995,
+            "score": 0.9497318560713526,
+            "interior_duration_ms": 10362.5,
+            "passed": false
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.9999980795432672,
+            "best_lag_ms": -25.5,
+            "resolution_ms": 0.125,
+            "source_sample_start": 434268,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9996113473914887,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9977471008333603,
+            "best_lag_ms": -25.5,
+            "source_sample_start": 434268,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9946127723320106,
+              "best_lag_ms": -29.0,
+              "resolution_ms": 10,
+              "source_feature_start": 5428
+            }
+          },
+          "duration_difference_ms": 18.375,
+          "v2_numeric_candidate": true,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 1.0,
+            "source_segments_speech_iou": 0.939385906781533,
+            "clip_segments_speech_iou": 0.939385906781533,
+            "agreement": 0.939385906781533,
+            "source_threshold": 0.006111314921940726,
+            "clip_threshold": 0.0061087468897552755,
+            "clip_speech_frames": 21263,
+            "segment_frames": 22635
+          },
+          "surah": 1,
+          "ayah": 7,
+          "source_offset_ms": 54309,
+          "hf_duration_ms": 22656,
+          "hf_audio_sha256": "52c4eefbc90422a5eee44c50497490e6ea20140ed107b480c243ff17d53099f3",
+          "original_hf_audio_sha256": "52c4eefbc90422a5eee44c50497490e6ea20140ed107b480c243ff17d53099f3",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.99086853,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 18.375,
+            "passed": true
+          },
+          "v1_remeasured": {
+            "score": 0.99086853,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 18.375,
+            "passed": true
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.9943548298179653,
+            "source_byte_position": 870590
+          },
+          "supplied_segments_sha256": "baaffc2eb9189fba7bf6f425de4cecd376633489d50b636f8e7525f86ff12691",
+          "word_timestamp_count": 9,
+          "segment_count": 1,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 434268,
+            "score": 0.9908685286707737,
+            "interior_duration_ms": 22274.375,
+            "passed": true
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.9851565197643033,
+            "best_lag_ms": 0.0,
+            "resolution_ms": 0.125,
+            "source_sample_start": 0,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9851895991661164,
+            "coarse_lag_ms": 0.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9617069600778616,
+            "best_lag_ms": 0.0,
+            "source_sample_start": 0,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9616998814869305,
+              "best_lag_ms": 0.0,
+              "resolution_ms": 10,
+              "source_feature_start": 0
+            }
+          },
+          "duration_difference_ms": 19.25,
+          "v2_numeric_candidate": true,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 0.9865741267493457,
+            "source_segments_speech_iou": 0.9074844074844075,
+            "clip_segments_speech_iou": 0.9074844074844075,
+            "agreement": 0.9074844074844075,
+            "source_threshold": 0.005283037598067537,
+            "clip_threshold": 0.0052766565553827175,
+            "clip_speech_frames": 8730,
+            "segment_frames": 9620
+          },
+          "surah": 2,
+          "ayah": 1,
+          "source_offset_ms": 0,
+          "hf_duration_ms": 9620,
+          "hf_audio_sha256": "8a8fecb831dd9770fa26310696138305202f9ec435793bfd18f8701f1e4f5d9e",
+          "original_hf_audio_sha256": "8a8fecb831dd9770fa26310696138305202f9ec435793bfd18f8701f1e4f5d9e",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.56377778,
+            "best_lag_ms": 0.125,
+            "duration_difference_ms": 19.25,
+            "passed": false
+          },
+          "v1_remeasured": {
+            "score": 0.56377778,
+            "best_lag_ms": 0.125,
+            "duration_difference_ms": 19.25,
+            "passed": false
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.9867207863784316,
+            "source_byte_position": 1653
+          },
+          "supplied_segments_sha256": "dff42dbd1a362316b2995fe476fed8c4ed9a7146d2fdd8bc33f792575a7f9488",
+          "word_timestamp_count": 1,
+          "segment_count": 1,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 0,
+            "score": 0.5441916287266207,
+            "interior_duration_ms": 9239.25,
+            "passed": false
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.999999657692873,
+            "best_lag_ms": -25.375,
+            "resolution_ms": 0.125,
+            "source_sample_start": 22912949,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9998334791238255,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9976522609547948,
+            "best_lag_ms": -25.375,
+            "source_sample_start": 22912949,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.995993612008789,
+              "best_lag_ms": -24.0,
+              "resolution_ms": 10,
+              "source_feature_start": 286412
+            }
+          },
+          "duration_difference_ms": 4.75,
+          "v2_numeric_candidate": true,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 0.9999553212402824,
+            "source_segments_speech_iou": 0.9477450772813889,
+            "clip_segments_speech_iou": 0.9477874232479356,
+            "agreement": 0.9477450772813889,
+            "source_threshold": 0.005018584764258882,
+            "clip_threshold": 0.005018773049779761,
+            "clip_speech_frames": 22382,
+            "segment_frames": 23615
+          },
+          "surah": 2,
+          "ayah": 72,
+          "source_offset_ms": 2864144,
+          "hf_duration_ms": 23636,
+          "hf_audio_sha256": "75707db016867188ed3f5832b03a2cf41018deaf16bb0c3e7cbf9db2361d16e8",
+          "original_hf_audio_sha256": "75707db016867188ed3f5832b03a2cf41018deaf16bb0c3e7cbf9db2361d16e8",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.99713135,
+            "best_lag_ms": -25.375,
+            "duration_difference_ms": 4.75,
+            "passed": true
+          },
+          "v1_remeasured": {
+            "score": 0.99713135,
+            "best_lag_ms": -25.375,
+            "duration_difference_ms": 4.75,
+            "passed": true
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.9945856344827404,
+            "source_byte_position": 45827951
+          },
+          "supplied_segments_sha256": "eda776502971f911783a18e4910244301d058cffab58049a3e5b2dc47215f5d1",
+          "word_timestamp_count": 10,
+          "segment_count": 1,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 22912949,
+            "score": 0.9971313531110485,
+            "interior_duration_ms": 23240.75,
+            "passed": true
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.999987111226463,
+            "best_lag_ms": -24.875,
+            "resolution_ms": 0.125,
+            "source_sample_start": 51546497,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9999587395624467,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9998672128596356,
+            "best_lag_ms": -24.875,
+            "source_sample_start": 51546497,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9987347865083959,
+              "best_lag_ms": -27.0,
+              "resolution_ms": 10,
+              "source_feature_start": 644331
+            }
+          },
+          "duration_difference_ms": 17.75,
+          "v2_numeric_candidate": true,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 0.9999221997465935,
+            "source_segments_speech_iou": 0.9561657289876269,
+            "clip_segments_speech_iou": 0.9561968207197685,
+            "agreement": 0.9561657289876269,
+            "source_threshold": 0.0074393855714495645,
+            "clip_threshold": 0.007443663713449991,
+            "clip_speech_frames": 89970,
+            "segment_frames": 93265
+          },
+          "surah": 2,
+          "ayah": 143,
+          "source_offset_ms": 6443337,
+          "hf_duration_ms": 109148,
+          "hf_audio_sha256": "997be6acb03e4476d7242040b58f5cf5d409eb0911c5dcc88aeabe26e6947f44",
+          "original_hf_audio_sha256": "997be6acb03e4476d7242040b58f5cf5d409eb0911c5dcc88aeabe26e6947f44",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.88822859,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 17.75,
+            "passed": false
+          },
+          "v1_remeasured": {
+            "score": 0.88822859,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 17.75,
+            "passed": false
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.9988274703990666,
+            "source_byte_position": 103095047
+          },
+          "supplied_segments_sha256": "ad67f6c82dbddfe9abd049cff9c6baf511acabf07021305aa68ccd0af7e42098",
+          "word_timestamp_count": 45,
+          "segment_count": 5,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 51546497,
+            "score": 0.8882285915596486,
+            "interior_duration_ms": 108765.75,
+            "passed": false
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.9999849675084724,
+            "best_lag_ms": -24.75,
+            "resolution_ms": 0.125,
+            "source_sample_start": 81807786,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9997694018458868,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.999818314918222,
+            "best_lag_ms": -24.75,
+            "source_sample_start": 81807786,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.998162665711713,
+              "best_lag_ms": -28.0,
+              "resolution_ms": 10,
+              "source_feature_start": 1022597
+            }
+          },
+          "duration_difference_ms": 18.125,
+          "v2_numeric_candidate": true,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 0.9999337836048205,
+            "source_segments_speech_iou": 0.9459803716851117,
+            "clip_segments_speech_iou": 0.9460430152432658,
+            "agreement": 0.9459803716851117,
+            "source_threshold": 0.004190383318015927,
+            "clip_threshold": 0.004189856463397652,
+            "clip_speech_frames": 45306,
+            "segment_frames": 47890
+          },
+          "surah": 2,
+          "ayah": 215,
+          "source_offset_ms": 10225998,
+          "hf_duration_ms": 52697,
+          "hf_audio_sha256": "578b55aa98617c16f11da05b472e2f703a89cfec6f7945195c3c63af7b339478",
+          "original_hf_audio_sha256": "578b55aa98617c16f11da05b472e2f703a89cfec6f7945195c3c63af7b339478",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.94066662,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 18.125,
+            "passed": false
+          },
+          "v1_remeasured": {
+            "score": 0.94066662,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 18.125,
+            "passed": false
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.9975718543776573,
+            "source_byte_position": 163617626
+          },
+          "supplied_segments_sha256": "8d219a83266d2a5f8949c4283a1c748620825b5f38c5332b1edd481be62b07d2",
+          "word_timestamp_count": 22,
+          "segment_count": 2,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 81807786,
+            "score": 0.9406666116942902,
+            "interior_duration_ms": 52315.125,
+            "passed": false
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.9999881333514886,
+            "best_lag_ms": -24.875,
+            "resolution_ms": 0.125,
+            "source_sample_start": 124735329,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9999316752173288,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9997996446831344,
+            "best_lag_ms": -24.875,
+            "source_sample_start": 124735329,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9970616269592647,
+              "best_lag_ms": -21.0,
+              "resolution_ms": 10,
+              "source_feature_start": 1559192
+            }
+          },
+          "duration_difference_ms": 9.25,
+          "v2_numeric_candidate": true,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 0.9999040502776545,
+            "source_segments_speech_iou": 0.9611271959673792,
+            "clip_segments_speech_iou": 0.9611733357941241,
+            "agreement": 0.9611271959673792,
+            "source_threshold": 0.007854951934316361,
+            "clip_threshold": 0.007849446695763018,
+            "clip_speech_frames": 83375,
+            "segment_frames": 86645
+          },
+          "surah": 2,
+          "ayah": 286,
+          "source_offset_ms": 15591941,
+          "hf_duration_ms": 104559,
+          "hf_audio_sha256": "a48b5da586696ff013a0b913cb0be43a56e25c1913fd5d3cab1f9a67e61af295",
+          "original_hf_audio_sha256": "a48b5da586696ff013a0b913cb0be43a56e25c1913fd5d3cab1f9a67e61af295",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.87945334,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 9.25,
+            "passed": false
+          },
+          "v1_remeasured": {
+            "score": 0.87945334,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 9.25,
+            "passed": false
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.9987759183451468,
+            "source_byte_position": 249472712
+          },
+          "supplied_segments_sha256": "08b3a457ae5210d5fc1710e79661ae486c5eaf4695560b73d0e31c24cf06217b",
+          "word_timestamp_count": 49,
+          "segment_count": 6,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 124735329,
+            "score": 0.8794533437971679,
+            "interior_duration_ms": 104168.25,
+            "passed": false
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.9999963918492765,
+            "best_lag_ms": -24.75,
+            "resolution_ms": 0.125,
+            "source_sample_start": 7114,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9998905437850711,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9975531720067145,
+            "best_lag_ms": -24.75,
+            "source_sample_start": 7114,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9976284909461378,
+              "best_lag_ms": -24.0,
+              "resolution_ms": 10,
+              "source_feature_start": 89
+            }
+          },
+          "duration_difference_ms": 3.375,
+          "v2_numeric_candidate": false,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 1.0,
+            "source_segments_speech_iou": 0.85125,
+            "clip_segments_speech_iou": 0.85125,
+            "agreement": 0.85125,
+            "source_threshold": 0.0065322334403272305,
+            "clip_threshold": 0.006528471895476386,
+            "clip_speech_frames": 7491,
+            "segment_frames": 8800
+          },
+          "surah": 3,
+          "ayah": 1,
+          "source_offset_ms": 914,
+          "hf_duration_ms": 8826,
+          "hf_audio_sha256": "f24f9d7a783493b5692a9086d21e54a069b335b86a716eb024adde843066c191",
+          "original_hf_audio_sha256": "f24f9d7a783493b5692a9086d21e54a069b335b86a716eb024adde843066c191",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.96425376,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 3.375,
+            "passed": true
+          },
+          "v1_remeasured": {
+            "score": 0.96425376,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 3.375,
+            "passed": true
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.9855029376371487,
+            "source_byte_position": 16270
+          },
+          "supplied_segments_sha256": "96564481e25ee9b011df6f4f2941d3287a1aa82dacb9f12391eb92d77750a63a",
+          "word_timestamp_count": 1,
+          "segment_count": 1,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 7114,
+            "score": 0.9642537462032743,
+            "interior_duration_ms": 8429.375,
+            "passed": true
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.9999954989069244,
+            "best_lag_ms": -24.625,
+            "resolution_ms": 0.125,
+            "source_sample_start": 18331907,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9999097083953649,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9995836295895495,
+            "best_lag_ms": -24.625,
+            "source_sample_start": 18331907,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9990940162076394,
+              "best_lag_ms": -23.0,
+              "resolution_ms": 10,
+              "source_feature_start": 229149
+            }
+          },
+          "duration_difference_ms": 15.375,
+          "v2_numeric_candidate": true,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 0.9998442529332364,
+            "source_segments_speech_iou": 0.9298347347057118,
+            "clip_segments_speech_iou": 0.9297864115202474,
+            "agreement": 0.9297864115202474,
+            "source_threshold": 0.007363473223684845,
+            "clip_threshold": 0.007371872222966607,
+            "clip_speech_frames": 19260,
+            "segment_frames": 20675
+          },
+          "surah": 3,
+          "ayah": 51,
+          "source_offset_ms": 2291513,
+          "hf_duration_ms": 27152,
+          "hf_audio_sha256": "d02a4ec1fbd524aa88a952b55b284affdf6a1a1358b0bfae67baf6bd041d580f",
+          "original_hf_audio_sha256": "d02a4ec1fbd524aa88a952b55b284affdf6a1a1358b0bfae67baf6bd041d580f",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.92461735,
+            "best_lag_ms": -24.625,
+            "duration_difference_ms": 15.375,
+            "passed": false
+          },
+          "v1_remeasured": {
+            "score": 0.92461735,
+            "best_lag_ms": -24.625,
+            "duration_difference_ms": 15.375,
+            "passed": false
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.995288466405017,
+            "source_byte_position": 36665857
+          },
+          "supplied_segments_sha256": "0fe2439a2db35477e64e9fbecc8a7e13870ee03b29493517490f4f765fd8521a",
+          "word_timestamp_count": 8,
+          "segment_count": 2,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 18331907,
+            "score": 0.9246174293338342,
+            "interior_duration_ms": 26767.375,
+            "passed": false
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.999984696671896,
+            "best_lag_ms": -25.0,
+            "resolution_ms": 0.125,
+            "source_sample_start": 36282000,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9999842346806755,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.999536237093431,
+            "best_lag_ms": -25.0,
+            "source_sample_start": 36282000,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9995916270628187,
+              "best_lag_ms": -25.0,
+              "resolution_ms": 10,
+              "source_feature_start": 453525
+            }
+          },
+          "duration_difference_ms": 4.875,
+          "v2_numeric_candidate": true,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 0.9998604404499399,
+            "source_segments_speech_iou": 0.9448797767282096,
+            "clip_segments_speech_iou": 0.9449066122799484,
+            "agreement": 0.9448797767282096,
+            "source_threshold": 0.0074735874751805246,
+            "clip_threshold": 0.00748017162050332,
+            "clip_speech_frames": 35825,
+            "segment_frames": 36650
+          },
+          "surah": 3,
+          "ayah": 101,
+          "source_offset_ms": 4535275,
+          "hf_duration_ms": 41765,
+          "hf_audio_sha256": "837b0bc3e6c5d59cc4226b2379b4ead62b198e508d0fa5e759fe594338a8a553",
+          "original_hf_audio_sha256": "837b0bc3e6c5d59cc4226b2379b4ead62b198e508d0fa5e759fe594338a8a553",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.85996248,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 4.875,
+            "passed": false
+          },
+          "v1_remeasured": {
+            "score": 0.85996248,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 4.875,
+            "passed": false
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.9969355859569635,
+            "source_byte_position": 72566043
+          },
+          "supplied_segments_sha256": "5d2f1c627852f78b137da8063b6646a51a21b951ba790c0aaa20f2e9ffd53d97",
+          "word_timestamp_count": 17,
+          "segment_count": 2,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 36282000,
+            "score": 0.8599625522112252,
+            "interior_duration_ms": 41369.875,
+            "passed": false
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.9999998622946401,
+            "best_lag_ms": -24.75,
+            "resolution_ms": 0.125,
+            "source_sample_start": 52485442,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9998079081671019,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9979249938675073,
+            "best_lag_ms": -24.75,
+            "source_sample_start": 52485442,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9978562426104126,
+              "best_lag_ms": -25.0,
+              "resolution_ms": 10,
+              "source_feature_start": 656068
+            }
+          },
+          "duration_difference_ms": 5.0,
+          "v2_numeric_candidate": false,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 1.0,
+            "source_segments_speech_iou": 0.8877667140825035,
+            "clip_segments_speech_iou": 0.8877667140825035,
+            "agreement": 0.8877667140825035,
+            "source_threshold": 0.007290032615018757,
+            "clip_threshold": 0.00729034251801136,
+            "clip_speech_frames": 12482,
+            "segment_frames": 14060
+          },
+          "surah": 3,
+          "ayah": 150,
+          "source_offset_ms": 6560705,
+          "hf_duration_ms": 14075,
+          "hf_audio_sha256": "7eb34ce0d911f2af2ed137a1fc50897d7baf0f2f72df373a4f83d1d3af795f5b",
+          "original_hf_audio_sha256": "7eb34ce0d911f2af2ed137a1fc50897d7baf0f2f72df373a4f83d1d3af795f5b",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.99999,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 5.0,
+            "passed": true
+          },
+          "v1_remeasured": {
+            "score": 0.99999,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 5.0,
+            "passed": true
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.990909090909091,
+            "source_byte_position": 104972926
+          },
+          "supplied_segments_sha256": "2c8c4352d86a111a7193923ed1f4cdc8f098c0709aea5ec7d616246bb8eb66aa",
+          "word_timestamp_count": 6,
+          "segment_count": 1,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 52485442,
+            "score": 0.9999900397583508,
+            "interior_duration_ms": 13680.0,
+            "passed": true
+          }
+        },
+        {
+          "envelope": {
+            "measured": true,
+            "score": 0.99999986041085,
+            "best_lag_ms": -24.875,
+            "resolution_ms": 0.125,
+            "source_sample_start": 73559153,
+            "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+            "coarse_score": 0.9999245105211152,
+            "coarse_lag_ms": -25.0
+          },
+          "log_mel": {
+            "measured": true,
+            "score": 0.9981844031148257,
+            "best_lag_ms": -24.875,
+            "source_sample_start": 73559153,
+            "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+            "coarse_search": {
+              "measured": true,
+              "score": 0.9932203699090353,
+              "best_lag_ms": -29.0,
+              "resolution_ms": 10,
+              "source_feature_start": 919489
+            }
+          },
+          "duration_difference_ms": 9.0,
+          "v2_numeric_candidate": true,
+          "v2_adoption_requires_codec_identity_evidence": true,
+          "vad": {
+            "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+            "source_clip_speech_iou": 1.0,
+            "source_segments_speech_iou": 0.9758925973648115,
+            "clip_segments_speech_iou": 0.9758925973648115,
+            "agreement": 0.9758925973648115,
+            "source_threshold": 0.006501630943201293,
+            "clip_threshold": 0.006501757854145352,
+            "clip_speech_frames": 23488,
+            "segment_frames": 24050
+          },
+          "surah": 3,
+          "ayah": 200,
+          "source_offset_ms": 9194919,
+          "hf_duration_ms": 24076,
+          "hf_audio_sha256": "fa0df94649315e4dbef0e8ea306da23091fa1f8b3f63c0340cd0322d11e2d13a",
+          "original_hf_audio_sha256": "fa0df94649315e4dbef0e8ea306da23091fa1f8b3f63c0340cd0322d11e2d13a",
+          "same_hf_payload_as_original": true,
+          "same_hf_metadata_as_original": true,
+          "v1_original": {
+            "score": 0.99986028,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 9.0,
+            "passed": true
+          },
+          "v1_remeasured": {
+            "score": 0.99986028,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 9.0,
+            "passed": true
+          },
+          "encoded_identity": {
+            "proven": true,
+            "method": "exact_contiguous_encoded_interior_copy",
+            "excluded_header_bytes": 1024,
+            "excluded_trailer_bytes": 1024,
+            "matched_interior_fraction": 0.994685475102437,
+            "source_byte_position": 147120348
+          },
+          "supplied_segments_sha256": "5db85cf8e984f635e6a1bb05d59149c31b52431080e5dfa5b05ce7a1dc1d3c08",
+          "word_timestamp_count": 10,
+          "segment_count": 1,
+          "interior_pcm": {
+            "measured": true,
+            "trim_each_side_ms": 200,
+            "minimum_interior_duration_ms": 800,
+            "diagnosis_only": true,
+            "changes_v1_acceptance": false,
+            "source_sample_start": 73559153,
+            "score": 0.9998600181450592,
+            "interior_duration_ms": 23685.0,
+            "passed": true
+          }
+        }
+      ],
+      "source_sha256": {
+        "1": "caff970e5ecd84cd109d55e5dfdc1d31c19eb543083e1267ff36fc14a2be4163",
+        "2": "b83e3276b4f1ed0b172e6ba33f4b2517e7ddd7398c685838c974f47b5e71526b",
+        "3": "8a1a76c36c3a00da288edb1857d8d2ffef1eb5f50d2654773d82e9d3292ed80b"
+      },
+      "retained_catalog_source_sha256": {
+        "1": "caff970e5ecd84cd109d55e5dfdc1d31c19eb543083e1267ff36fc14a2be4163",
+        "2": "b83e3276b4f1ed0b172e6ba33f4b2517e7ddd7398c685838c974f47b5e71526b",
+        "3": "8a1a76c36c3a00da288edb1857d8d2ffef1eb5f50d2654773d82e9d3292ed80b"
+      },
+      "catalog_source_matches_retained": {
+        "1": true,
+        "2": true,
+        "3": true
+      },
+      "started_at": "2026-10-10T00:35:51.787721+00:00",
+      "sample_distribution": {
+        "verified": true,
+        "unique_sample_count": 15,
+        "chapter_count": 3,
+        "policy": "3_chapters_with_5_fixed_distributed_ayahs; beginning_quartiles_middle_end",
+        "chapters": {
+          "1": {
+            "observed_ayah_count": 7,
+            "first_observed_ayah": 1,
+            "last_observed_ayah": 7,
+            "fixed_distributed_ayahs": [
+              1,
+              3,
+              4,
+              5,
+              7
+            ],
+            "annotation_cache_sha256": "c3d62b5c89eb850d29743ca113cf3edc65d6cdc2a88f07f94db10ac37daf504d"
+          },
+          "2": {
+            "observed_ayah_count": 286,
+            "first_observed_ayah": 1,
+            "last_observed_ayah": 286,
+            "fixed_distributed_ayahs": [
+              1,
+              72,
+              143,
+              215,
+              286
+            ],
+            "annotation_cache_sha256": "c3d62b5c89eb850d29743ca113cf3edc65d6cdc2a88f07f94db10ac37daf504d"
+          },
+          "3": {
+            "observed_ayah_count": 200,
+            "first_observed_ayah": 1,
+            "last_observed_ayah": 200,
+            "fixed_distributed_ayahs": [
+              1,
+              51,
+              101,
+              150,
+              200
+            ],
+            "annotation_cache_sha256": "c3d62b5c89eb850d29743ca113cf3edc65d6cdc2a88f07f94db10ac37daf504d"
+          }
+        }
+      },
+      "scratch_dir": "C:\\Users\\cpazi\\AppData\\Local\\Temp\\ayahx-d3-acoustic-1fukrbbr",
+      "manual_cleanup_required": true,
+      "audio_scratch_deleted": false,
+      "retention_reason": "automatic_cleanup_disabled_after_command_policy_rejection; no_alternative_deletion",
+      "status": "measured",
+      "classification": {
+        "pattern": "unresolved",
+        "reason": "insufficient_position_or_identity_evidence",
+        "sample_distribution": {
+          "verified": true,
+          "unique_sample_count": 15,
+          "chapter_count": 3,
+          "policy": "3_chapters_with_5_fixed_distributed_ayahs; beginning_quartiles_middle_end",
+          "chapters": {
+            "1": {
+              "observed_ayah_count": 7,
+              "first_observed_ayah": 1,
+              "last_observed_ayah": 7,
+              "fixed_distributed_ayahs": [
+                1,
+                3,
+                4,
+                5,
+                7
+              ],
+              "annotation_cache_sha256": "c3d62b5c89eb850d29743ca113cf3edc65d6cdc2a88f07f94db10ac37daf504d"
+            },
+            "2": {
+              "observed_ayah_count": 286,
+              "first_observed_ayah": 1,
+              "last_observed_ayah": 286,
+              "fixed_distributed_ayahs": [
+                1,
+                72,
+                143,
+                215,
+                286
+              ],
+              "annotation_cache_sha256": "c3d62b5c89eb850d29743ca113cf3edc65d6cdc2a88f07f94db10ac37daf504d"
+            },
+            "3": {
+              "observed_ayah_count": 200,
+              "first_observed_ayah": 1,
+              "last_observed_ayah": 200,
+              "fixed_distributed_ayahs": [
+                1,
+                51,
+                101,
+                150,
+                200
+              ],
+              "annotation_cache_sha256": "c3d62b5c89eb850d29743ca113cf3edc65d6cdc2a88f07f94db10ac37daf504d"
+            }
+          }
+        },
+        "retained_source_hashes_match": true,
+        "lag_trends": [
+          {
+            "surah": 1,
+            "reliable_sample_count": 5,
+            "slope_ms_per_second": 0.003690914981079336,
+            "fitted_lag_change_ms": 0.19996639184491624,
+            "residual_std_ms": 0.3509151924855109,
+            "observed_lag_range_ms": 0.875,
+            "increasing_drift_evidence": false
+          },
+          {
+            "surah": 2,
+            "reliable_sample_count": 5,
+            "slope_ms_per_second": -0.0011435724650682595,
+            "fitted_lag_change_ms": 17.830514404568863,
+            "residual_std_ms": 7.771484719719795,
+            "observed_lag_range_ms": 25.375,
+            "increasing_drift_evidence": false
+          },
+          {
+            "surah": 3,
+            "reliable_sample_count": 5,
+            "slope_ms_per_second": -1.6876387420360267e-05,
+            "fitted_lag_change_ms": 0.1551615903247294,
+            "residual_std_ms": 0.1154195946790171,
+            "observed_lag_range_ms": 0.375,
+            "increasing_drift_evidence": false
+          }
+        ],
+        "v2_eligible": false,
+        "next_path": "D5_or_further_read_only_diagnosis"
+      },
+      "all_hf_payloads_match_retained": true,
+      "finished_at": "2026-10-10T00:42:50.137274+00:00",
+      "attempts": [
+        {
+          "finished_epoch": 1791592970.13827,
+          "status": "measured",
+          "reason": null
+        }
+      ]
+    }
+  },
+  "v2_automatically_published": false,
+  "calculator": {
+    "method_version": "B-v2-diagnostics-gridfix-1",
+    "script_sha256": "507b5b4046ce9a46f3b9f9f178db41d7b81ea9b9afde5f47a806a9a458299985",
+    "kernel_sha256": "5f43e008c2333a328739e313274369200442915a450fcdae0e4e08c67076bcf1",
+    "retained_v1_calculator_sha256": "282fc30c527a8ed1f35687ee90dd268cf114153e0fad30a3ff90c9cd922de6b8"
+  },
+  "checked_at": "2026-10-10T00:42:50.138270+00:00",
+  "transport_stats": {
+    "requests": 51,
+    "bytes": 871737293,
+    "statuses": [
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      200,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      200,
+      200,
+      200
+    ],
+    "minimum_interval_seconds": 2,
+    "minimum_observed_interval_seconds": 2.0
+  },
+  "status_counts": {
+    "measured": 1
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "checked_at": "2026-10-10T04:50:21.389Z",
+  "read_only": true,
+  "d1_counts": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "critical_counts": {
+    "users": 13,
+    "subscriptions": 16,
+    "plans": null,
+    "payment_requests": 3,
+    "videos": null,
+    "saved_videos": 7,
+    "render_jobs": 72,
+    "system_settings": 13,
+    "user_roles": 13,
+    "notifications": 49
+  },
+  "critical_counts_unchanged": true,
+  "admin_users_and_roles_checksums_unchanged": true,
+  "D3_tables_present": []
+}

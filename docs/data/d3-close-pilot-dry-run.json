@@ -1,0 +1,32 @@
+{
+  "target": "production",
+  "sql_sha256": "6805250efa46eb830d0375206bb02bd1ac897c916dfe6a0dbcd74a41b2223640",
+  "dry_run": true,
+  "results": [
+    {
+      "slug": "ahmed_saud_mp3quran",
+      "insert_rows": 327
+    }
+  ],
+  "started_at": "2026-10-10T05:41:38.610Z",
+  "event_loop_delay_ms": {
+    "p50": 13.967359,
+    "p99": 32.817151,
+    "max": 32.817151,
+    "samples": 30
+  },
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 2,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 467,
+    "transport_response_bytes": 794
+  },
+  "wall_clock_ms": 1096
+}

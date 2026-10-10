@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-10-10T06:06:28.6004293Z",
+  "mysql": "9.7.2",
+  "before": [
+    "ayahx_d2_d3_cli_20261010.ayah_timings\t2497400903",
+    "ayahx_d2_d3_cli_20261010.import_jobs\t3780127025",
+    "ayahx_d2_d3_cli_20261010.ayah_timing_history\t0",
+    "ayahx_d2_d3_cli_20261010.recitation_chapters\t3007351581",
+    "ayahx_d2_d3_cli_20261010.recitations\t662038683"
+  ],
+  "after": [
+    "ayahx_d2_d3_cli_20261010.ayah_timings\t2497400903",
+    "ayahx_d2_d3_cli_20261010.import_jobs\t3780127025",
+    "ayahx_d2_d3_cli_20261010.ayah_timing_history\t0",
+    "ayahx_d2_d3_cli_20261010.recitation_chapters\t3007351581",
+    "ayahx_d2_d3_cli_20261010.recitations\t662038683"
+  ],
+  "identical_including_timestamps": true,
+  "verified_skipped_checkpoints": 69,
+  "passed": true
+}

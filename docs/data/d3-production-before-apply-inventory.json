@@ -1,0 +1,4213 @@
+{
+  "events": [],
+  "tables": [
+    {
+      "name": "achievements",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "admin_invitations",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "admin_permissions",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "admin_roles",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "admin_sessions",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "admin_user_extensions",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "alignment_documents",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "alignment_review_events",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "audio_providers",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "audit_logs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "daily_cloud_render_usage",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "daily_render_engine_usage",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "daily_video_usage",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "domain_events",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "dsr_requests",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "entity_notes",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "favorite_performers",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "favorite_reciters",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "favorite_surahs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "feature_flags",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "notifications",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "payment_requests",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "profiles",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_audio_assets",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_ayahs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_surahs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_text_versions",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_words",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "recitation_chapters",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "recitations",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "reciters",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "recycle_bin",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "render_engine_capacity",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "render_job_audit",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "render_jobs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "render_manifests",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "riwayat",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "saved_videos",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "saved_views",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "subscriptions",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "synthetic_canary_runs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "system_settings",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "system_settings_enhanced",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "translation_ayahs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "translations",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "user_achievements",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "user_follows",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "user_roles",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "users",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "video_comments",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "video_likes",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    }
+  ],
+  "columns": [
+    {
+      "type": "varchar(100)",
+      "table": "achievements",
+      "column": "category",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "achievements",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "achievements",
+      "column": "description",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "achievements",
+      "column": "icon",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "achievements",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "achievements",
+      "column": "key",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "achievements",
+      "column": "points",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "achievements",
+      "column": "threshold",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "achievements",
+      "column": "title",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_invitations",
+      "column": "accepted_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_invitations",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "admin_invitations",
+      "column": "email",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_invitations",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "admin_invitations",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "admin_invitations",
+      "column": "invited_by_user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "admin_invitations",
+      "column": "role_slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "admin_invitations",
+      "column": "token_hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "admin_permissions",
+      "column": "action",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_permissions",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "admin_permissions",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "admin_permissions",
+      "column": "resource",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "admin_permissions",
+      "column": "role_slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_roles",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "admin_roles",
+      "column": "description_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "admin_roles",
+      "column": "description_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "admin_roles",
+      "column": "is_system",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "admin_roles",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "admin_roles",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "admin_roles",
+      "column": "slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_sessions",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_sessions",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "admin_sessions",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(45)",
+      "table": "admin_sessions",
+      "column": "ip_address",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "admin_sessions",
+      "column": "is_revoked",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_sessions",
+      "column": "last_active_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "admin_sessions",
+      "column": "token_hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "admin_sessions",
+      "column": "user_agent",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "admin_sessions",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_user_extensions",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "admin_user_extensions",
+      "column": "failed_login_attempts",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_user_extensions",
+      "column": "last_login_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(45)",
+      "table": "admin_user_extensions",
+      "column": "last_login_ip",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_user_extensions",
+      "column": "locked_until",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(50)",
+      "table": "admin_user_extensions",
+      "column": "role_slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "admin_user_extensions",
+      "column": "two_factor_backup_codes_encrypted",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "admin_user_extensions",
+      "column": "two_factor_enabled",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "admin_user_extensions",
+      "column": "two_factor_secret_encrypted",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_user_extensions",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "admin_user_extensions",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(256)",
+      "table": "alignment_documents",
+      "column": "audio_content_hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "alignment_documents",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "alignment_documents",
+      "column": "document_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "alignment_documents",
+      "column": "end_ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "alignment_documents",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(191)",
+      "table": "alignment_documents",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "alignment_documents",
+      "column": "parent_document_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(80)",
+      "table": "alignment_documents",
+      "column": "provider_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(24)",
+      "table": "alignment_documents",
+      "column": "review_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "alignment_documents",
+      "column": "start_ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "alignment_documents",
+      "column": "surah_number",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "alignment_documents",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "alignment_documents",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(24)",
+      "table": "alignment_documents",
+      "column": "validation_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "alignment_review_events",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(191)",
+      "table": "alignment_review_events",
+      "column": "document_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "alignment_review_events",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "alignment_review_events",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(2000)",
+      "table": "alignment_review_events",
+      "column": "note",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "alignment_review_events",
+      "column": "parent_document_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "alignment_review_events",
+      "column": "revision_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(24)",
+      "table": "alignment_review_events",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "alignment_review_events",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "audio_providers",
+      "column": "adapter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "audio_providers",
+      "column": "attribution_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "audio_providers",
+      "column": "base_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "audio_providers",
+      "column": "code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "audio_providers",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('unchecked','healthy','unavailable')",
+      "table": "audio_providers",
+      "column": "health_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "audio_providers",
+      "column": "host_allowlist",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "audio_providers",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "audio_providers",
+      "column": "is_active",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "audio_providers",
+      "column": "last_checked_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "audio_providers",
+      "column": "license_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "audio_providers",
+      "column": "name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "audio_providers",
+      "column": "priority",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "audio_providers",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "audit_logs",
+      "column": "action",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "audit_logs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "audit_logs",
+      "column": "entity_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "audit_logs",
+      "column": "entity_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "audit_logs",
+      "column": "hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "audit_logs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(45)",
+      "table": "audit_logs",
+      "column": "ip_address",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "audit_logs",
+      "column": "new_values",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "audit_logs",
+      "column": "old_values",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "audit_logs",
+      "column": "prev_hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "audit_logs",
+      "column": "role_slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "audit_logs",
+      "column": "user_agent",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "audit_logs",
+      "column": "user_email",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "audit_logs",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "daily_cloud_render_usage",
+      "column": "count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "daily_cloud_render_usage",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "date",
+      "table": "daily_cloud_render_usage",
+      "column": "date",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "daily_cloud_render_usage",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "daily_cloud_render_usage",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "daily_render_engine_usage",
+      "column": "background_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "daily_render_engine_usage",
+      "column": "count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "daily_render_engine_usage",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "date",
+      "table": "daily_render_engine_usage",
+      "column": "date",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(32)",
+      "table": "daily_render_engine_usage",
+      "column": "engine",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "daily_render_engine_usage",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "daily_render_engine_usage",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "daily_video_usage",
+      "column": "count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "date",
+      "table": "daily_video_usage",
+      "column": "date",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "daily_video_usage",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "daily_video_usage",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "domain_events",
+      "column": "anonymous_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "domain_events",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "domain_events",
+      "column": "entity_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "domain_events",
+      "column": "entity_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "domain_events",
+      "column": "event_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "domain_events",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(45)",
+      "table": "domain_events",
+      "column": "ip_address",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "domain_events",
+      "column": "properties_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "domain_events",
+      "column": "user_agent",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "domain_events",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "dsr_requests",
+      "column": "admin_notes",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "dsr_requests",
+      "column": "completed_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "dsr_requests",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "dsr_requests",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "longtext",
+      "table": "dsr_requests",
+      "column": "payload_json",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "dsr_requests",
+      "column": "request_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "dsr_requests",
+      "column": "requested_by_email",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "dsr_requests",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "dsr_requests",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "entity_notes",
+      "column": "admin_email",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "entity_notes",
+      "column": "admin_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "entity_notes",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "entity_notes",
+      "column": "entity_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "entity_notes",
+      "column": "entity_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "entity_notes",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "entity_notes",
+      "column": "is_pinned",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "entity_notes",
+      "column": "note_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "favorite_performers",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "favorite_performers",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "favorite_performers",
+      "column": "performer_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "favorite_performers",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "favorite_reciters",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "favorite_reciters",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "favorite_reciters",
+      "column": "reciter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "favorite_reciters",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "favorite_surahs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "favorite_surahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "favorite_surahs",
+      "column": "surah_number",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "favorite_surahs",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "feature_flags",
+      "column": "description",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "feature_flags",
+      "column": "is_enabled",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "feature_flags",
+      "column": "key_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(150)",
+      "table": "feature_flags",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(150)",
+      "table": "feature_flags",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "feature_flags",
+      "column": "rollout_percentage",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "feature_flags",
+      "column": "rules_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "feature_flags",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "feature_flags",
+      "column": "updated_by",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "notifications",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "notifications",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "notifications",
+      "column": "is_read",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "notifications",
+      "column": "message",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "notifications",
+      "column": "title",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "notifications",
+      "column": "type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "notifications",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "payment_requests",
+      "column": "admin_note",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "decimal(10,2)",
+      "table": "payment_requests",
+      "column": "amount",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "payment_requests",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "char(3)",
+      "table": "payment_requests",
+      "column": "currency",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "payment_requests",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "payment_requests",
+      "column": "payment_method",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "payment_requests",
+      "column": "phone_number",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "payment_requests",
+      "column": "plan",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('pending','approved','rejected')",
+      "table": "payment_requests",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "payment_requests",
+      "column": "transfer_reference",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "payment_requests",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "payment_requests",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "profiles",
+      "column": "avatar_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "profiles",
+      "column": "bio",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "profiles",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "profiles",
+      "column": "display_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "profiles",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "profiles",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "profiles",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_audio_assets",
+      "column": "ayah_end",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_audio_assets",
+      "column": "ayah_start",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "quran_audio_assets",
+      "column": "content_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_audio_assets",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_audio_assets",
+      "column": "created_by",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_audio_assets",
+      "column": "file_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_audio_assets",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_audio_assets",
+      "column": "license_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(2048)",
+      "table": "quran_audio_assets",
+      "column": "license_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(512)",
+      "table": "quran_audio_assets",
+      "column": "object_key",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(120)",
+      "table": "quran_audio_assets",
+      "column": "reciter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(2000)",
+      "table": "quran_audio_assets",
+      "column": "review_note",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_audio_assets",
+      "column": "reviewed_by",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(24)",
+      "table": "quran_audio_assets",
+      "column": "rights_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "char(64)",
+      "table": "quran_audio_assets",
+      "column": "sha256",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "bigint unsigned",
+      "table": "quran_audio_assets",
+      "column": "size_bytes",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(2048)",
+      "table": "quran_audio_assets",
+      "column": "source_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_audio_assets",
+      "column": "surah_number",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_audio_assets",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(24)",
+      "table": "quran_audio_assets",
+      "column": "upload_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_ayahs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_ayahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "juz",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "page",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "surah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "quran_ayahs",
+      "column": "text_simple",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "quran_ayahs",
+      "column": "text_uthmani",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_ayahs",
+      "column": "text_version_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_ayahs",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "words_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_surahs",
+      "column": "ayah_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_surahs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "quran_surahs",
+      "column": "has_basmala",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_surahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_surahs",
+      "column": "juz_start",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_surahs",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_surahs",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_surahs",
+      "column": "name_translit",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_surahs",
+      "column": "number",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_surahs",
+      "column": "page_start",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(32)",
+      "table": "quran_surahs",
+      "column": "revelation_place",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_surahs",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "char(64)",
+      "table": "quran_text_versions",
+      "column": "checksum",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_text_versions",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_text_versions",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_text_versions",
+      "column": "imported_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "quran_text_versions",
+      "column": "is_active",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "quran_text_versions",
+      "column": "qud_version",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_text_versions",
+      "column": "riwayah_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(32)",
+      "table": "quran_text_versions",
+      "column": "script",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('qul','qud')",
+      "table": "quran_text_versions",
+      "column": "source",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_text_versions",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(191)",
+      "table": "quran_text_versions",
+      "column": "version_label",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_words",
+      "column": "ayah_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_words",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_words",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_words",
+      "column": "position",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_words",
+      "column": "text_simple",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_words",
+      "column": "text_uthmani",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_words",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('unverified','available','source_unavailable')",
+      "table": "recitation_chapters",
+      "column": "audio_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitation_chapters",
+      "column": "audio_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "recitation_chapters",
+      "column": "available_ayahs",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_chapters",
+      "column": "ayahs_complete",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "recitation_chapters",
+      "column": "chapter_offset_ms",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_chapters",
+      "column": "coverage_mismatch",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recitation_chapters",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitation_chapters",
+      "column": "duration_ms",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "recitation_chapters",
+      "column": "expected_ayahs",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitation_chapters",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_chapters",
+      "column": "is_complete",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recitation_chapters",
+      "column": "last_verified_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recitation_chapters",
+      "column": "missing_verses",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitation_chapters",
+      "column": "recitation_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "recitation_chapters",
+      "column": "surah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_chapters",
+      "column": "timing_complete",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recitation_chapters",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "attribution_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "recitations",
+      "column": "audio_category",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('unverified_source','surah_slice')",
+      "table": "recitations",
+      "column": "audio_mode",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "recitations",
+      "column": "audit_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitations",
+      "column": "ayahs_complete",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('ayah_1_included','separate_clip','absent')",
+      "table": "recitations",
+      "column": "basmala_mode",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "basmala_reason",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitations",
+      "column": "canonical_text_available",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recitations",
+      "column": "catalog_raw",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "char(64)",
+      "table": "recitations",
+      "column": "catalog_sha256",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "channel",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitations",
+      "column": "coverage_ayahs",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitations",
+      "column": "coverage_words",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recitations",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "license_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "double",
+      "table": "recitations",
+      "column": "offset_check_score",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "recitations",
+      "column": "offset_correction_ms",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitations",
+      "column": "offset_verified",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "provider_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "qud_version",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "reciter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "recitations",
+      "column": "recording_context",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint",
+      "table": "recitations",
+      "column": "recording_year",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "riwayah_code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "riwayah_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "recitations",
+      "column": "slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "source_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('draft','imported','needs_review','published','hidden','deprecated')",
+      "table": "recitations",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "style",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('unverified','verified','not_applicable')",
+      "table": "recitations",
+      "column": "surah_start_basmala_audio_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "surah_start_basmala_text_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('none','ayah','word','letter')",
+      "table": "recitations",
+      "column": "timing_level",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('unimported','needs_review','aligned','verified')",
+      "table": "recitations",
+      "column": "timing_quality",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "recitations",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "recitations",
+      "column": "variant_label",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "recitations",
+      "column": "verification_details",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('pending','passed','failed','source_unavailable')",
+      "table": "recitations",
+      "column": "verification_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "reciters",
+      "column": "bio",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "reciters",
+      "column": "country",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "reciters",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "reciters",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "reciters",
+      "column": "is_featured",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "reciters",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "reciters",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "reciters",
+      "column": "photo_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "reciters",
+      "column": "slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "reciters",
+      "column": "sort_order",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(191)",
+      "table": "reciters",
+      "column": "source_reciter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('imported','needs_review')",
+      "table": "reciters",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "reciters",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recycle_bin",
+      "column": "data_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recycle_bin",
+      "column": "deleted_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recycle_bin",
+      "column": "deleted_by_user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "recycle_bin",
+      "column": "entity_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "recycle_bin",
+      "column": "entity_title",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "recycle_bin",
+      "column": "entity_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recycle_bin",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "recycle_bin",
+      "column": "purge_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "render_engine_capacity",
+      "column": "active_jobs",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(32)",
+      "table": "render_engine_capacity",
+      "column": "engine",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "render_engine_capacity",
+      "column": "replicas",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "render_engine_capacity",
+      "column": "slots_per_replica",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_engine_capacity",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "render_engine_capacity",
+      "column": "waiting_jobs",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_job_audit",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "render_job_audit",
+      "column": "details",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "render_job_audit",
+      "column": "event",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_job_audit",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_job_audit",
+      "column": "job_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_job_audit",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_jobs",
+      "column": "active_user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "completed_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "content_expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "decimal(7,2)",
+      "table": "render_jobs",
+      "column": "duration_seconds",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(32)",
+      "table": "render_jobs",
+      "column": "engine",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(16)",
+      "table": "render_jobs",
+      "column": "enqueue_state",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "render_jobs",
+      "column": "error_code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "render_jobs",
+      "column": "error_message",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "render_jobs",
+      "column": "estimated_cost_cents",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "heartbeat_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_jobs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "render_jobs",
+      "column": "idempotency_key",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "render_jobs",
+      "column": "manifest",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "render_jobs",
+      "column": "max_retries",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "render_jobs",
+      "column": "metadata",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "render_jobs",
+      "column": "output_filename",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "render_jobs",
+      "column": "output_path",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "bigint",
+      "table": "render_jobs",
+      "column": "output_size_bytes",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('instant_vip','subscriber','free')",
+      "table": "render_jobs",
+      "column": "priority_lane",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "decimal(5,2)",
+      "table": "render_jobs",
+      "column": "progress",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "render_jobs",
+      "column": "retry_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "render_jobs",
+      "column": "stage",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "started_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('queued','running','succeeded','failed','cancelled')",
+      "table": "render_jobs",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "render_jobs",
+      "column": "synthetic_canary",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_jobs",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "render_jobs",
+      "column": "worker_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(20)",
+      "table": "render_manifests",
+      "column": "aspect_ratio",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "render_manifests",
+      "column": "audio_source",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "render_manifests",
+      "column": "codec",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "render_manifests",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "render_manifests",
+      "column": "end_ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_manifests",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_manifests",
+      "column": "job_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "longtext",
+      "table": "render_manifests",
+      "column": "raw_manifest",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "render_manifests",
+      "column": "reciter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(150)",
+      "table": "render_manifests",
+      "column": "reciter_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "render_manifests",
+      "column": "render_engine",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "render_manifests",
+      "column": "start_ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "render_manifests",
+      "column": "surah_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "render_manifests",
+      "column": "surah_number",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "render_manifests",
+      "column": "template_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "render_manifests",
+      "column": "text_sha256",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "render_manifests",
+      "column": "timing_version",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "render_manifests",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_manifests",
+      "column": "video_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "riwayat",
+      "column": "aligner_code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "riwayat",
+      "column": "code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "riwayat",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "riwayat",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "riwayat",
+      "column": "is_active",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "riwayat",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "riwayat",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "riwayat",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(20)",
+      "table": "saved_videos",
+      "column": "aspect_ratio",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "saved_videos",
+      "column": "background_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "saved_videos",
+      "column": "content_fingerprint",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "saved_videos",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "saved_videos",
+      "column": "deleted_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "saved_videos",
+      "column": "downloads_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "decimal(7,2)",
+      "table": "saved_videos",
+      "column": "duration_seconds",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "saved_videos",
+      "column": "end_ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "saved_videos",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "bigint",
+      "table": "saved_videos",
+      "column": "file_size_bytes",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "saved_videos",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "saved_videos",
+      "column": "is_public",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "saved_videos",
+      "column": "job_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "saved_videos",
+      "column": "qc_issues",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('passed','warning','needs_review')",
+      "table": "saved_videos",
+      "column": "qc_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "saved_videos",
+      "column": "reciter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(150)",
+      "table": "saved_videos",
+      "column": "reciter_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "saved_videos",
+      "column": "render_engine",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "saved_videos",
+      "column": "shares_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "saved_videos",
+      "column": "start_ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "saved_videos",
+      "column": "surah_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "saved_videos",
+      "column": "surah_number",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "saved_videos",
+      "column": "thumbnail_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "saved_videos",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "saved_videos",
+      "column": "video_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "saved_videos",
+      "column": "views_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "saved_views",
+      "column": "columns_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "saved_views",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "saved_views",
+      "column": "filters_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "saved_views",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "saved_views",
+      "column": "is_shared",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(50)",
+      "table": "saved_views",
+      "column": "module",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "saved_views",
+      "column": "name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "saved_views",
+      "column": "sort_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "saved_views",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "subscriptions",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "subscriptions",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "subscriptions",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('free','monthly','yearly')",
+      "table": "subscriptions",
+      "column": "plan",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "subscriptions",
+      "column": "starts_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('active','expired','canceled')",
+      "table": "subscriptions",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "subscriptions",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "subscriptions",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "synthetic_canary_runs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "synthetic_canary_runs",
+      "column": "duration_ms",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(50)",
+      "table": "synthetic_canary_runs",
+      "column": "engine",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "synthetic_canary_runs",
+      "column": "error_message",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "synthetic_canary_runs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "synthetic_canary_runs",
+      "column": "metrics",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('success','failed','running')",
+      "table": "synthetic_canary_runs",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "system_settings",
+      "column": "category",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "system_settings",
+      "column": "is_secret",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "system_settings",
+      "column": "key_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "system_settings",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "system_settings",
+      "column": "value_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "system_settings_enhanced",
+      "column": "category",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "system_settings_enhanced",
+      "column": "description_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "system_settings_enhanced",
+      "column": "description_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "system_settings_enhanced",
+      "column": "is_public",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "system_settings_enhanced",
+      "column": "is_secret",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "system_settings_enhanced",
+      "column": "key_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "system_settings_enhanced",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "system_settings_enhanced",
+      "column": "updated_by",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "system_settings_enhanced",
+      "column": "value_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(20)",
+      "table": "system_settings_enhanced",
+      "column": "value_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "translation_ayahs",
+      "column": "ayah_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "translation_ayahs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "translation_ayahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "translation_ayahs",
+      "column": "text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "translation_ayahs",
+      "column": "translation_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "translation_ayahs",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "translations",
+      "column": "code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "translations",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "translations",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(16)",
+      "table": "translations",
+      "column": "lang",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "translations",
+      "column": "license",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "translations",
+      "column": "name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "translations",
+      "column": "translator",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "translations",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_achievements",
+      "column": "achievement_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_achievements",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "user_achievements",
+      "column": "unlocked_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_achievements",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "user_follows",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_follows",
+      "column": "follower_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_follows",
+      "column": "following_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_follows",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "user_roles",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_roles",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('admin','moderator','user')",
+      "table": "user_roles",
+      "column": "role",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_roles",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "users",
+      "column": "ban_reason",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "users",
+      "column": "banned_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "users",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "users",
+      "column": "credits_balance",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "users",
+      "column": "email",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "users",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "users",
+      "column": "is_banned",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "users",
+      "column": "last_active_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "users",
+      "column": "password_hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "users",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "video_comments",
+      "column": "content",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "video_comments",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_comments",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_comments",
+      "column": "parent_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_comments",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_comments",
+      "column": "video_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "video_likes",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_likes",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_likes",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_likes",
+      "column": "video_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    }
+  ],
+  "database": "railway",
+  "settings": {
+    "sql_mode": "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION",
+    "time_zone": "SYSTEM",
+    "max_connections": 60,
+    "collation_server": "utf8mb4_0900_ai_ci",
+    "system_time_zone": "UTC",
+    "max_allowed_packet": 67108864,
+    "character_set_server": "utf8mb4"
+  },
+  "triggers": [],
+  "server_uuid": "9496a587-b364-11f1-860a-a2aa73a6893f",
+  "foreign_keys": [
+    {
+      "table": "admin_invitations",
+      "column": "invited_by_user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "admin_invitations",
+      "column": "role_slug",
+      "referenced": "admin_roles"
+    },
+    {
+      "table": "admin_permissions",
+      "column": "role_slug",
+      "referenced": "admin_roles"
+    },
+    {
+      "table": "admin_sessions",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "admin_user_extensions",
+      "column": "role_slug",
+      "referenced": "admin_roles"
+    },
+    {
+      "table": "admin_user_extensions",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "alignment_documents",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "alignment_review_events",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "daily_cloud_render_usage",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "daily_render_engine_usage",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "daily_video_usage",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "favorite_performers",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "favorite_reciters",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "favorite_surahs",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "notifications",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "payment_requests",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "profiles",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "quran_audio_assets",
+      "column": "created_by",
+      "referenced": "users"
+    },
+    {
+      "table": "quran_audio_assets",
+      "column": "reviewed_by",
+      "referenced": "users"
+    },
+    {
+      "table": "quran_ayahs",
+      "column": "text_version_id",
+      "referenced": "quran_text_versions"
+    },
+    {
+      "table": "quran_text_versions",
+      "column": "riwayah_id",
+      "referenced": "riwayat"
+    },
+    {
+      "table": "quran_words",
+      "column": "ayah_id",
+      "referenced": "quran_ayahs"
+    },
+    {
+      "table": "recitation_chapters",
+      "column": "recitation_id",
+      "referenced": "recitations"
+    },
+    {
+      "table": "recitations",
+      "column": "provider_id",
+      "referenced": "audio_providers"
+    },
+    {
+      "table": "recitations",
+      "column": "reciter_id",
+      "referenced": "reciters"
+    },
+    {
+      "table": "render_job_audit",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "render_jobs",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "saved_videos",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "saved_views",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "subscriptions",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "translation_ayahs",
+      "column": "ayah_id",
+      "referenced": "quran_ayahs"
+    },
+    {
+      "table": "translation_ayahs",
+      "column": "translation_id",
+      "referenced": "translations"
+    },
+    {
+      "table": "user_achievements",
+      "column": "achievement_id",
+      "referenced": "achievements"
+    },
+    {
+      "table": "user_achievements",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "user_follows",
+      "column": "follower_id",
+      "referenced": "users"
+    },
+    {
+      "table": "user_follows",
+      "column": "following_id",
+      "referenced": "users"
+    },
+    {
+      "table": "user_roles",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "video_comments",
+      "column": "parent_id",
+      "referenced": "video_comments"
+    },
+    {
+      "table": "video_comments",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "video_comments",
+      "column": "video_id",
+      "referenced": "saved_videos"
+    },
+    {
+      "table": "video_likes",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "video_likes",
+      "column": "video_id",
+      "referenced": "saved_videos"
+    }
+  ],
+  "mysql_version": "9.7.2",
+  "row_counts": {
+    "achievements": 10,
+    "admin_invitations": 0,
+    "admin_permissions": 284,
+    "admin_roles": 8,
+    "admin_sessions": 0,
+    "admin_user_extensions": 2,
+    "alignment_documents": 1,
+    "alignment_review_events": 0,
+    "audio_providers": 10,
+    "audit_logs": 0,
+    "daily_cloud_render_usage": 13,
+    "daily_render_engine_usage": 17,
+    "daily_video_usage": 17,
+    "domain_events": 0,
+    "dsr_requests": 0,
+    "entity_notes": 0,
+    "favorite_performers": 0,
+    "favorite_reciters": 1,
+    "favorite_surahs": 2,
+    "feature_flags": 0,
+    "notifications": 49,
+    "payment_requests": 3,
+    "profiles": 13,
+    "quran_audio_assets": 0,
+    "quran_ayahs": 6236,
+    "quran_surahs": 114,
+    "quran_text_versions": 1,
+    "quran_words": 77433,
+    "recitation_chapters": 7765,
+    "recitations": 69,
+    "reciters": 57,
+    "recycle_bin": 0,
+    "render_engine_capacity": 3,
+    "render_job_audit": 292,
+    "render_jobs": 72,
+    "render_manifests": 0,
+    "riwayat": 4,
+    "saved_videos": 7,
+    "saved_views": 0,
+    "subscriptions": 16,
+    "synthetic_canary_runs": 0,
+    "system_settings": 13,
+    "system_settings_enhanced": 10,
+    "translation_ayahs": 0,
+    "translations": 0,
+    "user_achievements": 1,
+    "user_follows": 0,
+    "user_roles": 13,
+    "users": 13,
+    "video_comments": 0,
+    "video_likes": 0
+  },
+  "checksums": {
+    "achievements": "720648712",
+    "admin_invitations": "0",
+    "admin_permissions": "3101946428",
+    "admin_roles": "3096633898",
+    "admin_sessions": "0",
+    "admin_user_extensions": "24868127",
+    "alignment_documents": "855393549",
+    "alignment_review_events": "0",
+    "audio_providers": "256889962",
+    "audit_logs": "0",
+    "daily_cloud_render_usage": "3005621074",
+    "daily_render_engine_usage": "16694276",
+    "daily_video_usage": "1998448965",
+    "domain_events": "0",
+    "dsr_requests": "0",
+    "entity_notes": "0",
+    "favorite_performers": "0",
+    "favorite_reciters": "2841979377",
+    "favorite_surahs": "1361531746",
+    "feature_flags": "0",
+    "notifications": "1549172204",
+    "payment_requests": "425435828",
+    "profiles": "3305835068",
+    "quran_audio_assets": "0",
+    "quran_ayahs": "1712042852",
+    "quran_surahs": "2501341507",
+    "quran_text_versions": "2465363195",
+    "quran_words": "2986733015",
+    "recitation_chapters": "2981531357",
+    "recitations": "1435663705",
+    "reciters": "2360772223",
+    "recycle_bin": "0",
+    "render_engine_capacity": "914548789",
+    "render_job_audit": "791554965",
+    "render_jobs": "3147249881",
+    "render_manifests": "0",
+    "riwayat": "261302837",
+    "saved_videos": "2903173038",
+    "saved_views": "0",
+    "subscriptions": "869915229",
+    "synthetic_canary_runs": "0",
+    "system_settings": "1316653524",
+    "system_settings_enhanced": "3610769787",
+    "translation_ayahs": "0",
+    "translations": "0",
+    "user_achievements": "390398688",
+    "user_follows": "0",
+    "user_roles": "1812061936",
+    "users": "465493766",
+    "video_comments": "0",
+    "video_likes": "0"
+  },
+  "critical_counts": {
+    "users": 13,
+    "subscriptions": 16,
+    "plans": null,
+    "payment_requests": 3,
+    "videos": null,
+    "saved_videos": 7,
+    "render_jobs": 72,
+    "system_settings": 13,
+    "user_roles": 13,
+    "notifications": 49
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "d1_counts": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "environment_id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+  "checked_at": "2026-10-10T04:44:50.003Z"
+}

@@ -1,0 +1,193 @@
+{
+  "checked_at": "2026-10-10T03:25:22.173Z",
+  "mysql_version": "9.7.2",
+  "local_queries_only": true,
+  "database_writes": false,
+  "method": "JSON_STORAGE_SIZE measured with MySQL 9.7.2 JSON_TABLE on every source row in reduced scope, plus schema scalar payload; excludes InnoDB/pages/indexes/redo/history/backup overhead",
+  "available_bytes": 118530048,
+  "thirty_percent_free_bytes": 35559014.4,
+  "minimum_payload_bytes": 223071669,
+  "exceeds_entire_free_space": true,
+  "minimum_additional_bytes": 104541621,
+  "results": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 5930412,
+      "non_json_payload_bytes": 3719849,
+      "minimum_payload_bytes": 9650261
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 5932594,
+      "non_json_payload_bytes": 3719599,
+      "minimum_payload_bytes": 9652193
+    },
+    {
+      "slug": "abdulaziz_al_turki_yt",
+      "rows": 6115,
+      "mysql_binary_json_bytes": 5988826,
+      "non_json_payload_bytes": 3670694,
+      "minimum_payload_bytes": 9659520
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_warsh_qdc",
+      "rows": 6214,
+      "mysql_binary_json_bytes": 5169670,
+      "non_json_payload_bytes": 1690208,
+      "minimum_payload_bytes": 6859878
+    },
+    {
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 5927852,
+      "non_json_payload_bytes": 3715348,
+      "minimum_payload_bytes": 9643200
+    },
+    {
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6108529,
+      "non_json_payload_bytes": 3742388,
+      "minimum_payload_bytes": 9850917
+    },
+    {
+      "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6280287,
+      "non_json_payload_bytes": 3769501,
+      "minimum_payload_bytes": 10049788
+    },
+    {
+      "slug": "ahmed_saud_mp3quran",
+      "rows": 327,
+      "mysql_binary_json_bytes": 115349,
+      "non_json_payload_bytes": 146544,
+      "minimum_payload_bytes": 261893
+    },
+    {
+      "slug": "ali_al_huthaifi_mp3quran",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6343895,
+      "non_json_payload_bytes": 3778099,
+      "minimum_payload_bytes": 10121994
+    },
+    {
+      "slug": "ayman_swed_muallim_yt",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6549003,
+      "non_json_payload_bytes": 3809268,
+      "minimum_payload_bytes": 10358271
+    },
+    {
+      "slug": "badr_al_turki_yt",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6253419,
+      "non_json_payload_bytes": 3767242,
+      "minimum_payload_bytes": 10020661
+    },
+    {
+      "slug": "haitham_al_dukhain_mp3quran",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6378076,
+      "non_json_payload_bytes": 3785667,
+      "minimum_payload_bytes": 10163743
+    },
+    {
+      "slug": "ibrahim_al_akhdar_drive",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 5956215,
+      "non_json_payload_bytes": 3719337,
+      "minimum_payload_bytes": 9675552
+    },
+    {
+      "slug": "imad_zuhair_hafez_mp3quran",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6220228,
+      "non_json_payload_bytes": 3760557,
+      "minimum_payload_bytes": 9980785
+    },
+    {
+      "slug": "khalid_al_mohana_drive",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6034064,
+      "non_json_payload_bytes": 3731998,
+      "minimum_payload_bytes": 9766062
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_mp3quran",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6235244,
+      "non_json_payload_bytes": 3762289,
+      "minimum_payload_bytes": 9997533
+    },
+    {
+      "slug": "mohammed_abdulkareem_qdc",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6468018,
+      "non_json_payload_bytes": 3801605,
+      "minimum_payload_bytes": 10269623
+    },
+    {
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6295972,
+      "non_json_payload_bytes": 3772483,
+      "minimum_payload_bytes": 10068455
+    },
+    {
+      "slug": "mohammed_alghazali_archive",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6383487,
+      "non_json_payload_bytes": 3785394,
+      "minimum_payload_bytes": 10168881
+    },
+    {
+      "slug": "mohammed_ayyub_drive",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6335168,
+      "non_json_payload_bytes": 3779776,
+      "minimum_payload_bytes": 10114944
+    },
+    {
+      "slug": "mohammed_burhaji_yt",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6298728,
+      "non_json_payload_bytes": 3774417,
+      "minimum_payload_bytes": 10073145
+    },
+    {
+      "slug": "mohammed_saayed_warsh_mp3quran",
+      "rows": 6214,
+      "mysql_binary_json_bytes": 5104070,
+      "non_json_payload_bytes": 1690208,
+      "minimum_payload_bytes": 6794278
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6178669,
+      "non_json_payload_bytes": 3754235,
+      "minimum_payload_bytes": 9932904
+    },
+    {
+      "slug": "saber_abdulhakam_yt",
+      "rows": 6236,
+      "mysql_binary_json_bytes": 6182831,
+      "non_json_payload_bytes": 3754357,
+      "minimum_payload_bytes": 9937188
+    }
+  ],
+  "scalar_widths": {
+    "surah": 2,
+    "ayah": 2,
+    "source_offset_ms": 8,
+    "start_ms": 8,
+    "end_ms": 8,
+    "coverage_words": 4,
+    "expected_words": 4
+  },
+  "scalar_sizing_reviewed_at": "2026-10-10T03:26:44.592541+00:00",
+  "minimum_free_for_thirty_percent_bytes": 743572230.0
+}

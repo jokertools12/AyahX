@@ -1,0 +1,17 @@
+{
+  "checked_at": "2026-10-10T02:46:07.652990+00:00",
+  "patterns": [
+    "test_*acoustic*.py",
+    "test_diagnose_qud_audio.py",
+    "test_inventory_qud_local_proof_candidates.py",
+    "test_prove_qud*.py",
+    "test_collect_diagnosis*.py",
+    "test_report_qud_audio*.py"
+  ],
+  "tests_run": 105,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "database_or_network_operations": 0,
+  "synthetic_tests_not_live_audio_acceptance": true
+}

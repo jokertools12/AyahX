@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-10-10T05:49:59.0010219Z",
+  "pilot_rows": 327,
+  "pilot_recitation_ms": 5649,
+  "pilot_wall_ms": 12285,
+  "compression": "gzip",
+  "measured_sql_bytes": 655372.0,
+  "measured_wire_request_bytes": 110246.0,
+  "measured_write_ack_ms": 837.0,
+  "effective_compressed_payload_bytes_per_second": 131715.651135006,
+  "estimated_full_ms": 8056632.220183486,
+  "estimated_full_hours": 2.237953394495413,
+  "under_4h": true,
+  "method": "Pessimistic pilot recitation latency scaled by row count, plus 10 seconds per recitation, full dry-run generation, and one session/schema setup. Framed payload metrics are not billing network bytes."
+}

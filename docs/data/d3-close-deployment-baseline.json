@@ -1,0 +1,45 @@
+{
+  "checked_at": "2026-10-10T05:53:30.370Z",
+  "deployments": [
+    {
+      "service": "AyahX",
+      "service_id": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "deployment_id": "42b9264d-4797-4f6c-ba00-322071289cc0",
+      "status": "SLEEPING",
+      "commit": "802720bad9aa8152fe93394f187fbb19e9879846",
+      "created_at": "2026-10-10T00:02:50.106Z",
+      "url": null,
+      "can_rollback": true
+    },
+    {
+      "service": "render-control",
+      "service_id": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "deployment_id": "f6b20af1-6ef9-47ba-9432-9f6ed9f51c1d",
+      "status": "SUCCESS",
+      "commit": "802720bad9aa8152fe93394f187fbb19e9879846",
+      "created_at": "2026-10-10T00:02:50.102Z",
+      "url": null,
+      "can_rollback": true
+    },
+    {
+      "service": "render-worker-skia",
+      "service_id": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "deployment_id": "f8c9e4e7-3d0c-4473-ba5b-3bbd5160e2ca",
+      "status": "SUCCESS",
+      "commit": "802720bad9aa8152fe93394f187fbb19e9879846",
+      "created_at": "2026-10-10T00:02:50.103Z",
+      "url": null,
+      "can_rollback": true
+    },
+    {
+      "service": "alignment-worker",
+      "service_id": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "deployment_id": "0dcab870-6e04-47c9-9ea4-772213794b99",
+      "status": "SUCCESS",
+      "commit": "802720bad9aa8152fe93394f187fbb19e9879846",
+      "created_at": "2026-10-10T00:02:50.105Z",
+      "url": null,
+      "can_rollback": true
+    }
+  ]
+}

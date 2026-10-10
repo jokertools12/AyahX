@@ -1,0 +1,32 @@
+{
+  "checked_at": "2026-10-10T02:59:01.482849+00:00",
+  "full_measurement_scope": {
+    "configs": 48,
+    "samples": 720,
+    "source": "d3-audio-failure-diagnosis-v2.json"
+  },
+  "independent_PCM_replay_configs": 48,
+  "independent_reference_replay_scope": [
+    "ahmed_saud_mp3quran",
+    "mishary_rashid_al_afasy_mp3quran",
+    "mohammed_alghazali_archive",
+    "saber_abdulhakam_warsh_way2quran"
+  ],
+  "scope_reason": "All four reported numeric-core candidates receive reference VAD replay. Other failed recitations retain complete measured B VAD, with numeric gate failures; no v2 approval is inferred from missing independent reference replay.",
+  "earlier_full_reference_run": {
+    "operator_interrupted_at": "2026-10-10T02:54:09Z",
+    "native_exit_code": 1,
+    "network_or_diagnostic_failure": false,
+    "complete_configs_saved": 1,
+    "checkpoint_requests": 60,
+    "last_observed_requests_lower_bound": 85,
+    "raw_checkpoint_sha256": "239931eda31fb9c12ec97362d6dd8b459abe2f2eac275578ddccf24c7966b8dd",
+    "partial_evidence_preserved": true
+  },
+  "live_audio_calculator_changed": false,
+  "v1_results_replaced": false,
+  "cleanup_attempted": false,
+  "main_run_stopped_before_each_reference_run": true,
+  "network_request_concurrency": 1,
+  "minimum_interval_seconds": 2
+}

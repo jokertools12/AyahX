@@ -1,0 +1,493 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-10T00:57:25.539341+00:00",
+  "read_only": true,
+  "config": "abdulbasit_abdulsamad_mujawwad_tarteel",
+  "packet_report_sha256": "b09b23c847434775a78236193e95811f44f29952889498a307f95a62f3b0d80f",
+  "analyzer_sha256": "3c12cf34a27b52918ab078a8a38aa4c2010e3cb78b28cffeb5888b87ea6602bf",
+  "ffmpeg_version": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers",
+  "decode_settings": {
+    "stream": "0:a:0",
+    "channels": 1,
+    "sample_rate_hz": 44100,
+    "format": "f32le",
+    "seek": false,
+    "lag_search": false,
+    "resampling_rate_change": false,
+    "trim_each_side_ms": 200,
+    "minimum_interior_duration_ms": 800,
+    "full_source_pcm_file_written": false,
+    "source_pcm_retained_in_ram": "fixed intervals only"
+  },
+  "source_decoded_native_sample_counts": {
+    "1": 3455471,
+    "2": 692225903,
+    "3": 406628241
+  },
+  "samples": [
+    {
+      "surah": 1,
+      "ayah": 1,
+      "hf_audio_sha256": "37d11a1a53d187c23d57e526a0b01071c3b066f76055cf624b9008452ecb0164",
+      "exact_native_source_sample_start": 4655,
+      "source_interior_begin_sample": 13475,
+      "source_interior_end_sample_exclusive": 276923,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 272268,
+      "clip_decoded_native_sample_count": 281088,
+      "retained_8khz_interior_pcm_score": 0.9502150986390253,
+      "retained_envelope_lag_ms": -25.5,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -1,
+        "denominator": 18,
+        "value": -0.05555555555555555
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 0.9999999999999998,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 263448,
+      "native_interior_duration_ms": {
+        "numerator": 263448000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 1,
+      "ayah": 3,
+      "hf_audio_sha256": "e24ddf531bf8bbf629c8cfebdf329a999a50f537a2bb24e66407de49c199a157",
+      "exact_native_source_sample_start": 756911,
+      "source_interior_begin_sample": 765731,
+      "source_interior_end_sample_exclusive": 1084475,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 327564,
+      "clip_decoded_native_sample_count": 336384,
+      "retained_8khz_interior_pcm_score": 0.9963240683652621,
+      "retained_envelope_lag_ms": -25.5,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -13,
+        "denominator": 882,
+        "value": -0.01473922902494331
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 318744,
+      "native_interior_duration_ms": {
+        "numerator": 318744000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 1,
+      "ayah": 4,
+      "hf_audio_sha256": "580f9cefd20309b428b80008da6fc07e1612aae3353d9b9263b85c7fab91e149",
+      "exact_native_source_sample_start": 1118639,
+      "source_interior_begin_sample": 1127459,
+      "source_interior_end_sample_exclusive": 1423163,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 304524,
+      "clip_decoded_native_sample_count": 313344,
+      "retained_8khz_interior_pcm_score": 0.9563761997946798,
+      "retained_envelope_lag_ms": -25.0,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 16,
+        "denominator": 441,
+        "value": 0.036281179138321996
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 0.9999999999999999,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 295704,
+      "native_interior_duration_ms": {
+        "numerator": 295704000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 1,
+      "ayah": 5,
+      "hf_audio_sha256": "e50bd39312adb20489dbb9ef141059acaebca88ebfc4a38e6afdeed872b52b7d",
+      "exact_native_source_sample_start": 1460783,
+      "source_interior_begin_sample": 1469603,
+      "source_interior_end_sample_exclusive": 1926587,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 465804,
+      "clip_decoded_native_sample_count": 474624,
+      "retained_8khz_interior_pcm_score": 0.9497318560713526,
+      "retained_envelope_lag_ms": -24.625,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 155,
+        "denominator": 3528,
+        "value": 0.043934240362811794
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 456984,
+      "native_interior_duration_ms": {
+        "numerator": 456984000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 1,
+      "ayah": 7,
+      "hf_audio_sha256": "52c4eefbc90422a5eee44c50497490e6ea20140ed107b480c243ff17d53099f3",
+      "exact_native_source_sample_start": 2393903,
+      "source_interior_begin_sample": 2402723,
+      "source_interior_end_sample_exclusive": 3385019,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 991116,
+      "clip_decoded_native_sample_count": 999936,
+      "retained_8khz_interior_pcm_score": 0.9908685286707737,
+      "retained_envelope_lag_ms": -25.5,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -13,
+        "denominator": 882,
+        "value": -0.01473922902494331
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 0.9999999999999999,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 982296,
+      "native_interior_duration_ms": {
+        "numerator": 982296000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 2,
+      "ayah": 1,
+      "hf_audio_sha256": "8a8fecb831dd9770fa26310696138305202f9ec435793bfd18f8701f1e4f5d9e",
+      "exact_native_source_sample_start": -1105,
+      "source_interior_begin_sample": 7715,
+      "source_interior_end_sample_exclusive": 415163,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 416268,
+      "clip_decoded_native_sample_count": 425088,
+      "retained_8khz_interior_pcm_score": 0.5441916287266207,
+      "retained_envelope_lag_ms": 0.0,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 11050,
+        "denominator": 441,
+        "value": 25.05668934240363
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 407448,
+      "native_interior_duration_ms": {
+        "numerator": 407448000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 2,
+      "ayah": 72,
+      "hf_audio_sha256": "75707db016867188ed3f5832b03a2cf41018deaf16bb0c3e7cbf9db2361d16e8",
+      "exact_native_source_sample_start": 126307631,
+      "source_interior_begin_sample": 126316451,
+      "source_interior_end_sample_exclusive": 127341371,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 1033740,
+      "clip_decoded_native_sample_count": 1042560,
+      "retained_8khz_interior_pcm_score": 0.9971313531110485,
+      "retained_envelope_lag_ms": -25.375,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 29,
+        "denominator": 3528,
+        "value": 0.008219954648526076
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 0.9999999999999999,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 1024920,
+      "native_interior_duration_ms": {
+        "numerator": 1024920000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 2,
+      "ayah": 143,
+      "hf_audio_sha256": "997be6acb03e4476d7242040b58f5cf5d409eb0911c5dcc88aeabe26e6947f44",
+      "exact_native_source_sample_start": 284150063,
+      "source_interior_begin_sample": 284158883,
+      "source_interior_end_sample_exclusive": 288955451,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 4805388,
+      "clip_decoded_native_sample_count": 4814208,
+      "retained_8khz_interior_pcm_score": 0.8882285915596486,
+      "retained_envelope_lag_ms": -24.875,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 137,
+        "denominator": 3528,
+        "value": 0.03883219954648526
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 4796568,
+      "native_interior_duration_ms": {
+        "numerator": 4796568000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 2,
+      "ayah": 215,
+      "hf_audio_sha256": "578b55aa98617c16f11da05b472e2f703a89cfec6f7945195c3c63af7b339478",
+      "exact_native_source_sample_start": 450965423,
+      "source_interior_begin_sample": 450974243,
+      "source_interior_end_sample_exclusive": 453281339,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 2315916,
+      "clip_decoded_native_sample_count": 2324736,
+      "retained_8khz_interior_pcm_score": 0.9406666116942902,
+      "retained_envelope_lag_ms": -24.75,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -107,
+        "denominator": 1764,
+        "value": -0.06065759637188209
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0000000000000002,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 2307096,
+      "native_interior_duration_ms": {
+        "numerator": 2307096000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 2,
+      "ayah": 286,
+      "hf_audio_sha256": "a48b5da586696ff013a0b913cb0be43a56e25c1913fd5d3cab1f9a67e61af295",
+      "exact_native_source_sample_start": 687603503,
+      "source_interior_begin_sample": 687612323,
+      "source_interior_end_sample_exclusive": 692206139,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 4602636,
+      "clip_decoded_native_sample_count": 4611456,
+      "retained_8khz_interior_pcm_score": 0.8794533437971679,
+      "retained_envelope_lag_ms": -24.875,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -151,
+        "denominator": 3528,
+        "value": -0.042800453514739226
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0000000000000002,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 4593816,
+      "native_interior_duration_ms": {
+        "numerator": 4593816000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 3,
+      "ayah": 1,
+      "hf_audio_sha256": "f24f9d7a783493b5692a9086d21e54a069b335b86a716eb024adde843066c191",
+      "exact_native_source_sample_start": 39215,
+      "source_interior_begin_sample": 48035,
+      "source_interior_end_sample_exclusive": 419771,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 380556,
+      "clip_decoded_native_sample_count": 389376,
+      "retained_8khz_interior_pcm_score": 0.9642537462032743,
+      "retained_envelope_lag_ms": -24.75,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 37,
+        "denominator": 1764,
+        "value": 0.020975056689342405
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 371736,
+      "native_interior_duration_ms": {
+        "numerator": 371736000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 3,
+      "ayah": 51,
+      "hf_audio_sha256": "d02a4ec1fbd524aa88a952b55b284affdf6a1a1358b0bfae67baf6bd041d580f",
+      "exact_native_source_sample_start": 101054639,
+      "source_interior_begin_sample": 101063459,
+      "source_interior_end_sample_exclusive": 102243899,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 1189260,
+      "clip_decoded_native_sample_count": 1198080,
+      "retained_8khz_interior_pcm_score": 0.9246174293338342,
+      "retained_envelope_lag_ms": -24.625,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -19,
+        "denominator": 504,
+        "value": -0.037698412698412696
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 1180440,
+      "native_interior_duration_ms": {
+        "numerator": 1180440000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 3,
+      "ayah": 101,
+      "hf_audio_sha256": "837b0bc3e6c5d59cc4226b2379b4ead62b198e508d0fa5e759fe594338a8a553",
+      "exact_native_source_sample_start": 200004527,
+      "source_interior_begin_sample": 200013347,
+      "source_interior_end_sample_exclusive": 201837755,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 1833228,
+      "clip_decoded_native_sample_count": 1842048,
+      "retained_8khz_interior_pcm_score": 0.8599625522112252,
+      "retained_envelope_lag_ms": -25.0,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -20,
+        "denominator": 441,
+        "value": -0.045351473922902494
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 0.9999999999999998,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 1824408,
+      "native_interior_duration_ms": {
+        "numerator": 1824408000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 3,
+      "ayah": 150,
+      "hf_audio_sha256": "7eb34ce0d911f2af2ed137a1fc50897d7baf0f2f72df373a4f83d1d3af795f5b",
+      "exact_native_source_sample_start": 289325999,
+      "source_interior_begin_sample": 289334819,
+      "source_interior_end_sample_exclusive": 289938107,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 612108,
+      "clip_decoded_native_sample_count": 620928,
+      "retained_8khz_interior_pcm_score": 0.9999900397583508,
+      "retained_envelope_lag_ms": -24.75,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 1,
+        "denominator": 1764,
+        "value": 0.0005668934240362812
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 0.9999999999999999,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 603288,
+      "native_interior_duration_ms": {
+        "numerator": 603288000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 3,
+      "ayah": 200,
+      "hf_audio_sha256": "fa0df94649315e4dbef0e8ea306da23091fa1f8b3f63c0340cd0322d11e2d13a",
+      "exact_native_source_sample_start": 405494831,
+      "source_interior_begin_sample": 405503651,
+      "source_interior_end_sample_exclusive": 406548155,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 1053324,
+      "clip_decoded_native_sample_count": 1062144,
+      "retained_8khz_interior_pcm_score": 0.9998600181450592,
+      "retained_envelope_lag_ms": -24.875,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -1,
+        "denominator": 504,
+        "value": -0.001984126984126984
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 1044504,
+      "native_interior_duration_ms": {
+        "numerator": 1044504000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    }
+  ],
+  "exact_native_pcm_identity_count": 15,
+  "all_input_hashes_unchanged": true,
+  "v1_results_replaced": false,
+  "v2_accepted": false,
+  "publication_changed": false,
+  "manual_cleanup_required": true,
+  "private_outputs": "%TEMP%\\ayahx-b-packet-proof",
+  "deletion_or_move_attempted": false,
+  "limitations": [
+    "Fixed interior identity does not waive retained full-window correlation/duration/lag or VAD requirements.",
+    "No new 8kHz metric or correction is applied. Native diagnosis only separates payload identity from decoded-clock/sample-grid effects.",
+    "Only matching native 44100Hz source/clip rates are supported; other or mismatched rates stop with an explicit UNSUPPORTED error and no forced resampling.",
+    "Only this recitation and these 15 samples were measured."
+  ]
+}

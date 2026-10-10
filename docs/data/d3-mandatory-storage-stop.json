@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-10-10T03:33:12.398224+00:00",
+  "mandatory_stop": true,
+  "condition": 5,
+  "reason": "Reduced D3 scope payload exceeds all free production MySQL volume capacity; volume/service configuration or scope change requires user decision",
+  "D3_remote_writes": 0,
+  "D2_closed": true,
+  "B_closed": true,
+  "D3_closed": false,
+  "D4_D5_D6_started": false,
+  "all_prepared_recitations": 69,
+  "all_prepared_rows": 422463,
+  "reduced_recitations": 24,
+  "reduced_rows": 143590,
+  "reduced_minimum_payload_bytes": 223071669,
+  "production_free_bytes": 118530048,
+  "cleanup": "manual_cleanup_required",
+  "production_publish_changed": false
+}

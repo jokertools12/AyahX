@@ -1,0 +1,92 @@
+{
+  "staging": {
+    "read_only": true,
+    "checked_at": "2026-10-10T03:28:43.015Z",
+    "critical_counts": {
+      "users": 2,
+      "subscriptions": 4,
+      "plans": null,
+      "payment_requests": 1,
+      "videos": null,
+      "saved_videos": 1,
+      "render_jobs": 0,
+      "system_settings": 13,
+      "user_roles": 3,
+      "notifications": 3
+    },
+    "baseline_critical_counts": {
+      "users": 2,
+      "subscriptions": 4,
+      "plans": null,
+      "payment_requests": 1,
+      "videos": null,
+      "saved_videos": 1,
+      "render_jobs": 0,
+      "system_settings": 13,
+      "user_roles": 3,
+      "notifications": 3
+    },
+    "d1_counts": {
+      "surahs": 114,
+      "ayahs": 6236,
+      "words": 77433
+    },
+    "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+    "critical_unchanged": true,
+    "changed_checksums": [
+      {
+        "table": "render_engine_capacity",
+        "before_count": 3,
+        "after_count": 3,
+        "before_checksum": "1191861490",
+        "after_checksum": "3986293043"
+      }
+    ],
+    "unapplied_new_tables_present": [],
+    "mysql_version": "9.7.2",
+    "table_count": 90,
+    "ssh_exit_code": 0,
+    "close_acknowledged": true
+  },
+  "production": {
+    "read_only": true,
+    "checked_at": "2026-10-10T03:28:48.812Z",
+    "critical_counts": {
+      "users": 13,
+      "subscriptions": 16,
+      "plans": null,
+      "payment_requests": 3,
+      "videos": null,
+      "saved_videos": 7,
+      "render_jobs": 72,
+      "system_settings": 13,
+      "user_roles": 13,
+      "notifications": 49
+    },
+    "baseline_critical_counts": {
+      "users": 13,
+      "subscriptions": 16,
+      "plans": null,
+      "payment_requests": 3,
+      "videos": null,
+      "saved_videos": 7,
+      "render_jobs": 72,
+      "system_settings": 13,
+      "user_roles": 13,
+      "notifications": 49
+    },
+    "d1_counts": {
+      "surahs": 114,
+      "ayahs": 6236,
+      "words": 77433
+    },
+    "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+    "critical_unchanged": true,
+    "changed_checksums": [],
+    "unapplied_new_tables_present": [],
+    "mysql_version": "9.7.2",
+    "table_count": 51,
+    "ssh_exit_code": 0,
+    "close_acknowledged": true
+  }
+}

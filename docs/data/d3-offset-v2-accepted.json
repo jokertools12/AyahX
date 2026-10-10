@@ -1,0 +1,77 @@
+{
+  "checked_at": "2026-10-10T03:02:15.028325+00:00",
+  "criteria": {
+    "envelope_NCC_min": 0.9,
+    "VAD_agreement_min": 0.9,
+    "absolute_lag_ms_max": 30,
+    "duration_difference_ms_max": 30
+  },
+  "raw_report_sha256": "a4b3a518d3daf416e7ce88228450e9634c21b59dcd2c454d899f873410f4fd43",
+  "independent_review_sha256": "88138a873f518d77285ca0e662145eae35a8838f26a9d4151af2bf1ae07b03ec",
+  "accepted": {
+    "ahmed_saud_mp3quran": {
+      "verification_method": "v2",
+      "decision": "accepted_for_data_pipeline_verification",
+      "v1_verification_status_retained": "failed",
+      "minimum_v1_NCC": 0.89284286,
+      "offset_check_score": 0.9997001455077874,
+      "minimum_VAD_agreement": 0.9754372550893625,
+      "maximum_absolute_lag_ms": 0.5,
+      "maximum_duration_difference_ms": 25.75,
+      "sample_count": 15,
+      "chapters": [
+        101,
+        102,
+        105
+      ],
+      "cause": "codec_processing_only",
+      "review_blockers": [],
+      "database_offset_verified_changed": false,
+      "publication_changed": false
+    },
+    "mishary_rashid_al_afasy_mp3quran": {
+      "verification_method": "v2",
+      "decision": "accepted_for_data_pipeline_verification",
+      "v1_verification_status_retained": "failed",
+      "minimum_v1_NCC": 0.94327183,
+      "offset_check_score": 0.9991414310357438,
+      "minimum_VAD_agreement": 0.945560975609756,
+      "maximum_absolute_lag_ms": 0.5,
+      "maximum_duration_difference_ms": 26.625,
+      "sample_count": 15,
+      "chapters": [
+        74,
+        85,
+        97
+      ],
+      "cause": "codec_processing_only",
+      "review_blockers": [],
+      "database_offset_verified_changed": false,
+      "publication_changed": false
+    },
+    "mohammed_alghazali_archive": {
+      "verification_method": "v2",
+      "decision": "accepted_for_data_pipeline_verification",
+      "v1_verification_status_retained": "failed",
+      "minimum_v1_NCC": 0.91330988,
+      "offset_check_score": 0.9987981569685923,
+      "minimum_VAD_agreement": 0.9529454022988506,
+      "maximum_absolute_lag_ms": 25.5,
+      "maximum_duration_difference_ms": 20.5,
+      "sample_count": 15,
+      "chapters": [
+        74,
+        85,
+        97
+      ],
+      "cause": "codec_processing_only",
+      "review_blockers": [],
+      "database_offset_verified_changed": false,
+      "publication_changed": false
+    }
+  },
+  "database_writes": 0,
+  "v1_results_replaced": false,
+  "publication_changed": false,
+  "implementation_phase_for_database_method_fields": "D4"
+}

@@ -1,0 +1,296 @@
+{
+  "read_only": true,
+  "calculation": "position flags only, no additional audio decoding",
+  "historical_measurement_commit": "66e5b7a8c6dd6a82ee1ca634f9ade97404757c66",
+  "historical_native_report_sha256": "75dbfba2199f50253969ca7a9b65037cde19dd05d75dd9dd4ac736cce0a26835",
+  "current_position_analyzer_sha256": "8121d46ef5ca5e65118907b8b432db5297b0bb0601a6a0447164cd8c1e4272e0",
+  "samples": [
+    {
+      "surah": 1,
+      "ayah": 1,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -229,
+        "denominator": 9,
+        "value": -25.444444444444443
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -1,
+        "denominator": 18,
+        "value": -0.05555555555555555
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 1,
+      "ayah": 3,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -11239,
+        "denominator": 441,
+        "value": -25.485260770975056
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -13,
+        "denominator": 882,
+        "value": -0.01473922902494331
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 1,
+      "ayah": 4,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -11041,
+        "denominator": 441,
+        "value": -25.03628117913832
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 16,
+        "denominator": 441,
+        "value": 0.036281179138321996
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 1,
+      "ayah": 5,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -10879,
+        "denominator": 441,
+        "value": -24.668934240362812
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 155,
+        "denominator": 3528,
+        "value": 0.043934240362811794
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 1,
+      "ayah": 7,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -11239,
+        "denominator": 441,
+        "value": -25.485260770975056
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -13,
+        "denominator": 882,
+        "value": -0.01473922902494331
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 2,
+      "ayah": 1,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -11050,
+        "denominator": 441,
+        "value": -25.05668934240363
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": false,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": false,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 11050,
+        "denominator": 441,
+        "value": 25.05668934240363
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 2,
+      "ayah": 72,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -11194,
+        "denominator": 441,
+        "value": -25.383219954648528
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 29,
+        "denominator": 3528,
+        "value": 0.008219954648526076
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 2,
+      "ayah": 143,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -10987,
+        "denominator": 441,
+        "value": -24.913832199546484
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 137,
+        "denominator": 3528,
+        "value": 0.03883219954648526
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 2,
+      "ayah": 215,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -10888,
+        "denominator": 441,
+        "value": -24.689342403628117
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -107,
+        "denominator": 1764,
+        "value": -0.06065759637188209
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 2,
+      "ayah": 286,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -10951,
+        "denominator": 441,
+        "value": -24.83219954648526
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -151,
+        "denominator": 3528,
+        "value": -0.042800453514739226
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 3,
+      "ayah": 1,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -10924,
+        "denominator": 441,
+        "value": -24.77097505668934
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 37,
+        "denominator": 1764,
+        "value": 0.020975056689342405
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 3,
+      "ayah": 51,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -1549,
+        "denominator": 63,
+        "value": -24.58730158730159
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -19,
+        "denominator": 504,
+        "value": -0.037698412698412696
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 3,
+      "ayah": 101,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -11005,
+        "denominator": 441,
+        "value": -24.954648526077097
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -20,
+        "denominator": 441,
+        "value": -0.045351473922902494
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 3,
+      "ayah": 150,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -10915,
+        "denominator": 441,
+        "value": -24.750566893424036
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 1,
+        "denominator": 1764,
+        "value": 0.0005668934240362812
+      },
+      "v2_accepted": false
+    },
+    {
+      "surah": 3,
+      "ayah": 200,
+      "native_pcm_identity_proven_previously": true,
+      "decoded_packet_lag_ms": {
+        "numerator": -1567,
+        "denominator": 63,
+        "value": -24.873015873015873
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -1,
+        "denominator": 504,
+        "value": -0.001984126984126984
+      },
+      "v2_accepted": false
+    }
+  ],
+  "raw_classification_replaced": false,
+  "v2_accepted": false
+}

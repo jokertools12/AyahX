@@ -1,0 +1,68 @@
+{
+  "checked_at": "2026-10-10T05:10:21.789Z",
+  "limit": {
+    "action": "status",
+    "agentUsage": {
+      "billingPeriodEnd": "2026-10-19T00:53:56.000Z",
+      "hardLimitCents": 2500,
+      "hardLimitDollars": 25,
+      "softLimitCents": 2000,
+      "softLimitDollars": 20,
+      "totalUsedCents": 5,
+      "totalUsedDollars": 0.05,
+      "usageRemaining": 0.998
+    },
+    "workspace": {
+      "id": "2f1dc03e-7691-4697-8a94-9ec7301206fb"
+    },
+    "workspaceUsage": {
+      "currentUsageDollars": 17.849900938462714,
+      "usageLimit": {
+        "hardLimit": 30,
+        "isOverLimit": false,
+        "softLimit": 20
+      }
+    }
+  },
+  "usage": {
+    "billingPeriod": {
+      "end": "2026-10-19T00:53:56+00:00",
+      "start": "2026-09-19T00:53:56+00:00"
+    },
+    "currentBillDollars": 17.849900938462714,
+    "currentUsageDollars": 17.849900938462714,
+    "estimatedBillDollars": 23.059528188805004,
+    "isCurrentPeriod": true,
+    "lineItems": [
+      {
+        "currentUsageDollars": 0.8737710351851853,
+        "label": "CPU"
+      },
+      {
+        "currentUsageDollars": 16.782575819504196,
+        "label": "Memory"
+      },
+      {
+        "currentUsageDollars": 0.0879371946,
+        "label": "Egress"
+      },
+      {
+        "currentUsageDollars": 0.09551259434666666,
+        "label": "Volume"
+      },
+      {
+        "currentUsageDollars": 0.010104294826666665,
+        "label": "Backup"
+      }
+    ],
+    "period": "current",
+    "usageLimit": {
+      "hardLimit": 30,
+      "isOverLimit": false,
+      "softLimit": 20
+    },
+    "workspace": {
+      "id": "2f1dc03e-7691-4697-8a94-9ec7301206fb"
+    }
+  }
+}
