@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-10-10T00:36:11Z",
+  "stage": "B",
+  "network_requests_during_local_tests": 0,
+  "database_writes": 0,
+  "reviewed_audio_commit": "34e3c876778d764cb7c244ce1635b5920a11a2d7",
+  "independent_test_commits": ["4b81a9b1600c0034317b96fcafe52cc008138a61", "7effb5e9396beb2c37be9d941fc8f85b8430fd76"],
+  "python": "C:\\Users\\cpazi\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+  "temporary_python_packages": ["%TEMP%/ayahx-d2-python", "%TEMP%/ayahx-d1-python"],
+  "bytecode_disabled": true,
+  "commands": ["python -m unittest discover -s scripts -p test_acoustic*.py", "python -m unittest discover -s scripts -p test_diagnose_qud_audio.py"],
+  "root_results": {"acoustic_and_independent_regression": {"passed": 20, "failed": 0}, "classification_and_provenance": {"passed": 11, "failed": 0}},
+  "initial_environment_failures": ["Windows python alias unavailable", "bundled Python without temporary PYTHONPATH lacks scipy/duckdb"],
+  "environment_resolution": "Use the existing bundled executable and existing temporary packages; no installation or dependency-file changes.",
+  "independent_boundary_check": "Exact 30ms accepted and 30.125ms rejected; no rounding or threshold change.",
+  "v1_original_results_replaced": false,
+  "v2_recitations_accepted": 0,
+  "live_audit_resumed_after_independent_review": true
+}
