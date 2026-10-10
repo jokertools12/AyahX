@@ -1,0 +1,33 @@
+{
+  "window_lines": 391,
+  "read_only": true,
+  "matched_errors": [
+    {
+      "timestamp": "2026-10-10T07:34:16.99Z",
+      "severity": "error",
+      "message": "POST /api/alignments/resolve-known 503 - 43ms",
+      "keys": [
+        "error",
+        "level",
+        "message",
+        "timestamp"
+      ]
+    }
+  ],
+  "checked_at": "2026-10-10T07:43:38.5298752Z",
+  "classification": "UNMODIFIED_LEGACY_ALIGNMENT_ROUTE_CAUSE_UNAVAILABLE",
+  "original_gate_passed": false,
+  "second_window_start": "2026-10-10T07:45:46Z",
+  "error_body_limitation": "Request logger retained Error: [object Object], not the response code; no payload or user data captured.",
+  "legacy_assets": {
+    "proof": "d3-close-legacy-assets-readonly.json",
+    "all_twelve_hashes_match": true
+  },
+  "baseline": {
+    "proof": "d3-close-alignment-error-baseline.json",
+    "same_signature_observed_before_deploy": false
+  },
+  "cause_verified": false,
+  "guard_unchanged": true,
+  "first_window_preserved": "d3-close-services-first-window-failed.json"
+}

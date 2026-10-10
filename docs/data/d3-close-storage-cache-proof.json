@@ -1,0 +1,59 @@
+{
+  "first_calls": [
+    {
+      "checked_at": "2026-10-10T07:30:40.685Z",
+      "http_status": 200,
+      "status": "ready",
+      "storage": {
+        "status": "ok",
+        "totalBytes": 5000000000,
+        "allocatedTableBytes": 1372880896,
+        "baseTableBytes": 57622528,
+        "timingTableBytes": 1315258368,
+        "availableBytes": 3627119104,
+        "freePercent": 72.54,
+        "observedAt": "2026-10-10T07:29:57.995Z",
+        "source": "information_schema",
+        "limitation": "Table allocation estimate; excludes redo, undo, binlog and other filesystem files."
+      }
+    },
+    {
+      "checked_at": "2026-10-10T07:30:41.010Z",
+      "http_status": 200,
+      "status": "ready",
+      "storage": {
+        "status": "ok",
+        "totalBytes": 5000000000,
+        "allocatedTableBytes": 1372880896,
+        "baseTableBytes": 57622528,
+        "timingTableBytes": 1315258368,
+        "availableBytes": 3627119104,
+        "freePercent": 72.54,
+        "observedAt": "2026-10-10T07:29:57.995Z",
+        "source": "information_schema",
+        "limitation": "Table allocation estimate; excludes redo, undo, binlog and other filesystem files."
+      }
+    }
+  ],
+  "immediate_cache_hit": true,
+  "expiry_checked": true,
+  "monitor_calls": [
+    {
+      "checked_at": "2026-10-10T07:35:30.650Z",
+      "http_status": 200,
+      "storage": {
+        "status": "ok",
+        "totalBytes": 5000000000,
+        "allocatedTableBytes": 1372880896,
+        "baseTableBytes": 57622528,
+        "timingTableBytes": 1315258368,
+        "availableBytes": 3627119104,
+        "freePercent": 72.54,
+        "observedAt": "2026-10-10T07:35:31.090Z",
+        "source": "information_schema",
+        "limitation": "Table allocation estimate; excludes redo, undo, binlog and other filesystem files."
+      }
+    }
+  ],
+  "refresh_interval_ms": 333095
+}

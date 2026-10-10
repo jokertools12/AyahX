@@ -1,0 +1,58 @@
+{
+  "accepted": true,
+  "pr_number": 11,
+  "pr_url": "https://github.com/jokertools12/AyahX/pull/11",
+  "head_commit": "8f9a8d5445fc62f79b77477971daeb9195b91a7a",
+  "merge_commit": "78c4a17bf573e7e67c3b0e23ab23a00e97c54140",
+  "ci_url": "https://github.com/jokertools12/AyahX/actions/runs/38034363594",
+  "ci_conclusion": "success",
+  "deployments": [
+    {
+      "service": "AyahX",
+      "service_id": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "deployment_id": "dbf63844-3aef-4648-ab38-c9ff1c8e8b0d",
+      "status": "SUCCESS",
+      "commit": "78c4a17bf573e7e67c3b0e23ab23a00e97c54140",
+      "updated_at": "2026-10-10T07:53:02.732Z"
+    },
+    {
+      "service": "render-control",
+      "service_id": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "deployment_id": "3c092b68-dd07-4766-aa34-2c6416ce0b3a",
+      "status": "SUCCESS",
+      "commit": "78c4a17bf573e7e67c3b0e23ab23a00e97c54140",
+      "updated_at": "2026-10-10T07:29:10.792Z"
+    },
+    {
+      "service": "render-worker-skia",
+      "service_id": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "deployment_id": "5d5656a3-5e07-4501-b1b4-5b0b375f392e",
+      "status": "SUCCESS",
+      "commit": "78c4a17bf573e7e67c3b0e23ab23a00e97c54140",
+      "updated_at": "2026-10-10T07:29:12.539Z"
+    },
+    {
+      "service": "alignment-worker",
+      "service_id": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "deployment_id": "0a935147-3a6c-4ada-b8eb-da30e6490fd3",
+      "status": "SUCCESS",
+      "commit": "78c4a17bf573e7e67c3b0e23ab23a00e97c54140",
+      "updated_at": "2026-10-10T07:28:45.736Z"
+    }
+  ],
+  "log_window_start": "2026-10-10T07:45:46Z",
+  "deployments_success_checked_at": "2026-10-10T07:30:17Z",
+  "tested_and_merged_tree": "013604b9e9e7a500363f810e5d0ea8fc132f3f41",
+  "accepted_checked_at": "2026-10-10T08:07:31.930Z",
+  "log_window_end": "2026-10-10T07:56:53.593Z",
+  "log_window_seconds": 667.593,
+  "first_window_passed": false,
+  "first_window_failure_proof": "d3-close-services-first-window-failed.json",
+  "legacy_503_cause_verified": false,
+  "legacy_incident_proof": "d3-close-log-incident.json",
+  "postdeploy_required_database_invariants_passed": true,
+  "all_database_checksums_unchanged": false,
+  "dynamic_test_rows_proof": "d3-close-postdeploy-state-comparison.json",
+  "rollback_performed": false,
+  "rollback_reason": "No causal D3 regression established: legacy route and asset hashes unchanged, protected/data invariants intact, subsequent complete log window clean."
+}
