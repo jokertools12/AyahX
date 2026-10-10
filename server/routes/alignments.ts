@@ -19,6 +19,7 @@ import { alignmentDocumentToTimingMap } from '../services/alignmentProvider';
 import { attestTimingMapForUser } from '../services/alignmentAttestation';
 import { resolveKnownQuranAlign } from '../services/quranAlignService';
 import { resolveUniversalQuranAudio } from '../services/quranUniversalAudioService';
+import { attachResponseError } from '../logger';
 
 const router = Router();
 
@@ -126,6 +127,7 @@ router.post('/resolve-known', aiRateLimiter, async (req: any, res: Response) => 
     return res.json({ accepted: true, timingMap, validation: { status: 'approved', errors: [], warnings: [] } });
   } catch (error: any) {
     const code = String(error?.message || error || 'KNOWN_ALIGNMENT_FAILED');
+    attachResponseError(res, error);
     const status = code.includes('NOT_AVAILABLE') || code.includes('MISSING') || code.includes('MULTIWORD')
       ? 422
       : code.includes('REQUIRED') || code.includes('INPUT') || code.includes('CONTIGUOUS')

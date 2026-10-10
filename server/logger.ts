@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import { Request, Response, NextFunction } from 'express';
+import { monitoringError, redactLogText, redactLogValue, serializeLogError, type SerializedLogError } from './logRedaction';
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
@@ -7,16 +8,12 @@ export interface LogEntry {
   timestamp: string;
   level: LogLevel;
   message: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   requestId?: string;
-  error?: {
-    name: string;
-    message: string;
-    stack?: string;
-  };
+  error?: SerializedLogError;
 }
 
-export type ErrorMonitoringHook = (error: Error, context?: Record<string, any>) => void;
+export type ErrorMonitoringHook = (error: Error, context?: Record<string, unknown>) => void;
 
 const LOG_LEVEL_PRIORITIES: Record<LogLevel, number> = {
   debug: 0,
@@ -28,6 +25,12 @@ const LOG_LEVEL_PRIORITIES: Record<LogLevel, number> = {
 const currentMinLevel: LogLevel = (process.env.LOG_LEVEL as LogLevel) || (process.env.NODE_ENV === 'production' ? 'info' : 'debug');
 const isProd = process.env.NODE_ENV === 'production';
 const errorHooks: ErrorMonitoringHook[] = [];
+const responseErrors = new WeakMap<Response, unknown>();
+
+/** Preserve a route's caught error for the finish log; never alters its response. */
+export function attachResponseError(res: Response, error: unknown): void {
+  responseErrors.set(res, error);
+}
 
 /**
  * Register an APM or error reporting hook (e.g. Sentry, Datadog, PostHog).
@@ -61,29 +64,25 @@ function formatLogEntry(entry: LogEntry): string {
 
   const reqStr = entry.requestId ? ` (${entry.requestId.slice(0, 8)})` : '';
   const contextStr = entry.context && Object.keys(entry.context).length > 0 ? ` ${JSON.stringify(entry.context)}` : '';
-  const errStr = entry.error?.stack ? `\n${entry.error.stack}` : '';
+  const errStr = entry.error ? ` ${JSON.stringify(entry.error)}` : '';
 
   return `${entry.timestamp} ${colorMap[entry.level]}${reqStr} ${entry.message}${contextStr}${errStr}`;
 }
 
-function writeLog(level: LogLevel, message: string, context?: Record<string, any>, error?: Error): void {
+function writeLog(level: LogLevel, message: string, context?: Record<string, unknown>, error?: unknown): void {
   if (!shouldLog(level)) return;
+
+  const safeContext = context ? redactLogValue(context) as Record<string, unknown> : undefined;
 
   const entry: LogEntry = {
     timestamp: new Date().toISOString(),
     level,
-    message,
-    context,
-    requestId: context?.requestId,
+    message: redactLogText(message),
+    context: safeContext,
+    requestId: typeof safeContext?.requestId === 'string' ? safeContext.requestId : undefined,
   };
 
-  if (error) {
-    entry.error = {
-      name: error.name,
-      message: error.message,
-      stack: error.stack,
-    };
-  }
+  if (error !== undefined) entry.error = serializeLogError(error);
 
   const formatted = formatLogEntry(entry);
 
@@ -91,9 +90,9 @@ function writeLog(level: LogLevel, message: string, context?: Record<string, any
     console.error(formatted);
     for (const hook of errorHooks) {
       try {
-        hook(error || new Error(message), context);
+        hook(monitoringError(entry.error || { name: 'Error', message: entry.message }), safeContext);
       } catch (hookErr) {
-        console.error('Error in monitoring hook:', hookErr);
+        console.error(formatLogEntry({ timestamp: new Date().toISOString(), level: 'error', message: 'Error in monitoring hook', error: serializeLogError(hookErr) }));
       }
     }
   } else if (level === 'warn') {
@@ -104,13 +103,10 @@ function writeLog(level: LogLevel, message: string, context?: Record<string, any
 }
 
 export const logger = {
-  debug: (message: string, context?: Record<string, any>) => writeLog('debug', message, context),
-  info: (message: string, context?: Record<string, any>) => writeLog('info', message, context),
-  warn: (message: string, context?: Record<string, any>) => writeLog('warn', message, context),
-  error: (message: string, error?: Error | any, context?: Record<string, any>) => {
-    const err = error instanceof Error ? error : error ? new Error(String(error)) : undefined;
-    writeLog('error', message, context, err);
-  },
+  debug: (message: string, context?: Record<string, unknown>) => writeLog('debug', message, context),
+  info: (message: string, context?: Record<string, unknown>) => writeLog('info', message, context),
+  warn: (message: string, context?: Record<string, unknown>) => writeLog('warn', message, context),
+  error: (message: string, error?: unknown, context?: Record<string, unknown>) => writeLog('error', message, context, error),
 };
 
 /**
@@ -118,11 +114,27 @@ export const logger = {
  */
 export function requestLogger(req: Request, res: Response, next: NextFunction): void {
   const start = Date.now();
-  const requestId = (req.headers['x-request-id'] as string) || crypto.randomUUID();
+  const suppliedId = req.headers['x-request-id'];
+  const requestId = typeof suppliedId === 'string' && /^[A-Za-z0-9_-]{1,128}$/u.test(suppliedId) ? suppliedId : crypto.randomUUID();
+  const correlatedReq = req as Request & { requestId?: string; user?: { userId?: string } };
 
   // Attach requestId to request and response header
-  (req as any).requestId = requestId;
+  correlatedReq.requestId = requestId;
   res.setHeader('X-Request-Id', requestId);
+
+  let responseError: SerializedLogError | undefined;
+  if (typeof res.json === 'function') {
+    const originalJson = res.json;
+    res.json = function (body: unknown): Response {
+      if (this.statusCode >= 400 && body && typeof body === 'object') {
+        const payload = body as Record<string, unknown>;
+        const nested = payload.error && typeof payload.error === 'object' ? payload.error as Record<string, unknown> : {};
+        responseError = serializeLogError({ code: payload.code ?? nested.code,
+          message: payload.message ?? nested.message ?? (typeof payload.error === 'string' ? payload.error : 'HTTP error response') });
+      }
+      return originalJson.call(this, body);
+    };
+  }
 
   // Skip spamming logs with frequent liveness polling
   const isLivenessPoll = req.path === '/api/health/live';
@@ -131,6 +143,7 @@ export function requestLogger(req: Request, res: Response, next: NextFunction): 
     const durationMs = Date.now() - start;
     const statusCode = res.statusCode;
     const level: LogLevel = statusCode >= 500 ? 'error' : statusCode >= 400 ? 'warn' : 'info';
+    const logPath = (req.originalUrl || req.url).split(/[?#]/u)[0];
 
     if (isLivenessPoll && level === 'info') {
       return; // Do not spam logs on healthy liveness probes
@@ -139,15 +152,24 @@ export function requestLogger(req: Request, res: Response, next: NextFunction): 
     const logData = {
       requestId,
       method: req.method,
-      path: req.originalUrl || req.url,
+      path: logPath,
       status: statusCode,
       durationMs,
       contentLength: res.getHeader('content-length') || 0,
       ip: req.ip || req.socket.remoteAddress,
-      userId: (req as any).user?.userId,
+      userId: correlatedReq.user?.userId,
     };
 
-    logger[level](`${req.method} ${req.originalUrl || req.url} ${statusCode} - ${durationMs}ms`, logData);
+    const message = `${req.method} ${logPath} ${statusCode} - ${durationMs}ms`;
+    if (level === 'error') {
+      const caught = responseErrors.get(res);
+      const original = caught !== undefined ? serializeLogError(caught) : undefined;
+      const detail = original ? { ...original, ...(original.code === undefined && responseError?.code !== undefined ? { code: responseError.code } : {}) } : responseError;
+      logger.error(message, detail, logData);
+    } else {
+      logger[level](message, responseError ? { ...logData, error: responseError } : logData);
+    }
+    responseErrors.delete(res);
   });
 
   next();

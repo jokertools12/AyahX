@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-10-10T08:55:06.0514045+00:00",
+  "scope": "D4-T0 only",
+  "red_failed_expected": 5,
+  "focused": {
+    "failed": 0,
+    "passed": 14,
+    "total": 14
+  },
+  "tests": {
+    "failed": 0,
+    "skipped": 6,
+    "passed": 499,
+    "total": 505
+  },
+  "lint": {
+    "errors": 0,
+    "new_messages": 0,
+    "changed_files": 4,
+    "remaining_baseline_warnings": 15,
+    "logger_baseline_warnings_before": 10
+  },
+  "project_tsc_exit": 0,
+  "logger_strict_tsc_exit": 0,
+  "build_exit": 0,
+  "local_http_503_preserved": true,
+  "secrets_signed_urls_and_apm_scrubbed": true,
+  "historical_503_cause_proven": false,
+  "production_db_writes": 0,
+  "first_focused_run_note": "One existing APM contract assertion failed because the cloned Error gained an own name property; corrected without changing the assertion and reverified."
+}

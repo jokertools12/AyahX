@@ -1,3 +1,7 @@
+# 2026-10-10 — D4/T0، قبول محلي فقط قبل الشحن
+
+logger: code/message/stack للخطأ الأصلي، JSON error fields للردود دون اختلاقstack، لا[object Object] من سياقHTTP. حجبconnectionURLs/signedURLs/query strings والأسرار فيmessage/context/stack وAPMhooks، مع معالجةcontextالدائري. resolve-known يحفظcaughtError دون تغييرpayload/status. خمسة اختبارات انحدار فشلت على القديم؛ focused14/14 بعد إصلاح عقدAPM الذي كشفه اختبار قائم. كاملالمشروع499pass/6skip/0fail،tsc/strict/build ناجحة،lint4files/0errors/0newmessages و15تحذيرًا قديمًا باقيًا فيalignments. CI/productionpending؛ لاD4datawrites أوA1/D5. الدليلdocs/data/d4-t0-quality.json.
+
 # FEATURE QA LOG & PRODUCT QUALITY AUDIT
 
 ## 2026-10-10 — D3: قبول البيانات والكود مكتمل، توقف ولا D4
