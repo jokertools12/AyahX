@@ -1,0 +1,210 @@
+{
+  "errors": [],
+  "reviewed": [
+    {
+      "config": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "sample_count": 15,
+      "distribution_replayed": true,
+      "numeric_all_pass": false,
+      "fixed_position_all_pass": false,
+      "spectral_all_pass": true,
+      "encoded_all_proven": true,
+      "source_hashes_match_retained": true,
+      "within_chapter_drift_replayed": true,
+      "pattern": "unresolved",
+      "declared_v2_eligible": false
+    }
+  ],
+  "segments_IoU_replayed": false,
+  "segments_limitation": "intervals unavailable; SHA/count alone do not permit replay",
+  "report_sha256": "d2a69ab85e89d9742ee0911acb1abc6a6951cee420155c3e8b839002d89b9cc3",
+  "original_sha256": "c9b2439639d19261e82efdfd1a14a2c5a9387bede380e3f3312efafd6837df82",
+  "pcm_replay": {
+    "config": "abdulbasit_abdulsamad_mujawwad_tarteel",
+    "errors": [],
+    "samples": [
+      {
+        "surah": 1,
+        "ayah": 1,
+        "clip_decoded_duration_ms": 6373.875,
+        "hf_duration_ms": 6349,
+        "duration_difference_ms": 24.875,
+        "lag_ms": -25.5,
+        "envelope_score": 0.999989346305399,
+        "interior_pcm_score": 0.9502150986390256,
+        "source_clip_speech_iou": 1.0,
+        "complete_source_window": true
+      },
+      {
+        "surah": 1,
+        "ayah": 3,
+        "clip_decoded_duration_ms": 7627.75,
+        "hf_duration_ms": 7606,
+        "duration_difference_ms": 21.75,
+        "lag_ms": -25.5,
+        "envelope_score": 0.9999991335256829,
+        "interior_pcm_score": 0.9963240683652613,
+        "source_clip_speech_iou": 0.9996765847347995,
+        "complete_source_window": true
+      },
+      {
+        "surah": 1,
+        "ayah": 4,
+        "clip_decoded_duration_ms": 7105.375,
+        "hf_duration_ms": 7104,
+        "duration_difference_ms": 1.375,
+        "lag_ms": -25.0,
+        "envelope_score": 0.999993156455438,
+        "interior_pcm_score": 0.9563761997946808,
+        "source_clip_speech_iou": 0.999320882852292,
+        "complete_source_window": true
+      },
+      {
+        "surah": 1,
+        "ayah": 5,
+        "clip_decoded_duration_ms": 10762.5,
+        "hf_duration_ms": 10741,
+        "duration_difference_ms": 21.5,
+        "lag_ms": -24.625,
+        "envelope_score": 0.999993275711626,
+        "interior_pcm_score": 0.9497318560713528,
+        "source_clip_speech_iou": 0.9997837370242214,
+        "complete_source_window": true
+      },
+      {
+        "surah": 1,
+        "ayah": 7,
+        "clip_decoded_duration_ms": 22674.375,
+        "hf_duration_ms": 22656,
+        "duration_difference_ms": 18.375,
+        "lag_ms": -25.5,
+        "envelope_score": 0.9999980795432695,
+        "interior_pcm_score": 0.9908685286707735,
+        "source_clip_speech_iou": 1.0,
+        "complete_source_window": true
+      },
+      {
+        "surah": 2,
+        "ayah": 1,
+        "clip_decoded_duration_ms": 9639.25,
+        "hf_duration_ms": 9620,
+        "duration_difference_ms": 19.25,
+        "lag_ms": 0.0,
+        "envelope_score": 0.9851565197643045,
+        "interior_pcm_score": 0.5441916287266219,
+        "source_clip_speech_iou": 0.9865741267493457,
+        "complete_source_window": true
+      },
+      {
+        "surah": 2,
+        "ayah": 72,
+        "clip_decoded_duration_ms": 23640.75,
+        "hf_duration_ms": 23636,
+        "duration_difference_ms": 4.75,
+        "lag_ms": -25.375,
+        "envelope_score": 0.9999996576928752,
+        "interior_pcm_score": 0.9971313531110462,
+        "source_clip_speech_iou": 0.9999553212402824,
+        "complete_source_window": true
+      },
+      {
+        "surah": 2,
+        "ayah": 143,
+        "clip_decoded_duration_ms": 109165.75,
+        "hf_duration_ms": 109148,
+        "duration_difference_ms": 17.75,
+        "lag_ms": -24.875,
+        "envelope_score": 0.9999871112264632,
+        "interior_pcm_score": 0.8882285915596452,
+        "source_clip_speech_iou": 0.9999221997465935,
+        "complete_source_window": true
+      },
+      {
+        "surah": 2,
+        "ayah": 215,
+        "clip_decoded_duration_ms": 52715.125,
+        "hf_duration_ms": 52697,
+        "duration_difference_ms": 18.125,
+        "lag_ms": -24.75,
+        "envelope_score": 0.9999849675084725,
+        "interior_pcm_score": 0.9406666116942912,
+        "source_clip_speech_iou": 0.9999337836048205,
+        "complete_source_window": true
+      },
+      {
+        "surah": 2,
+        "ayah": 286,
+        "clip_decoded_duration_ms": 104568.25,
+        "hf_duration_ms": 104559,
+        "duration_difference_ms": 9.25,
+        "lag_ms": -24.875,
+        "envelope_score": 0.9999881333514912,
+        "interior_pcm_score": 0.8794533437971697,
+        "source_clip_speech_iou": 0.9999040502776545,
+        "complete_source_window": true
+      },
+      {
+        "surah": 3,
+        "ayah": 1,
+        "clip_decoded_duration_ms": 8829.375,
+        "hf_duration_ms": 8826,
+        "duration_difference_ms": 3.375,
+        "lag_ms": -24.75,
+        "envelope_score": 0.9999963918492761,
+        "interior_pcm_score": 0.9642537462032753,
+        "source_clip_speech_iou": 1.0,
+        "complete_source_window": true
+      },
+      {
+        "surah": 3,
+        "ayah": 51,
+        "clip_decoded_duration_ms": 27167.375,
+        "hf_duration_ms": 27152,
+        "duration_difference_ms": 15.375,
+        "lag_ms": -24.625,
+        "envelope_score": 0.9999954989069217,
+        "interior_pcm_score": 0.9246174293338323,
+        "source_clip_speech_iou": 0.9998442529332364,
+        "complete_source_window": true
+      },
+      {
+        "surah": 3,
+        "ayah": 101,
+        "clip_decoded_duration_ms": 41769.875,
+        "hf_duration_ms": 41765,
+        "duration_difference_ms": 4.875,
+        "lag_ms": -25.0,
+        "envelope_score": 0.9999846966718975,
+        "interior_pcm_score": 0.8599625522112256,
+        "source_clip_speech_iou": 0.9998604404499399,
+        "complete_source_window": true
+      },
+      {
+        "surah": 3,
+        "ayah": 150,
+        "clip_decoded_duration_ms": 14080.0,
+        "hf_duration_ms": 14075,
+        "duration_difference_ms": 5.0,
+        "lag_ms": -24.75,
+        "envelope_score": 0.9999998622946414,
+        "interior_pcm_score": 0.9999900397583468,
+        "source_clip_speech_iou": 1.0,
+        "complete_source_window": true
+      },
+      {
+        "surah": 3,
+        "ayah": 200,
+        "clip_decoded_duration_ms": 24085.0,
+        "hf_duration_ms": 24076,
+        "duration_difference_ms": 9.0,
+        "lag_ms": -24.875,
+        "envelope_score": 0.9999998604108488,
+        "interior_pcm_score": 0.9998600181450621,
+        "source_clip_speech_iou": 1.0,
+        "complete_source_window": true
+      }
+    ],
+    "duration_definition": "abs(decoded_HF_clip_duration_ms - HF_duration_ms); not independently measured source duration",
+    "supplied_segments_IoU_replayed": false
+  }
+}
