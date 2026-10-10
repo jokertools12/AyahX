@@ -9,7 +9,7 @@ import { chapterCoverageSql, completeTimingJobSql, importTimingRecitation, loadP
 import type { QuranTextCorpus } from '../server/services/quranTextImport';
 import { timingMigrationSql } from '../server/db/migrations/003_addQuranTimingTables';
 import { ENVIRONMENTS } from './lib/railwayQuranOps';
-import { openRailwayMysqlSession } from './lib/railwayMysqlSession';
+import { openRailwayMysqlSession, SerialMysqlError } from './lib/railwayMysqlSession';
 
 const option = (name: string): string => {
   const i = process.argv.indexOf(name);
@@ -110,13 +110,23 @@ try {
  } catch (error) {
   const raw = error instanceof Error ? error.message : 'IMPORT_FAILED';
   report.failure = /^[A-Za-z0-9_:-]+$/u.test(raw) ? raw : (error as { code?: string }).code ?? 'IMPORT_FAILED';
+  if(error instanceof SerialMysqlError)report.serial=error.evidence;
+  writeFileSync(option('--report'), JSON.stringify(report, null, 2) + '\n');
   console.error(report.failure);
   process.exitCode = 1;
 } finally {
   await new Promise<void>((accept) => setImmediate(accept));
   loop.disable();
   report.event_loop_delay_ms = { p50: loop.percentile(50) / 1e6, p99: loop.percentile(99) / 1e6, max: loop.max / 1e6, samples: loop.count };
-  if (session) report.serial = await session.close();
+  if (session) {
+    try { report.serial = await session.close(); }
+    catch(error) {
+      if(error instanceof SerialMysqlError){report.serial=error.evidence;report.failure??=error.code;}
+      else report.failure??='SESSION_CLOSE_FAILED';
+      process.exitCode=1;
+      console.error(report.failure);
+    }
+  }
   await local?.end();
   report.wall_clock_ms = Date.now() - wallStarted;
   writeFileSync(option('--report'), JSON.stringify(report, null, 2) + '\n');

@@ -1,10 +1,10 @@
 name: AyahX E2E
 on:
   pull_request:
-    paths: ['src/**', 'public/**', 'index.html', 'package*.json', 'vite.config.ts', 'tooling/e2e/**', '.github/workflows/e2e.yml']
+    paths: ['src/**', 'public/**', 'server/**', 'scripts/**', 'index.html', 'package*.json', 'vite.config.ts', 'tooling/e2e/**', '.github/workflows/e2e.yml', 'docs/data/d3-*', 'docs/progress.md', 'docs/plan/DECISIONS.md', 'docs/railway-ops-log.md', 'FEATURE_QA_LOG.md']
   push:
     branches: [main]
-    paths: ['src/**', 'public/**', 'index.html', 'package*.json', 'vite.config.ts', 'tooling/e2e/**', '.github/workflows/e2e.yml']
+    paths: ['src/**', 'public/**', 'server/**', 'scripts/**', 'index.html', 'package*.json', 'vite.config.ts', 'tooling/e2e/**', '.github/workflows/e2e.yml', 'docs/data/d3-*', 'docs/progress.md', 'docs/plan/DECISIONS.md', 'docs/railway-ops-log.md', 'FEATURE_QA_LOG.md']
   workflow_dispatch:
 
 permissions:

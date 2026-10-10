@@ -1,0 +1,7370 @@
+{
+  "events": [],
+  "tables": [
+    {
+      "name": "achievements",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "admin_invitations",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "admin_permissions",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "admin_roles",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "admin_sessions",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "admin_user_extensions",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "alignment_documents",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "alignment_review_events",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "audio_providers",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "audit_logs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "ayah_timing_history",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "ayah_timings",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "daily_cloud_render_usage",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "daily_render_engine_usage",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "daily_video_usage",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "domain_events",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "dsr_requests",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "entity_notes",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "favorite_performers",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "favorite_reciters",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "favorite_surahs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "feature_flags",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "import_jobs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "notifications",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "payment_requests",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "profiles",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_audio_assets",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_ayahs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_surahs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_text_versions",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "quran_words",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "recitation_chapters",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "recitations",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "reciters",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "recycle_bin",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "render_engine_capacity",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "render_job_audit",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "render_jobs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "render_manifests",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "riwayat",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "saved_videos",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "saved_views",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "subscriptions",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "synthetic_canary_runs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "system_settings",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "system_settings_enhanced",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "translation_ayahs",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "translations",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "user_achievements",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "user_follows",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "user_roles",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "users",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "video_comments",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    },
+    {
+      "name": "video_likes",
+      "engine": "InnoDB",
+      "collation": "utf8mb4_unicode_ci",
+      "row_format": "Dynamic"
+    }
+  ],
+  "columns": [
+    {
+      "type": "varchar(100)",
+      "table": "achievements",
+      "column": "category",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "achievements",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "achievements",
+      "column": "description",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "achievements",
+      "column": "icon",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "achievements",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "achievements",
+      "column": "key",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "achievements",
+      "column": "points",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "achievements",
+      "column": "threshold",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "achievements",
+      "column": "title",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_invitations",
+      "column": "accepted_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_invitations",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "admin_invitations",
+      "column": "email",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_invitations",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "admin_invitations",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "admin_invitations",
+      "column": "invited_by_user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "admin_invitations",
+      "column": "role_slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "admin_invitations",
+      "column": "token_hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "admin_permissions",
+      "column": "action",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_permissions",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "admin_permissions",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "admin_permissions",
+      "column": "resource",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "admin_permissions",
+      "column": "role_slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_roles",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "admin_roles",
+      "column": "description_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "admin_roles",
+      "column": "description_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "admin_roles",
+      "column": "is_system",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "admin_roles",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "admin_roles",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "admin_roles",
+      "column": "slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_sessions",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_sessions",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "admin_sessions",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(45)",
+      "table": "admin_sessions",
+      "column": "ip_address",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "admin_sessions",
+      "column": "is_revoked",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_sessions",
+      "column": "last_active_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "admin_sessions",
+      "column": "token_hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "admin_sessions",
+      "column": "user_agent",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "admin_sessions",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_user_extensions",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "admin_user_extensions",
+      "column": "failed_login_attempts",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_user_extensions",
+      "column": "last_login_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(45)",
+      "table": "admin_user_extensions",
+      "column": "last_login_ip",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_user_extensions",
+      "column": "locked_until",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(50)",
+      "table": "admin_user_extensions",
+      "column": "role_slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "admin_user_extensions",
+      "column": "two_factor_backup_codes_encrypted",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "admin_user_extensions",
+      "column": "two_factor_enabled",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "admin_user_extensions",
+      "column": "two_factor_secret_encrypted",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "admin_user_extensions",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "admin_user_extensions",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(256)",
+      "table": "alignment_documents",
+      "column": "audio_content_hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "alignment_documents",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "alignment_documents",
+      "column": "document_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "alignment_documents",
+      "column": "end_ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "alignment_documents",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(191)",
+      "table": "alignment_documents",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "alignment_documents",
+      "column": "parent_document_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(80)",
+      "table": "alignment_documents",
+      "column": "provider_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(24)",
+      "table": "alignment_documents",
+      "column": "review_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "alignment_documents",
+      "column": "start_ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "alignment_documents",
+      "column": "surah_number",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "alignment_documents",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "alignment_documents",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(24)",
+      "table": "alignment_documents",
+      "column": "validation_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "alignment_review_events",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(191)",
+      "table": "alignment_review_events",
+      "column": "document_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "alignment_review_events",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "alignment_review_events",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(2000)",
+      "table": "alignment_review_events",
+      "column": "note",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "alignment_review_events",
+      "column": "parent_document_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "alignment_review_events",
+      "column": "revision_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(24)",
+      "table": "alignment_review_events",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "alignment_review_events",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "audio_providers",
+      "column": "adapter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "audio_providers",
+      "column": "attribution_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "audio_providers",
+      "column": "base_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "audio_providers",
+      "column": "code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "audio_providers",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('unchecked','healthy','unavailable')",
+      "table": "audio_providers",
+      "column": "health_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "audio_providers",
+      "column": "host_allowlist",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "audio_providers",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "audio_providers",
+      "column": "is_active",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "audio_providers",
+      "column": "last_checked_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "audio_providers",
+      "column": "license_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "audio_providers",
+      "column": "name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "audio_providers",
+      "column": "priority",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "audio_providers",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "audit_logs",
+      "column": "action",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "audit_logs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "audit_logs",
+      "column": "entity_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "audit_logs",
+      "column": "entity_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "audit_logs",
+      "column": "hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "audit_logs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(45)",
+      "table": "audit_logs",
+      "column": "ip_address",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "audit_logs",
+      "column": "new_values",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "audit_logs",
+      "column": "old_values",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "audit_logs",
+      "column": "prev_hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "audit_logs",
+      "column": "role_slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "audit_logs",
+      "column": "user_agent",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "audit_logs",
+      "column": "user_email",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "audit_logs",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "ayah_timing_history",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "ayah_timing_history",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "ayah_timing_history",
+      "column": "reason",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "ayah_timing_history",
+      "column": "snapshot",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "ayah_timing_history",
+      "column": "timing_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "char(64)",
+      "table": "ayah_timing_history",
+      "column": "version_hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "ayah_timings",
+      "column": "ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "ayah_timings",
+      "column": "ayah_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "char(64)",
+      "table": "ayah_timings",
+      "column": "canonical_checksum",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('source_ms','chapter_ms','clip_ms')",
+      "table": "ayah_timings",
+      "column": "coordinate",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int unsigned",
+      "table": "ayah_timings",
+      "column": "coverage_words",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "ayah_timings",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "bigint unsigned",
+      "table": "ayah_timings",
+      "column": "end_ms",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "ayah_timings",
+      "column": "expected_words",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "ayah_timings",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "ayah_timings",
+      "column": "import_job_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "ayah_timings",
+      "column": "missing_words",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('aligned','verified','estimated')",
+      "table": "ayah_timings",
+      "column": "quality",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "ayah_timings",
+      "column": "qud_version",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "ayah_timings",
+      "column": "recitation_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('canonical','spoken')",
+      "table": "ayah_timings",
+      "column": "repetition_display_mode",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "ayah_timings",
+      "column": "review_reasons",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('ready','needs_review','approved','rejected')",
+      "table": "ayah_timings",
+      "column": "review_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "ayah_timings",
+      "column": "segments",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('qud','aligner')",
+      "table": "ayah_timings",
+      "column": "source",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "bigint",
+      "table": "ayah_timings",
+      "column": "source_offset_ms",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "ayah_timings",
+      "column": "source_rows",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "char(64)",
+      "table": "ayah_timings",
+      "column": "source_sha256",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "mediumtext",
+      "table": "ayah_timings",
+      "column": "spoken_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "bigint unsigned",
+      "table": "ayah_timings",
+      "column": "start_ms",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "ayah_timings",
+      "column": "surah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "ayah_timings",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "char(64)",
+      "table": "ayah_timings",
+      "column": "version_hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "ayah_timings",
+      "column": "word_highlight_enabled",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "ayah_timings",
+      "column": "words",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "daily_cloud_render_usage",
+      "column": "count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "daily_cloud_render_usage",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "date",
+      "table": "daily_cloud_render_usage",
+      "column": "date",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "daily_cloud_render_usage",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "daily_cloud_render_usage",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "daily_render_engine_usage",
+      "column": "background_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "daily_render_engine_usage",
+      "column": "count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "daily_render_engine_usage",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "date",
+      "table": "daily_render_engine_usage",
+      "column": "date",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(32)",
+      "table": "daily_render_engine_usage",
+      "column": "engine",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "daily_render_engine_usage",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "daily_render_engine_usage",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "daily_video_usage",
+      "column": "count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "date",
+      "table": "daily_video_usage",
+      "column": "date",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "daily_video_usage",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "daily_video_usage",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "domain_events",
+      "column": "anonymous_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "domain_events",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "domain_events",
+      "column": "entity_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "domain_events",
+      "column": "entity_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "domain_events",
+      "column": "event_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "domain_events",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(45)",
+      "table": "domain_events",
+      "column": "ip_address",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "domain_events",
+      "column": "properties_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "domain_events",
+      "column": "user_agent",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "domain_events",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "dsr_requests",
+      "column": "admin_notes",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "dsr_requests",
+      "column": "completed_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "dsr_requests",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "dsr_requests",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "longtext",
+      "table": "dsr_requests",
+      "column": "payload_json",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "dsr_requests",
+      "column": "request_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "dsr_requests",
+      "column": "requested_by_email",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "dsr_requests",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "dsr_requests",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "entity_notes",
+      "column": "admin_email",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "entity_notes",
+      "column": "admin_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "entity_notes",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "entity_notes",
+      "column": "entity_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "entity_notes",
+      "column": "entity_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "entity_notes",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "entity_notes",
+      "column": "is_pinned",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "entity_notes",
+      "column": "note_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "favorite_performers",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "favorite_performers",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "favorite_performers",
+      "column": "performer_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "favorite_performers",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "favorite_reciters",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "favorite_reciters",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "favorite_reciters",
+      "column": "reciter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "favorite_reciters",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "favorite_surahs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "favorite_surahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "favorite_surahs",
+      "column": "surah_number",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "favorite_surahs",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "feature_flags",
+      "column": "description",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "feature_flags",
+      "column": "is_enabled",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "feature_flags",
+      "column": "key_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(150)",
+      "table": "feature_flags",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(150)",
+      "table": "feature_flags",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "feature_flags",
+      "column": "rollout_percentage",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "feature_flags",
+      "column": "rules_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "feature_flags",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "feature_flags",
+      "column": "updated_by",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "char(64)",
+      "table": "import_jobs",
+      "column": "canonical_checksum",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int unsigned",
+      "table": "import_jobs",
+      "column": "checkpoint",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "import_jobs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "import_jobs",
+      "column": "error_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "import_jobs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int unsigned",
+      "table": "import_jobs",
+      "column": "imported_rows",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "import_jobs",
+      "column": "importer_version",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "char(64)",
+      "table": "import_jobs",
+      "column": "manifest_sha256",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "import_jobs",
+      "column": "qud_version",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "import_jobs",
+      "column": "recitation_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int unsigned",
+      "table": "import_jobs",
+      "column": "review_rows",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "char(64)",
+      "table": "import_jobs",
+      "column": "source_sha256",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('pending','running','interrupted','completed','failed')",
+      "table": "import_jobs",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int unsigned",
+      "table": "import_jobs",
+      "column": "total_rows",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "import_jobs",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "notifications",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "notifications",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "notifications",
+      "column": "is_read",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "notifications",
+      "column": "message",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "notifications",
+      "column": "title",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "notifications",
+      "column": "type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "notifications",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "payment_requests",
+      "column": "admin_note",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "decimal(10,2)",
+      "table": "payment_requests",
+      "column": "amount",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "payment_requests",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "char(3)",
+      "table": "payment_requests",
+      "column": "currency",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "payment_requests",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "payment_requests",
+      "column": "payment_method",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "payment_requests",
+      "column": "phone_number",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "payment_requests",
+      "column": "plan",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('pending','approved','rejected')",
+      "table": "payment_requests",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "payment_requests",
+      "column": "transfer_reference",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "payment_requests",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "payment_requests",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "profiles",
+      "column": "avatar_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "profiles",
+      "column": "bio",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "profiles",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "profiles",
+      "column": "display_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "profiles",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "profiles",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "profiles",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_audio_assets",
+      "column": "ayah_end",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_audio_assets",
+      "column": "ayah_start",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "quran_audio_assets",
+      "column": "content_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_audio_assets",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_audio_assets",
+      "column": "created_by",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_audio_assets",
+      "column": "file_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_audio_assets",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_audio_assets",
+      "column": "license_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(2048)",
+      "table": "quran_audio_assets",
+      "column": "license_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(512)",
+      "table": "quran_audio_assets",
+      "column": "object_key",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(120)",
+      "table": "quran_audio_assets",
+      "column": "reciter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(2000)",
+      "table": "quran_audio_assets",
+      "column": "review_note",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_audio_assets",
+      "column": "reviewed_by",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(24)",
+      "table": "quran_audio_assets",
+      "column": "rights_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "char(64)",
+      "table": "quran_audio_assets",
+      "column": "sha256",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "bigint unsigned",
+      "table": "quran_audio_assets",
+      "column": "size_bytes",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(2048)",
+      "table": "quran_audio_assets",
+      "column": "source_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_audio_assets",
+      "column": "surah_number",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_audio_assets",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(24)",
+      "table": "quran_audio_assets",
+      "column": "upload_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_ayahs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_ayahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "juz",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "page",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "surah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "quran_ayahs",
+      "column": "text_simple",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "quran_ayahs",
+      "column": "text_uthmani",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_ayahs",
+      "column": "text_version_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_ayahs",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "words_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_surahs",
+      "column": "ayah_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_surahs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "quran_surahs",
+      "column": "has_basmala",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_surahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_surahs",
+      "column": "juz_start",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_surahs",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_surahs",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_surahs",
+      "column": "name_translit",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_surahs",
+      "column": "number",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_surahs",
+      "column": "page_start",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(32)",
+      "table": "quran_surahs",
+      "column": "revelation_place",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_surahs",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "char(64)",
+      "table": "quran_text_versions",
+      "column": "checksum",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_text_versions",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_text_versions",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_text_versions",
+      "column": "imported_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "quran_text_versions",
+      "column": "is_active",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "quran_text_versions",
+      "column": "qud_version",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_text_versions",
+      "column": "riwayah_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(32)",
+      "table": "quran_text_versions",
+      "column": "script",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('qul','qud')",
+      "table": "quran_text_versions",
+      "column": "source",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_text_versions",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(191)",
+      "table": "quran_text_versions",
+      "column": "version_label",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_words",
+      "column": "ayah_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_words",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_words",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_words",
+      "column": "position",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_words",
+      "column": "text_simple",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_words",
+      "column": "text_uthmani",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_words",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('unverified','available','source_unavailable')",
+      "table": "recitation_chapters",
+      "column": "audio_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitation_chapters",
+      "column": "audio_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "recitation_chapters",
+      "column": "available_ayahs",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_chapters",
+      "column": "ayahs_complete",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "recitation_chapters",
+      "column": "chapter_offset_ms",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recitation_chapters",
+      "column": "coverage_details",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_chapters",
+      "column": "coverage_mismatch",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitation_chapters",
+      "column": "coverage_words",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recitation_chapters",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitation_chapters",
+      "column": "duration_ms",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "recitation_chapters",
+      "column": "expected_ayahs",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitation_chapters",
+      "column": "expected_words",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitation_chapters",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_chapters",
+      "column": "is_complete",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recitation_chapters",
+      "column": "last_verified_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recitation_chapters",
+      "column": "missing_verses",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitation_chapters",
+      "column": "recitation_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "recitation_chapters",
+      "column": "surah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_chapters",
+      "column": "timing_complete",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recitation_chapters",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "attribution_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "recitations",
+      "column": "audio_category",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('unverified_source','surah_slice')",
+      "table": "recitations",
+      "column": "audio_mode",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "recitations",
+      "column": "audit_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitations",
+      "column": "ayahs_complete",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('ayah_1_included','separate_clip','absent')",
+      "table": "recitations",
+      "column": "basmala_mode",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "basmala_reason",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitations",
+      "column": "canonical_text_available",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recitations",
+      "column": "catalog_raw",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "char(64)",
+      "table": "recitations",
+      "column": "catalog_sha256",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "channel",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitations",
+      "column": "coverage_ayahs",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitations",
+      "column": "coverage_words",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recitations",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "license_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "double",
+      "table": "recitations",
+      "column": "offset_check_score",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "recitations",
+      "column": "offset_correction_ms",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitations",
+      "column": "offset_verified",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "provider_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "qud_version",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "reciter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "recitations",
+      "column": "recording_context",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint",
+      "table": "recitations",
+      "column": "recording_year",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "riwayah_code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "riwayah_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "recitations",
+      "column": "slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "source_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('draft','imported','needs_review','published','hidden','deprecated')",
+      "table": "recitations",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "style",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('unverified','verified','not_applicable')",
+      "table": "recitations",
+      "column": "surah_start_basmala_audio_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "surah_start_basmala_text_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('none','ayah','word','letter')",
+      "table": "recitations",
+      "column": "timing_level",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('unimported','needs_review','aligned','verified')",
+      "table": "recitations",
+      "column": "timing_quality",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "recitations",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "recitations",
+      "column": "variant_label",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "recitations",
+      "column": "verification_details",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('pending','passed','failed','source_unavailable')",
+      "table": "recitations",
+      "column": "verification_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "reciters",
+      "column": "bio",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "reciters",
+      "column": "country",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "reciters",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "reciters",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "reciters",
+      "column": "is_featured",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "reciters",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "reciters",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "reciters",
+      "column": "photo_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "reciters",
+      "column": "slug",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "reciters",
+      "column": "sort_order",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(191)",
+      "table": "reciters",
+      "column": "source_reciter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('imported','needs_review')",
+      "table": "reciters",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "reciters",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recycle_bin",
+      "column": "data_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recycle_bin",
+      "column": "deleted_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recycle_bin",
+      "column": "deleted_by_user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "recycle_bin",
+      "column": "entity_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "recycle_bin",
+      "column": "entity_title",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "recycle_bin",
+      "column": "entity_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recycle_bin",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "recycle_bin",
+      "column": "purge_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "render_engine_capacity",
+      "column": "active_jobs",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(32)",
+      "table": "render_engine_capacity",
+      "column": "engine",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "render_engine_capacity",
+      "column": "replicas",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "render_engine_capacity",
+      "column": "slots_per_replica",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_engine_capacity",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "render_engine_capacity",
+      "column": "waiting_jobs",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_job_audit",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "render_job_audit",
+      "column": "details",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "render_job_audit",
+      "column": "event",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_job_audit",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_job_audit",
+      "column": "job_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_job_audit",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_jobs",
+      "column": "active_user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "completed_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "content_expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "decimal(7,2)",
+      "table": "render_jobs",
+      "column": "duration_seconds",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(32)",
+      "table": "render_jobs",
+      "column": "engine",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(16)",
+      "table": "render_jobs",
+      "column": "enqueue_state",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "render_jobs",
+      "column": "error_code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "render_jobs",
+      "column": "error_message",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "render_jobs",
+      "column": "estimated_cost_cents",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "heartbeat_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_jobs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "render_jobs",
+      "column": "idempotency_key",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "render_jobs",
+      "column": "manifest",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "render_jobs",
+      "column": "max_retries",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "render_jobs",
+      "column": "metadata",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "render_jobs",
+      "column": "output_filename",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "render_jobs",
+      "column": "output_path",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "bigint",
+      "table": "render_jobs",
+      "column": "output_size_bytes",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('instant_vip','subscriber','free')",
+      "table": "render_jobs",
+      "column": "priority_lane",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "decimal(5,2)",
+      "table": "render_jobs",
+      "column": "progress",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "render_jobs",
+      "column": "retry_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "render_jobs",
+      "column": "stage",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "started_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('queued','running','succeeded','failed','cancelled')",
+      "table": "render_jobs",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "render_jobs",
+      "column": "synthetic_canary",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "render_jobs",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_jobs",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "render_jobs",
+      "column": "worker_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(20)",
+      "table": "render_manifests",
+      "column": "aspect_ratio",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "render_manifests",
+      "column": "audio_source",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "render_manifests",
+      "column": "codec",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "render_manifests",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "render_manifests",
+      "column": "end_ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_manifests",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_manifests",
+      "column": "job_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "longtext",
+      "table": "render_manifests",
+      "column": "raw_manifest",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "render_manifests",
+      "column": "reciter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(150)",
+      "table": "render_manifests",
+      "column": "reciter_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "render_manifests",
+      "column": "render_engine",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "render_manifests",
+      "column": "start_ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "render_manifests",
+      "column": "surah_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "render_manifests",
+      "column": "surah_number",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "render_manifests",
+      "column": "template_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "render_manifests",
+      "column": "text_sha256",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "render_manifests",
+      "column": "timing_version",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "render_manifests",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "render_manifests",
+      "column": "video_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "riwayat",
+      "column": "aligner_code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "riwayat",
+      "column": "code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "riwayat",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "riwayat",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "riwayat",
+      "column": "is_active",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "riwayat",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "riwayat",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "riwayat",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(20)",
+      "table": "saved_videos",
+      "column": "aspect_ratio",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "saved_videos",
+      "column": "background_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "saved_videos",
+      "column": "content_fingerprint",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "saved_videos",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "saved_videos",
+      "column": "deleted_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "saved_videos",
+      "column": "downloads_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "decimal(7,2)",
+      "table": "saved_videos",
+      "column": "duration_seconds",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "saved_videos",
+      "column": "end_ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "saved_videos",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "bigint",
+      "table": "saved_videos",
+      "column": "file_size_bytes",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "saved_videos",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "saved_videos",
+      "column": "is_public",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "saved_videos",
+      "column": "job_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "saved_videos",
+      "column": "qc_issues",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('passed','warning','needs_review')",
+      "table": "saved_videos",
+      "column": "qc_status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "saved_videos",
+      "column": "reciter_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(150)",
+      "table": "saved_videos",
+      "column": "reciter_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "saved_videos",
+      "column": "render_engine",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "saved_videos",
+      "column": "shares_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "saved_videos",
+      "column": "start_ayah",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "saved_videos",
+      "column": "surah_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "saved_videos",
+      "column": "surah_number",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "saved_videos",
+      "column": "thumbnail_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "saved_videos",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "saved_videos",
+      "column": "video_url",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "saved_videos",
+      "column": "views_count",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "saved_views",
+      "column": "columns_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "saved_views",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "saved_views",
+      "column": "filters_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "saved_views",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "saved_views",
+      "column": "is_shared",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(50)",
+      "table": "saved_views",
+      "column": "module",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(100)",
+      "table": "saved_views",
+      "column": "name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "saved_views",
+      "column": "sort_json",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "saved_views",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "subscriptions",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "subscriptions",
+      "column": "expires_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "subscriptions",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('free','monthly','yearly')",
+      "table": "subscriptions",
+      "column": "plan",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "subscriptions",
+      "column": "starts_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('active','expired','canceled')",
+      "table": "subscriptions",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "subscriptions",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "subscriptions",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "synthetic_canary_runs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "synthetic_canary_runs",
+      "column": "duration_ms",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(50)",
+      "table": "synthetic_canary_runs",
+      "column": "engine",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "synthetic_canary_runs",
+      "column": "error_message",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "synthetic_canary_runs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "synthetic_canary_runs",
+      "column": "metrics",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "enum('success','failed','running')",
+      "table": "synthetic_canary_runs",
+      "column": "status",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "system_settings",
+      "column": "category",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "system_settings",
+      "column": "is_secret",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "system_settings",
+      "column": "key_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "system_settings",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "system_settings",
+      "column": "value_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(50)",
+      "table": "system_settings_enhanced",
+      "column": "category",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "system_settings_enhanced",
+      "column": "description_ar",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "system_settings_enhanced",
+      "column": "description_en",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "system_settings_enhanced",
+      "column": "is_public",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "system_settings_enhanced",
+      "column": "is_secret",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(100)",
+      "table": "system_settings_enhanced",
+      "column": "key_name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "system_settings_enhanced",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "system_settings_enhanced",
+      "column": "updated_by",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "system_settings_enhanced",
+      "column": "value_text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(20)",
+      "table": "system_settings_enhanced",
+      "column": "value_type",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "translation_ayahs",
+      "column": "ayah_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "translation_ayahs",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "translation_ayahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "translation_ayahs",
+      "column": "text",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "translation_ayahs",
+      "column": "translation_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "translation_ayahs",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "translations",
+      "column": "code",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "translations",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "translations",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(16)",
+      "table": "translations",
+      "column": "lang",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "translations",
+      "column": "license",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "translations",
+      "column": "name",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "translations",
+      "column": "translator",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "translations",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_achievements",
+      "column": "achievement_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_achievements",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "user_achievements",
+      "column": "unlocked_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_achievements",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "user_follows",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_follows",
+      "column": "follower_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_follows",
+      "column": "following_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_follows",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "user_roles",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_roles",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('admin','moderator','user')",
+      "table": "user_roles",
+      "column": "role",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "user_roles",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "users",
+      "column": "ban_reason",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "users",
+      "column": "banned_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "users",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "users",
+      "column": "credits_balance",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "users",
+      "column": "email",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "users",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "users",
+      "column": "is_banned",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "users",
+      "column": "last_active_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "users",
+      "column": "password_hash",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "users",
+      "column": "updated_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "video_comments",
+      "column": "content",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "video_comments",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_comments",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_comments",
+      "column": "parent_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_comments",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_comments",
+      "column": "video_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "video_likes",
+      "column": "created_at",
+      "charset": null,
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_likes",
+      "column": "id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_likes",
+      "column": "user_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "video_likes",
+      "column": "video_id",
+      "charset": "utf8mb4",
+      "collation": "utf8mb4_unicode_ci"
+    }
+  ],
+  "database": "railway",
+  "settings": {
+    "sql_mode": "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION",
+    "time_zone": "SYSTEM",
+    "max_connections": 60,
+    "collation_server": "utf8mb4_0900_ai_ci",
+    "system_time_zone": "UTC",
+    "max_allowed_packet": 67108864,
+    "character_set_server": "utf8mb4"
+  },
+  "triggers": [],
+  "server_uuid": "9496a587-b364-11f1-860a-a2aa73a6893f",
+  "foreign_keys": [
+    {
+      "table": "admin_invitations",
+      "column": "invited_by_user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "admin_invitations",
+      "column": "role_slug",
+      "referenced": "admin_roles"
+    },
+    {
+      "table": "admin_permissions",
+      "column": "role_slug",
+      "referenced": "admin_roles"
+    },
+    {
+      "table": "admin_sessions",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "admin_user_extensions",
+      "column": "role_slug",
+      "referenced": "admin_roles"
+    },
+    {
+      "table": "admin_user_extensions",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "alignment_documents",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "alignment_review_events",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "daily_cloud_render_usage",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "daily_render_engine_usage",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "daily_video_usage",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "favorite_performers",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "favorite_reciters",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "favorite_surahs",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "notifications",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "payment_requests",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "profiles",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "quran_audio_assets",
+      "column": "created_by",
+      "referenced": "users"
+    },
+    {
+      "table": "quran_audio_assets",
+      "column": "reviewed_by",
+      "referenced": "users"
+    },
+    {
+      "table": "quran_ayahs",
+      "column": "text_version_id",
+      "referenced": "quran_text_versions"
+    },
+    {
+      "table": "quran_text_versions",
+      "column": "riwayah_id",
+      "referenced": "riwayat"
+    },
+    {
+      "table": "quran_words",
+      "column": "ayah_id",
+      "referenced": "quran_ayahs"
+    },
+    {
+      "table": "recitation_chapters",
+      "column": "recitation_id",
+      "referenced": "recitations"
+    },
+    {
+      "table": "recitations",
+      "column": "provider_id",
+      "referenced": "audio_providers"
+    },
+    {
+      "table": "recitations",
+      "column": "reciter_id",
+      "referenced": "reciters"
+    },
+    {
+      "table": "render_job_audit",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "render_jobs",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "saved_videos",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "saved_views",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "subscriptions",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "translation_ayahs",
+      "column": "ayah_id",
+      "referenced": "quran_ayahs"
+    },
+    {
+      "table": "translation_ayahs",
+      "column": "translation_id",
+      "referenced": "translations"
+    },
+    {
+      "table": "user_achievements",
+      "column": "achievement_id",
+      "referenced": "achievements"
+    },
+    {
+      "table": "user_achievements",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "user_follows",
+      "column": "follower_id",
+      "referenced": "users"
+    },
+    {
+      "table": "user_follows",
+      "column": "following_id",
+      "referenced": "users"
+    },
+    {
+      "table": "user_roles",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "video_comments",
+      "column": "parent_id",
+      "referenced": "video_comments"
+    },
+    {
+      "table": "video_comments",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "video_comments",
+      "column": "video_id",
+      "referenced": "saved_videos"
+    },
+    {
+      "table": "video_likes",
+      "column": "user_id",
+      "referenced": "users"
+    },
+    {
+      "table": "video_likes",
+      "column": "video_id",
+      "referenced": "saved_videos"
+    }
+  ],
+  "mysql_version": "9.7.2",
+  "row_counts": {
+    "achievements": 10,
+    "admin_invitations": 0,
+    "admin_permissions": 284,
+    "admin_roles": 8,
+    "admin_sessions": 0,
+    "admin_user_extensions": 2,
+    "alignment_documents": 1,
+    "alignment_review_events": 0,
+    "audio_providers": 10,
+    "audit_logs": 0,
+    "ayah_timing_history": 0,
+    "ayah_timings": 422463,
+    "daily_cloud_render_usage": 13,
+    "daily_render_engine_usage": 17,
+    "daily_video_usage": 17,
+    "domain_events": 0,
+    "dsr_requests": 0,
+    "entity_notes": 0,
+    "favorite_performers": 0,
+    "favorite_reciters": 1,
+    "favorite_surahs": 2,
+    "feature_flags": 0,
+    "import_jobs": 69,
+    "notifications": 49,
+    "payment_requests": 3,
+    "profiles": 13,
+    "quran_audio_assets": 0,
+    "quran_ayahs": 6236,
+    "quran_surahs": 114,
+    "quran_text_versions": 1,
+    "quran_words": 77433,
+    "recitation_chapters": 7765,
+    "recitations": 69,
+    "reciters": 57,
+    "recycle_bin": 0,
+    "render_engine_capacity": 3,
+    "render_job_audit": 292,
+    "render_jobs": 72,
+    "render_manifests": 0,
+    "riwayat": 4,
+    "saved_videos": 7,
+    "saved_views": 0,
+    "subscriptions": 16,
+    "synthetic_canary_runs": 0,
+    "system_settings": 13,
+    "system_settings_enhanced": 10,
+    "translation_ayahs": 0,
+    "translations": 0,
+    "user_achievements": 1,
+    "user_follows": 0,
+    "user_roles": 13,
+    "users": 13,
+    "video_comments": 0,
+    "video_likes": 0
+  },
+  "checksums": {
+    "achievements": "720648712",
+    "admin_invitations": "0",
+    "admin_permissions": "3101946428",
+    "admin_roles": "3096633898",
+    "admin_sessions": "0",
+    "admin_user_extensions": "24868127",
+    "alignment_documents": "855393549",
+    "alignment_review_events": "0",
+    "audio_providers": "256889962",
+    "audit_logs": "0",
+    "ayah_timing_history": "0",
+    "ayah_timings": "2767002486",
+    "daily_cloud_render_usage": "3005621074",
+    "daily_render_engine_usage": "16694276",
+    "daily_video_usage": "1998448965",
+    "domain_events": "0",
+    "dsr_requests": "0",
+    "entity_notes": "0",
+    "favorite_performers": "0",
+    "favorite_reciters": "2841979377",
+    "favorite_surahs": "1361531746",
+    "feature_flags": "0",
+    "import_jobs": "3761574700",
+    "notifications": "1549172204",
+    "payment_requests": "425435828",
+    "profiles": "3305835068",
+    "quran_audio_assets": "0",
+    "quran_ayahs": "1712042852",
+    "quran_surahs": "2501341507",
+    "quran_text_versions": "2465363195",
+    "quran_words": "2986733015",
+    "recitation_chapters": "4153893285",
+    "recitations": "2495663560",
+    "reciters": "2360772223",
+    "recycle_bin": "0",
+    "render_engine_capacity": "914548789",
+    "render_job_audit": "791554965",
+    "render_jobs": "3147249881",
+    "render_manifests": "0",
+    "riwayat": "261302837",
+    "saved_videos": "2903173038",
+    "saved_views": "0",
+    "subscriptions": "869915229",
+    "synthetic_canary_runs": "0",
+    "system_settings": "1316653524",
+    "system_settings_enhanced": "3610769787",
+    "translation_ayahs": "0",
+    "translations": "0",
+    "user_achievements": "390398688",
+    "user_follows": "0",
+    "user_roles": "1812061936",
+    "users": "465493766",
+    "video_comments": "0",
+    "video_likes": "0"
+  },
+  "critical_counts": {
+    "users": 13,
+    "subscriptions": 16,
+    "plans": null,
+    "payment_requests": 3,
+    "videos": null,
+    "saved_videos": 7,
+    "render_jobs": 72,
+    "system_settings": 13,
+    "user_roles": 13,
+    "notifications": 49
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "d1_counts": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "environment_id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+  "checked_at": "2026-10-10T07:12:46.254Z",
+  "read_only": true,
+  "disk": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1666068480,
+    "available_bytes": 3009740800
+  },
+  "table_sizes": [
+    {
+      "table": "achievements",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "admin_invitations",
+      "data_bytes": 16384,
+      "index_bytes": 65536
+    },
+    {
+      "table": "admin_permissions",
+      "data_bytes": 49152,
+      "index_bytes": 65536
+    },
+    {
+      "table": "admin_roles",
+      "data_bytes": 16384,
+      "index_bytes": 0
+    },
+    {
+      "table": "admin_sessions",
+      "data_bytes": 16384,
+      "index_bytes": 49152
+    },
+    {
+      "table": "admin_user_extensions",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "alignment_documents",
+      "data_bytes": 16384,
+      "index_bytes": 65536
+    },
+    {
+      "table": "alignment_review_events",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "audio_providers",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "audit_logs",
+      "data_bytes": 16384,
+      "index_bytes": 49152
+    },
+    {
+      "table": "ayah_timing_history",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "ayah_timings",
+      "data_bytes": 1241235456,
+      "index_bytes": 73924608
+    },
+    {
+      "table": "daily_cloud_render_usage",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "daily_render_engine_usage",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "daily_video_usage",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "domain_events",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "dsr_requests",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "entity_notes",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "favorite_performers",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "favorite_reciters",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "favorite_surahs",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "feature_flags",
+      "data_bytes": 16384,
+      "index_bytes": 0
+    },
+    {
+      "table": "import_jobs",
+      "data_bytes": 49152,
+      "index_bytes": 16384
+    },
+    {
+      "table": "notifications",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "payment_requests",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "profiles",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "quran_audio_assets",
+      "data_bytes": 16384,
+      "index_bytes": 81920
+    },
+    {
+      "table": "quran_ayahs",
+      "data_bytes": 5783552,
+      "index_bytes": 1916928
+    },
+    {
+      "table": "quran_surahs",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "quran_text_versions",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "quran_words",
+      "data_bytes": 18432000,
+      "index_bytes": 15319040
+    },
+    {
+      "table": "recitation_chapters",
+      "data_bytes": 4702208,
+      "index_bytes": 1589248
+    },
+    {
+      "table": "recitations",
+      "data_bytes": 5783552,
+      "index_bytes": 65536
+    },
+    {
+      "table": "reciters",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "recycle_bin",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "render_engine_capacity",
+      "data_bytes": 16384,
+      "index_bytes": 0
+    },
+    {
+      "table": "render_job_audit",
+      "data_bytes": 114688,
+      "index_bytes": 98304
+    },
+    {
+      "table": "render_jobs",
+      "data_bytes": 1458176,
+      "index_bytes": 98304
+    },
+    {
+      "table": "render_manifests",
+      "data_bytes": 16384,
+      "index_bytes": 81920
+    },
+    {
+      "table": "riwayat",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "saved_videos",
+      "data_bytes": 16384,
+      "index_bytes": 114688
+    },
+    {
+      "table": "saved_views",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "subscriptions",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "synthetic_canary_runs",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "system_settings",
+      "data_bytes": 16384,
+      "index_bytes": 0
+    },
+    {
+      "table": "system_settings_enhanced",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "translation_ayahs",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "translations",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "user_achievements",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "user_follows",
+      "data_bytes": 16384,
+      "index_bytes": 32768
+    },
+    {
+      "table": "user_roles",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "users",
+      "data_bytes": 16384,
+      "index_bytes": 16384
+    },
+    {
+      "table": "video_comments",
+      "data_bytes": 16384,
+      "index_bytes": 65536
+    },
+    {
+      "table": "video_likes",
+      "data_bytes": 16384,
+      "index_bytes": 49152
+    }
+  ],
+  "additive_columns": [
+    {
+      "column": "coverage_details",
+      "nullable": "YES"
+    },
+    {
+      "column": "coverage_words",
+      "nullable": "YES"
+    },
+    {
+      "column": "expected_words",
+      "nullable": "YES"
+    }
+  ],
+  "recitations": [
+    {
+      "rows": 6236,
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "ready": 6071,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 165
+    },
+    {
+      "rows": 6236,
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "ready": 6080,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 156
+    },
+    {
+      "rows": 6115,
+      "slug": "abdulaziz_al_turki_yt",
+      "ready": 5686,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 429
+    },
+    {
+      "rows": 6236,
+      "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "ready": 5629,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 607
+    },
+    {
+      "rows": 6236,
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "ready": 5828,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 408
+    },
+    {
+      "rows": 6214,
+      "slug": "abdulbasit_abdulsamad_warsh_qdc",
+      "ready": 0,
+      "riwayah": "warsh_an_nafi",
+      "needs_review": 6214
+    },
+    {
+      "rows": 6236,
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "ready": 6168,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 68
+    },
+    {
+      "rows": 6236,
+      "slug": "abdullah_al_mattrod_qdc",
+      "ready": 5898,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 338
+    },
+    {
+      "rows": 6236,
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "ready": 5765,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 471
+    },
+    {
+      "rows": 6236,
+      "slug": "abdullah_kamel_way2quran",
+      "ready": 4515,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1721
+    },
+    {
+      "rows": 6236,
+      "slug": "abdulwadood_haneef_mp3quran",
+      "ready": 5511,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 725
+    },
+    {
+      "rows": 6236,
+      "slug": "abdur_rashid_sufi_qdc",
+      "ready": 5995,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 241
+    },
+    {
+      "rows": 6236,
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "ready": 0,
+      "riwayah": "shubah_an_asim",
+      "needs_review": 6236
+    },
+    {
+      "rows": 6236,
+      "slug": "abu_bakr_al_shatri_tarteel",
+      "ready": 4379,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1857
+    },
+    {
+      "rows": 6236,
+      "slug": "adel_al_karbalaei_archive_v2",
+      "ready": 6052,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 184
+    },
+    {
+      "rows": 6236,
+      "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+      "ready": 5481,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 755
+    },
+    {
+      "rows": 6236,
+      "slug": "ahmed_al_ajmi_qdc",
+      "ready": 4780,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1456
+    },
+    {
+      "rows": 6236,
+      "slug": "ahmed_amer_tvquran",
+      "ready": 5893,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 343
+    },
+    {
+      "rows": 6214,
+      "slug": "ahmed_deban_qalon_mp3quran",
+      "ready": 0,
+      "riwayah": "qalon_an_nafi",
+      "needs_review": 6214
+    },
+    {
+      "rows": 6236,
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "ready": 5971,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 265
+    },
+    {
+      "rows": 6236,
+      "slug": "ahmed_kaseb_way2quran",
+      "ready": 5925,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 311
+    },
+    {
+      "rows": 6236,
+      "slug": "ahmed_nuayna_qdc",
+      "ready": 6015,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 221
+    },
+    {
+      "rows": 6213,
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "ready": 0,
+      "riwayah": "qalon_an_nafi",
+      "needs_review": 6213
+    },
+    {
+      "rows": 327,
+      "slug": "ahmed_saud_mp3quran",
+      "ready": 325,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 2
+    },
+    {
+      "rows": 6236,
+      "slug": "ahmed_shaheen_mp3quran",
+      "ready": 5503,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 733
+    },
+    {
+      "rows": 5561,
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "ready": 4951,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 610
+    },
+    {
+      "rows": 6236,
+      "slug": "akram_al_alaqmi_qdc",
+      "ready": 5233,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1003
+    },
+    {
+      "rows": 6236,
+      "slug": "ali_al_huthaifi_mp3quran",
+      "ready": 5301,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 935
+    },
+    {
+      "rows": 6236,
+      "slug": "ayman_swed_muallim_yt",
+      "ready": 4881,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1355
+    },
+    {
+      "rows": 6236,
+      "slug": "badr_al_turki_yt",
+      "ready": 5589,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 647
+    },
+    {
+      "rows": 6236,
+      "slug": "bandar_baleela_qdc",
+      "ready": 5284,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 952
+    },
+    {
+      "rows": 6236,
+      "slug": "fatih_seferagic_way2quran",
+      "ready": 6167,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 69
+    },
+    {
+      "rows": 6236,
+      "slug": "haitham_al_dukhain_mp3quran",
+      "ready": 5122,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1114
+    },
+    {
+      "rows": 6236,
+      "slug": "hani_al_rifai_qdc_128k",
+      "ready": 5695,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 541
+    },
+    {
+      "rows": 6236,
+      "slug": "ibrahim_al_akhdar_drive",
+      "ready": 6106,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 130
+    },
+    {
+      "rows": 6236,
+      "slug": "imad_zuhair_hafez_mp3quran",
+      "ready": 5655,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 581
+    },
+    {
+      "rows": 5334,
+      "slug": "islam_sobhi_mp3quran",
+      "ready": 4683,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 651
+    },
+    {
+      "rows": 6236,
+      "slug": "khalid_al_mohana_drive",
+      "ready": 5973,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 263
+    },
+    {
+      "rows": 6236,
+      "slug": "khalifa_al_tunaiji_tarteel",
+      "ready": 5922,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 314
+    },
+    {
+      "rows": 6236,
+      "slug": "maher_al_muaiqly_qdc",
+      "ready": 5910,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 326
+    },
+    {
+      "rows": 6236,
+      "slug": "mahmoud_abdul_hakam_mp3quran",
+      "ready": 5660,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 576
+    },
+    {
+      "rows": 6236,
+      "slug": "mahmoud_ali_al_banna_qdc",
+      "ready": 5815,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 421
+    },
+    {
+      "rows": 6236,
+      "slug": "mahmoud_khalil_al_husary_mp3quran",
+      "ready": 5907,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 329
+    },
+    {
+      "rows": 6236,
+      "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "ready": 5656,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 580
+    },
+    {
+      "rows": 6236,
+      "slug": "mahmoud_khalil_al_husary_qdc_128k",
+      "ready": 5929,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 307
+    },
+    {
+      "rows": 6236,
+      "slug": "mishary_rashid_al_afasy_2008_qdc",
+      "ready": 5291,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 945
+    },
+    {
+      "rows": 6236,
+      "slug": "mishary_rashid_al_afasy_mp3quran",
+      "ready": 5404,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 832
+    },
+    {
+      "rows": 6177,
+      "slug": "moaz_mahmoud_hamed_qalon_way2quran",
+      "ready": 0,
+      "riwayah": "qalon_an_nafi",
+      "needs_review": 6177
+    },
+    {
+      "rows": 6236,
+      "slug": "mohammed_abdulkareem_qdc",
+      "ready": 4952,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1284
+    },
+    {
+      "rows": 6236,
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "ready": 5096,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1140
+    },
+    {
+      "rows": 6236,
+      "slug": "mohammed_alghazali_archive",
+      "ready": 5119,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1117
+    },
+    {
+      "rows": 6236,
+      "slug": "mohammed_ayyub_drive",
+      "ready": 5539,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 697
+    },
+    {
+      "rows": 6236,
+      "slug": "mohammed_burhaji_yt",
+      "ready": 5163,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1073
+    },
+    {
+      "rows": 6214,
+      "slug": "mohammed_saayed_warsh_mp3quran",
+      "ready": 0,
+      "riwayah": "warsh_an_nafi",
+      "needs_review": 6214
+    },
+    {
+      "rows": 6236,
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "ready": 5689,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 547
+    },
+    {
+      "rows": 6236,
+      "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+      "ready": 5766,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 470
+    },
+    {
+      "rows": 6236,
+      "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "ready": 5281,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 955
+    },
+    {
+      "rows": 6236,
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "ready": 5806,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 430
+    },
+    {
+      "rows": 6236,
+      "slug": "mustafa_ismail_mp3quran",
+      "ready": 5922,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 314
+    },
+    {
+      "rows": 6236,
+      "slug": "nasser_al_qatami_mp3quran",
+      "ready": 4518,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1718
+    },
+    {
+      "rows": 6236,
+      "slug": "saad_al_ghamdi_tarteel",
+      "ready": 5481,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 755
+    },
+    {
+      "rows": 6214,
+      "slug": "saber_abdulhakam_qalon_way2quran",
+      "ready": 0,
+      "riwayah": "qalon_an_nafi",
+      "needs_review": 6214
+    },
+    {
+      "rows": 6236,
+      "slug": "saber_abdulhakam_shubah_way2quran",
+      "ready": 0,
+      "riwayah": "shubah_an_asim",
+      "needs_review": 6236
+    },
+    {
+      "rows": 6214,
+      "slug": "saber_abdulhakam_warsh_way2quran",
+      "ready": 0,
+      "riwayah": "warsh_an_nafi",
+      "needs_review": 6214
+    },
+    {
+      "rows": 6236,
+      "slug": "saber_abdulhakam_yt",
+      "ready": 5630,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 606
+    },
+    {
+      "rows": 6236,
+      "slug": "saud_al_shuraim_mp3quran",
+      "ready": 5794,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 442
+    },
+    {
+      "rows": 6214,
+      "slug": "walid_al_naihi_qalon_mp3quran",
+      "ready": 0,
+      "riwayah": "qalon_an_nafi",
+      "needs_review": 6214
+    },
+    {
+      "rows": 6236,
+      "slug": "walid_atef_way2quran",
+      "ready": 4965,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1271
+    },
+    {
+      "rows": 6236,
+      "slug": "yasser_al_dosari_archive",
+      "ready": 5148,
+      "riwayah": "hafs_an_asim",
+      "needs_review": 1088
+    }
+  ],
+  "coverage": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "chapters": 114,
+      "complete": 66,
+      "covered_words": 76981,
+      "expected_words": 77433,
+      "missing_1_to_3": 12,
+      "timing_complete": 66
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "chapters": 114,
+      "complete": 62,
+      "covered_words": 76985,
+      "expected_words": 77433,
+      "missing_1_to_3": 11,
+      "timing_complete": 62
+    },
+    {
+      "slug": "abdulaziz_al_turki_yt",
+      "chapters": 112,
+      "complete": 57,
+      "covered_words": 74609,
+      "expected_words": 76082,
+      "missing_1_to_3": 6,
+      "timing_complete": 57
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "chapters": 114,
+      "complete": 51,
+      "covered_words": 74526,
+      "expected_words": 77433,
+      "missing_1_to_3": 5,
+      "timing_complete": 51
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "chapters": 114,
+      "complete": 57,
+      "covered_words": 75534,
+      "expected_words": 77433,
+      "missing_1_to_3": 4,
+      "timing_complete": 57
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_warsh_qdc",
+      "chapters": 114,
+      "complete": 0,
+      "covered_words": 0,
+      "expected_words": null,
+      "missing_1_to_3": null,
+      "timing_complete": 0
+    },
+    {
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "chapters": 114,
+      "complete": 90,
+      "covered_words": 77211,
+      "expected_words": 77433,
+      "missing_1_to_3": 11,
+      "timing_complete": 90
+    },
+    {
+      "slug": "abdullah_al_mattrod_qdc",
+      "chapters": 114,
+      "complete": 58,
+      "covered_words": 76355,
+      "expected_words": 77433,
+      "missing_1_to_3": 11,
+      "timing_complete": 58
+    },
+    {
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "chapters": 114,
+      "complete": 46,
+      "covered_words": 75662,
+      "expected_words": 77433,
+      "missing_1_to_3": 7,
+      "timing_complete": 46
+    },
+    {
+      "slug": "abdullah_kamel_way2quran",
+      "chapters": 114,
+      "complete": 35,
+      "covered_words": 71790,
+      "expected_words": 77433,
+      "missing_1_to_3": 6,
+      "timing_complete": 35
+    },
+    {
+      "slug": "abdulwadood_haneef_mp3quran",
+      "chapters": 114,
+      "complete": 51,
+      "covered_words": 75427,
+      "expected_words": 77433,
+      "missing_1_to_3": 7,
+      "timing_complete": 51
+    },
+    {
+      "slug": "abdur_rashid_sufi_qdc",
+      "chapters": 114,
+      "complete": 62,
+      "covered_words": 76426,
+      "expected_words": 77433,
+      "missing_1_to_3": 7,
+      "timing_complete": 62
+    },
+    {
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "chapters": 114,
+      "complete": 0,
+      "covered_words": 0,
+      "expected_words": null,
+      "missing_1_to_3": null,
+      "timing_complete": 0
+    },
+    {
+      "slug": "abu_bakr_al_shatri_tarteel",
+      "chapters": 114,
+      "complete": 34,
+      "covered_words": 73004,
+      "expected_words": 77433,
+      "missing_1_to_3": 8,
+      "timing_complete": 34
+    },
+    {
+      "slug": "adel_al_karbalaei_archive_v2",
+      "chapters": 114,
+      "complete": 60,
+      "covered_words": 76815,
+      "expected_words": 77433,
+      "missing_1_to_3": 15,
+      "timing_complete": 60
+    },
+    {
+      "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+      "chapters": 114,
+      "complete": 50,
+      "covered_words": 74540,
+      "expected_words": 77433,
+      "missing_1_to_3": 7,
+      "timing_complete": 50
+    },
+    {
+      "slug": "ahmed_al_ajmi_qdc",
+      "chapters": 114,
+      "complete": 32,
+      "covered_words": 73104,
+      "expected_words": 77433,
+      "missing_1_to_3": 13,
+      "timing_complete": 32
+    },
+    {
+      "slug": "ahmed_amer_tvquran",
+      "chapters": 114,
+      "complete": 56,
+      "covered_words": 75913,
+      "expected_words": 77433,
+      "missing_1_to_3": 4,
+      "timing_complete": 56
+    },
+    {
+      "slug": "ahmed_deban_qalon_mp3quran",
+      "chapters": 114,
+      "complete": 0,
+      "covered_words": 0,
+      "expected_words": null,
+      "missing_1_to_3": null,
+      "timing_complete": 0
+    },
+    {
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "chapters": 114,
+      "complete": 63,
+      "covered_words": 76514,
+      "expected_words": 77433,
+      "missing_1_to_3": 8,
+      "timing_complete": 63
+    },
+    {
+      "slug": "ahmed_kaseb_way2quran",
+      "chapters": 114,
+      "complete": 53,
+      "covered_words": 76565,
+      "expected_words": 77433,
+      "missing_1_to_3": 9,
+      "timing_complete": 53
+    },
+    {
+      "slug": "ahmed_nuayna_qdc",
+      "chapters": 114,
+      "complete": 57,
+      "covered_words": 76586,
+      "expected_words": 77433,
+      "missing_1_to_3": 5,
+      "timing_complete": 57
+    },
+    {
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "chapters": 114,
+      "complete": 0,
+      "covered_words": 0,
+      "expected_words": null,
+      "missing_1_to_3": null,
+      "timing_complete": 0
+    },
+    {
+      "slug": "ahmed_saud_mp3quran",
+      "chapters": 30,
+      "complete": 28,
+      "covered_words": 1359,
+      "expected_words": 1363,
+      "missing_1_to_3": 2,
+      "timing_complete": 28
+    },
+    {
+      "slug": "ahmed_shaheen_mp3quran",
+      "chapters": 114,
+      "complete": 51,
+      "covered_words": 74698,
+      "expected_words": 77433,
+      "missing_1_to_3": 5,
+      "timing_complete": 51
+    },
+    {
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "chapters": 107,
+      "complete": 42,
+      "covered_words": 65329,
+      "expected_words": 67052,
+      "missing_1_to_3": 10,
+      "timing_complete": 42
+    },
+    {
+      "slug": "akram_al_alaqmi_qdc",
+      "chapters": 114,
+      "complete": 39,
+      "covered_words": 73973,
+      "expected_words": 77433,
+      "missing_1_to_3": 7,
+      "timing_complete": 39
+    },
+    {
+      "slug": "ali_al_huthaifi_mp3quran",
+      "chapters": 114,
+      "complete": 49,
+      "covered_words": 74013,
+      "expected_words": 77433,
+      "missing_1_to_3": 3,
+      "timing_complete": 49
+    },
+    {
+      "slug": "ayman_swed_muallim_yt",
+      "chapters": 114,
+      "complete": 42,
+      "covered_words": 72807,
+      "expected_words": 77433,
+      "missing_1_to_3": 6,
+      "timing_complete": 42
+    },
+    {
+      "slug": "badr_al_turki_yt",
+      "chapters": 114,
+      "complete": 50,
+      "covered_words": 74786,
+      "expected_words": 77433,
+      "missing_1_to_3": 6,
+      "timing_complete": 50
+    },
+    {
+      "slug": "bandar_baleela_qdc",
+      "chapters": 114,
+      "complete": 42,
+      "covered_words": 74382,
+      "expected_words": 77433,
+      "missing_1_to_3": 9,
+      "timing_complete": 42
+    },
+    {
+      "slug": "fatih_seferagic_way2quran",
+      "chapters": 114,
+      "complete": 83,
+      "covered_words": 77216,
+      "expected_words": 77433,
+      "missing_1_to_3": 18,
+      "timing_complete": 83
+    },
+    {
+      "slug": "haitham_al_dukhain_mp3quran",
+      "chapters": 114,
+      "complete": 43,
+      "covered_words": 73893,
+      "expected_words": 77433,
+      "missing_1_to_3": 14,
+      "timing_complete": 43
+    },
+    {
+      "slug": "hani_al_rifai_qdc_128k",
+      "chapters": 114,
+      "complete": 46,
+      "covered_words": 76067,
+      "expected_words": 77433,
+      "missing_1_to_3": 13,
+      "timing_complete": 46
+    },
+    {
+      "slug": "ibrahim_al_akhdar_drive",
+      "chapters": 114,
+      "complete": 78,
+      "covered_words": 76995,
+      "expected_words": 77433,
+      "missing_1_to_3": 6,
+      "timing_complete": 78
+    },
+    {
+      "slug": "imad_zuhair_hafez_mp3quran",
+      "chapters": 114,
+      "complete": 52,
+      "covered_words": 74998,
+      "expected_words": 77433,
+      "missing_1_to_3": 3,
+      "timing_complete": 52
+    },
+    {
+      "slug": "islam_sobhi_mp3quran",
+      "chapters": 106,
+      "complete": 44,
+      "covered_words": 61761,
+      "expected_words": 63841,
+      "missing_1_to_3": 10,
+      "timing_complete": 45
+    },
+    {
+      "slug": "khalid_al_mohana_drive",
+      "chapters": 114,
+      "complete": 69,
+      "covered_words": 76377,
+      "expected_words": 77433,
+      "missing_1_to_3": 4,
+      "timing_complete": 69
+    },
+    {
+      "slug": "khalifa_al_tunaiji_tarteel",
+      "chapters": 114,
+      "complete": 59,
+      "covered_words": 76254,
+      "expected_words": 77433,
+      "missing_1_to_3": 3,
+      "timing_complete": 59
+    },
+    {
+      "slug": "maher_al_muaiqly_qdc",
+      "chapters": 114,
+      "complete": 59,
+      "covered_words": 75957,
+      "expected_words": 77433,
+      "missing_1_to_3": 2,
+      "timing_complete": 59
+    },
+    {
+      "slug": "mahmoud_abdul_hakam_mp3quran",
+      "chapters": 114,
+      "complete": 49,
+      "covered_words": 74973,
+      "expected_words": 77433,
+      "missing_1_to_3": 6,
+      "timing_complete": 49
+    },
+    {
+      "slug": "mahmoud_ali_al_banna_qdc",
+      "chapters": 114,
+      "complete": 56,
+      "covered_words": 75656,
+      "expected_words": 77433,
+      "missing_1_to_3": 4,
+      "timing_complete": 56
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mp3quran",
+      "chapters": 114,
+      "complete": 60,
+      "covered_words": 76107,
+      "expected_words": 77433,
+      "missing_1_to_3": 5,
+      "timing_complete": 60
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "chapters": 114,
+      "complete": 55,
+      "covered_words": 75095,
+      "expected_words": 77433,
+      "missing_1_to_3": 5,
+      "timing_complete": 55
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_qdc_128k",
+      "chapters": 114,
+      "complete": 64,
+      "covered_words": 75839,
+      "expected_words": 77433,
+      "missing_1_to_3": 3,
+      "timing_complete": 64
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_2008_qdc",
+      "chapters": 114,
+      "complete": 47,
+      "covered_words": 74622,
+      "expected_words": 77433,
+      "missing_1_to_3": 4,
+      "timing_complete": 47
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_mp3quran",
+      "chapters": 114,
+      "complete": 53,
+      "covered_words": 74969,
+      "expected_words": 77433,
+      "missing_1_to_3": 5,
+      "timing_complete": 53
+    },
+    {
+      "slug": "moaz_mahmoud_hamed_qalon_way2quran",
+      "chapters": 114,
+      "complete": 0,
+      "covered_words": 0,
+      "expected_words": null,
+      "missing_1_to_3": null,
+      "timing_complete": 0
+    },
+    {
+      "slug": "mohammed_abdulkareem_qdc",
+      "chapters": 114,
+      "complete": 35,
+      "covered_words": 73300,
+      "expected_words": 77433,
+      "missing_1_to_3": 12,
+      "timing_complete": 35
+    },
+    {
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "chapters": 114,
+      "complete": 44,
+      "covered_words": 74389,
+      "expected_words": 77433,
+      "missing_1_to_3": 9,
+      "timing_complete": 44
+    },
+    {
+      "slug": "mohammed_alghazali_archive",
+      "chapters": 114,
+      "complete": 38,
+      "covered_words": 73766,
+      "expected_words": 77433,
+      "missing_1_to_3": 8,
+      "timing_complete": 38
+    },
+    {
+      "slug": "mohammed_ayyub_drive",
+      "chapters": 114,
+      "complete": 51,
+      "covered_words": 74229,
+      "expected_words": 77433,
+      "missing_1_to_3": 6,
+      "timing_complete": 51
+    },
+    {
+      "slug": "mohammed_burhaji_yt",
+      "chapters": 114,
+      "complete": 46,
+      "covered_words": 74699,
+      "expected_words": 77433,
+      "missing_1_to_3": 6,
+      "timing_complete": 46
+    },
+    {
+      "slug": "mohammed_saayed_warsh_mp3quran",
+      "chapters": 114,
+      "complete": 0,
+      "covered_words": 0,
+      "expected_words": null,
+      "missing_1_to_3": null,
+      "timing_complete": 0
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "chapters": 114,
+      "complete": 52,
+      "covered_words": 75222,
+      "expected_words": 77433,
+      "missing_1_to_3": 5,
+      "timing_complete": 52
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+      "chapters": 114,
+      "complete": 54,
+      "covered_words": 75510,
+      "expected_words": 77433,
+      "missing_1_to_3": 4,
+      "timing_complete": 54
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "chapters": 114,
+      "complete": 43,
+      "covered_words": 73501,
+      "expected_words": 77433,
+      "missing_1_to_3": 3,
+      "timing_complete": 43
+    },
+    {
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "chapters": 114,
+      "complete": 59,
+      "covered_words": 75660,
+      "expected_words": 77433,
+      "missing_1_to_3": 4,
+      "timing_complete": 59
+    },
+    {
+      "slug": "mustafa_ismail_mp3quran",
+      "chapters": 114,
+      "complete": 62,
+      "covered_words": 76001,
+      "expected_words": 77433,
+      "missing_1_to_3": 4,
+      "timing_complete": 62
+    },
+    {
+      "slug": "nasser_al_qatami_mp3quran",
+      "chapters": 114,
+      "complete": 30,
+      "covered_words": 72390,
+      "expected_words": 77433,
+      "missing_1_to_3": 9,
+      "timing_complete": 30
+    },
+    {
+      "slug": "saad_al_ghamdi_tarteel",
+      "chapters": 114,
+      "complete": 47,
+      "covered_words": 75006,
+      "expected_words": 77433,
+      "missing_1_to_3": 5,
+      "timing_complete": 47
+    },
+    {
+      "slug": "saber_abdulhakam_qalon_way2quran",
+      "chapters": 114,
+      "complete": 0,
+      "covered_words": 0,
+      "expected_words": null,
+      "missing_1_to_3": null,
+      "timing_complete": 0
+    },
+    {
+      "slug": "saber_abdulhakam_shubah_way2quran",
+      "chapters": 114,
+      "complete": 0,
+      "covered_words": 0,
+      "expected_words": null,
+      "missing_1_to_3": null,
+      "timing_complete": 0
+    },
+    {
+      "slug": "saber_abdulhakam_warsh_way2quran",
+      "chapters": 114,
+      "complete": 0,
+      "covered_words": 0,
+      "expected_words": null,
+      "missing_1_to_3": null,
+      "timing_complete": 0
+    },
+    {
+      "slug": "saber_abdulhakam_yt",
+      "chapters": 114,
+      "complete": 52,
+      "covered_words": 75267,
+      "expected_words": 77433,
+      "missing_1_to_3": 6,
+      "timing_complete": 52
+    },
+    {
+      "slug": "saud_al_shuraim_mp3quran",
+      "chapters": 114,
+      "complete": 55,
+      "covered_words": 75932,
+      "expected_words": 77433,
+      "missing_1_to_3": 12,
+      "timing_complete": 55
+    },
+    {
+      "slug": "walid_al_naihi_qalon_mp3quran",
+      "chapters": 114,
+      "complete": 0,
+      "covered_words": 0,
+      "expected_words": null,
+      "missing_1_to_3": null,
+      "timing_complete": 0
+    },
+    {
+      "slug": "walid_atef_way2quran",
+      "chapters": 114,
+      "complete": 37,
+      "covered_words": 72980,
+      "expected_words": 77433,
+      "missing_1_to_3": 6,
+      "timing_complete": 37
+    },
+    {
+      "slug": "yasser_al_dosari_archive",
+      "chapters": 114,
+      "complete": 38,
+      "covered_words": 73928,
+      "expected_words": 77433,
+      "missing_1_to_3": 7,
+      "timing_complete": 38
+    }
+  ],
+  "reasons": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "count": 163,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "count": 14,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "count": 2,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "count": 155,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "count": 15,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdulaziz_al_turki_yt",
+      "count": 429,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "abdulaziz_al_turki_yt",
+      "count": 33,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "count": 606,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "count": 56,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "count": 407,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "count": 27,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_warsh_qdc",
+      "count": 6214,
+      "reason": "CANONICAL_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_warsh_qdc",
+      "count": 6214,
+      "reason": "SPOKEN_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_warsh_qdc",
+      "count": 6214,
+      "reason": "SPOKEN_WORD_COUNT_MISMATCH"
+    },
+    {
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "count": 68,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "count": 4,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "abdullah_al_mattrod_qdc",
+      "count": 336,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "abdullah_al_mattrod_qdc",
+      "count": 19,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "abdullah_al_mattrod_qdc",
+      "count": 2,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "count": 470,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "count": 16,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "count": 13,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdullah_kamel_way2quran",
+      "count": 1654,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "abdullah_kamel_way2quran",
+      "count": 196,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "abdullah_kamel_way2quran",
+      "count": 109,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdullah_kamel_way2quran",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "abdulwadood_haneef_mp3quran",
+      "count": 719,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "abdulwadood_haneef_mp3quran",
+      "count": 52,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "abdulwadood_haneef_mp3quran",
+      "count": 10,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdulwadood_haneef_mp3quran",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "abdur_rashid_sufi_qdc",
+      "count": 240,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "abdur_rashid_sufi_qdc",
+      "count": 20,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "abdur_rashid_sufi_qdc",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "count": 6236,
+      "reason": "CANONICAL_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "count": 6236,
+      "reason": "SPOKEN_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "count": 6236,
+      "reason": "SPOKEN_WORD_COUNT_MISMATCH"
+    },
+    {
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abu_bakr_al_shatri_tarteel",
+      "count": 1853,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "abu_bakr_al_shatri_tarteel",
+      "count": 123,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "abu_bakr_al_shatri_tarteel",
+      "count": 7,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "adel_al_karbalaei_archive_v2",
+      "count": 182,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "adel_al_karbalaei_archive_v2",
+      "count": 10,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "adel_al_karbalaei_archive_v2",
+      "count": 2,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+      "count": 755,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+      "count": 53,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "ahmed_al_ajmi_qdc",
+      "count": 1455,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "ahmed_al_ajmi_qdc",
+      "count": 108,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "ahmed_al_ajmi_qdc",
+      "count": 2,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_al_ajmi_qdc",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "ahmed_amer_tvquran",
+      "count": 342,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "ahmed_amer_tvquran",
+      "count": 26,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "ahmed_amer_tvquran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_deban_qalon_mp3quran",
+      "count": 6214,
+      "reason": "CANONICAL_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "ahmed_deban_qalon_mp3quran",
+      "count": 6214,
+      "reason": "SPOKEN_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "ahmed_deban_qalon_mp3quran",
+      "count": 6214,
+      "reason": "SPOKEN_WORD_COUNT_MISMATCH"
+    },
+    {
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "count": 260,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "count": 23,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "count": 5,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "count": 2,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "ahmed_kaseb_way2quran",
+      "count": 309,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "ahmed_kaseb_way2quran",
+      "count": 23,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "ahmed_kaseb_way2quran",
+      "count": 2,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_kaseb_way2quran",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "ahmed_nuayna_qdc",
+      "count": 162,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "ahmed_nuayna_qdc",
+      "count": 73,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "ahmed_nuayna_qdc",
+      "count": 59,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "count": 6213,
+      "reason": "CANONICAL_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "count": 6213,
+      "reason": "SPOKEN_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "count": 6213,
+      "reason": "SPOKEN_WORD_COUNT_MISMATCH"
+    },
+    {
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_saud_mp3quran",
+      "count": 2,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "ahmed_shaheen_mp3quran",
+      "count": 730,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "ahmed_shaheen_mp3quran",
+      "count": 48,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "ahmed_shaheen_mp3quran",
+      "count": 3,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "count": 601,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "count": 47,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "count": 11,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "akram_al_alaqmi_qdc",
+      "count": 1002,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "akram_al_alaqmi_qdc",
+      "count": 69,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "akram_al_alaqmi_qdc",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "akram_al_alaqmi_qdc",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "ali_al_huthaifi_mp3quran",
+      "count": 935,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "ali_al_huthaifi_mp3quran",
+      "count": 68,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "ayman_swed_muallim_yt",
+      "count": 1339,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "ayman_swed_muallim_yt",
+      "count": 102,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "ayman_swed_muallim_yt",
+      "count": 20,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "badr_al_turki_yt",
+      "count": 646,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "badr_al_turki_yt",
+      "count": 51,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "badr_al_turki_yt",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "bandar_baleela_qdc",
+      "count": 939,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "bandar_baleela_qdc",
+      "count": 70,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "bandar_baleela_qdc",
+      "count": 23,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "bandar_baleela_qdc",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "fatih_seferagic_way2quran",
+      "count": 66,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "fatih_seferagic_way2quran",
+      "count": 11,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "fatih_seferagic_way2quran",
+      "count": 5,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "fatih_seferagic_way2quran",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "haitham_al_dukhain_mp3quran",
+      "count": 1112,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "haitham_al_dukhain_mp3quran",
+      "count": 73,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "haitham_al_dukhain_mp3quran",
+      "count": 3,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "hani_al_rifai_qdc_128k",
+      "count": 531,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "hani_al_rifai_qdc_128k",
+      "count": 31,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "hani_al_rifai_qdc_128k",
+      "count": 10,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "hani_al_rifai_qdc_128k",
+      "count": 2,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "ibrahim_al_akhdar_drive",
+      "count": 130,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "ibrahim_al_akhdar_drive",
+      "count": 13,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "imad_zuhair_hafez_mp3quran",
+      "count": 581,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "imad_zuhair_hafez_mp3quran",
+      "count": 38,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "islam_sobhi_mp3quran",
+      "count": 647,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "islam_sobhi_mp3quran",
+      "count": 30,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "islam_sobhi_mp3quran",
+      "count": 4,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "khalid_al_mohana_drive",
+      "count": 262,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "khalid_al_mohana_drive",
+      "count": 18,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "khalid_al_mohana_drive",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "khalifa_al_tunaiji_tarteel",
+      "count": 314,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "khalifa_al_tunaiji_tarteel",
+      "count": 17,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "maher_al_muaiqly_qdc",
+      "count": 326,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "maher_al_muaiqly_qdc",
+      "count": 16,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mahmoud_abdul_hakam_mp3quran",
+      "count": 576,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mahmoud_abdul_hakam_mp3quran",
+      "count": 42,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mahmoud_ali_al_banna_qdc",
+      "count": 420,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mahmoud_ali_al_banna_qdc",
+      "count": 31,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mahmoud_ali_al_banna_qdc",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mp3quran",
+      "count": 328,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mp3quran",
+      "count": 18,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mp3quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "count": 580,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "count": 41,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_qdc_128k",
+      "count": 307,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_qdc_128k",
+      "count": 35,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_2008_qdc",
+      "count": 944,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_2008_qdc",
+      "count": 47,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_2008_qdc",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_mp3quran",
+      "count": 831,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_mp3quran",
+      "count": 52,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_mp3quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "moaz_mahmoud_hamed_qalon_way2quran",
+      "count": 6177,
+      "reason": "CANONICAL_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "moaz_mahmoud_hamed_qalon_way2quran",
+      "count": 6177,
+      "reason": "SPOKEN_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "moaz_mahmoud_hamed_qalon_way2quran",
+      "count": 6177,
+      "reason": "SPOKEN_WORD_COUNT_MISMATCH"
+    },
+    {
+      "slug": "mohammed_abdulkareem_qdc",
+      "count": 1276,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mohammed_abdulkareem_qdc",
+      "count": 67,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mohammed_abdulkareem_qdc",
+      "count": 11,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_abdulkareem_qdc",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "count": 1139,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "count": 64,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "count": 2,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_alghazali_archive",
+      "count": 1117,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mohammed_alghazali_archive",
+      "count": 57,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mohammed_alghazali_archive",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_ayyub_drive",
+      "count": 697,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mohammed_ayyub_drive",
+      "count": 48,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mohammed_burhaji_yt",
+      "count": 1068,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mohammed_burhaji_yt",
+      "count": 67,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mohammed_burhaji_yt",
+      "count": 10,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_saayed_warsh_mp3quran",
+      "count": 6214,
+      "reason": "CANONICAL_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "mohammed_saayed_warsh_mp3quran",
+      "count": 6214,
+      "reason": "SPOKEN_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "mohammed_saayed_warsh_mp3quran",
+      "count": 6214,
+      "reason": "SPOKEN_WORD_COUNT_MISMATCH"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "count": 546,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "count": 45,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+      "count": 469,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+      "count": 34,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "count": 903,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "count": 124,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "count": 60,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "count": 427,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "count": 33,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "count": 7,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "count": 4,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mustafa_ismail_mp3quran",
+      "count": 313,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "mustafa_ismail_mp3quran",
+      "count": 21,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "mustafa_ismail_mp3quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "nasser_al_qatami_mp3quran",
+      "count": 1699,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "nasser_al_qatami_mp3quran",
+      "count": 125,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "nasser_al_qatami_mp3quran",
+      "count": 28,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "nasser_al_qatami_mp3quran",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "saad_al_ghamdi_tarteel",
+      "count": 753,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "saad_al_ghamdi_tarteel",
+      "count": 55,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "saad_al_ghamdi_tarteel",
+      "count": 2,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "saad_al_ghamdi_tarteel",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "saber_abdulhakam_qalon_way2quran",
+      "count": 6214,
+      "reason": "CANONICAL_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "saber_abdulhakam_qalon_way2quran",
+      "count": 6214,
+      "reason": "SPOKEN_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "saber_abdulhakam_qalon_way2quran",
+      "count": 6214,
+      "reason": "SPOKEN_WORD_COUNT_MISMATCH"
+    },
+    {
+      "slug": "saber_abdulhakam_shubah_way2quran",
+      "count": 6236,
+      "reason": "CANONICAL_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "saber_abdulhakam_shubah_way2quran",
+      "count": 6236,
+      "reason": "SPOKEN_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "saber_abdulhakam_shubah_way2quran",
+      "count": 6236,
+      "reason": "SPOKEN_WORD_COUNT_MISMATCH"
+    },
+    {
+      "slug": "saber_abdulhakam_warsh_way2quran",
+      "count": 6214,
+      "reason": "CANONICAL_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "saber_abdulhakam_warsh_way2quran",
+      "count": 6214,
+      "reason": "SPOKEN_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "saber_abdulhakam_warsh_way2quran",
+      "count": 6214,
+      "reason": "SPOKEN_WORD_COUNT_MISMATCH"
+    },
+    {
+      "slug": "saber_abdulhakam_yt",
+      "count": 606,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "saber_abdulhakam_yt",
+      "count": 38,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "saud_al_shuraim_mp3quran",
+      "count": 438,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "saud_al_shuraim_mp3quran",
+      "count": 33,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "saud_al_shuraim_mp3quran",
+      "count": 4,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "saud_al_shuraim_mp3quran",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "walid_al_naihi_qalon_mp3quran",
+      "count": 6214,
+      "reason": "CANONICAL_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "walid_al_naihi_qalon_mp3quran",
+      "count": 6214,
+      "reason": "SPOKEN_TEXT_UNAVAILABLE"
+    },
+    {
+      "slug": "walid_al_naihi_qalon_mp3quran",
+      "count": 6214,
+      "reason": "SPOKEN_WORD_COUNT_MISMATCH"
+    },
+    {
+      "slug": "walid_atef_way2quran",
+      "count": 1270,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "walid_atef_way2quran",
+      "count": 76,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "walid_atef_way2quran",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    },
+    {
+      "slug": "walid_atef_way2quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "yasser_al_dosari_archive",
+      "count": 1083,
+      "reason": "CANONICAL_WORD_COVERAGE_INCOMPLETE"
+    },
+    {
+      "slug": "yasser_al_dosari_archive",
+      "count": 62,
+      "reason": "WORD_DIFF_UNMAPPED"
+    },
+    {
+      "slug": "yasser_al_dosari_archive",
+      "count": 7,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "yasser_al_dosari_archive",
+      "count": 1,
+      "reason": "MISSING_SOURCE_AYAH"
+    }
+  ],
+  "violations": [
+    {
+      "word_accounting": 0,
+      "highlight_invalid": 0,
+      "ready_with_reasons": 0,
+      "noncanonical_spoken_text": 0,
+      "noncanonical_legal_reference": 0
+    }
+  ],
+  "release_defect_reasons": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "count": 2,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdullah_al_mattrod_qdc",
+      "count": 2,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdullah_kamel_way2quran",
+      "count": 109,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdulwadood_haneef_mp3quran",
+      "count": 10,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdur_rashid_sufi_qdc",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "abu_bakr_al_shatri_tarteel",
+      "count": 7,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "adel_al_karbalaei_archive_v2",
+      "count": 2,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_al_ajmi_qdc",
+      "count": 2,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_amer_tvquran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "count": 5,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_kaseb_way2quran",
+      "count": 2,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_nuayna_qdc",
+      "count": 59,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_shaheen_mp3quran",
+      "count": 3,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "count": 11,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "akram_al_alaqmi_qdc",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "ayman_swed_muallim_yt",
+      "count": 20,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "badr_al_turki_yt",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "bandar_baleela_qdc",
+      "count": 23,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "fatih_seferagic_way2quran",
+      "count": 5,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "haitham_al_dukhain_mp3quran",
+      "count": 3,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "hani_al_rifai_qdc_128k",
+      "count": 10,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "islam_sobhi_mp3quran",
+      "count": 4,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "khalid_al_mohana_drive",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mahmoud_ali_al_banna_qdc",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mp3quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_2008_qdc",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_mp3quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_abdulkareem_qdc",
+      "count": 11,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_alghazali_archive",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_burhaji_yt",
+      "count": 10,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "count": 60,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "count": 4,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "mustafa_ismail_mp3quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "nasser_al_qatami_mp3quran",
+      "count": 28,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "saad_al_ghamdi_tarteel",
+      "count": 2,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "saud_al_shuraim_mp3quran",
+      "count": 4,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "walid_atef_way2quran",
+      "count": 1,
+      "reason": "INVALID_WORD_INTERVAL"
+    },
+    {
+      "slug": "yasser_al_dosari_archive",
+      "count": 7,
+      "reason": "INVALID_WORD_INTERVAL"
+    }
+  ],
+  "publication_gates": [
+    {
+      "published": 0,
+      "recitations": 69,
+      "audio_basmala_unverified": 69
+    }
+  ],
+  "chapter_invariant": [
+    {
+      "coverage_errors": 0,
+      "checked_chapters": 7765
+    }
+  ],
+  "semantic_hashes": {
+    "ayah_timings": "061e235f93af8af2de7b6e6fd9fd9829eacd4b90ed59997f1dd75ba49d7f5ad5",
+    "import_jobs": "0502798d8d1413cb5ba065b6d2519214f462980a78e6922c3ebef215cf05ecdb",
+    "ayah_timing_history": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "recitation_chapters": "fa64be160a552c959b6b0842188e674d1eea072780b7ec5e4e3b100ed1a7607d",
+    "recitations": "e36e1144044c9250d699232393a84a4784df5382c842523f2d8f849c161d9497"
+  },
+  "semantic_timestamps_excluded": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 20,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 7400,
+    "transport_response_bytes": 31899264
+  }
+}

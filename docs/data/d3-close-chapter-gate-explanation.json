@@ -1,0 +1,29 @@
+{
+  "checked_at": "2026-10-10T07:21:44.820Z",
+  "read_only": true,
+  "rows": [
+    {
+      "slug": "islam_sobhi_mp3quran",
+      "surah": 44,
+      "is_complete": 0,
+      "ayahs_complete": 0,
+      "expected_ayahs": 59,
+      "available_ayahs": 0,
+      "timing_complete": 1,
+      "coverage_mismatch": 1
+    }
+  ],
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 1,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 361,
+    "transport_response_bytes": 364
+  }
+}

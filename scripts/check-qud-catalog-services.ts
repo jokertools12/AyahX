@@ -11,21 +11,28 @@ const option = (name: string): string => {
 if (!process.argv.includes('--production-read-only')) throw new Error('EXPLICIT_READ_ONLY_SCOPE_REQUIRED');
 const since = option('--since');
 if (!/^\d{4}-\d{2}-\d{2}T/u.test(since) || !Number.isFinite(Date.parse(since))) throw new Error('EXPLICIT_ISO_WINDOW_REQUIRED');
-const health: Array<{ path: string; http_status: number; status: string; database?: string }> = [];
+const health: Array<{ path: string; http_status: number; status: string; database?: string; storage?: Record<string, unknown> }> = [];
 for (const path of ['/api/health', '/api/health/ready']) {
   const response = await fetch(`https://ayahx.com${path}`, { signal: AbortSignal.timeout(60000) });
   if (response.status !== 200) throw new Error(`HEALTH_HTTP_${response.status}:${path}`);
-  let body: { status?: string; database?: { status?: string } | string };
+  let body: { status?: string; database?: { status?: string } | string; storage?: Record<string, unknown> };
   try { body = await response.json() as typeof body; }
   catch { throw new Error(`HEALTH_JSON_MALFORMED:${path}`); }
   const status = body.status === 'ok' || body.status === 'ready' ? body.status : 'unexpected';
   const database = typeof body.database === 'object' ? body.database?.status : body.database;
-  health.push({ path, http_status: response.status, status, ...(database === 'connected' ? { database } : {}) });
+  health.push({ path, http_status: response.status, status, ...(database === 'connected' ? { database } : {}), ...(body.storage ? { storage: body.storage } : {}) });
   if (status === 'unexpected' || (path.endsWith('/ready') && database !== 'connected')) throw new Error(`HEALTH_NOT_READY:${path}`);
 }
 const until = new Date().toISOString();
 const logs: Array<{ service: string; since: string; until: string; lines: number; errors: number; error_timestamps: string[] }> = [];
-for (const [service, id] of [['AyahX', '1ff57ef9-b793-4130-ae60-ce8392172cf8'], ['MySQL', MYSQL_SERVICE]]) {
+const services = [['AyahX', '1ff57ef9-b793-4130-ae60-ce8392172cf8'], ['MySQL', MYSQL_SERVICE]];
+if (process.argv.includes('--all-services')) services.push(
+  ['render-control', '68eea2bb-ae45-4af7-8962-ba9e16e466fc'],
+  ['render-worker-skia', '18de6ea4-108a-4346-8474-c7b05b81943b'],
+  ['alignment-worker', 'd8558eff-68f5-4c63-b744-a103ddd743f6'],
+  ['Redis', '72fdd003-f982-4ef7-a95d-243fee381fbb'],
+);
+for (const [service, id] of services) {
   const child = spawn(railwayBinary, ['logs', '--project', PROJECT, '--environment', ENVIRONMENTS.production,
     '--service', id, '--since', since, '--until', until, '--lines', '500', '--json'], { env: railwayEnv, stdio: ['ignore', 'pipe', 'pipe'] });
   const output: Buffer[] = [];
@@ -54,4 +61,4 @@ for (const [service, id] of [['AyahX', '1ff57ef9-b793-4130-ae60-ce8392172cf8'], 
 const report = { checked_at: new Date().toISOString(), health, logs, passed: logs.every((log) => log.errors === 0), read_only: true };
 await writeFile(option('--out'), JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify(report));
-if (!report.passed) throw new Error('PRODUCTION_LOG_ERRORS_STOP; no DB repair or deploy authorized');
+if (!report.passed) throw new Error('PRODUCTION_LOG_ERRORS_STOP; inspect evidence before any further action');

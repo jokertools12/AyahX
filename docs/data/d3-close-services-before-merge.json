@@ -1,0 +1,68 @@
+{
+  "checked_at": "2026-10-10T07:18:30.768Z",
+  "health": [
+    {
+      "path": "/api/health",
+      "http_status": 200,
+      "status": "ok"
+    },
+    {
+      "path": "/api/health/ready",
+      "http_status": 200,
+      "status": "ready",
+      "database": "connected"
+    }
+  ],
+  "logs": [
+    {
+      "service": "AyahX",
+      "since": "2026-10-10T07:07:00Z",
+      "until": "2026-10-10T07:18:20.072Z",
+      "lines": 6,
+      "errors": 0,
+      "error_timestamps": []
+    },
+    {
+      "service": "MySQL",
+      "since": "2026-10-10T07:07:00Z",
+      "until": "2026-10-10T07:18:20.072Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": []
+    },
+    {
+      "service": "render-control",
+      "since": "2026-10-10T07:07:00Z",
+      "until": "2026-10-10T07:18:20.072Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": []
+    },
+    {
+      "service": "render-worker-skia",
+      "since": "2026-10-10T07:07:00Z",
+      "until": "2026-10-10T07:18:20.072Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": []
+    },
+    {
+      "service": "alignment-worker",
+      "since": "2026-10-10T07:07:00Z",
+      "until": "2026-10-10T07:18:20.072Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": []
+    },
+    {
+      "service": "Redis",
+      "since": "2026-10-10T07:07:00Z",
+      "until": "2026-10-10T07:18:20.072Z",
+      "lines": 55,
+      "errors": 0,
+      "error_timestamps": []
+    }
+  ],
+  "passed": true,
+  "read_only": true
+}

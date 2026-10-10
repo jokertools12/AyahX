@@ -1,0 +1,283 @@
+{
+  "checked_at": "2026-10-10T06:37:41.118Z",
+  "read_only": true,
+  "slug": "khalifa_al_tunaiji_tarteel",
+  "connections": [
+    {
+      "id": 12113,
+      "state": "executing",
+      "command": "Query",
+      "seconds": 0,
+      "query_sha256": "d0ab3da7e59157e4b9fb652964e9721b686133e4b6fcc0e9786200a4b02174c7"
+    },
+    {
+      "id": 5,
+      "state": "Waiting on empty queue",
+      "command": "Daemon",
+      "seconds": 70363,
+      "query_sha256": null
+    },
+    {
+      "id": 7919,
+      "state": "",
+      "command": "Sleep",
+      "seconds": 23631,
+      "query_sha256": null
+    }
+  ],
+  "threads_connected": "Threads_connected\t2\n",
+  "max_connections": "max_connections\t60\n",
+  "jobs": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "abdulaziz_al_turki_yt",
+      "status": "completed",
+      "checkpoint": 6115,
+      "total_rows": 6115
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_warsh_qdc",
+      "status": "completed",
+      "checkpoint": 6214,
+      "total_rows": 6214
+    },
+    {
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "abdullah_al_mattrod_qdc",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "abdullah_kamel_way2quran",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "abdulwadood_haneef_mp3quran",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "abdur_rashid_sufi_qdc",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "abu_bakr_al_shatri_tarteel",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "adel_al_karbalaei_archive_v2",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "ahmed_al_ajmi_qdc",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "ahmed_amer_tvquran",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "ahmed_deban_qalon_mp3quran",
+      "status": "completed",
+      "checkpoint": 6214,
+      "total_rows": 6214
+    },
+    {
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "ahmed_kaseb_way2quran",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "ahmed_nuayna_qdc",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "status": "completed",
+      "checkpoint": 6213,
+      "total_rows": 6213
+    },
+    {
+      "slug": "ahmed_saud_mp3quran",
+      "status": "completed",
+      "checkpoint": 327,
+      "total_rows": 327
+    },
+    {
+      "slug": "ahmed_shaheen_mp3quran",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "status": "completed",
+      "checkpoint": 5561,
+      "total_rows": 5561
+    },
+    {
+      "slug": "akram_al_alaqmi_qdc",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "ali_al_huthaifi_mp3quran",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "ayman_swed_muallim_yt",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "badr_al_turki_yt",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "bandar_baleela_qdc",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "fatih_seferagic_way2quran",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "haitham_al_dukhain_mp3quran",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "hani_al_rifai_qdc_128k",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "ibrahim_al_akhdar_drive",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "imad_zuhair_hafez_mp3quran",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "islam_sobhi_mp3quran",
+      "status": "completed",
+      "checkpoint": 5334,
+      "total_rows": 5334
+    },
+    {
+      "slug": "khalid_al_mohana_drive",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    },
+    {
+      "slug": "khalifa_al_tunaiji_tarteel",
+      "status": "completed",
+      "checkpoint": 6236,
+      "total_rows": 6236
+    }
+  ],
+  "read_ms": 8452.961800000001,
+  "sha256": "669644af08754232e6aaa57ee32b3fae2ff78c885f00cc334106dd5b7d31c018",
+  "rows": 6236,
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 5,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 1753,
+    "transport_response_bytes": 12596803
+  }
+}
