@@ -1,5 +1,9 @@
 # سجل عمليات Railway — D1/D2
 
+## 2026-10-10 — بداية الدفعة2/D4، T0 قبل النشر
+
+الإنفاق بالقراءة08:43:36.906UTC=17.892516611862717$، حد30$/تنبيه20$، المتبقي12.107483388137283$؛ لا تعديلميزانية أوموارد. T0logger يجهزPRمستقل وبواباتCI/SUCCESS/health/ready/10min/smoke. لاDBكتابةD4 ولافتحflagالإنتاج. stagingتبقىمتوقفة. [قراءةالبداية](data/d4-budget-before.json)، [الجودةالمحلية](data/d4-t0-quality.json).
+
 ## 2026-10-10 — قبول نشر D3 وإغلاق الدفعة
 
 - [PR11](https://github.com/jokertools12/AyahX/pull/11) دُمج بعد [CI38034363594](https://github.com/jokertools12/AyahX/actions/runs/38034363594) الأخضر. source78c4a17bf573e7e67c3b0e23ab23a00e97c54140؛ التطبيق dbf63844-3aef-4648-ab38-c9ff1c8e8b0d، control3c092b68-dd07-4766-aa34-2c6416ce0b3a، Skia5d5656a3-5e07-4501-b1b4-5b0b375f392e، alignment0a935147-3a6c-4ada-b8eb-da30e6490fd3؛ جميعها SUCCESS. [دليل النشر](data/d3-close-publication.json).
