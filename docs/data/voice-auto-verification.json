@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "actor": "auto-verifier-v1",
-  "checked_at": "2026-10-10T13:52:42.525561+00:00",
+  "checked_at": "2026-10-10T14:29:10.793061+00:00",
   "scope": "Advisory automated checks only. Speaker consistency does not prove absolute named identity.",
   "network_requests": 0,
   "database_writes": 0,
@@ -858,7 +858,22 @@
         ],
         "reasons": [
           "ALIGNER_AUDITION_COVERAGE_INCOMPLETE"
-        ]
+        ],
+        "actual_probe": {
+          "checked_at": "2026-10-10T14:16:56.042Z",
+          "provider": "internal_ctc",
+          "requests": 1,
+          "retries": 0,
+          "v2_status": "unverified",
+          "http_status": 404,
+          "code": "ALIGNMENT_HTTP_404",
+          "request_sha256": "e83190ac52f9fba9f28b431708219c7574c1a910b3f5aa5122a477bb1447829c",
+          "audio_sha256": "8ff3458a12ec2d994c36695f9acc8ffaf6b138476e361624f8206a498c6c63d6",
+          "duration_ms": 32026.067,
+          "production_db_writes": 0,
+          "probe_artifact_sha256": "c59e17ff487d62d8c6b54abaf0cb8dfd82aeeb1364c6312d4ee947bc639ac2cf",
+          "v2_credit_granted": false
+        }
       },
       "V3": {
         "passed": false,
@@ -6112,9 +6127,49 @@
       "review_item_type": "voice_confirmation"
     }
   },
+  "actual_aligner_probe": {
+    "checked_at": "2026-10-10T14:16:56.042Z",
+    "provider": "internal_ctc",
+    "requests": 1,
+    "retries": 0,
+    "v2_status": "unverified",
+    "http_status": 404,
+    "code": "ALIGNMENT_HTTP_404",
+    "request_sha256": "e83190ac52f9fba9f28b431708219c7574c1a910b3f5aa5122a477bb1447829c",
+    "audio_sha256": "8ff3458a12ec2d994c36695f9acc8ffaf6b138476e361624f8206a498c6c63d6",
+    "duration_ms": 32026.067,
+    "production_db_writes": 0,
+    "probe_artifact_sha256": "c59e17ff487d62d8c6b54abaf0cb8dfd82aeeb1364c6312d4ee947bc639ac2cf",
+    "v2_credit_granted": false
+  },
+  "actual_aligner_readiness": {
+    "checked_at": "2026-10-10T14:24:12.526Z",
+    "provider": "internal_ctc",
+    "configured_path": "/",
+    "expected_alignment_path": "/v1/align",
+    "alignment_posts": 0,
+    "checks": [
+      {
+        "path": "/health/live",
+        "http_status": 200,
+        "code": null,
+        "status": "alive"
+      },
+      {
+        "path": "/health/ready",
+        "http_status": 503,
+        "code": "MODEL_NOT_CONFIGURED",
+        "status": null
+      }
+    ],
+    "readiness_artifact_sha256": "2f6c89a3bf828a6a4adfa49b32a6039de103f3b81db9845d40452073529b54f2",
+    "v2_credit_granted": false
+  },
   "input_sha256": {
     "catalog": "b7ee26c2267b086d5758477e21144887c28c6ba884a6ff5157a55cf17df4eed4",
     "identity": "59c7243d16869fc379ae9ebf5bf23c8da39813a07f495f6810c561dce2636096",
-    "speakers": "766b39869f8195a330863aaaee970b51c5cfce5e328e58237c4bcf7caabb02fe"
+    "speakers": "766b39869f8195a330863aaaee970b51c5cfce5e328e58237c4bcf7caabb02fe",
+    "aligner_probe": "c59e17ff487d62d8c6b54abaf0cb8dfd82aeeb1364c6312d4ee947bc639ac2cf",
+    "aligner_readiness": "2f6c89a3bf828a6a4adfa49b32a6039de103f3b81db9845d40452073529b54f2"
   }
 }

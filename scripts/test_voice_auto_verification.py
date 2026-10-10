@@ -5,6 +5,24 @@ from lib.voice_auto_verification import alignment_evidence, calibrated_threshold
 
 
 class VoiceDecisionTests(unittest.TestCase):
+    def test_real_probe_and_readiness_are_observations_not_v2_credit(self):
+        spec = importlib.util.spec_from_file_location('voice_report', Path(__file__).with_name('auto-verify-voices.py'))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        report = {'results': {'fixture': {'V1': {'content_fingerprint_scope': [{'sha256': 'a' * 64}]},
+                                          'V2': {'passed': False}, 'voice_identity_status': 'unverified'}}}
+        module.attach_aligner_observations(report,
+            {'http_status': 404, 'code': 'ALIGNMENT_HTTP_404', 'requests': 1, 'audio_sha256': 'a' * 64,
+             'endpoint': 'do-not-copy', 'error_body': 'do-not-copy'}, 'b' * 64,
+            {'alignment_posts': 0, 'checks': [{'path': '/health/ready', 'http_status': 503,
+                                             'code': 'MODEL_NOT_CONFIGURED', 'body': 'do-not-copy'}]}, 'c' * 64)
+        self.assertFalse(report['results']['fixture']['V2']['passed'])
+        self.assertEqual(report['results']['fixture']['voice_identity_status'], 'unverified')
+        self.assertEqual(report['actual_aligner_probe']['probe_artifact_sha256'], 'b' * 64)
+        self.assertEqual(report['actual_aligner_readiness']['readiness_artifact_sha256'], 'c' * 64)
+        self.assertNotIn('endpoint', report['actual_aligner_probe'])
+        self.assertNotIn('body', report['actual_aligner_readiness']['checks'][0])
+
     def test_never_confirmed_and_never_public(self):
         passed = {'passed': True}
         for model in (True, False):

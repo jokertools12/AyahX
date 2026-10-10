@@ -13,6 +13,27 @@ def load(path):
     return json.loads(raw), sha256(raw)
 
 
+def attach_aligner_observations(report, probe=None, probe_sha=None, readiness=None, readiness_sha=None):
+    """Attach bounded actual observations; these never grant V2 or alter decisions."""
+    if probe is not None:
+        fields = ['checked_at', 'provider', 'requests', 'retries', 'v2_status', 'http_status',
+                  'code', 'request_sha256', 'audio_sha256', 'duration_ms', 'production_db_writes']
+        safe_probe = {key: probe[key] for key in fields if key in probe}
+        report['actual_aligner_probe'] = {**safe_probe, 'probe_artifact_sha256': probe_sha,
+                                         'v2_credit_granted': False}
+        for row in report['results'].values():
+            if any(item['sha256'] == probe.get('audio_sha256') for item in row['V1']['content_fingerprint_scope']):
+                row['V2']['actual_probe'] = report['actual_aligner_probe']
+    if readiness is not None:
+        fields = ['checked_at', 'provider', 'configured_path', 'expected_alignment_path', 'alignment_posts']
+        safe_readiness = {key: readiness[key] for key in fields if key in readiness}
+        safe_readiness['checks'] = [{key: check[key] for key in ['path', 'http_status', 'code', 'status'] if key in check}
+                                    for check in readiness.get('checks', [])]
+        report['actual_aligner_readiness'] = {**safe_readiness, 'readiness_artifact_sha256': readiness_sha,
+                                             'v2_credit_granted': False}
+    return report
+
+
 def build(catalog, identity, alignment=None, speakers=None, youtube_metadata=None):
     alignment, speakers, youtube_metadata = alignment or {}, speakers or {}, youtube_metadata or {}
     measurements = identity.get('duration_quality_comparison', {}).get('measurements', [])
@@ -88,7 +109,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for field in ('catalog', 'identity', 'out'):
         parser.add_argument('--' + field, required=True)
-    for field in ('alignment', 'speakers', 'youtube-metadata'):
+    for field in ('alignment', 'speakers', 'youtube-metadata', 'aligner-probe', 'aligner-readiness'):
         parser.add_argument('--' + field)
     args = parser.parse_args()
     inputs, hashes = {}, {}
@@ -97,6 +118,13 @@ def main():
         if path:
             inputs[key], hashes[key] = load(path)
     report = build(**inputs)
+    observations = {}
+    for field, observation in [('aligner_probe', 'probe'), ('aligner_readiness', 'readiness')]:
+        path = getattr(args, field)
+        if path:
+            observations[observation], hashes[field] = load(path)
+            observations[observation + '_sha'] = hashes[field]
+    attach_aligner_observations(report, **observations)
     report['input_sha256'] = hashes
     destination = Path(args.out)
     destination.parent.mkdir(parents=True, exist_ok=True)
