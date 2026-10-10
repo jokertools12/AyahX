@@ -1,0 +1,37 @@
+{
+  "source_commands": [
+    "railway usage --workspace <workspace-id> --json",
+    "railway usage projects --workspace <workspace-id> --project <project-id> --period current --json",
+    "railway usage limit status --workspace <workspace-id> --target workspace --json"
+  ],
+  "billing_period": {
+    "start": "2026-09-19T00:53:56+00:00",
+    "end": "2026-10-19T00:53:56+00:00"
+  },
+  "current_usage_dollars": 17.83406514740877,
+  "estimated_bill_dollars": 23.073205267590637,
+  "hard_limit_dollars": 18,
+  "soft_limit_dollars": 5,
+  "is_over_limit": false,
+  "remaining_before_hard_limit_dollars": 0.16593485259123142,
+  "mysql_period_cost": {
+    "total_dollars": 5.813558654074766,
+    "volume_dollars": 0.06269965184712994,
+    "backup_dollars": 0.010062073438499275
+  },
+  "volume": {
+    "configured_size_mb": 5000,
+    "official_rate_usd_per_gb_month": 0.15,
+    "official_rate_source": "https://docs.railway.com/pricing/plans",
+    "full_5gb_month_calculated_usd": 0.75,
+    "full_5gb_month_is_measured_bill": false
+  },
+  "stop": {
+    "trigger": "unexpected_billing_budget_condition",
+    "user_clause": 6,
+    "db_writes": false,
+    "limit_or_plan_changed": false
+  },
+  "recorded_at": "2026-10-10T04:20:26.388Z",
+  "exact_cli_response_timestamp_unavailable": true
+}
