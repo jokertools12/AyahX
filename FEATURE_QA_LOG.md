@@ -1,3 +1,7 @@
+# 2026-10-10 — D4/T0، قبول محلي فقط قبل الشحن
+
+logger: code/message/stack للخطأ الأصلي، JSON error fields للردود دون اختلاقstack، لا[object Object] من سياقHTTP. حجبconnectionURLs/signedURLs/query strings والأسرار فيmessage/context/stack وAPMhooks، مع معالجةcontextالدائري. resolve-known يحفظcaughtError دون تغييرpayload/status. خمسة اختبارات انحدار فشلت على القديم؛ focused14/14 بعد إصلاح عقدAPM الذي كشفه اختبار قائم. كاملالمشروع499pass/6skip/0fail،tsc/strict/build ناجحة،lint4files/0errors/0newmessages و15تحذيرًا قديمًا باقيًا فيalignments. CI/productionpending؛ لاD4datawrites أوA1/D5. الدليلdocs/data/d4-t0-quality.json.
+
 # FEATURE QA LOG & PRODUCT QUALITY AUDIT
 
 ## 2026-10-10 — D3: قبول البيانات والكود مكتمل، توقف ولا D4
@@ -268,7 +272,3 @@ Railway volume5000MB وdf: total4,685,873,152/used325,705,728/free4,350,103,552 
 استعيدت نسخة age جديدة على MySQL 9.7.2 وتطابقت COUNT/CHECKSUM لكل 51 جدولًا. البروفة المحلية وصلت إلى 316,539 صفًا في 52 تلاوة فقط، مع سبعة صفوف HF حقيقية في جدول تدقيق needs_review. بعد ثماني رسائل WorkerError على الأقل، فشلت BullMQ برسالة job stalled more than allowable limit. فُعلت نقطة توقف التكرار ولم تُعد المحاولة. القفل المحلي القصير، ثانيتان، سبب مرجح يحتاج قياسًا، وليس سببًا مثبتًا.
 
 جداول D3 غائبة على production؛ D1 والجداول الحرجة وبصمتا users/user_roles ثابتة، وحسابات الأدمن محفوظة. health/ready=200 ولوج بلا أخطاء جديدة ضمن النافذة المسجلة. npm test: 488 ناجحة و6 متخطاة وصفر فشل؛ tsc وbuild ناجحان، ولا رسائل lint جديدة. اختبارات البروفة الكاملة والقتل/الاستئناف والفساد/down والفهارس غير مكتملة، وفحص مساحة health غير منشور. لا دمج أو نشر أو إغلاق D3، ولا D4. التفاصيل والأدلة في docs/data/d3-import-report.md.
-# 2026-10-10 — D4/T0، قبول محلي فقط قبل الشحن
-
-logger: code/message/stack للخطأ الأصلي، JSON error fields للردود دون اختلاقstack، لا[object Object] من سياقHTTP. حجبconnectionURLs/signedURLs/query strings والأسرار فيmessage/context/stack وAPMhooks، مع معالجةcontextالدائري. resolve-known يحفظcaughtError دون تغييرpayload/status. خمسة اختبارات انحدار فشلت على القديم؛ focused14/14 بعد إصلاح عقدAPM الذي كشفه اختبار قائم. كاملالمشروع499pass/6skip/0fail،tsc/strict/build ناجحة،lint4files/0errors/0newmessages و15تحذيرًا قديمًا باقيًا فيalignments. CI/productionpending؛ لاD4datawrites أوA1/D5. الدليلdocs/data/d4-t0-quality.json.
-
