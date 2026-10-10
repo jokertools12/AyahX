@@ -1,0 +1,128 @@
+{
+  "pr": 10,
+  "merge_sha": "802720bad9aa8152fe93394f187fbb19e9879846",
+  "services": [
+    {
+      "service": "AyahX",
+      "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "id": "42b9264d-4797-4f6c-ba00-322071289cc0",
+      "status": "SUCCESS",
+      "sha": "802720bad9aa8152fe93394f187fbb19e9879846",
+      "updatedAt": "2026-10-10T00:08:17.170Z"
+    },
+    {
+      "service": "render-control",
+      "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "id": "f6b20af1-6ef9-47ba-9432-9f6ed9f51c1d",
+      "status": "SUCCESS",
+      "sha": "802720bad9aa8152fe93394f187fbb19e9879846",
+      "updatedAt": "2026-10-10T00:03:47.368Z"
+    },
+    {
+      "service": "render-worker-skia",
+      "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "id": "f8c9e4e7-3d0c-4473-ba5b-3bbd5160e2ca",
+      "status": "SUCCESS",
+      "sha": "802720bad9aa8152fe93394f187fbb19e9879846",
+      "updatedAt": "2026-10-10T00:03:55.862Z"
+    },
+    {
+      "service": "alignment-worker",
+      "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "id": "0dcab870-6e04-47c9-9ea4-772213794b99",
+      "status": "SUCCESS",
+      "sha": "802720bad9aa8152fe93394f187fbb19e9879846",
+      "updatedAt": "2026-10-10T00:03:08.209Z"
+    }
+  ],
+  "window_start": "2026-10-10T00:08:47.000Z",
+  "window_end": "2026-10-10T00:19:06.000Z",
+  "minimum_elapsed_seconds": 619,
+  "worker_logs": [
+    {
+      "service": "render-control",
+      "status": "SUCCESS",
+      "since": "2026-10-10T00:08:47.000Z",
+      "until": "2026-10-10T00:19:06.000Z",
+      "elapsed_seconds": 619,
+      "lines": 0,
+      "new_errors": 0,
+      "complete": true
+    },
+    {
+      "service": "render-worker-skia",
+      "status": "SUCCESS",
+      "since": "2026-10-10T00:08:47.000Z",
+      "until": "2026-10-10T00:19:06.000Z",
+      "elapsed_seconds": 619,
+      "lines": 0,
+      "new_errors": 0,
+      "complete": true
+    },
+    {
+      "service": "alignment-worker",
+      "status": "SUCCESS",
+      "since": "2026-10-10T00:08:47.000Z",
+      "until": "2026-10-10T00:19:06.000Z",
+      "elapsed_seconds": 619,
+      "lines": 0,
+      "new_errors": 0,
+      "complete": true
+    }
+  ],
+  "startup_log_classification": [
+    {
+      "service": "AyahX",
+      "id": "42b9264d-4797-4f6c-ba00-322071289cc0",
+      "status": "SUCCESS",
+      "lines": 192,
+      "raw_error_labels": 0,
+      "exact_previous_info_templates": 0,
+      "new_errors": 0,
+      "error_timestamps": [],
+      "complete": true
+    },
+    {
+      "service": "render-control",
+      "id": "f6b20af1-6ef9-47ba-9432-9f6ed9f51c1d",
+      "status": "SUCCESS",
+      "lines": 4,
+      "raw_error_labels": 0,
+      "exact_previous_info_templates": 0,
+      "new_errors": 0,
+      "error_timestamps": [],
+      "complete": true
+    },
+    {
+      "service": "render-worker-skia",
+      "id": "f8c9e4e7-3d0c-4473-ba5b-3bbd5160e2ca",
+      "status": "SUCCESS",
+      "lines": 4,
+      "raw_error_labels": 0,
+      "exact_previous_info_templates": 0,
+      "new_errors": 0,
+      "error_timestamps": [],
+      "complete": true
+    },
+    {
+      "service": "alignment-worker",
+      "id": "0dcab870-6e04-47c9-9ea4-772213794b99",
+      "status": "SUCCESS",
+      "lines": 6,
+      "raw_error_labels": 4,
+      "exact_previous_info_templates": 4,
+      "new_errors": 0,
+      "error_timestamps": [],
+      "complete": true
+    }
+  ],
+  "health_report": "d2-pr10-health-window.json",
+  "production_readonly_report": "d2-pr10-production-readonly.json",
+  "remote_public_e2e": {
+    "passed": 10,
+    "failed": 0,
+    "api_writes": false
+  },
+  "passed": true,
+  "d2_closed": true
+}

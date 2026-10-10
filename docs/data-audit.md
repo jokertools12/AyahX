@@ -903,3 +903,11 @@ HF logger يسجل الآن 500 مع وقت UTC ونص استجابة محجوب
 - نتائج الاختبارات الحالية: Vitest، 471 passed و 6 skipped و 0 failed من 477، ومنها 32 اختبارًا للكتالوج والنقل. نجحت فحوص root TypeScript و strict للملفات المعدلة و lint بلا رسائل. لم يُصلح lint العام، ولم تتغير UI/render. لم يجد فحص diff لـ PR9/10 نمط أسرار أو ملفات خاصة أو migration عند startup؛ ويُعاد CI للرأس النهائي بعد الدفع.
 
 الأدلة: `data/d2-*status-fixed.json`، `d2-backup-reuse-precheck.json`، `d2-backup-reverification-status-fixed.json`، `d2-status-rehearsal-attempts.json`، `d2-serial-transport-readonly-precheck.json`، `d2-cleanup-expanded-authorization.json` و`progress.md`.
+
+## إغلاق D2 تحت التفويض الموسع — 2026-10-10T00:19Z
+
+دُمج PR9 على 099d8e76 ثم PR10 بعد تغيير base إلى main، على 802720ba، بعد CI الرأس 3455a5b والمراجعة المستقلة للأسرار وحراس staging وغياب migrations D1/D2 عن startup. نجحت الخدمات الأربع في النشرين. نافذتا قبول اللوجات تجاوزتا 604s و619s، بلا أخطاء جديدة؛ health/ready=200 وdatabase=connected. نجحت اختبارات الواجهة العامة 10/10 لكل نشر دون إرسال forms أو API writes. تصنيف Railway لسطور Uvicorn الأربع كأخطاء مصدره رسائل INFO عند بدء الخدمة؛ طابقت كل قالب مع النشر السابق، ولا استثناء/traceback جديد، مع إبقاء عدد severity الخام موثقًا.
+
+المصالحة المستقلة بعد النشر الأخير الساعة 00:19:17Z: 57 قارئًا و10 مزودين و69 تلاوة و7765 سورة؛ riwayat=4 بإدراج 3 غير مفعلة؛ published=0. جميع حقول الكتالوج تطابق dataset. D1=114/6236/77433 وبصمة القانوني eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4 وCHECKSUM وcollations والجداول الحرجة ثابتة. SQL واحد بالبصمة d3f0db3ece980af02af2b00b2c06f5e2ce890b3526e62050396571cd2cc42fe8 طُبق فعليًا على staging والإنتاج، مع COMMIT/SSH exit=0 و45 فحص اتصالات؛ أعظمهما المرصود 2. نتيجة offset الأصلية 8/48/13 لم تتغير.
+
+D2 مغلق. الأدلة: data/d2-pr9-deployment-acceptance.json وdata/d2-pr10-deployment-acceptance.json وdata/d2-pr10-production-readonly.json؛ نتائج الاختبارات 471 pass/6 skip/0 fail، و32/32 مستهدفًا، وTypeScript/lint المتغير ناجحان. يبدأ B الآن؛ لا D3 قبل قبوله. manual_cleanup_required مستمر بعد رفض المحاولة الواحدة بـblocked by policy؛ لا تنظيف بديل ولا snapshot جديد. ستحتفظ أدوات التدقيق اللاحقة بالـscratch بدل الحذف التلقائي، مع مسارات واضحة.
