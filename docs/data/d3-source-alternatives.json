@@ -1,0 +1,1597 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-10T00:34:58.920021+00:00",
+  "task": "B source alternatives for D2 source_unavailable recitations; D3 preparation",
+  "read_only": true,
+  "source": {
+    "qud_version": "v3.2.0",
+    "catalog_url": "https://github.com/QUD-Technologies/quranic-universal-audio/releases/download/v3.2.0/catalog.json",
+    "catalog_sha256": "b7ee26c2267b086d5758477e21144887c28c6ba884a6ff5157a55cf17df4eed4",
+    "source_main_commit": "802720bad9aa8152fe93394f187fbb19e9879846",
+    "v1_evidence_file": "docs/data/d2-offset-verification.json",
+    "v1_evidence_git_blob_sha256": "e844418430c2b43dc4be9a0fa3dfd8bebb6ddb1392ba43a927c4364cce57cba3",
+    "v1_evidence_checkout_sha256": "c9b2439639d19261e82efdfd1a14a2c5a9387bede380e3f3312efafd6837df82",
+    "v1_results_semantic_sha256": "7abf83aa3a929a978bd1dfe7d5b913535b52b0efb350914e460f79f546f185aa",
+    "v1_git_blob_unchanged_since_f171d98": true,
+    "v1_root_retained_sha256": "e071bf483c7b44c9157c49cc15287c9aa11ed598d777bfff2bdcb1e8a449a0b9",
+    "v1_root_retained_bytes": 530675,
+    "v1_checkout_bytes": 530676,
+    "v1_git_blob_bytes": 514561,
+    "v1_root_git_semantic_equal": true,
+    "v1_root_git_newline_normalized_equal": true,
+    "v1_normalization_explanation": "Root retained evidence and Windows checkout differ by one final newline byte. Git stores LF while checkout uses CRLF. Parsed JSON and newline-normalized bytes are equal; original verification results were not modified."
+  },
+  "policy": {
+    "no_database_calls": true,
+    "no_railway_calls": true,
+    "no_alignment_posts": true,
+    "no_hf_dataset_requests": true,
+    "no_youtube_requests": true,
+    "no_audio_rehosting": true,
+    "no_authentication_or_cookies": true,
+    "no_drive_confirmation_or_quota_bypass": true,
+    "no_automatic_publication": true,
+    "space_request_spacing_target_ms": 4000,
+    "space_observed_minimum_start_interval_ms": 3988,
+    "drive_request_spacing_target_ms": 5000,
+    "space_range_bytes": 1024,
+    "drive_maximum_read_rate_bytes_per_second": 81920
+  },
+  "aligner": {
+    "base_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1",
+    "openapi_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/openapi.json",
+    "openapi_version": "1.0.0",
+    "openapi_sha256": "c9a042f6f6f4e4482d22d2542c987b2d641f2e0e9e5a254f37e4c245d546f430",
+    "root_openapi_is_gradio_schema_not_the_api_contract": true,
+    "catalog_probes": [
+      {
+        "label": "openapi",
+        "request_path": "/openapi.json",
+        "started_at": "2026-10-10T00:22:33.080864+00:00",
+        "status": 200,
+        "content_type": "application/json",
+        "bytes": 35011,
+        "body_sha256": "dbda8f6667fdf1b8b66cfea1979801c971a9c51a7c365d80ce0cee8f637bb69c",
+        "truncated": false,
+        "top_type": "dict",
+        "top_keys": [
+          "openapi",
+          "info",
+          "paths",
+          "components"
+        ],
+        "record_count": null,
+        "collections": {}
+      },
+      {
+        "label": "audio-recitations",
+        "request_path": "/api/v1/audio-recitations",
+        "started_at": "2026-10-10T00:22:37.799889+00:00",
+        "status": 200,
+        "content_type": "application/json",
+        "bytes": 1303373,
+        "body_sha256": "63d571703b87a75ee9bd8c6ce8249d78ba263a2eb1e57ad67fe9ca43743c77e5",
+        "truncated": false,
+        "top_type": "dict",
+        "top_keys": [
+          "recitations"
+        ],
+        "record_count": null,
+        "collections": {
+          "recitations": 2163
+        }
+      },
+      {
+        "label": "recitations",
+        "request_path": "/api/v1/recitations",
+        "started_at": "2026-10-10T00:22:56.660280+00:00",
+        "status": 200,
+        "content_type": "application/json",
+        "bytes": 62761,
+        "body_sha256": "8923f32733286256dbc49e84fc0a99a69f5d428f6eb1cfbf584e0f4d3db4875c",
+        "truncated": false,
+        "top_type": "dict",
+        "top_keys": [
+          "recitations"
+        ],
+        "record_count": null,
+        "collections": {
+          "recitations": 93
+        }
+      }
+    ],
+    "audio_only_recitations": 2163,
+    "reviewed_recitations": 93,
+    "static_audio_source": {
+      "status": 200,
+      "bytes": 5580,
+      "sha256": "e98b477a4d692a287e56c24019a26c057bd3bb9d8f3ff4516433e988ca2560b4",
+      "checked_at": "2026-10-10T00:26:04.214302+00:00",
+      "source_url": "https://huggingface.co/spaces/hetchyy/quranic-universal-aligner/raw/main/src/ui/preload_audio_route.py",
+      "x_repo_commit": "ad3222b8870ffe9faf6b48d1bac9d32a16a8b10d",
+      "static_bucket_FileResponse": true,
+      "yt_dlp_present": false,
+      "subprocess_present": false,
+      "method_support_GET_HEAD": true
+    },
+    "static_audio_source_pinned_url": "https://huggingface.co/spaces/hetchyy/quranic-universal-aligner/raw/ad3222b8870ffe9faf6b48d1bac9d32a16a8b10d/src/ui/preload_audio_route.py",
+    "serving_evidence": "GET/HEAD without clip query serves existing read-only mounted MP3 via FileResponse; no source extraction in this route",
+    "api_openapi_probe": {
+      "path": "/api/v1/openapi.json",
+      "status": 200,
+      "started_at": "2026-10-10T00:23:42.483305+00:00",
+      "bytes": 41779,
+      "sha256": "c9a042f6f6f4e4482d22d2542c987b2d641f2e0e9e5a254f37e4c245d546f430",
+      "routes": [
+        "/recitations",
+        "/recitations/{recitation}/chapters/{chapter}/segments",
+        "/audio-recitations",
+        "/recitations/{recitation}/chapters/{chapter}/audio"
+      ]
+    }
+  },
+  "summary": {
+    "source_unavailable_recitations": 13,
+    "original_youtube": 9,
+    "original_drive": 4,
+    "exact_reviewed_catalog_matches": 13,
+    "exact_audio_only_catalog_matches": 0,
+    "healthy_space_sample_surahs": 13,
+    "healthy_space_sample_heads": 13,
+    "healthy_space_sample_ranges": 13,
+    "space_audio_bytes_read_in_memory": 13312,
+    "space_audio_files_saved": 0,
+    "drive_audio_files_downloaded": 1,
+    "drive_virus_scan_confirmation_pages": 3,
+    "offset_results_changed": 0,
+    "publication_changes": 0
+  },
+  "recitations": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "reciter_id": "abdul_hamid_ghraio",
+      "riwayah": "hafs_an_asim",
+      "style": "murattal",
+      "original_channel": "youtube",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 114,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Murattal",
+        "aligner_channel_label": "YouTube"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": null,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/abdul_hamid_ghraio_2025_yt/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/abdul_hamid_ghraio_2025_yt/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "abdul_hamid_ghraio_2025_yt",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/abdul_hamid_ghraio_2025_yt/chapters/112/audio",
+          "started_at": "2026-10-10T00:24:29.955654+00:00",
+          "status": 200,
+          "body_sha256": "09b70307e12a7333075ee9fb60b0f81b4bf58b07ed863abe48f6b1c55ec74a52",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "bf5b6cd47b981f03a0950a08766c71e7da71fc3e0141e0304e2f92fb746965c7"
+            }
+          },
+          "metadata": {
+            "recitation": "abdul_hamid_ghraio_2025_yt",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "abdul_hamid_ghraio_2025_yt",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:26:17.845497+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "342444",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "abdul_hamid_ghraio_2025_yt",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:26:22.308440+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/342444",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "47ebb7c0b8b63caaae5484773af024e75ba943171a8a1ef8a70ac75e5eeb5648",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "youtube_requests": 0,
+      "youtube_extraction": "explicitly prohibited; no page or media request attempted"
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "reciter_id": "abdul_hamid_ghraio",
+      "riwayah": "hafs_an_asim",
+      "style": "murattal",
+      "original_channel": "youtube",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 114,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Murattal",
+        "aligner_channel_label": "YouTube"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": 2629235,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/abdul_hamid_ghraio_2026_yt/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/abdul_hamid_ghraio_2026_yt/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "abdul_hamid_ghraio_2026_yt",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/abdul_hamid_ghraio_2026_yt/chapters/112/audio",
+          "started_at": "2026-10-10T00:27:06.757554+00:00",
+          "status": 200,
+          "body_sha256": "d6552b97320cd24ba5f52094ab0e11f16be482ab1db2956a77a323a4e9228375",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "d355cf212e631ab39eb07f5aca86514d3655c06363c84bc195afce704c1b15e2"
+            }
+          },
+          "metadata": {
+            "recitation": "abdul_hamid_ghraio_2026_yt",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "abdul_hamid_ghraio_2026_yt",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:27:10.756138+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "363134",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "abdul_hamid_ghraio_2026_yt",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:27:14.745016+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/363134",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "fb7bd68ec758d261dd26643fa56127e3f030714e907f9786e4787757ae2daf1c",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "youtube_requests": 0,
+      "youtube_extraction": "explicitly prohibited; no page or media request attempted"
+    },
+    {
+      "slug": "abdulaziz_al_turki_yt",
+      "reciter_id": "abdulaziz_al_turki",
+      "riwayah": "hafs_an_asim",
+      "style": "murattal",
+      "original_channel": "youtube",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 112,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Murattal",
+        "aligner_channel_label": "YouTube"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": null,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/abdulaziz_al_turki_yt/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/abdulaziz_al_turki_yt/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "abdulaziz_al_turki_yt",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/abdulaziz_al_turki_yt/chapters/112/audio",
+          "started_at": "2026-10-10T00:27:18.745889+00:00",
+          "status": 200,
+          "body_sha256": "a58dea39f7443490badb086c2bf8ab69320347e2a34986fb267aeee952940fa0",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "bb4e54a25aadee38b919a61a4ac55a57897de83aeca3376b1dba439e4a37369c"
+            }
+          },
+          "metadata": {
+            "recitation": "abdulaziz_al_turki_yt",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "abdulaziz_al_turki_yt",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:27:22.752139+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "589992",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "abdulaziz_al_turki_yt",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:27:26.746357+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/589992",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "bc97785abcfaf1b2710776677db433d75d6ad6f5accce8fcda3fda2ec0695ae9",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "youtube_requests": 0,
+      "youtube_extraction": "explicitly prohibited; no page or media request attempted"
+    },
+    {
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "reciter_id": "abdullah_al_buaijan",
+      "riwayah": "hafs_an_asim",
+      "style": "murattal",
+      "original_channel": "youtube",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 114,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Murattal",
+        "aligner_channel_label": "YouTube"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": null,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/abdullah_al_buaijan_2025_yt/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/abdullah_al_buaijan_2025_yt/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "abdullah_al_buaijan_2025_yt",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/abdullah_al_buaijan_2025_yt/chapters/112/audio",
+          "started_at": "2026-10-10T00:27:30.751189+00:00",
+          "status": 200,
+          "body_sha256": "6088e172a6349f1e154cb703eddc9068bf2547029db8167296763f03b8b6b83b",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "3f950ac47752381c52f57ffc5214aefa1a19bc83af31bab15699dcc7d0a2f5c7"
+            }
+          },
+          "metadata": {
+            "recitation": "abdullah_al_buaijan_2025_yt",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "abdullah_al_buaijan_2025_yt",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:27:34.756677+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "526044",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "abdullah_al_buaijan_2025_yt",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:27:38.748850+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/526044",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "5cb78473627b7213dde53a6318536a6717ecb12d72c3c722fa7aaea6d38a82c3",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "youtube_requests": 0,
+      "youtube_extraction": "explicitly prohibited; no page or media request attempted"
+    },
+    {
+      "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+      "reciter_id": "ahmad_naseem_ali_ahmad",
+      "riwayah": "hafs_an_asim",
+      "style": "murattal",
+      "original_channel": "youtube",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 114,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Murattal",
+        "aligner_channel_label": "YouTube"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": 10290,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/ahmad_naseem_ali_ahmad_2019_yt/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/ahmad_naseem_ali_ahmad_2019_yt/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/ahmad_naseem_ali_ahmad_2019_yt/chapters/112/audio",
+          "started_at": "2026-10-10T00:27:42.747109+00:00",
+          "status": 200,
+          "body_sha256": "d51f0d7d7b40ad20ee4562f668af03f9c4b607d2f5cd8a51fb9bc490a1b131f0",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "40d530f8d57094b1c01aab3ff4fed7ffab6eda6c0d086cafa41ad734bc7ec8e2"
+            }
+          },
+          "metadata": {
+            "recitation": "ahmad_naseem_ali_ahmad_2019_yt",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:27:46.751456+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "495952",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:27:50.762941+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/495952",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "8775bcbc00fb805ad65268ea363bfba44caa910ee1d7398274313f1d836a4846",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "youtube_requests": 0,
+      "youtube_extraction": "explicitly prohibited; no page or media request attempted"
+    },
+    {
+      "slug": "ayman_swed_muallim_yt",
+      "reciter_id": "ayman_swed",
+      "riwayah": "hafs_an_asim",
+      "style": "muallim",
+      "original_channel": "youtube",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 114,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Muallim",
+        "aligner_channel_label": "YouTube"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": null,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/ayman_swed_muallim_yt/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/ayman_swed_muallim_yt/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "ayman_swed_muallim_yt",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/ayman_swed_muallim_yt/chapters/112/audio",
+          "started_at": "2026-10-10T00:27:54.762435+00:00",
+          "status": 200,
+          "body_sha256": "0bec6eb322c959e13b83bba547b0eb79a71a00d3d0464e9eee1437cf1995b316",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "c827dd09e00b22f39a55352e224995a06cec77bf7d9d87d0efb4c614478c317c"
+            }
+          },
+          "metadata": {
+            "recitation": "ayman_swed_muallim_yt",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "ayman_swed_muallim_yt",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:27:58.760211+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "830736",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "ayman_swed_muallim_yt",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:28:02.767645+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/830736",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "d692828b32a78c46b664de18b806ad84da50494de2c8353a75f063fde84ab9ab",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "youtube_requests": 0,
+      "youtube_extraction": "explicitly prohibited; no page or media request attempted"
+    },
+    {
+      "slug": "badr_al_turki_yt",
+      "reciter_id": "badr_al_turki",
+      "riwayah": "hafs_an_asim",
+      "style": "murattal",
+      "original_channel": "youtube",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 114,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Murattal",
+        "aligner_channel_label": "YouTube"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": null,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/badr_al_turki_yt/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/badr_al_turki_yt/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "badr_al_turki_yt",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/badr_al_turki_yt/chapters/112/audio",
+          "started_at": "2026-10-10T00:28:06.762219+00:00",
+          "status": 200,
+          "body_sha256": "84544b42cf9f06a0491ef420e798b7c273ad6f2547e45b0e74c575f69eaff6af",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "b9d37e91872d288eeff682956f55f86166336d7d79b657a1a71eeff624fd939d"
+            }
+          },
+          "metadata": {
+            "recitation": "badr_al_turki_yt",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "badr_al_turki_yt",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:28:10.768420+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "537956",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "badr_al_turki_yt",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:28:14.765490+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/537956",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "a7ad4ab10a9cfe0ecd9f9fca46ace7d055f0e27a96fffd06a59993303eff08ec",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "youtube_requests": 0,
+      "youtube_extraction": "explicitly prohibited; no page or media request attempted"
+    },
+    {
+      "slug": "ibrahim_al_akhdar_drive",
+      "reciter_id": "ibrahim_al_akhdar",
+      "riwayah": "hafs_an_asim",
+      "style": "murattal",
+      "original_channel": "drive",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 114,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Murattal",
+        "aligner_channel_label": "Drive"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": 3762170,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/ibrahim_al_akhdar_drive/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/ibrahim_al_akhdar_drive/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "ibrahim_al_akhdar_drive",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/ibrahim_al_akhdar_drive/chapters/112/audio",
+          "started_at": "2026-10-10T00:24:25.373279+00:00",
+          "status": 200,
+          "body_sha256": "d4b87fceb65cb67c30b2e9788b41b2e52ebd934ac4d976ccebeb73477a68c8e9",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "688fb3ab1f2302b4676316e8f88700241d8380956aa3847ac63b1e7c7389b2af"
+            }
+          },
+          "metadata": {
+            "recitation": "ibrahim_al_akhdar_drive",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "ibrahim_al_akhdar_drive",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:26:08.225352+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "494293",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "ibrahim_al_akhdar_drive",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:26:12.804628+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/494293",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "5219f272764e16fb7b60ae8bdab9178a096185b7552873716596ddc3a2561f9e",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "drive_audit": {
+        "public_view_url": "https://drive.google.com/file/d/1dkHqlDkrC0Tuyqcd2cx318wvs7AnmKHQ/view",
+        "probes": [
+          {
+            "slug": "ibrahim_al_akhdar_drive",
+            "surah": 112,
+            "probe": "catalog_public_view_head",
+            "started_at": "2026-10-10T00:30:12.119572+00:00",
+            "status": 200,
+            "content_type": "text/html; charset=utf-8",
+            "content_length": "0",
+            "final_host": "drive.google.com",
+            "url_sha256": "5a739de7325329143c9d3efdae126af42586856a06e3b8d27923c5348f653f08",
+            "cookies_or_credentials_sent": false,
+            "confirmation_or_quota_bypass": false,
+            "bytes_read": 0
+          },
+          {
+            "slug": "ibrahim_al_akhdar_drive",
+            "surah": 112,
+            "probe": "normal_public_download",
+            "started_at": "2026-10-10T00:30:17.133018+00:00",
+            "status": 200,
+            "content_type": "text/html; charset=utf-8",
+            "content_length": "2507",
+            "final_host": "drive.usercontent.google.com",
+            "url_sha256": "b25d85906a98b3133d281b8e081c53b3a661551a19eb28d83eb157124fb9d17c",
+            "cookies_or_credentials_sent": false,
+            "confirmation_or_quota_bypass": false,
+            "bytes_read": 2507,
+            "body_sha256": "6d9a55ed4f0b25cfa11c46cf8709bb789442e08e1af2811f3ee92ae25257810f",
+            "full_audio_downloaded": false,
+            "html_not_audio": true,
+            "contains_confirmation_form": true,
+            "contains_quota_message": false,
+            "contains_sign_in_message": false
+          }
+        ],
+        "result": "virus_scan_confirmation_required_not_followed"
+      }
+    },
+    {
+      "slug": "khalid_al_mohana_drive",
+      "reciter_id": "khalid_al_mohana",
+      "riwayah": "hafs_an_asim",
+      "style": "murattal",
+      "original_channel": "drive",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 114,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Murattal",
+        "aligner_channel_label": "Drive"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": 3757655,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/khalid_al_mohana_drive/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/khalid_al_mohana_drive/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "khalid_al_mohana_drive",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/khalid_al_mohana_drive/chapters/112/audio",
+          "started_at": "2026-10-10T00:28:18.762247+00:00",
+          "status": 200,
+          "body_sha256": "c1d2622f39d001e31ed7536da2689b4b8273513a728f7a5ef6cd797c83f8292c",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "1f5315a6e6ab0bee004bb3d62e84e7b5204ea36552b75b0a562f364520e803c9"
+            }
+          },
+          "metadata": {
+            "recitation": "khalid_al_mohana_drive",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "khalid_al_mohana_drive",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:28:22.771456+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "501687",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "khalid_al_mohana_drive",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:28:26.759082+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/501687",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "bfbd662f4f47e8dba7d393e9680950f457f0787be8312ddeb4c4cc9239341765",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "drive_audit": {
+        "public_view_url": "https://drive.google.com/file/d/1nAUem-TmomDvCFRtzPVeYf6IqADGLYzu/view",
+        "probes": [
+          {
+            "slug": "khalid_al_mohana_drive",
+            "surah": 112,
+            "probe": "catalog_public_view_head",
+            "started_at": "2026-10-10T00:30:27.137159+00:00",
+            "status": 200,
+            "content_type": "text/html; charset=utf-8",
+            "content_length": "80397",
+            "final_host": "drive.google.com",
+            "url_sha256": "59c6fad8bf15f54ad73c8f0b464eab34236153aad8ae354f0048f755c48b2f7e",
+            "cookies_or_credentials_sent": false,
+            "confirmation_or_quota_bypass": false,
+            "bytes_read": 0
+          },
+          {
+            "slug": "khalid_al_mohana_drive",
+            "surah": 112,
+            "probe": "normal_public_download",
+            "started_at": "2026-10-10T00:30:32.148993+00:00",
+            "status": 200,
+            "content_type": "text/html; charset=utf-8",
+            "content_length": "2480",
+            "final_host": "drive.usercontent.google.com",
+            "url_sha256": "d1bf3f03153cdf597e970d196772494ef4a0864631783513cb141613258548e7",
+            "cookies_or_credentials_sent": false,
+            "confirmation_or_quota_bypass": false,
+            "bytes_read": 2480,
+            "body_sha256": "61d2d7c949642cfcb528ddcfb087c7659e3d68175bbe22297e0ea3d1b9f93378",
+            "full_audio_downloaded": false,
+            "html_not_audio": true,
+            "contains_confirmation_form": true,
+            "contains_quota_message": false,
+            "contains_sign_in_message": false
+          }
+        ],
+        "result": "virus_scan_confirmation_required_not_followed"
+      }
+    },
+    {
+      "slug": "mohammed_ayyub_drive",
+      "reciter_id": "mohammed_ayyub",
+      "riwayah": "hafs_an_asim",
+      "style": "murattal",
+      "original_channel": "drive",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 114,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Murattal",
+        "aligner_channel_label": "Drive"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": 3770130,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/mohammed_ayyub_drive/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/mohammed_ayyub_drive/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "mohammed_ayyub_drive",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/mohammed_ayyub_drive/chapters/112/audio",
+          "started_at": "2026-10-10T00:28:30.771296+00:00",
+          "status": 200,
+          "body_sha256": "4a710eb0b4d72f9e1264e8fe81920c1472be938810a61a8f552d9bcc4c4ecec8",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "064416a2dd488d34a9e780a262bb517ed5f1c315ee8a2ba4a577ce161ae567a5"
+            }
+          },
+          "metadata": {
+            "recitation": "mohammed_ayyub_drive",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "mohammed_ayyub_drive",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:28:34.761401+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "519988",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "mohammed_ayyub_drive",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:28:38.765812+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/519988",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "1127234e9f5b66deb3f6c9889c2ee685a6c9f69e56bf35db62c3e46ea796139c",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "drive_audit": {
+        "public_view_url": "https://drive.google.com/file/d/1156e0dfi1uOQ_lZwVnCn0KhglW0tfmTw/view",
+        "probes": [
+          {
+            "slug": "mohammed_ayyub_drive",
+            "surah": 112,
+            "probe": "catalog_public_view_head",
+            "started_at": "2026-10-10T00:30:42.161151+00:00",
+            "status": 200,
+            "content_type": "text/html; charset=utf-8",
+            "content_length": "80363",
+            "final_host": "drive.google.com",
+            "url_sha256": "9c837cdcd5990340cc83532a8a0f173dbb87dfed55a9a8269651ae92925fff71",
+            "cookies_or_credentials_sent": false,
+            "confirmation_or_quota_bypass": false,
+            "bytes_read": 0
+          },
+          {
+            "slug": "mohammed_ayyub_drive",
+            "surah": 112,
+            "probe": "normal_public_download",
+            "started_at": "2026-10-10T00:30:47.163679+00:00",
+            "status": 200,
+            "content_type": "text/html; charset=utf-8",
+            "content_length": "2497",
+            "final_host": "drive.usercontent.google.com",
+            "url_sha256": "1c3c753b3a6d3b5d50cf632096bc5eb0094419f0e3d257f8ab2595904db1cb9f",
+            "cookies_or_credentials_sent": false,
+            "confirmation_or_quota_bypass": false,
+            "bytes_read": 2497,
+            "body_sha256": "6a28ad5997fbf10c7db49c02999b95fdcdddd03a9bf013558d903a5378179a6b",
+            "full_audio_downloaded": false,
+            "html_not_audio": true,
+            "contains_confirmation_form": true,
+            "contains_quota_message": false,
+            "contains_sign_in_message": false
+          }
+        ],
+        "result": "virus_scan_confirmation_required_not_followed"
+      }
+    },
+    {
+      "slug": "mohammed_burhaji_yt",
+      "reciter_id": "mohammed_burhaji",
+      "riwayah": "hafs_an_asim",
+      "style": "murattal",
+      "original_channel": "youtube",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 114,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Murattal",
+        "aligner_channel_label": "YouTube"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": null,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/mohammed_burhaji_yt/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/mohammed_burhaji_yt/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "mohammed_burhaji_yt",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/mohammed_burhaji_yt/chapters/112/audio",
+          "started_at": "2026-10-10T00:28:42.761735+00:00",
+          "status": 200,
+          "body_sha256": "95789bd86f190820e10850f3ef34c4a5572258ea3626543f27280a7511916b84",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "cc28dd304376e581280c0b022468c011a7e3770f2a95122415355b6d04fce042"
+            }
+          },
+          "metadata": {
+            "recitation": "mohammed_burhaji_yt",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "mohammed_burhaji_yt",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:28:46.761078+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "444542",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "mohammed_burhaji_yt",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:28:50.762555+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/444542",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "b7879556b7a4d5e2c7d768e854d85b8a98d63b9d71f462d6327b63710c63de2a",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "youtube_requests": 0,
+      "youtube_extraction": "explicitly prohibited; no page or media request attempted"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "reciter_id": "mohammed_siddiq_al_minshawi",
+      "riwayah": "hafs_an_asim",
+      "style": "murattal",
+      "original_channel": "drive",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 114,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Murattal",
+        "aligner_channel_label": "Drive"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": null,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/mohammed_siddiq_al_minshawi_1967_drive/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/mohammed_siddiq_al_minshawi_1967_drive/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/mohammed_siddiq_al_minshawi_1967_drive/chapters/112/audio",
+          "started_at": "2026-10-10T00:28:54.766968+00:00",
+          "status": 200,
+          "body_sha256": "b2b3f535a1c367a81aa95a2111fdbadc5c577067cbd45b32d9754ae97f9b41dd",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "00e0318f0f661b3f82a1f32beca157001d97808e4d28a26114b11d16d7c8c5bf"
+            }
+          },
+          "metadata": {
+            "recitation": "mohammed_siddiq_al_minshawi_1967_drive",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:28:58.778109+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "447050",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:29:02.784209+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/447050",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "b73c766e4d5897f99305dde08959ad28f9011fd085b1e3af929512d3b2495d50",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "drive_audit": {
+        "public_view_url": "https://drive.google.com/file/d/1NdiEj04bj3sh_0f2Y-L_vY_FfwctAj9s/view",
+        "probes": [
+          {
+            "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+            "surah": 112,
+            "probe": "catalog_public_view_head",
+            "started_at": "2026-10-10T00:30:57.166804+00:00",
+            "status": 200,
+            "content_type": "text/html; charset=utf-8",
+            "content_length": "0",
+            "final_host": "drive.google.com",
+            "url_sha256": "aaff52bcfc7e20108e0f0e5c0c5beb2bc69d6be1a647b92553e47e041dbaa615",
+            "cookies_or_credentials_sent": false,
+            "confirmation_or_quota_bypass": false,
+            "bytes_read": 0
+          },
+          {
+            "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+            "surah": 112,
+            "probe": "normal_public_download",
+            "started_at": "2026-10-10T00:31:02.164071+00:00",
+            "status": 200,
+            "content_type": "audio/mpeg",
+            "content_length": "446380",
+            "final_host": "drive.usercontent.google.com",
+            "url_sha256": "b9fc8322bff73f542f1b481a527378829474c2ac1d9ef8f43bafb8e3f7539d59",
+            "cookies_or_credentials_sent": false,
+            "confirmation_or_quota_bypass": false,
+            "bytes_read": 446380,
+            "file_sha256": "6ea6a4fe677fbd41ad3ee051066c84a0f2674d9e44663eec2478ff60d9b44b89",
+            "local_audit_file": "mohammed_siddiq_al_minshawi_1967_drive.drive-112.audit-audio",
+            "full_audio_downloaded": true,
+            "maximum_read_rate_bytes_per_second": 81920
+          }
+        ],
+        "result": "downloaded_audio_sample",
+        "ffprobe": {
+          "exit_code": 0,
+          "format_name": "mp3",
+          "duration_ms": 18599,
+          "bytes": 446380,
+          "bit_rate": 191999,
+          "streams": [
+            {
+              "codec_name": "mp3",
+              "sample_rate": "44100",
+              "channels": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "slug": "saber_abdulhakam_yt",
+      "reciter_id": "saber_abdulhakam",
+      "riwayah": "hafs_an_asim",
+      "style": "murattal",
+      "original_channel": "youtube",
+      "v1_verification_status": "source_unavailable",
+      "v1_reason": "catalog_audio_unavailable",
+      "catalog_chapter_urls_count": 114,
+      "metadata_match": {
+        "exact_slug": true,
+        "exact_reciter_id": true,
+        "reviewed_matches": 1,
+        "audio_only_matches": 0,
+        "chapter_number_sets_equal": true,
+        "aligner_riwayah_label": "Hafs A'n Assem",
+        "aligner_style_label": "Murattal",
+        "aligner_channel_label": "YouTube"
+      },
+      "sample_surah": 112,
+      "qud_original_chapter_offset_ms": 190,
+      "aligner_candidate": {
+        "api_url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/recitations/saber_abdulhakam_yt/chapters/112/audio",
+        "public_audio_url": "https://hetchyy-quranic-universal-aligner.hf.space/preload-audio/saber_abdulhakam_yt/112.mp3",
+        "url_has_query": false,
+        "metadata_get": {
+          "slug": "saber_abdulhakam_yt",
+          "surah": 112,
+          "request_path": "/api/v1/recitations/saber_abdulhakam_yt/chapters/112/audio",
+          "started_at": "2026-10-10T00:29:06.789511+00:00",
+          "status": 200,
+          "body_sha256": "0d6123a88843791e3fbb4d5e94622b40e30e1f8e007cc5d7cd022ae911814655",
+          "response_keys": [
+            "recitation",
+            "chapter",
+            "audio_url"
+          ],
+          "urls": {
+            "audio_url": {
+              "scheme": "https",
+              "host": "hetchyy-quranic-universal-aligner.hf.space",
+              "query_present": false,
+              "url_sha256": "a57f9d2bc266e94ce5519bbbdeb74fd9a6d9372a56fc2686d00c0a2582d2ed35"
+            }
+          },
+          "metadata": {
+            "recitation": "saber_abdulhakam_yt",
+            "chapter": 112
+          }
+        },
+        "head": {
+          "slug": "saber_abdulhakam_yt",
+          "surah": 112,
+          "method": "HEAD",
+          "started_at": "2026-10-10T00:29:10.799319+00:00",
+          "status": 200,
+          "content_type": "audio/mpeg",
+          "content_length": "600024",
+          "content_range": null,
+          "accept_ranges": "bytes",
+          "bytes_read": 0,
+          "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "id3_prefix": false,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "range_get": {
+          "slug": "saber_abdulhakam_yt",
+          "surah": 112,
+          "method": "GET",
+          "started_at": "2026-10-10T00:29:14.797602+00:00",
+          "status": 206,
+          "content_type": "audio/mpeg",
+          "content_length": "1024",
+          "content_range": "bytes 0-1023/600024",
+          "accept_ranges": "bytes",
+          "bytes_read": 1024,
+          "body_sha256": "69d6e11be59c732bb835cef7902c79f9d2b361390caeb1a3a623353517d555c1",
+          "id3_prefix": true,
+          "mpeg_frame_prefix": false,
+          "redirect_followed": false
+        },
+        "coordinate_reference": "separate chapter file; relation to original source_offset_ms unverified"
+      },
+      "disposition": "candidate_available_not_approved",
+      "offset_verification_changed": false,
+      "published": false,
+      "audio_license_verified": false,
+      "acoustic_identity_checked": false,
+      "required_before_use": [
+        "verify offsets on the served file or realign in D5",
+        "confirm audio license/attribution",
+        "validate every chapter that will be published"
+      ],
+      "youtube_requests": 0,
+      "youtube_extraction": "explicitly prohibited; no page or media request attempted"
+    }
+  ],
+  "limitations": [
+    "Availability was probed only for surah 112 per recitation; chapter list equality is metadata, not audio availability for every chapter.",
+    "Exact slug and reciter_id confirm catalog identity, not acoustic equality or ownership.",
+    "QUD original chapter_offsets_ms/source_offset_ms cannot be applied silently to the separate Space chapter files.",
+    "Original source_unavailable offset evidence remains unchanged. Candidate URLs require served-file offset verification or D5 and license/attribution review.",
+    "No new explicit prohibition of programmatic access was encountered; this audit is not an audio licensing approval."
+  ],
+  "cleanup": {
+    "manual_cleanup_required": true,
+    "deletion_attempted": false,
+    "scratch_directory": "%TEMP%\\ayahx-d3-source-alternatives",
+    "retained_audio_files": [
+      {
+        "filename": "mohammed_siddiq_al_minshawi_1967_drive.drive-112.audit-audio",
+        "bytes": 446380,
+        "sha256": "6ea6a4fe677fbd41ad3ee051066c84a0f2674d9e44663eec2478ff60d9b44b89"
+      }
+    ],
+    "reason": "Root instructed no scratch deletion after the earlier command policy rejection; no alternate deletion, move, or ACL change attempted.",
+    "absolute_private_paths_kept_outside_git": true
+  }
+}
