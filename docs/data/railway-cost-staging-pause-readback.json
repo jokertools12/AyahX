@@ -1,0 +1,57 @@
+{
+  "checked_at": "2026-10-10T04:35:04.864Z",
+  "data": {
+    "data": {
+      "s0": {
+        "activeDeployments": [],
+        "watchPatterns": [
+          "/__staging_disabled__/**"
+        ]
+      },
+      "s1": {
+        "activeDeployments": [],
+        "watchPatterns": [
+          "/__staging_disabled__/**"
+        ]
+      },
+      "s2": {
+        "activeDeployments": [],
+        "watchPatterns": [
+          "/__staging_disabled__/**"
+        ]
+      },
+      "s3": {
+        "activeDeployments": [],
+        "watchPatterns": [
+          "/__staging_disabled__/**"
+        ]
+      },
+      "s4": {
+        "activeDeployments": [],
+        "watchPatterns": [
+          "/__staging_disabled__/**"
+        ]
+      },
+      "s5": {
+        "activeDeployments": [
+          {
+            "id": "76296f93-0b9d-402b-9172-e3c175233b13",
+            "status": "SUCCESS"
+          }
+        ],
+        "watchPatterns": [
+          "/__staging_disabled__/**"
+        ]
+      },
+      "s6": {
+        "activeDeployments": [
+          {
+            "id": "cdc231d4-9fdb-4ba3-932e-5f5444b38c8d",
+            "status": "SLEEPING"
+          }
+        ],
+        "watchPatterns": []
+      }
+    }
+  }
+}

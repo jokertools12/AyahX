@@ -1,0 +1,119 @@
+{
+  "billingPeriod": {
+    "end": "2026-10-19T00:53:56+00:00",
+    "start": "2026-09-19T00:53:56+00:00"
+  },
+  "currentUsageDollars": 17.84222754068557,
+  "period": "current",
+  "project": {
+    "deletedAt": null,
+    "id": "6394b364-57bc-4736-8ce1-10dcf382c1e5",
+    "name": "courteous-recreation"
+  },
+  "services": [
+    {
+      "backupDollars": 0.010067289358285955,
+      "cpuDollars": 0.09140914708333334,
+      "egressDollars": 0,
+      "id": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+      "memoryDollars": 5.652423045183209,
+      "name": "MySQL",
+      "totalDollars": 5.816649662723972,
+      "volumeDollars": 0.06275018109914306
+    },
+    {
+      "backupDollars": 0,
+      "cpuDollars": 0.14849982693672842,
+      "egressDollars": 0.046241467700000004,
+      "id": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "memoryDollars": 2.079124994354568,
+      "name": "AyahX",
+      "totalDollars": 2.2738662889912966,
+      "volumeDollars": 0
+    },
+    {
+      "backupDollars": 0,
+      "cpuDollars": 0.0010779084567901236,
+      "egressDollars": 0.0000121909,
+      "id": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e",
+      "memoryDollars": 2.169582808730864,
+      "name": "admin-media-scanner",
+      "totalDollars": 2.1750211604681056,
+      "volumeDollars": 0.0043482523804507876
+    },
+    {
+      "backupDollars": 0,
+      "cpuDollars": 0.14106374317901235,
+      "egressDollars": 0.00511522545,
+      "id": "e8c8f16f-a7e2-4c25-a983-cba9da84b045",
+      "memoryDollars": 1.9049626365471606,
+      "name": "deleted service",
+      "totalDollars": 2.051141605176173,
+      "volumeDollars": 0
+    },
+    {
+      "backupDollars": 0,
+      "cpuDollars": 0.1855200763734568,
+      "egressDollars": 0.0044505913,
+      "id": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "memoryDollars": 1.8256636522982719,
+      "name": "render-worker-skia",
+      "totalDollars": 2.0156343199717286,
+      "volumeDollars": 0
+    },
+    {
+      "backupDollars": 0,
+      "cpuDollars": 0.1477105160648148,
+      "egressDollars": 0.0035955880500000005,
+      "id": "4031bdca-f094-487b-9793-2063ae5c877d",
+      "memoryDollars": 1.6783346667614816,
+      "name": "deleted service",
+      "totalDollars": 1.8296407708762965,
+      "volumeDollars": 0
+    },
+    {
+      "backupDollars": 0,
+      "cpuDollars": 0.09377413836419754,
+      "egressDollars": 0.02850282815,
+      "id": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "memoryDollars": 1.0303618713441975,
+      "name": "render-control",
+      "totalDollars": 1.152638837858395,
+      "volumeDollars": 0
+    },
+    {
+      "backupDollars": 0,
+      "cpuDollars": 0.05109361866512346,
+      "egressDollars": 0,
+      "id": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+      "memoryDollars": 0.25461562880000005,
+      "name": "Redis",
+      "totalDollars": 0.33378004773793846,
+      "volumeDollars": 0.028070800272814948
+    },
+    {
+      "backupDollars": 0,
+      "cpuDollars": 0.01313946176697531,
+      "egressDollars": 0.00000125115,
+      "id": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "memoryDollars": 0.1782001900562963,
+      "name": "alignment-worker",
+      "totalDollars": 0.1913409029732716,
+      "volumeDollars": 0
+    },
+    {
+      "backupDollars": 0,
+      "cpuDollars": 0.00016970739197530866,
+      "egressDollars": 0.000015477350000000002,
+      "id": "aa240473-18fd-4255-998a-8fb6d050cf5c",
+      "memoryDollars": 0.0023287591664197535,
+      "name": "deleted service",
+      "totalDollars": 0.0025139439083950626,
+      "volumeDollars": 0
+    }
+  ],
+  "workspace": {
+    "id": "2f1dc03e-7691-4697-8a94-9ec7301206fb",
+    "name": "jokertools12's Projects"
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "checked_at": "2026-10-10T04:50:25.582Z",
+  "read_only": true,
+  "events": [
+    {
+      "id": "1791607561391-0",
+      "fields": {
+        "event": "failed",
+        "jobId": "d3-71a21e26-0db7-8655-a5b8-50f53ddc942a",
+        "failedReason": "job stalled more than allowable limit",
+        "prev": "active"
+      }
+    },
+    {
+      "id": "1791607561388-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-71a21e26-0db7-8655-a5b8-50f53ddc942a",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607558845-1",
+      "fields": {
+        "event": "stalled",
+        "jobId": "d3-71a21e26-0db7-8655-a5b8-50f53ddc942a"
+      }
+    },
+    {
+      "id": "1791607552780-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-71a21e26-0db7-8655-a5b8-50f53ddc942a",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607552779-1",
+      "fields": {
+        "event": "stalled",
+        "jobId": "d3-71a21e26-0db7-8655-a5b8-50f53ddc942a"
+      }
+    },
+    {
+      "id": "1791607535549-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-71a21e26-0db7-8655-a5b8-50f53ddc942a",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607525115-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-aee12689-68f2-3dd5-4e4d-5ab909c8d697",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607519403-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-a904cbdc-9b61-8828-c96f-0610da8de96a",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607513666-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-9df8333b-7378-7378-fdd6-86396b7f9a45",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607508476-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-2ca1b353-2a1e-244c-e80f-1db911816e00",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607502847-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-c74750fe-009e-f4be-caba-068dfa9d0fbc",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607497019-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-257fa267-3c04-cb3d-3963-bbd13517e1b3",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607491285-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-93fa1093-5163-1bcb-6d28-a6305289319a",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607485695-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-5b05f7e1-f160-154d-1d05-ee657ddd67cf",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607480061-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-70380781-2123-ec70-037b-b59acc8e878d",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607474597-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-d724c4a6-f8cc-76c6-1ab1-375472c864c7",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607469075-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-8dccfbd8-e34e-4d37-cb4a-d6667f1e77a6",
+        "prev": "waiting"
+      }
+    },
+    {
+      "id": "1791607464599-0",
+      "fields": {
+        "event": "active",
+        "jobId": "d3-c6256da0-86f5-5901-a365-eb01b2392229",
+        "prev": "waiting"
+      }
+    }
+  ],
+  "worker_error_callbacks_observed_at_least": 8,
+  "worker_lock_duration_ms": 2000,
+  "fatal_reason": "job stalled more than allowable limit",
+  "cause_is_hypothesis": "2-second local lock plus synchronous parsing/SQL construction and concurrent local test/build/backup; no event-loop-delay measurement was collected",
+  "retry_executed_after_stop": false
+}

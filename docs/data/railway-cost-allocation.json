@@ -1,0 +1,308 @@
+{
+  "checked_at": "2026-10-10T04:31:23.467Z",
+  "method": "Allocate each CLI service billed component by its measured environment usage share; usage and billing snapshots have different collection times",
+  "groups": {
+    "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6:72fdd003-f982-4ef7-a95d-243fee381fbb": {
+      "environment_id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "service_id": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+      "values": {
+        "CPU_USAGE": 67.86587058333332,
+        "NETWORK_TX_GB": 0,
+        "MEMORY_USAGE_GB": 700.1548052728672,
+        "DISK_USAGE_GB": 2462.3271504724585,
+        "BACKUP_USAGE_GB": 0
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.03141663948582838,
+        "memoryDollars": 0.1597801474042268,
+        "egressDollars": 0,
+        "volumeDollars": 0.008546669212366818,
+        "backupDollars": 0
+      }
+    },
+    "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6:4031bdca-f094-487b-9793-2063ae5c877d": {
+      "environment_id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "service_id": "4031bdca-f094-487b-9793-2063ae5c877d",
+      "values": {
+        "CPU_USAGE": 141.8918291,
+        "NETWORK_TX_GB": 0.054964082000000004,
+        "MEMORY_USAGE_GB": 3869.9616007385976
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.06569066162037036,
+        "memoryDollars": 0.8798272747467064,
+        "egressDollars": 0.0027482041000000002,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6:18de6ea4-108a-4346-8474-c7b05b81943b": {
+      "environment_id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "service_id": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "values": {
+        "CPU_USAGE": 200.56090376666663,
+        "NETWORK_TX_GB": 0.072172712,
+        "MEMORY_USAGE_GB": 4480.810829093438
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.0928536046084785,
+        "memoryDollars": 1.0196785777074442,
+        "egressDollars": 0.0036086355999999996,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "e726848b-49ec-45ab-bce8-a1462dd85bc8:1ff57ef9-b793-4130-ae60-ce8392172cf8": {
+      "environment_id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "service_id": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "values": {
+        "CPU_USAGE": 154.82935728333337,
+        "NETWORK_TX_GB": 0.316105294,
+        "MEMORY_USAGE_GB": 3939.890669232038
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.07167520776042945,
+        "memoryDollars": 0.892229268148164,
+        "egressDollars": 0.01580475430876929,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6:68eea2bb-ae45-4af7-8962-ba9e16e466fc": {
+      "environment_id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "service_id": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "values": {
+        "CPU_USAGE": 120.52032708333333,
+        "NETWORK_TX_GB": 0.270144912,
+        "MEMORY_USAGE_GB": 2584.142278524292
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.0557983325056952,
+        "memoryDollars": 0.5881800738567123,
+        "egressDollars": 0.013507779720440745,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6:2b03e60f-d2fc-446c-b278-f340d472dfd4": {
+      "environment_id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "service_id": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+      "values": {
+        "CPU_USAGE": 99.00192163333334,
+        "NETWORK_TX_GB": 0,
+        "MEMORY_USAGE_GB": 10666.341475182047,
+        "DISK_USAGE_GB": 6894.116983229181,
+        "BACKUP_USAGE_GB": 2900.102569406697
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.04583335923193707,
+        "memoryDollars": 2.433592844567005,
+        "egressDollars": 0,
+        "volumeDollars": 0.023972838675532824,
+        "backupDollars": 0.010067289358285955
+      }
+    },
+    "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6:aa240473-18fd-4255-998a-8fb6d050cf5c": {
+      "environment_id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "service_id": "aa240473-18fd-4255-998a-8fb6d050cf5c",
+      "values": {
+        "CPU_USAGE": 0.37853745,
+        "NETWORK_TX_GB": 0.000309547,
+        "MEMORY_USAGE_GB": 11.32367029535284
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.00016970739197530866,
+        "memoryDollars": 0.0023287591664197535,
+        "egressDollars": 0.000015477350000000002,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "e726848b-49ec-45ab-bce8-a1462dd85bc8:e8c8f16f-a7e2-4c25-a983-cba9da84b045": {
+      "environment_id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "service_id": "e8c8f16f-a7e2-4c25-a983-cba9da84b045",
+      "values": {
+        "CPU_USAGE": 155.57882425,
+        "NETWORK_TX_GB": 0.016917603,
+        "MEMORY_USAGE_GB": 3498.394702018877
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.07202723344907408,
+        "memoryDollars": 0.7965535894178105,
+        "egressDollars": 0.00084588015,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "e726848b-49ec-45ab-bce8-a1462dd85bc8:18de6ea4-108a-4346-8474-c7b05b81943b": {
+      "environment_id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "service_id": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "values": {
+        "CPU_USAGE": 200.15670263333334,
+        "NETWORK_TX_GB": 0.016839114,
+        "MEMORY_USAGE_GB": 3541.7696608219103
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.09266647176497829,
+        "memoryDollars": 0.8059850745908277,
+        "egressDollars": 0.0008419556999999999,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6:1ff57ef9-b793-4130-ae60-ce8392172cf8": {
+      "environment_id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "service_id": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "values": {
+        "CPU_USAGE": 165.95286965,
+        "NETWORK_TX_GB": 0.608753926,
+        "MEMORY_USAGE_GB": 5241.0737508506145
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.07682461917629896,
+        "memoryDollars": 1.1868957262064044,
+        "egressDollars": 0.030436713391230715,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "e726848b-49ec-45ab-bce8-a1462dd85bc8:72fdd003-f982-4ef7-a95d-243fee381fbb": {
+      "environment_id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "service_id": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+      "values": {
+        "CPU_USAGE": 42.50598868333333,
+        "NETWORK_TX_GB": 0,
+        "MEMORY_USAGE_GB": 415.56801072183583,
+        "DISK_USAGE_GB": 5624.974689550522,
+        "BACKUP_USAGE_GB": 0
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.019676979179295076,
+        "memoryDollars": 0.09483548139577325,
+        "egressDollars": 0,
+        "volumeDollars": 0.019524131060448126,
+        "backupDollars": 0
+      }
+    },
+    "e726848b-49ec-45ab-bce8-a1462dd85bc8:4031bdca-f094-487b-9793-2063ae5c877d": {
+      "environment_id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "service_id": "4031bdca-f094-487b-9793-2063ae5c877d",
+      "values": {
+        "CPU_USAGE": 177.1628856,
+        "NETWORK_TX_GB": 0.016947679,
+        "MEMORY_USAGE_GB": 3512.2722762746116
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.08201985444444444,
+        "memoryDollars": 0.7985073920147752,
+        "egressDollars": 0.00084738395,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "e726848b-49ec-45ab-bce8-a1462dd85bc8:68eea2bb-ae45-4af7-8962-ba9e16e466fc": {
+      "environment_id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "service_id": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "values": {
+        "CPU_USAGE": 82.02496988333333,
+        "NETWORK_TX_GB": 0.29988911,
+        "MEMORY_USAGE_GB": 1942.7055224581493
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.03797580585850234,
+        "memoryDollars": 0.44218179748748526,
+        "egressDollars": 0.014995048429559258,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "e726848b-49ec-45ab-bce8-a1462dd85bc8:2b03e60f-d2fc-446c-b278-f340d472dfd4": {
+      "environment_id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "service_id": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+      "values": {
+        "CPU_USAGE": 98.44555696666666,
+        "NETWORK_TX_GB": 0,
+        "MEMORY_USAGE_GB": 14108.005842904204,
+        "DISK_USAGE_GB": 11151.60113432678,
+        "BACKUP_USAGE_GB": 0
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.04557578785139626,
+        "memoryDollars": 3.218830200616204,
+        "egressDollars": 0,
+        "volumeDollars": 0.03877734242361024,
+        "backupDollars": 0
+      }
+    },
+    "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6:e8c8f16f-a7e2-4c25-a983-cba9da84b045": {
+      "environment_id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "service_id": "e8c8f16f-a7e2-4c25-a983-cba9da84b045",
+      "values": {
+        "CPU_USAGE": 149.11886101666664,
+        "NETWORK_TX_GB": 0.085386906,
+        "MEMORY_USAGE_GB": 4868.0369904317795
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.06903650972993827,
+        "memoryDollars": 1.10840904712935,
+        "egressDollars": 0.0042693453,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6:d8558eff-68f5-4c63-b744-a103ddd743f6": {
+      "environment_id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "service_id": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "values": {
+        "CPU_USAGE": 19.447949966666666,
+        "NETWORK_TX_GB": 0.000025023,
+        "MEMORY_USAGE_GB": 606.3788464067655
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.009004398333031361,
+        "memoryDollars": 0.13817624608578263,
+        "egressDollars": 0.00000125115,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "e726848b-49ec-45ab-bce8-a1462dd85bc8:d8558eff-68f5-4c63-b744-a103ddd743f6": {
+      "environment_id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "service_id": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "values": {
+        "CPU_USAGE": 8.931025016666666,
+        "NETWORK_TX_GB": 0,
+        "MEMORY_USAGE_GB": 175.6428739453668
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.004135063433943946,
+        "memoryDollars": 0.040023943970513676,
+        "egressDollars": 0,
+        "volumeDollars": 0,
+        "backupDollars": 0
+      }
+    },
+    "e726848b-49ec-45ab-bce8-a1462dd85bc8:6b8de88a-e0d7-4c3c-ad8b-e0a53407755e": {
+      "environment_id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "service_id": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e",
+      "values": {
+        "CPU_USAGE": 2.328225733333333,
+        "NETWORK_TX_GB": 0.000243818,
+        "MEMORY_USAGE_GB": 9503.745565265795,
+        "DISK_USAGE_GB": 1252.1901429878576,
+        "BACKUP_USAGE_GB": 0
+      },
+      "allocated_costs": {
+        "cpuDollars": 0.0010779084567901236,
+        "memoryDollars": 2.169582808730864,
+        "egressDollars": 0.0000121909,
+        "volumeDollars": 0.0043482523804507876,
+        "backupDollars": 0
+      }
+    }
+  },
+  "sums": {
+    "production": 8.060670732811463,
+    "staging": 9.78155680787411
+  }
+}

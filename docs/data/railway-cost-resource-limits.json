@@ -1,0 +1,153 @@
+{
+  "data": {
+    "a0": {
+      "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "numReplicas": 1,
+      "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+      "sleepApplication": false,
+      "watchPatterns": []
+    },
+    "a1": {
+      "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "numReplicas": null,
+      "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "sleepApplication": false,
+      "watchPatterns": []
+    },
+    "a10": {
+      "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "numReplicas": 2,
+      "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "sleepApplication": false,
+      "watchPatterns": [
+        "/__staging_disabled__/**"
+      ]
+    },
+    "a11": {
+      "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "numReplicas": null,
+      "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "sleepApplication": false,
+      "watchPatterns": [
+        "/__staging_disabled__/**"
+      ]
+    },
+    "a12": {
+      "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "numReplicas": null,
+      "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "sleepApplication": true,
+      "watchPatterns": []
+    },
+    "a2": {
+      "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "numReplicas": 1,
+      "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+      "sleepApplication": false,
+      "watchPatterns": []
+    },
+    "a3": {
+      "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "numReplicas": 1,
+      "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "sleepApplication": true,
+      "watchPatterns": []
+    },
+    "a4": {
+      "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "numReplicas": null,
+      "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "sleepApplication": false,
+      "watchPatterns": []
+    },
+    "a5": {
+      "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "numReplicas": 1,
+      "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "sleepApplication": false,
+      "watchPatterns": []
+    },
+    "a6": {
+      "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "numReplicas": null,
+      "serviceId": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e",
+      "sleepApplication": false,
+      "watchPatterns": []
+    },
+    "a7": {
+      "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "numReplicas": null,
+      "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "sleepApplication": false,
+      "watchPatterns": [
+        "/__staging_disabled__/**"
+      ]
+    },
+    "a8": {
+      "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "numReplicas": null,
+      "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+      "sleepApplication": false,
+      "watchPatterns": [
+        "/__staging_disabled__/**"
+      ]
+    },
+    "a9": {
+      "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "numReplicas": null,
+      "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+      "sleepApplication": false,
+      "watchPatterns": [
+        "/__staging_disabled__/**"
+      ]
+    },
+    "b0": null,
+    "b1": null,
+    "b10": {
+      "containers": {
+        "cpu": 4,
+        "memoryBytes": 3000000000
+      }
+    },
+    "b11": {
+      "containers": {
+        "cpu": 0.5,
+        "memoryBytes": 500000000
+      }
+    },
+    "b12": {
+      "containers": {
+        "cpu": 1,
+        "memoryBytes": 1000000000
+      }
+    },
+    "b2": null,
+    "b3": {
+      "containers": {
+        "cpu": 1,
+        "memoryBytes": 1000000000
+      }
+    },
+    "b4": {
+      "containers": {
+        "cpu": 0.5,
+        "memoryBytes": 500000000
+      }
+    },
+    "b5": {
+      "containers": {
+        "cpu": 2,
+        "memoryBytes": 2000000000
+      }
+    },
+    "b6": {
+      "containers": {
+        "cpu": 1,
+        "memoryBytes": 2000000000
+      }
+    },
+    "b7": null,
+    "b8": null,
+    "b9": null
+  }
+}

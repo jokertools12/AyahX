@@ -31,7 +31,7 @@ export function buildTimingPlan(inputs: Array<{ slug: string; rows: PreparedTimi
       batches.push({ job_id: first.import_job_id, checkpoint, row_count: part.length, statements: [
         'START TRANSACTION',
         `INSERT INTO ayah_timings(${timingColumns.join(',')}) VALUES\n${part.map((row) => { const values = timingValues(row); return `(${timingColumns.map((c) => sqlLiteral(values[c])).join(',')})`; }).join(',\n')} ON DUPLICATE KEY UPDATE id=id`,
-        `UPDATE import_jobs SET checkpoint=${checkpoint},imported_rows=${checkpoint},status='${checkpoint === rows.length ? 'completed' : 'running'}' WHERE id=${sqlLiteral(first.import_job_id)}`,
+        `UPDATE import_jobs SET checkpoint=${checkpoint},imported_rows=${checkpoint},status='${checkpoint === rows.length ? 'completed' : 'running'}' WHERE id=${sqlLiteral(first.import_job_id)} COLLATE utf8mb4_unicode_ci`,
         'COMMIT',
       ] });
     }

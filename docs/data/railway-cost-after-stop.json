@@ -1,0 +1,16 @@
+{
+  "recorded_at": "2026-10-10T04:53:03.982Z",
+  "current_usage_usd": 17.84644344915963,
+  "estimated_bill_usd": 23.07158363939096,
+  "hard_limit_usd": 30,
+  "soft_limit_usd": 20,
+  "before_usage_usd": 17.840302718684075,
+  "before_estimated_bill_usd": 23.07756657010779,
+  "usage_delta_usd": 0.006140730475554079,
+  "forecast_delta_usd": -0.005982930716832868,
+  "production_D3_import_started": false,
+  "production_D3_volume_growth_bytes": 0,
+  "actual_D3_incremental_cloud_cost": "not separately metered; production import did not start",
+  "savings_measured_in_dollars": false,
+  "billing_delay_note": "Do not attribute total period delta or forecast delta to the staging shutdown or D3; invoices and samples lag"
+}

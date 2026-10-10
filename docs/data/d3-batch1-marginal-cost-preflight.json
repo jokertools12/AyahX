@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-10-10T04:36:05.035Z",
+  "current_usage_usd": 17.840302718684075,
+  "hard_limit": 30,
+  "soft_limit": 20,
+  "size": {
+    "rows": 422463,
+    "payload_bytes": 645389632,
+    "overhead_50_percent_bytes": 968084448
+  },
+  "available_bytes": 4350103552,
+  "size_gate_passed": true,
+  "estimate": {
+    "volume_month_usd": 0.1452126672,
+    "cpu_usd": 0.41666666688,
+    "ram_usd": 0.25555555584,
+    "egress_usd": 0.15000000000000002
+  },
+  "estimated_incremental_total_usd": 0.96743488992,
+  "remaining_after_estimate_usd": 11.192262391395925,
+  "margin_gate_passed": true,
+  "assumptions": "4h maximum import/rehearsal cloud exposure, 2vCPU/2GB incremental RAM conservative reserve; per-minute CPU/RAM rates conservatively above current public price; 3GB egress reserve; input traffic free; local CPU/Redis not billed by Railway",
+  "exact_import_cost_not_yet_measured": true
+}

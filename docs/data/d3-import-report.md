@@ -1,172 +1,196 @@
-# تقرير المرحلة D3 — الدفعة 1: توقف مالي قبل الاستيراد
+# تقرير المرحلة D3 — الدفعة 1: السعة والتكلفة، وتوقف البروفة المحلية
+
+الحالة: **D3 غير مغلق**. فعّلت نقطة التوقف التي حددها المستخدم بعد تكرار أخطاء BullMQ في الخطوة نفسها. لم يبدأ استيراد D3 على production، ولم تبدأ D4.
 
 ## 1. ما الذي تغيّر
 
-سُجلت قرارات المستخدم الأحدث في DECISIONS.md أولًا: MySQL لكل البيانات، النطاق 69 تلاوة، بوابة JSON_STORAGE_SIZE+50%≤60%من الحرة، حماية حساب الأدمن، وتفويض الدفعة 1 وحدها. تحديث توثيق وأدلة قراءة فقط؛ لا تغيير كود أو schema أو بيانات أو UI أو renderer. أنشئ launch-blockers.md بعد إثبات غيابه؛ لا ادعاء قراءة وثيقة غير موجودة.
+سُجل قرار الميزانية أولًا في DECISIONS.md، ثم تحقق حد الصرف 30$ والتنبيه عند 20$ بالقراءة. اكتمل [تحليل التكلفة](railway-cost-analysis.md)، وأوقفت deployments خدمات staging الست المتبقية؛ Redis كان بلا deployment أصلًا. بقيت الخدمات والبيئة والـ volumes الثلاثة، وحُفظت إعدادات watchPatterns السابقة مع تفعيل حارس يمنع النشر التلقائي على staging. لم تُشغّل مجددًا، ولم تتغير إعدادات production.
+
+أضيف كود D3 للمراجعة، دون دمج أو نشر: مستورد BullMQ بتزامن واحد، SQL حتمي، checkpoints ذرية، والتحقق من القيم المخزنة قبل الاستئناف وبعد كل تلاوة. يحسب تغطية الكلمات ويحدّث أعمدة D2 دون الكتابة إلى is_complete المولد. migration003 منفصلة عن startup، وتحتوي down مقيدًا بالبروفة المحلية؛ اختبار down الحقيقي ما زال معلقًا.
+
+تضيف migration جداول ayah_timings وimport_jobs وayah_timing_history، وجدول quran_timing_audit_fixtures للصفوف السبعة من HF التي لا تتبع Release المثبت، وجدول quran_storage_health لقياس المساحة. النص المنطوق يستخدم utf8mb4_bin، والحقول الوصفية utf8mb4_unicode_ci. فحص health/ready المحضّر يحذر تحت 20% ويعلن القياس الغائب أو القديم unavailable دون إسقاط الجاهزية. جامع القياس ودورة حياته لم يُقبلا أو يُنشرا؛ لا يُعتبر التحذير التشغيلي مكتملًا.
+
+لم تتغير الواجهة أو الريندر أو سياسة النشر أو نتيجة offset المعتمدة. تبقى التوقيتات في source_ms دون تحويل إحداثيات.
 
 ## 2. ما الذي تحققت منه فعليًا
 
-Railway describe-service/describe-environment: volume5000MB، MySQL9.7.2 SUCCESS، لا TCP proxy ولا domain عام للقاعدة، ولا staged changes. df -B1 --output=size,used,avail,pcent /var/lib/mysql الساعة 04:15:41UTC:
+### السعة والتكلفة
 
-| القياس | bytes |
+Railway يعرض volume بحجم 5000MB. df الفعلي داخل خدمة MySQL قبل الدفعة وبعد التوقف:
+
+| القياس | قبل | بعد |
+|---|---:|---:|
+| الحجم، bytes | 4,685,873,152 | 4,685,873,152 |
+| المستخدم، bytes | 325,705,728 | 325,705,728 |
+| المتاح، bytes | 4,350,103,552 | 4,350,103,552 |
+| الاستخدام | 7% | 7% |
+
+MySQL 9.7.2؛ آخر جرد السعة سجل uptime=61,844s وThreads_connected=2 مقابل max_connections=60. binlog معطل أصلًا؛ لا PURGE أو SET PERSIST، وأثر تنظيف binlog صفر. redo=104,861,696 وundo=33,554,432 bytes في الجرد الفعلي. الأدلة: [السعة قبل](d3-batch1-capacity-before.json) و[df بعد](d3-queue-stop-df-after.json).
+
+قِيس JSON_STORAGE_SIZE لكل الصفوف الـ 422,463 في التلاوات الـ 69 على MySQL 9.7.2، مع الأحجام الفعلية للنص وحقول DDL: 645,389,632 bytes، ومع هامش 50% يصبح 968,084,448 bytes. هذا أقل من 60% من المساحة الحرة، أي 2,610,062,131.2 bytes؛ بوابة السعة ناجحة. الرقم تقدير payload مع هامش، وليس حجم جداول نهائيًا على القرص. [دليل القياس](d3-all-recitation-binary-size.json).
+
+الاستهلاك قبل الدفعة 17.840302718684075$ وبعدها 17.84644344915963$؛ الزيادة 0.006140730475555$ تشمل الاستهلاك الجاري ولا تعزل تكلفة D3. التقدير العام تغير من 23.07756657010779$ إلى 23.07158363939096$؛ فرق التقدير ليس توفيرًا ماليًا مقاسًا. [الدليل](railway-cost-after-stop.json).
+
+تقدير تكلفة D3 المحافظ قبل الكتابة بلغ 0.96743488992$: نمو volume بسعر 0.15$/GB-month يقدر بـ 0.1452126672$ شهريًا، واحتياط CPU=0.41666666688$ وRAM=0.25555555584$ وegress=0.15$. افترض التقدير أربع ساعات، 2vCPU و2GB RAM إضافيين و3GB egress؛ التنفيذ المحلي لا يحتسب CPU/Redis على Railway. المتبقي بعد التقدير 11.192262391395925$، فوق حد 3$. السقف الاسمي عند استخدام 5GB كاملة 0.75$ شهريًا، وليس فاتورة توسعة مقاسة. billing مكوّن volume الخاص بخدمة MySQL عبر البيئتين بلغ 0.06275018109914306$ خلال الدورة عند التحليل. [دليل بوابة التكلفة](d3-batch1-marginal-cost-preflight.json).
+
+توزيع الفاتورة بحسب حصة كل بيئة من القياسات أعطى production≈8.06$ وstaging≈9.78$، ويشمل خدمات محذوفة تاريخيًا. هو توزيع مشتق من billing لكل خدمة وusage لكل بيئة، وليس فاتورتين مستقلتين. RAM هي أكبر بند، نحو 16.77$. runtime يثبت renderAutoscaler=false وSkia minimum=1؛ لا خدمات Chromium/FFmpeg حية. أعداد queued/running كانت صفرًا في البيئتين قبل الإيقاف.
+
+بعد التخفيض: جميع activeDeployments في staging فارغة، والـ volumes محفوظة. المتوقع من RAM نحو 18.2$/شهر وفق القياس السابق والسعر الاسمي؛ التوفير الفعلي بالدولار غير قابل للقياس في هذه النافذة القصيرة بسبب تأخر المقاييس والفاتورة. آخر RAM metric للـ scanner بقي قديمًا رغم توقف deployment، فلا يثبت استهلاكًا جديدًا أو صفر استهلاك. [قراءة الإيقاف النهائية](railway-cost-staging-pause-readback-final.json). حجم استيراد D3 على production وزمنه لم يقاسا لأنه لم يبدأ.
+
+### النسخة وحماية البيانات
+
+أُنشئت نسخة age جديدة خاصة، واستعيدت محليًا على MySQL 9.7.2؛ تطابقت أعداد الصفوف وCHECKSUM لكل 51 جدولًا. حجم SQL قبل التشفير 21,307,787 bytes. [دليل النسخة والاستعادة](d3-batch1-backup-verification.json). لا dump أو مفتاح أو صوت في Git، ولا snapshot جديد لأن الميزة مرفوضة بسبب الخطة، ولا محاولة تنظيف محلي بديلة.
+
+بعد التوقف أثبتت قراءة production ثبات D1: 114/6236/77433، وبصمة النص القانوني eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4. الجداول الحرجة ثابتة: users=13، subscriptions=16، payment_requests=3، saved_videos=7، render_jobs=72، system_settings=13، user_roles=13، notifications=49. CHECKSUM users/user_roles ثابتان، وحسابا الأدمن محفوظان دون إخراج بياناتهما. جداول D3 الخمسة غير موجودة على production. [الدليل](d3-queue-stop-production-readonly.json).
+
+health وready أعادا 200، ولوج AyahX/MySQL بلا أخطاء جديدة في نافذة 04:46–04:49 UTC. ليست نافذة قبول نشر عشر دقائق؛ لم يحدث نشر جديد. [دليل الخدمات](d3-queue-stop-production-services.json). لم يُنفذ طلب ريندر فعلي بعد التخفيض؛ لا ندعي قبول العامل عند الطلب من health وحده.
+
+### البروفة الجزئية والتوقف
+
+محاولة تلاوة واحدة كشفت تعارض collation بين القيمة المحولة ومعرّف الجدول. عولجت المقارنات الخاصة بـ D3 باستخدام COLLATE صريح، دون ALTER للأعمدة القائمة. نجحت إعادة تلاوة ماهر بـ 6,236 صفًا وبصمة القيم bc2619c9b20af61acd8d792f623630eb12c27bc83e8aa93449ed9c2105f9288d. [النتيجة](d3-local-first-fixed.json).
+
+المحاولة الكاملة التالية أنشأت SQL محليًا خاصًا ببصمة fcd552302417328ed5e82fab9e90865d933faa3c953066efe2ab88012d5c6cb7. وصلت قاعدة البروفة إلى 316,539 صفًا و52 checkpoint مكتملًا، ثم فشلت BullMQ برسالة job stalled more than allowable limit بعد ثماني رسائل WorkerError على الأقل. تقرير المعالج يحتوي 53 نتيجة بسبب إعادة job واحد؛ القراءة الفعلية تثبت 52 تلاوة، ولا يُحسب التكرار كتلاوة إضافية. [التقرير الجزئي](d3-local-full-first.json) و[قراءة MySQL](d3-local-queue-stop-readonly.json) و[أحداث Redis والتشخيص](d3-bullmq-stop-diagnosis.json).
+
+مجموع elapsed_ms للمعالج عبر النتائج الـ 53 هو 241761ms، بما فيه الوظيفة المعادة؛ ليس زمنًا جداريًا لاستيراد كامل أو زمن production.
+
+القفل المحلي القصير، ثانيتان، مع العمل المتزامن في بناء SQL وقراءة المدخلات سبب مرجح؛ لا إثبات سببي نهائي لأن event-loop-delay لم يقس. لا زيادة لـ maxStalledCount ولا تمرير للفشل. فُعّلت نقطة توقف التكرار أكثر من مرتين، ولم تُعد المحاولة بعد التوقف.
+
+الصفوف السبعة الحقيقية من HF موجودة في جدول التدقيق المحلي بحالة needs_review وأسباب NON_POSITIVE_WORD_DURATION وHF_AUDIT_OUTSIDE_PINNED_RELEASE. تقع في 5:116، 7:44، 7:57، 9:72، 9:98، 10:104، 33:7. لم تُنشأ تلاوة وهمية لها في Release. مخالفات معادلة coverage_words+missing_words=expected_words في الجزء المحلي صفر.
+
+الأحجام التالية إحصاءات information_schema للبروفة الجزئية قبل ANALYZE النهائي، وقد تتأخر عن تخصيص InnoDB؛ ليست قياس حجم استيراد كامل أو قياس production:
+
+| الجدول | DATA_LENGTH | INDEX_LENGTH |
+|---|---:|---:|
+| ayah_timing_history | 16,384 | 16,384 |
+| ayah_timings | 19,480,576 | 2,080,768 |
+| import_jobs | 16,384 | 16,384 |
+| quran_storage_health | 16,384 | 0 |
+| quran_timing_audit_fixtures | 16,384 | 16,384 |
+
+Golden fixtures للقسم 6 فُحصت من Release المثبت وكاش HF الحقيقي: 1:2 و1:3 و2:7 و2:32 ready؛ 2:31 needs_review بسبب نقص ربط الكلمات القانونية وتظليل الكلمات معطل. وصف المصدر القديم لا يطابق دائمًا occurrences في Release الحالي؛ الأدلة تحفظ المصدرين دون اختلاق segments. [دليل العينات](d3-golden-fixtures-source-check.json).
+
+### جدول التلاوات والتغطية
+
+الأعداد ready/needs_review والكلمات أدناه من التحضير المثبت لكل 69 تلاوة، وليست قبول نشر. العمود المحلي يثبت الصفوف التي تحققت قيمها أثناء المعالجة فقط؛ قبول الطابور الكامل فشل. الاستيراد على production صفر لكل التلاوات. غير حفص لا يحتوي spoken_text مستعارًا؛ تغطية قانوني حفص له غير منطبقة، والسبب SPOKEN_TEXT_UNAVAILABLE محفوظ.
+
+| التلاوة | الرواية | صفوف التحضير | ready | needs_review | الكلمات الموقّتة/القانونية | الصفوف المحلية المتحققة | production D3 |
+|---|---|---:|---:|---:|---:|---:|---:|
+| abdul_hamid_ghraio_2025_yt | hafs_an_asim | 6,236 | 6,071 | 165 | 76,981/77,433 | 6,236 | 0 |
+| abdul_hamid_ghraio_2026_yt | hafs_an_asim | 6,236 | 6,080 | 156 | 76,985/77,433 | 6,236 | 0 |
+| abdulaziz_al_turki_yt | hafs_an_asim | 6,115 | 5,686 | 429 | 74,609/76,082 | 6,115 | 0 |
+| abdulbasit_abdulsamad_mujawwad_tarteel | hafs_an_asim | 6,236 | 5,629 | 607 | 74,526/77,433 | 6,236 | 0 |
+| abdulbasit_abdulsamad_tarteel | hafs_an_asim | 6,236 | 5,828 | 408 | 75,534/77,433 | 6,236 | 0 |
+| abdulbasit_abdulsamad_warsh_qdc | warsh_an_nafi | 6,214 | 0 | 6,214 | غير منطبق | 6,214 | 0 |
+| abdullah_al_buaijan_2025_yt | hafs_an_asim | 6,236 | 6,168 | 68 | 77,211/77,433 | 6,236 | 0 |
+| abdullah_al_mattrod_qdc | hafs_an_asim | 6,236 | 5,898 | 338 | 76,355/77,433 | 6,236 | 0 |
+| abdullah_al_qarafi_mp3quran | hafs_an_asim | 6,236 | 5,765 | 471 | 75,662/77,433 | 6,236 | 0 |
+| abdullah_kamel_way2quran | hafs_an_asim | 6,236 | 4,515 | 1,721 | 71,790/77,433 | 6,236 | 0 |
+| abdulwadood_haneef_mp3quran | hafs_an_asim | 6,236 | 5,511 | 725 | 75,427/77,433 | 6,236 | 0 |
+| abdur_rashid_sufi_qdc | hafs_an_asim | 6,236 | 5,995 | 241 | 76,426/77,433 | 6,236 | 0 |
+| abdur_rashid_sufi_shubah_qdc | shubah_an_asim | 6,236 | 0 | 6,236 | غير منطبق | 6,236 | 0 |
+| abu_bakr_al_shatri_tarteel | hafs_an_asim | 6,236 | 4,379 | 1,857 | 73,004/77,433 | 6,236 | 0 |
+| adel_al_karbalaei_archive_v2 | hafs_an_asim | 6,236 | 6,052 | 184 | 76,815/77,433 | 6,236 | 0 |
+| ahmad_naseem_ali_ahmad_2019_yt | hafs_an_asim | 6,236 | 5,481 | 755 | 74,540/77,433 | 6,236 | 0 |
+| ahmed_al_ajmi_qdc | hafs_an_asim | 6,236 | 4,780 | 1,456 | 73,104/77,433 | 6,236 | 0 |
+| ahmed_amer_tvquran | hafs_an_asim | 6,236 | 5,893 | 343 | 75,913/77,433 | 6,236 | 0 |
+| ahmed_deban_qalon_mp3quran | qalon_an_nafi | 6,214 | 0 | 6,214 | غير منطبق | 6,214 | 0 |
+| ahmed_issa_al_maasaraawi_mp3quran | hafs_an_asim | 6,236 | 5,971 | 265 | 76,514/77,433 | 6,236 | 0 |
+| ahmed_kaseb_way2quran | hafs_an_asim | 6,236 | 5,925 | 311 | 76,565/77,433 | 6,236 | 0 |
+| ahmed_nuayna_qdc | hafs_an_asim | 6,236 | 6,015 | 221 | 76,586/77,433 | 6,236 | 0 |
+| ahmed_saleh_rajab_qalon_way2quran | qalon_an_nafi | 6,213 | 0 | 6,213 | غير منطبق | 6,213 | 0 |
+| ahmed_saud_mp3quran | hafs_an_asim | 327 | 325 | 2 | 1,359/1,363 | 327 | 0 |
+| ahmed_shaheen_mp3quran | hafs_an_asim | 6,236 | 5,503 | 733 | 74,698/77,433 | 6,236 | 0 |
+| ahmed_talib_bin_humaid_mp3quran | hafs_an_asim | 5,561 | 4,951 | 610 | 65,329/67,052 | 5,561 | 0 |
+| akram_al_alaqmi_qdc | hafs_an_asim | 6,236 | 5,233 | 1,003 | 73,973/77,433 | 6,236 | 0 |
+| ali_al_huthaifi_mp3quran | hafs_an_asim | 6,236 | 5,301 | 935 | 74,013/77,433 | 6,236 | 0 |
+| ayman_swed_muallim_yt | hafs_an_asim | 6,236 | 4,881 | 1,355 | 72,807/77,433 | 6,236 | 0 |
+| badr_al_turki_yt | hafs_an_asim | 6,236 | 5,589 | 647 | 74,786/77,433 | 6,236 | 0 |
+| bandar_baleela_qdc | hafs_an_asim | 6,236 | 5,284 | 952 | 74,382/77,433 | 6,236 | 0 |
+| fatih_seferagic_way2quran | hafs_an_asim | 6,236 | 6,167 | 69 | 77,216/77,433 | 6,236 | 0 |
+| haitham_al_dukhain_mp3quran | hafs_an_asim | 6,236 | 5,122 | 1,114 | 73,893/77,433 | 6,236 | 0 |
+| hani_al_rifai_qdc_128k | hafs_an_asim | 6,236 | 5,695 | 541 | 76,067/77,433 | 6,236 | 0 |
+| ibrahim_al_akhdar_drive | hafs_an_asim | 6,236 | 6,106 | 130 | 76,995/77,433 | 6,236 | 0 |
+| imad_zuhair_hafez_mp3quran | hafs_an_asim | 6,236 | 5,655 | 581 | 74,998/77,433 | 6,236 | 0 |
+| islam_sobhi_mp3quran | hafs_an_asim | 5,334 | 4,683 | 651 | 61,761/63,841 | 5,334 | 0 |
+| khalid_al_mohana_drive | hafs_an_asim | 6,236 | 5,973 | 263 | 76,377/77,433 | 6,236 | 0 |
+| khalifa_al_tunaiji_tarteel | hafs_an_asim | 6,236 | 5,922 | 314 | 76,254/77,433 | 6,236 | 0 |
+| maher_al_muaiqly_qdc | hafs_an_asim | 6,236 | 5,910 | 326 | 75,957/77,433 | 6,236 | 0 |
+| mahmoud_abdul_hakam_mp3quran | hafs_an_asim | 6,236 | 5,660 | 576 | 74,973/77,433 | 6,236 | 0 |
+| mahmoud_ali_al_banna_qdc | hafs_an_asim | 6,236 | 5,815 | 421 | 75,656/77,433 | 6,236 | 0 |
+| mahmoud_khalil_al_husary_mp3quran | hafs_an_asim | 6,236 | 5,907 | 329 | 76,107/77,433 | 6,236 | 0 |
+| mahmoud_khalil_al_husary_mujawwad_tarteel | hafs_an_asim | 6,236 | 5,656 | 580 | 75,095/77,433 | 6,236 | 0 |
+| mahmoud_khalil_al_husary_qdc_128k | hafs_an_asim | 6,236 | 5,929 | 307 | 75,839/77,433 | 6,236 | 0 |
+| mishary_rashid_al_afasy_2008_qdc | hafs_an_asim | 6,236 | 5,291 | 945 | 74,622/77,433 | 6,236 | 0 |
+| mishary_rashid_al_afasy_mp3quran | hafs_an_asim | 6,236 | 5,404 | 832 | 74,969/77,433 | 6,236 | 0 |
+| moaz_mahmoud_hamed_qalon_way2quran | qalon_an_nafi | 6,177 | 0 | 6,177 | غير منطبق | 6,177 | 0 |
+| mohammed_abdulkareem_qdc | hafs_an_asim | 6,236 | 4,952 | 1,284 | 73,300/77,433 | 6,236 | 0 |
+| mohammed_al_luhaidan_mp3quran | hafs_an_asim | 6,236 | 5,096 | 1,140 | 74,389/77,433 | 6,236 | 0 |
+| mohammed_alghazali_archive | hafs_an_asim | 6,236 | 5,119 | 1,117 | 73,766/77,433 | 6,236 | 0 |
+| mohammed_ayyub_drive | hafs_an_asim | 6,236 | 5,539 | 697 | 74,229/77,433 | 6,236 | 0 |
+| mohammed_burhaji_yt | hafs_an_asim | 6,236 | 5,163 | 1,073 | 74,699/77,433 | 0 | 0 |
+| mohammed_saayed_warsh_mp3quran | warsh_an_nafi | 6,214 | 0 | 6,214 | غير منطبق | 0 | 0 |
+| mohammed_siddiq_al_minshawi_1967_drive | hafs_an_asim | 6,236 | 5,689 | 547 | 75,222/77,433 | 0 | 0 |
+| mohammed_siddiq_al_minshawi_mp3quran | hafs_an_asim | 6,236 | 5,766 | 470 | 75,510/77,433 | 0 | 0 |
+| mohammed_siddiq_al_minshawi_mujawwad_mp3quran | hafs_an_asim | 6,236 | 5,281 | 955 | 73,501/77,433 | 0 | 0 |
+| muammar_zainal_al_sukaini_way2quran | hafs_an_asim | 6,236 | 5,806 | 430 | 75,660/77,433 | 0 | 0 |
+| mustafa_ismail_mp3quran | hafs_an_asim | 6,236 | 5,922 | 314 | 76,001/77,433 | 0 | 0 |
+| nasser_al_qatami_mp3quran | hafs_an_asim | 6,236 | 4,518 | 1,718 | 72,390/77,433 | 0 | 0 |
+| saad_al_ghamdi_tarteel | hafs_an_asim | 6,236 | 5,481 | 755 | 75,006/77,433 | 0 | 0 |
+| saber_abdulhakam_qalon_way2quran | qalon_an_nafi | 6,214 | 0 | 6,214 | غير منطبق | 0 | 0 |
+| saber_abdulhakam_shubah_way2quran | shubah_an_asim | 6,236 | 0 | 6,236 | غير منطبق | 0 | 0 |
+| saber_abdulhakam_warsh_way2quran | warsh_an_nafi | 6,214 | 0 | 6,214 | غير منطبق | 0 | 0 |
+| saber_abdulhakam_yt | hafs_an_asim | 6,236 | 5,630 | 606 | 75,267/77,433 | 0 | 0 |
+| saud_al_shuraim_mp3quran | hafs_an_asim | 6,236 | 5,794 | 442 | 75,932/77,433 | 0 | 0 |
+| walid_al_naihi_qalon_mp3quran | qalon_an_nafi | 6,214 | 0 | 6,214 | غير منطبق | 0 | 0 |
+| walid_atef_way2quran | hafs_an_asim | 6,236 | 4,965 | 1,271 | 72,980/77,433 | 0 | 0 |
+| yasser_al_dosari_archive | hafs_an_asim | 6,236 | 5,148 | 1,088 | 73,928/77,433 | 0 | 0 |
+
+أسباب needs_review في التحضير الكامل؛ قد يحمل الصف أكثر من سبب، فلا يُجمع هذا الجدول للحصول على عدد الصفوف:
+
+| السبب | عدد مرات السبب |
 |---|---:|
-| الحجم الفعلي لـfilesystem | 4,685,873,152 |
-| المستخدم | 325,705,728 |
-| المتاح قبل التنفيذ | 4,350,103,552 |
-| حد 60%من المتاح | 2,610,062,131.2 |
-| بعد الاستيراد | لم ينفذ؛ لا قياس بعدي يُختلق |
-
-الفرق بين 5000MB المخصص وحجم filesystem لا يعني فشل التوسعة. استخدام df7%. du datadir=325,570,560، railway=100,470,784، redo=104,861,696، undo_001/undo_002 كل 16,777,216 bytes. MySQL uptime=61,844s و Threads_connected=2/max_connections60 و max_allowed_packet67,108,864. @@log_bin=0، retention الحالي 2,592,000s. SHOW REPLICAS و SHOW REPLICA STATUS بلا صفوف. binlog معطل، فلا ملفات لتنظيفها ولا كتابة مضاعفة منه؛ لم ينفذ SET PERSIST أو PURGE بلا أثر مفيد، وأثر التنظيف 0 bytes. لم يُدّع جرد CDC كاملًا من هذين الأمرين.
-
-أحجام information_schema للجداول القائمة (metadata، DATA_FREE قد يخص tablespace ولا يُجمع كحجم مستخدم):
-
-| الجدول القائم | DATA_LENGTH | INDEX_LENGTH | DATA_FREE |
-|---|---:|---:|---:|
-| quran_words | 18432000 | 15319040 | 4194304 |
-| quran_ayahs | 5783552 | 1916928 | 4194304 |
-| recitations | 5783552 | 65536 | 4194304 |
-| recitation_chapters | 2637824 | 1589248 | 4194304 |
-| render_jobs | 1458176 | 98304 | 4194304 |
-| render_job_audit | 114688 | 98304 | 0 |
-| saved_videos | 16384 | 114688 | 0 |
-| admin_permissions | 49152 | 65536 | 0 |
-| quran_audio_assets | 16384 | 81920 | 0 |
-| render_manifests | 16384 | 81920 | 0 |
-| admin_invitations | 16384 | 65536 | 0 |
-| alignment_documents | 16384 | 65536 | 0 |
-| video_comments | 16384 | 65536 | 0 |
-| admin_sessions | 16384 | 49152 | 0 |
-| audit_logs | 16384 | 49152 | 0 |
-
-جداول D3 غير موجودة؛ حجمها الفعلي على production غير متاح وليس تقديرًا. لم يُقَس JSON_STORAGE_SIZE لكل 69: القياس السابق 24 تلاوة/143590 صفًا فقط،223,071,669 bytespayload؛ لا تعميم له ولا ادعاء اجتياز 60%.
-
-### التكلفة — نقطة التوقف الملزمة
-
-railway usage الحالي 17.83406514740877 دولار؛ hardLimit18 و softLimit5 و isOverLimit=false؛ المتبقي 0.16593485259123 دولار. تقدير نهاية دورة 19 سبتمبر–19 أكتوبر 23.073205267590637 دولار، ويتجاوز الحد القائم. هذا تقدير Railway العام، لا تكلفة استيراد D3 محسوبة، ولا ادعاء أن الحد بلغ الآن. حالة مالية غير متوقعة قبل عملية كبيرة تفعّل نقطةالتوقف 6؛ لا رفع limit أو ترقية خطة أو إنفاق جديد.
-
-Railway usage projects يعرض تكلفة MySQL volume الفعلية للدورة حتى القراءة 0.06269965184712994 دولار، وتكلفة MySQL الإجمالية 5.813558654074766. السعر الشهري المنشور رسميًا 0.15 دولار/GB/month؛ تكلفة 5GB مستخدمة طوال شهر 0.75 دولار حساب مشتق، وليست فاتورة شهرية مقاسة للتوسعة. المصدر [Railway pricing](https://docs.railway.com/pricing/plans). يظهر backup0.010062073438499275 دولار كاستخدام قائم؛ لم ينشئ الوكيل snapshot أو backup خدمة مدفوعًا.
-
-### تحقق Production قراءة فقط
-
-D1=114/6236/77433؛ البصمة eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4. جداول D3 الثلاثة غائبة. سجل الحماية وجد صفين بدور admin؛ حُفظت البصمة دون IDs أو بيانات شخصية، وكل حسابات admin محمية لأن أي اختيار لأحدهما كحساب المستخدم غير مثبت. لا DELETE/UPDATE أو تنظيف userdata، ولا حساب أُعدل.
-
-| الجدول | production عند التوقف |
-|---|---:|
-| users | 13 |
-| subscriptions | 16 |
-| payment_requests | 3 |
-| saved_videos | 7 |
-| render_jobs | 72 |
-| system_settings | 13 |
-| user_roles | 13 |
-| notifications | 49 |
-
-/api/health و/api/health/ready200، database connected. لوجات 04:10:00–04:17:15UTC: AyahX2 سطور/MySQL0، أخطاء 0. ليست نافذة قبول نشر 10 دقائق؛ لم يحدث نشر في الدفعة. الأدلة: d3-batch1-capacity-before.json، d3-batch1-billing.json، d3-batch1-production-readonly.json، d3-batch1-admin-protection.json، d3-batch1-services-readonly.json.
-
-## 3. نتائج الاختبارات
-
-لم تُشغّل tsc/lint/npm test/build أو بروفة DB في هذه الدفعة بعد تفعيل التوقف؛ ملفات التغيير توثيق فقط. نتائج الدفعة السابقة المحفوظة:483pass/6skip/0fail،12D3 مستهدفًا و 108B ناجحة و tsc/lint متغير ناجحان. تلك نتائج تاريخية، وليست تشغيلًا جديدًا أو قبولًا لـ D3.
-
-البروفة المدمرة الحقيقية، التشغيل مرتين، قتل العملية والاستئناف، رفض الفساد، down/reapply، goldenfixtures مع فحص DB، EXPLAIN<50ms، ووجود السبعة بحالتها داخل قاعدة الاختبار: لم تنفذ في هذه الدفعة. لا نتائج mocks تُقدّم بديلًا عنها.
-
-## 4. ما لم يكتمل أو يحتاج قرارك، وسببه
-
-D3 غير مغلق. لا migration003 ولا dry-run/apply على production، لا BullMQ فعلي أو coverageupdate أو ANALYZE. تحذير المساحة health/ready لم يُضف. لا دمج/نشر/PR جديد؛ لا CI أو روابط نشر جديدة. لا dump جديد لأنه لا عملية هدم/كتابة بدأت؛ نسخة age السابقة المتحققة محفوظة ولا يُدعى تحديثها. شرط 60%لم يُختبر على 69 تلاوة بعد.
-
-عدد المحضّر السابق 422463 صفًا في 69 تلاوة؛ المستورد في production0. زمن الاستيراد غير متاح لأنه لم يبدأ. الآتي مرجع التحضير السابق بتاريخ 2026-10-10T03:23:15.529Z فقط، وليس coverage قاعدة أو قبول timing_complete/is_complete. المخطط لم يتغير:
-
-| التلاوة | الرواية | ready/المحضّر | كلمات موقّتة/قانونية | needs_review |
-|---|---|---:|---:|---:|
-| abdul_hamid_ghraio_2025_yt | hafs_an_asim | 6071/6236 | 76981/77433 | 165 |
-| abdul_hamid_ghraio_2026_yt | hafs_an_asim | 6080/6236 | 76985/77433 | 156 |
-| abdulaziz_al_turki_yt | hafs_an_asim | 5686/6115 | 74609/76082 | 429 |
-| abdulbasit_abdulsamad_mujawwad_tarteel | hafs_an_asim | 5629/6236 | 74526/77433 | 607 |
-| abdulbasit_abdulsamad_tarteel | hafs_an_asim | 5828/6236 | 75534/77433 | 408 |
-| abdulbasit_abdulsamad_warsh_qdc | warsh_an_nafi | 0/6214 | مرجع قانوني غير متوفر | 6214 |
-| abdullah_al_buaijan_2025_yt | hafs_an_asim | 6168/6236 | 77211/77433 | 68 |
-| abdullah_al_mattrod_qdc | hafs_an_asim | 5898/6236 | 76355/77433 | 338 |
-| abdullah_al_qarafi_mp3quran | hafs_an_asim | 5765/6236 | 75662/77433 | 471 |
-| abdullah_kamel_way2quran | hafs_an_asim | 4515/6236 | 71790/77433 | 1721 |
-| abdulwadood_haneef_mp3quran | hafs_an_asim | 5511/6236 | 75427/77433 | 725 |
-| abdur_rashid_sufi_qdc | hafs_an_asim | 5995/6236 | 76426/77433 | 241 |
-| abdur_rashid_sufi_shubah_qdc | shubah_an_asim | 0/6236 | مرجع قانوني غير متوفر | 6236 |
-| abu_bakr_al_shatri_tarteel | hafs_an_asim | 4379/6236 | 73004/77433 | 1857 |
-| adel_al_karbalaei_archive_v2 | hafs_an_asim | 6052/6236 | 76815/77433 | 184 |
-| ahmad_naseem_ali_ahmad_2019_yt | hafs_an_asim | 5481/6236 | 74540/77433 | 755 |
-| ahmed_al_ajmi_qdc | hafs_an_asim | 4780/6236 | 73104/77433 | 1456 |
-| ahmed_amer_tvquran | hafs_an_asim | 5893/6236 | 75913/77433 | 343 |
-| ahmed_deban_qalon_mp3quran | qalon_an_nafi | 0/6214 | مرجع قانوني غير متوفر | 6214 |
-| ahmed_issa_al_maasaraawi_mp3quran | hafs_an_asim | 5971/6236 | 76514/77433 | 265 |
-| ahmed_kaseb_way2quran | hafs_an_asim | 5925/6236 | 76565/77433 | 311 |
-| ahmed_nuayna_qdc | hafs_an_asim | 6015/6236 | 76586/77433 | 221 |
-| ahmed_saleh_rajab_qalon_way2quran | qalon_an_nafi | 0/6213 | مرجع قانوني غير متوفر | 6213 |
-| ahmed_saud_mp3quran | hafs_an_asim | 325/327 | 1359/1363 | 2 |
-| ahmed_shaheen_mp3quran | hafs_an_asim | 5503/6236 | 74698/77433 | 733 |
-| ahmed_talib_bin_humaid_mp3quran | hafs_an_asim | 4951/5561 | 65329/67052 | 610 |
-| akram_al_alaqmi_qdc | hafs_an_asim | 5233/6236 | 73973/77433 | 1003 |
-| ali_al_huthaifi_mp3quran | hafs_an_asim | 5301/6236 | 74013/77433 | 935 |
-| ayman_swed_muallim_yt | hafs_an_asim | 4881/6236 | 72807/77433 | 1355 |
-| badr_al_turki_yt | hafs_an_asim | 5589/6236 | 74786/77433 | 647 |
-| bandar_baleela_qdc | hafs_an_asim | 5284/6236 | 74382/77433 | 952 |
-| fatih_seferagic_way2quran | hafs_an_asim | 6167/6236 | 77216/77433 | 69 |
-| haitham_al_dukhain_mp3quran | hafs_an_asim | 5122/6236 | 73893/77433 | 1114 |
-| hani_al_rifai_qdc_128k | hafs_an_asim | 5695/6236 | 76067/77433 | 541 |
-| ibrahim_al_akhdar_drive | hafs_an_asim | 6106/6236 | 76995/77433 | 130 |
-| imad_zuhair_hafez_mp3quran | hafs_an_asim | 5655/6236 | 74998/77433 | 581 |
-| islam_sobhi_mp3quran | hafs_an_asim | 4683/5334 | 61761/63841 | 651 |
-| khalid_al_mohana_drive | hafs_an_asim | 5973/6236 | 76377/77433 | 263 |
-| khalifa_al_tunaiji_tarteel | hafs_an_asim | 5922/6236 | 76254/77433 | 314 |
-| maher_al_muaiqly_qdc | hafs_an_asim | 5910/6236 | 75957/77433 | 326 |
-| mahmoud_abdul_hakam_mp3quran | hafs_an_asim | 5660/6236 | 74973/77433 | 576 |
-| mahmoud_ali_al_banna_qdc | hafs_an_asim | 5815/6236 | 75656/77433 | 421 |
-| mahmoud_khalil_al_husary_mp3quran | hafs_an_asim | 5907/6236 | 76107/77433 | 329 |
-| mahmoud_khalil_al_husary_mujawwad_tarteel | hafs_an_asim | 5656/6236 | 75095/77433 | 580 |
-| mahmoud_khalil_al_husary_qdc_128k | hafs_an_asim | 5929/6236 | 75839/77433 | 307 |
-| mishary_rashid_al_afasy_2008_qdc | hafs_an_asim | 5291/6236 | 74622/77433 | 945 |
-| mishary_rashid_al_afasy_mp3quran | hafs_an_asim | 5404/6236 | 74969/77433 | 832 |
-| moaz_mahmoud_hamed_qalon_way2quran | qalon_an_nafi | 0/6177 | مرجع قانوني غير متوفر | 6177 |
-| mohammed_abdulkareem_qdc | hafs_an_asim | 4952/6236 | 73300/77433 | 1284 |
-| mohammed_al_luhaidan_mp3quran | hafs_an_asim | 5096/6236 | 74389/77433 | 1140 |
-| mohammed_alghazali_archive | hafs_an_asim | 5119/6236 | 73766/77433 | 1117 |
-| mohammed_ayyub_drive | hafs_an_asim | 5539/6236 | 74229/77433 | 697 |
-| mohammed_burhaji_yt | hafs_an_asim | 5163/6236 | 74699/77433 | 1073 |
-| mohammed_saayed_warsh_mp3quran | warsh_an_nafi | 0/6214 | مرجع قانوني غير متوفر | 6214 |
-| mohammed_siddiq_al_minshawi_1967_drive | hafs_an_asim | 5689/6236 | 75222/77433 | 547 |
-| mohammed_siddiq_al_minshawi_mp3quran | hafs_an_asim | 5766/6236 | 75510/77433 | 470 |
-| mohammed_siddiq_al_minshawi_mujawwad_mp3quran | hafs_an_asim | 5281/6236 | 73501/77433 | 955 |
-| muammar_zainal_al_sukaini_way2quran | hafs_an_asim | 5806/6236 | 75660/77433 | 430 |
-| mustafa_ismail_mp3quran | hafs_an_asim | 5922/6236 | 76001/77433 | 314 |
-| nasser_al_qatami_mp3quran | hafs_an_asim | 4518/6236 | 72390/77433 | 1718 |
-| saad_al_ghamdi_tarteel | hafs_an_asim | 5481/6236 | 75006/77433 | 755 |
-| saber_abdulhakam_qalon_way2quran | qalon_an_nafi | 0/6214 | مرجع قانوني غير متوفر | 6214 |
-| saber_abdulhakam_shubah_way2quran | shubah_an_asim | 0/6236 | مرجع قانوني غير متوفر | 6236 |
-| saber_abdulhakam_warsh_way2quran | warsh_an_nafi | 0/6214 | مرجع قانوني غير متوفر | 6214 |
-| saber_abdulhakam_yt | hafs_an_asim | 5630/6236 | 75267/77433 | 606 |
-| saud_al_shuraim_mp3quran | hafs_an_asim | 5794/6236 | 75932/77433 | 442 |
-| walid_al_naihi_qalon_mp3quran | qalon_an_nafi | 0/6214 | مرجع قانوني غير متوفر | 6214 |
-| walid_atef_way2quran | hafs_an_asim | 4965/6236 | 72980/77433 | 1271 |
-| yasser_al_dosari_archive | hafs_an_asim | 5148/6236 | 73928/77433 | 1088 |
-
-أسباب needs_review المجمّعة من التحضير السابق (قد يحمل الصف أكثر من سبب؛ لا تجمعها كعدد صفوف مستقل). ready=321473، needs_review=100990:
-
-| سبب التحضير | العدد |
-|---|---:|
-| CANONICAL_TEXT_UNAVAILABLE | 62146 |
-| SPOKEN_TEXT_UNAVAILABLE | 62146 |
-| SPOKEN_WORD_COUNT_MISMATCH | 62146 |
-| CANONICAL_WORD_COVERAGE_INCOMPLETE | 38518 |
-| WORD_DIFF_UNMAPPED | 2808 |
+| CANONICAL_TEXT_UNAVAILABLE | 62,146 |
+| SPOKEN_TEXT_UNAVAILABLE | 62,146 |
+| SPOKEN_WORD_COUNT_MISMATCH | 62,146 |
+| CANONICAL_WORD_COVERAGE_INCOMPLETE | 38,518 |
+| WORD_DIFF_UNMAPPED | 2,808 |
 | INVALID_WORD_INTERVAL | 426 |
 | MISSING_SOURCE_AYAH | 43 |
 
-الصفوف السبعة المعيبة config HF خارجي al_hussayni_al_azazy_kids_qdc وليس ضمن Release 69. تبقى fixtures حقيقية منفصلة؛ لا اختلاق صفوف Release أو ادعاء وجودها في production. خطة تنفيذها يجب أن تميز مصدر التدقيق بوضوح دون استعارة نص حفص لغير حفص.
+## 3. نتائج الاختبارات
+
+- npm test: 488 ناجحة، 6 متخطاة، صفر فشل من 494. استُخدم corpus ومدخلات D3 الحقيقية. الاختبارات الستة المتخطاة تخص renderJobQueue المشروط ببيئة DB، ولا تعد قبول D3.
+- npx tsc --noEmit، وفحص strict لملفات server/scripts الجديدة، وnpm run build: ناجحة.
+- lint للملفات الجديدة بلا رسائل؛ في server/index.ts تحذيران قديمان متطابقان قبل وبعد، ولا رسائل جديدة. لم يُصلح lint العام.
+- التشغيل المستهدف للـ golden/import/normalize: 8/8؛ اختبارات schema/storage أيضًا ناجحة. الاختبارات الوحدية لا تعوض فشل البروفة الكاملة.
+
+الأدلة: [مخرجات npm test](d3-batch1-tests.json)، [مقارنة lint](d3-changed-lint-baseline-comparison.json). الأوامر:
+
+~~~powershell
+$env:D1_QURAN_CORPUS = "$env:TEMP/ayahx-d1/corpus.json"
+$env:D3_INPUT_DIRECTORY = "$env:TEMP/ayahx-d3-release-inputs"
+npm test -- --reporter=json --outputFile=docs/data/d3-batch1-tests.json
+npx tsc --noEmit
+npm run build
+npx tsc --noEmit --module esnext --moduleResolution bundler --target es2022 --skipLibCheck --strict --esModuleInterop server/services/qudTimingImport.ts scripts/import-qud-timings.ts server/services/quranStorageHealth.ts
+~~~
+
+المستورد المحلي نُفذ عبر scripts/import-qud-timings.ts باستخدام --target local --apply، ومدخلات Release الخاصة والبصمات المسجلة في الأدلة. هذا ليس dry-run أو apply على production.
+
+## 4. ما لم يكتمل أو يحتاج قرارك، وسببه
+
+D3 غير مغلق بسبب نقطة التوقف الملزمة. لم يكتمل الاستيراد المحلي الكامل مرتين، أو قتل العملية المخطط ثم الاستئناف الحقيقي، أو رفض فساد قاعدة حقيقية، أو down وإعادة التطبيق، أو EXPLAIN يثبت الفهرس وزمنًا أقل من 50ms. لم ينفذ production dry-run/apply/ANALYZE أو تحقق تغطية كل سورة بعد الاستيراد. فحص المساحة يحتاج تشغيل جامع دائم واختبار دورة حياته. لا PR/CI/merge/deploy جديد؛ الكود لا يستوفي بوابة الدمج.
+
+لا عزل مالي ممكن لتكلفة D3 الفعلية أو التوفير المحقق من فاتورة الدورة المتأخرة. لا اختبار طلب ريندر فعلي بعد تخفيض staging. لم تبدأ D4 أو أي مرحلة بعدها.
 
 ## 5. المخاطر المعروفة
 
-الهامش المالي أقل من 0.17 دولار؛ قد يوقف hardLimit الخدمات لاحقًا مع الاستهلاك القائم. قراءة حجم volume لا تلغي حد الميزانية أو تثبت تكلفة الاستيراد. allocation النهائي والفهارس غير مقاسة. السماح بحذف testdata لا يسمح لمس admin؛ لم يحتج هذا الفحص أي حذف. snapshot يبقى مرفوضًا بسبب Pro، ورفض الحذف المحلي محفوظ بلا محاولات بديلة. B/offset والبسملة والنشر لم تتغير.
+قفل BullMQ قد ينتهي قبل تجديده تحت الحمل المتزامن؛ نجاح SQL أو checkpoint لا يعني نجاح الطابور. قد تستأنف BullMQ الوظيفة داخليًا، ولهذا يُتحقق من القيم المخزنة قبل أي كتابة. SQL الخاص والكاش محفوظان، ولا محاولة حذف بديلة. أرقام حجم information_schema الجزئية تحتاج ANALYZE وقياسًا فعليًا بعد استيراد كامل. خدمة القياس يجب أن تميز stale وأن تستمر بعد إعادة التشغيل قبل قبول health storage.
+
+الـ offset والبسملة وحقوق الصوت قيود مستقلة محفوظة، ولا تُنشر تلاوة لمجرد استيراد توقيتها.
 
 ## 6. الخطوة التالية المقترحة
 
-قرار المستخدم بشأن حد الإنفاق القائم وتقدير الدورة أولًا؛ لم أطلب ترقية أو أُنفّذ تغيير ميزانية. بعد حسم القيد يُستأنف D3 فقط: قياس 69+50%، بروفة 9.7.2، dry-run ثم apply وتحقق كل تلاوة، ثم قبول الاختبارات والنشر كما فُوّض. لا D4 أو أي مرحلة بعدها. العمل متوقف الآن.
+بعد قرار المستخدم باستئناف D3: تشخيص event-loop-delay وأخطاء القفل المحددة، وتقييم قفل طبيعي 120 ثانية مع تجديد موثق، وقفل قصير محصور في اختبار قتل منفصل. لا زيادة لـ maxStalledCount لإخفاء الفشل. بعدها تعاد البروفة الكاملة بكل اختبارات القبول، ثم بوابات production. العمل متوقف الآن؛ لا D4.
 
-قرارات ذاتية: تفعيل بند التوقف المالي عند ثبوت الهامش والتقدير؛ عدم PURGE مع binlog معطل؛ حماية كل صفوف admin دون اختيار هوية غير مثبتة؛ إنشاء launch-blockers كتوثيق جديد؛ الحفاظ على الأدلة التاريخية وعدم إعادة تسميتها نتائج حالية؛ عدم تشغيل وكلاء جدد لتجاوز usage limit الذي أوقف الوكلاء السابقين.
+القرارات الذاتية: حماية جميع حسابات الأدمن؛ إيقاف staging وحدها وحفظ الرجوع ومنع auto-deploy؛ إبقاء موارد production؛ عدم PURGE مع binlog معطل؛ فصل تدقيق HF عن Release؛ إصلاح المقارنات بدل تغيير collation قائم؛ التوقف عند تكرار الفشل؛ الفصل بين تقدير التوفير والتوفير المالي المقاس.

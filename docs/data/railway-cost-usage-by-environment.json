@@ -1,0 +1,1594 @@
+{
+  "checked_at": "2026-10-10T04:29:05.650Z",
+  "period_start": "2026-09-19T00:53:56Z",
+  "data": {
+    "data": {
+      "usage": [
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 24.436038583333332
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "4031bdca-f094-487b-9793-2063ae5c877d"
+          },
+          "value": 94.0150269
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "4031bdca-f094-487b-9793-2063ae5c877d"
+          },
+          "value": 0.047319904
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 90.23509663333331
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 0.053585535
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 82.84808931666667
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 0.252931344
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 47.1699579
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 0.150392682
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 37.24131615
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "aa240473-18fd-4255-998a-8fb6d050cf5c"
+          },
+          "value": 0.37853745
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "aa240473-18fd-4255-998a-8fb6d050cf5c"
+          },
+          "value": 0.000309547
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "e8c8f16f-a7e2-4c25-a983-cba9da84b045"
+          },
+          "value": 103.47624443333332
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "e8c8f16f-a7e2-4c25-a983-cba9da84b045"
+          },
+          "value": 0.016917603
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 123.31163321666666
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 0.016839114
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 69.59942085
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 0.432965445
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 24.69503855
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "4031bdca-f094-487b-9793-2063ae5c877d"
+          },
+          "value": 119.3506854
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "4031bdca-f094-487b-9793-2063ae5c877d"
+          },
+          "value": 0.016947679
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 44.18681926666667
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 0.151994778
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 38.94055148333333
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "e8c8f16f-a7e2-4c25-a983-cba9da84b045"
+          },
+          "value": 91.51003853333332
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "e8c8f16f-a7e2-4c25-a983-cba9da84b045"
+          },
+          "value": 0.085237881
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 321.2375246373785
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "4031bdca-f094-487b-9793-2063ae5c877d"
+          },
+          "value": 2341.4769334125517
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 2244.5223295223404
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 2118.0503174131445
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 1139.185519245596
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 4635.9851664082635
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "aa240473-18fd-4255-998a-8fb6d050cf5c"
+          },
+          "value": 11.32367029535284
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "e8c8f16f-a7e2-4c25-a983-cba9da84b045"
+          },
+          "value": 2040.780838478605
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 1936.0446536367829
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 2864.631974995177
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 249.0162175532336
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "4031bdca-f094-487b-9793-2063ae5c877d"
+          },
+          "value": 1988.460128751449
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 1021.736700225006
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 5972.97211584547
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "e8c8f16f-a7e2-4c25-a983-cba9da84b045"
+          },
+          "value": 3382.186515339239
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 690.5492937007664
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 2511.450073881173
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 894.8350602697599
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 1631.418820695878
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 3954.8464772459615
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 22.955444833333335
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "4031bdca-f094-487b-9793-2063ae5c877d"
+          },
+          "value": 47.8768022
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "4031bdca-f094-487b-9793-2063ae5c877d"
+          },
+          "value": 0.007644178
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 64.19162431666666
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 0.017244448
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 64.16273663333334
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 0.020850792
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 7.0202431333333335
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 0.000017835
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 37.90376763333333
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 0.119744002
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 34.93229475
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "e8c8f16f-a7e2-4c25-a983-cba9da84b045"
+          },
+          "value": 52.10257981666667
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "e8c8f16f-a7e2-4c25-a983-cba9da84b045"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 70.56169706666667
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 76.5217609
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 0.130453774
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 17.810950133333332
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "4031bdca-f094-487b-9793-2063ae5c877d"
+          },
+          "value": 57.8122002
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "4031bdca-f094-487b-9793-2063ae5c877d"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 30.93998215
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 0.122838835
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 33.631065283333335
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "e8c8f16f-a7e2-4c25-a983-cba9da84b045"
+          },
+          "value": 57.608822483333334
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "e8c8f16f-a7e2-4c25-a983-cba9da84b045"
+          },
+          "value": 0.000149025
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 6.986992383333333
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 180.43352252241024
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "4031bdca-f094-487b-9793-2063ae5c877d"
+          },
+          "value": 1528.484667326046
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 1707.1573742056796
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 1716.735862374337
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 209.7007665767372
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 923.8444539834594
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 3694.801228329354
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "e8c8f16f-a7e2-4c25-a983-cba9da84b045"
+          },
+          "value": 1457.6138635402722
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 1420.5337146055226
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 2155.7325448705046
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 166.55179316860225
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "4031bdca-f094-487b-9793-2063ae5c877d"
+          },
+          "value": 1523.8121475231624
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 757.3571131215374
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 4417.479688073875
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "e8c8f16f-a7e2-4c25-a983-cba9da84b045"
+          },
+          "value": 1485.85047509254
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 118.1665624688058
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 892.0198906145271
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 2364.3617507844942
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 987.6150509109426
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 1962.114276534644
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 3675.568746349363
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 19.999969066666665
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 45.50251143333333
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 0.001342729
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 7.818531333333333
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 0.042323158
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 12.126074
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 0.000007188
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 34.834783683333335
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 0.000008228
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 26.15071335
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 5.41337765
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 19.59569305
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 0.045273606
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 5.836269383333334
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 0.021173576
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 25.048328266666665
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 1.6638667666666669
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e"
+          },
+          "value": 2.317292033333333
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e"
+          },
+          "value": 0.000243818
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 194.87559650867072
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 516.7301761117135
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 105.10448944455624
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 387.5705009500283
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 510.4254144489211
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 2243.7353200069165
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 155.94887264413538
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 216.8380834864454
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 137.04295643614876
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 3613.596669264428
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 48.59241515656101
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e"
+          },
+          "value": 9280.771429058945
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 862.4314784754021
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 1941.6808562521016
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 995.7417419719832
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 1988.9965056
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 3424.636351449879
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e"
+          },
+          "value": 1210.2540661878577
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0.4744181
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 0.6316713833333333
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 0.30163283333333335
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 0.6118178666666667
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0.6775973833333333
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 0.8699947
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 0.23599485
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 0.000061101
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 1.0618990833333333
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 0.003881921
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0.8256119333333334
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 0.28016586666666665
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "CPU_USAGE",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e"
+          },
+          "value": 0.0109337
+        },
+        {
+          "measurement": "NETWORK_TX_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 3.6081616044077136
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 12.400949253704734
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 9.10757888
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 10.68689084631579
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 91.81976043751412
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b"
+          },
+          "value": 29.242419935469613
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          },
+          "value": 3.8711474984873946
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc"
+          },
+          "value": 26.568752675457063
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 103.95736972042818
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6"
+          },
+          "value": 8.88389632
+        },
+        {
+          "measurement": "MEMORY_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e"
+          },
+          "value": 222.97413620685083
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 17.326487681763084
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 76.62430231141244
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 21.910716254011295
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 42.44508672
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 96.54955928157749
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4"
+          },
+          "value": 0
+        },
+        {
+          "measurement": "DISK_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e"
+          },
+          "value": 41.9360768
+        },
+        {
+          "measurement": "BACKUP_USAGE_GB",
+          "tags": {
+            "environmentId": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+            "serviceId": "6b8de88a-e0d7-4c3c-ad8b-e0a53407755e"
+          },
+          "value": 0
+        }
+      ]
+    }
+  }
+}

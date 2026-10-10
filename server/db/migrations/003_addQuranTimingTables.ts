@@ -2,7 +2,7 @@
 const text = (name: string, type: string, tail = 'NOT NULL'): string => `${name} ${type} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ${tail}`;
 const create = (table: string, fields: string[]): string => `CREATE TABLE IF NOT EXISTS ${table} (${fields.join(',\n')}) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`;
 const dates = ['created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP', 'updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'];
-export const TIMING_TABLES = ['ayah_timing_history', 'ayah_timings', 'import_jobs'] as const;
+export const TIMING_TABLES = ['quran_timing_audit_fixtures', 'quran_storage_health', 'ayah_timing_history', 'ayah_timings', 'import_jobs'] as const;
 export const timingChapterColumns: Readonly<Record<string, string>> = {
   coverage_words: 'INT UNSIGNED NOT NULL DEFAULT 0',
   expected_words: 'INT UNSIGNED DEFAULT NULL',
@@ -20,7 +20,7 @@ export const quranTimingCreateSql = [
     text('quality', "ENUM('aligned','verified','estimated')", "NOT NULL DEFAULT 'aligned'"), text('qud_version', 'VARCHAR(64)'),
     text('source_sha256', 'CHAR(64)'), text('canonical_checksum', 'CHAR(64)', 'DEFAULT NULL'), text('coordinate', "ENUM('source_ms','chapter_ms','clip_ms')"),
     'source_offset_ms BIGINT DEFAULT NULL', 'start_ms BIGINT UNSIGNED DEFAULT NULL', 'end_ms BIGINT UNSIGNED DEFAULT NULL',
-    'segments JSON NOT NULL', 'words JSON NOT NULL', text('spoken_text', 'MEDIUMTEXT', 'DEFAULT NULL'), 'source_rows JSON NOT NULL',
+    'segments JSON NOT NULL', 'words JSON NOT NULL', 'spoken_text MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL', 'source_rows JSON NOT NULL',
     text('review_status', "ENUM('ready','needs_review','approved','rejected')", "NOT NULL DEFAULT 'needs_review'"), 'review_reasons JSON NOT NULL',
     'word_highlight_enabled BOOLEAN NOT NULL DEFAULT FALSE', text('repetition_display_mode', "ENUM('canonical','spoken')", "NOT NULL DEFAULT 'canonical'"),
     'coverage_words INT UNSIGNED NOT NULL', 'expected_words INT UNSIGNED DEFAULT NULL', 'missing_words JSON NOT NULL',
@@ -31,6 +31,15 @@ export const quranTimingCreateSql = [
   create('ayah_timing_history', [text('id', 'VARCHAR(36)'), text('timing_id', 'VARCHAR(36)'), text('version_hash', 'CHAR(64)'),
     'snapshot JSON NOT NULL', text('reason', 'VARCHAR(191)'), 'created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
     'PRIMARY KEY(id)', 'UNIQUE KEY uk_timing_version(timing_id,version_hash)']),
+  create('quran_storage_health', ['id TINYINT UNSIGNED NOT NULL PRIMARY KEY', 'total_bytes BIGINT UNSIGNED NOT NULL',
+    'available_bytes BIGINT UNSIGNED NOT NULL', 'observed_at TIMESTAMP NOT NULL', 'CONSTRAINT chk_storage_singleton CHECK(id=1)',
+    'CONSTRAINT chk_storage_bytes CHECK(total_bytes>0 AND available_bytes<=total_bytes)']),
+  // These seven external HF audit records are never Release recitations or active timings.
+  create('quran_timing_audit_fixtures', [text('id', 'VARCHAR(36)'), text('config', 'VARCHAR(191)'),
+    'surah SMALLINT UNSIGNED NOT NULL', 'ayah SMALLINT UNSIGNED NOT NULL', text('source', "ENUM('hf_audit')"),
+    text('source_sha256', 'CHAR(64)'), 'raw_payload JSON NOT NULL', 'review_reasons JSON NOT NULL',
+    text('review_status', "ENUM('needs_review')"), 'created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
+    'PRIMARY KEY(id)', 'UNIQUE KEY uk_audit_reference(config,surah,ayah)']),
 ] as const;
 
 /** Same deterministic conditional SQL on both environments and on replay. */
