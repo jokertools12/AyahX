@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it, vi } from 'vitest';
 import {
-  CatalogLinkCollisionError, audioFileIdentity, catalogLinkReport, catalogLinkSqlPlan, createLinkCheckpoint,
+  audioFileIdentity, catalogLinkReport, catalogLinkSqlPlan, createLinkCheckpoint, migrateStoppedLinkCheckpoint,
   reportableAudioUrl, runCatalogLinkChecks, type CatalogLinkCheckpoint, type CatalogLinkTarget,
 } from '../../server/services/catalogLinkChecker';
 
@@ -26,21 +26,28 @@ describe('D4 periodic catalog link checker (unit fixtures; no live network)', ()
     expect(audioFileIdentity('https://audio.example/file.mp3?v=1')).not.toBe(audioFileIdentity('https://audio.example/file.mp3?v=2'));
     expect(reportableAudioUrl('https://audio.example/file.mp3?X-Amz-Signature=secret')).toBeNull();
   });
-  it('stops before network on an original same-file source attributed to different reciters', async () => {
-    const targets = [target('first'), target('second', { reciterId: 'reader-2', url: 'https://audio.example/first.mp3' })];
-    const checkLink = vi.fn(); const persist = vi.fn();
-    await expect(runCatalogLinkChecks(targets, { checkpoint: createLinkCheckpoint(targets), checkLink, persist, now: () => time })).rejects.toBeInstanceOf(CatalogLinkCollisionError);
-    expect(checkLink).not.toHaveBeenCalled();
-    expect(persist.mock.calls[0][0].stopped.collisions[0].evidence).toBe('original_url_file_identity');
+  it('excludes original cross-reciter shared sources and continues unrelated checks', async () => {
+    const targets = [target('first'), target('second', { reciterId: 'reader-2', recitationId: 'recording-2', recitationSlug: 'reader-two', url: 'https://audio.example/first.mp3' }), target('third')];
+    const checked = await run(targets);
+    expect(checked.checkLink.mock.calls.map(c => c[0])).toEqual(['https://audio.example/third.mp3']);
+    expect(checked.result.results.first.check.status).toBe('SAME_AUDIO_CONFLICT'); expect(checked.result.results.second.check.status).toBe('SAME_AUDIO_CONFLICT');
+    expect(checked.result.stopped).toBeUndefined(); expect(checked.result.conflicts?.[0].evidence).toBe('original_url_file_identity');
+    const report = catalogLinkReport(targets, checked.result);
+    expect(report.excluded_rule_v1_recitation_ids).toEqual(['recording-1', 'recording-2']);
+    expect(report.same_audio_conflicts).toMatchObject([{ type: 'same_audio_conflict', severity: 'critical' }]);
+    expect(catalogLinkSqlPlan(targets, checked.result).statements).toHaveLength(1);
   });
-  it('stops with persisted evidence on a final redirect collision; SQL generation cannot continue', async () => {
+  it('retains resolved collision evidence and finishes all remaining targets without stopping', async () => {
     const targets = [target('first'), target('second', { reciterId: 'reader-2' }), target('third')];
-    const checkLink = vi.fn(async () => available('https://cdn.example/shared.mp3'));
+    const checkLink = vi.fn(async (url: string) => available(url.includes('third') ? 'https://cdn.example/third.mp3' : 'https://cdn.example/shared.mp3'));
     let saved = createLinkCheckpoint(targets);
-    await expect(runCatalogLinkChecks(targets, { checkpoint: saved, checkLink, persist: value => { saved = structuredClone(value); }, now: () => time })).rejects.toThrow('CROSS_RECITER_AUDIO_FILE_COLLISION');
-    expect(checkLink).toHaveBeenCalledTimes(2);
-    expect(saved.stopped?.collisions[0]).toMatchObject({ evidence: 'resolved_url_file_identity', reciterIds: ['reader-1', 'reader-2'] });
-    expect(() => catalogLinkSqlPlan(targets, saved)).toThrow('CATALOG_LINK_CHECKPOINT_INVENTORY_CHANGED_OR_STOPPED');
+    await runCatalogLinkChecks(targets, { checkpoint: saved, checkLink, persist: value => { saved = structuredClone(value); }, now: () => time });
+    expect(checkLink).toHaveBeenCalledTimes(3);
+    expect(saved.conflicts?.[0]).toMatchObject({ evidence: 'resolved_url_file_identity', reciterIds: ['reader-1', 'reader-2'] });
+    expect(saved.results.first.conflictObservation).toEqual(available('https://cdn.example/shared.mp3'));
+    expect(saved.results.third.check.status).toBe('available'); expect(saved.stopped).toBeUndefined();
+    const plan = catalogLinkSqlPlan(targets, saved); expect(plan.statements).toHaveLength(1); expect(plan.sql).not.toContain("id='first'"); expect(plan.sql).not.toContain("id='second'");
+    const resume = await run(targets, vi.fn(), saved); expect(resume.checkLink).not.toHaveBeenCalled(); expect(resume.result.conflicts).toEqual(saved.conflicts);
   });
   it('resumes every chapter without network; checks stale rows and rejects changed inventory or damaged checkpoints', async () => {
     const targets = [target('first'), target('second')];
@@ -77,12 +84,34 @@ describe('D4 periodic catalog link checker (unit fixtures; no live network)', ()
     expect(result.persisted).toHaveLength(3);
     for (const row of Object.values(result.result.results)) expect(row.evidenceScope).toBe('link_only_not_voice_identity');
   });
-  it('does no network in dry-read mode, but still stops an inventory collision', async () => {
+  it('does no network in dry-read mode, but records an inventory collision as excluded', async () => {
     const targets = [target('a')]; const checkLink = vi.fn(); const persist = vi.fn();
     const checkpoint = await runCatalogLinkChecks(targets, { checkpoint: createLinkCheckpoint(targets), checkLink, persist, checkNetwork: false });
     expect(checkLink).not.toHaveBeenCalled(); expect(checkpoint.results).toEqual({}); expect(persist).toHaveBeenCalledOnce();
     const collision = [target('a'), target('b', { reciterId: 'reader-2', url: targets[0].url })];
-    await expect(runCatalogLinkChecks(collision, { checkpoint: createLinkCheckpoint(collision), checkLink, persist, checkNetwork: false })).rejects.toThrow('CROSS_RECITER_AUDIO_FILE_COLLISION');
+    const checked = await runCatalogLinkChecks(collision, { checkpoint: createLinkCheckpoint(collision), checkLink, persist, checkNetwork: false });
+    expect(checked.conflicts).toHaveLength(1); expect(checked.results.a.check.status).toBe('SAME_AUDIO_CONFLICT'); expect(checked.results.b.check.status).toBe('SAME_AUDIO_CONFLICT'); expect(checkLink).not.toHaveBeenCalled();
+  });
+  it('refuses legacy stopped checkpoints unless explicitly reviewed, then preserves complete stop history', async () => {
+    const targets = [target('a'), target('b', { reciterId: 'reader-2', url: 'https://audio.example/a.mp3' }), target('c')];
+    const original = createLinkCheckpoint(targets); original.stopped = { code: 'CROSS_RECITER_AUDIO_FILE_COLLISION', collisions: [{ identity: audioFileIdentity(targets[0].url)!, targetKeys: ['a', 'b'], reciterIds: ['reader-1', 'reader-2'], recitationSlugs: ['reader-one-recording'], evidence: 'original_url_file_identity' }] };
+    expect(() => createLinkCheckpoint(targets, original)).toThrow('INVENTORY_CHANGED_OR_STOPPED');
+    expect(() => migrateStoppedLinkCheckpoint(targets, original, { reviewedBy: '', reason: 'new policy', reviewedAt: new Date(time).toISOString() })).toThrow('MIGRATION_REVIEW_REQUIRED');
+    const migrated = migrateStoppedLinkCheckpoint(targets, original, { reviewedBy: 'root-reviewed-latest-user-policy', reason: 'K1–K9 retain critical conflict and continue unrelated requests', reviewedAt: new Date(time).toISOString() });
+    expect(original.stopped).toBeDefined(); expect(migrated.stopped).toBeUndefined(); expect(migrated.stoppedHistory?.[0].stopped).toEqual(original.stopped);
+    const checked = await run(targets, vi.fn(async (url: string) => available(url)), migrated); expect(checked.checkLink).toHaveBeenCalledTimes(1); expect(checked.result.stoppedHistory).toEqual(migrated.stoppedHistory); expect(checked.result.conflicts).toHaveLength(1);
+  });
+  it('retains conflicts after stale checkpoints and catches a third attribution to the resolved same file', async () => {
+    const targets = [target('a'), target('b', { reciterId: 'reader-2' }), target('c', { reciterId: 'reader-3' }), target('d')];
+    const checked = await run(targets, vi.fn(async (url: string) => available(url.includes('/d.') ? 'https://cdn.example/other.mp3' : 'https://cdn.example/shared.mp3')));
+    expect(checked.result.conflicts?.[0].targetKeys).toEqual(['a', 'b', 'c']);
+    const resumed = vi.fn(async (url: string) => ({ ...available(url), checkedAt: new Date(time + 25 * 60 * 60 * 1000).toISOString() }));
+    const next = await runCatalogLinkChecks(targets, { checkpoint: checked.result, checkLink: resumed, persist: vi.fn(), now: () => time + 25 * 60 * 60 * 1000 });
+    expect(resumed).toHaveBeenCalledTimes(1); expect(next.results.a.check.status).toBe('SAME_AUDIO_CONFLICT'); expect(next.conflicts?.[0].targetKeys).toEqual(['a', 'b', 'c']);
+  });
+  it('rejects forged or damaged conflict evidence rather than publishing it', async () => {
+    const targets = [target('a'), target('b', { reciterId: 'reader-2', url: 'https://audio.example/a.mp3' })]; const checked = await run(targets);
+    const corrupted = structuredClone(checked.result); corrupted.conflicts![0].identity = 'url:https://other.example/unrelated.mp3'; expect(() => createLinkCheckpoint(targets, corrupted)).toThrow('CONFLICT_EVIDENCE_CORRUPT');
   });
   it('persists a redirect-host Retry-After and blocks that host after restart', async () => {
     const targets = [target('a', { allowedHosts: ['audio.example', 'cdn.example'] }), target('b', { url: 'https://cdn.example/b.mp3', allowedHosts: ['cdn.example'] })];
