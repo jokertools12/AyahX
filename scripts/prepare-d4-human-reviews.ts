@@ -6,7 +6,7 @@ import mysql,{type RowDataPacket} from 'mysql2/promise';
 import {planHumanReviews,type ReviewPreparation} from '../server/services/humanReviewPlanner';
 import {canonicalAuditJson} from '../server/services/catalogAudit';
 import {jsonReviewValue} from '../server/services/humanReviewService';
-import {D4AuditSqlPlan,d4Literal} from './lib/d4AuditSqlPlan';
+import {D4AuditSqlPlan,d4Literal,sha256} from './lib/d4AuditSqlPlan';
 import {openRailwayMysqlSession} from './lib/railwayMysqlSession';
 import {ENVIRONMENTS} from './lib/railwayQuranOps';
 const option=(key:string,required=true)=>{const i=process.argv.indexOf(key);if(i<0||!process.argv[i+1]){if(required)throw new Error('REQUIRED_OPTION:'+key);return null;}return process.argv[i+1];};
@@ -19,6 +19,8 @@ const report:Record<string,unknown>={started_at:new Date().toISOString(),target,
 try{
   const evidencePath=option('--evidence',false);const extra=evidencePath?JSON.parse(readFileSync(evidencePath,'utf8')):{};
   const recitations=await read("SELECT JSON_OBJECT('id',id,'slug',slug,'channel',channel,'style',style,'voice_identity_status',voice_identity_status,'voice_auto_evidence',voice_auto_evidence,'surah_start_basmala_audio_status',surah_start_basmala_audio_status,'basmala_mode',basmala_mode,'basmala_reason',basmala_reason,'verification_method',verification_method,'verification_status',verification_status,'verification_details',verification_details,'needs_label_review',needs_label_review,'display_label_ar',display_label_ar) record FROM recitations ORDER BY slug");
+  const voiceFile=option('--voice-auto',false);
+  if(voiceFile){const bytes=readFileSync(voiceFile),voice=JSON.parse(bytes.toString('utf8'));assert.equal(voice.actor,'auto-verifier-v1');assert.ok(voice.results&&typeof voice.results==='object');assert.deepEqual(Object.keys(voice.results).sort(),recitations.map(r=>r.slug).sort(),'VOICE_EVIDENCE_COVERAGE_MISMATCH');extra.voice_evidence=Object.fromEntries(Object.entries(voice.results).map(([slug,record])=>[slug,{artifact:'docs/data/voice-auto-verification.json',artifact_sha256:sha256(bytes),result:record}]));report.voice_artifact_sha256=sha256(bytes);}
   const providers=await read("SELECT JSON_OBJECT('id',id,'code',code,'name',name,'license_status',license_status,'terms_url',terms_url) record FROM audio_providers ORDER BY code");
   const auditions=await read("SELECT JSON_OBJECT('recitation_id',recitation_id,'sample_key',sample_key,'surah',surah,'start_ms',start_ms,'duration_ms',duration_ms,'selection_details',selection_details) record FROM recitation_audition_samples ORDER BY recitation_id,sample_key");
   const near=JSON.parse(readFileSync(option('--near-complete')!,'utf8'));
