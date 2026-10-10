@@ -41,3 +41,6 @@ python -m unittest discover -s scripts -p 'test_prove_qud_*.py' -v
 ```
 
 الاختبارات 13/13 ناجحة: رفض موضع خاطئ رغم وجود البايتات، clock غير متصل أو غائب، skip غير مطابق، مؤشر native كسري، تغطية ناقصة، نافذة قصيرة، PCM مزاح، ومعدلات مختلفة أو غير مدعومة. جميع مخرجات packet الخاصة وstderr وتقرير native الأول المحتفظ به بقيت في scratch الخاص؛ `manual_cleanup_required=true`، دون حذف أو نقل أو تعديل ACL. لا صوت أو PCM أو Parquet أو رابط موقّع أو سر داخل Git.
+
+
+تحديث لاحق للأداة: قياس الـ15 أعلاه يخص النسخة المثبتة `66e5b7a` وبصماته محفوظة. توسعة معدلات native وجرد المرشحين المحليين موثقة في [d3-local-proof-candidates.md](d3-local-proof-candidates.md)، ولا تغير التقرير الخام أو قياسات v1 ولا تعلن قبول v2.

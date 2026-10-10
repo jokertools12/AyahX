@@ -3,17 +3,37 @@ import unittest
 import numpy as np
 
 from prove_qud_native_pcm import (MINIMUM_INTERIOR, RATE, TRIM, compare_fixed,
-                                  exact_native_start, fixed_interval, require_supported_native_rates)
+                                  exact_native_start, fixed_interval, require_supported_native_rates,
+                                  position_diagnostics)
 
 
 class NativePcmTest(unittest.TestCase):
-    def test_non_44100_matching_native_rates_are_explicitly_unsupported(self):
-        with self.assertRaisesRegex(ValueError, 'UNSUPPORTED_NATIVE_RATE_NON_44100'):
-            require_supported_native_rates(48000, 48000)
+    def test_unlisted_matching_native_rate_is_explicitly_unsupported(self):
+        with self.assertRaisesRegex(ValueError, 'UNSUPPORTED_NATIVE_MP3_RATE'):
+            require_supported_native_rates(96000, 96000)
+
+    def test_matching_supported_rate_is_preserved(self):
+        self.assertEqual(require_supported_native_rates(48000, '48000'), 48000)
+        proof = {'source_decoded_pcm_coordinate_of_clip_decoded_zero_ms':
+                 {'numerator': -1105, 'denominator': 48}}
+        self.assertEqual(exact_native_start(proof, 48000), -1105)
+        self.assertEqual(fixed_interval(0, 48000 * 2, 48000), (9600, 86400))
 
     def test_mismatched_native_rates_are_never_resampled_to_pass(self):
         with self.assertRaisesRegex(ValueError, 'UNSUPPORTED_MISMATCHED'):
             require_supported_native_rates(44100, 22050)
+
+    def test_packet_identity_does_not_approve_wrong_declared_offset(self):
+        flags = position_diagnostics(0, RATE, RATE * 2, RATE, 1000, 0)
+        self.assertFalse(flags['decoded_packet_lag_within_30ms'])
+        self.assertEqual(flags['decoded_packet_lag_ms']['value'], -1000)
+
+    def test_native_interior_does_not_claim_missing_full_window(self):
+        flags = position_diagnostics(-1105, RATE * 2, RATE * 3, RATE, 0, 0)
+        self.assertFalse(flags['full_native_source_window_available'])
+        self.assertFalse(flags['retained_envelope_start_matches_native_within_half_8khz_sample'])
+        flags = position_diagnostics(RATE, RATE * 2, RATE * 2, RATE, 1000, 0)
+        self.assertFalse(flags['full_native_source_window_available'])
 
     def test_packet_fraction_yields_integer_without_rounding(self):
         proof = {'source_decoded_pcm_coordinate_of_clip_decoded_zero_ms':
