@@ -1,0 +1,52 @@
+{
+  "mysql_version": "9.7.2",
+  "sql_sha256": "d3f0db3ece980af02af2b00b2c06f5e2ce890b3526e62050396571cd2cc42fe8",
+  "catalog_sha256": "b7ee26c2267b086d5758477e21144887c28c6ba884a6ff5157a55cf17df4eed4",
+  "counts": {
+    "reciters": 57,
+    "audio_providers": 10,
+    "recitations": 69,
+    "recitation_chapters": 7765
+  },
+  "schema": {
+    "tables": 4,
+    "text_columns": 46,
+    "internal_foreign_keys": 3
+  },
+  "d1_collations": {
+    "tableCount": 7,
+    "textColumnCount": 35,
+    "canonicalColumns": 2
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "migration_twice": true,
+  "import_twice": true,
+  "replay_table_checksums_unchanged": true,
+  "existing_users_join": true,
+  "unverified_audio_publication_rejected": true,
+  "publication_without_audio_evidence_rejected": true,
+  "corrupted_catalog_rejected": true,
+  "rollback_remaining": 0,
+  "reapply_after_rollback": true,
+  "unverified_surah_slice_rejected": true,
+  "offset_without_score_rejected": true,
+  "previous_failed_imported_rows": 8,
+  "failed_imported_after": 0,
+  "existing_table_counts_unchanged": true,
+  "critical_counts": {
+    "users": 13,
+    "subscriptions": 16,
+    "payment_requests": 3,
+    "saved_videos": 7,
+    "render_jobs": 72,
+    "system_settings": 13,
+    "user_roles": 13,
+    "notifications": 49,
+    "quran_surahs": 114,
+    "quran_ayahs": 6236,
+    "quran_words": 77433,
+    "quran_text_versions": 1,
+    "translations": 0,
+    "translation_ayahs": 0
+  }
+}

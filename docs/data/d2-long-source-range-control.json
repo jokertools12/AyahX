@@ -1,0 +1,14 @@
+{
+  "checked_at": "2026-10-09T18:05:15Z",
+  "method": "FFmpeg HTTP Range accurate seek compared with cached complete catalog source decode",
+  "config": "adel_al_karbalaei_archive_v2",
+  "surah": 2,
+  "accepted_as_audit_method": false,
+  "failure": "subprocess.TimeoutExpired",
+  "timeout_seconds": 120,
+  "attempted_start_ms": 4258860,
+  "attempted_duration_ms": 2000,
+  "observation": "Short-source control passed, but long-source seeking timed out. Catalog original was available as a complete download; this interruption is not classified as recitation acoustic failure or unavailable source.",
+  "resolution": "Use complete original catalog download and full local decode for all acceptance samples",
+  "short_control": "d2-source-range-control.json"
+}

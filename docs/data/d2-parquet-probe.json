@@ -1,0 +1,44 @@
+{
+  "config": "maher_al_muaiqly_qdc",
+  "surah": 1,
+  "ayah": 1,
+  "method": "Parquet audio column via serial HTTP ranges",
+  "stats": {
+    "requests": 8,
+    "bytes": 142440527,
+    "statuses": [
+      200,
+      206,
+      206,
+      206
+    ],
+    "minimum_interval_seconds": 2
+  },
+  "status": "available",
+  "audio_sha256": "1b5fc87b3fdbfa2927edcb64d77e1b11df9aad8a607afb79ca74d6402a143b30",
+  "audio_bytes": 78368,
+  "duration_ms": 6514,
+  "source_offset_ms": 7523,
+  "word_timestamps": [
+    [
+      1,
+      187,
+      817
+    ],
+    [
+      2,
+      817,
+      1617
+    ],
+    [
+      3,
+      1617,
+      2737
+    ],
+    [
+      4,
+      2737,
+      5997
+    ]
+  ]
+}

@@ -194,3 +194,27 @@ A market analysis of top Quranic reel generator tools (**Tashghil.Pro**, **Quran
 - **TypeScript Static Verification:** `tsc --noEmit` clean (0 errors).
 - **Production Asset Build:** `vite build` completed in 7.54s (All 51 assets chunked and optimized).
 - **End-to-End API Integration:** Registration, project creation, duplication, renaming, contact submission, and cascading account deletion validated via automated HTTP integration testing.
+
+## D2 — كتالوج البيانات، 2026-10-09 (توقّف قبل الإنتاج)
+
+اكتملت البيانات والبروفة المحلية: Vitest451 ناجحًا و6 متخطاة وصفر فشل من457، وPython7/7، وTypeScript وlint للمتغير بلا أخطاء أو تحذيرات. SQL النهائي2498e681…؛ أربع جداول،57 قارئًا و69 تلاوة و7765 رابطًا، وثلاث روايات غير مفعّلة. D1 ثابت؛ الواجهة والريندر وstartup ثابتة. نتائج offset:8passed و48failed و13source_unavailable، وجميع التلاوات غير منشورة وبسملة الصوتunverified. قِيست166 مقدمة صوتية في سور العينة للتلاوات الـ56؛ ليست تدقيق جميع مقدمات كل السور، ولا إثباتًا لمحتوى البسملة.
+
+أمر staging بدأ كتابة ثم خرجRAILWAY_SSH_EXIT_1؛ أظهرت قراءة تشخيصية لاحقة حد اتصالاتSSH. لم تُعد الكتابة. مصالحة القراءة باتصال واحد نجحت: جميع الحقول والـJSON مطابقة وcollations/FK وD1/CHECKSUM والحرجة ثابتة. production بلاD2، والنص والأعداد وbin ثابتة، وhealth/ready200 بلا أخطاء. **D2 غير مغلق: لم يُنفذ production أو يُتجاوز حارس إثبات staging، ولا D3/A1.** الأدلة في docs/data/d2-local-rehearsal.json وd2-staging-apply-incident.json وd2-staging-readonly-reconciliation.json وd2-production-readonly-reconciliation.json؛ الجدول الكامل والاستثناءات فيdocs/data-audit.md.
+
+قاعدتا الاستعادة المحليتان حُذفتا والخادم توقف، والنسخة الحاليةage محفوظة. رفضت مراجعة الأوامر حذف ملفات التخزين، فبقيت بقايا محتملة في سجلات الاستعادة مع تقييدACL؛ تحتاج تنظيفًا يدويًا. دليل ذلكdocs/data/d2-local-private-data-cleanup.json.
+
+## متابعة D2 — 2026-10-10، انتظار اعتماد المصالحة
+
+المصالحة الكاملة الجديدة تثبت staging: 57 قارئًا و 10 مزوّدين و 69 تلاوة و 7765 رابطًا و riwayat=4. الإنتاج بلا D2، و D1 والجداول الحرجة ثابتة. تشخيص كل بيئة بلقطتين متتابعتين: staging عند 1/151 و production عند 1/60؛ لا اتصال root محلي غير التشخيص، ومعرف الاتصال الأول غائب في الثانية. حد SSH السابق منفصل عن MySQL؛ سبب exit1 الأصلي غير محسوم. لم تُنفَّذ كتابة Railway أو إعادة staging أو dump جديد أو dry-run إنتاج أو snapshot أو تنظيف ملفات، ولم يُغيَّر حارس staging.
+
+التحليل يشمل 840 عينة محفوظة: 211 فاشلة؛ ارتباط منخفض في 175، وفرق مدة في 70، و lag كبير في 65، مع تداخل الأسباب. نتائج التلاوات 8 passed/48 failed/13 unavailable لم تتغير. مصادر configs الـ 12 ذات chapter offset غير متاحة. حُذفت فرضية chapter+HF غير المنفّذة، لأن HF offset يتضمن chapter base بحسب كود QUD؛ لا إعادة تصنيف أو تغيير SQL. تعارض جديد مثبت: ثماني تلاوات غير حفص failed حالتها imported وفق السياسة السابقة؛ يلزم needs_review في SQL جديد وإعادة staging بعد الموافقة. كلها غير منشورة.
+
+Vitest: 451 pass/6 skip/0 fail من 457 مع corpus المثبت. Python: 17/17؛ root TS و strict للسكربت و lint المتغير ناجحة. تسجيل HTTP 500 اختُبر بـ fixtures معلنة فقط، مع UTC ونص محجوب وبصمة، ودون تسريع؛ لا نص استجابة تاريخي مختلق. بسملة الصوت unverified للجميع، و 166 prefix لا تغطي كل السور. DECISIONS محدث ببروتوكول dump جديد واستعادة 9.7.2 وتطابق SQL SHA و dry-run مقارن وإذن إنتاج مستقل؛ snapshot ممنوع بعد رفض Pro. تعليمات التنظيف اليدوي في docs/d2-manual-cleanup.ar.md مرة واحدة، دون تنفيذ آلي. الأدلة في docs/data/d2-*followup*.json و d2-offset-failure-analysis.* و d2-*connections-readonly.json. D2 غير مغلق و PR10 مسودة؛ لا D3/A1/merge/deploy.
+
+# متابعة D2 — التفويض الموسع
+
+صُححت حالة needs_review لكل فحص verification فاشل، ونُفذ النقل عبر SSH/mysql بالتتابع مع تأكيد COMMIT وخروج exit0. نجحت الاختبارات المستهدفة 32/32؛ وبلغت نتيجة المجموعة الكاملة 471 passed و 6 skipped من 477. فحوص root/strict TypeScript و lint للملفات المتغيرة بلا مشكلات.
+
+نجحت استعادة 47 جدولًا على MySQL 9.7.2 ومقارنة CHECKSUM. ونجحت البروفة التي تشمل up/import مرتين، وكشف الفساد، وبوابات الرفض، و rollback/reapply. صحح تطبيق staging الحالات الـ 8 ونجح. طبق الإنتاج SQL بالبصمة نفسها، d3f0db3e…42fe8، ثم نجحت مصالحة مستقلة للقراءة فقط. بقيت D1 والجداول الحرجة ثابتة، وأعاد health/ready الرمز 200، واللوج بلا errors. الأدلة في docs/data/*status-fixed.json.
+
+لا ربط UI/render ولا تخفيف لمعيار offset؛ وعدد المنشور 0. ينتظر إغلاق D2 دمج PR9/10 ومراقبة كل نشر. رُفض التنظيف بـ blocked by policy، وبقي manual_cleanup_required دون بدائل.

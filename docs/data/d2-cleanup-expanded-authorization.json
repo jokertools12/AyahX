@@ -1,0 +1,16 @@
+{
+  "checked_at": "2026-10-09T23:30:40.185Z",
+  "authorized_path": "C:\\Users\\cpazi\\AppData\\Local\\Temp\\ayahx-d1-mysql-9.7.2\\acceptance-data",
+  "attempts_in_this_authorization": 1,
+  "command_policy_result": "blocked by policy",
+  "command_executed": false,
+  "subsequent_read_only_check": {
+    "mysqld_processes": 0,
+    "path_exists": true
+  },
+  "manual_cleanup_required": true,
+  "alternative_delete_move_acl_attempts": 0,
+  "continued_under_explicit_user_exception": true,
+  "age_identity_and_encrypted_archive_preserved": true,
+  "timestamp_scope": "time this summary was recorded; exact attempt timestamp not captured"
+}

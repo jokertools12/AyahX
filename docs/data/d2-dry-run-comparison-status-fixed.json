@@ -1,0 +1,104 @@
+{
+  "checked_at": "2026-10-09T23:36:05.313Z",
+  "passed": true,
+  "sql_sha256": "d3f0db3ece980af02af2b00b2c06f5e2ce890b3526e62050396571cd2cc42fe8",
+  "source_counts": {
+    "riwayat": 3,
+    "reciters": 57,
+    "audio_providers": 10,
+    "recitations": 69,
+    "recitation_chapters": 7765
+  },
+  "staging": {
+    "target": "staging",
+    "dry_run": true,
+    "verify_only": false,
+    "sql_sha256": "d3f0db3ece980af02af2b00b2c06f5e2ce890b3526e62050396571cd2cc42fe8",
+    "counts": {
+      "riwayat": 3,
+      "reciters": 57,
+      "audio_providers": 10,
+      "recitations": 69,
+      "recitation_chapters": 7765
+    },
+    "batch_size": 250,
+    "new_tables": 0,
+    "existing_catalog_tables": 4,
+    "status_corrections": 8,
+    "planned_inserts": {
+      "riwayat": 0,
+      "reciters": 0,
+      "audio_providers": 0,
+      "recitations": 0,
+      "recitation_chapters": 0
+    },
+    "planned_existing_table_writes": "INSERT absent inactive riwayah metadata only; no ALTER/DROP/DELETE/UPDATE to pre-D1 tables",
+    "before_critical_counts": {
+      "users": 2,
+      "subscriptions": 4,
+      "plans": null,
+      "payment_requests": 1,
+      "videos": null,
+      "saved_videos": 1,
+      "render_jobs": 0,
+      "system_settings": 13,
+      "user_roles": 3,
+      "notifications": 3
+    },
+    "backup_created_at": "2026-10-09T16:33:52.620Z",
+    "backup_age_hours": 6.99589351969401,
+    "ssh_exit_verified": true,
+    "mysql_connections": 1,
+    "writes": 0,
+    "checked_at": "2026-10-09T23:33:38.463Z"
+  },
+  "production": {
+    "target": "production",
+    "dry_run": true,
+    "verify_only": false,
+    "sql_sha256": "d3f0db3ece980af02af2b00b2c06f5e2ce890b3526e62050396571cd2cc42fe8",
+    "counts": {
+      "riwayat": 3,
+      "reciters": 57,
+      "audio_providers": 10,
+      "recitations": 69,
+      "recitation_chapters": 7765
+    },
+    "batch_size": 250,
+    "new_tables": 4,
+    "existing_catalog_tables": 0,
+    "status_corrections": 0,
+    "planned_inserts": {
+      "riwayat": 3,
+      "reciters": 57,
+      "audio_providers": 10,
+      "recitations": 69,
+      "recitation_chapters": 7765
+    },
+    "planned_existing_table_writes": "INSERT absent inactive riwayah metadata only; no ALTER/DROP/DELETE/UPDATE to pre-D1 tables",
+    "before_critical_counts": {
+      "users": 13,
+      "subscriptions": 16,
+      "plans": null,
+      "payment_requests": 3,
+      "videos": null,
+      "saved_videos": 7,
+      "render_jobs": 72,
+      "system_settings": 13,
+      "user_roles": 13,
+      "notifications": 49
+    },
+    "backup_created_at": "2026-10-09T16:33:52.620Z",
+    "backup_age_hours": 7.025142686360677,
+    "ssh_exit_verified": true,
+    "mysql_connections": 1,
+    "writes": 0,
+    "checked_at": "2026-10-09T23:35:23.782Z"
+  },
+  "differences_explained": [
+    "Staging already contains all catalog rows and inactive riwayah metadata: no new insert, eight failed/imported status corrections.",
+    "Production has no D2 tables: create four tables, insert the complete pinned catalog and three inactive riwayah metadata rows.",
+    "Environment critical counts differ by baseline; each independently matches its approved inventory and production matches its verified backup."
+  ],
+  "unexplained_differences": 0
+}

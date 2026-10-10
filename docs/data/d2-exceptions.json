@@ -1,0 +1,3673 @@
+{
+  "qud_version": "v3.2.0",
+  "counts": {
+    "source_unavailable": 13,
+    "failed": 48,
+    "passed": 8
+  },
+  "failed": [
+    {
+      "config": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "minimum_ncc": 0.56377778,
+      "failed_samples": [
+        {
+          "surah": 1,
+          "ayah": 5,
+          "duration_ms": 10741,
+          "source_offset_ms": 33149,
+          "hf_audio_sha256": "e50bd39312adb20489dbb9ef141059acaebca88ebfc4a38e6afdeed872b52b7d",
+          "source_offset_hypothesis": {
+            "score": 0.94973188,
+            "best_lag_ms": -24.625,
+            "duration_difference_ms": 21.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 1,
+          "duration_ms": 9620,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "8a8fecb831dd9770fa26310696138305202f9ec435793bfd18f8701f1e4f5d9e",
+          "source_offset_hypothesis": {
+            "score": 0.56377778,
+            "best_lag_ms": 0.125,
+            "duration_difference_ms": 19.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 143,
+          "duration_ms": 109148,
+          "source_offset_ms": 6443337,
+          "hf_audio_sha256": "997be6acb03e4476d7242040b58f5cf5d409eb0911c5dcc88aeabe26e6947f44",
+          "source_offset_hypothesis": {
+            "score": 0.88822859,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 17.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 215,
+          "duration_ms": 52697,
+          "source_offset_ms": 10225998,
+          "hf_audio_sha256": "578b55aa98617c16f11da05b472e2f703a89cfec6f7945195c3c63af7b339478",
+          "source_offset_hypothesis": {
+            "score": 0.94066662,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 18.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 286,
+          "duration_ms": 104559,
+          "source_offset_ms": 15591941,
+          "hf_audio_sha256": "a48b5da586696ff013a0b913cb0be43a56e25c1913fd5d3cab1f9a67e61af295",
+          "source_offset_hypothesis": {
+            "score": 0.87945334,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 9.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 3,
+          "ayah": 51,
+          "duration_ms": 27152,
+          "source_offset_ms": 2291513,
+          "hf_audio_sha256": "d02a4ec1fbd524aa88a952b55b284affdf6a1a1358b0bfae67baf6bd041d580f",
+          "source_offset_hypothesis": {
+            "score": 0.92461735,
+            "best_lag_ms": -24.625,
+            "duration_difference_ms": 15.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 3,
+          "ayah": 101,
+          "duration_ms": 41765,
+          "source_offset_ms": 4535275,
+          "hf_audio_sha256": "837b0bc3e6c5d59cc4226b2379b4ead62b198e508d0fa5e759fe594338a8a553",
+          "source_offset_hypothesis": {
+            "score": 0.85996248,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 4.875,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "abdulbasit_abdulsamad_tarteel",
+      "minimum_ncc": 0.37945573,
+      "failed_samples": [
+        {
+          "surah": 1,
+          "ayah": 7,
+          "duration_ms": 11681,
+          "source_offset_ms": 30119,
+          "hf_audio_sha256": "7fffdaa089ed0241c075527330a69d43f7c101ebdd8937ba2a6658089c821d89",
+          "source_offset_hypothesis": {
+            "score": 0.53975434,
+            "best_lag_ms": -47.125,
+            "duration_difference_ms": 21.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 1,
+          "duration_ms": 6940,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "05ec6527bdabda602a9ff9bd48bef3970af50f76f4c241ad29f41ffe54ec799e",
+          "source_offset_hypothesis": {
+            "score": 0.67146821,
+            "best_lag_ms": 0.375,
+            "duration_difference_ms": 8.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 72,
+          "duration_ms": 16447,
+          "source_offset_ms": 1636963,
+          "hf_audio_sha256": "e6b327752ac932fd549e07108487afa2be87bf0a8912299dfffa6f469d6b50d8",
+          "source_offset_hypothesis": {
+            "score": 0.98807981,
+            "best_lag_ms": -49.875,
+            "duration_difference_ms": 10.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 143,
+          "duration_ms": 76967,
+          "source_offset_ms": 4121548,
+          "hf_audio_sha256": "99db58a5bb5da42c5b5f323c4ce475b87919001d905dede03eaf235ed9a218c8",
+          "source_offset_hypothesis": {
+            "score": 0.99340393,
+            "best_lag_ms": -50.375,
+            "duration_difference_ms": 15.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 215,
+          "duration_ms": 37770,
+          "source_offset_ms": 6818900,
+          "hf_audio_sha256": "8e0b16127132e4aac4f62187ff8f3d913f498b423e6ebdc6a76e3f7f6a37dc35",
+          "source_offset_hypothesis": {
+            "score": 0.98907791,
+            "best_lag_ms": -50.5,
+            "duration_difference_ms": 3.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 286,
+          "duration_ms": 58521,
+          "source_offset_ms": 9626279,
+          "hf_audio_sha256": "5b7892221346515a7bebd0be8f416580b0b9c8ff054d56d1efc074fa176197d9",
+          "source_offset_hypothesis": {
+            "score": 0.92419122,
+            "best_lag_ms": -49.875,
+            "duration_difference_ms": 19.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 3,
+          "ayah": 200,
+          "duration_ms": 14654,
+          "source_offset_ms": 5248731,
+          "hf_audio_sha256": "f470cb686a766b513d8520f421f49ac4f7442005a8e2116420b55af75d2c5cf6",
+          "source_offset_hypothesis": {
+            "score": 0.37945573,
+            "best_lag_ms": -43.125,
+            "duration_difference_ms": 208.25,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "abdullah_al_mattrod_qdc",
+      "minimum_ncc": 0.23156619,
+      "failed_samples": [
+        {
+          "surah": 2,
+          "ayah": 286,
+          "duration_ms": 59358,
+          "source_offset_ms": 7880542,
+          "hf_audio_sha256": "bd8cae63fb647d4fbc41aac633f1d00e5b7000f0f0176a371719a6938eb79934",
+          "source_offset_hypothesis": {
+            "score": 0.23156619,
+            "best_lag_ms": -29.625,
+            "duration_difference_ms": 242.875,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "abdullah_kamel_way2quran",
+      "minimum_ncc": 0.14085619,
+      "failed_samples": [
+        {
+          "surah": 1,
+          "ayah": 7,
+          "duration_ms": 12212,
+          "source_offset_ms": 29675,
+          "hf_audio_sha256": "f25cc0683199faac249b8585c15ba910abc5fa9827ea6b90fc6b7e55126567ea",
+          "source_offset_hypothesis": {
+            "score": 0.14085619,
+            "best_lag_ms": -40.75,
+            "duration_difference_ms": 274.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 1,
+          "duration_ms": 8278,
+          "source_offset_ms": 2847,
+          "hf_audio_sha256": "ad22729c0fa9a258a54a8d561705db365fdb0bddb7093195a68b35a5354d1d2c",
+          "source_offset_hypothesis": {
+            "score": 0.93803804,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 2.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 286,
+          "duration_ms": 87498,
+          "source_offset_ms": 7874142,
+          "hf_audio_sha256": "d3d454793de1c0c40ef8b845b77ee1e03616aa511d8f3eddf26dd235ecf5873a",
+          "source_offset_hypothesis": {
+            "score": 0.19391764,
+            "best_lag_ms": -27.75,
+            "duration_difference_ms": 118.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 3,
+          "ayah": 51,
+          "duration_ms": 12668,
+          "source_offset_ms": 1116212,
+          "hf_audio_sha256": "88d4ca8b650b35584c51814d5fd70a51d776f9eb3f9bff6e9c97f4ad026a1799",
+          "source_offset_hypothesis": {
+            "score": 0.91992412,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 1.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 3,
+          "ayah": 150,
+          "duration_ms": 6638,
+          "source_offset_ms": 3283252,
+          "hf_audio_sha256": "62aafbdf9888a77a1727f8534434e702b02af526a70fa7f6a39c5b2dbd56c9c4",
+          "source_offset_hypothesis": {
+            "score": 0.88481772,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 23.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 3,
+          "ayah": 200,
+          "duration_ms": 20338,
+          "source_offset_ms": 4689554,
+          "hf_audio_sha256": "8b253cedb78b3d60812cbd9970eb7e4422d56081f13992fd615abe0a78874e99",
+          "source_offset_hypothesis": {
+            "score": 0.17027513,
+            "best_lag_ms": -52.625,
+            "duration_difference_ms": 249.75,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "abdulwadood_haneef_mp3quran",
+      "minimum_ncc": 0.82327665,
+      "failed_samples": [
+        {
+          "surah": 1,
+          "ayah": 3,
+          "duration_ms": 1986,
+          "source_offset_ms": 7184,
+          "hf_audio_sha256": "8461dafddf705a45fc47dac8ef8d51af8bb8da12542d03bcaba228d8108352cb",
+          "source_offset_hypothesis": {
+            "score": 0.8908664,
+            "best_lag_ms": -0.375,
+            "duration_difference_ms": 25.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 1,
+          "ayah": 6,
+          "duration_ms": 2483,
+          "source_offset_ms": 15987,
+          "hf_audio_sha256": "b6799ee2c2e67ca293be114db22af1e1139f782b8b94d0611c538aa8dff652dd",
+          "source_offset_hypothesis": {
+            "score": 0.85056609,
+            "best_lag_ms": 0.0,
+            "duration_difference_ms": 24.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 1,
+          "ayah": 7,
+          "duration_ms": 14166,
+          "source_offset_ms": 18469,
+          "hf_audio_sha256": "b9758cc6269646c63f9fb33c59e2acb60c86f77c17af0def484705d3e23c8fb5",
+          "source_offset_hypothesis": {
+            "score": 0.83082597,
+            "best_lag_ms": -0.5,
+            "duration_difference_ms": 608.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 286,
+          "duration_ms": 43404,
+          "source_offset_ms": 5890116,
+          "hf_audio_sha256": "5eb076d70ff73d9678bed12316f08232fbf25764d79e94fac3ba730892a9973e",
+          "source_offset_hypothesis": {
+            "score": 0.96326907,
+            "best_lag_ms": -0.125,
+            "duration_difference_ms": 171.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 3,
+          "ayah": 1,
+          "duration_ms": 7480,
+          "source_offset_ms": 2090,
+          "hf_audio_sha256": "6b0ee9c3271032703ef51aaa013899bf3c1e671315150c14fa8304e0651a5ada",
+          "source_offset_hypothesis": {
+            "score": 0.82327665,
+            "best_lag_ms": 5.5,
+            "duration_difference_ms": 17.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 3,
+          "ayah": 200,
+          "duration_ms": 10291,
+          "source_offset_ms": 3049744,
+          "hf_audio_sha256": "778c9e7340c0ff6b44e61688321782087e39b099dbaa4fe64fbc9d416a74534f",
+          "source_offset_hypothesis": {
+            "score": 0.9210008,
+            "best_lag_ms": -0.375,
+            "duration_difference_ms": 1.25,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "abdur_rashid_sufi_qdc",
+      "minimum_ncc": 0.93475225,
+      "failed_samples": [
+        {
+          "surah": 2,
+          "ayah": 286,
+          "duration_ms": 50536,
+          "source_offset_ms": 7130149,
+          "hf_audio_sha256": "c8bf79e36e469a9ab5a8eecd9be28f5ba973bcbc4437265dfaf9817225eb6329",
+          "source_offset_hypothesis": {
+            "score": 0.93475225,
+            "best_lag_ms": -0.375,
+            "duration_difference_ms": 10.875,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "abdur_rashid_sufi_shubah_qdc",
+      "minimum_ncc": 0.32600671,
+      "failed_samples": [
+        {
+          "surah": 2,
+          "ayah": 72,
+          "duration_ms": 11531,
+          "source_offset_ms": 1324904,
+          "hf_audio_sha256": "af27f1f8d8fbacdf06e5d77a8a9a7f4de1065b873382cec606c916ef0a876bbc",
+          "source_offset_hypothesis": {
+            "score": 0.9446695,
+            "best_lag_ms": -24.625,
+            "duration_difference_ms": 15.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 286,
+          "duration_ms": 50873,
+          "source_offset_ms": 7134563,
+          "hf_audio_sha256": "7c441cbd85ad52d9f99813ba45d9a61884df328ea082c121ecada77a183aa32d",
+          "source_offset_hypothesis": {
+            "score": 0.32600671,
+            "best_lag_ms": -29.375,
+            "duration_difference_ms": 273.75,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "abu_bakr_al_shatri_tarteel",
+      "minimum_ncc": 0.20549451,
+      "failed_samples": [
+        {
+          "surah": 2,
+          "ayah": 1,
+          "duration_ms": 9188,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "cb9838e699fa47b83978316dedf865878b17ca420f8252e05febd62dcc0090c2",
+          "source_offset_hypothesis": {
+            "score": 0.35484102,
+            "best_lag_ms": 6.375,
+            "duration_difference_ms": 7.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 286,
+          "duration_ms": 53644,
+          "source_offset_ms": 7021871,
+          "hf_audio_sha256": "8f2e53aab0d8916cb5b3a10538046887fd76bfbf3ba5238ec0679b8ee6852289",
+          "source_offset_hypothesis": {
+            "score": 0.20549451,
+            "best_lag_ms": -30.0,
+            "duration_difference_ms": 145.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 3,
+          "ayah": 1,
+          "duration_ms": 10432,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "1ca1ded47824fe906347cea7b30d7010189eac38e929d661e2585e86d25df1f5",
+          "source_offset_hypothesis": {
+            "score": 0.65776429,
+            "best_lag_ms": 1.5,
+            "duration_difference_ms": 17.0,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "adel_al_karbalaei_archive_v2",
+      "minimum_ncc": 0.20222689,
+      "failed_samples": [
+        {
+          "surah": 1,
+          "ayah": 7,
+          "duration_ms": 14121,
+          "source_offset_ms": 36519,
+          "hf_audio_sha256": "376b1faf01f2656dd923b01d63692f5d50b30c2f1f78c9e5666b32aee9a34bde",
+          "source_offset_hypothesis": {
+            "score": 0.29025899,
+            "best_lag_ms": -41.25,
+            "duration_difference_ms": 223.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 2,
+          "ayah": 286,
+          "duration_ms": 57670,
+          "source_offset_ms": 8460330,
+          "hf_audio_sha256": "6c99e852d23353e2e86f143b2a69766d24dc18007499b682522099e9a69f39e4",
+          "source_offset_hypothesis": {
+            "score": 0.28910575,
+            "best_lag_ms": -29.375,
+            "duration_difference_ms": 252.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 3,
+          "ayah": 200,
+          "duration_ms": 15586,
+          "source_offset_ms": 4933538,
+          "hf_audio_sha256": "a655d5bb51a12697f30340e8cfbbc9140491c0350d78abd9af83b80dce3fe86a",
+          "source_offset_hypothesis": {
+            "score": 0.20222689,
+            "best_lag_ms": -48.75,
+            "duration_difference_ms": 252.125,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "ahmed_al_ajmi_qdc",
+      "minimum_ncc": 0.27977153,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 15,
+          "duration_ms": 5915,
+          "source_offset_ms": 53760,
+          "hf_audio_sha256": "0bdf481670b8bf564b66377f7453c3be25edc35d634d48b59304995cedea7592",
+          "source_offset_hypothesis": {
+            "score": 0.93692667,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 14.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 4715,
+          "source_offset_ms": 137770,
+          "hf_audio_sha256": "dd199994b9cdd6f41d75e3424fef89ce90115fb1c47463f3ba4f25e96736cafb",
+          "source_offset_hypothesis": {
+            "score": 0.773135,
+            "best_lag_ms": -28.875,
+            "duration_difference_ms": 274.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 1,
+          "duration_ms": 6435,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "ae21218ee051891a0f24bab8e9601d235f00d60a566d0be28940fda9c6dd4121",
+          "source_offset_hypothesis": {
+            "score": 0.27977153,
+            "best_lag_ms": 30.375,
+            "duration_difference_ms": 17.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 2,
+          "duration_ms": 5507,
+          "source_offset_ms": 6478,
+          "hf_audio_sha256": "9c3759062254934187fd644e935f8a207f0e30160b0838e25efa6410c4f26c75",
+          "source_offset_hypothesis": {
+            "score": 0.91999909,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 4.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 4905,
+          "source_offset_ms": 28395,
+          "hf_audio_sha256": "d3a711e8d41c35099c29a6bb9abb86541d286a9ca48f15aa7f1f7956410ea875",
+          "source_offset_hypothesis": {
+            "score": 0.35171695,
+            "best_lag_ms": -28.5,
+            "duration_difference_ms": 124.5,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "ahmed_amer_tvquran",
+      "minimum_ncc": 0.97377819,
+      "failed_samples": [
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 3904,
+          "source_offset_ms": 125466,
+          "hf_audio_sha256": "24592e87cb80c7138445ada98398a82029d33617c8aad9e8bcb2d5587667d046",
+          "source_offset_hypothesis": {
+            "score": 0.99994185,
+            "best_lag_ms": 0.125,
+            "duration_difference_ms": 246.875,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "ahmed_deban_qalon_mp3quran",
+      "minimum_ncc": 0.92241244,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 15,
+          "duration_ms": 3999,
+          "source_offset_ms": 52506,
+          "hf_audio_sha256": "960cbee787ca6597d66049b19c1f763beb70c623289de59033713121c83b2f7c",
+          "source_offset_hypothesis": {
+            "score": 0.93430076,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 23.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 28,
+          "duration_ms": 3127,
+          "source_offset_ms": 103628,
+          "hf_audio_sha256": "5c2f43de9f7c180c7f2fdb93ff7dd1473cf7095108a624a68af6f7506d048645",
+          "source_offset_hypothesis": {
+            "score": 0.94004414,
+            "best_lag_ms": -25.25,
+            "duration_difference_ms": 7.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 84,
+          "ayah": 1,
+          "duration_ms": 4679,
+          "source_offset_ms": 4101,
+          "hf_audio_sha256": "82a329938f279f090d84bedb7bd3733ca64ea0cce3291c7168cfa346deb46531",
+          "source_offset_hypothesis": {
+            "score": 0.93785519,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 23.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 84,
+          "ayah": 7,
+          "duration_ms": 6193,
+          "source_offset_ms": 34612,
+          "hf_audio_sha256": "a3409a288ec89b3776ee221fff193b30ba3104e1bb85f4f6ecfac57c0c08fb78",
+          "source_offset_hypothesis": {
+            "score": 0.92241244,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 24.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 3,
+          "duration_ms": 5615,
+          "source_offset_ms": 14080,
+          "hf_audio_sha256": "9f21d89e5b155019581151b63697d8eb9ea9b11a41508839c8c806447adf919f",
+          "source_offset_hypothesis": {
+            "score": 0.93082454,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 1.375,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "ahmed_issa_al_maasaraawi_mp3quran",
+      "minimum_ncc": 0.9368733,
+      "failed_samples": [
+        {
+          "surah": 85,
+          "ayah": 11,
+          "duration_ms": 15398,
+          "source_offset_ms": 66011,
+          "hf_audio_sha256": "a4c75376787b66f52caabad6d600f9048ca30b86de058068ca515af91aabe500",
+          "source_offset_hypothesis": {
+            "score": 0.9368733,
+            "best_lag_ms": 0.375,
+            "duration_difference_ms": 14.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 4325,
+          "source_offset_ms": 121365,
+          "hf_audio_sha256": "ab92c9fb6175d8c796b86aebc12a125abbaa2bcb28c320ee4ffe06b783ebac21",
+          "source_offset_hypothesis": {
+            "score": 0.98802897,
+            "best_lag_ms": -0.125,
+            "duration_difference_ms": 223.75,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "ahmed_kaseb_way2quran",
+      "minimum_ncc": 0.19738515,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 1,
+          "duration_ms": 4255,
+          "source_offset_ms": 3276,
+          "hf_audio_sha256": "882b1c4ba610f800a1d84bbd9155e6bf03dbbadeb7ad91bf9ceedf32a1cb3744",
+          "source_offset_hypothesis": {
+            "score": 0.97599774,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 29.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 15,
+          "duration_ms": 4184,
+          "source_offset_ms": 55224,
+          "hf_audio_sha256": "bacb252a598e8dd29855939a13eae8b19cffb7997206f3023cd5aa07ee1cf050",
+          "source_offset_hypothesis": {
+            "score": 0.98146458,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 28.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 29,
+          "duration_ms": 3236,
+          "source_offset_ms": 115416,
+          "hf_audio_sha256": "78320236139b038d7c92f44a4ca70ca831d7a0b80d892bb087ecf23700c478e0",
+          "source_offset_hypothesis": {
+            "score": 0.98065836,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 4.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 42,
+          "duration_ms": 3329,
+          "source_offset_ms": 236484,
+          "hf_audio_sha256": "ca3638a100aab5e2528cc3a1f79b58c16de77a5508c56d477c1c66bc4a47cb65",
+          "source_offset_hypothesis": {
+            "score": 0.9753538,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 19.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 15267,
+          "source_offset_ms": 316764,
+          "hf_audio_sha256": "54cc43064d3f56d4a07d82e982e8ac42a0583140e7762ad6cddbc6dc3264cb57",
+          "source_offset_hypothesis": {
+            "score": 0.19738515,
+            "best_lag_ms": -45.5,
+            "duration_difference_ms": 255.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 1,
+          "duration_ms": 5535,
+          "source_offset_ms": 3600,
+          "hf_audio_sha256": "b2eb93c591a813ccec8994e4694fa87aacdd8e3cb4952a8379f8c9ec705739f8",
+          "source_offset_hypothesis": {
+            "score": 0.98672772,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 9.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 6,
+          "duration_ms": 3344,
+          "source_offset_ms": 22428,
+          "hf_audio_sha256": "b83f8610e6888756d59ef6cd3ec238a81f82aaf5bbccf37f8f3620deae3c59ad",
+          "source_offset_hypothesis": {
+            "score": 0.98827317,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 4.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 11,
+          "duration_ms": 14539,
+          "source_offset_ms": 65484,
+          "hf_audio_sha256": "75abd455debd15cf0bb4372ad350a007b8fcaaf659183ae7041ccd3dc25b4270",
+          "source_offset_hypothesis": {
+            "score": 0.98670592,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 5.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 17,
+          "duration_ms": 3746,
+          "source_offset_ms": 96984,
+          "hf_audio_sha256": "ab1db42fb7d31769d06d8f92ffd8a668053196d3b53d8b35db2fa1019e9ad952",
+          "source_offset_hypothesis": {
+            "score": 0.98540168,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 34.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 5418,
+          "source_offset_ms": 120312,
+          "hf_audio_sha256": "0e413138a8c52c26e48ddf5bc7580c0a812a99a5153dca31465dd59a002cf921",
+          "source_offset_hypothesis": {
+            "score": 0.26533457,
+            "best_lag_ms": -68.375,
+            "duration_difference_ms": 18.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 1,
+          "duration_ms": 7574,
+          "source_offset_ms": 3600,
+          "hf_audio_sha256": "50ed014f68847a2378f42f33eea4dc783b6b58527b54e91a5794baeda0e29ced",
+          "source_offset_hypothesis": {
+            "score": 0.99260381,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 22.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 2,
+          "duration_ms": 5067,
+          "source_offset_ms": 11196,
+          "hf_audio_sha256": "e4ecbd094852b9898f57c4fca7dc354c0310ffaba0e65b558154b4ede8e63b8d",
+          "source_offset_hypothesis": {
+            "score": 0.98552953,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 9.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 3,
+          "duration_ms": 5043,
+          "source_offset_ms": 16272,
+          "hf_audio_sha256": "2a9f06b2af273e29c1fd6786019f01dc4072b349e4dd4739f05b259d38d700c5",
+          "source_offset_hypothesis": {
+            "score": 0.99197513,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 33.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 4,
+          "duration_ms": 10530,
+          "source_offset_ms": 21348,
+          "hf_audio_sha256": "30dc5644f56eaf5000c7d5cd9f977a5a53263c280d1da41fdf20905b96e927f2",
+          "source_offset_hypothesis": {
+            "score": 0.99163585,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 18.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 5099,
+          "source_offset_ms": 31896,
+          "hf_audio_sha256": "a2fbc9b1cf0e68a00d8a4ab15f02b946d7ac2187193a7c102ed70806e73c0676",
+          "source_offset_hypothesis": {
+            "score": 0.98956826,
+            "best_lag_ms": -34.5,
+            "duration_difference_ms": 13.0,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "ahmed_nuayna_qdc",
+      "minimum_ncc": 0.30031817,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 15,
+          "duration_ms": 4314,
+          "source_offset_ms": 69146,
+          "hf_audio_sha256": "6e5458c21c4fa2d8dd9e8ce1311f4883f695043221382bcb627388b065093bdd",
+          "source_offset_hypothesis": {
+            "score": 0.93257518,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 22.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 13656,
+          "source_offset_ms": 340584,
+          "hf_audio_sha256": "ec5c0d6712aa4fc1af15967d479e91b30fc04db2c15ec5fd32d6b7e956b2dcf2",
+          "source_offset_hypothesis": {
+            "score": 0.92238472,
+            "best_lag_ms": -24.625,
+            "duration_difference_ms": 6.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 4572,
+          "source_offset_ms": 136908,
+          "hf_audio_sha256": "e6d0345d18ef8a5ce39b51c96b272aec8be5cc3b34caf5c5574b8cd9eea77fca",
+          "source_offset_hypothesis": {
+            "score": 0.40632836,
+            "best_lag_ms": -29.5,
+            "duration_difference_ms": 0.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 5420,
+          "source_offset_ms": 32940,
+          "hf_audio_sha256": "a12571fb401ad8a7fb5cdeac86e69ffbb3d608aef3bc109224292ed0437bbf91",
+          "source_offset_hypothesis": {
+            "score": 0.30031817,
+            "best_lag_ms": -33.25,
+            "duration_difference_ms": 91.0,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "ahmed_saleh_rajab_qalon_way2quran",
+      "minimum_ncc": 0.13331352,
+      "failed_samples": [
+        {
+          "surah": 84,
+          "ayah": 25,
+          "duration_ms": 9458,
+          "source_offset_ms": 127582,
+          "hf_audio_sha256": "0c9e3886f48d4e6e64faf2b0db169c7e1198780b5759226c6360805553301dcd",
+          "source_offset_hypothesis": {
+            "score": 0.13331352,
+            "best_lag_ms": -44.375,
+            "duration_difference_ms": 236.75,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "ahmed_saud_mp3quran",
+      "minimum_ncc": 0.89284286,
+      "failed_samples": [
+        {
+          "surah": 101,
+          "ayah": 1,
+          "duration_ms": 1985,
+          "source_offset_ms": 7105,
+          "hf_audio_sha256": "defcf1395df5b652344014f5843167b29ea4f048197aeb0d58bb4343da0b5101",
+          "source_offset_hypothesis": {
+            "score": 0.93731144,
+            "best_lag_ms": 0.25,
+            "duration_difference_ms": 0.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 102,
+          "ayah": 5,
+          "duration_ms": 5878,
+          "source_offset_ms": 26149,
+          "hf_audio_sha256": "3fe9aca8ee4b35bfcc2e27fedc1e1200e44ce9aee179e27b59bf0b7f8b28aa13",
+          "source_offset_hypothesis": {
+            "score": 0.90770063,
+            "best_lag_ms": -0.375,
+            "duration_difference_ms": 25.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 102,
+          "ayah": 8,
+          "duration_ms": 10463,
+          "source_offset_ms": 45427,
+          "hf_audio_sha256": "e9118e345d02d273bc6be4bb9cfc39ac4af895090b888a2561c84119c39c6f78",
+          "source_offset_hypothesis": {
+            "score": 0.94147989,
+            "best_lag_ms": 0.0,
+            "duration_difference_ms": 12.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 105,
+          "ayah": 2,
+          "duration_ms": 6571,
+          "source_offset_ms": 15804,
+          "hf_audio_sha256": "3f2e0af13e84eee7f6b074b2b8a8973104f7d2d52bd9b1ade46bfe3b8e17e9e9",
+          "source_offset_hypothesis": {
+            "score": 0.93965629,
+            "best_lag_ms": 0.125,
+            "duration_difference_ms": 11.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 105,
+          "ayah": 3,
+          "duration_ms": 6632,
+          "source_offset_ms": 22387,
+          "hf_audio_sha256": "48f8d9ee383e526479fca41f93114af79a240fb2e762832b623e299e0dc00f6a",
+          "source_offset_hypothesis": {
+            "score": 0.89284286,
+            "best_lag_ms": 0.0,
+            "duration_difference_ms": 3.125,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "ahmed_shaheen_mp3quran",
+      "minimum_ncc": 0.80653435,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 1,
+          "duration_ms": 3713,
+          "source_offset_ms": 4389,
+          "hf_audio_sha256": "e097df738a38d4b0160eaed35638ed14152e57dc655f956e775761296192046f",
+          "source_offset_hypothesis": {
+            "score": 0.80653435,
+            "best_lag_ms": -0.375,
+            "duration_difference_ms": 22.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 29,
+          "duration_ms": 3581,
+          "source_offset_ms": 126171,
+          "hf_audio_sha256": "d248f8b53dc8f752d08a8d126bf74c220b553c7bd268258f43b2dcb399dcf517",
+          "source_offset_hypothesis": {
+            "score": 0.88036,
+            "best_lag_ms": 0.375,
+            "duration_difference_ms": 24.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 13417,
+          "source_offset_ms": 346018,
+          "hf_audio_sha256": "b76657ba246697e3b7f706868ae96a4e3da74b386191a402fe1095f540489895",
+          "source_offset_hypothesis": {
+            "score": 0.92544846,
+            "best_lag_ms": 0.0,
+            "duration_difference_ms": 94.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 1,
+          "duration_ms": 5913,
+          "source_offset_ms": 4650,
+          "hf_audio_sha256": "879b1e3ed7ceb72a9afbe05ca2f9e6c7a6024afbe60010f14fd6a6a5133a47a8",
+          "source_offset_hypothesis": {
+            "score": 0.88301112,
+            "best_lag_ms": -0.25,
+            "duration_difference_ms": 16.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 17,
+          "duration_ms": 4296,
+          "source_offset_ms": 114887,
+          "hf_audio_sha256": "be1e8e57085f1b06ce37d314d64e09be97ec53b45cf74d995a2c34fc02dfe12a",
+          "source_offset_hypothesis": {
+            "score": 0.9454661,
+            "best_lag_ms": -0.5,
+            "duration_difference_ms": 14.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 4662,
+          "source_offset_ms": 139050,
+          "hf_audio_sha256": "be42ff5ded19febec50057d2752e182f431d2fe272c13bba15d958128f9f23f5",
+          "source_offset_hypothesis": {
+            "score": 0.84745725,
+            "best_lag_ms": -0.25,
+            "duration_difference_ms": 299.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 5671,
+          "source_offset_ms": 38139,
+          "hf_audio_sha256": "73fa2bdb549dbbbbb3dce5f8294d68209dc43af68f7c29710099c4c12a21985e",
+          "source_offset_hypothesis": {
+            "score": 0.97593186,
+            "best_lag_ms": -0.25,
+            "duration_difference_ms": 133.0,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "ahmed_talib_bin_humaid_mp3quran",
+      "minimum_ncc": 0.89251828,
+      "failed_samples": [
+        {
+          "surah": 77,
+          "ayah": 50,
+          "duration_ms": 8620,
+          "source_offset_ms": 231445,
+          "hf_audio_sha256": "c0c0cbc48675770e6352ecfd6806c3c8c37eebed14d67ece14c1395033ff55d5",
+          "source_offset_hypothesis": {
+            "score": 0.89251828,
+            "best_lag_ms": -0.25,
+            "duration_difference_ms": 77.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 11,
+          "duration_ms": 17651,
+          "source_offset_ms": 85159,
+          "hf_audio_sha256": "cf2634e77d4d5f88bbdca425d00427b2d0c750a3c8466dfd131c494d0edb6913",
+          "source_offset_hypothesis": {
+            "score": 0.94535973,
+            "best_lag_ms": 0.125,
+            "duration_difference_ms": 7.875,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "akram_al_alaqmi_qdc",
+      "minimum_ncc": 0.30281426,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 42,
+          "duration_ms": 3738,
+          "source_offset_ms": 289437,
+          "hf_audio_sha256": "a8600d2cf82de822bf1f09ec5f6e9eecdd640237444fd7c41799d96841ca5f44",
+          "source_offset_hypothesis": {
+            "score": 0.94115147,
+            "best_lag_ms": -25.375,
+            "duration_difference_ms": 23.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 16078,
+          "source_offset_ms": 377130,
+          "hf_audio_sha256": "0c71587f5539b45754bafa7592133c5ea9c7e93813a27e69d79ff1e04eb54024",
+          "source_offset_hypothesis": {
+            "score": 0.30281426,
+            "best_lag_ms": -29.375,
+            "duration_difference_ms": 273.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 11,
+          "duration_ms": 20308,
+          "source_offset_ms": 92212,
+          "hf_audio_sha256": "f5225b2ed6379226cf7626d9e11e8c9da6a1a54ddebfb908aeb5287c9143743f",
+          "source_offset_hypothesis": {
+            "score": 0.9406133,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 15.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 5159,
+          "source_offset_ms": 168385,
+          "hf_audio_sha256": "aad570183954ee23f0cb2fb4124a93303038fa5c67174a9099c0ee73a2206192",
+          "source_offset_hypothesis": {
+            "score": 0.41829579,
+            "best_lag_ms": -28.75,
+            "duration_difference_ms": 274.0,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "bandar_baleela_qdc",
+      "minimum_ncc": 0.21324602,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 29,
+          "duration_ms": 3491,
+          "source_offset_ms": 138449,
+          "hf_audio_sha256": "28abfe9959ee17d4a6fd0363d7c5b845417efdfd515ffd1cec634453a4d67c78",
+          "source_offset_hypothesis": {
+            "score": 0.94230165,
+            "best_lag_ms": -25.125,
+            "duration_difference_ms": 9.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 18329,
+          "source_offset_ms": 385411,
+          "hf_audio_sha256": "be9b1d4b633dda9681632210829061facc017bdae9e926d049ab4e9407bc0070",
+          "source_offset_hypothesis": {
+            "score": 0.93167285,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 9.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 3,
+          "duration_ms": 6778,
+          "source_offset_ms": 17842,
+          "hf_audio_sha256": "99deb0f88167936c99aeeb7632a6fafc7d04a9d3de312440a58fb9ea643746fe",
+          "source_offset_hypothesis": {
+            "score": 0.9355121,
+            "best_lag_ms": -25.375,
+            "duration_difference_ms": 13.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 6648,
+          "source_offset_ms": 37198,
+          "hf_audio_sha256": "309e54d858cb848be3b1e8e0225ae33be2a442dc5d56bef90f7e802346e6b4f2",
+          "source_offset_hypothesis": {
+            "score": 0.21324602,
+            "best_lag_ms": -30.875,
+            "duration_difference_ms": 274.125,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "fatih_seferagic_way2quran",
+      "minimum_ncc": 0.17826191,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 14395,
+          "source_offset_ms": 296777,
+          "hf_audio_sha256": "5e3060ee1a35027016e96522b700d52163bdd4b87c6d101f26f4de9db48613bf",
+          "source_offset_hypothesis": {
+            "score": 0.17826191,
+            "best_lag_ms": -42.375,
+            "duration_difference_ms": 262.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 5125,
+          "source_offset_ms": 141479,
+          "hf_audio_sha256": "2afe7e44dcf8160c318aaaffcd625847a867693e718086b4ba7d2387e9ac156f",
+          "source_offset_hypothesis": {
+            "score": 0.53467145,
+            "best_lag_ms": -35.125,
+            "duration_difference_ms": 266.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 5076,
+          "source_offset_ms": 36624,
+          "hf_audio_sha256": "bcff8405323321a7a9d3665dcf73939b581dfab75eae9c6cdb33484748814548",
+          "source_offset_hypothesis": {
+            "score": 0.368161,
+            "best_lag_ms": -35.5,
+            "duration_difference_ms": 269.375,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "hani_al_rifai_qdc_128k",
+      "minimum_ncc": 0.31115219,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 10566,
+          "source_offset_ms": 253231,
+          "hf_audio_sha256": "1dbdb98d6cf4b5aee8e8f6e0afd4a214f2d80ad6887a8983805b8da4bf73969c",
+          "source_offset_hypothesis": {
+            "score": 0.31115219,
+            "best_lag_ms": -28.875,
+            "duration_difference_ms": 273.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 11,
+          "duration_ms": 16485,
+          "source_offset_ms": 60160,
+          "hf_audio_sha256": "574ff940403310b848b2b045194541727f9be64d1f66a1653525f655e28473a1",
+          "source_offset_hypothesis": {
+            "score": 0.93202196,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 24.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 4558,
+          "source_offset_ms": 115069,
+          "hf_audio_sha256": "e14f53acb2aa1388fe2b73d856910fd2fbcb08b8343233d413358cee333614e8",
+          "source_offset_hypothesis": {
+            "score": 0.55356445,
+            "best_lag_ms": -29.625,
+            "duration_difference_ms": 273.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 4767,
+          "source_offset_ms": 25600,
+          "hf_audio_sha256": "fbb62fcd88f33569975ee93b36809c7a534f6566d942ea1b840334cd1929747e",
+          "source_offset_hypothesis": {
+            "score": 0.38930874,
+            "best_lag_ms": -39.375,
+            "duration_difference_ms": 273.875,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "islam_sobhi_mp3quran",
+      "minimum_ncc": 0.94425559,
+      "failed_samples": [
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 5154,
+          "source_offset_ms": 33881,
+          "hf_audio_sha256": "8ba119d79f8d0c2a649d1f8a51293e5aa7bca3d3c0720744dbf5b93d3f4bddb8",
+          "source_offset_hypothesis": {
+            "score": 0.94425559,
+            "best_lag_ms": -0.125,
+            "duration_difference_ms": 18.25,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "khalifa_al_tunaiji_tarteel",
+      "minimum_ncc": 0.24713172,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 1,
+          "duration_ms": 5444,
+          "source_offset_ms": 104,
+          "hf_audio_sha256": "7074c20b9f9bb5880598af2b16e8c4924cf82a9f1e420da57578ffa192ba910c",
+          "source_offset_hypothesis": {
+            "score": 0.99996473,
+            "best_lag_ms": -49.625,
+            "duration_difference_ms": 15.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 15,
+          "duration_ms": 5604,
+          "source_offset_ms": 58253,
+          "hf_audio_sha256": "db05a52de2dfffd2b3a8f2a19d095a8e04d208a56ff0b8d9a2b361d25b53e6a0",
+          "source_offset_hypothesis": {
+            "score": 0.96816904,
+            "best_lag_ms": -50.0,
+            "duration_difference_ms": 12.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 29,
+          "duration_ms": 3242,
+          "source_offset_ms": 120816,
+          "hf_audio_sha256": "58fcd7435ed3c315d4cfc1f12b7142c848c1e1331fdc6b5d6871d63286ed51eb",
+          "source_offset_hypothesis": {
+            "score": 0.97888418,
+            "best_lag_ms": -49.75,
+            "duration_difference_ms": 23.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 42,
+          "duration_ms": 3225,
+          "source_offset_ms": 258717,
+          "hf_audio_sha256": "1fb05ca6d6e6f0eccebde5e463bf50477cb2be5b5891d511a69946d8e77602cd",
+          "source_offset_hypothesis": {
+            "score": 0.99983786,
+            "best_lag_ms": -50.375,
+            "duration_difference_ms": 14.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 15296,
+          "source_offset_ms": 343589,
+          "hf_audio_sha256": "4038b78bf6bb92e236830f54db6b71dd736afb4f5d204f2039f31424d73b5cd7",
+          "source_offset_hypothesis": {
+            "score": 0.28360822,
+            "best_lag_ms": -87.625,
+            "duration_difference_ms": 223.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 1,
+          "duration_ms": 6948,
+          "source_offset_ms": 104,
+          "hf_audio_sha256": "2bbc34ef39b953ca62f5950de1db77fcc4e6843ad4e9187f8db1c447c7290bfb",
+          "source_offset_hypothesis": {
+            "score": 0.99994547,
+            "best_lag_ms": -49.625,
+            "duration_difference_ms": 0.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 6,
+          "duration_ms": 5078,
+          "source_offset_ms": 27089,
+          "hf_audio_sha256": "6e964fddceec3f9394699a0c3c4d488a9b1eff4dda6b872d1b9e05a947f53250",
+          "source_offset_hypothesis": {
+            "score": 0.99912762,
+            "best_lag_ms": -50.125,
+            "duration_difference_ms": 15.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 11,
+          "duration_ms": 18775,
+          "source_offset_ms": 79882,
+          "hf_audio_sha256": "3fa4e91deaa1dee97c237a9f0b04422d32ee7c6f2f5b57a22814b80148d5baf8",
+          "source_offset_hypothesis": {
+            "score": 0.97858292,
+            "best_lag_ms": -49.625,
+            "duration_difference_ms": 7.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 17,
+          "duration_ms": 5423,
+          "source_offset_ms": 125649,
+          "hf_audio_sha256": "fd1bbf84b1d53b48636a76e01221965f3e6197b665c0fb490ed151f07acab7af",
+          "source_offset_hypothesis": {
+            "score": 0.9992094,
+            "best_lag_ms": -50.125,
+            "duration_difference_ms": 10.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 5526,
+          "source_offset_ms": 155037,
+          "hf_audio_sha256": "4f75ec33fb48bef5dab21c667bfabdb0151a58424b85371708a406afd7148ba4",
+          "source_offset_hypothesis": {
+            "score": 0.49365088,
+            "best_lag_ms": -100.875,
+            "duration_difference_ms": 223.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 1,
+          "duration_ms": 8100,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "4440c3b454b3198876a21edce3c7199955f8f0364d2e169df8ced4fef059b089",
+          "source_offset_hypothesis": {
+            "score": 0.32781581,
+            "best_lag_ms": 0.625,
+            "duration_difference_ms": 24.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 2,
+          "duration_ms": 5690,
+          "source_offset_ms": 8150,
+          "hf_audio_sha256": "ac29cc3c09b707d47e221bc01ac47ec607a2d19a5d1de2450f0b7917d0c96668",
+          "source_offset_hypothesis": {
+            "score": 0.98382708,
+            "best_lag_ms": -49.875,
+            "duration_difference_ms": 4.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 3,
+          "duration_ms": 4897,
+          "source_offset_ms": 13871,
+          "hf_audio_sha256": "3845f8a5e12f0682646c1c41e1cc513b0f7215344de4e41f30fbf9edb53fa0fd",
+          "source_offset_hypothesis": {
+            "score": 0.99109526,
+            "best_lag_ms": -50.125,
+            "duration_difference_ms": 14.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 4,
+          "duration_ms": 10822,
+          "source_offset_ms": 18860,
+          "hf_audio_sha256": "68bf64a3000fa694adf285a6f7886d70d83d452e7adb5b054e6c49c183e9efcd",
+          "source_offset_hypothesis": {
+            "score": 0.97695521,
+            "best_lag_ms": -49.75,
+            "duration_difference_ms": 18.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 4690,
+          "source_offset_ms": 29780,
+          "hf_audio_sha256": "c04ee962429f1e10fdfb85373a1306b482a6ac94a0f6afbf2d28c0fcfcb06cab",
+          "source_offset_hypothesis": {
+            "score": 0.24713172,
+            "best_lag_ms": -83.0,
+            "duration_difference_ms": 223.0,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "maher_al_muaiqly_qdc",
+      "minimum_ncc": 0.93806561,
+      "failed_samples": [
+        {
+          "surah": 36,
+          "ayah": 83,
+          "duration_ms": 12952,
+          "source_offset_ms": 1159158,
+          "hf_audio_sha256": "1f771fc6b623c72aa125067efa85f8918b32c6f56358296a6a5f8eee19433b55",
+          "source_offset_hypothesis": {
+            "score": 0.93806561,
+            "best_lag_ms": -0.5,
+            "duration_difference_ms": 4.75,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "mahmoud_abdul_hakam_mp3quran",
+      "minimum_ncc": 0.93613915,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 1,
+          "duration_ms": 5192,
+          "source_offset_ms": 6870,
+          "hf_audio_sha256": "df6174e0249cb245e060307cc6ed638859edb1d5b671597aa47f8479ebc028c8",
+          "source_offset_hypothesis": {
+            "score": 0.93613915,
+            "best_lag_ms": 0.25,
+            "duration_difference_ms": 6.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 5037,
+          "source_offset_ms": 147148,
+          "hf_audio_sha256": "a873aef24242ac2280933557ef51dc6f2221ea9f18de36d0e9b62adc9ce14228",
+          "source_offset_hypothesis": {
+            "score": 0.99978067,
+            "best_lag_ms": -0.25,
+            "duration_difference_ms": 73.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 2,
+          "duration_ms": 6622,
+          "source_offset_ms": 13558,
+          "hf_audio_sha256": "5f8670c0553ba8bf537c9d23a19f1d11ad18199b505645ee667ad4a9ccb9b38e",
+          "source_offset_hypothesis": {
+            "score": 0.94312076,
+            "best_lag_ms": -0.5,
+            "duration_difference_ms": 13.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 7043,
+          "source_offset_ms": 41927,
+          "hf_audio_sha256": "5ea1f393ea693da482485fdc178b96957a5c45fd67d43e353d57e08b7d50a500",
+          "source_offset_hypothesis": {
+            "score": 0.98128381,
+            "best_lag_ms": -0.5,
+            "duration_difference_ms": 42.25,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "mahmoud_ali_al_banna_qdc",
+      "minimum_ncc": 0.9441084,
+      "failed_samples": [
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 5731,
+          "source_offset_ms": 36519,
+          "hf_audio_sha256": "ba01ca92d066d62d99a85ef32599ebde95e7554e52ce9800e0e5fcdb3c5c1552",
+          "source_offset_hypothesis": {
+            "score": 0.9441084,
+            "best_lag_ms": 0.125,
+            "duration_difference_ms": 114.625,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "mahmoud_khalil_al_husary_mp3quran",
+      "minimum_ncc": 0.89306233,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 1,
+          "duration_ms": 6914,
+          "source_offset_ms": 8411,
+          "hf_audio_sha256": "b2af975b81c9c65aa5c7f9a3576d1754b262bf9b1a13a58b3b48eb18e5eb267c",
+          "source_offset_hypothesis": {
+            "score": 0.89306233,
+            "best_lag_ms": 0.375,
+            "duration_difference_ms": 8.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 15,
+          "duration_ms": 6673,
+          "source_offset_ms": 95112,
+          "hf_audio_sha256": "d35c925a7a1c2ff926f2afd26d3ea747eb0a8adb4bb5b30517c18ac052bb3134",
+          "source_offset_hypothesis": {
+            "score": 0.93706857,
+            "best_lag_ms": -0.125,
+            "duration_difference_ms": 14.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 16700,
+          "source_offset_ms": 424490,
+          "hf_audio_sha256": "f053828c736ae1a615638e99f91b343986a962eaf1580db4b66f2578912a11cc",
+          "source_offset_hypothesis": {
+            "score": 0.94950976,
+            "best_lag_ms": -0.25,
+            "duration_difference_ms": 18.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 1,
+          "duration_ms": 8308,
+          "source_offset_ms": 9352,
+          "hf_audio_sha256": "3bde37606e397022fad547204864347841ac4a3b4c7830b3d4ce2b33e63dd7f2",
+          "source_offset_hypothesis": {
+            "score": 0.92925135,
+            "best_lag_ms": -0.125,
+            "duration_difference_ms": 25.125,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "minimum_ncc": 0.14771115,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 1,
+          "duration_ms": 6360,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "80bf8f61172c5ad6ebec38ed7e6e8fb7d031d0a2092615cae61add865c951eef",
+          "source_offset_hypothesis": {
+            "score": 0.14771115,
+            "best_lag_ms": 1.125,
+            "duration_difference_ms": 0.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 26192,
+          "source_offset_ms": 743544,
+          "hf_audio_sha256": "3b44d2eac6e61a83758edd9cff86e3f7bb2a3fb20d50b365b6a0757fa011c6a7",
+          "source_offset_hypothesis": {
+            "score": 0.32127268,
+            "best_lag_ms": -29.125,
+            "duration_difference_ms": 272.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 1,
+          "duration_ms": 8060,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "cc42d4894930b029aec45d53b412bb5deeef01b1856e92a4ba0c87376f724f14",
+          "source_offset_hypothesis": {
+            "score": 0.48073806,
+            "best_lag_ms": 3.125,
+            "duration_difference_ms": 4.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 7618,
+          "source_offset_ms": 335448,
+          "hf_audio_sha256": "8664e3beed4a6018978e112a5249bf763fa1ecebc4f225d64b1b46c4e4d99128",
+          "source_offset_hypothesis": {
+            "score": 0.39772231,
+            "best_lag_ms": -27.5,
+            "duration_difference_ms": 274.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 1,
+          "duration_ms": 11100,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "ca175439804d4f72f7dd293f3b7798a5c26258bd1afd25d7ca116a9e7bbf0541",
+          "source_offset_hypothesis": {
+            "score": 0.21915306,
+            "best_lag_ms": 14.25,
+            "duration_difference_ms": 12.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 8503,
+          "source_offset_ms": 58296,
+          "hf_audio_sha256": "b00aefac680a4af6fb2c674e5f0432b0761d8ff732a788ea5ddd157968e25f09",
+          "source_offset_hypothesis": {
+            "score": 0.18175514,
+            "best_lag_ms": -35.5,
+            "duration_difference_ms": 271.0,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "mahmoud_khalil_al_husary_qdc_128k",
+      "minimum_ncc": 0.28092874,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 42,
+          "duration_ms": 4188,
+          "source_offset_ms": 281652,
+          "hf_audio_sha256": "352b7e06b038980e8470a842b011b75b78bc1a9e37e2305e2690cae877d323e0",
+          "source_offset_hypothesis": {
+            "score": 0.91973633,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 17.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 14686,
+          "source_offset_ms": 366054,
+          "hf_audio_sha256": "824176f993fac44cdbc6c277dc4670a67b2dce6c2d9d55ed1957af5072af97dc",
+          "source_offset_hypothesis": {
+            "score": 0.28092874,
+            "best_lag_ms": -30.875,
+            "duration_difference_ms": 20.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 1,
+          "duration_ms": 4704,
+          "source_offset_ms": 5016,
+          "hf_audio_sha256": "6295636ec59ec3a7583c1153b1bf93fb1d9ba36d65882bc8338bc8a712c3da09",
+          "source_offset_hypothesis": {
+            "score": 0.94357017,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 24.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 4245,
+          "source_offset_ms": 137404,
+          "hf_audio_sha256": "c8964546b6b01eb3014282c83985e99ce6cb758106c0e26b6eac24422d493fc9",
+          "source_offset_hypothesis": {
+            "score": 0.35352688,
+            "best_lag_ms": -28.25,
+            "duration_difference_ms": 274.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 1,
+          "duration_ms": 6953,
+          "source_offset_ms": 5407,
+          "hf_audio_sha256": "5e95ef0e0d5591f6fbae728b7e0e785d004485ea1063374556d2871ce466482d",
+          "source_offset_hypothesis": {
+            "score": 0.94124797,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 21.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 2,
+          "duration_ms": 5084,
+          "source_offset_ms": 12696,
+          "hf_audio_sha256": "ebb180d1023cef8864c3f1408968a8e06ea9dcd0b2d84d8d015cf87890a8048e",
+          "source_offset_hypothesis": {
+            "score": 0.93501568,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 9.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 3,
+          "duration_ms": 5649,
+          "source_offset_ms": 18051,
+          "hf_audio_sha256": "f6a5a734254ffe7e454aeb2611041b1e60ea02ec157f6d7dece42a35a38de8ee",
+          "source_offset_hypothesis": {
+            "score": 0.92288283,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 19.625,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "mishary_rashid_al_afasy_2008_qdc",
+      "minimum_ncc": 0.16867719,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 1,
+          "duration_ms": 3365,
+          "source_offset_ms": 5120,
+          "hf_audio_sha256": "f0b68a0b43cd21b10f864dea171508b99b9ec28996dc9cea0966c0e859fe20bf",
+          "source_offset_hypothesis": {
+            "score": 0.94150155,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 4.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 29,
+          "duration_ms": 2971,
+          "source_offset_ms": 110184,
+          "hf_audio_sha256": "949a33168b4344e21fc6a31dc7caf7b79c66eb9e0bd5c7f2fb9879b43e0e42f7",
+          "source_offset_hypothesis": {
+            "score": 0.92964242,
+            "best_lag_ms": -24.625,
+            "duration_difference_ms": 7.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 42,
+          "duration_ms": 3222,
+          "source_offset_ms": 239438,
+          "hf_audio_sha256": "6caaadd8b75a0d447a5a61f642603da7d1522d452a34a066d214e0d632f514b0",
+          "source_offset_hypothesis": {
+            "score": 0.92022952,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 17.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 14851,
+          "source_offset_ms": 321149,
+          "hf_audio_sha256": "c1ae082f83ba0a3ef9897aefde1cb8d6ad8dc3748dc550cde61fa1b0dc96186a",
+          "source_offset_hypothesis": {
+            "score": 0.16867719,
+            "best_lag_ms": -36.125,
+            "duration_difference_ms": 274.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 6309,
+          "source_offset_ms": 153025,
+          "hf_audio_sha256": "1a8d2050034f38f5f008a9af02672c7bcfa0f0312af8ad5b789b61f5fc95b1b1",
+          "source_offset_hypothesis": {
+            "score": 0.66434139,
+            "best_lag_ms": -31.125,
+            "duration_difference_ms": 274.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 2,
+          "duration_ms": 4484,
+          "source_offset_ms": 11651,
+          "hf_audio_sha256": "cd6f18794f6e165015e3fd3001037710c967c322f16ffdf4eb71e1800e0f3f43",
+          "source_offset_hypothesis": {
+            "score": 0.94659078,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 9.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 5381,
+          "source_offset_ms": 34299,
+          "hf_audio_sha256": "2c3cc95eb0eba42ef6785e5c28b476e84273aee50a3efb47a4b094bc16fe9c5b",
+          "source_offset_hypothesis": {
+            "score": 0.35865104,
+            "best_lag_ms": -30.125,
+            "duration_difference_ms": 261.0,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "mishary_rashid_al_afasy_mp3quran",
+      "minimum_ncc": 0.94327183,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 42,
+          "duration_ms": 2895,
+          "source_offset_ms": 229695,
+          "hf_audio_sha256": "fecdb835b6ee69bea31e9c9f84aaa03e8ccc98ded0c7fb86b4f7143076dd59bf",
+          "source_offset_hypothesis": {
+            "score": 0.94327183,
+            "best_lag_ms": -0.25,
+            "duration_difference_ms": 4.625,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "moaz_mahmoud_hamed_qalon_way2quran",
+      "minimum_ncc": 0.15092399,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 55,
+          "duration_ms": 16456,
+          "source_offset_ms": 343824,
+          "hf_audio_sha256": "2d0e27a771bc1a70d7dff48dd5ecda990ac763c2657cbd024e42b41b6e66bfd9",
+          "source_offset_hypothesis": {
+            "score": 0.15092399,
+            "best_lag_ms": -55.375,
+            "duration_difference_ms": 233.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 84,
+          "ayah": 1,
+          "duration_ms": 4577,
+          "source_offset_ms": 4023,
+          "hf_audio_sha256": "fb93d56f15b74589cb6b6f49eb7d434d856216507b8831adab481e2be096b3d5",
+          "source_offset_hypothesis": {
+            "score": 0.9443188,
+            "best_lag_ms": -25.25,
+            "duration_difference_ms": 20.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 84,
+          "ayah": 25,
+          "duration_ms": 10784,
+          "source_offset_ms": 128836,
+          "hf_audio_sha256": "5766a279d9369455a12f7c47903d6019e4d72037d78600a8a3ee796c1b489f25",
+          "source_offset_hypothesis": {
+            "score": 0.37832226,
+            "best_lag_ms": -49.125,
+            "duration_difference_ms": 256.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 1,
+          "duration_ms": 7662,
+          "source_offset_ms": 3918,
+          "hf_audio_sha256": "f58230c69ca0f2c8b2f579256348611bfba9ffcd91bb1deadf566f9488b17876",
+          "source_offset_hypothesis": {
+            "score": 0.94347205,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 18.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 2,
+          "duration_ms": 5078,
+          "source_offset_ms": 11677,
+          "hf_audio_sha256": "aa75f2aa882d1b4532c6d600b9e644160f298a0bebcc9b924dbf7f8dd8ff388f",
+          "source_offset_hypothesis": {
+            "score": 0.93850365,
+            "best_lag_ms": -25.375,
+            "duration_difference_ms": 15.875,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "mohammed_alghazali_archive",
+      "minimum_ncc": 0.91330988,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 1,
+          "duration_ms": 6014,
+          "source_offset_ms": 2508,
+          "hf_audio_sha256": "8a7b1124e83ce3d40b5ecde8c9aab72fde0a33b1754f5c7e44ae7ddc7b3ce6fe",
+          "source_offset_hypothesis": {
+            "score": 0.94508824,
+            "best_lag_ms": -25.25,
+            "duration_difference_ms": 20.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 16927,
+          "source_offset_ms": 377678,
+          "hf_audio_sha256": "d1f55c0a084b31a8173542f9d5f2fba9f1f9d380b032b78d395cd678d2cd6fd7",
+          "source_offset_hypothesis": {
+            "score": 0.91330988,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 0.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 1,
+          "duration_ms": 5848,
+          "source_offset_ms": 2508,
+          "hf_audio_sha256": "c8e1a5b3fe2d3bee389cfb9b7199fb36a873cadf25e2a718455d28c94be66f5e",
+          "source_offset_hypothesis": {
+            "score": 0.93437104,
+            "best_lag_ms": -25.25,
+            "duration_difference_ms": 3.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 1,
+          "duration_ms": 7542,
+          "source_offset_ms": 2664,
+          "hf_audio_sha256": "9c543582d2c3de1d29e39f072a57e459ffe9ecb5577972ef0856f3566023a120",
+          "source_offset_hypothesis": {
+            "score": 0.94301198,
+            "best_lag_ms": -24.625,
+            "duration_difference_ms": 7.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 2,
+          "duration_ms": 5430,
+          "source_offset_ms": 10214,
+          "hf_audio_sha256": "88fe3c3c9079ece9acf3be33f72adac071d38f5936b1125b5b1603bb188f00a3",
+          "source_offset_hypothesis": {
+            "score": 0.92323259,
+            "best_lag_ms": -25.125,
+            "duration_difference_ms": 3.5,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "mohammed_siddiq_al_minshawi_mp3quran",
+      "minimum_ncc": 0.87437985,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 29,
+          "duration_ms": 3445,
+          "source_offset_ms": 124918,
+          "hf_audio_sha256": "7ba1c6d294ba45ae810c179d806175c2a5508b7f2cf5ac2e8a4db792405ea347",
+          "source_offset_hypothesis": {
+            "score": 0.91541257,
+            "best_lag_ms": -0.5,
+            "duration_difference_ms": 3.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 11,
+          "duration_ms": 22198,
+          "source_offset_ms": 99344,
+          "hf_audio_sha256": "7bde1f757be0a6563180e7a41696b0741959fddddcb0def9ac357a0312548c22",
+          "source_offset_hypothesis": {
+            "score": 0.93916199,
+            "best_lag_ms": -0.375,
+            "duration_difference_ms": 6.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 4938,
+          "source_offset_ms": 174602,
+          "hf_audio_sha256": "5ad509e9503d78827e08fbc3096cce3b3f56af883e6ca2bdf2823bf1cd07739e",
+          "source_offset_hypothesis": {
+            "score": 0.88303388,
+            "best_lag_ms": 0.375,
+            "duration_difference_ms": 183.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 2,
+          "duration_ms": 7048,
+          "source_offset_ms": 14890,
+          "hf_audio_sha256": "3bd07f2f9a77aea58bdc4c7ea3a6f3bc3a13e6dfed14be6592ac8cfebc12dfd3",
+          "source_offset_hypothesis": {
+            "score": 0.92260282,
+            "best_lag_ms": -0.25,
+            "duration_difference_ms": 5.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 4,
+          "duration_ms": 13485,
+          "source_offset_ms": 28787,
+          "hf_audio_sha256": "ae2ea1902b9e115efb13a86897e9c580bc704b796c81f819dd7b4219579428ec",
+          "source_offset_hypothesis": {
+            "score": 0.87437985,
+            "best_lag_ms": 0.0,
+            "duration_difference_ms": 20.375,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "minimum_ncc": 0.64401192,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 15,
+          "duration_ms": 6083,
+          "source_offset_ms": 109897,
+          "hf_audio_sha256": "3e11ab27683a28cd5bc8d9a7c6b10aaa15af7f21c6fa095df214f8a869333f2b",
+          "source_offset_hypothesis": {
+            "score": 0.94429984,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 3.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 29,
+          "duration_ms": 4584,
+          "source_offset_ms": 216346,
+          "hf_audio_sha256": "d9ff307ee6b721ee4e4a490bcf0ec473682e5d0eca2b992e5465951e4db91e3e",
+          "source_offset_hypothesis": {
+            "score": 0.92636727,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 13.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 42,
+          "duration_ms": 5649,
+          "source_offset_ms": 492931,
+          "hf_audio_sha256": "a95b628fdfc3f3d1d962ab8911344b086be2087774c8fae1627c2c761beba89b",
+          "source_offset_hypothesis": {
+            "score": 0.89515932,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 19.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 1,
+          "duration_ms": 7995,
+          "source_offset_ms": 6635,
+          "hf_audio_sha256": "2b19c456ce8515160bea29a74f7dba2509e6bea31a29294653d68321d0ae775d",
+          "source_offset_hypothesis": {
+            "score": 0.92982071,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 24.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 5184,
+          "source_offset_ms": 280869,
+          "hf_audio_sha256": "b7ea1d2392e3052b051ad1025d6c2616f2a7fcd02c3e099f8370b3d7a5fc8d89",
+          "source_offset_hypothesis": {
+            "score": 0.64401192,
+            "best_lag_ms": -31.625,
+            "duration_difference_ms": 273.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 2,
+          "duration_ms": 8840,
+          "source_offset_ms": 21760,
+          "hf_audio_sha256": "c67f1b40b190dc4d67fe3397c8a830bb5a86e5621be05300ddbbe9ab7097309c",
+          "source_offset_hypothesis": {
+            "score": 0.90212507,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 15.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 3,
+          "duration_ms": 8833,
+          "source_offset_ms": 32287,
+          "hf_audio_sha256": "507031234749551d17bde060aefddabdd6446226cd80f3439feab4a020775c06",
+          "source_offset_hypothesis": {
+            "score": 0.94156746,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 22.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 8338,
+          "source_offset_ms": 62642,
+          "hf_audio_sha256": "3d889c982df6cd0dc404916e7fb911901f6f58b23c672e29461cd8bef81ea922",
+          "source_offset_hypothesis": {
+            "score": 0.90928999,
+            "best_lag_ms": -25.375,
+            "duration_difference_ms": 21.25,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "muammar_zainal_al_sukaini_way2quran",
+      "minimum_ncc": 0.92592441,
+      "failed_samples": [
+        {
+          "surah": 85,
+          "ayah": 17,
+          "duration_ms": 4599,
+          "source_offset_ms": 163971,
+          "hf_audio_sha256": "ce4ac51cc195861ebb6892d699f947acf5bcf42af0036c1d82eac581808b8a69",
+          "source_offset_hypothesis": {
+            "score": 0.94633625,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 24.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 1,
+          "duration_ms": 9276,
+          "source_offset_ms": 9012,
+          "hf_audio_sha256": "c21c6adb6ca8be36e2c84d4c1cba25892a510655b1385e1685190ccd2d7b8c3c",
+          "source_offset_hypothesis": {
+            "score": 0.92592441,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 23.625,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "mustafa_ismail_mp3quran",
+      "minimum_ncc": 0.93735887,
+      "failed_samples": [
+        {
+          "surah": 85,
+          "ayah": 11,
+          "duration_ms": 18439,
+          "source_offset_ms": 81241,
+          "hf_audio_sha256": "b76709f216d0cf322708ecc64e2567e8179bf0de6a114640d89e4f75b9b2b86a",
+          "source_offset_hypothesis": {
+            "score": 0.93735887,
+            "best_lag_ms": -0.125,
+            "duration_difference_ms": 3.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 2,
+          "duration_ms": 5385,
+          "source_offset_ms": 13375,
+          "hf_audio_sha256": "6461bd22462309f80ac525eeb9bd95101f8ed1903d6609ec2c2b678179107001",
+          "source_offset_hypothesis": {
+            "score": 0.93780962,
+            "best_lag_ms": -0.25,
+            "duration_difference_ms": 22.375,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "nasser_al_qatami_mp3quran",
+      "minimum_ncc": 0.9731941,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 14647,
+          "source_offset_ms": 277943,
+          "hf_audio_sha256": "83fcc384bc137f138d405189724507b1fd26e566cbd99d366752c3f555c172ee",
+          "source_offset_hypothesis": {
+            "score": 0.99739405,
+            "best_lag_ms": -0.125,
+            "duration_difference_ms": 227.375,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "saad_al_ghamdi_tarteel",
+      "minimum_ncc": 0.1997949,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 1,
+          "duration_ms": 4335,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "4132480842a23195eb1cb2d8938bba0582cf12ac6d0613189d7cd39179f79b17",
+          "source_offset_hypothesis": {
+            "score": 0.31708606,
+            "best_lag_ms": 5.625,
+            "duration_difference_ms": 1.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 12965,
+          "source_offset_ms": 278753,
+          "hf_audio_sha256": "d23da24da72d60926703468bd3cc7b4e0d7ffc6bbb7c1bbec39512a4d48a0a3a",
+          "source_offset_hypothesis": {
+            "score": 0.24099816,
+            "best_lag_ms": -46.0,
+            "duration_difference_ms": 269.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 1,
+          "duration_ms": 3920,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "55041344f11da26deea3a7d8ceb19ce5ff8fb038df76249ab86e2ba907a1d108",
+          "source_offset_hypothesis": {
+            "score": 0.25844909,
+            "best_lag_ms": 0.375,
+            "duration_difference_ms": 24.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 17,
+          "duration_ms": 3066,
+          "source_offset_ms": 106344,
+          "hf_audio_sha256": "a1dead03d82b06effb62941995194a641f9091491b334613ca1c504f1503826f",
+          "source_offset_hypothesis": {
+            "score": 0.9391844,
+            "best_lag_ms": -24.625,
+            "duration_difference_ms": 16.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 4072,
+          "source_offset_ms": 128836,
+          "hf_audio_sha256": "82ecefbfdbb84fd338cbd6864159a4097462a63f45ec965d8f87b49dbea1844f",
+          "source_offset_hypothesis": {
+            "score": 0.42411352,
+            "best_lag_ms": -45.5,
+            "duration_difference_ms": 258.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 1,
+          "duration_ms": 7000,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "e182bb2c578919194f7e11790d03acc8f030b4cebd165ddd58f58e311c341187",
+          "source_offset_hypothesis": {
+            "score": 0.24114546,
+            "best_lag_ms": 12.125,
+            "duration_difference_ms": 0.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 4316,
+          "source_offset_ms": 26567,
+          "hf_audio_sha256": "7ec395005dea6f83fbb24f197422fe41328950119991f3c5af9f9443089b2f03",
+          "source_offset_hypothesis": {
+            "score": 0.1997949,
+            "best_lag_ms": -33.875,
+            "duration_difference_ms": 267.0,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "saber_abdulhakam_qalon_way2quran",
+      "minimum_ncc": 0.202516,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 55,
+          "duration_ms": 15399,
+          "source_offset_ms": 358922,
+          "hf_audio_sha256": "b782ba8507a7ea9d7beedb156aca246e72cfa266e6dd706208efaeb39bf6e444",
+          "source_offset_hypothesis": {
+            "score": 0.202516,
+            "best_lag_ms": -27.875,
+            "duration_difference_ms": 274.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 84,
+          "ayah": 25,
+          "duration_ms": 9155,
+          "source_offset_ms": 139938,
+          "hf_audio_sha256": "9d495680ad364f4dfcae39f0887f11353b6100a48f36f2ad5f0b7ba0512fc12f",
+          "source_offset_hypothesis": {
+            "score": 0.27458624,
+            "best_lag_ms": -28.5,
+            "duration_difference_ms": 273.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 5315,
+          "source_offset_ms": 36389,
+          "hf_audio_sha256": "19488e9de88f53724fb2163adf3a70107ab27e569a3a5bbeb9d2904d7db475ba",
+          "source_offset_hypothesis": {
+            "score": 0.34926765,
+            "best_lag_ms": -32.125,
+            "duration_difference_ms": 273.375,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "saber_abdulhakam_shubah_way2quran",
+      "minimum_ncc": 0.93022949,
+      "failed_samples": [
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 5456,
+          "source_offset_ms": 47464,
+          "hf_audio_sha256": "4ab3ed7a0b349a8b8b58eae2f97049bd77a77cafb2dd0ee6115d5cae01920129",
+          "source_offset_hypothesis": {
+            "score": 0.93022949,
+            "best_lag_ms": -24.625,
+            "duration_difference_ms": 3.625,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "saber_abdulhakam_warsh_way2quran",
+      "minimum_ncc": 0.90106301,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 28,
+          "duration_ms": 4290,
+          "source_offset_ms": 167680,
+          "hf_audio_sha256": "85589b492637e474a01c9d2b66a99854a8c116388a93a13204ccbd37bfa31e87",
+          "source_offset_hypothesis": {
+            "score": 0.93813576,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 20.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 74,
+          "ayah": 55,
+          "duration_ms": 20019,
+          "source_offset_ms": 471301,
+          "hf_audio_sha256": "269ee027b7ebda06d8b133e225d1f4cd7dbdffa403cba2f69b41bdeb4577f48c",
+          "source_offset_hypothesis": {
+            "score": 0.94066809,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 17.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 84,
+          "ayah": 1,
+          "duration_ms": 7605,
+          "source_offset_ms": 14315,
+          "hf_audio_sha256": "914e8e983b2c8d75c414d296422a44f50ddd41fe7867e0a14a9b5508769cb319",
+          "source_offset_hypothesis": {
+            "score": 0.94835476,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 22.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 84,
+          "ayah": 7,
+          "duration_ms": 8334,
+          "source_offset_ms": 56451,
+          "hf_audio_sha256": "772a6610bfa239e8c618e05c9424146baae9e4b4f8c9f06aca952fe6172bdea5",
+          "source_offset_hypothesis": {
+            "score": 0.90106301,
+            "best_lag_ms": -25.5,
+            "duration_difference_ms": 25.25,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "saud_al_shuraim_mp3quran",
+      "minimum_ncc": 0.74639432,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 9853,
+          "source_offset_ms": 212872,
+          "hf_audio_sha256": "594746e8c6fc4ab81720b09e75b0aea591ed714b87401540b4ded9ffd24d8992",
+          "source_offset_hypothesis": {
+            "score": 0.95846474,
+            "best_lag_ms": -0.125,
+            "duration_difference_ms": 266.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 17,
+          "duration_ms": 2708,
+          "source_offset_ms": 71105,
+          "hf_audio_sha256": "5b6c44d0b83d24ed16062fb871f5679bb2c4dd204c0963947265615534b0aa7c",
+          "source_offset_hypothesis": {
+            "score": 0.92127923,
+            "best_lag_ms": 0.25,
+            "duration_difference_ms": 8.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 3592,
+          "source_offset_ms": 87118,
+          "hf_audio_sha256": "1cbd6404eb2b8c08d41b6d914431a6a26c4e5432aef43b31a462469a3dd8477a",
+          "source_offset_hypothesis": {
+            "score": 0.99870265,
+            "best_lag_ms": 0.375,
+            "duration_difference_ms": 300.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 3905,
+          "source_offset_ms": 19304,
+          "hf_audio_sha256": "56f2a1bb4f272ea2f20b043e1c036e7d19322e5c9ef72a8c1b57c3d4380e12c1",
+          "source_offset_hypothesis": {
+            "score": 0.74639432,
+            "best_lag_ms": 0.375,
+            "duration_difference_ms": 300.0,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "walid_al_naihi_qalon_mp3quran",
+      "minimum_ncc": 0.19377974,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 55,
+          "duration_ms": 11649,
+          "source_offset_ms": 286511,
+          "hf_audio_sha256": "fb2f9934702e20160dc6b14162894965b64d1b6188865783a2be401319d2ec66",
+          "source_offset_hypothesis": {
+            "score": 0.30618964,
+            "best_lag_ms": -30.75,
+            "duration_difference_ms": 233.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 84,
+          "ayah": 1,
+          "duration_ms": 4460,
+          "source_offset_ms": 3840,
+          "hf_audio_sha256": "dcced082cd767f71587139047b1f84a3441624e374a6fd2da95482861bf03de0",
+          "source_offset_hypothesis": {
+            "score": 0.91280389,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 6.875,
+            "passed": false
+          }
+        },
+        {
+          "surah": 84,
+          "ayah": 13,
+          "duration_ms": 5145,
+          "source_offset_ms": 58880,
+          "hf_audio_sha256": "e632e05a176f4609d1b4723c70389889acc9cb9213c55cc0bb72143665084b08",
+          "source_offset_hypothesis": {
+            "score": 0.91908081,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 1.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 84,
+          "ayah": 25,
+          "duration_ms": 8394,
+          "source_offset_ms": 107886,
+          "hf_audio_sha256": "a3e826054407de9777b6f8fe127c401171b9ae671c993ce3d360ae69221a942e",
+          "source_offset_hypothesis": {
+            "score": 0.31712292,
+            "best_lag_ms": -30.875,
+            "duration_difference_ms": 87.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 1,
+          "duration_ms": 5150,
+          "source_offset_ms": 3605,
+          "hf_audio_sha256": "e989173769c892bdaba475580047fe42d3fa91506071991e7507e1f509bee9a0",
+          "source_offset_hypothesis": {
+            "score": 0.94130234,
+            "best_lag_ms": -25.125,
+            "duration_difference_ms": 22.25,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 2,
+          "duration_ms": 3642,
+          "source_offset_ms": 8803,
+          "hf_audio_sha256": "55229ca3a672d8f73e331fdca75f9a4a7e8b1a230f7f7b0e27f65f34eeb355a2",
+          "source_offset_hypothesis": {
+            "score": 0.92437226,
+            "best_lag_ms": -24.75,
+            "duration_difference_ms": 15.125,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 4,
+          "duration_ms": 9276,
+          "source_offset_ms": 16849,
+          "hf_audio_sha256": "3ac0b241f49796b9728f0d6dfec494691c0ca1969c40b25af8dd26f33b010559",
+          "source_offset_hypothesis": {
+            "score": 0.90150084,
+            "best_lag_ms": -25.125,
+            "duration_difference_ms": 23.625,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 4662,
+          "source_offset_ms": 26201,
+          "hf_audio_sha256": "c897f1865b7250a2906d1400d7b518f22fd1ac9d8a82c17c33bb7034c00abd50",
+          "source_offset_hypothesis": {
+            "score": 0.19377974,
+            "best_lag_ms": -30.25,
+            "duration_difference_ms": 273.375,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "walid_atef_way2quran",
+      "minimum_ncc": 0.29440389,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 15634,
+          "source_offset_ms": 349205,
+          "hf_audio_sha256": "2b413f0bdc92902b7710dfbcadedb3e6d3971b7b896457c5eded55015c2bd248",
+          "source_offset_hypothesis": {
+            "score": 0.29440389,
+            "best_lag_ms": -37.375,
+            "duration_difference_ms": 274.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 11,
+          "duration_ms": 19138,
+          "source_offset_ms": 87197,
+          "hf_audio_sha256": "5ed638a52c74770963f0c5e028d9ebd63f112f6e98a038fc664631a0f5bca43c",
+          "source_offset_hypothesis": {
+            "score": 0.91648278,
+            "best_lag_ms": -25.375,
+            "duration_difference_ms": 9.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 4245,
+          "source_offset_ms": 154880,
+          "hf_audio_sha256": "0dcfbfe1238ee6992bcdc96831ceb75c99c51acc0c3b015e5b565fd1e0852813",
+          "source_offset_hypothesis": {
+            "score": 0.40736054,
+            "best_lag_ms": -38.75,
+            "duration_difference_ms": 274.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 4,
+          "duration_ms": 11935,
+          "source_offset_ms": 23275,
+          "hf_audio_sha256": "28fbb25ac4fddbf793f1a8bb2a60e344d59fb07d861a88bb8ac01c7be1860c07",
+          "source_offset_hypothesis": {
+            "score": 0.94096593,
+            "best_lag_ms": -25.0,
+            "duration_difference_ms": 3.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 6439,
+          "source_offset_ms": 35291,
+          "hf_audio_sha256": "c56597e29e5dcd0b36a411ce7e218a8dfb1b68ec776f581d93766cf584e0d76b",
+          "source_offset_hypothesis": {
+            "score": 0.39982207,
+            "best_lag_ms": -29.375,
+            "duration_difference_ms": 274.0,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    },
+    {
+      "config": "yasser_al_dosari_archive",
+      "minimum_ncc": 0.16456753,
+      "failed_samples": [
+        {
+          "surah": 74,
+          "ayah": 56,
+          "duration_ms": 12995,
+          "source_offset_ms": 276846,
+          "hf_audio_sha256": "4cd0d04d81c4a1215f479f903baa40aec6858413cc7de08a7cb7e556cd2f1a4f",
+          "source_offset_hypothesis": {
+            "score": 0.3174661,
+            "best_lag_ms": -30.375,
+            "duration_difference_ms": 273.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 1,
+          "duration_ms": 6170,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "24eec9a87f3591135dfc4a464ecc25ac700af3235741b38b238cdb7d69bf8a72",
+          "source_offset_hypothesis": {
+            "score": 0.17364404,
+            "best_lag_ms": 1.375,
+            "duration_difference_ms": 21.0,
+            "passed": false
+          }
+        },
+        {
+          "surah": 85,
+          "ayah": 22,
+          "duration_ms": 5316,
+          "source_offset_ms": 121835,
+          "hf_audio_sha256": "62f89d360f67e28cd18bc2353e3e8c6e75cffbe27b78e1683d9dbefdbfd99d30",
+          "source_offset_hypothesis": {
+            "score": 0.41757906,
+            "best_lag_ms": -27.625,
+            "duration_difference_ms": 274.375,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 1,
+          "duration_ms": 7320,
+          "source_offset_ms": 0,
+          "hf_audio_sha256": "7cdf961dfc69856fb4a7cb4a8750623de0a6d82ab250e98de98b75bda316ec86",
+          "source_offset_hypothesis": {
+            "score": 0.16456753,
+            "best_lag_ms": 2.375,
+            "duration_difference_ms": 20.5,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 3,
+          "duration_ms": 4814,
+          "source_offset_ms": 13061,
+          "hf_audio_sha256": "2d38c43f7a7eb95f3149f1224a14836e171205056f8fecf4a0dcbdbccf9846af",
+          "source_offset_hypothesis": {
+            "score": 0.94345995,
+            "best_lag_ms": -24.875,
+            "duration_difference_ms": 18.75,
+            "passed": false
+          }
+        },
+        {
+          "surah": 97,
+          "ayah": 5,
+          "duration_ms": 5316,
+          "source_offset_ms": 42971,
+          "hf_audio_sha256": "8aa78d6e159b5f84f7255e4ddc1a5e6c3043ad92ebef93d90ddabb33a7b31b8c",
+          "source_offset_hypothesis": {
+            "score": 0.19327318,
+            "best_lag_ms": -27.375,
+            "duration_difference_ms": 274.375,
+            "passed": false
+          }
+        }
+      ],
+      "d5_option": "realign on audio actually served; not executed in D2"
+    }
+  ],
+  "source_unavailable": [
+    {
+      "config": "abdul_hamid_ghraio_2025_yt",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 2,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791564803.021694,
+          "finished_epoch": 1791564804.996885,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    },
+    {
+      "config": "abdul_hamid_ghraio_2026_yt",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 2,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791564805.0037055,
+          "finished_epoch": 1791564806.9200714,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    },
+    {
+      "config": "abdulaziz_al_turki_yt",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 2,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791564806.9200714,
+          "finished_epoch": 1791564808.988277,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    },
+    {
+      "config": "abdullah_al_buaijan_2025_yt",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 1,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791566782.262155,
+          "finished_epoch": 1791566784.3406887,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    },
+    {
+      "config": "ahmad_naseem_ali_ahmad_2019_yt",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 74,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791569861.7373424,
+          "finished_epoch": 1791569863.829582,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    },
+    {
+      "config": "ayman_swed_muallim_yt",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 74,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791570970.0934753,
+          "finished_epoch": 1791570972.81397,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    },
+    {
+      "config": "badr_al_turki_yt",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 74,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791570972.8225567,
+          "finished_epoch": 1791570976.322447,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    },
+    {
+      "config": "ibrahim_al_akhdar_drive",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 74,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791571485.0775611,
+          "finished_epoch": 1791571486.0814755,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    },
+    {
+      "config": "khalid_al_mohana_drive",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 74,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791571612.558243,
+          "finished_epoch": 1791571613.4879742,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    },
+    {
+      "config": "mohammed_ayyub_drive",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 74,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791572926.5540407,
+          "finished_epoch": 1791572927.5349622,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    },
+    {
+      "config": "mohammed_burhaji_yt",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 74,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791572927.551523,
+          "finished_epoch": 1791572930.3873167,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    },
+    {
+      "config": "mohammed_siddiq_al_minshawi_1967_drive",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 74,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791573050.972915,
+          "finished_epoch": 1791573052.276237,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    },
+    {
+      "config": "saber_abdulhakam_yt",
+      "reason": "catalog_audio_unavailable",
+      "source_error": {
+        "surah": 74,
+        "type": "ValueError",
+        "http_status": null
+      },
+      "attempts": [
+        {
+          "started_epoch": 1791574077.4454632,
+          "finished_epoch": 1791574079.323669,
+          "status": "source_unavailable",
+          "reason": "catalog_audio_unavailable"
+        }
+      ]
+    }
+  ],
+  "incomplete_or_mismatched_coverage": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "abdulaziz_al_turki_yt",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6115,
+      "observed_hf_ayahs": 6115,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_warsh_qdc",
+      "riwayah": "warsh_an_nafi",
+      "coverage_ayahs": 6214,
+      "observed_hf_ayahs": 6178,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6223,
+      "observed_hf_ayahs": 6223,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "abdullah_kamel_way2quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "abdulwadood_haneef_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "riwayah": "shubah_an_asim",
+      "coverage_ayahs": 6236,
+      "observed_hf_ayahs": 6230,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "ahmed_al_ajmi_qdc",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "ahmed_deban_qalon_mp3quran",
+      "riwayah": "qalon_an_nafi",
+      "coverage_ayahs": 6214,
+      "observed_hf_ayahs": 6190,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6234,
+      "observed_hf_ayahs": 6234,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "ahmed_kaseb_way2quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "riwayah": "qalon_an_nafi",
+      "coverage_ayahs": 6213,
+      "observed_hf_ayahs": 6126,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "ahmed_saud_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 327,
+      "observed_hf_ayahs": 327,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 5561,
+      "observed_hf_ayahs": 5561,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "akram_al_alaqmi_qdc",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "bandar_baleela_qdc",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "fatih_seferagic_way2quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "hani_al_rifai_qdc_128k",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6234,
+      "observed_hf_ayahs": 6233,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": [
+        34
+      ]
+    },
+    {
+      "slug": "islam_sobhi_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 5334,
+      "observed_hf_ayahs": 5275,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": [
+        44
+      ]
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "moaz_mahmoud_hamed_qalon_way2quran",
+      "riwayah": "qalon_an_nafi",
+      "coverage_ayahs": 6177,
+      "observed_hf_ayahs": 6175,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "mohammed_abdulkareem_qdc",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6234,
+      "observed_hf_ayahs": 6234,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "mohammed_saayed_warsh_mp3quran",
+      "riwayah": "warsh_an_nafi",
+      "coverage_ayahs": 6214,
+      "observed_hf_ayahs": 6214,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6229,
+      "observed_hf_ayahs": 6229,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "nasser_al_qatami_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "saad_al_ghamdi_tarteel",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "saber_abdulhakam_qalon_way2quran",
+      "riwayah": "qalon_an_nafi",
+      "coverage_ayahs": 6214,
+      "observed_hf_ayahs": 6194,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "saber_abdulhakam_shubah_way2quran",
+      "riwayah": "shubah_an_asim",
+      "coverage_ayahs": 6236,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "saber_abdulhakam_warsh_way2quran",
+      "riwayah": "warsh_an_nafi",
+      "coverage_ayahs": 6214,
+      "observed_hf_ayahs": 6213,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "saud_al_shuraim_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "walid_al_naihi_qalon_mp3quran",
+      "riwayah": "qalon_an_nafi",
+      "coverage_ayahs": 6214,
+      "observed_hf_ayahs": 6195,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "walid_atef_way2quran",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    },
+    {
+      "slug": "yasser_al_dosari_archive",
+      "riwayah": "hafs_an_asim",
+      "coverage_ayahs": 6235,
+      "observed_hf_ayahs": 6235,
+      "ayahs_complete": false,
+      "coverage_mismatch_chapters": []
+    }
+  ],
+  "non_hafs": [
+    {
+      "config": "abdulbasit_abdulsamad_warsh_qdc",
+      "riwayah": "warsh_an_nafi",
+      "status": "imported",
+      "canonical_text_available": false
+    },
+    {
+      "config": "abdur_rashid_sufi_shubah_qdc",
+      "riwayah": "shubah_an_asim",
+      "status": "imported",
+      "canonical_text_available": false
+    },
+    {
+      "config": "ahmed_deban_qalon_mp3quran",
+      "riwayah": "qalon_an_nafi",
+      "status": "imported",
+      "canonical_text_available": false
+    },
+    {
+      "config": "ahmed_saleh_rajab_qalon_way2quran",
+      "riwayah": "qalon_an_nafi",
+      "status": "imported",
+      "canonical_text_available": false
+    },
+    {
+      "config": "moaz_mahmoud_hamed_qalon_way2quran",
+      "riwayah": "qalon_an_nafi",
+      "status": "imported",
+      "canonical_text_available": false
+    },
+    {
+      "config": "mohammed_saayed_warsh_mp3quran",
+      "riwayah": "warsh_an_nafi",
+      "status": "imported",
+      "canonical_text_available": false
+    },
+    {
+      "config": "saber_abdulhakam_qalon_way2quran",
+      "riwayah": "qalon_an_nafi",
+      "status": "imported",
+      "canonical_text_available": false
+    },
+    {
+      "config": "saber_abdulhakam_shubah_way2quran",
+      "riwayah": "shubah_an_asim",
+      "status": "imported",
+      "canonical_text_available": false
+    },
+    {
+      "config": "saber_abdulhakam_warsh_way2quran",
+      "riwayah": "warsh_an_nafi",
+      "status": "imported",
+      "canonical_text_available": false
+    },
+    {
+      "config": "walid_al_naihi_qalon_mp3quran",
+      "riwayah": "qalon_an_nafi",
+      "status": "imported",
+      "canonical_text_available": false
+    }
+  ],
+  "publication_barriers": {
+    "basmala_audio_unverified": 69,
+    "word_timing_unimported": 69,
+    "audio_license_not_verified": 69
+  }
+}

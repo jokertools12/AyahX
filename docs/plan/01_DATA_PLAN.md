@@ -120,7 +120,7 @@ export interface AyahTiming {
 
 ---
 
-## 3. نموذج قاعدة البيانات (MySQL 8، utf8mb4_unicode_ci)
+## 3. نموذج قاعدة البيانات (MySQL 9.7.2 الفعلي، metadata unicode_ci، القانوني/المنطوق bin)
 
 > أسماء مقترحة؛ طابقها مع ما هو موجود فعلاً بعد D0 ولا تكرر جدولاً قائماً. كل جدول: `id` PK, `created_at`, `updated_at`. الـ migrations ترقيمية وidempotent.
 
@@ -134,7 +134,7 @@ export interface AyahTiming {
 | `translations` + `translation_ayahs` | `code`, `lang`, `name`, `translator`, `license`; `ayah_id`, `text` | متعدد اللغات |
 | `reciters` | `slug` UNIQUE, `name_ar`, `name_en`, `country`, `bio`, `photo_url`, `is_featured`, `sort_order`, `status` | الشخص |
 | `audio_providers` | `code` (qdc,everyayah,mp3quran,way2quran,tvquran,tarteel,qud,upload,…), `name`, `base_url`, `host_allowlist` JSON, `priority`, `is_active`, `health_status`, `last_checked_at` | تُدار من الأدمن |
-| `recitations` | `slug` UNIQUE (= slug QUD/المزوّد), `reciter_id`, `riwayah_id`, `style` (murattal,mujawwad,muallim,taraweeh,kids), `provider_id`, `audio_mode` (`surah_file`/`ayah_clips`/`both`), `timing_level`, `timing_quality`, `coverage_ayahs`, `coverage_words`, `license_text`, `attribution_text`, `source_url`, `qud_version`, `status` (draft,imported,needs_review,published,hidden,deprecated) | وحدة الاختيار في الواجهة |
+| `recitations` | `slug` UNIQUE (= slug QUD/المزوّد), `reciter_id`, `riwayah_id`, `style` (murattal,mujawwad,muallim,taraweeh,kids), `provider_id`, `audio_mode` في D2 (`unverified_source`/`surah_slice`)، `audio_category` من المصدر، `timing_level`, `timing_quality`, `coverage_ayahs`, `coverage_words`, `license_text`, `attribution_text`, `source_url`, `qud_version`, `status` (draft,imported,needs_review,published,hidden,deprecated) | استراتيجية القص لا تساوي تصنيف المصدر؛ surah_slice محظور دون offset_verified. HF clips للتدقيق فقط، ولا يضاف وضع clips إنتاجي في D2 |
 | `recitation_chapters` | `recitation_id`, `surah`, `audio_url`, `duration_ms`, `audio_status`, `last_verified_at`, UNIQUE(`recitation_id`,`surah`) | صوت السورة |
 | `ayah_timings` | `recitation_id`, `surah`, `ayah`, `clip_audio_url` NULL, `source_offset_ms` NULL, `clip_duration_ms`, `segments` JSON, `words` JSON, `quality`, `source` (qud,aligner,manual,estimated), `version`, `confidence` NULL, `approved_by` NULL, `approved_at` NULL, UNIQUE(`recitation_id`,`surah`,`ayah`) | ≈ 6k صف × عدد التلاوات (مئات الآلاف: مقبول) |
 | `ayah_timing_history` | `ayah_timing_id`, `version`, `snapshot` JSON, `changed_by`, `reason` | تدقيق ورجوع |
@@ -186,6 +186,7 @@ export interface AyahTiming {
 **اختبارات:** counts، checksum النص، تطابق عدد الكلمات مع عيّنة QUD، تغطية الخط، idempotency للاستيراد.
 
 ### D2 — كتالوج القراء والتلاوات والمزوّدين
+**القرارات الملزمة:** راجع `DECISIONS.md`. المصدر QUD Release v3.2.0 ببصمة فعلية؛ HF تدقيق فقط. القراء حسب reciter_id فقط؛ configs الخارجية unmapped_sources ولا استيراد. الروايات غير حفص imported بلا مرجع حفص وبلا نشر. أربع جداول جديدة فقط؛ riwayah_id VARCHAR(36) بلا FK إلى riwayat القائمة؛ FKs داخل D2 فقط. basmala_mode لوجود 1:1، وحالتان مستقلتان للبسملة النصية والصوتية؛ الصوتية unverified افتراضياً وقيد قاعدة يمنع published دون دليل ومراجعة. verification_status مستقل pending/passed/failed/source_unavailable. timing_complete=NULL وis_complete=false حتى D3. البروفة المدمرة محلية على restored MySQL9.7.2؛ staging إضافة فقط، ثم apply منفصل للإنتاج عبر SSH و--confirm-production، والتحقق قراءة فقط. لا تغيير UI أو renderer أو الخرائط القائمة.
 **المهام**
 1. migrations: `reciters, audio_providers, recitations, recitation_chapters`.
 2. **محوّل مصدر** (Provider Adapter) بواجهة موحدة:
@@ -199,13 +200,13 @@ interface CatalogAdapter {
   healthCheck(): Promise<{ ok: boolean; detail?: string }>;
 }
 ```
-   محوّلات أولى: `QudReleaseAdapter` (من Releases/`catalog.json`)، `QudHfDatasetAdapter`، `AlignerCatalogAdapter` (`GET /recitations`)، `EveryAyahAdapter`، `QdcAdapter` (للتوافق مع الموجود). إضافة مصدر جديد = كتابة محوّل + سجل في `audio_providers`، دون لمس باقي الكود.
-3. **[تحقّق]** حمّل `catalog.json` من آخر Release وسجّل حقوله الفعلية، ثم اربط الحقول بالأعمدة أعلاه (لا تخمّن الأسماء).
+   في D2: `QudReleaseAdapter` فقط (من Releases/`catalog.json`)؛ HF محوّل تدقيق صوتي محلي وليس مصدر كتالوج أو مزوّد إنتاج. سجلات EveryAyah/QDC والمصادر الفعلية توثيقية غير مفعّلة، ومسار التشغيل الحالي ثابت. بقية المحوّلات تؤجل لمرحلتها وموافقة المستخدم. إضافة مصدر = محوّل محقون + سجل موثّق، دون تعديل محرك الاستيراد.
+3. **[تحقّق]** حمّل `catalog.json` من Release المثبّت v3.2.0 وسجّل حقوله الفعلية وبصمة SHA، ثم اربط الحقول بالأعمدة أعلاه (لا تخمّن الأسماء أو ثبات الملف تحت tag).
 4. استيراد القراء: ادمج التلاوات التي تخص نفس الشخص تحت `reciter` واحد (مثلاً مرتّل/مجوّد/روايتان). المطابقة عبر الميتاداتا في الكتالوج وليس عبر تحليل الـ slug.
 5. تقرير تغطية لكل تلاوة: عدد الآيات/السور المتاحة، ومستوى التوقيت.
-6. نشر تلقائي ممنوع: كل تلاوة مستوردة تدخل `imported`؛ `published` بقرار أدمن أو قاعدة صريحة (تغطية ≥ X% وتوقيت `aligned`).
+6. نشر تلقائي ممنوع. imported افتراضياً؛ فشل الصوت needs_review لحفص؛ غير حفص imported غير منشور. published يتطلب صوت بسملة مراجع بدليل، offset معتمد، مرجع قانوني للرواية، و100% تغطية آيات/توقيت كلمات. source_unavailable لا يساوي نجاحاً أو فشلاً صوتياً.
 
-**قبول:** كتالوج يضم مئات التلاوات؛ لا قارئ في الكود hardcoded؛ حذف ملف الخرائط القديم لا يكسر شيئاً.
+**قبول:** استيراد جميع سجلات Release المثبّت مرتين دون تكرار، أعداد محسوبة من المصدر، دمج بهوية المصدر فقط، coverage/missing ranges وHF mismatch موثقة، عدم نشر آلي بقيد MySQL، verify-offset فعلي وقابل للاستئناف. تبقى خرائط runtime القائمة حتى D7/D8 ولا يُحذف ملف قائم في D2.
 **اختبارات:** استيراد fixture صغير، إعادة التشغيل لا تُنتج تكرار، تقرير التغطية صحيح، محوّل وهمي (mock) يُضاف دون تعديل المحرك.
 
 ### D3 — استيراد التوقيتات (آية/كلمة/حرف) إلى `ayah_timings`
@@ -272,6 +273,7 @@ interface AudioPlan {
 **اختبارات:** كل مدقق بحالة نجاح/فشل؛ تتبّع الإصدارات؛ الصلاحيات.
 
 ### D7 — ربط الريندر (RenderManifest + المحرك الحتمي)
+**قبول إضافي معتمد:** render-harness على Railway يستخدم ملفات الخطوط من `public/fonts` دون اعتماد على CDN خارجي. اختبار E2E D1 استخدم Amiri مضمّنًا ولا يثبت سلوك الإنتاج؛ يلزم إثبات إنتاجي فعلي في D7.
 **المهام**
 1. تحديث `RenderManifest` (الإصدار 1.1): أضف `recitationId`, `timingVersionHash`, `audio.mode`, `audio.coordinate`. اجعل الـ schema يرفض توقيتاً خارج الإحداثيات (يستدعي `assertTimelineValid`).
 2. الكلمات تُقرأ في السيرفر من `ayah_timings` المعتمدة، **لا** من جسم الطلب (تقليل ثقة العميل). الواجهة ترسل `{recitationId, surah, from, to, options}` فقط، والسيرفر يبني الـ `timingMap`.
@@ -283,6 +285,7 @@ interface AudioPlan {
 **اختبارات:** golden-frame tests (تظليل الكلمة k عند t)، اختبار الإحداثيات، اختبار تكرار، اختبار `estimated` بلا glow.
 
 ### D8 — ربط الواجهة الأمامية والـ API العام
+**الخطوط:** القرآن بالستة المثبتة على corpus كامل فقط: Amiri، Amiri Quran، Noto Naskh Arabic، Scheherazade New، Lateef، Mada. العشرة الناقصة ليست خيارات قرآن معتمدة؛ تطبيق القيد في D8/A4 دون تغيير UI في D2.
 **Endpoints عامة (للقراءة، مع ETag/Cache-Control):**
 - `GET /api/catalog/surahs`, `/api/catalog/riwayat`
 - `GET /api/catalog/reciters?riwayah=&style=&q=&timing=word&featured=1`

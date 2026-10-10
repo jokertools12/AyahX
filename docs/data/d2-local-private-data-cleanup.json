@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-10-09T19:57:25.8951099Z",
+  "restored_local_mysql_version": "9.7.2",
+  "local_server_shutdown": true,
+  "restored_databases_dropped": [
+    "ayahx_d2_restored_972",
+    "ayahx_d1_restored_972"
+  ],
+  "datadir_path": "C:\\Users\\cpazi\\AppData\\Local\\Temp\\ayahx-d1-mysql-9.7.2\\acceptance-data",
+  "datadir_removed": false,
+  "remaining_mysql_storage_may_contain_restore_residue": true,
+  "filesystem_cleanup_auto_review_rejected": true,
+  "auto_review_reason": "blocked by policy",
+  "safer_literal_file_removal_also_rejected": true,
+  "residue_acl_inheritance_removed": true,
+  "residue_acl_current_account_full_control": true,
+  "manual_cleanup_required": true,
+  "d2_audio_scratch_directories_remaining": 0,
+  "encrypted_backup_retained": true,
+  "production_database_cleanup_performed": false
+}

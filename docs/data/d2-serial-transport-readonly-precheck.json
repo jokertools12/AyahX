@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-10-09T23:32:59.419Z",
+  "read_only": true,
+  "target": "staging",
+  "raw_identity_and_status": [
+    "railway\t9.7.2\ta9d4ce5a-b463-11f1-b4a4-a2aa5c49cf2f",
+    "Threads_connected\t1",
+    "max_connections\t151"
+  ],
+  "ssh_exit_code": 0,
+  "ssh_signal": null,
+  "stderr_redacted": "[diagnostic content redacted]",
+  "compression": "gzip",
+  "mysql_close_acknowledged": true,
+  "commit_acknowledged": false,
+  "acknowledged_commands": 1,
+  "writes_halted": false,
+  "batches": []
+}

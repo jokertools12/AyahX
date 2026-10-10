@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-10-09T23:30:18.620Z",
+  "target": "production",
+  "read_only": true,
+  "backup_age_hours": 6.937319722222222,
+  "critical_counts_match_verified_backup": true,
+  "uuid": "9496a587-b364-11f1-860a-a2aa73a6893f",
+  "version": "9.7.2",
+  "critical": {
+    "users": 13,
+    "user_roles": 13,
+    "render_jobs": 72,
+    "saved_videos": 7,
+    "notifications": 49,
+    "subscriptions": 16,
+    "system_settings": 13,
+    "payment_requests": 3
+  }
+}

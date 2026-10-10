@@ -1,0 +1,123 @@
+{
+  "checked_at": "2026-10-09T21:09:20.320512+00:00",
+  "read_only": true,
+  "catalog_sha256": "b7ee26c2267b086d5758477e21144887c28c6ba884a6ff5157a55cf17df4eed4",
+  "sql_sha256": "2498e681f2be2e1e9398e7dcdcb9731e8861ac331087dad2bb3c65a4507958b8",
+  "rows": [
+    {
+      "table": "reciters",
+      "expected": 57,
+      "staging": 57,
+      "difference": 0
+    },
+    {
+      "table": "recitations",
+      "expected": 69,
+      "staging": 69,
+      "difference": 0
+    },
+    {
+      "table": "recitation_chapters",
+      "expected": 7765,
+      "staging": 7765,
+      "difference": 0
+    },
+    {
+      "table": "audio_providers",
+      "expected": 10,
+      "staging": 10,
+      "difference": 0
+    },
+    {
+      "table": "riwayat",
+      "expected": 4,
+      "staging": 4,
+      "difference": 0
+    }
+  ],
+  "counts_and_full_values_reconciliation": "d2-staging-readonly-reconciliation-followup.json",
+  "catalog_channel_count": 8,
+  "documentary_runtime_only_providers": [
+    "everyayah",
+    "qdc"
+  ],
+  "riwayat_baseline": 1,
+  "riwayat_added": 3,
+  "status_policy_exceptions": [
+    {
+      "config": "abdur_rashid_sufi_shubah_qdc",
+      "verification_status": "failed",
+      "current_status": "imported",
+      "required_status": "needs_review",
+      "published": false
+    },
+    {
+      "config": "ahmed_deban_qalon_mp3quran",
+      "verification_status": "failed",
+      "current_status": "imported",
+      "required_status": "needs_review",
+      "published": false
+    },
+    {
+      "config": "ahmed_saleh_rajab_qalon_way2quran",
+      "verification_status": "failed",
+      "current_status": "imported",
+      "required_status": "needs_review",
+      "published": false
+    },
+    {
+      "config": "moaz_mahmoud_hamed_qalon_way2quran",
+      "verification_status": "failed",
+      "current_status": "imported",
+      "required_status": "needs_review",
+      "published": false
+    },
+    {
+      "config": "saber_abdulhakam_qalon_way2quran",
+      "verification_status": "failed",
+      "current_status": "imported",
+      "required_status": "needs_review",
+      "published": false
+    },
+    {
+      "config": "saber_abdulhakam_shubah_way2quran",
+      "verification_status": "failed",
+      "current_status": "imported",
+      "required_status": "needs_review",
+      "published": false
+    },
+    {
+      "config": "saber_abdulhakam_warsh_way2quran",
+      "verification_status": "failed",
+      "current_status": "imported",
+      "required_status": "needs_review",
+      "published": false
+    },
+    {
+      "config": "walid_al_naihi_qalon_mp3quran",
+      "verification_status": "failed",
+      "current_status": "imported",
+      "required_status": "needs_review",
+      "published": false
+    }
+  ],
+  "status_policy_fix_requires_new_sql_and_staging_replay": true,
+  "all_recitations_unpublished": true,
+  "missing_chapter_links_relative_to_canonical_chapter_inventory": 101,
+  "legacy_offset_evidence_sha256": "e071bf483c7b44c9157c49cc15287c9aa11ed598d777bfff2bdcb1e8a449a0b9",
+  "critical_counts": {
+    "users": 2,
+    "user_roles": 3,
+    "render_jobs": 0,
+    "saved_videos": 1,
+    "notifications": 3,
+    "subscriptions": 4,
+    "system_settings": 13,
+    "payment_requests": 1
+  },
+  "d1_counts": {
+    "ayahs": 6236,
+    "words": 77433,
+    "surahs": 114
+  }
+}

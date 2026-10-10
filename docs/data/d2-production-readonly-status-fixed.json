@@ -1,0 +1,42 @@
+{
+  "target": "production",
+  "checked_at": "2026-10-09T23:37:39.183Z",
+  "read_only": true,
+  "mysql_connections": 1,
+  "server_uuid": "9496a587-b364-11f1-860a-a2aa73a6893f",
+  "expected_sql_sha256": "d3f0db3ece980af02af2b00b2c06f5e2ce890b3526e62050396571cd2cc42fe8",
+  "catalog_expected_present": true,
+  "actual_catalog_values_match": true,
+  "counts": {
+    "reciters": 57,
+    "audio_providers": 10,
+    "recitations": 69,
+    "recitation_chapters": 7765
+  },
+  "critical_counts": {
+    "users": 13,
+    "user_roles": 13,
+    "render_jobs": 72,
+    "saved_videos": 7,
+    "notifications": 49,
+    "subscriptions": 16,
+    "system_settings": 13,
+    "payment_requests": 3
+  },
+  "d1_counts": {
+    "ayahs": 6236,
+    "words": 77433,
+    "surahs": 114
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "d1_table_checksums_unchanged": true,
+  "d1_canonical_collations_unchanged": true,
+  "catalog_tables": 4,
+  "catalog_text_columns": 46,
+  "internal_foreign_keys": 3,
+  "riwayat": 4,
+  "published": 0,
+  "writes_in_this_command": 0,
+  "application_command_success_claimed": false,
+  "passed": true
+}

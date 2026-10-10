@@ -1,0 +1,186 @@
+{
+  "checked_at": "2026-10-09T20:00:00.941Z",
+  "settings": {
+    "deploymentTriggers": {
+      "edges": [
+        {
+          "node": {
+            "branch": "main",
+            "environmentId": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+            "provider": "github",
+            "repository": "jokertools12/AyahX",
+            "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8"
+          }
+        }
+      ]
+    },
+    "project": {
+      "environments": {
+        "edges": [
+          {
+            "node": {
+              "id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+              "name": "production"
+            }
+          },
+          {
+            "node": {
+              "id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+              "name": "staging"
+            }
+          }
+        ]
+      },
+      "prDeploys": false
+    },
+    "serviceInstanceAutoDeployStatus": {
+      "canEnable": true,
+      "enabled": true,
+      "reason": null
+    }
+  },
+  "environments": [
+    {
+      "id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+      "name": "production",
+      "services": [
+        {
+          "name": "Redis",
+          "repo": null,
+          "latest": {
+            "id": "79cf206c-7ecc-4de1-b409-c41f13c24ecc",
+            "status": "SUCCESS",
+            "created_at": "2026-10-09T04:54:59.698Z"
+          }
+        },
+        {
+          "name": "AyahX",
+          "repo": "jokertools12/AyahX",
+          "latest": {
+            "id": "cd1db603-d2bf-4b23-925c-dbb5c1f6572e",
+            "status": "SLEEPING",
+            "created_at": "2026-10-09T05:05:15.249Z",
+            "branch": "main",
+            "commit": "456d1da8b682dc907471e114743ae0983b1e2ca8"
+          }
+        },
+        {
+          "name": "render-control",
+          "repo": "jokertools12/AyahX",
+          "latest": {
+            "id": "799ab2bf-650e-4905-9bfa-d2c0f46e121a",
+            "status": "SUCCESS",
+            "created_at": "2026-10-09T04:54:59.478Z",
+            "branch": "main",
+            "commit": "f876f23d19ae463b4a23f1dc65e8fbaee7c65877"
+          }
+        },
+        {
+          "name": "render-worker-skia",
+          "repo": "jokertools12/AyahX",
+          "latest": {
+            "id": "983ee6fb-a969-43b4-aa27-d188a16eff87",
+            "status": "SUCCESS",
+            "created_at": "2026-10-09T04:54:58.831Z",
+            "branch": "main",
+            "commit": "f876f23d19ae463b4a23f1dc65e8fbaee7c65877"
+          }
+        },
+        {
+          "name": "MySQL",
+          "repo": null,
+          "latest": {
+            "id": "5688ebb9-d685-4c31-b378-10b1fef748d0",
+            "status": "SUCCESS",
+            "created_at": "2026-10-09T11:04:38.810Z"
+          }
+        },
+        {
+          "name": "alignment-worker",
+          "repo": "jokertools12/AyahX",
+          "latest": {
+            "id": "b524bde2-5a0f-43e5-b723-ded1e2d66808",
+            "status": "SUCCESS",
+            "created_at": "2026-10-09T04:54:59.203Z",
+            "branch": "main",
+            "commit": "f876f23d19ae463b4a23f1dc65e8fbaee7c65877"
+          }
+        }
+      ]
+    },
+    {
+      "id": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+      "name": "staging",
+      "services": [
+        {
+          "name": "render-worker-skia",
+          "repo": "jokertools12/AyahX",
+          "latest": {
+            "id": "b60ac42a-b111-462f-9b3e-c45f286aed37",
+            "status": "SUCCESS",
+            "created_at": "2026-10-09T05:21:10.326Z",
+            "branch": "codex/openrouter-quran-animate-staging",
+            "commit": "89bd84d83da716b5a9403974008d9c3732d5a686"
+          }
+        },
+        {
+          "name": "alignment-worker",
+          "repo": null,
+          "latest": {
+            "id": "3fa35ec2-ab12-493d-954d-db31cf78f58a",
+            "status": "SUCCESS",
+            "created_at": "2026-10-09T05:16:33.604Z"
+          }
+        },
+        {
+          "name": "MySQL",
+          "repo": null,
+          "latest": {
+            "id": "c9294f14-81be-441c-93bf-1fa5823718c8",
+            "status": "SUCCESS",
+            "created_at": "2026-10-09T11:04:55.772Z"
+          }
+        },
+        {
+          "name": "AyahX",
+          "repo": "jokertools12/AyahX",
+          "latest": {
+            "id": "39dfd967-9f42-419f-8f1d-f7b279fc68ce",
+            "status": "SLEEPING",
+            "created_at": "2026-10-09T05:02:11.605Z",
+            "branch": "main",
+            "commit": "456d1da8b682dc907471e114743ae0983b1e2ca8"
+          }
+        },
+        {
+          "name": "admin-media-scanner",
+          "repo": null,
+          "latest": {
+            "id": "5a5e583f-c63e-4a4a-b0ad-37ab2101d835",
+            "status": "SUCCESS",
+            "created_at": "2026-10-09T04:54:59.798Z"
+          }
+        },
+        {
+          "name": "render-control",
+          "repo": "jokertools12/AyahX",
+          "latest": {
+            "id": "76296f93-0b9d-402b-9172-e3c175233b13",
+            "status": "SUCCESS",
+            "created_at": "2026-10-09T05:16:35.709Z",
+            "branch": "codex/openrouter-quran-animate-staging",
+            "commit": "89bd84d83da716b5a9403974008d9c3732d5a686"
+          }
+        },
+        {
+          "name": "Redis",
+          "repo": null,
+          "latest": {}
+        }
+      ]
+    }
+  ],
+  "changed_deployments": [],
+  "environment_set_unchanged": true,
+  "unintended_deployment_detected": false
+}

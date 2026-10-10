@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-10-09T19:37:18.616006+00:00",
+  "head_requests": 3,
+  "transport": {
+    "requests": 6,
+    "bytes": 0,
+    "statuses": [
+      200,
+      200,
+      200
+    ],
+    "minimum_interval_seconds": 2,
+    "minimum_observed_interval_seconds": 2.0
+  },
+  "passed": true,
+  "prior_audit_minimum_seconds": 1.9849999999860302,
+  "prior_audit_deviation_recorded": true,
+  "audio_downloaded": false
+}
