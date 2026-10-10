@@ -1,0 +1,29 @@
+{
+  "checked_at": "2026-10-10T01:16:20.021556+00:00",
+  "stage": "B",
+  "database_writes": 0,
+  "network_requests": 0,
+  "local_audio_or_plots_added_to_git": false,
+  "root_test_results": {
+    "acoustic_and_regression": 21,
+    "diagnosis_classifier": 11,
+    "independent_reviewer": 7,
+    "packet_native_proofs": 16,
+    "local_candidate_inventory": 4
+  },
+  "total_unique_passed": 59,
+  "failed": 0,
+  "classifier_11_tests_verified_in_prior_root_run": true,
+  "generalized_native_review_commit": "63003a46aab06a5214b15267aaffeaf44ef9e5e6",
+  "independent_causal_review": "Fraction native packet positions; no seek or rate-changing resampling; full-window and interior claims separated; acceptance requires rederived four core bounds and independent segments replay.",
+  "root_actual_distinct_failed_overlays_inspected": 5,
+  "overlay_evidence": "b-root-overlay-review.json",
+  "v1_original_results_replaced": false,
+  "v2_adopted_recitations": 0,
+  "full_B_accepted": false,
+  "limitations": [
+    "Five overlays satisfy only the image-inspection item; full48 diagnosis is running.",
+    "First15 native identities establish local position/codec evidence only; VAD and other core limits still apply.",
+    "No CI/build or live deployment claim is made from these standalone Python checks."
+  ]
+}

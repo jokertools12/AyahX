@@ -1,0 +1,515 @@
+{
+  "read_only": true,
+  "network_requests": 0,
+  "preview_not_part_of_selected_five": true,
+  "report_snapshot_sha256": "fbb9c96ed0e0ec8908e85f5126171e9e8bc6ea8f28ce1a08a887ad29e6c3c997",
+  "plots": [
+    {
+      "path": "C:\\Users\\cpazi\\AppData\\Local\\Temp\\ayahx-d3-diagnosis-preview-plots\\abdulbasit_abdulsamad_mujawwad_tarteel.png",
+      "sha256": "cf38e8a4fbf3a3f454706e043f9cc5a6c46974370312d4d416b4692bc34b369d",
+      "local_only": true,
+      "config": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "surah": 2,
+      "ayah": 1,
+      "channel": "tarteel",
+      "audio_category": "by_surah",
+      "style": "mujawwad",
+      "riwayah": "hafs_an_asim",
+      "original_v1_failed_sample": true,
+      "lag_ms": 0.0,
+      "numeric_candidate": true,
+      "classification": "unresolved",
+      "root_visually_inspected": true,
+      "root_inspected_at": "2026-10-10T01:14:49.615525+00:00",
+      "source_sha256": "b83e3276b4f1ed0b172e6ba33f4b2517e7ddd7398c685838c974f47b5e71526b",
+      "hf_audio_sha256": "8a8fecb831dd9770fa26310696138305202f9ec435793bfd18f8701f1e4f5d9e",
+      "input_metric": {
+        "envelope": {
+          "measured": true,
+          "score": 0.9851565197643033,
+          "best_lag_ms": 0.0,
+          "resolution_ms": 0.125,
+          "source_sample_start": 0,
+          "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+          "coarse_score": 0.9851895991661164,
+          "coarse_lag_ms": 0.0
+        },
+        "log_mel": {
+          "measured": true,
+          "score": 0.9617069600778616,
+          "best_lag_ms": 0.0,
+          "source_sample_start": 0,
+          "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+          "coarse_search": {
+            "measured": true,
+            "score": 0.9616998814869305,
+            "best_lag_ms": 0.0,
+            "resolution_ms": 10,
+            "source_feature_start": 0
+          }
+        },
+        "duration_difference_ms": 19.25,
+        "v2_numeric_candidate": true,
+        "v2_adoption_requires_codec_identity_evidence": true,
+        "vad": {
+          "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+          "source_clip_speech_iou": 0.9865741267493457,
+          "source_segments_speech_iou": 0.9074844074844075,
+          "clip_segments_speech_iou": 0.9074844074844075,
+          "agreement": 0.9074844074844075,
+          "source_threshold": 0.005283037598067537,
+          "clip_threshold": 0.0052766565553827175,
+          "clip_speech_frames": 8730,
+          "segment_frames": 9620
+        },
+        "surah": 2,
+        "ayah": 1,
+        "source_offset_ms": 0,
+        "hf_duration_ms": 9620,
+        "hf_audio_sha256": "8a8fecb831dd9770fa26310696138305202f9ec435793bfd18f8701f1e4f5d9e",
+        "original_hf_audio_sha256": "8a8fecb831dd9770fa26310696138305202f9ec435793bfd18f8701f1e4f5d9e",
+        "same_hf_payload_as_original": true,
+        "same_hf_metadata_as_original": true,
+        "v1_original": {
+          "score": 0.56377778,
+          "best_lag_ms": 0.125,
+          "duration_difference_ms": 19.25,
+          "passed": false
+        },
+        "v1_remeasured": {
+          "score": 0.56377778,
+          "best_lag_ms": 0.125,
+          "duration_difference_ms": 19.25,
+          "passed": false
+        },
+        "encoded_identity": {
+          "proven": true,
+          "method": "exact_contiguous_encoded_interior_copy",
+          "excluded_header_bytes": 1024,
+          "excluded_trailer_bytes": 1024,
+          "matched_interior_fraction": 0.9867207863784316,
+          "source_byte_position": 1653
+        },
+        "supplied_segments_sha256": "dff42dbd1a362316b2995fe476fed8c4ed9a7146d2fdd8bc33f792575a7f9488",
+        "word_timestamp_count": 1,
+        "segment_count": 1,
+        "interior_pcm": {
+          "measured": true,
+          "trim_each_side_ms": 200,
+          "minimum_interior_duration_ms": 800,
+          "diagnosis_only": true,
+          "changes_v1_acceptance": false,
+          "source_sample_start": 0,
+          "score": 0.5441916287266207,
+          "interior_duration_ms": 9239.25,
+          "passed": false
+        }
+      },
+      "inspection_completed_before_report_timestamp": true
+    },
+    {
+      "path": "C:\\Users\\cpazi\\AppData\\Local\\Temp\\ayahx-d3-diagnosis-preview-plots\\abdullah_al_mattrod_qdc.png",
+      "sha256": "88e025074edeaf4aa0912afb61e8ed6f02efeca59112759583dd9fc7ed2a7b42",
+      "local_only": true,
+      "config": "abdullah_al_mattrod_qdc",
+      "surah": 2,
+      "ayah": 286,
+      "channel": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "riwayah": "hafs_an_asim",
+      "original_v1_failed_sample": true,
+      "lag_ms": -26.125,
+      "numeric_candidate": false,
+      "classification": "unresolved",
+      "root_visually_inspected": true,
+      "root_inspected_at": "2026-10-10T01:14:49.615525+00:00",
+      "source_sha256": "1e5a357802c906c947b24b6e91095fa0dc2f80233962ab13d2b8d22bf267b1f3",
+      "hf_audio_sha256": "bd8cae63fb647d4fbc41aac633f1d00e5b7000f0f0176a371719a6938eb79934",
+      "input_metric": {
+        "envelope": {
+          "measured": true,
+          "score": 0.9943748842030821,
+          "best_lag_ms": -26.125,
+          "resolution_ms": 0.125,
+          "source_sample_start": 63044127,
+          "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+          "coarse_score": 0.9915047762599325,
+          "coarse_lag_ms": -27.0
+        },
+        "log_mel": {
+          "measured": true,
+          "score": 0.9769361429348755,
+          "best_lag_ms": -26.125,
+          "source_sample_start": 63044127,
+          "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+          "coarse_search": {
+            "measured": true,
+            "score": 0.963055849938157,
+            "best_lag_ms": -22.0,
+            "resolution_ms": 10,
+            "source_feature_start": 788052
+          }
+        },
+        "duration_difference_ms": 242.875,
+        "v2_numeric_candidate": false,
+        "v2_adoption_requires_codec_identity_evidence": true,
+        "vad": {
+          "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+          "reason": "SEGMENT_OUTSIDE_DECODED_CLIP"
+        },
+        "surah": 2,
+        "ayah": 286,
+        "source_offset_ms": 7880542,
+        "hf_duration_ms": 59358,
+        "hf_audio_sha256": "bd8cae63fb647d4fbc41aac633f1d00e5b7000f0f0176a371719a6938eb79934",
+        "original_hf_audio_sha256": "bd8cae63fb647d4fbc41aac633f1d00e5b7000f0f0176a371719a6938eb79934",
+        "same_hf_payload_as_original": true,
+        "same_hf_metadata_as_original": true,
+        "v1_original": {
+          "score": 0.23156619,
+          "best_lag_ms": -29.625,
+          "duration_difference_ms": 242.875,
+          "passed": false
+        },
+        "v1_remeasured": {
+          "score": 0.23156619,
+          "best_lag_ms": -29.625,
+          "duration_difference_ms": 242.875,
+          "passed": false
+        },
+        "encoded_identity": {
+          "proven": false,
+          "method": "exact_contiguous_encoded_interior_copy",
+          "excluded_header_bytes": 1024,
+          "excluded_trailer_bytes": 1024,
+          "matched_interior_fraction": 0,
+          "source_byte_position": null
+        },
+        "supplied_segments_sha256": "a0988e5403103f73ab1d1c9fe8dbd8dd70dc97b50581755b6ef283319eb90cf1",
+        "word_timestamp_count": 49,
+        "segment_count": 7,
+        "interior_pcm": {
+          "measured": true,
+          "trim_each_side_ms": 200,
+          "minimum_interior_duration_ms": 800,
+          "diagnosis_only": true,
+          "changes_v1_acceptance": false,
+          "source_sample_start": 63044127,
+          "score": -0.1537669908065896,
+          "interior_duration_ms": 58715.125,
+          "passed": false
+        }
+      },
+      "inspection_completed_before_report_timestamp": true
+    },
+    {
+      "path": "C:\\Users\\cpazi\\AppData\\Local\\Temp\\ayahx-d3-diagnosis-preview-plots\\abdullah_kamel_way2quran.png",
+      "sha256": "c214bb65dd159cbbf5085558eb3e5883e4a134386bef667c939dddf8b113d448",
+      "local_only": true,
+      "config": "abdullah_kamel_way2quran",
+      "surah": 1,
+      "ayah": 7,
+      "channel": "way2quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "riwayah": "hafs_an_asim",
+      "original_v1_failed_sample": true,
+      "lag_ms": -26.125,
+      "numeric_candidate": false,
+      "classification": "unresolved",
+      "root_visually_inspected": true,
+      "root_inspected_at": "2026-10-10T01:14:49.615525+00:00",
+      "source_sha256": "26c41061acca08b1712cb110d009f8db8b7e7b9de565d2241a0517d469304330",
+      "hf_audio_sha256": "f25cc0683199faac249b8585c15ba910abc5fa9827ea6b90fc6b7e55126567ea",
+      "input_metric": {
+        "envelope": {
+          "measured": true,
+          "score": 0.997899594278087,
+          "best_lag_ms": -26.125,
+          "resolution_ms": 0.125,
+          "source_sample_start": 237191,
+          "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+          "coarse_score": 0.9981372662262442,
+          "coarse_lag_ms": -26.0
+        },
+        "log_mel": {
+          "measured": true,
+          "score": 0.9733340827324302,
+          "best_lag_ms": -26.125,
+          "source_sample_start": 237191,
+          "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+          "coarse_search": {
+            "measured": true,
+            "score": 0.9751753506492803,
+            "best_lag_ms": -25.0,
+            "resolution_ms": 10,
+            "source_feature_start": 2965
+          }
+        },
+        "duration_difference_ms": 274.0,
+        "v2_numeric_candidate": false,
+        "v2_adoption_requires_codec_identity_evidence": true,
+        "vad": {
+          "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+          "reason": "SEGMENT_OUTSIDE_DECODED_CLIP"
+        },
+        "surah": 1,
+        "ayah": 7,
+        "source_offset_ms": 29675,
+        "hf_duration_ms": 12212,
+        "hf_audio_sha256": "f25cc0683199faac249b8585c15ba910abc5fa9827ea6b90fc6b7e55126567ea",
+        "original_hf_audio_sha256": "f25cc0683199faac249b8585c15ba910abc5fa9827ea6b90fc6b7e55126567ea",
+        "same_hf_payload_as_original": true,
+        "same_hf_metadata_as_original": true,
+        "v1_original": {
+          "score": 0.14085619,
+          "best_lag_ms": -40.75,
+          "duration_difference_ms": 274.0,
+          "passed": false
+        },
+        "v1_remeasured": {
+          "score": 0.14085619,
+          "best_lag_ms": -40.75,
+          "duration_difference_ms": 274.0,
+          "passed": false
+        },
+        "encoded_identity": {
+          "proven": false,
+          "method": "exact_contiguous_encoded_interior_copy",
+          "excluded_header_bytes": 1024,
+          "excluded_trailer_bytes": 1024,
+          "matched_interior_fraction": 0,
+          "source_byte_position": null
+        },
+        "supplied_segments_sha256": "cd85f44b139990b8ef32bdadbb38befbfc322d4fc8e2694f9b95c112d412d7f6",
+        "word_timestamp_count": 9,
+        "segment_count": 1,
+        "interior_pcm": {
+          "measured": true,
+          "trim_each_side_ms": 200,
+          "minimum_interior_duration_ms": 800,
+          "diagnosis_only": true,
+          "changes_v1_acceptance": false,
+          "source_sample_start": 237191,
+          "score": -0.16906690154364773,
+          "interior_duration_ms": 11538.0,
+          "passed": false
+        }
+      },
+      "inspection_completed_before_report_timestamp": true
+    },
+    {
+      "path": "C:\\Users\\cpazi\\AppData\\Local\\Temp\\ayahx-d3-diagnosis-preview-plots\\abdulwadood_haneef_mp3quran.png",
+      "sha256": "62abbc43c926236271506e223fa83db914e58d7101cf2a871db9afd870e7ac46",
+      "local_only": true,
+      "config": "abdulwadood_haneef_mp3quran",
+      "surah": 3,
+      "ayah": 1,
+      "channel": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "riwayah": "hafs_an_asim",
+      "original_v1_failed_sample": true,
+      "lag_ms": -0.25,
+      "numeric_candidate": true,
+      "classification": "unresolved",
+      "source_sha256": "d3e0128e13b75f6cea96aa8925de9777698d4e9ef01653a99b92fb9f0ff76c84",
+      "hf_audio_sha256": "6b0ee9c3271032703ef51aaa013899bf3c1e671315150c14fa8304e0651a5ada",
+      "report_snapshot_sha256": "0a2a98cc973c9b4f47edb0bfbdbf65780b6e3c7858c822a184f7a59f5d7f5f4d",
+      "calculator": {
+        "method_version": "B-v2-diagnostics-gridfix-1",
+        "script_sha256": "507b5b4046ce9a46f3b9f9f178db41d7b81ea9b9afde5f47a806a9a458299985",
+        "kernel_sha256": "5f43e008c2333a328739e313274369200442915a450fcdae0e4e08c67076bcf1",
+        "retained_v1_calculator_sha256": "282fc30c527a8ed1f35687ee90dd268cf114153e0fad30a3ff90c9cd922de6b8"
+      },
+      "root_visually_inspected": true,
+      "root_inspected_at": "2026-10-10T01:14:49.615525+00:00",
+      "input_metric": {
+        "envelope": {
+          "measured": true,
+          "score": 0.999211138500219,
+          "best_lag_ms": -0.25,
+          "resolution_ms": 0.125,
+          "source_sample_start": 16718,
+          "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+          "coarse_score": 0.998937625286786,
+          "coarse_lag_ms": 0.0
+        },
+        "log_mel": {
+          "measured": true,
+          "score": 0.9567021957414664,
+          "best_lag_ms": -0.25,
+          "source_sample_start": 16718,
+          "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+          "coarse_search": {
+            "measured": true,
+            "score": 0.9537775470135591,
+            "best_lag_ms": 0.0,
+            "resolution_ms": 10,
+            "source_feature_start": 209
+          }
+        },
+        "duration_difference_ms": 17.125,
+        "v2_numeric_candidate": true,
+        "v2_adoption_requires_codec_identity_evidence": true,
+        "vad": {
+          "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+          "source_clip_speech_iou": 0.9976545253863135,
+          "source_segments_speech_iou": 0.9663101604278075,
+          "clip_segments_speech_iou": 0.9685113225244539,
+          "agreement": 0.9663101604278075,
+          "source_threshold": 0.0031622776601683794,
+          "clip_threshold": 0.0031622776601683794,
+          "clip_speech_frames": 7231,
+          "segment_frames": 7460
+        },
+        "surah": 3,
+        "ayah": 1,
+        "source_offset_ms": 2090,
+        "hf_duration_ms": 7480,
+        "hf_audio_sha256": "6b0ee9c3271032703ef51aaa013899bf3c1e671315150c14fa8304e0651a5ada",
+        "original_hf_audio_sha256": "6b0ee9c3271032703ef51aaa013899bf3c1e671315150c14fa8304e0651a5ada",
+        "same_hf_payload_as_original": true,
+        "same_hf_metadata_as_original": true,
+        "v1_original": {
+          "score": 0.82327665,
+          "best_lag_ms": 5.5,
+          "duration_difference_ms": 17.125,
+          "passed": false
+        },
+        "v1_remeasured": {
+          "score": 0.82327665,
+          "best_lag_ms": 5.5,
+          "duration_difference_ms": 17.125,
+          "passed": false
+        },
+        "encoded_identity": {
+          "proven": true,
+          "method": "exact_contiguous_encoded_interior_copy",
+          "excluded_header_bytes": 1024,
+          "excluded_trailer_bytes": 1024,
+          "matched_interior_fraction": 0.9931707382138546,
+          "source_byte_position": 91570
+        },
+        "supplied_segments_sha256": "53b12882e0b461f3b113fc5f9be103f662478c179dc5d9f0edbdd745ef602dfe",
+        "word_timestamp_count": 1,
+        "segment_count": 1,
+        "interior_pcm": {
+          "measured": true,
+          "trim_each_side_ms": 200,
+          "minimum_interior_duration_ms": 800,
+          "diagnosis_only": true,
+          "changes_v1_acceptance": false,
+          "source_sample_start": 16718,
+          "score": 0.7532027952407421,
+          "interior_duration_ms": 7097.125,
+          "passed": false
+        }
+      },
+      "inspection_completed_before_report_timestamp": true
+    },
+    {
+      "path": "C:\\Users\\cpazi\\AppData\\Local\\Temp\\ayahx-d3-diagnosis-plots\\abdulbasit_abdulsamad_tarteel.png",
+      "sha256": "5c9cfa20230899df20f2860c25897583d2ad44023f1ecb54e0b36cf25cb5ec52",
+      "config": "abdulbasit_abdulsamad_tarteel",
+      "surah": 3,
+      "ayah": 200,
+      "local_only": true,
+      "plot_kind": "selected_main_run_overlay",
+      "root_visually_inspected": true,
+      "root_inspected_at": "2026-10-10T01:14:49.615525+00:00",
+      "source_sha256": "d70f1b5808017e88d3cbc2fca09d4946fc896e6cdd656c117cfa93f3308fbccc",
+      "hf_audio_sha256": "f470cb686a766b513d8520f421f49ac4f7442005a8e2116420b55af75d2c5cf6",
+      "input_metric": {
+        "envelope": {
+          "measured": true,
+          "score": 0.9725859512177351,
+          "best_lag_ms": -37.625,
+          "resolution_ms": 0.125,
+          "source_sample_start": 41989547,
+          "boundary_convention": "zero_boundary_on_both_complete_PCM_windows",
+          "coarse_score": 0.9747331868349172,
+          "coarse_lag_ms": -37.0
+        },
+        "log_mel": {
+          "measured": true,
+          "score": 0.9504834961139649,
+          "best_lag_ms": -37.625,
+          "source_sample_start": 41989547,
+          "method": "fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides",
+          "coarse_search": {
+            "measured": true,
+            "score": 0.9405674455118922,
+            "best_lag_ms": -41.0,
+            "resolution_ms": 10,
+            "source_feature_start": 524869
+          }
+        },
+        "duration_difference_ms": 208.25,
+        "v2_numeric_candidate": false,
+        "v2_adoption_requires_codec_identity_evidence": true,
+        "vad": {
+          "method": "rms_energy_proxy; peak_minus_35dB; floor_minus_50dBFS; speech_IoU",
+          "reason": "SEGMENT_OUTSIDE_DECODED_CLIP"
+        },
+        "surah": 3,
+        "ayah": 200,
+        "source_offset_ms": 5248731,
+        "hf_duration_ms": 14654,
+        "hf_audio_sha256": "f470cb686a766b513d8520f421f49ac4f7442005a8e2116420b55af75d2c5cf6",
+        "original_hf_audio_sha256": "f470cb686a766b513d8520f421f49ac4f7442005a8e2116420b55af75d2c5cf6",
+        "same_hf_payload_as_original": true,
+        "same_hf_metadata_as_original": true,
+        "v1_original": {
+          "score": 0.37945573,
+          "best_lag_ms": -43.125,
+          "duration_difference_ms": 208.25,
+          "passed": false
+        },
+        "v1_remeasured": {
+          "score": 0.37945573,
+          "best_lag_ms": -43.125,
+          "duration_difference_ms": 208.25,
+          "passed": false
+        },
+        "encoded_identity": {
+          "proven": true,
+          "method": "exact_contiguous_encoded_interior_copy",
+          "excluded_header_bytes": 1024,
+          "excluded_trailer_bytes": 1024,
+          "matched_interior_fraction": 0.9911392624128204,
+          "source_byte_position": 83981355
+        },
+        "supplied_segments_sha256": "1f2d146d4a5f255d3f02555dd3eb41d12a721f215a4b56a6dae01d028751dc72",
+        "word_timestamp_count": 10,
+        "segment_count": 1,
+        "interior_pcm": {
+          "measured": true,
+          "trim_each_side_ms": 200,
+          "minimum_interior_duration_ms": 800,
+          "diagnosis_only": true,
+          "changes_v1_acceptance": false,
+          "source_sample_start": 41989547,
+          "score": -0.15998728131771958,
+          "interior_duration_ms": 14045.75,
+          "passed": false
+        }
+      },
+      "inspection_completed_before_report_timestamp": true
+    }
+  ],
+  "root_reviewed_distinct_failed_configs": 5,
+  "root_evidence_container_sha256": "0a2a98cc973c9b4f47edb0bfbdbf65780b6e3c7858c822a184f7a59f5d7f5f4d",
+  "calculator": {
+    "method_version": "B-v2-diagnostics-gridfix-1",
+    "script_sha256": "507b5b4046ce9a46f3b9f9f178db41d7b81ea9b9afde5f47a806a9a458299985",
+    "kernel_sha256": "5f43e008c2333a328739e313274369200442915a450fcdae0e4e08c67076bcf1",
+    "retained_v1_calculator_sha256": "282fc30c527a8ed1f35687ee90dd268cf114153e0fad30a3ff90c9cd922de6b8"
+  },
+  "database_writes": 0,
+  "audio_or_png_tracked": false,
+  "v2_accepted": false,
+  "scope": "Five actual overlays inspected; full48 diagnosis remains in progress. Four preview overlays and one selected main-run overlay.",
+  "root_review_reported_at": "2026-10-10T01:14:49.615525+00:00"
+}
