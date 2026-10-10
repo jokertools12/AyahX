@@ -1,0 +1,3219 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-10T09:54:51.736Z",
+  "scope": "D4 T5 advisory metadata and source audit; no DB writes, no voice confirmations, no T7",
+  "source_commit": "ec593cf689a1402155fe41f2016720c82ef78118",
+  "sources": {
+    "catalog_release": "v3.2.0",
+    "catalog_sha256": "b7ee26c2267b086d5758477e21144887c28c6ba884a6ff5157a55cf17df4eed4",
+    "legacy_source": "src/data/reciters.ts",
+    "legacy_source_sha256": "bdc460bd1335232831233fea556d478699622b5ac20a0f95f9286ce7cefebd66",
+    "normalizer": "Lowercase scheme/host only; URL path and IDs case-sensitive; preserve all query keys sorted; remove temporal fragment; Drive aliases compare exact file ID; YouTube exact v ID",
+    "legacy_qf_source": "src/lib/quranFoundationApi.ts",
+    "legacy_qf_source_sha256": "c288e3d822465e815f9f78a42630656d38691c0f28cef9ed938670372842c62f"
+  },
+  "counts": {
+    "recitations": 69,
+    "reciters": 57,
+    "chapter_url_assignments": 7765,
+    "distinct_exact_urls": 7523,
+    "distinct_file_identity_keys": 7523,
+    "cross_reciter_exact_url_groups": 0,
+    "cross_reciter_same_file_identity_groups": 0,
+    "multi_recitation_reciters": 7,
+    "legacy_entries": 70,
+    "legacy_same_source_groups": 4,
+    "folder_alias_matches": 54,
+    "opaque_folder_or_id_unverifiable": 15
+  },
+  "stop_trigger": false,
+  "cross_reciter_duplicate_audio_urls": [],
+  "cross_reciter_duplicate_audio_file_ids": [],
+  "channel_host_anomalies": [],
+  "folder_checks": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "reciter_id": "abdul_hamid_ghraio",
+      "channel": "youtube",
+      "hosts": [
+        "www.youtube.com"
+      ],
+      "representative_original_url": "https://www.youtube.com/watch?v=OEk9JS8Y58c",
+      "identity_key": "youtube:OEk9JS8Y58c",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "abdul_hamid_ghraio",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبدالحميد القريو",
+      "catalog_name_en": "Abdul Hamid Ghraio",
+      "original_folder_path": ""
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "reciter_id": "abdul_hamid_ghraio",
+      "channel": "youtube",
+      "hosts": [
+        "www.youtube.com"
+      ],
+      "representative_original_url": "https://www.youtube.com/watch?v=BM-hCR3ketY",
+      "identity_key": "youtube:BM-hCR3ketY",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "abdul_hamid_ghraio",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبدالحميد القريو",
+      "catalog_name_en": "Abdul Hamid Ghraio",
+      "original_folder_path": ""
+    },
+    {
+      "slug": "abdulaziz_al_turki_yt",
+      "reciter_id": "abdulaziz_al_turki",
+      "channel": "youtube",
+      "hosts": [
+        "www.youtube.com"
+      ],
+      "representative_original_url": "https://www.youtube.com/watch?v=CAXuiGDr_YI",
+      "identity_key": "youtube:CAXuiGDr_YI",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "abdulaziz_al_turki",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبد العزيز التركي",
+      "catalog_name_en": "Abdulaziz Al-Turki",
+      "original_folder_path": ""
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "reciter_id": "abdulbasit_abdulsamad",
+      "channel": "tarteel",
+      "hosts": [
+        "audio-cdn.tarteel.ai"
+      ],
+      "representative_original_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/mujawwad/mp3/001.mp3",
+      "identity_key": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/mujawwad/mp3/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "abdulbasit_abdulsamad",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبد الباسط عبد الصمد",
+      "catalog_name_en": "Abdulbasit Abdulsamad",
+      "original_folder_path": "/quran/surah/abdulBasit/mujawwad/mp3",
+      "expected_known_folder_token": "abdulBasit",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "reciter_id": "abdulbasit_abdulsamad",
+      "channel": "tarteel",
+      "hosts": [
+        "audio-cdn.tarteel.ai"
+      ],
+      "representative_original_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/murattal/mp3/001.mp3",
+      "identity_key": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/murattal/mp3/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "abdulbasit_abdulsamad",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبد الباسط عبد الصمد",
+      "catalog_name_en": "Abdulbasit Abdulsamad",
+      "original_folder_path": "/quran/surah/abdulBasit/murattal/mp3",
+      "expected_known_folder_token": "abdulBasit",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_warsh_qdc",
+      "reciter_id": "abdulbasit_abdulsamad",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/abdulbaset_warsh/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/abdulbaset_warsh/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "abdulbasit_abdulsamad",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبد الباسط عبد الصمد",
+      "catalog_name_en": "Abdulbasit Abdulsamad",
+      "original_folder_path": "/quran/abdulbaset_warsh",
+      "expected_known_folder_token": "abdulbaset_warsh",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "reciter_id": "abdullah_al_buaijan",
+      "channel": "youtube",
+      "hosts": [
+        "www.youtube.com"
+      ],
+      "representative_original_url": "https://www.youtube.com/watch?v=7qcvvbEJTPk",
+      "identity_key": "youtube:7qcvvbEJTPk",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "abdullah_al_buaijan",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبد الله البعيجان",
+      "catalog_name_en": "Abdullah Al-Buaijan",
+      "original_folder_path": ""
+    },
+    {
+      "slug": "abdullah_al_mattrod_qdc",
+      "reciter_id": "abdullah_al_mattrod",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/abdullah_matroud/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/abdullah_matroud/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "abdullah_al_mattrod",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبد الله المطرود",
+      "catalog_name_en": "Abdullah Al-Mattrod",
+      "original_folder_path": "/quran/abdullah_matroud",
+      "expected_known_folder_token": "abdullah_matroud",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "reciter_id": "abdullah_al_qarafi",
+      "channel": "mp3quran",
+      "hosts": [
+        "server16.mp3quran.net"
+      ],
+      "representative_original_url": "https://server16.mp3quran.net/a_alqrafi/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "identity_key": "https://server16.mp3quran.net/a_alqrafi/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "abdullah_al_qarafi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبد الله القرافي",
+      "catalog_name_en": "Abdullah Al-Qarafi",
+      "original_folder_path": "/a_alqrafi/Rewayat-Hafs-A-n-Assem"
+    },
+    {
+      "slug": "abdullah_kamel_way2quran",
+      "reciter_id": "abdullah_kamel",
+      "channel": "way2quran",
+      "hosts": [
+        "media.way2quran.com"
+      ],
+      "representative_original_url": "https://media.way2quran.com/abdullah-kamel/hafs-an-asim/001.mp3",
+      "identity_key": "https://media.way2quran.com/abdullah-kamel/hafs-an-asim/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "abdullah_kamel",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبد الله كامل",
+      "catalog_name_en": "Abdullah Kamel",
+      "original_folder_path": "/abdullah-kamel/hafs-an-asim",
+      "expected_known_folder_token": "abdullah-kamel",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "abdulwadood_haneef_mp3quran",
+      "reciter_id": "abdulwadood_haneef",
+      "channel": "mp3quran",
+      "hosts": [
+        "server8.mp3quran.net"
+      ],
+      "representative_original_url": "https://server8.mp3quran.net/wdod/001.mp3",
+      "identity_key": "https://server8.mp3quran.net/wdod/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "abdulwadood_haneef",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبد الودود حنيف",
+      "catalog_name_en": "Abdulwadood Haneef",
+      "original_folder_path": "/wdod"
+    },
+    {
+      "slug": "abdur_rashid_sufi_qdc",
+      "reciter_id": "abdur_rashid_sufi",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/abdurrashid_sufi/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "abdur_rashid_sufi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبد الرشيد صوفي",
+      "catalog_name_en": "Abdur-Rashid Sufi",
+      "original_folder_path": "/quran/abdurrashid_sufi",
+      "expected_known_folder_token": "abdurrashid_sufi",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "reciter_id": "abdur_rashid_sufi",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi_shu3ba/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/abdurrashid_sufi_shu3ba/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "abdur_rashid_sufi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عبد الرشيد صوفي",
+      "catalog_name_en": "Abdur-Rashid Sufi",
+      "original_folder_path": "/quran/abdurrashid_sufi_shu3ba",
+      "expected_known_folder_token": "abdurrashid_sufi_shu3ba",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "abu_bakr_al_shatri_tarteel",
+      "reciter_id": "abu_bakr_al_shatri",
+      "channel": "tarteel",
+      "hosts": [
+        "audio-cdn.tarteel.ai"
+      ],
+      "representative_original_url": "https://audio-cdn.tarteel.ai/quran/surah/abuBakrAlShatri/murattal/mp3/001.mp3",
+      "identity_key": "https://audio-cdn.tarteel.ai/quran/surah/abuBakrAlShatri/murattal/mp3/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "abu_bakr_al_shatri",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أبو بكر الشاطري",
+      "catalog_name_en": "Abu Bakr Al-Shatri",
+      "original_folder_path": "/quran/surah/abuBakrAlShatri/murattal/mp3",
+      "expected_known_folder_token": "abuBakrAlShatri",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "adel_al_karbalaei_archive_v2",
+      "reciter_id": "adel_al_karbalaei",
+      "channel": "archive_org",
+      "hosts": [
+        "archive.org"
+      ],
+      "representative_original_url": "https://archive.org/download/a_20251007sss/001%20-%20%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9.mp3",
+      "identity_key": "https://archive.org/download/a_20251007sss/001%20-%20%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9.mp3",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "adel_al_karbalaei",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عادل الکربلائي",
+      "catalog_name_en": "Adel Al-Karbalaei",
+      "original_folder_path": "/download/a_20251007sss"
+    },
+    {
+      "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+      "reciter_id": "ahmad_naseem_ali_ahmad",
+      "channel": "youtube",
+      "hosts": [
+        "www.youtube.com"
+      ],
+      "representative_original_url": "https://www.youtube.com/watch?v=kTuag2gaPaY",
+      "identity_key": "youtube:kTuag2gaPaY",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "ahmad_naseem_ali_ahmad",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أحمد  نسيم على أحمد",
+      "catalog_name_en": "Ahmad Naseem Ali Ahmad",
+      "original_folder_path": ""
+    },
+    {
+      "slug": "ahmed_al_ajmi_qdc",
+      "reciter_id": "ahmed_al_ajmi",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/ahmed_ibn_3ali_al-3ajamy/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/ahmed_ibn_3ali_al-3ajamy/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "ahmed_al_ajmi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أحمد بن علي العجمي",
+      "catalog_name_en": "Ahmed Al-Ajmi",
+      "original_folder_path": "/quran/ahmed_ibn_3ali_al-3ajamy",
+      "expected_known_folder_token": "ahmed_ibn_3ali_al-3ajamy",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "ahmed_amer_tvquran",
+      "reciter_id": "ahmed_amer",
+      "channel": "tvquran",
+      "hosts": [
+        "download.tvquran.com"
+      ],
+      "representative_original_url": "https://download.tvquran.com/download/recitations/197/143/001.mp3",
+      "identity_key": "https://download.tvquran.com/download/recitations/197/143/001.mp3",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "ahmed_amer",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أحمد عامر",
+      "catalog_name_en": "Ahmed Amer",
+      "original_folder_path": "/download/recitations/197/143"
+    },
+    {
+      "slug": "ahmed_deban_qalon_mp3quran",
+      "reciter_id": "ahmed_deban",
+      "channel": "mp3quran",
+      "hosts": [
+        "server16.mp3quran.net"
+      ],
+      "representative_original_url": "https://server16.mp3quran.net/deban/Rewayat-Qalon-A-n-Nafi/001.mp3",
+      "identity_key": "https://server16.mp3quran.net/deban/Rewayat-Qalon-A-n-Nafi/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "ahmed_deban",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أحمد ديبان",
+      "catalog_name_en": "Ahmed Deban",
+      "original_folder_path": "/deban/Rewayat-Qalon-A-n-Nafi"
+    },
+    {
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "reciter_id": "ahmed_issa_al_maasaraawi",
+      "channel": "mp3quran",
+      "hosts": [
+        "server16.mp3quran.net"
+      ],
+      "representative_original_url": "https://server16.mp3quran.net/a_maasaraawi/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "identity_key": "https://server16.mp3quran.net/a_maasaraawi/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "ahmed_issa_al_maasaraawi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أحمد عيسى المعصراوي",
+      "catalog_name_en": "Ahmed Issa Al-Maasaraawi",
+      "original_folder_path": "/a_maasaraawi/Rewayat-Hafs-A-n-Assem"
+    },
+    {
+      "slug": "ahmed_kaseb_way2quran",
+      "reciter_id": "ahmed_kaseb",
+      "channel": "way2quran",
+      "hosts": [
+        "media.way2quran.com"
+      ],
+      "representative_original_url": "https://media.way2quran.com/ahmed-kaseb/hafs-an-asim/001.mp3",
+      "identity_key": "https://media.way2quran.com/ahmed-kaseb/hafs-an-asim/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "ahmed_kaseb",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أحمد كاسب",
+      "catalog_name_en": "Ahmed Kaseb",
+      "original_folder_path": "/ahmed-kaseb/hafs-an-asim",
+      "expected_known_folder_token": "ahmed-kaseb",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "ahmed_nuayna_qdc",
+      "reciter_id": "ahmed_nuayna",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/ahmad_nauina/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/ahmad_nauina/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "ahmed_nuayna",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أحمد نعينع",
+      "catalog_name_en": "Ahmed Nuayna",
+      "original_folder_path": "/quran/ahmad_nauina",
+      "expected_known_folder_token": "ahmad_nauina",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "reciter_id": "ahmed_saleh_rajab",
+      "channel": "way2quran",
+      "hosts": [
+        "media.way2quran.com"
+      ],
+      "representative_original_url": "https://media.way2quran.com/ahmed-saleh-rajab/qalun-an-nafi/001.mp3",
+      "identity_key": "https://media.way2quran.com/ahmed-saleh-rajab/qalun-an-nafi/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "ahmed_saleh_rajab",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أحمد صالح رجب",
+      "catalog_name_en": "Ahmed Saleh Rajab",
+      "original_folder_path": "/ahmed-saleh-rajab/qalun-an-nafi",
+      "expected_known_folder_token": "ahmed-saleh-rajab",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "ahmed_saud_mp3quran",
+      "reciter_id": "ahmed_saud",
+      "channel": "mp3quran",
+      "hosts": [
+        "server11.mp3quran.net"
+      ],
+      "representative_original_url": "https://server11.mp3quran.net/saud/085.mp3",
+      "identity_key": "https://server11.mp3quran.net/saud/085.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "ahmed_saud",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أحمد سعود",
+      "catalog_name_en": "Ahmed Saud",
+      "original_folder_path": "/saud"
+    },
+    {
+      "slug": "ahmed_shaheen_mp3quran",
+      "reciter_id": "ahmed_shaheen",
+      "channel": "mp3quran",
+      "hosts": [
+        "server16.mp3quran.net"
+      ],
+      "representative_original_url": "https://server16.mp3quran.net/shaheen/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "identity_key": "https://server16.mp3quran.net/shaheen/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "ahmed_shaheen",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أحمد خليل شاهين",
+      "catalog_name_en": "Ahmed Khalil Shaheen",
+      "original_folder_path": "/shaheen/Rewayat-Hafs-A-n-Assem"
+    },
+    {
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "reciter_id": "ahmed_talib_bin_humaid",
+      "channel": "mp3quran",
+      "hosts": [
+        "server16.mp3quran.net"
+      ],
+      "representative_original_url": "https://server16.mp3quran.net/a_binhameed/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "identity_key": "https://server16.mp3quran.net/a_binhameed/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "ahmed_talib_bin_humaid",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أحمد طالب بن حميد",
+      "catalog_name_en": "Ahmed Talib bin Hameed",
+      "original_folder_path": "/a_binhameed/Rewayat-Hafs-A-n-Assem"
+    },
+    {
+      "slug": "akram_al_alaqmi_qdc",
+      "reciter_id": "akram_al_alaqmi",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/akram_al_alaqmi/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/akram_al_alaqmi/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "akram_al_alaqmi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أكرم العلاقمي",
+      "catalog_name_en": "Akram Al-Alaqmi",
+      "original_folder_path": "/quran/akram_al_alaqmi",
+      "expected_known_folder_token": "akram_al_alaqmi",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "ali_al_huthaifi_mp3quran",
+      "reciter_id": "ali_al_huthaifi",
+      "channel": "mp3quran",
+      "hosts": [
+        "server9.mp3quran.net"
+      ],
+      "representative_original_url": "https://server9.mp3quran.net/hthfi/001.mp3",
+      "identity_key": "https://server9.mp3quran.net/hthfi/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "ali_al_huthaifi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "علي بن عبد الرحمن الحذيفي",
+      "catalog_name_en": "Ali Al-Huthaifi",
+      "original_folder_path": "/hthfi"
+    },
+    {
+      "slug": "ayman_swed_muallim_yt",
+      "reciter_id": "ayman_swed",
+      "channel": "youtube",
+      "hosts": [
+        "www.youtube.com"
+      ],
+      "representative_original_url": "https://www.youtube.com/watch?v=LzflYxNwe7s",
+      "identity_key": "youtube:LzflYxNwe7s",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "ayman_swed",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "أيمن سويد",
+      "catalog_name_en": "Ayman Suwayd",
+      "original_folder_path": ""
+    },
+    {
+      "slug": "badr_al_turki_yt",
+      "reciter_id": "badr_al_turki",
+      "channel": "youtube",
+      "hosts": [
+        "www.youtube.com"
+      ],
+      "representative_original_url": "https://www.youtube.com/watch?v=bLkIzLqqJ8g",
+      "identity_key": "youtube:bLkIzLqqJ8g",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "badr_al_turki",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "بدر التركي",
+      "catalog_name_en": "Badr Al-Turki",
+      "original_folder_path": ""
+    },
+    {
+      "slug": "bandar_baleela_qdc",
+      "reciter_id": "bandar_baleela",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/bandar_baleela/complete/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/bandar_baleela/complete/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "bandar_baleela",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "بندر بليلة",
+      "catalog_name_en": "Bandar Baleela",
+      "original_folder_path": "/quran/bandar_baleela/complete",
+      "expected_known_folder_token": "bandar_baleela",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "fatih_seferagic_way2quran",
+      "reciter_id": "fatih_seferagic",
+      "channel": "way2quran",
+      "hosts": [
+        "media.way2quran.com"
+      ],
+      "representative_original_url": "https://media.way2quran.com/fatih-sefercik/hafs-an-asim/001.mp3",
+      "identity_key": "https://media.way2quran.com/fatih-sefercik/hafs-an-asim/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "fatih_seferagic",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "فاتح سفراجيك",
+      "catalog_name_en": "Fatih Seferagic",
+      "original_folder_path": "/fatih-sefercik/hafs-an-asim",
+      "expected_known_folder_token": "fatih-sefercik",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "haitham_al_dukhain_mp3quran",
+      "reciter_id": "haitham_al_dukhain",
+      "channel": "mp3quran",
+      "hosts": [
+        "server16.mp3quran.net"
+      ],
+      "representative_original_url": "https://server16.mp3quran.net/h_dukhain/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "identity_key": "https://server16.mp3quran.net/h_dukhain/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "haitham_al_dukhain",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "هيثم الدخين",
+      "catalog_name_en": "Haitham Al-Dukhain",
+      "original_folder_path": "/h_dukhain/Rewayat-Hafs-A-n-Assem"
+    },
+    {
+      "slug": "hani_al_rifai_qdc_128k",
+      "reciter_id": "hani_al_rifai",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/qdc/hani_ar_rifai/murattal/1.mp3",
+      "identity_key": "https://download.quranicaudio.com/qdc/hani_ar_rifai/murattal/1.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "hani_al_rifai",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "هاني الرفاعي",
+      "catalog_name_en": "Hani Al-Rifai",
+      "original_folder_path": "/qdc/hani_ar_rifai/murattal",
+      "expected_known_folder_token": "hani_ar_rifai",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "ibrahim_al_akhdar_drive",
+      "reciter_id": "ibrahim_al_akhdar",
+      "channel": "drive",
+      "hosts": [
+        "drive.google.com"
+      ],
+      "representative_original_url": "https://drive.google.com/file/d/1pX9svXw4rcI8iBip7BcgXbnNNFAsG4jc/view",
+      "identity_key": "drive:1pX9svXw4rcI8iBip7BcgXbnNNFAsG4jc",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "ibrahim_al_akhdar",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "إبراهيم الأخضر",
+      "catalog_name_en": "Ibrahim Al-Akhdar",
+      "original_folder_path": "/file/d/1pX9svXw4rcI8iBip7BcgXbnNNFAsG4jc"
+    },
+    {
+      "slug": "imad_zuhair_hafez_mp3quran",
+      "reciter_id": "imad_zuhair_hafez",
+      "channel": "mp3quran",
+      "hosts": [
+        "server6.mp3quran.net"
+      ],
+      "representative_original_url": "https://server6.mp3quran.net/hafz/001.mp3",
+      "identity_key": "https://server6.mp3quran.net/hafz/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "imad_zuhair_hafez",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "عماد زهير حافظ",
+      "catalog_name_en": "Imad Zuhair Hafez",
+      "original_folder_path": "/hafz"
+    },
+    {
+      "slug": "islam_sobhi_mp3quran",
+      "reciter_id": "islam_sobhi",
+      "channel": "mp3quran",
+      "hosts": [
+        "server14.mp3quran.net"
+      ],
+      "representative_original_url": "https://server14.mp3quran.net/islam/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "identity_key": "https://server14.mp3quran.net/islam/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "islam_sobhi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "إسلام صبحي",
+      "catalog_name_en": "Islam Sobhi",
+      "original_folder_path": "/islam/Rewayat-Hafs-A-n-Assem"
+    },
+    {
+      "slug": "khalid_al_mohana_drive",
+      "reciter_id": "khalid_al_mohana",
+      "channel": "drive",
+      "hosts": [
+        "drive.google.com"
+      ],
+      "representative_original_url": "https://drive.google.com/file/d/1vOp-e1Epnx0Xi_QRNbKBx9hnFSR1vdSH/view",
+      "identity_key": "drive:1vOp-e1Epnx0Xi_QRNbKBx9hnFSR1vdSH",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "khalid_al_mohana",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "خالد المهنا",
+      "catalog_name_en": "Khalid Al-Mohana",
+      "original_folder_path": "/file/d/1vOp-e1Epnx0Xi_QRNbKBx9hnFSR1vdSH"
+    },
+    {
+      "slug": "khalifa_al_tunaiji_tarteel",
+      "reciter_id": "khalifa_al_tunaiji",
+      "channel": "tarteel",
+      "hosts": [
+        "audio-cdn.tarteel.ai"
+      ],
+      "representative_original_url": "https://audio-cdn.tarteel.ai/quran/surah/khalifaAlTunaiji/murattal/mp3/001.mp3",
+      "identity_key": "https://audio-cdn.tarteel.ai/quran/surah/khalifaAlTunaiji/murattal/mp3/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "khalifa_al_tunaiji",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "خليفة الطنيجي",
+      "catalog_name_en": "Khalifa Al-Tunaiji",
+      "original_folder_path": "/quran/surah/khalifaAlTunaiji/murattal/mp3",
+      "expected_known_folder_token": "khalifaAlTunaiji",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "maher_al_muaiqly_qdc",
+      "reciter_id": "maher_al_muaiqly",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "maher_al_muaiqly",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "ماهر المعيقلي",
+      "catalog_name_en": "Maher Al-Muaiqly",
+      "original_folder_path": "/quran/maher_almu3aiqly/year1440",
+      "expected_known_folder_token": "maher_almu3aiqly",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "mahmoud_abdul_hakam_mp3quran",
+      "reciter_id": "mahmoud_abdul_hakam",
+      "channel": "mp3quran",
+      "hosts": [
+        "server16.mp3quran.net"
+      ],
+      "representative_original_url": "https://server16.mp3quran.net/m_abdelhakam/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "identity_key": "https://server16.mp3quran.net/m_abdelhakam/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mahmoud_abdul_hakam",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمود عبدالحكم",
+      "catalog_name_en": "Mahmoud Abdul Hakam",
+      "original_folder_path": "/m_abdelhakam/Rewayat-Hafs-A-n-Assem"
+    },
+    {
+      "slug": "mahmoud_ali_al_banna_qdc",
+      "reciter_id": "mahmoud_ali_al_banna",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/mahmood_ali_albana/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/mahmood_ali_albana/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mahmoud_ali_al_banna",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمود علي البنا",
+      "catalog_name_en": "Mahmoud Ali Al-Banna",
+      "original_folder_path": "/quran/mahmood_ali_albana",
+      "expected_known_folder_token": "mahmood_ali_albana",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mp3quran",
+      "reciter_id": "mahmoud_khalil_al_husary",
+      "channel": "mp3quran",
+      "hosts": [
+        "server13.mp3quran.net"
+      ],
+      "representative_original_url": "https://server13.mp3quran.net/husr/001.mp3",
+      "identity_key": "https://server13.mp3quran.net/husr/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mahmoud_khalil_al_husary",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمود خليل الحصري",
+      "catalog_name_en": "Mahmoud Khalil Al-Husary",
+      "original_folder_path": "/husr"
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "reciter_id": "mahmoud_khalil_al_husary",
+      "channel": "tarteel",
+      "hosts": [
+        "audio-cdn.tarteel.ai"
+      ],
+      "representative_original_url": "https://audio-cdn.tarteel.ai/quran/surah/husary/mujawwad/mp3/001.mp3",
+      "identity_key": "https://audio-cdn.tarteel.ai/quran/surah/husary/mujawwad/mp3/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mahmoud_khalil_al_husary",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمود خليل الحصري",
+      "catalog_name_en": "Mahmoud Khalil Al-Husary",
+      "original_folder_path": "/quran/surah/husary/mujawwad/mp3",
+      "expected_known_folder_token": "husary",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_qdc_128k",
+      "reciter_id": "mahmoud_khalil_al_husary",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree_iza3a/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree_iza3a/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mahmoud_khalil_al_husary",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمود خليل الحصري",
+      "catalog_name_en": "Mahmoud Khalil Al-Husary",
+      "original_folder_path": "/quran/mahmood_khaleel_al-husaree_iza3a",
+      "expected_known_folder_token": "mahmood_khaleel_al-husaree_iza3a",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_2008_qdc",
+      "reciter_id": "mishary_rashid_al_afasy",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/mishaari_california/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/mishaari_california/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mishary_rashid_al_afasy",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "مشاري بن راشد العفاسي",
+      "catalog_name_en": "Mishary Rashid Al-Afasy",
+      "original_folder_path": "/quran/mishaari_california",
+      "expected_known_folder_token": "mishaari_california",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_mp3quran",
+      "reciter_id": "mishary_rashid_al_afasy",
+      "channel": "mp3quran",
+      "hosts": [
+        "server8.mp3quran.net"
+      ],
+      "representative_original_url": "https://server8.mp3quran.net/afs/001.mp3",
+      "identity_key": "https://server8.mp3quran.net/afs/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mishary_rashid_al_afasy",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "مشاري بن راشد العفاسي",
+      "catalog_name_en": "Mishary Rashid Al-Afasy",
+      "original_folder_path": "/afs"
+    },
+    {
+      "slug": "moaz_mahmoud_hamed_qalon_way2quran",
+      "reciter_id": "moaz_mahmoud_hamed",
+      "channel": "way2quran",
+      "hosts": [
+        "media.way2quran.com"
+      ],
+      "representative_original_url": "https://media.way2quran.com/moaz-mahmoud-hamed/qalun-an-nafi/001.mp3",
+      "identity_key": "https://media.way2quran.com/moaz-mahmoud-hamed/qalun-an-nafi/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "moaz_mahmoud_hamed",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "معاذ محمود حامد",
+      "catalog_name_en": "Moaz Mahmoud Hamed",
+      "original_folder_path": "/moaz-mahmoud-hamed/qalun-an-nafi",
+      "expected_known_folder_token": "moaz-mahmoud-hamed",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "mohammed_abdulkareem_qdc",
+      "reciter_id": "mohammed_abdulkareem",
+      "channel": "quranicaudio",
+      "hosts": [
+        "download.quranicaudio.com"
+      ],
+      "representative_original_url": "https://download.quranicaudio.com/quran/muhammad_abdulkareem/001.mp3",
+      "identity_key": "https://download.quranicaudio.com/quran/muhammad_abdulkareem/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mohammed_abdulkareem",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمد عبد الكريم",
+      "catalog_name_en": "Mohammed Abdulkareem",
+      "original_folder_path": "/quran/muhammad_abdulkareem",
+      "expected_known_folder_token": "muhammad_abdulkareem",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "reciter_id": "mohammed_al_luhaidan",
+      "channel": "mp3quran",
+      "hosts": [
+        "server8.mp3quran.net"
+      ],
+      "representative_original_url": "https://server8.mp3quran.net/lhdan/001.mp3",
+      "identity_key": "https://server8.mp3quran.net/lhdan/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mohammed_al_luhaidan",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمد اللحيدان",
+      "catalog_name_en": "Mohammed Al-Luhaidan",
+      "original_folder_path": "/lhdan"
+    },
+    {
+      "slug": "mohammed_alghazali_archive",
+      "reciter_id": "mohammed_alghazali",
+      "channel": "archive_org",
+      "hosts": [
+        "ia601406.us.archive.org"
+      ],
+      "representative_original_url": "https://ia601406.us.archive.org/16/items/Mohammed-Al-Ghazali/001.mp3",
+      "identity_key": "https://ia601406.us.archive.org/16/items/Mohammed-Al-Ghazali/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mohammed_alghazali",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمد الغزالي",
+      "catalog_name_en": "Mohammed Al-Ghazali",
+      "original_folder_path": "/16/items/Mohammed-Al-Ghazali",
+      "expected_known_folder_token": "Mohammed-Al-Ghazali",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "mohammed_ayyub_drive",
+      "reciter_id": "mohammed_ayyub",
+      "channel": "drive",
+      "hosts": [
+        "drive.google.com"
+      ],
+      "representative_original_url": "https://drive.google.com/file/d/1rl6qU2TnCacbR_VjK5V-wFm97Zn-cHSg/view",
+      "identity_key": "drive:1rl6qU2TnCacbR_VjK5V-wFm97Zn-cHSg",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "mohammed_ayyub",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمد أيوب",
+      "catalog_name_en": "Mohammed Ayyub",
+      "original_folder_path": "/file/d/1rl6qU2TnCacbR_VjK5V-wFm97Zn-cHSg"
+    },
+    {
+      "slug": "mohammed_burhaji_yt",
+      "reciter_id": "mohammed_burhaji",
+      "channel": "youtube",
+      "hosts": [
+        "www.youtube.com"
+      ],
+      "representative_original_url": "https://www.youtube.com/watch?v=RXZqoXkm7UY",
+      "identity_key": "youtube:RXZqoXkm7UY",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "mohammed_burhaji",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمد برهجي",
+      "catalog_name_en": "Mohammed Burhaji",
+      "original_folder_path": ""
+    },
+    {
+      "slug": "mohammed_saayed_warsh_mp3quran",
+      "reciter_id": "mohammed_saayed",
+      "channel": "mp3quran",
+      "hosts": [
+        "server16.mp3quran.net"
+      ],
+      "representative_original_url": "https://server16.mp3quran.net/m_sayed/Rewayat-Warsh-A-n-Nafi/001.mp3",
+      "identity_key": "https://server16.mp3quran.net/m_sayed/Rewayat-Warsh-A-n-Nafi/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mohammed_saayed",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمد سايد",
+      "catalog_name_en": "Mohammed Saayed",
+      "original_folder_path": "/m_sayed/Rewayat-Warsh-A-n-Nafi"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "reciter_id": "mohammed_siddiq_al_minshawi",
+      "channel": "drive",
+      "hosts": [
+        "drive.google.com"
+      ],
+      "representative_original_url": "https://drive.google.com/file/d/1pWfUFPFVPL6EgIjoG0-VIGofZVHlgXhO/view",
+      "identity_key": "drive:1pWfUFPFVPL6EgIjoG0-VIGofZVHlgXhO",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "mohammed_siddiq_al_minshawi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمد صديق المنشاوي",
+      "catalog_name_en": "Mohammed Siddiq Al-Minshawi",
+      "original_folder_path": "/file/d/1pWfUFPFVPL6EgIjoG0-VIGofZVHlgXhO"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+      "reciter_id": "mohammed_siddiq_al_minshawi",
+      "channel": "mp3quran",
+      "hosts": [
+        "server10.mp3quran.net"
+      ],
+      "representative_original_url": "https://server10.mp3quran.net/minsh/001.mp3",
+      "identity_key": "https://server10.mp3quran.net/minsh/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mohammed_siddiq_al_minshawi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمد صديق المنشاوي",
+      "catalog_name_en": "Mohammed Siddiq Al-Minshawi",
+      "original_folder_path": "/minsh"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "reciter_id": "mohammed_siddiq_al_minshawi",
+      "channel": "mp3quran",
+      "hosts": [
+        "server10.mp3quran.net"
+      ],
+      "representative_original_url": "https://server10.mp3quran.net/minsh/Almusshaf-Al-Mojawwad/001.mp3",
+      "identity_key": "https://server10.mp3quran.net/minsh/Almusshaf-Al-Mojawwad/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mohammed_siddiq_al_minshawi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "محمد صديق المنشاوي",
+      "catalog_name_en": "Mohammed Siddiq Al-Minshawi",
+      "original_folder_path": "/minsh/Almusshaf-Al-Mojawwad"
+    },
+    {
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "reciter_id": "muammar_zainal_al_sukaini",
+      "channel": "way2quran",
+      "hosts": [
+        "media.way2quran.com"
+      ],
+      "representative_original_url": "https://media.way2quran.com/muammar-zainal-al-sukaini/hafs-an-asim/001.mp3",
+      "identity_key": "https://media.way2quran.com/muammar-zainal-al-sukaini/hafs-an-asim/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "muammar_zainal_al_sukaini",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "معمر زينل السكيني",
+      "catalog_name_en": "Muammar Zainal Al-Sukaini",
+      "original_folder_path": "/muammar-zainal-al-sukaini/hafs-an-asim",
+      "expected_known_folder_token": "muammar-zainal-al-sukaini",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "mustafa_ismail_mp3quran",
+      "reciter_id": "mustafa_ismail",
+      "channel": "mp3quran",
+      "hosts": [
+        "server8.mp3quran.net"
+      ],
+      "representative_original_url": "https://server8.mp3quran.net/mustafa/001.mp3",
+      "identity_key": "https://server8.mp3quran.net/mustafa/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "mustafa_ismail",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "مصطفى إسماعيل",
+      "catalog_name_en": "Mustafa Ismail",
+      "original_folder_path": "/mustafa"
+    },
+    {
+      "slug": "nasser_al_qatami_mp3quran",
+      "reciter_id": "nasser_al_qatami",
+      "channel": "mp3quran",
+      "hosts": [
+        "server6.mp3quran.net"
+      ],
+      "representative_original_url": "https://server6.mp3quran.net/qtm/001.mp3",
+      "identity_key": "https://server6.mp3quran.net/qtm/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "nasser_al_qatami",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "ناصر القطامي",
+      "catalog_name_en": "Nasser Al-Qatami",
+      "original_folder_path": "/qtm"
+    },
+    {
+      "slug": "saad_al_ghamdi_tarteel",
+      "reciter_id": "saad_al_ghamdi",
+      "channel": "tarteel",
+      "hosts": [
+        "audio-cdn.tarteel.ai"
+      ],
+      "representative_original_url": "https://audio-cdn.tarteel.ai/quran/surah/ghamadi/murattal/mp3/001.mp3",
+      "identity_key": "https://audio-cdn.tarteel.ai/quran/surah/ghamadi/murattal/mp3/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "saad_al_ghamdi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "سعد الغامدي",
+      "catalog_name_en": "Saad Al-Ghamdi",
+      "original_folder_path": "/quran/surah/ghamadi/murattal/mp3",
+      "expected_known_folder_token": "ghamadi",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "saber_abdulhakam_qalon_way2quran",
+      "reciter_id": "saber_abdulhakam",
+      "channel": "way2quran",
+      "hosts": [
+        "media.way2quran.com"
+      ],
+      "representative_original_url": "https://media.way2quran.com/saber-abdel-hakam/qalun-an-nafi/001.mp3",
+      "identity_key": "https://media.way2quran.com/saber-abdel-hakam/qalun-an-nafi/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "saber_abdulhakam",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "صابر عبد الحكم",
+      "catalog_name_en": "Saber Abdulhakam",
+      "original_folder_path": "/saber-abdel-hakam/qalun-an-nafi",
+      "expected_known_folder_token": "saber-abdel-hakam",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "saber_abdulhakam_shubah_way2quran",
+      "reciter_id": "saber_abdulhakam",
+      "channel": "way2quran",
+      "hosts": [
+        "media.way2quran.com"
+      ],
+      "representative_original_url": "https://media.way2quran.com/saber-abdel-hakam/shubah-an-asim/001.mp3",
+      "identity_key": "https://media.way2quran.com/saber-abdel-hakam/shubah-an-asim/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "saber_abdulhakam",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "صابر عبد الحكم",
+      "catalog_name_en": "Saber Abdulhakam",
+      "original_folder_path": "/saber-abdel-hakam/shubah-an-asim",
+      "expected_known_folder_token": "saber-abdel-hakam",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "saber_abdulhakam_warsh_way2quran",
+      "reciter_id": "saber_abdulhakam",
+      "channel": "way2quran",
+      "hosts": [
+        "media.way2quran.com"
+      ],
+      "representative_original_url": "https://media.way2quran.com/saber-abdel-hakam/warsh-an-nafi/001.mp3",
+      "identity_key": "https://media.way2quran.com/saber-abdel-hakam/warsh-an-nafi/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "saber_abdulhakam",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "صابر عبد الحكم",
+      "catalog_name_en": "Saber Abdulhakam",
+      "original_folder_path": "/saber-abdel-hakam/warsh-an-nafi",
+      "expected_known_folder_token": "saber-abdel-hakam",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "saber_abdulhakam_yt",
+      "reciter_id": "saber_abdulhakam",
+      "channel": "youtube",
+      "hosts": [
+        "www.youtube.com"
+      ],
+      "representative_original_url": "https://www.youtube.com/watch?v=JRVS4Zod3GY",
+      "identity_key": "youtube:JRVS4Zod3GY",
+      "folder_classification": "OPAQUE_FILE_OR_CHANNEL_UNVERIFIABLE",
+      "expected_alias_reciter_id": "saber_abdulhakam",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "صابر عبد الحكم",
+      "catalog_name_en": "Saber Abdulhakam",
+      "original_folder_path": ""
+    },
+    {
+      "slug": "saud_al_shuraim_mp3quran",
+      "reciter_id": "saud_al_shuraim",
+      "channel": "mp3quran",
+      "hosts": [
+        "server7.mp3quran.net"
+      ],
+      "representative_original_url": "https://server7.mp3quran.net/shur/001.mp3",
+      "identity_key": "https://server7.mp3quran.net/shur/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "saud_al_shuraim",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "سعود الشريم",
+      "catalog_name_en": "Saud Al-Shuraim",
+      "original_folder_path": "/shur"
+    },
+    {
+      "slug": "walid_al_naihi_qalon_mp3quran",
+      "reciter_id": "walid_al_naihi",
+      "channel": "mp3quran",
+      "hosts": [
+        "server9.mp3quran.net"
+      ],
+      "representative_original_url": "https://server9.mp3quran.net/waleed/001.mp3",
+      "identity_key": "https://server9.mp3quran.net/waleed/001.mp3",
+      "folder_classification": "KNOWN_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "walid_al_naihi",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "وليد النائحي",
+      "catalog_name_en": "Walid Al-Naihi",
+      "original_folder_path": "/waleed"
+    },
+    {
+      "slug": "walid_atef_way2quran",
+      "reciter_id": "walid_atef",
+      "channel": "way2quran",
+      "hosts": [
+        "media.way2quran.com"
+      ],
+      "representative_original_url": "https://media.way2quran.com/walid-atef/hafs-an-asim/001.mp3",
+      "identity_key": "https://media.way2quran.com/walid-atef/hafs-an-asim/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "walid_atef",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "وليد عاطف",
+      "catalog_name_en": "Walid Atef",
+      "original_folder_path": "/walid-atef/hafs-an-asim",
+      "expected_known_folder_token": "walid-atef",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    },
+    {
+      "slug": "yasser_al_dosari_archive",
+      "reciter_id": "yasser_al_dosari",
+      "channel": "archive_org",
+      "hosts": [
+        "archive.org"
+      ],
+      "representative_original_url": "https://archive.org/download/Yasser_Aldosari_MP3_Quran/001.mp3",
+      "identity_key": "https://archive.org/download/Yasser_Aldosari_MP3_Quran/001.mp3",
+      "folder_classification": "DESCRIPTIVE_FOLDER_ALIAS_MATCH",
+      "expected_alias_reciter_id": "yasser_al_dosari",
+      "voice_identity_status": "unverified",
+      "source": "QUD catalog metadata only; no listening or decoded fingerprint",
+      "catalog_name_ar": "ياسر الدوسري",
+      "catalog_name_en": "Yasser Al-Dosari",
+      "original_folder_path": "/download/Yasser_Aldosari_MP3_Quran",
+      "expected_known_folder_token": "Yasser_Aldosari_MP3_Quran",
+      "alias_evidence": "Manual transliteration comparison of this catalog name and descriptive folder only; not proof of speaker or recording."
+    }
+  ],
+  "same_reciter_variants": [
+    {
+      "reciter_id": "abdul_hamid_ghraio",
+      "name_ar": "عبدالحميد القريو",
+      "distinct_channels": [
+        "youtube"
+      ],
+      "distinct_styles": [
+        "murattal"
+      ],
+      "distinct_riwayat": [
+        "hafs_an_asim"
+      ],
+      "distinct_known_recording_years": [
+        2025,
+        2026
+      ],
+      "recitations": [
+        {
+          "slug": "abdul_hamid_ghraio_2025_yt",
+          "channel": "youtube",
+          "style": "murattal",
+          "riwayah": "hafs_an_asim",
+          "recording_year": 2025,
+          "recording_context": "taraweeh",
+          "variant_label": "Qasr",
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 192,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        },
+        {
+          "slug": "abdul_hamid_ghraio_2026_yt",
+          "channel": "youtube",
+          "style": "murattal",
+          "riwayah": "hafs_an_asim",
+          "recording_year": 2026,
+          "recording_context": "taraweeh",
+          "variant_label": "Tawassut",
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 192,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        }
+      ]
+    },
+    {
+      "reciter_id": "abdulbasit_abdulsamad",
+      "name_ar": "عبد الباسط عبد الصمد",
+      "distinct_channels": [
+        "tarteel",
+        "quranicaudio"
+      ],
+      "distinct_styles": [
+        "mujawwad",
+        "murattal"
+      ],
+      "distinct_riwayat": [
+        "hafs_an_asim",
+        "warsh_an_nafi"
+      ],
+      "distinct_known_recording_years": [],
+      "recitations": [
+        {
+          "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+          "channel": "tarteel",
+          "style": "mujawwad",
+          "riwayah": "hafs_an_asim",
+          "recording_year": null,
+          "recording_context": "studio",
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 128,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        },
+        {
+          "slug": "abdulbasit_abdulsamad_tarteel",
+          "channel": "tarteel",
+          "style": "murattal",
+          "riwayah": "hafs_an_asim",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 128,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        },
+        {
+          "slug": "abdulbasit_abdulsamad_warsh_qdc",
+          "channel": "quranicaudio",
+          "style": "murattal",
+          "riwayah": "warsh_an_nafi",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 128,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        }
+      ]
+    },
+    {
+      "reciter_id": "abdur_rashid_sufi",
+      "name_ar": "عبد الرشيد صوفي",
+      "distinct_channels": [
+        "quranicaudio"
+      ],
+      "distinct_styles": [
+        "murattal"
+      ],
+      "distinct_riwayat": [
+        "hafs_an_asim",
+        "shubah_an_asim"
+      ],
+      "distinct_known_recording_years": [],
+      "recitations": [
+        {
+          "slug": "abdur_rashid_sufi_qdc",
+          "channel": "quranicaudio",
+          "style": "murattal",
+          "riwayah": "hafs_an_asim",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": null,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        },
+        {
+          "slug": "abdur_rashid_sufi_shubah_qdc",
+          "channel": "quranicaudio",
+          "style": "murattal",
+          "riwayah": "shubah_an_asim",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 128,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        }
+      ]
+    },
+    {
+      "reciter_id": "mahmoud_khalil_al_husary",
+      "name_ar": "محمود خليل الحصري",
+      "distinct_channels": [
+        "mp3quran",
+        "tarteel",
+        "quranicaudio"
+      ],
+      "distinct_styles": [
+        "murattal",
+        "mujawwad"
+      ],
+      "distinct_riwayat": [
+        "hafs_an_asim"
+      ],
+      "distinct_known_recording_years": [],
+      "recitations": [
+        {
+          "slug": "mahmoud_khalil_al_husary_mp3quran",
+          "channel": "mp3quran",
+          "style": "murattal",
+          "riwayah": "hafs_an_asim",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 128,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        },
+        {
+          "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+          "channel": "tarteel",
+          "style": "mujawwad",
+          "riwayah": "hafs_an_asim",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 128,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 48000,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        },
+        {
+          "slug": "mahmoud_khalil_al_husary_qdc_128k",
+          "channel": "quranicaudio",
+          "style": "murattal",
+          "riwayah": "hafs_an_asim",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 128,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        }
+      ]
+    },
+    {
+      "reciter_id": "mishary_rashid_al_afasy",
+      "name_ar": "مشاري بن راشد العفاسي",
+      "distinct_channels": [
+        "quranicaudio",
+        "mp3quran"
+      ],
+      "distinct_styles": [
+        "murattal"
+      ],
+      "distinct_riwayat": [
+        "hafs_an_asim"
+      ],
+      "distinct_known_recording_years": [
+        2008
+      ],
+      "recitations": [
+        {
+          "slug": "mishary_rashid_al_afasy_2008_qdc",
+          "channel": "quranicaudio",
+          "style": "murattal",
+          "riwayah": "hafs_an_asim",
+          "recording_year": 2008,
+          "recording_context": "taraweeh",
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 128,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": null
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        },
+        {
+          "slug": "mishary_rashid_al_afasy_mp3quran",
+          "channel": "mp3quran",
+          "style": "murattal",
+          "riwayah": "hafs_an_asim",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 128,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        }
+      ]
+    },
+    {
+      "reciter_id": "mohammed_siddiq_al_minshawi",
+      "name_ar": "محمد صديق المنشاوي",
+      "distinct_channels": [
+        "drive",
+        "mp3quran"
+      ],
+      "distinct_styles": [
+        "murattal",
+        "mujawwad"
+      ],
+      "distinct_riwayat": [
+        "hafs_an_asim"
+      ],
+      "distinct_known_recording_years": [
+        1967
+      ],
+      "recitations": [
+        {
+          "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+          "channel": "drive",
+          "style": "murattal",
+          "riwayah": "hafs_an_asim",
+          "recording_year": 1967,
+          "recording_context": "studio",
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 192,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        },
+        {
+          "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+          "channel": "mp3quran",
+          "style": "murattal",
+          "riwayah": "hafs_an_asim",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 128,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        },
+        {
+          "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+          "channel": "mp3quran",
+          "style": "mujawwad",
+          "riwayah": "hafs_an_asim",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": null,
+            "bitrate_mode": "mixed",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        }
+      ]
+    },
+    {
+      "reciter_id": "saber_abdulhakam",
+      "name_ar": "صابر عبد الحكم",
+      "distinct_channels": [
+        "way2quran",
+        "youtube"
+      ],
+      "distinct_styles": [
+        "murattal"
+      ],
+      "distinct_riwayat": [
+        "qalon_an_nafi",
+        "shubah_an_asim",
+        "warsh_an_nafi",
+        "hafs_an_asim"
+      ],
+      "distinct_known_recording_years": [],
+      "recitations": [
+        {
+          "slug": "saber_abdulhakam_qalon_way2quran",
+          "channel": "way2quran",
+          "style": "murattal",
+          "riwayah": "qalon_an_nafi",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 128,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        },
+        {
+          "slug": "saber_abdulhakam_shubah_way2quran",
+          "channel": "way2quran",
+          "style": "murattal",
+          "riwayah": "shubah_an_asim",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 320,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        },
+        {
+          "slug": "saber_abdulhakam_warsh_way2quran",
+          "channel": "way2quran",
+          "style": "murattal",
+          "riwayah": "warsh_an_nafi",
+          "recording_year": null,
+          "recording_context": null,
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 128,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": 2
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        },
+        {
+          "slug": "saber_abdulhakam_yt",
+          "channel": "youtube",
+          "style": "murattal",
+          "riwayah": "hafs_an_asim",
+          "recording_year": null,
+          "recording_context": "studio",
+          "variant_label": null,
+          "declared_audio_metadata": {
+            "bitrate_kbps_nominal": 192,
+            "bitrate_mode": "cbr",
+            "sample_rate_hz": 44100,
+            "channels": null
+          },
+          "measured_audio_quality": null,
+          "measured_full_surah_duration_ms": null,
+          "recording_identity": "not measured; independent option, not interchangeable"
+        }
+      ]
+    }
+  ],
+  "legacy_shared_sources": [
+    {
+      "url": "https://server13.mp3quran.net/husr/001.mp3",
+      "legacy_ids": [
+        "mahmoud_husary_murattal",
+        "mahmoud_husary_mujawwad",
+        "mahmoud_husary_tarteel",
+        "husary_muallim"
+      ],
+      "catalog_reciter_ids": [
+        "mahmoud_khalil_al_husary"
+      ],
+      "styles": [
+        "مرتل",
+        "مجود",
+        "ترتيل",
+        "معلم"
+      ],
+      "finding": "Same configured source despite separate style options; not proof of different voice"
+    },
+    {
+      "url": "https://server10.mp3quran.net/minsh/001.mp3",
+      "legacy_ids": [
+        "minshawi_murattal",
+        "minshawi_mujawwad"
+      ],
+      "catalog_reciter_ids": [
+        "mohammed_siddiq_al_minshawi"
+      ],
+      "styles": [
+        "مرتل",
+        "مجود"
+      ],
+      "finding": "Same configured source despite separate style options; not proof of different voice"
+    },
+    {
+      "url": "https://server8.mp3quran.net/bna/001.mp3",
+      "legacy_ids": [
+        "mahmoud_ali_albanna",
+        "mahmoud_ali_albanna_mujawwad"
+      ],
+      "catalog_reciter_ids": [
+        "mahmoud_ali_al_banna"
+      ],
+      "styles": [
+        "مرتل",
+        "مجود"
+      ],
+      "finding": "Same configured source despite separate style options; not proof of different voice"
+    },
+    {
+      "url": "https://server8.mp3quran.net/mustafa/001.mp3",
+      "legacy_ids": [
+        "mustafa_ismail_murattal",
+        "mustafa_ismail"
+      ],
+      "catalog_reciter_ids": [
+        "mustafa_ismail"
+      ],
+      "styles": [
+        "مرتل",
+        "مجود"
+      ],
+      "finding": "Same configured source despite separate style options; not proof of different voice"
+    }
+  ],
+  "legacy_mapping_rows": [
+    {
+      "legacy_id": "mishary_alafasy",
+      "name_ar": "مشاري راشد العفاسي",
+      "english_name": "Mishary Rashid Alafasy",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server8.mp3quran.net/afs/001.mp3",
+      "everyayah_folder": "Alafasy_128kbps",
+      "quran_foundation_id": 7,
+      "qua_slug": "mishary_rashid_al_afasy_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "mishary_rashid_al_afasy",
+      "catalog_recitation_candidates": [
+        "mishary_rashid_al_afasy_2008_qdc",
+        "mishary_rashid_al_afasy_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdul_basit_murattal",
+      "name_ar": "عبد الباسط عبد الصمد",
+      "english_name": "Abdul Basit Abdul Samad",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server8.mp3quran.net/basit/001.mp3",
+      "everyayah_folder": "Abdul_Basit_Murattal_64kbps",
+      "quran_foundation_id": 2,
+      "qua_slug": "abdulbasit_abdulsamad_tarteel",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "abdulbasit_abdulsamad",
+      "catalog_recitation_candidates": [
+        "abdulbasit_abdulsamad_mujawwad_tarteel",
+        "abdulbasit_abdulsamad_tarteel",
+        "abdulbasit_abdulsamad_warsh_qdc"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mahmoud_husary_murattal",
+      "name_ar": "محمود خليل الحصري",
+      "english_name": "Mahmoud Khalil Al-Husary",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server13.mp3quran.net/husr/001.mp3",
+      "everyayah_folder": "Husary_64kbps",
+      "quran_foundation_id": 6,
+      "qua_slug": "mahmoud_khalil_al_husary_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "mahmoud_khalil_al_husary",
+      "catalog_recitation_candidates": [
+        "mahmoud_khalil_al_husary_mp3quran",
+        "mahmoud_khalil_al_husary_mujawwad_tarteel",
+        "mahmoud_khalil_al_husary_qdc_128k"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "minshawi_murattal",
+      "name_ar": "محمد صديق المنشاوي",
+      "english_name": "Muhammad Siddiq Al-Minshawi",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server10.mp3quran.net/minsh/001.mp3",
+      "everyayah_folder": "Minshawy_Murattal_128kbps",
+      "quran_foundation_id": 9,
+      "qua_slug": "mohammed_siddiq_al_minshawi_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "mohammed_siddiq_al_minshawi",
+      "catalog_recitation_candidates": [
+        "mohammed_siddiq_al_minshawi_1967_drive",
+        "mohammed_siddiq_al_minshawi_mp3quran",
+        "mohammed_siddiq_al_minshawi_mujawwad_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "maher_muaiqly",
+      "name_ar": "ماهر المعيقلي",
+      "english_name": "Maher Al Muaiqly",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server12.mp3quran.net/maher/001.mp3",
+      "everyayah_folder": "MaherAlMuaiqly128kbps",
+      "quran_foundation_id": null,
+      "qua_slug": "maher_al_muaiqly_qdc",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "maher_al_muaiqly",
+      "catalog_recitation_candidates": [
+        "maher_al_muaiqly_qdc"
+      ],
+      "direct_style_difference": {
+        "legacy_style": "مرتل",
+        "catalog_style": "mujawwad"
+      },
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "saud_shuraim",
+      "name_ar": "سعود الشريم",
+      "english_name": "Saud Al-Shuraim",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server7.mp3quran.net/shur/001.mp3",
+      "everyayah_folder": "Saood_ash-Shuraym_128kbps",
+      "quran_foundation_id": 10,
+      "qua_slug": "saud_al_shuraim_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "saud_al_shuraim",
+      "catalog_recitation_candidates": [
+        "saud_al_shuraim_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdul_rahman_sudais",
+      "name_ar": "عبد الرحمن السديس",
+      "english_name": "Abdul Rahman Al-Sudais",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server11.mp3quran.net/sds/001.mp3",
+      "everyayah_folder": "Abdurrahmaan_As-Sudais_192kbps",
+      "quran_foundation_id": 3,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abu_bakr_shatri",
+      "name_ar": "أبو بكر الشاطري",
+      "english_name": "Abu Bakr Al-Shatri",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server11.mp3quran.net/shatri/001.mp3",
+      "everyayah_folder": "Abu_Bakr_Ash-Shaatree_128kbps",
+      "quran_foundation_id": 4,
+      "qua_slug": "abu_bakr_al_shatri_tarteel",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "abu_bakr_al_shatri",
+      "catalog_recitation_candidates": [
+        "abu_bakr_al_shatri_tarteel"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "saad_ghamdi",
+      "name_ar": "سعد الغامدي",
+      "english_name": "Saad Al-Ghamdi",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server7.mp3quran.net/s_gmd/001.mp3",
+      "everyayah_folder": "Ghamadi_40kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "saad_al_ghamdi",
+      "catalog_recitation_candidates": [
+        "saad_al_ghamdi_tarteel"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "ahmad_ajmi",
+      "name_ar": "أحمد بن علي العجمي",
+      "english_name": "Ahmad Al-Ajmi",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server10.mp3quran.net/ajm/001.mp3",
+      "everyayah_folder": "Ahmed_ibn_Ali_al-Ajamy_128kbps_ketaballah.net",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "ahmed_al_ajmi",
+      "catalog_recitation_candidates": [
+        "ahmed_al_ajmi_qdc"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "hani_rifai",
+      "name_ar": "هاني الرفاعي",
+      "english_name": "Hani Al-Rifai",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server8.mp3quran.net/hani/001.mp3",
+      "everyayah_folder": "Hani_Rifai_192kbps",
+      "quran_foundation_id": 5,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "hani_al_rifai",
+      "catalog_recitation_candidates": [
+        "hani_al_rifai_qdc_128k"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "fares_abbad",
+      "name_ar": "فارس عباد",
+      "english_name": "Fares Abbad",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server8.mp3quran.net/frs_a/001.mp3",
+      "everyayah_folder": "Fares_Abbad_64kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "yasser_dosari",
+      "name_ar": "ياسر الدوسري",
+      "english_name": "Yasser Al-Dosari",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server11.mp3quran.net/yasser/001.mp3",
+      "everyayah_folder": "Yasser_Ad-Dussary_128kbps",
+      "quran_foundation_id": 97,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "yasser_al_dosari",
+      "catalog_recitation_candidates": [
+        "yasser_al_dosari_archive"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "nasser_qatami",
+      "name_ar": "ناصر القطامي",
+      "english_name": "Nasser Al-Qatami",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server6.mp3quran.net/qtm/001.mp3",
+      "everyayah_folder": "Nasser_Alqatami_128kbps",
+      "quran_foundation_id": null,
+      "qua_slug": "nasser_al_qatami_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "nasser_al_qatami",
+      "catalog_recitation_candidates": [
+        "nasser_al_qatami_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "bandar_baleela",
+      "name_ar": "بندر بليلة",
+      "english_name": "Bandar Baleela",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server8.mp3quran.net/balilah/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "bandar_baleela",
+      "catalog_recitation_candidates": [
+        "bandar_baleela_qdc"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdullah_matrood",
+      "name_ar": "عبد الله المطرود",
+      "english_name": "Abdullah Al-Matrood",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server11.mp3quran.net/mtrod/001.mp3",
+      "everyayah_folder": "Abdullah_Matroud_128kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "abdullah_al_mattrod",
+      "catalog_recitation_candidates": [
+        "abdullah_al_mattrod_qdc"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "khaled_jaleel",
+      "name_ar": "خالد الجليل",
+      "english_name": "Khaled Al-Jaleel",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server10.mp3quran.net/jleel/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdulbari_thubaity",
+      "name_ar": "عبد الباري الثبيتي",
+      "english_name": "Abdul Bari Al-Thubaity",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server6.mp3quran.net/thbtei/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "ali_jaber",
+      "name_ar": "علي جابر",
+      "english_name": "Ali Jaber",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server11.mp3quran.net/a_jbr/001.mp3",
+      "everyayah_folder": "Ali_Jaber_64kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdullah_awad_juhany",
+      "name_ar": "عبد الله عواد الجهني",
+      "english_name": "Abdullah Awad Al-Juhany",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server10.mp3quran.net/jhn/001.mp3",
+      "everyayah_folder": "Abdullaah_3awwaad_Al-Juhaynee_128kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "muhammad_luhaidan",
+      "name_ar": "محمد اللحيدان",
+      "english_name": "Muhammad Al-Luhaidan",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server6.mp3quran.net/lhdan/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "mohammed_al_luhaidan",
+      "catalog_recitation_candidates": [
+        "mohammed_al_luhaidan_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "salah_budair",
+      "name_ar": "صلاح البدير",
+      "english_name": "Salah Al-Budair",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server7.mp3quran.net/s_bud/001.mp3",
+      "everyayah_folder": "Salah_Al_Budair_128kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "idris_abkar",
+      "name_ar": "إدريس أبكر",
+      "english_name": "Idris Abkar",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server8.mp3quran.net/abkr/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "islam_sobhi",
+      "name_ar": "إسلام صبحي",
+      "english_name": "Islam Sobhi",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server14.mp3quran.net/islam/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": "islam_sobhi_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "islam_sobhi",
+      "catalog_recitation_candidates": [
+        "islam_sobhi_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "raad_kurdi",
+      "name_ar": "رعد الكردي",
+      "english_name": "Raad Al-Kurdi",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server6.mp3quran.net/kurdi/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdullah_basfar",
+      "name_ar": "عبد الله بصفر",
+      "english_name": "Abdullah Basfar",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server10.mp3quran.net/bsfr/001.mp3",
+      "everyayah_folder": "Abdullah_Basfar_192kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mansour_salimi",
+      "name_ar": "منصور السالمي",
+      "english_name": "Mansour Al-Salimi",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server10.mp3quran.net/salmi/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "hazza_albalushi",
+      "name_ar": "هزاع البلوشي",
+      "english_name": "Hazza Al-Balushi",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server11.mp3quran.net/balushi/001.mp3",
+      "everyayah_folder": "Hazza_Al-Balushi_128kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mahmoud_ali_albanna",
+      "name_ar": "محمود علي البنا",
+      "english_name": "Mahmoud Ali Al-Banna",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server8.mp3quran.net/bna/001.mp3",
+      "everyayah_folder": "mahmoud_ali_al_banna_32kbps",
+      "quran_foundation_id": null,
+      "qua_slug": "mahmoud_ali_al_banna_qdc",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "mahmoud_ali_al_banna",
+      "catalog_recitation_candidates": [
+        "mahmoud_ali_al_banna_qdc"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "khalifa_tunaiji",
+      "name_ar": "خليفة الطنيجي",
+      "english_name": "Khalifa Al-Tunaiji",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server12.mp3quran.net/tnjy/001.mp3",
+      "everyayah_folder": "khalefa_al_tunaiji_64kbps",
+      "quran_foundation_id": null,
+      "qua_slug": "khalifa_al_tunaiji_tarteel",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "khalifa_al_tunaiji",
+      "catalog_recitation_candidates": [
+        "khalifa_al_tunaiji_tarteel"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "wadih_yamani",
+      "name_ar": "وديع اليمني",
+      "english_name": "Wadih Al-Yamani",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server6.mp3quran.net/wdee/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdullah_al_qarafi",
+      "name_ar": "عبد الله القرافي",
+      "english_name": "Abdullah Al-Qarafi",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server16.mp3quran.net/a_alqrafi/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": "abdullah_al_qarafi_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "abdullah_al_qarafi",
+      "catalog_recitation_candidates": [
+        "abdullah_al_qarafi_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdulwadood_haneef",
+      "name_ar": "عبد الودود حنيف",
+      "english_name": "Abdulwadood Haneef",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server8.mp3quran.net/wdod/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": "abdulwadood_haneef_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "abdulwadood_haneef",
+      "catalog_recitation_candidates": [
+        "abdulwadood_haneef_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdur_rashid_sufi",
+      "name_ar": "عبد الرشيد صوفي",
+      "english_name": "Abdur-Rashid Sufi",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://download.quranicaudio.com/quran/abdurrashid_sufi/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": "abdur_rashid_sufi_qdc",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "abdur_rashid_sufi",
+      "catalog_recitation_candidates": [
+        "abdur_rashid_sufi_qdc",
+        "abdur_rashid_sufi_shubah_qdc"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "ahmed_amer",
+      "name_ar": "أحمد عامر",
+      "english_name": "Ahmed Amer",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://download.tvquran.com/download/recitations/197/143/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": "ahmed_amer_tvquran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "ahmed_amer",
+      "catalog_recitation_candidates": [
+        "ahmed_amer_tvquran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "ahmed_issa_al_maasaraawi",
+      "name_ar": "أحمد عيسى المعصراوي",
+      "english_name": "Ahmed Issa Al-Maasaraawi",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server16.mp3quran.net/a_maasaraawi/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "ahmed_issa_al_maasaraawi",
+      "catalog_recitation_candidates": [
+        "ahmed_issa_al_maasaraawi_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "ahmed_shaheen",
+      "name_ar": "أحمد خليل شاهين",
+      "english_name": "Ahmed Khalil Shaheen",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server16.mp3quran.net/shaheen/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": "ahmed_shaheen_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "ahmed_shaheen",
+      "catalog_recitation_candidates": [
+        "ahmed_shaheen_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "ali_al_huthaifi",
+      "name_ar": "علي بن عبد الرحمن الحذيفي",
+      "english_name": "Ali Al-Huthaifi",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server9.mp3quran.net/hthfi/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": "ali_al_huthaifi_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "ali_al_huthaifi",
+      "catalog_recitation_candidates": [
+        "ali_al_huthaifi_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mahmoud_abdul_hakam",
+      "name_ar": "محمود عبدالحكم",
+      "english_name": "Mahmoud Abdul Hakam",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server16.mp3quran.net/m_abdelhakam/Rewayat-Hafs-A-n-Assem/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": "mahmoud_abdul_hakam_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "mahmoud_abdul_hakam",
+      "catalog_recitation_candidates": [
+        "mahmoud_abdul_hakam_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mohammed_alghazali",
+      "name_ar": "محمد الغزالي",
+      "english_name": "Mohammed Al-Ghazali",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://ia601406.us.archive.org/16/items/Mohammed-Al-Ghazali/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": "mohammed_alghazali_archive",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "mohammed_alghazali",
+      "catalog_recitation_candidates": [
+        "mohammed_alghazali_archive"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mustafa_ismail_murattal",
+      "name_ar": "مصطفى إسماعيل",
+      "english_name": "Mustafa Ismail",
+      "style": "مرتل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server8.mp3quran.net/mustafa/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": "mustafa_ismail_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "mustafa_ismail",
+      "catalog_recitation_candidates": [
+        "mustafa_ismail_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdul_basit_mujawwad",
+      "name_ar": "عبد الباسط عبد الصمد - مجود",
+      "english_name": "Abdul Basit - Mujawwad",
+      "style": "مجود",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server7.mp3quran.net/basit/001.mp3",
+      "everyayah_folder": "Abdul_Basit_Mujawwad_128kbps",
+      "quran_foundation_id": 1,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "abdulbasit_abdulsamad",
+      "catalog_recitation_candidates": [
+        "abdulbasit_abdulsamad_mujawwad_tarteel",
+        "abdulbasit_abdulsamad_tarteel",
+        "abdulbasit_abdulsamad_warsh_qdc"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mahmoud_husary_mujawwad",
+      "name_ar": "محمود خليل الحصري - مجود",
+      "english_name": "Mahmoud Khalil Al-Husary - Mujawwad",
+      "style": "مجود",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server13.mp3quran.net/husr/001.mp3",
+      "everyayah_folder": "Husary_128kbps_Mujawwad",
+      "quran_foundation_id": 6,
+      "qua_slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "mahmoud_khalil_al_husary",
+      "catalog_recitation_candidates": [
+        "mahmoud_khalil_al_husary_mp3quran",
+        "mahmoud_khalil_al_husary_mujawwad_tarteel",
+        "mahmoud_khalil_al_husary_qdc_128k"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "minshawi_mujawwad",
+      "name_ar": "محمد صديق المنشاوي - مجود",
+      "english_name": "Muhammad Siddiq Al-Minshawi - Mujawwad",
+      "style": "مجود",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server10.mp3quran.net/minsh/001.mp3",
+      "everyayah_folder": "Minshawy_Mujawwad_192kbps",
+      "quran_foundation_id": 8,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "mohammed_siddiq_al_minshawi",
+      "catalog_recitation_candidates": [
+        "mohammed_siddiq_al_minshawi_1967_drive",
+        "mohammed_siddiq_al_minshawi_mp3quran",
+        "mohammed_siddiq_al_minshawi_mujawwad_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mohammad_tablawi",
+      "name_ar": "محمد الطبلاوي - مجود",
+      "english_name": "Mohammad Al-Tablawi - Mujawwad",
+      "style": "مجود",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server12.mp3quran.net/tblawi/001.mp3",
+      "everyayah_folder": "Mohammad_al_Tablaway_128kbps",
+      "quran_foundation_id": 11,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mahmoud_ali_albanna_mujawwad",
+      "name_ar": "محمود علي البنا - مجود",
+      "english_name": "Mahmoud Ali Al-Banna - Mujawwad",
+      "style": "مجود",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server8.mp3quran.net/bna/001.mp3",
+      "everyayah_folder": "Mahmod_Ali_Albanna_128kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "mahmoud_ali_al_banna",
+      "catalog_recitation_candidates": [
+        "mahmoud_ali_al_banna_qdc"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "muhammad_rifat",
+      "name_ar": "محمد رفعت",
+      "english_name": "Muhammad Rifat",
+      "style": "مجود",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server14.mp3quran.net/refat/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mustafa_ismail",
+      "name_ar": "مصطفى إسماعيل - مجود",
+      "english_name": "Mustafa Ismail - Mujawwad",
+      "style": "مجود",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server8.mp3quran.net/mustafa/001.mp3",
+      "everyayah_folder": "Mustafa_Ismail_48kbps",
+      "quran_foundation_id": null,
+      "qua_slug": "mustafa_ismail_mp3quran",
+      "qua_catalog_found": true,
+      "catalog_reciter_id": "mustafa_ismail",
+      "catalog_recitation_candidates": [
+        "mustafa_ismail_mp3quran"
+      ],
+      "direct_style_difference": {
+        "legacy_style": "مجود",
+        "catalog_style": "murattal"
+      },
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mahmoud_husary_tarteel",
+      "name_ar": "محمود خليل الحصري - ترتيل",
+      "english_name": "Mahmoud Khalil Al-Husary - Tarteel",
+      "style": "ترتيل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server13.mp3quran.net/husr/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": 6,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "mahmoud_khalil_al_husary",
+      "catalog_recitation_candidates": [
+        "mahmoud_khalil_al_husary_mp3quran",
+        "mahmoud_khalil_al_husary_mujawwad_tarteel",
+        "mahmoud_khalil_al_husary_qdc_128k"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "muhammad_ayyub",
+      "name_ar": "محمد أيوب",
+      "english_name": "Muhammad Ayyub",
+      "style": "ترتيل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server8.mp3quran.net/ayyub/001.mp3",
+      "everyayah_folder": "Muhammad_Ayyoub_128kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "mohammed_ayyub",
+      "catalog_recitation_candidates": [
+        "mohammed_ayyub_drive"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "ali_hudhaify",
+      "name_ar": "علي الحذيفي",
+      "english_name": "Ali Al-Hudhaify",
+      "style": "ترتيل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server11.mp3quran.net/hthfi/001.mp3",
+      "everyayah_folder": "Hudhaify_128kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "ali_al_huthaifi",
+      "catalog_recitation_candidates": [
+        "ali_al_huthaifi_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdulmohsen_qasim",
+      "name_ar": "عبد المحسن القاسم",
+      "english_name": "Abdul Mohsen Al-Qasim",
+      "style": "ترتيل",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server6.mp3quran.net/qasm/001.mp3",
+      "everyayah_folder": "Muhsin_Al_Qasim_192kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "husary_muallim",
+      "name_ar": "محمود خليل الحصري - المعلم",
+      "english_name": "Mahmoud Khalil Al-Husary - Muallim",
+      "style": "معلم",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server13.mp3quran.net/husr/001.mp3",
+      "everyayah_folder": "Husary_Muallim_128kbps",
+      "quran_foundation_id": 12,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "mahmoud_khalil_al_husary",
+      "catalog_recitation_candidates": [
+        "mahmoud_khalil_al_husary_mp3quran",
+        "mahmoud_khalil_al_husary_mujawwad_tarteel",
+        "mahmoud_khalil_al_husary_qdc_128k"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "minshawi_muallim",
+      "name_ar": "محمد صديق المنشاوي - المعلم",
+      "english_name": "Muhammad Siddiq Al-Minshawi - Muallim",
+      "style": "معلم",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://server10.mp3quran.net/minsh/Almusshaf-Al-Mo-lim/001.mp3",
+      "everyayah_folder": "Minshawy_Teacher_128kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "mohammed_siddiq_al_minshawi",
+      "catalog_recitation_candidates": [
+        "mohammed_siddiq_al_minshawi_1967_drive",
+        "mohammed_siddiq_al_minshawi_mp3quran",
+        "mohammed_siddiq_al_minshawi_mujawwad_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "ayman_swed",
+      "name_ar": "أيمن سويد",
+      "english_name": "Ayman Suwayd",
+      "style": "معلم",
+      "riwayah": "حفص عن عاصم",
+      "full_surah_url_example": "https://download.tvquran.com/download/recitations/346/270/001.mp3",
+      "everyayah_folder": "Ayman_Sowaid_64kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "ayman_swed",
+      "catalog_recitation_candidates": [
+        "ayman_swed_muallim_yt"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdul_basit_warsh",
+      "name_ar": "عبد الباسط عبد الصمد - ورش",
+      "english_name": "Abdul Basit Abdul Samad - Warsh",
+      "style": "مرتل",
+      "riwayah": "ورش عن نافع",
+      "full_surah_url_example": "https://server7.mp3quran.net/basit/Rewayat-Warsh-A-n-Nafi/001.mp3",
+      "everyayah_folder": "warsh/warsh_Abdul_Basit_128kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "abdulbasit_abdulsamad",
+      "catalog_recitation_candidates": [
+        "abdulbasit_abdulsamad_mujawwad_tarteel",
+        "abdulbasit_abdulsamad_tarteel",
+        "abdulbasit_abdulsamad_warsh_qdc"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "ibrahim_dosri_warsh",
+      "name_ar": "إبراهيم الدوسري - ورش",
+      "english_name": "Ibrahim Al-Dosary - Warsh",
+      "style": "مرتل",
+      "riwayah": "ورش عن نافع",
+      "full_surah_url_example": "https://server10.mp3quran.net/ibrahim_dosri/Rewayat-Warsh-A-n-Nafi/001.mp3",
+      "everyayah_folder": "warsh/warsh_ibrahim_aldosary_128kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "yassin_jazaery_warsh",
+      "name_ar": "ياسين الجزائري - ورش",
+      "english_name": "Yassin Al-Jazaery - Warsh",
+      "style": "مرتل",
+      "riwayah": "ورش عن نافع",
+      "full_surah_url_example": "https://server11.mp3quran.net/qari/001.mp3",
+      "everyayah_folder": "warsh/warsh_yassin_al_jazaery_64kbps",
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "POSSIBLE_SOURCE_CHANGE_ON_FAILURE",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mahmoud_husary_warsh",
+      "name_ar": "محمود خليل الحصري - ورش",
+      "english_name": "Mahmoud Khalil Al-Husary - Warsh",
+      "style": "مرتل",
+      "riwayah": "ورش عن نافع",
+      "full_surah_url_example": "https://server13.mp3quran.net/husr/Rewayat-Warsh-A-n-Nafi/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "mahmoud_khalil_al_husary",
+      "catalog_recitation_candidates": [
+        "mahmoud_khalil_al_husary_mp3quran",
+        "mahmoud_khalil_al_husary_mujawwad_tarteel",
+        "mahmoud_khalil_al_husary_qdc_128k"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "omar_qazabri_warsh",
+      "name_ar": "عمر القزابري - ورش",
+      "english_name": "Omar Al-Qazabri - Warsh",
+      "style": "مرتل",
+      "riwayah": "ورش عن نافع",
+      "full_surah_url_example": "https://server9.mp3quran.net/omar_warsh/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "koshi_warsh",
+      "name_ar": "العيون الكوشي - ورش",
+      "english_name": "Al-Uyun Al-Koushi - Warsh",
+      "style": "مرتل",
+      "riwayah": "ورش عن نافع",
+      "full_surah_url_example": "https://server11.mp3quran.net/koshi/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mahmoud_husary_qaloon",
+      "name_ar": "محمود خليل الحصري - قالون",
+      "english_name": "Mahmoud Al-Husary - Qaloon",
+      "style": "مرتل",
+      "riwayah": "قالون عن نافع",
+      "full_surah_url_example": "https://server13.mp3quran.net/husr/Rewayat-Qalon-A-n-Nafi/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "mahmoud_khalil_al_husary",
+      "catalog_recitation_candidates": [
+        "mahmoud_khalil_al_husary_mp3quran",
+        "mahmoud_khalil_al_husary_mujawwad_tarteel",
+        "mahmoud_khalil_al_husary_qdc_128k"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "ali_hudhaify_qaloon",
+      "name_ar": "علي الحذيفي - قالون",
+      "english_name": "Ali Al-Hudhaify - Qaloon",
+      "style": "ترتيل",
+      "riwayah": "قالون عن نافع",
+      "full_surah_url_example": "https://server9.mp3quran.net/huthifi_qalon/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "ali_al_huthaifi",
+      "catalog_recitation_candidates": [
+        "ali_al_huthaifi_mp3quran"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "dokali_qaloon",
+      "name_ar": "الدوكالي محمد العالم - قالون",
+      "english_name": "Al-Dokali Muhammad Al-Alim - Qaloon",
+      "style": "مرتل",
+      "riwayah": "قالون عن نافع",
+      "full_surah_url_example": "https://server7.mp3quran.net/dokali/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "nourin_siddig_duri",
+      "name_ar": "نورين محمد صديق - الدوري",
+      "english_name": "Nourin Mohamed Siddig - Al-Duri",
+      "style": "مرتل",
+      "riwayah": "الدوري عن أبي عمرو",
+      "full_surah_url_example": "https://server16.mp3quran.net/nourin_siddig/Rewayat-Aldori-A-n-Abi-Amr/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "fateh_zubeir_duri",
+      "name_ar": "الفاتح محمد الزبير - الدوري",
+      "english_name": "Al-Fateh Muhammad Al-Zubair - Al-Duri",
+      "style": "مرتل",
+      "riwayah": "الدوري عن أبي عمرو",
+      "full_surah_url_example": "https://server6.mp3quran.net/fateh/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "mahmoud_husary_duri",
+      "name_ar": "محمود خليل الحصري - الدوري",
+      "english_name": "Mahmoud Khalil Al-Husary - Al-Duri",
+      "style": "مرتل",
+      "riwayah": "الدوري عن أبي عمرو",
+      "full_surah_url_example": "https://server13.mp3quran.net/husr/Rewayat-Aldori-A-n-Abi-Amr/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "mahmoud_khalil_al_husary",
+      "catalog_recitation_candidates": [
+        "mahmoud_khalil_al_husary_mp3quran",
+        "mahmoud_khalil_al_husary_mujawwad_tarteel",
+        "mahmoud_khalil_al_husary_qdc_128k"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdur_rashid_sufi_soosi",
+      "name_ar": "عبد الرشيد صوفي - السوسي",
+      "english_name": "Abdur-Rashid Sufi - Al-Susi",
+      "style": "مرتل",
+      "riwayah": "السوسي عن أبي عمرو",
+      "full_surah_url_example": "https://server16.mp3quran.net/soufi/Rewayat-Assosi-A-n-Abi-Amr/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "abdur_rashid_sufi",
+      "catalog_recitation_candidates": [
+        "abdur_rashid_sufi_qdc",
+        "abdur_rashid_sufi_shubah_qdc"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "muftah_sultany_shubah",
+      "name_ar": "مفتاح السلطني - شعبة",
+      "english_name": "Muftah Al-Sultany - Shu'bah",
+      "style": "مرتل",
+      "riwayah": "شعبة عن عاصم",
+      "full_surah_url_example": "https://server14.mp3quran.net/muftah_sultany/Rewayat_Sho-bah-A-n-Asim/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": null,
+      "catalog_recitation_candidates": [],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    },
+    {
+      "legacy_id": "abdur_rashid_sufi_khalaf",
+      "name_ar": "عبد الرشيد صوفي - خلف عن حمزة",
+      "english_name": "Abdur-Rashid Sufi - Khalaf an Hamzah",
+      "style": "مرتل",
+      "riwayah": "خلف عن حمزة",
+      "full_surah_url_example": "https://server16.mp3quran.net/soufi/Rewayat-Khalaf-A-n-Hamzah/001.mp3",
+      "everyayah_folder": null,
+      "quran_foundation_id": null,
+      "qua_slug": null,
+      "qua_catalog_found": null,
+      "catalog_reciter_id": "abdur_rashid_sufi",
+      "catalog_recitation_candidates": [
+        "abdur_rashid_sufi_qdc",
+        "abdur_rashid_sufi_shubah_qdc"
+      ],
+      "direct_style_difference": null,
+      "recording_fallback_changes": "FULL_SURAH_ONLY",
+      "human_voice_identity": "unverified"
+    }
+  ],
+  "existing_live_head_evidence": {
+    "source": "docs/data/d4-islam-sobhi-44.json",
+    "checked_window": {
+      "from": "2026-10-10T09:22:33.615Z",
+      "to": "2026-10-10T09:24:04Z"
+    },
+    "slug": "islam_sobhi_mp3quran",
+    "surah": 44,
+    "original_url": "https://server14.mp3quran.net/islam/Rewayat-Hafs-A-n-Assem/044.mp3",
+    "resolved_url": "https://cdn.mp3quran.net/audio/islam-sobhi/r1/044.mp3",
+    "status": 200,
+    "content_length": 6639247,
+    "content_type": "audio/mpeg",
+    "identity_result": "not measured; original folder and redirect contain islam/islam-sobhi, no different-reciter assignment found"
+  },
+  "duration_quality_comparison": {
+    "status": "unavailable",
+    "reason": "No measured same-surah full-source duration/decoded-quality dataset for all variants. QUD nominal bitrate/sample rate are declarations only. Timing spans cannot substitute for full audio duration.",
+    "measured_pair_comparisons": 0,
+    "anomalies": null
+  },
+  "speaker_embeddings": {
+    "status": "not_attempted_optional",
+    "reason": "No verified complete same-reciter audition corpus; optional embeddings not required for identity confirmation and not used to decide voice status."
+  },
+  "limitations": [
+    "No listening or human identity approval; all recitations remain unverified.",
+    "Different URLs may still resolve to identical bytes; complete redirect/content fingerprint comparison not performed by this advisory metadata audit.",
+    "Opaque YouTube/Drive IDs and numeric archive/TVQuran folders cannot prove reader name from URL. YouTube not fetched.",
+    "Legacy source metadata claims isOpenLicense are not provider permission.",
+    "Audition sample selection and production insertion belong to root T5; this report does not invent durations or apply rows."
+  ],
+  "folder_name_review_findings": [],
+  "legacy_quran_foundation_reference": {
+    "url": "https://api.quran.com/api/v4/resources/recitations?language=en",
+    "observed_ids": [
+      2,
+      1,
+      3,
+      4,
+      5,
+      12,
+      6,
+      7,
+      9,
+      8,
+      10,
+      11
+    ],
+    "legacy_id_97": "Not present in observed resource list; specific chapter endpoint and voice not tested",
+    "style_6": "null; do not infer mujawwad",
+    "runtime_enabled": false,
+    "recorded_at_utc": "2026-10-10T09:56:36.573Z",
+    "observed_on_utc_date": "2026-10-10"
+  },
+  "legacy_name_resolver_wrong_reciter": {
+    "source": "src/lib/quranFoundationApi.ts:74",
+    "read_at_utc": "2026-10-10T09:56:36.573Z",
+    "resource_status": 200,
+    "observed_recitations": 12,
+    "callers": "Repository rg found definition only; PreviewPage legacy QF path disabled",
+    "results": [
+      {
+        "requested_name": "Maher Al Muaiqly",
+        "resolved_id": 2,
+        "resolved_name": "AbdulBaset AbdulSamad"
+      },
+      {
+        "requested_name": "Reader Not In Catalog",
+        "resolved_id": 2,
+        "resolved_name": "AbdulBaset AbdulSamad"
+      },
+      {
+        "requested_name": "",
+        "resolved_id": null,
+        "resolved_name": null
+      }
+    ],
+    "source_sha256": "c288e3d822465e815f9f78a42630656d38691c0f28cef9ed938670372842c62f",
+    "failure_reason": "style/null-style contributes positive score even when nameHit=false; filter accepts score>0",
+    "current_runtime_effect": "inactive: definition has no callsites in src/server and legacy QF playback is disabled",
+    "audio_body_requested": false,
+    "stop_trigger": false
+  }
+}
