@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import mysql,{type RowDataPacket} from 'mysql2/promise';
-import {humanReviewMigrationSql,upHumanReviewsAndLicensedSources} from '../server/db/migrations/005_addHumanReviewsAndLicensedSources';
-import {D4_OFFSET_CHECK,D4_PUBLISH_CHECK} from '../server/services/catalogTechnicalPublication';
+import {humanReviewMigrationSql,upHumanReviewsAndLicensedSources,downHumanReviewsAndLicensedSources} from '../server/db/migrations/005_addHumanReviewsAndLicensedSources';
+import {D4_OFFSET_CHECK,D4_PUBLISH_CHECK,publicationConstraintSql} from '../server/services/catalogTechnicalPublication';
 import {createLicensedPublicationDetails,scopedLicensedChapterProof} from '../server/services/catalogLicensedReadiness';
 import type {HostedAudioPlan} from '../server/services/licensedSourceResolver';
 const option=(key:string)=>{const i=process.argv.indexOf(key);assert.ok(i>=0&&process.argv[i+1],key);return process.argv[i+1];};
@@ -31,6 +31,9 @@ try{
   // The original catalog branch remains accepted with no licensed cache.
   await insert(null,{offset_verified:1,offset_check_score:.96,verification_status:'passed',verification_method:'v1'});
   await db.query(`ALTER TABLE ${table} DROP CHECK chk_fixture_scoped_publication`);await db.query(`ALTER TABLE ${table} DROP COLUMN licensed_publication_details`);await db.query(`ALTER TABLE ${table} ADD COLUMN licensed_publication_details JSON DEFAULT NULL`);await db.query(`DELETE FROM ${table}`);await db.query(`ALTER TABLE ${table} ADD CONSTRAINT chk_fixture_scoped_publication CHECK(${D4_PUBLISH_CHECK})`);await insert(snapshot);
+  const checkRows=async()=> (await db.query<RowDataPacket[]>("SELECT CONSTRAINT_NAME name,CHECK_CLAUSE clause FROM information_schema.CHECK_CONSTRAINTS WHERE CONSTRAINT_SCHEMA=DATABASE() AND CONSTRAINT_NAME IN ('chk_recitations_offset_gate_v1','chk_recitations_publish_gate_v1','chk_catalog_offset','chk_catalog_publish')"))[0];
+  const applyChecks=async()=>{const rows=await checkRows();for(const sql of publicationConstraintSql(rows.map(r=>String(r.name)),Object.fromEntries(rows.map(r=>[String(r.name),String(r.clause)]))))await db.query(sql);};
+  await applyChecks();await downHumanReviewsAndLicensedSources(db,'local-rehearsal');await downHumanReviewsAndLicensedSources(db,'local-rehearsal');await upHumanReviewsAndLicensedSources(db);await applyChecks();report.down005_twice_and_reapply_with_dependent_check=true;
   Object.assign(report,{passed:true,migration_up_twice:true,column_nullable_json:true,global_offset_unchanged:true,catalog_branch_unchanged:true,local_column_down_reapply:true,ddl_sha256:createHash('sha256').update(ddl).digest('hex'),migration_sql_sha256:createHash('sha256').update(humanReviewMigrationSql().join('\n')).digest('hex')});
 }catch(error){report.passed=false;report.failure=error instanceof Error?error.message:'UNKNOWN';throw new Error('LOCAL_LICENSED_PUBLICATION_ACCEPTANCE_FAILED');}
 finally{await db.query(`DROP TABLE IF EXISTS ${table}`);await db.end();report.finished_at=new Date().toISOString();writeFileSync(option('--report'),JSON.stringify(report,null,2)+'\n');}

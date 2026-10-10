@@ -62,12 +62,16 @@ export const LICENSED_PUBLICATION_JSON_SCHEMA=JSON.stringify({type:'object',requ
 // CHECK cannot join sources or use NOW(). Authoritative live rights/source/expiry rechecks remain mandatory at every public access.
 export const D4_LICENSED_PUBLISH_CHECK=every([`JSON_SCHEMA_VALID('${LICENSED_PUBLICATION_JSON_SCHEMA.replace(/'/gu,"''")}',licensed_publication_details)=1`,"JSON_UNQUOTE(JSON_EXTRACT(licensed_publication_details,'$.recitation_id'))=id","JSON_EXTRACT(licensed_publication_details,'$.complete_chapter_count')=JSON_LENGTH(JSON_EXTRACT(licensed_publication_details,'$.chapters'))","JSON_EXTRACT(licensed_publication_details,'$.expires_at_epoch_ms')-JSON_EXTRACT(licensed_publication_details,'$.checked_at_epoch_ms')=300000","JSON_EXTRACT(licensed_publication_details,'$.chapters[0].ready_ayahs')=JSON_EXTRACT(licensed_publication_details,'$.chapters[0].expected_ayahs')","JSON_EXTRACT(licensed_publication_details,'$.chapters[0].last_word_ms')<=JSON_EXTRACT(licensed_publication_details,'$.chapters[0].duration_ms')+30"]);
 const catalogPublish=every(["offset_verified=1","verification_status='passed'","verification_method IN ('v1','v2')"]);
+export const D4_CATALOG_ONLY_PUBLISH_CHECK=`status<>'published' OR (${every(["riwayah_code='hafs_an_asim'","canonical_text_available=1","audio_mode='surah_slice'","offset_verified=1","verification_status='passed'","timing_quality='verified'","timing_level IN ('word','letter')","verification_method IN ('v1','v2')"])})`;
 export const D4_PUBLISH_CHECK=`status<>'published' OR (${every(["riwayah_code='hafs_an_asim'","canonical_text_available=1","audio_mode='surah_slice'","timing_quality='verified'","timing_level IN ('word','letter')",`(${catalogPublish}) OR (${D4_LICENSED_PUBLISH_CHECK})`])})`;
 export const PUBLICATION_CONSTRAINTS={chk_recitations_offset_gate_v1:D4_OFFSET_CHECK,chk_recitations_publish_gate_v1:D4_PUBLISH_CHECK} as const;
-export function publicationConstraintSql(existing:readonly string[]):string[]{
-  const added=Object.entries(PUBLICATION_CONSTRAINTS).filter(([name])=>!existing.includes(name)).map(([name,expr])=>`ADD CONSTRAINT ${name} CHECK (${expr})`);
+const normalizeCheck=(expression:string):string=>expression.toLowerCase().replace(/_utf8mb4/gu,'').replace(/`/gu,'').replace(/\s+/gu,'').replace(/[()]/gu,'');
+/** The caller must read CHECK_CLAUSE. Existing names alone cannot certify a changed expression. */
+export function publicationConstraintSql(existing:readonly string[],clauses:Readonly<Record<string,string>>={}):string[]{
+  const changed=Object.entries(PUBLICATION_CONSTRAINTS).filter(([name,expr])=>existing.includes(name)&&clauses[name]!==undefined&&normalizeCheck(clauses[name])!==normalizeCheck(expr));
+  const added=Object.entries(PUBLICATION_CONSTRAINTS).filter(([name])=>!existing.includes(name)||changed.some(([n])=>n===name)).map(([name,expr])=>`ADD CONSTRAINT ${name} CHECK (${expr})`);
   const removed=['chk_catalog_offset','chk_catalog_publish'].filter(n=>existing.includes(n)).map(n=>`DROP CHECK ${n}`);
-  return added.length||removed.length?[`ALTER TABLE recitations ${[...removed,...added].join(', ')};`]:[];
+  return added.length||removed.length?[`ALTER TABLE recitations ${[...removed,...changed.map(([name])=>`DROP CHECK ${name}`),...added].join(', ')};`]:[];
 }
 /** Separate reviewed K1 operation, never part of additive migration004. */
 export const D4_PUBLICATION_CONSTRAINT_SQL=publicationConstraintSql(['chk_catalog_offset','chk_catalog_publish'])[0];

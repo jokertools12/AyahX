@@ -39,6 +39,7 @@ export class RecitationAudioResolver {
     if(licensed){
       if(timeline.sourceWindow.toMs>licensed.durationMs+30)throw new CatalogError('LICENSED_TIMING_COORDINATES_INVALID',409);
       const url=licensed.adapter==='r2'?(await this.licensed!.storage.presignGet(licensed.objectKey,900)).url:licensed.url;
+      await this.db.transaction(tx=>appendCatalogAudit(tx,{id:'audio-resolver',kind:'system',permissions:new Set()},'recitation.licensed_source_used','recitation',String(r.id),null,{source_id:licensed.sourceId,source_sha256:licensed.sha256,surah,from,to,adapter:licensed.adapter,reason:'EXPLICIT_LICENSED_SAME_RECORDING'}));
       return {recitationId,mode:'surah_slice',coordinate:'source_ms',provider:'licensed_file',license:'admin_owned_or_licensed',attribution:r.attribution_text===null?null:String(r.attribution_text),parts:[{url,sliceFromMs:timeline.sourceWindow.fromMs,sliceToMs:timeline.sourceWindow.toMs}],fallbackUsed:true,fallbackReason:'EXPLICIT_LICENSED_SAME_RECORDING',alternateSourceId:licensed.sourceId};
     }
     const hosts=json(r.host_allowlist);if(!Array.isArray(hosts)||hosts.some(h=>typeof h!=='string'))throw new CatalogError('AUDIO_PROVIDER_INVALID',503);

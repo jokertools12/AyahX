@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {catalogPublicationFacts,technicalPublicationDecision,technicalPublicationMutation} from '../../server/services/catalogTechnicalPublication';
+import {catalogPublicationFacts,technicalPublicationDecision,technicalPublicationMutation,publicationConstraintSql,PUBLICATION_CONSTRAINTS,D4_CATALOG_ONLY_PUBLISH_CHECK} from '../../server/services/catalogTechnicalPublication';
 const row={status:'needs_review',riwayah_code:'hafs_an_asim',canonical_text_available:1,offset_verified:1,verification_status:'passed',verification_method:'v1',offset_check_score:.96,timing_level:'word',timing_quality:'verified',audio_mode:'surah_slice'};
 const facts={completeChapters:1,healthyCompleteChapters:1,coverageMismatches:0,links:114,healthyLinks:114,youtube:false,sameAudioConflict:false};
 describe('technical publication only',()=>{
@@ -38,5 +38,9 @@ describe('technical publication only',()=>{
   it('rejects impossible or missing fact counts',()=>{
     expect(()=>technicalPublicationDecision(row,{...facts,healthyCompleteChapters:2})).toThrow('FACTS_INVALID');
     expect(()=>technicalPublicationDecision(row,{...facts,healthyLinks:0})).toThrow('FACTS_INVALID');
+  });
+  it('replaces only a changed publish CHECK even when its existing name is unchanged',()=>{
+    const existing=Object.keys(PUBLICATION_CONSTRAINTS),clauses={...PUBLICATION_CONSTRAINTS,chk_recitations_publish_gate_v1:D4_CATALOG_ONLY_PUBLISH_CHECK};
+    const [sql]=publicationConstraintSql(existing,clauses);expect(sql).toContain('DROP CHECK chk_recitations_publish_gate_v1');expect(sql).toContain('ADD CONSTRAINT chk_recitations_publish_gate_v1');expect(sql).not.toContain('DROP CHECK chk_recitations_offset_gate_v1');expect(publicationConstraintSql(existing,PUBLICATION_CONSTRAINTS)).toEqual([]);
   });
 });

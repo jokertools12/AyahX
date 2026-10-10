@@ -5,7 +5,7 @@ import type {MockInstance} from 'vitest';
 import {RecitationAudioResolver} from '../../server/services/recitationAudioResolver';
 import {CatalogAudioSource} from '../../server/services/catalogAudioSource';
 import * as timeline from '../../shared/timing/toRenderTimeline';
-import type {CatalogDatabase,CatalogRow,CatalogSettings} from '../../server/services/catalogContracts';
+import type {CatalogDatabase,CatalogRow,CatalogSettings,CatalogTx} from '../../server/services/catalogContracts';
 import type {AudioObjectStorage} from '../../server/services/catalogStorageContracts';
 import type {LicensedOffsetEvidence} from '../../server/services/licensedAudioVerification';
 import type {StorageAudioPlan} from '../../server/services/licensedSourceResolver';
@@ -21,9 +21,10 @@ function fixture(plan:StorageAudioPlan|null=licensed(),record:CatalogRow=base,ch
     if(sql.includes('FROM recitations r JOIN audio_providers p'))return [record];
     if(sql.includes('FROM recitation_chapters'))return [chapterRow];
     if(sql.includes('FROM ayah_timings'))return ayahRows.filter(t=>Number(t.ayah)>=Number(params[2])&&Number(t.ayah)<=Number(params[3]));
+    if(sql.startsWith('SELECT a.hash'))return [];
     throw new Error('UNEXPECTED_LICENSED_BRANCH_QUERY');
   });
-  const execute=vi.fn(async()=>{}),transaction=vi.fn(async()=>{throw new Error('LICENSED_BRANCH_MUST_NOT_PERSIST_CAPABILITY');});const db:CatalogDatabase={read,execute,transaction};
+  const execute=vi.fn(async(_sql:string,_params?:unknown[])=>{});const transaction=vi.fn(async(work:(tx:CatalogTx)=>Promise<unknown>)=>work(db));const db:CatalogDatabase={read,execute,transaction:async<T>(work:(tx:CatalogTx)=>Promise<T>)=>await transaction(work) as T};
   const source=new CatalogAudioSource(),check=vi.spyOn(source,'checkLink').mockRejectedValue(new Error('PROVIDER_FETCH_FORBIDDEN_IN_UNIT')),fingerprint=vi.spyOn(source,'verifyRecordingFingerprint').mockRejectedValue(new Error('PROVIDER_FETCH_FORBIDDEN_IN_UNIT'));
   const presignGet=vi.fn(async()=>({url:signedUnitUrl,expiresAt:'2026-10-10T12:15:00.000Z',requiredHeaders:{}}));
   const storage={adapter:'r2',bucket:'unit-bucket',presignGet} as unknown as AudioObjectStorage;
@@ -43,7 +44,7 @@ describe('licensed RecitationAudioResolver branch — units, no live object stor
     const plan=licensed(),f=fixture(plan),result=await f.resolver.resolveAudioPlan(input);
     expect(f.resolveLicensedSource).toHaveBeenCalledWith('r1',1);expect(conversion).toHaveBeenCalledTimes(1);expect(conversion).toHaveBeenCalledWith(expect.any(Array),{chapterOffsetMs:plan.offsetEvidence.sourceChapterOffsetMs,sourceFormat:'qud_release',padMs:150});
     expect(result).toMatchObject({recitationId:'r1',provider:'licensed_file',license:'admin_owned_or_licensed',attribution:'Owner attribution',coordinate:'source_ms',fallbackUsed:true,fallbackReason:'EXPLICIT_LICENSED_SAME_RECORDING',alternateSourceId:'source-1',parts:[{url:signedUnitUrl,sliceFromMs:60850,sliceToMs:62500}]});
-    expect(f.presignGet).toHaveBeenCalledExactlyOnceWith(plan.objectKey,900);expect(f.check).not.toHaveBeenCalled();expect(f.fingerprint).not.toHaveBeenCalled();expect(globalThis.fetch).not.toHaveBeenCalled();expect(f.execute).not.toHaveBeenCalled();expect(f.transaction).not.toHaveBeenCalled();expect(JSON.stringify(result)).not.toContain(providerUrl);
+    expect(f.presignGet).toHaveBeenCalledExactlyOnceWith(plan.objectKey,900);expect(f.check).not.toHaveBeenCalled();expect(f.fingerprint).not.toHaveBeenCalled();expect(globalThis.fetch).not.toHaveBeenCalled();expect(f.transaction).toHaveBeenCalledOnce();expect(f.execute).toHaveBeenCalledOnce();expect(f.execute.mock.calls[0][0]).toContain('INSERT INTO audit_logs');expect(f.execute.mock.calls[0][1]?.[3]).toBe('recitation.licensed_source_used');expect(JSON.stringify(f.execute.mock.calls)).not.toContain(signedUnitUrl);expect(JSON.stringify(f.execute.mock.calls)).not.toContain(providerUrl);expect(JSON.stringify(result)).not.toContain(providerUrl);
   });
   it('applies the requested crop to licensed source coordinates without the provider chapter base',async()=>{
     const f=fixture(),result=await f.resolver.resolveAudioPlan({...input,from:2,to:2,padMs:50});expect(result.parts[0]).toMatchObject({sliceFromMs:61950,sliceToMs:62500});expect(conversion).toHaveBeenCalledTimes(1);expect(f.check).not.toHaveBeenCalled();
