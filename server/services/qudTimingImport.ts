@@ -61,6 +61,7 @@ export function chapterCoverageSql(rows: PreparedTiming[], chapters: number[], c
   return `UPDATE recitation_chapters SET ${Object.entries(cases).map(([key, parts]) => `${key}=CASE surah ${parts.join(' ')} ELSE ${key} END`).join(',')} WHERE recitation_id=${metadataLiteral(rows[0].recitation_id)}`;
 }
 export const recitationCoverageSql = (rows: PreparedTiming[]): string => `UPDATE recitations SET coverage_words=${rows.reduce((n, r) => n + r.coverage_words, 0)} WHERE id=${metadataLiteral(rows[0].recitation_id)}`;
+export const completeTimingJobSql = (id: string): string => `UPDATE import_jobs SET status='completed',error_json=NULL WHERE id=${metadataLiteral(id)}`;
 export async function importTimingRecitation(db: TimingDatabase, input: {
   rows: PreparedTiming[]; slug: string; manifest: PreparationManifest; corpus: QuranTextCorpus;
   maxPacket: number; onCheckpoint?: (checkpoint: number) => void | Promise<void>;
@@ -73,6 +74,20 @@ export async function importTimingRecitation(db: TimingDatabase, input: {
   const checkpoint = records.length ? Number(records[0].checkpoint) : 0;
   if (!Number.isSafeInteger(checkpoint) || checkpoint < 0 || checkpoint > rows.length || (records.length && (records[0].manifest_sha256 !== manifest.manifest_sha256 || records[0].canonical_checksum !== corpus.checksum || Number(records[0].total_rows) !== rows.length))) throw new Error('CHECKPOINT_IDENTITY_MISMATCH');
   const actual = await db.read(storedTimingSql(rows[0].recitation_id));
+  const expectedById = new Map(rows.slice(0, checkpoint).map((row) => [row.id, row]));
+  for (const stored of actual) {
+    const expected = expectedById.get(String(stored.id));
+    if (!expected) continue; // The count/identity guard below rejects unexpected records.
+    try { verifyTimingRow(expected, stored); }
+    catch (error) {
+      const snapshot = JSON.stringify(stored);
+      const actualHash = timingHash(snapshot);
+      const historyId = stableId('timing-history', `${expected.id}:${actualHash}`);
+      await db.execute(`INSERT INTO ayah_timing_history(id,timing_id,version_hash,snapshot,reason) VALUES(${[historyId, expected.id, actualHash, snapshot, 'CHECKPOINT_STORED_VALUE_MISMATCH'].map(sqlLiteral).join(',')}) ON DUPLICATE KEY UPDATE id=id;`, 1);
+      await db.execute(`UPDATE import_jobs SET status='failed',error_json=${sqlLiteral(JSON.stringify({ code: 'CHECKPOINT_STORED_VALUE_MISMATCH', timing_id: expected.id }))} WHERE id=${metadataLiteral(job.id)};`, 1);
+      throw error;
+    }
+  }
   verifyImportedRows(rows, actual, checkpoint); // Reject corruption before any write, including unchanged version_hash.
   await db.execute(`${job.insert_sql};`, 1);
   for (const batch of job.batches) {
@@ -86,17 +101,7 @@ export async function importTimingRecitation(db: TimingDatabase, input: {
   await db.execute(`${chapterCoverageSql(rows, chapters.map((r) => Number(r.surah)), corpus)};`, chapters.length);
   await db.execute(`${recitationCoverageSql(rows)};`, 1);
   const verified = await db.read(storedTimingSql(rows[0].recitation_id));
-  return { slug, rows: verified.length, sha256: verifyImportedRows(rows, verified), resumed_from: checkpoint, elapsed_ms: Date.now() - started };
-}
-
-/** Actual HF audit rows, isolated from the pinned Release import and publication. */
-export function defectiveAuditSql(cache: string, fixturesPath: string): string {
-  const fixtures = JSON.parse(readFileSync(fixturesPath, 'utf8')) as Array<{ config: string; surah: number; ayah: number; invalid_events: number[][] }>;
-  const values = fixtures.map((fixture) => {
-    const raw = readFileSync(join(cache, `${fixture.config}.recited.jsonl`), 'utf8');
-    const payload = raw.trim().split('\n').map((s) => JSON.parse(s) as { surah: number; ayah: number; word_timestamps: number[][] }).find((r) => r.surah === fixture.surah && r.ayah === fixture.ayah);
-    if (!payload || !fixture.invalid_events.every((bad) => payload.word_timestamps.some((w) => JSON.stringify(w) === JSON.stringify(bad))) || !payload.word_timestamps.some((w) => w[2] <= w[1])) throw new Error('ACTUAL_DEFECTIVE_FIXTURE_MISMATCH');
-    return `(${[stableId('timing-audit', `${fixture.config}:${fixture.surah}:${fixture.ayah}`), fixture.config, fixture.surah, fixture.ayah, 'hf_audit', timingHash(raw), JSON.stringify(payload), JSON.stringify(['NON_POSITIVE_WORD_DURATION','HF_AUDIT_OUTSIDE_PINNED_RELEASE']), 'needs_review'].map(sqlLiteral).join(',')})`;
-  });
-  return `INSERT INTO quran_timing_audit_fixtures(id,config,surah,ayah,source,source_sha256,raw_payload,review_reasons,review_status) VALUES ${values.join(',')} ON DUPLICATE KEY UPDATE id=id;`;
+  const sha256 = verifyImportedRows(rows, verified);
+  await db.execute(`${completeTimingJobSql(job.id)};`, 1);
+  return { slug, rows: verified.length, sha256, resumed_from: checkpoint, elapsed_ms: Date.now() - started };
 }

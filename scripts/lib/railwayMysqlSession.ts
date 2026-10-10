@@ -34,7 +34,7 @@ export interface SerialSessionOptions {
   spawnChild?: SerialChildFactory;
 }
 interface PendingCommand {
-  marker: string; kind: 'read' | 'write' | 'commit' | 'close'; begun: boolean;
+  marker: string; kind: 'read' | 'write' | 'commit' | 'close' | 'storage'; begun: boolean;
   lines: string[]; bytes: number; timer: ReturnType<typeof setTimeout>;
   resolve: (result: string) => void; reject: (error: SerialMysqlError) => void;
 }
@@ -184,10 +184,10 @@ export class RailwayMysqlSession {
     if (this.failure) throw new SerialMysqlError(this.failure, this.evidence);
     if (this.ended || (this.closing && kind !== 'close')) throw new SerialMysqlError('RAILWAY_SERIAL_SESSION_CLOSED', this.evidence);
     if (this.pending) throw new SerialMysqlError('RAILWAY_SERIAL_CONCURRENT_COMMAND_PROHIBITED', this.evidence);
-    if (kind !== 'close' && !sql.trimEnd().endsWith(';')) throw new SerialMysqlError('RAILWAY_SERIAL_SQL_TERMINATOR_REQUIRED', this.evidence);
+    if (kind !== 'close' && kind !== 'storage' && !sql.trimEnd().endsWith(';')) throw new SerialMysqlError('RAILWAY_SERIAL_SQL_TERMINATOR_REQUIRED', this.evidence);
     const marker = `${this.nonce}_${++this.sequence}`;
-    const payload = kind === 'close' ? '-' : (this.compression === 'gzip' ? gzipSync(Buffer.from(sql)) : Buffer.from(sql)).toString('base64');
-    const mode = kind === 'close' ? 'C' : this.compression === 'gzip' ? 'G' : 'P';
+    const payload = kind === 'close' || kind === 'storage' ? '-' : (this.compression === 'gzip' ? gzipSync(Buffer.from(sql)) : Buffer.from(sql)).toString('base64');
+    const mode = kind === 'close' ? 'C' : kind === 'storage' ? 'D' : this.compression === 'gzip' ? 'G' : 'P';
     return new Promise<string>((resolve, reject) => {
       const timer = setTimeout(() => this.fail('RAILWAY_SERIAL_COMMAND_TIMEOUT', true), this.timeoutMs);
       this.pending = { marker, kind, begun: false, lines: [], bytes: 0, timer, resolve, reject };
@@ -200,6 +200,13 @@ export class RailwayMysqlSession {
       throw new SerialMysqlError('READ_ONLY_SQL_REQUIRED', this.evidence);
     }
     return this.command(sql, 'read');
+  }
+
+  /** Actual MySQL filesystem observation inside this same SSH session. No additional connection. */
+  async storage(): Promise<{ total_bytes: number; used_bytes: number; available_bytes: number }> {
+    const value = JSON.parse((await this.command('', 'storage')).trim()) as { total_bytes: number; used_bytes: number; available_bytes: number };
+    if (![value.total_bytes, value.used_bytes, value.available_bytes].every((n) => Number.isSafeInteger(n) && n >= 0) || value.total_bytes <= 0 || value.available_bytes > value.total_bytes) throw new SerialMysqlError('MYSQL_STORAGE_MEASUREMENT_INVALID', this.evidence);
+    return value;
   }
 
   async executeStatements(statements: readonly SerialSqlStatement[], beforeBatch?: (row: SerialBatchEvidence) => void | Promise<void>): Promise<void> {

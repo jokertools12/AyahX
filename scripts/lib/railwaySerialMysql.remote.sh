@@ -37,6 +37,12 @@ while IFS=$'\t' read -r mode marker payload; do
       exit "$status"
     fi
   fi
+  if [[ "$mode" = D && "$payload" = - ]]; then
+    printf 'AYAHX_SERIAL_BEGIN\t%s\n' "$marker"
+    df -B1 --output=size,used,avail /var/lib/mysql | tail -n 1 | awk '{printf "{\"total_bytes\":%s,\"used_bytes\":%s,\"available_bytes\":%s}\n",$1,$2,$3}'
+    printf 'AYAHX_SERIAL_ACK\t%s\n' "$marker"
+    continue
+  fi
   [[ "$mode" = P || ( "$mode" = G && "$compression" = gzip ) ]] || { printf '%s\n' AYAHX_FRAME_MODE_INVALID >&2; exit 64; }
   [[ "$payload" =~ ^[A-Za-z0-9+/=]+$ ]] || { printf '%s\n' AYAHX_FRAME_PAYLOAD_INVALID >&2; exit 64; }
   printf 'AYAHX_SERIAL_BEGIN\t%s\n' "$marker"

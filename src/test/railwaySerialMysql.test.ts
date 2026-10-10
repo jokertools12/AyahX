@@ -36,6 +36,11 @@ class MockSsh extends EventEmitter {
         if (!this.closeHangs) queueMicrotask(() => this.finish(this.closeCode));
         return;
       }
+      if (mode === 'D') {
+        this.stdout.write(`AYAHX_SERIAL_BEGIN\t${marker}\n{"total_bytes":5000,"used_bytes":1000,"available_bytes":4000}\nAYAHX_SERIAL_ACK\t${marker}\n`);
+        callback();
+        return;
+      }
       const sql = (mode === 'G' ? gunzipSync(Buffer.from(encoded, 'base64')) : Buffer.from(encoded, 'base64')).toString('utf8');
       this.received.push(sql);
       this.stdout.write(`AYAHX_SERIAL_BEGIN\t${marker}\n`);
@@ -70,6 +75,13 @@ async function sessionFor(mock = new MockSsh(), options: SerialSessionOptions = 
 }
 
 describe('single-session Railway mysql transport', () => {
+  it('measures df through the same framed session without another SQL connection', async () => {
+    const { mock, session } = await sessionFor();
+    expect(await session.storage()).toEqual({ total_bytes: 5000, used_bytes: 1000, available_bytes: 4000 });
+    expect(mock.received).toEqual([]);
+    expect(mock.frames[0]).toMatch(/^D\t/u);
+    expect((await session.close()).ssh_exit_code).toBe(0);
+  });
   it('uses one SSH child for before reads, guarded writes, COMMIT and after reads', async () => {
     const mock = new MockSsh();
     const spawnChild = vi.fn(() => mock.asChild());
