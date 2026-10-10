@@ -6,6 +6,7 @@ import { appendCatalogAudit } from './catalogAudit';
 import type {LicensedSourceResolver} from './licensedSourceResolver';
 import type {AudioObjectStorage} from './catalogStorageContracts';
 import {assertLicensedOffsetEvidence} from './licensedAudioVerification';
+import {CatalogLicensedChapterReadiness} from './catalogLicensedReadiness';
 const json=(value:unknown):unknown=>typeof value==='string'?JSON.parse(value):value;
 export function hasVerifiedCatalogOffset(row:CatalogRow):boolean{
   if(Number(row.offset_verified)!==1||row.verification_status!=='passed'||!Number.isFinite(Number(row.offset_check_score))||Number(row.offset_check_score)>1)return false;
@@ -37,8 +38,8 @@ export class RecitationAudioResolver {
     const timeline=toRenderTimeline(timing,{chapterOffsetMs:licensed?licensed.sourceChapterOffsetMs:chapter.chapter_offset_ms===null?0:Number(chapter.chapter_offset_ms),sourceFormat:'qud_release',padMs:pad});
     if(licensed){
       if(timeline.sourceWindow.toMs>licensed.durationMs+30)throw new CatalogError('LICENSED_TIMING_COORDINATES_INVALID',409);
-      const capability=await this.licensed!.storage.presignGet(licensed.objectKey,900);
-      return {recitationId,mode:'surah_slice',coordinate:'source_ms',provider:'licensed_file',license:'admin_owned_or_licensed',attribution:r.attribution_text===null?null:String(r.attribution_text),parts:[{url:capability.url,sliceFromMs:timeline.sourceWindow.fromMs,sliceToMs:timeline.sourceWindow.toMs}],fallbackUsed:true,fallbackReason:'EXPLICIT_LICENSED_SAME_RECORDING',alternateSourceId:licensed.sourceId};
+      const url=licensed.adapter==='r2'?(await this.licensed!.storage.presignGet(licensed.objectKey,900)).url:licensed.url;
+      return {recitationId,mode:'surah_slice',coordinate:'source_ms',provider:'licensed_file',license:'admin_owned_or_licensed',attribution:r.attribution_text===null?null:String(r.attribution_text),parts:[{url,sliceFromMs:timeline.sourceWindow.fromMs,sliceToMs:timeline.sourceWindow.toMs}],fallbackUsed:true,fallbackReason:'EXPLICIT_LICENSED_SAME_RECORDING',alternateSourceId:licensed.sourceId};
     }
     const hosts=json(r.host_allowlist);if(!Array.isArray(hosts)||hosts.some(h=>typeof h!=='string'))throw new CatalogError('AUDIO_PROVIDER_INVALID',503);
     const primary=String(chapter.audio_url);const health=await this.source.checkLink(primary,hosts);
@@ -57,8 +58,14 @@ export class RecitationAudioResolver {
       await this.db.transaction(tx=>appendCatalogAudit(tx,{id:'audio-resolver',kind:'system',permissions:new Set()},'recitation.alternate_used','recitation',String(r.id),{primary_status:health.status},{source_id:alternate.id,surah,from,to,reason}));
       return {...base,parts:part(checked.finalUrl??String(alternate.url)),fallbackUsed:true,fallbackReason:reason,alternateSourceId:String(alternate.id)};
     }
-    const candidates=settings.enabled?await this.db.read(`SELECT r.slug,r.display_label_ar,r.display_label_en,c.availability_state,c.available_runs FROM recitations r JOIN audio_providers p ON p.id=r.provider_id JOIN recitation_chapters c ON c.recitation_id=r.id WHERE r.reciter_id=? AND r.id<>? AND ${publicCatalogSql(settings.voiceGatePolicy)} AND c.surah=? AND c.run_count>0 ORDER BY COALESCE(r.sort_order,2147483647),r.slug`,[r.reciter_id,r.id,surah]):[];
-    const suggestions=candidates.filter(c=>(settings.availabilityMode==='ayah_ranges'||c.availability_state==='complete')&&isRangeAvailable(parseRuns(c.available_runs),from,to)).map(({availability_state:_state,available_runs:_runs,...suggestion})=>{void _state;void _runs;return suggestion;});
+    const candidates=settings.enabled?await this.db.read(`SELECT r.id,r.channel,p.code provider,r.licensed_publication_details,r.offset_verified,r.offset_check_score,r.verification_status,r.verification_method,r.verification_details,r.slug,r.display_label_ar,r.display_label_en,c.availability_state,c.available_runs FROM recitations r JOIN audio_providers p ON p.id=r.provider_id JOIN recitation_chapters c ON c.recitation_id=r.id WHERE r.reciter_id=? AND r.id<>? AND ${publicCatalogSql(settings.voiceGatePolicy)} AND c.surah=? AND c.run_count>0 ORDER BY COALESCE(r.sort_order,2147483647),r.slug`,[r.reciter_id,r.id,surah]):[];
+    const suggestions:CatalogRow[]=[];
+    for(const c of candidates){if(!(settings.availabilityMode==='ayah_ranges'||c.availability_state==='complete')||!isRangeAvailable(parseRuns(c.available_runs),from,to))continue;
+      if(c.channel==='youtube'||c.provider==='youtube'||c.licensed_publication_details!==null&&c.licensed_publication_details!==undefined&&!hasVerifiedCatalogOffset(c)){
+        if(!this.licensed||!await new CatalogLicensedChapterReadiness(this.db,this.licensed.resolver).isChapterReady(String(c.id),surah,settings.availabilityMode==='complete_only'))continue;
+      }
+      suggestions.push({slug:c.slug,display_label_ar:c.display_label_ar,display_label_en:c.display_label_en});
+    }
     throw new CatalogError('AUDIO_UNAVAILABLE',502,{recitation_id:recitationId,suggested_recitations:suggestions,failures});
   }
 }

@@ -1,6 +1,7 @@
 import {type CatalogRow} from './catalogContracts';
 import {hasVerifiedCatalogOffset} from './recitationAudioResolver';
-export interface PublicationFacts {completeChapters:number;healthyCompleteChapters:number;coverageMismatches:number;links:number;healthyLinks:number;youtube:boolean;sameAudioConflict:boolean;licensedOffsetVerifiedCompleteChapters?:number}
+import {validLicensedPublicationDetails} from './catalogLicensedReadiness';
+export interface PublicationFacts {completeChapters:number;healthyCompleteChapters:number;coverageMismatches:number;links:number;healthyLinks:number;youtube:boolean;sameAudioConflict:boolean;licensedOffsetVerifiedCompleteChapters?:number;licensedPublicationDetails?:unknown;asOfMs?:number}
 const zero=(value:unknown)=>value===0||value===false||value==='0';
 /** K8 requires healthy and complete in the same chapter, not two disjoint counts. */
 export function catalogPublicationFacts(row:CatalogRow,chapters:readonly CatalogRow[],conflicts:readonly CatalogRow[],nowMs:number):PublicationFacts{
@@ -23,14 +24,15 @@ export function technicalPublicationDecision(row:CatalogRow,facts:PublicationFac
   for(const value of [facts.completeChapters,facts.healthyCompleteChapters,facts.coverageMismatches,facts.links,facts.healthyLinks,facts.licensedOffsetVerifiedCompleteChapters??0])if(!Number.isSafeInteger(value)||value<0)throw new Error('PUBLICATION_FACTS_INVALID');
   if(facts.healthyLinks>facts.links||facts.completeChapters>facts.links||facts.healthyCompleteChapters>Math.min(facts.completeChapters,facts.healthyLinks)||facts.coverageMismatches>facts.links||typeof facts.youtube!=='boolean'||typeof facts.sameAudioConflict!=='boolean')throw new Error('PUBLICATION_FACTS_INVALID');
   const reasons:string[]=[];
+  const licensed=!!facts.licensedPublicationDetails&&validLicensedPublicationDetails(facts.licensedPublicationDetails,String(row.id),facts.asOfMs??Date.now());
   if(row.riwayah_code!=='hafs_an_asim'||Number(row.canonical_text_available)!==1)reasons.push('HAFS_CANONICAL_REQUIRED');
-  if(!hasVerifiedCatalogOffset(row))reasons.push('OFFSET_NOT_VERIFIED');
+  if(!licensed&&!hasVerifiedCatalogOffset(row))reasons.push('OFFSET_NOT_VERIFIED');
   if(row.audio_mode!=='surah_slice')reasons.push('SURAH_SLICE_REQUIRED');
   if(row.timing_quality!=='verified'||!['word','letter'].includes(String(row.timing_level)))reasons.push('WORD_TIMING_NOT_VERIFIED');
   if(facts.completeChapters<1)reasons.push('NO_COMPLETE_CHAPTER');
   if(facts.coverageMismatches>0)reasons.push('COVERAGE_MISMATCH');
-  if(facts.healthyCompleteChapters<1)reasons.push('NO_HEALTHY_COMPLETE_CHAPTER');
-  if(facts.youtube)reasons.push('YOUTUBE_SOURCE_PROHIBITED');
+  if(!licensed&&facts.healthyCompleteChapters<1)reasons.push('NO_HEALTHY_COMPLETE_CHAPTER');
+  if(facts.youtube&&!licensed)reasons.push('YOUTUBE_RENDER_REQUIRES_LICENSED_FILE');
   if(facts.sameAudioConflict)reasons.push('SAME_AUDIO_CONFLICT');
   if(['hidden','deprecated'].includes(String(row.status)))reasons.push('ADMIN_STATUS_PROTECTED');
   return {eligible:reasons.length===0,reasons};
@@ -55,7 +57,12 @@ const v2=every(["verification_method='v2'","offset_check_score>=0.90",
   "JSON_TYPE(JSON_EXTRACT(verification_details,'$.v2_acceptance.review_blockers'))='ARRAY'",
   "JSON_LENGTH(JSON_EXTRACT(verification_details,'$.v2_acceptance.review_blockers'))=0"]);
 export const D4_OFFSET_CHECK=`IFNULL(offset_verified,0)=0 OR (${every(["verification_status='passed'","offset_check_score BETWEEN 0 AND 1",`(verification_method='v1' AND offset_check_score>=0.95) OR (${v2})`])})`;
-export const D4_PUBLISH_CHECK=`status<>'published' OR (${every(["riwayah_code='hafs_an_asim'","canonical_text_available=1","audio_mode='surah_slice'","offset_verified=1","verification_status='passed'","timing_quality='verified'","timing_level IN ('word','letter')","verification_method IN ('v1','v2')"])})`;
+const chapterProofSchema={type:'object',required:['surah','source_id','source_sha256','rights_ref','offset_evidence_sha256','method','minimum_score','maximum_absolute_lag_ms','maximum_duration_difference_ms','sample_count','distinct_surahs','distinct_chapter_lengths','canonical_complete','expected_ayahs','ready_ayahs','coverage_mismatch','duration_ms','last_word_ms','source_chapter_offset_ms','adapter','v2_human_review_id'],properties:{surah:{type:'integer',minimum:1,maximum:114},source_id:{type:'string',minLength:1},source_sha256:{type:'string',pattern:'^[a-f0-9]{64}$'},rights_ref:{type:'string',minLength:1},offset_evidence_sha256:{type:'string',pattern:'^[a-f0-9]{64}$'},method:{enum:['v1','v2']},minimum_score:{type:'number',minimum:.9,maximum:1},maximum_absolute_lag_ms:{type:'number',minimum:0,maximum:30},maximum_duration_difference_ms:{type:'number',minimum:0,maximum:30},sample_count:{type:'integer',minimum:5},distinct_surahs:{type:'integer',minimum:3},distinct_chapter_lengths:{type:'integer',minimum:3},canonical_complete:{enum:[true]},expected_ayahs:{type:'integer',minimum:1},ready_ayahs:{type:'integer',minimum:1},coverage_mismatch:{enum:[0]},duration_ms:{type:'number',exclusiveMinimum:true,minimum:0},last_word_ms:{type:'integer',minimum:1},source_chapter_offset_ms:{type:'integer',minimum:0},adapter:{enum:['r2','url_reference']},v2_human_review_id:{type:['string','null']}},anyOf:[{properties:{method:{enum:['v1']},minimum_score:{minimum:.95}}},{properties:{method:{enum:['v2']},v2_human_review_id:{type:'string',minLength:1}}}]};
+export const LICENSED_PUBLICATION_JSON_SCHEMA=JSON.stringify({type:'object',required:['schema_version','actor','recitation_id','checked_at_epoch_ms','expires_at_epoch_ms','complete_chapter_count','chapters'],properties:{schema_version:{enum:[1]},actor:{enum:['scoped-licensed-verifier-v1']},recitation_id:{type:'string',minLength:1},checked_at_epoch_ms:{type:'integer',minimum:0},expires_at_epoch_ms:{type:'integer',minimum:0},complete_chapter_count:{type:'integer',minimum:1,maximum:1},chapters:{type:'array',minItems:1,maxItems:1,uniqueItems:true,items:chapterProofSchema}}});
+// CHECK cannot join sources or use NOW(). Authoritative live rights/source/expiry rechecks remain mandatory at every public access.
+export const D4_LICENSED_PUBLISH_CHECK=every([`JSON_SCHEMA_VALID('${LICENSED_PUBLICATION_JSON_SCHEMA.replace(/'/gu,"''")}',licensed_publication_details)=1`,"JSON_UNQUOTE(JSON_EXTRACT(licensed_publication_details,'$.recitation_id'))=id","JSON_EXTRACT(licensed_publication_details,'$.complete_chapter_count')=JSON_LENGTH(JSON_EXTRACT(licensed_publication_details,'$.chapters'))","JSON_EXTRACT(licensed_publication_details,'$.expires_at_epoch_ms')-JSON_EXTRACT(licensed_publication_details,'$.checked_at_epoch_ms')=300000","JSON_EXTRACT(licensed_publication_details,'$.chapters[0].ready_ayahs')=JSON_EXTRACT(licensed_publication_details,'$.chapters[0].expected_ayahs')","JSON_EXTRACT(licensed_publication_details,'$.chapters[0].last_word_ms')<=JSON_EXTRACT(licensed_publication_details,'$.chapters[0].duration_ms')+30"]);
+const catalogPublish=every(["offset_verified=1","verification_status='passed'","verification_method IN ('v1','v2')"]);
+export const D4_PUBLISH_CHECK=`status<>'published' OR (${every(["riwayah_code='hafs_an_asim'","canonical_text_available=1","audio_mode='surah_slice'","timing_quality='verified'","timing_level IN ('word','letter')",`(${catalogPublish}) OR (${D4_LICENSED_PUBLISH_CHECK})`])})`;
 export const PUBLICATION_CONSTRAINTS={chk_recitations_offset_gate_v1:D4_OFFSET_CHECK,chk_recitations_publish_gate_v1:D4_PUBLISH_CHECK} as const;
 export function publicationConstraintSql(existing:readonly string[]):string[]{
   const added=Object.entries(PUBLICATION_CONSTRAINTS).filter(([name])=>!existing.includes(name)).map(([name,expr])=>`ADD CONSTRAINT ${name} CHECK (${expr})`);

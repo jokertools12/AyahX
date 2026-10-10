@@ -2,7 +2,7 @@
 const text=(type:string,tail='DEFAULT NULL',binary=false)=>`${type} CHARACTER SET utf8mb4 COLLATE ${binary?'utf8mb4_bin':'utf8mb4_unicode_ci'} ${tail}`;
 export const reviewTypes=['voice_confirmation','provider_license','label_review','offset_exception','basmala_audio','youtube_rights','youtube_audio_missing','near_complete_chapters','data_conflict','same_audio_conflict','storage_activation','storage_credentials','storage_rights'] as const;
 export const licensedSourceColumns:Readonly<Record<string,Readonly<Record<string,string>>>>={
-  recitations:{voice_auto_evidence:'JSON DEFAULT NULL',voice_auto_verified_at:'DATETIME(3) NULL DEFAULT NULL',needs_label_review:'BOOLEAN DEFAULT NULL'},
+  recitations:{voice_auto_evidence:'JSON DEFAULT NULL',voice_auto_verified_at:'DATETIME(3) NULL DEFAULT NULL',needs_label_review:'BOOLEAN DEFAULT NULL',licensed_publication_details:'JSON DEFAULT NULL'},
   recitation_source_urls:{kind:text("ENUM('provider_original','alternate_same_recording','licensed_file')"),rights_ref:text('TEXT'),sha256:text('CHAR(64)', 'DEFAULT NULL',true),duration_ms:'BIGINT UNSIGNED DEFAULT NULL',verification_status:text("ENUM('pending','verified','rejected')"),verification_details:'JSON DEFAULT NULL',storage_object_id:text('VARCHAR(36)'),channel_title:text('VARCHAR(255)')},
 };
 const create=(table:string,columns:string[])=>`CREATE TABLE IF NOT EXISTS ${table} (${columns.join(',')}) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`;

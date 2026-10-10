@@ -112,4 +112,14 @@ export class CatalogAudioSource implements AdminSourceValidator {
   async verifyRecordingFingerprint(url:string,hosts:string[],expectedSha256:string):Promise<void>{
     if(!/^[a-f0-9]{64}$/u.test(expectedSha256)||(await this.decodedFingerprint(url,hosts))!==expectedSha256)throw new CatalogError('ALTERNATE_RECORDING_MISMATCH',422);
   }
+  /** Blob SHA for explicitly licensed hosted files; never a decoded SHA or a YouTube request. */
+  async verifyLicensedBlob(url:string,hosts:string[],expectedSha256:string):Promise<void>{
+    if(!/^[a-f0-9]{64}$/u.test(expectedSha256))throw new CatalogError('LICENSED_RECORDING_UNVERIFIED',409);
+    const {response}=await this.request(url,hosts,'GET');
+    if(response.statusCode!==200||!/^(?:audio\/|application\/octet-stream)/iu.test(String(response.headers['content-type']??''))){response.destroy();throw new CatalogError('LICENSED_AUDIO_UNAVAILABLE',502);}
+    const hash=createHash('sha256');let bytes=0;const timer=setTimeout(()=>response.destroy(new Error('LICENSED_BLOB_TIMEOUT')),120000);
+    try{for await(const chunk of response){bytes+=chunk.length;if(bytes>1_000_000_000)throw new CatalogError('AUDIO_SIZE_LIMIT',422);hash.update(chunk);}if(!bytes||hash.digest('hex')!==expectedSha256)throw new CatalogError('LICENSED_RECORDING_CHANGED',409);}
+    catch(error){if(error instanceof CatalogError)throw error;throw new CatalogError('LICENSED_BLOB_CHECK_FAILED',502);}
+    finally{clearTimeout(timer);response.destroy();}
+  }
 }

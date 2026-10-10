@@ -33,7 +33,7 @@ describe('technical publication only',()=>{
   });
   it('does not treat a future licensed-source count as verified catalog offset or R2 availability',()=>{
     expect(technicalPublicationDecision({...row,offset_verified:0},{...facts,licensedOffsetVerifiedCompleteChapters:1}).reasons).toContain('OFFSET_NOT_VERIFIED');
-    expect(technicalPublicationDecision(row,{...facts,youtube:true,licensedOffsetVerifiedCompleteChapters:1}).reasons).toContain('YOUTUBE_SOURCE_PROHIBITED');
+    expect(technicalPublicationDecision(row,{...facts,youtube:true,licensedOffsetVerifiedCompleteChapters:1}).reasons).toContain('YOUTUBE_RENDER_REQUIRES_LICENSED_FILE');
   });
   it('rejects impossible or missing fact counts',()=>{
     expect(()=>technicalPublicationDecision(row,{...facts,healthyCompleteChapters:2})).toThrow('FACTS_INVALID');
