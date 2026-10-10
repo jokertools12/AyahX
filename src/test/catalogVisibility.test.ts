@@ -5,11 +5,11 @@ describe('D4 public/human gates',()=>{
   it('all status, voice, license, flag and administrator-toggle combinations',()=>{
     let checked=0;
     for(const status of ['draft','imported','needs_review','published','hidden','deprecated'])
-      for(const voice of ['unverified','confirmed','mismatch',null])for(const license of ['unreviewed','permitted','restricted',null])
-        for(const flag of [true,false])for(const visible of [true,false,1,0,null]){
-          expect(isPubliclyVisible({status,voice_identity_status:voice,license_status:license,is_public:visible},flag)).toBe(status==='published'&&voice==='confirmed'&&license==='permitted'&&flag&&(visible===true||visible===1));checked++;
+      for(const voice of ['unverified','auto_verified','confirmed','mismatch',null])for(const license of ['unreviewed','permitted','restricted',null])
+        for(const policy of ['allow_auto_verified','require_confirmed'] as const) for(const flag of [true,false])for(const visible of [true,false,1,0,null]){
+          expect(isPubliclyVisible({status,voice_identity_status:voice,license_status:license,is_public:visible},flag,policy)).toBe(status==='published'&&(voice==='confirmed'||(policy==='allow_auto_verified'&&voice==='auto_verified'))&&license==='permitted'&&flag&&(visible===true||visible===1));checked++;
         }
-    expect(checked).toBe(960);
+    expect(checked).toBe(2400);
   });
   it('permissions are explicit and system actors cannot make human approvals',()=>{
     const human={id:'reviewer',kind:'human' as const,permissions:new Set(['recitations.voice.review'])};

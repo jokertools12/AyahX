@@ -1,6 +1,7 @@
 import { lookup as dnsLookup } from 'node:dns/promises';
 import { isIP } from 'node:net';
 import https from 'node:https';
+import type { TLSSocket } from 'node:tls';
 import type { IncomingMessage } from 'node:http';
 import { createHash } from 'node:crypto';
 import { spawn } from 'node:child_process';
@@ -9,8 +10,13 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { CatalogError } from './catalogContracts';
 import type { AdminSourceValidator,AlternateRecordingProof } from './recitationAdminService';
 import { getFfmpegBinary } from './ffmpegBinary';
-export interface AudioLinkCheck { status:string; httpStatus:number|null; checkedAt:string; finalUrl?:string; contentType?:string; contentLength?:number; retryAt?:string; retryHost?:string; redirects?:string[] }
+export interface AudioTransportEvidence { host:string; dns_addresses:string[]; connected_address:string|null; tls_authorized:boolean; certificate_sha256:string|null }
+export interface AudioLinkCheck { status:string; httpStatus:number|null; checkedAt:string; finalUrl?:string; contentType?:string; contentLength?:number; retryAt?:string; retryHost?:string; redirects?:string[]; transport_evidence?:AudioTransportEvidence[] }
 export type AudioDnsLookup=(host:string)=>Promise<Array<{address:string;family:number}>>;
+/** The only wildcard accepted is the audited Internet Archive CDN namespace. */
+export function catalogHostAllowed(host:string,hosts:readonly string[]):boolean{
+  const name=host.toLowerCase();return hosts.some(h=>h.toLowerCase()===name||h==='*.us.archive.org'&&name.endsWith('.us.archive.org')&&name!== 'us.archive.org');
+}
 export function isPublicAudioAddress(address:string):boolean{
   const family=isIP(address);
   if(family===4){const [a,b,c]=address.split('.').map(Number);return !(a===0||a===10||a===127||a>=224||(a===169&&b===254)||(a===172&&b>=16&&b<=31)||(a===192&&b===168)||(a===100&&b>=64&&b<=127)||(a===198&&(b===18||b===19))||(a===192&&b===0)||(a===198&&b===51&&c===100)||(a===203&&b===0&&c===113));}
@@ -20,7 +26,7 @@ export function isPublicAudioAddress(address:string):boolean{
 export function assertCatalogAudioUrl(raw:string,hosts:readonly string[]):URL{
   let url:URL;try{url=new URL(raw);}catch{throw new CatalogError('AUDIO_URL_INVALID',422);}
   if(url.protocol!=='https:'||url.username||url.password||url.hash||(url.port&&url.port!=='443')||isIP(url.hostname.replace(/^\[|\]$/gu,'')))throw new CatalogError('AUDIO_URL_UNSAFE',422);
-  if(!hosts.some(h=>h.toLowerCase()===url.hostname.toLowerCase())||url.hostname.includes('youtube')||url.hostname==='youtu.be')throw new CatalogError('AUDIO_HOST_NOT_ALLOWED',422);
+  if(!catalogHostAllowed(url.hostname,hosts)||url.hostname.includes('youtube')||url.hostname==='youtu.be')throw new CatalogError('AUDIO_HOST_NOT_ALLOWED',422);
   if([...url.searchParams.keys()].some(k=>/token|signature|credential|expires|x-amz|x-goog|key-pair-id|policy|^sig$|^api[_-]?key$/iu.test(k)))throw new CatalogError('SIGNED_AUDIO_URL_NOT_PERSISTABLE',422);
   return url;
 }
@@ -43,9 +49,9 @@ export class CatalogAudioSource implements AdminSourceValidator {
     const url=assertCatalogAudioUrl(raw,hosts);const addresses=await this.addresses(url.hostname);
     if(!addresses.length||addresses.some(a=>!isPublicAudioAddress(a.address)))throw new CatalogError('AUDIO_DNS_UNSAFE',422);
   }
-  private async request(raw:string,hosts:string[],method:'HEAD'|'GET',range?:string,signal?:AbortSignal):Promise<{response:IncomingMessage;url:URL;redirects:string[]}>{
-    let url=assertCatalogAudioUrl(raw,hosts);const redirects:string[]=[];
-    for(let hop=0;hop<=3;hop++){
+  private async request(raw:string,hosts:string[],method:'HEAD'|'GET',range?:string,signal?:AbortSignal):Promise<{response:IncomingMessage;url:URL;redirects:string[];transport_evidence:AudioTransportEvidence[]}>{
+    let url=assertCatalogAudioUrl(raw,hosts);const redirects:string[]=[],transport_evidence:AudioTransportEvidence[]=[];
+    for(let hop=0;hop<=5;hop++){
       signal?.throwIfAborted();
       const addresses=await this.addresses(url.hostname);if(!addresses.length||addresses.some(a=>!isPublicAudioAddress(a.address)))throw new CatalogError('AUDIO_DNS_UNSAFE',422);
       const blocked=this.blockedUntil.get(url.hostname)??0;if(blocked>Date.now())throw new CatalogError('AUDIO_RATE_LIMITED',429,{retry_at:new Date(blocked).toISOString(),retry_host:url.hostname});
@@ -59,14 +65,17 @@ export class CatalogAudioSource implements AdminSourceValidator {
           headers:{'User-Agent':'AyahX-D4-audio-catalog/1.0',Accept:'audio/*',...(range?{Range:range}:{})},timeout:20000},accept);
         req.once('timeout',()=>req.destroy(new Error('AUDIO_REQUEST_TIMEOUT')));req.once('error',()=>reject(new CatalogError('AUDIO_REQUEST_FAILED',502)));req.end();
       });
+      const socket=response.socket as TLSSocket;
+      const certificate=socket.getPeerCertificate?.();
+      transport_evidence.push({host:url.hostname,dns_addresses:addresses.map(a=>a.address),connected_address:socket.remoteAddress??null,tls_authorized:socket.authorized===true,certificate_sha256:certificate?.fingerprint256??null});
       if(response.statusCode===429){
         const value=response.headers['retry-after'];const rawRetry=Array.isArray(value)?value[0]:value;
         const retry=rawRetry&&/^\d+$/u.test(rawRetry)?Date.now()+Number(rawRetry)*1000:rawRetry?Date.parse(rawRetry):Date.now()+60000;
         const until=Number.isFinite(retry)?Math.max(Date.now()+1000,retry):Date.now()+60000;this.blockedUntil.set(url.hostname,until);response.destroy();
         throw new CatalogError('AUDIO_RATE_LIMITED',429,{retry_at:new Date(until).toISOString(),retry_host:url.hostname});
       }
-      if(response.statusCode && response.statusCode>=300&&response.statusCode<400){const location=response.headers.location;response.destroy();if(!location||hop===3)throw new CatalogError('AUDIO_REDIRECT_INVALID',502);url=assertCatalogAudioUrl(new URL(location,url).href,hosts);redirects.push(url.href);continue;}
-      return {response,url,redirects};
+      if(response.statusCode && response.statusCode>=300&&response.statusCode<400){const location=response.headers.location;response.destroy();if(!location||hop===5)throw new CatalogError('AUDIO_REDIRECT_INVALID',502,{redirects,transport_evidence});const next=new URL(location,url).href;redirects.push(next);try{url=assertCatalogAudioUrl(next,hosts);}catch(error){if(error instanceof CatalogError)throw new CatalogError(error.code,error.status,{...error.details,redirects,transport_evidence});throw error;}continue;}
+      return {response,url,redirects,transport_evidence};
     }
     throw new CatalogError('AUDIO_REDIRECT_INVALID',502);
   }
@@ -77,8 +86,8 @@ export class CatalogAudioSource implements AdminSourceValidator {
       if(result.response.statusCode===405||result.response.statusCode===501){result.response.destroy();result=await this.request(raw,hosts,'GET','bytes=0-1023',signal);}
       const r=result.response;const status=r.statusCode??0;const type=String(r.headers['content-type']??'');const length=Number(r.headers['content-length']??0);
       r.destroy();const available=(status===200||status===206)&&/^(?:audio\/|application\/octet-stream)/iu.test(type);
-      return {status:available?'available':'source_unavailable',httpStatus:status,checkedAt,finalUrl:result.url.href,contentType:type,...(length>0?{contentLength:length}:{}),redirects:result.redirects};
-    }catch(error){if(error instanceof CatalogError)return {status:error.code,httpStatus:error.status===429?429:null,checkedAt,...(error.details.retry_at?{retryAt:String(error.details.retry_at),retryHost:String(error.details.retry_host)}:{})};throw error;}
+      return {status:available?'available':'source_unavailable',httpStatus:status,checkedAt,finalUrl:result.url.href,contentType:type,...(length>0?{contentLength:length}:{}),redirects:result.redirects,transport_evidence:result.transport_evidence};
+    }catch(error){if(error instanceof CatalogError)return {status:error.code,httpStatus:error.status===429?429:null,checkedAt,...(Array.isArray(error.details.redirects)?{redirects:error.details.redirects as string[]}:{}),...(Array.isArray(error.details.transport_evidence)?{transport_evidence:error.details.transport_evidence as AudioTransportEvidence[]}:{}),...(error.details.retry_at?{retryAt:String(error.details.retry_at),retryHost:String(error.details.retry_host)}:{})};throw error;}
   }
   private async decodedFingerprint(raw:string,hosts:string[]):Promise<string>{
     const {response}=await this.request(raw,hosts,'GET');

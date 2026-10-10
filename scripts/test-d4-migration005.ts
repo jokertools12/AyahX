@@ -10,8 +10,9 @@ const option=(name:string)=>{const i=process.argv.indexOf(name);if(i<0||!process
 const database=option('--local-db');assert.match(database,/^ayahx_d4_[a-z0-9_]+$/u);
 const db=await mysql.createConnection({host:'127.0.0.1',port:33319,user:'root',database,charset:'utf8mb4',multipleStatements:true,dateStrings:true});
 const rows=async(sql:string,params:unknown[]=[])=>{const [result]=await db.query<RowDataPacket[]>(sql,params);return result;};
-const safe=(name:string)=>{assert.match(name,/^[a-z_]+$/u);return '`'+name+'`';};
+const safe=(name:string)=>{assert.match(name,/^[a-z_][a-z0-9_]*$/u);return '`'+name+'`';};
 const report:Record<string,unknown>={target:'local',database,production_writes:0,started_at:new Date().toISOString()};
+assert.equal(safe('catalog_sha256'),'`catalog_sha256`');
 try{
   await db.query("SET time_zone='+00:00'");const [{version}]=await rows('SELECT VERSION() version');assert.equal(version,'9.7.2');
   const beforeTables=(await rows('SELECT TABLE_NAME name FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() ORDER BY TABLE_NAME')).map(r=>String(r.name));

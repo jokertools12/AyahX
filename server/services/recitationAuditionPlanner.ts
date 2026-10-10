@@ -1,3 +1,5 @@
+import {catalogHostAllowed} from './catalogAudioSource';
+import {youtubeReference} from './catalogYoutubeMetadata';
 /** Pure T5 selection; HEAD evidence is supplied by the caller. No timing or offset conversion. */
 export interface AuditionChapter { surah: number; audio_url: string; chapter_offset_ms: number | null }
 export interface AuditionLinkEvidence { status: string; httpStatus: number | null; contentType?: string; finalUrl?: string }
@@ -6,15 +8,16 @@ export interface AuditionPlannerInput {
   chapters: readonly AuditionChapter[];
   allowed_hosts: readonly string[];
   link_checks: Readonly<Record<string, AuditionLinkEvidence>>;
+  youtube_metadata?: Readonly<Record<string,{status:string}>>;
 }
 export type AuditionUnavailableReason = 'CHAPTER_NOT_IN_CATALOG' | 'AUDIO_URL_INVALID' | 'AUDIO_URL_UNSAFE'
   | 'AUDIO_HOST_NOT_ALLOWED' | 'SIGNED_AUDIO_URL_NOT_PERSISTABLE' | 'LINK_UNCHECKED' | 'LINK_UNAVAILABLE'
-  | 'LINK_RESPONSE_NOT_AUDIO' | 'SOURCE_NOT_INDEPENDENT';
+  | 'LINK_RESPONSE_NOT_AUDIO' | 'SOURCE_NOT_INDEPENDENT' | 'YOUTUBE_OFFSET_UNAVAILABLE' | 'YOUTUBE_METADATA_UNAVAILABLE';
 export interface AuditionSlot {
   recitation_id: string;
   sample_key: 'fatiha_25s' | 'ikhlas_full' | 'yasin_25s';
   surah: number;
-  start_ms: 0;
+  start_ms: number;
   /** Configured preview limit, not a measured duration. NULL plays the entire independent source. */
   duration_ms: number | null;
   selection_details: {
@@ -27,6 +30,8 @@ export interface AuditionSlot {
     playback_url: string | null;
     timing_dependency: false;
     offset_used: false;
+    playback_kind?: 'youtube_iframe';
+    chapter_offset_ms?: number;
   };
 }
 function safeUrl(raw: string, hosts: readonly string[]): AuditionUnavailableReason | null {
@@ -35,7 +40,7 @@ function safeUrl(raw: string, hosts: readonly string[]): AuditionUnavailableReas
   if (url.protocol !== 'https:' || url.username || url.password || url.hash || (url.port && url.port !== '443')
     || /^\d+\.\d+\.\d+\.\d+$/u.test(url.hostname) || url.hostname.includes(':')
     || /(?:^|\.)(?:localhost|local)$/iu.test(url.hostname)) return 'AUDIO_URL_UNSAFE';
-  if (!hosts.some(host => host.toLowerCase() === url.hostname.toLowerCase())
+  if (!catalogHostAllowed(url.hostname,hosts)
     || /(?:^|\.)(?:youtube\.com|youtu\.be)$/iu.test(url.hostname)) return 'AUDIO_HOST_NOT_ALLOWED';
   if ([...url.searchParams.keys()].some(key => /token|signature|credential|expires|x-amz|x-goog|key-pair-id|policy|^sig$|^api[_-]?key$/iu.test(key))) return 'SIGNED_AUDIO_URL_NOT_PERSISTABLE';
   return null;
@@ -51,6 +56,13 @@ function sourceIdentity(raw: string): string {
 }
 export function planRecitationAuditions(input: AuditionPlannerInput): AuditionSlot[] {
   if (!input.recitation_id.trim()) throw new Error('AUDITION_INVALID_RECITATION_ID');
+  if(input.chapters.length&&input.chapters.every(c=>youtubeReference(c.audio_url))){
+    return ([['fatiha_25s',1,25000],['ikhlas_full',112,null],['yasin_25s',36,25000]] as const).map(([key,surah,duration])=>{
+      const c=input.chapters.find(c=>c.surah===surah);const ref=c?youtubeReference(c.audio_url):null;
+      const reason:AuditionUnavailableReason|null=!c?'CHAPTER_NOT_IN_CATALOG':c.chapter_offset_ms===null?'YOUTUBE_OFFSET_UNAVAILABLE':!Number.isSafeInteger(c.chapter_offset_ms)||c.chapter_offset_ms<0?'YOUTUBE_OFFSET_UNAVAILABLE':!ref||input.youtube_metadata?.[ref.videoId]?.status!=='available'?'YOUTUBE_METADATA_UNAVAILABLE':null;
+      return {recitation_id:input.recitation_id,sample_key:key,surah,start_ms:reason?0:c!.chapter_offset_ms!,duration_ms:duration,selection_details:{requested_surah:surah,status:reason?'unavailable':'available',selection_reason:reason?'NO_AVAILABLE_INDEPENDENT_SURAH':'REQUESTED_SURAH',requested_unavailable_reason:reason,unavailable_reason:reason,original_url:c?.audio_url??null,playback_url:reason?null:c!.audio_url,timing_dependency:false,offset_used:false,playback_kind:'youtube_iframe',...(reason?{}:{chapter_offset_ms:c!.chapter_offset_ms!})}};
+    });
+  }
   const chapters = new Map<number, AuditionChapter>();
   const identityChapters = new Map<string, Set<number>>();
   const identities = (chapter: AuditionChapter): string[] => [chapter.audio_url, input.link_checks[chapter.audio_url]?.finalUrl]

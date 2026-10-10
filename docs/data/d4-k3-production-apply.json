@@ -1,0 +1,82 @@
+{
+  "started_at": "2026-10-10T14:55:47.011Z",
+  "target": "production",
+  "applied": true,
+  "sql_sha256": "fde3e9fafc640f1213e68168a68a02d89c1200ad7234425aa46b078721303aaf",
+  "sql_bytes": 664607,
+  "statements": 422,
+  "disk_before": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1751638016,
+    "available_bytes": 2924171264
+  },
+  "protected_checksums_unchanged": true,
+  "d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "timings": 422463,
+  "disk_after": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1752887296,
+    "available_bytes": 2922921984
+  },
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": true,
+    "acknowledged_commands": 23,
+    "writes_halted": false,
+    "batches": [
+      {
+        "ordinal": 1,
+        "row_count": 161,
+        "sql_sha256": "e94ab9bdf7354a0e88a6dabfd5994683fca0f12fd324a731807ed5a61add805a",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 292,
+        "sql_bytes": 261458,
+        "wire_request_bytes": 21962
+      },
+      {
+        "ordinal": 2,
+        "row_count": 164,
+        "sql_sha256": "b6905bfcb081e1997ded84270684aaffe5a6bcd14a377ef0edadd22ba48fa1de",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 279,
+        "sql_bytes": 261527,
+        "wire_request_bytes": 21851
+      },
+      {
+        "ordinal": 3,
+        "row_count": 89,
+        "sql_sha256": "c9900914dea6dc5fc323234101153ad0dd151e912427674d5a52eb1f5b92817a",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 268,
+        "sql_bytes": 141619,
+        "wire_request_bytes": 12411
+      },
+      {
+        "ordinal": 4,
+        "row_count": 0,
+        "sql_sha256": "2db35aa37c4005aa96055e900adc9bfbbd70d106820fefcb83216b7cc3f95422",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 220,
+        "sql_bytes": 7,
+        "wire_request_bytes": 75
+      }
+    ],
+    "transport_request_bytes": 62481,
+    "transport_response_bytes": 3014805
+  },
+  "finished_at": "2026-10-10T14:57:46.957Z"
+}

@@ -11,6 +11,8 @@ import { ENVIRONMENTS } from './lib/railwayQuranOps';
 const option=(key:string):string=>{const i=process.argv.indexOf(key);if(i<0||!process.argv[i+1])throw new Error('REQUIRED_OPTION:'+key);return process.argv[i+1];};
 const target=option('--target'); const apply=process.argv.includes('--apply');
 assert.ok(['local','production'].includes(target),'EXPLICIT_TARGET_REQUIRED');
+const baseline=JSON.parse(readFileSync(option('--baseline'),'utf8')) as {coverage:Array<{complete:number;missing_1_to_3:number}>};
+assert.ok(Array.isArray(baseline.coverage),'D3_BASELINE_COVERAGE_REQUIRED');
 if(target==='production' && apply) assert.ok(process.argv.includes('--confirm-production'),'PRODUCTION_CONFIRM_REQUIRED');
 const local=target==='local'?await mysql.createConnection({host:'127.0.0.1',port:33319,user:'root',database:option('--local-db'),charset:'utf8mb4',multipleStatements:true}):null;
 if(local) assert.match(option('--local-db'),/^ayahx_d4_[a-z0-9_]+$/u);
@@ -44,7 +46,6 @@ try{
     if(process.argv.includes('--progress'))console.log(JSON.stringify({checked_recitations:results.length,total_recitations:recitations.length,changes_so_far:changes}));
   }
   const fingerprint=availabilityFingerprint(all);const total=(key:string)=>results.reduce((n,r)=>n+Number(r[key]),0);
-  const baseline=JSON.parse(readFileSync(option('--baseline'),'utf8')) as {coverage:Array<{complete:number;missing_1_to_3:number}>};
   assert.equal(total('complete'),baseline.coverage.reduce((n,r)=>n+Number(r.complete),0),'D3_COMPLETE_COUNT_STOP');
   assert.equal(near.length,baseline.coverage.reduce((n,r)=>n+Number(r.missing_1_to_3),0),'NEAR_COMPLETE_COUNT_STOP');
   if(process.argv.includes('--expected-report')){const previous=JSON.parse(readFileSync(option('--expected-report'),'utf8'));assert.equal(fingerprint,previous.fingerprint,'AVAILABILITY_PLAN_MISMATCH');}

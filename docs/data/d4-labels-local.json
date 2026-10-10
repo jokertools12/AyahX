@@ -1,0 +1,500 @@
+{
+  "target": "local",
+  "applied": true,
+  "started_at": "2026-10-10T14:16:18.097Z",
+  "sql_sha256": "82045d8f25074a48dd8ca4c944086030d26a4f8d4673634581a59676c60a0522",
+  "sql_bytes": 139640,
+  "audit_seed": "3f7de04007826b83bb8c97d4e227a632b881f6b0962cbd454e27c081ba73f391",
+  "audit_tail": "d429dbf7606692ff7ffb3d9694f0c666eca8e3c5106bee39fdf635a7ad01ef5e",
+  "mutations": [
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "145f04af-ee8c-61d9-5570-d3375a6e59e3",
+      "audit_id": "a4e1c108-82af-7106-24ce-2457ca476c7e",
+      "audit_hash": "325e2b59fc66aa4f1a7b881fb1186df0530691efb4dc2f4a56cbf0171c224b4d"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "4b8a17c8-07dd-51bd-949a-b3deffb74a83",
+      "audit_id": "4ec2cadb-369b-544d-ba98-2b3df6bd253b",
+      "audit_hash": "a85cef78d8f957214c239179fc7aad2623712e6328eb6c4b5745bc6c2fc013c2"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "5ee98aee-2dd0-13a3-793c-0934afec9a06",
+      "audit_id": "14492b96-627c-fa7f-7389-8a9a1db62e91",
+      "audit_hash": "98f8128277a9a661053d044ad59789f57468123058cd613a911499a25315956e"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "51567d7d-7729-4997-25d3-99b3c82e6aed",
+      "audit_id": "f0e0a809-253b-c039-d06d-4785bc394044",
+      "audit_hash": "0298ce7fd0b8f454c1d77c63b9b87ebd7a7b06b4f3a8275b06bebcc0b8e0e60e"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "95650f99-296a-6122-2dac-498b79db8ede",
+      "audit_id": "f55cd8fa-d10f-e530-9e8a-fb6419359fc9",
+      "audit_hash": "1f569d235f30d93b128d1073c32c70c3e8e1fa3cdb571780ece519e77a9cef52"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "7f972ead-c29b-5642-a62a-df91ff150ca5",
+      "audit_id": "e4d8b5d6-fec9-1268-5e53-88b7dc0d798c",
+      "audit_hash": "986bcc21c49f14bcf3d76af21965c71b02c599343c673595a64def1430f5dfee"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "c22f1347-80b6-2a9c-f7d7-7fb9ce0bc56a",
+      "audit_id": "dab9c789-11b5-8a74-f46a-f19cd881b923",
+      "audit_hash": "7de7cfbf17dd7c7433a182a84b729fe044ced88065e0c25299f587853fa063c0"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "bc8af87f-bb5f-0bec-9b75-94ee6898e594",
+      "audit_id": "8c3bb5c8-7f4b-8171-9a56-78159f9fc75a",
+      "audit_hash": "92807421dfe964fa8c68f9f346fe917e791d2a86b9b69626b3588872992917bd"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "1be4803e-aa12-eb2b-3cee-ffde092273d3",
+      "audit_id": "62917f76-e3f7-4174-3275-a62dddf457b1",
+      "audit_hash": "dd3d42d50a3d57855f16451ad9ae1d576fb198eeaece1c17c691115c208b1145"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "09be4d81-c0e6-4cc7-4d32-70480e377a61",
+      "audit_id": "d2652c86-a9d5-bb79-8cc5-8b82ab51a99e",
+      "audit_hash": "1ab3355d2f5b11eba4ff2bcc47572cca28b8ba992dad054dc124db8cac918e89"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "2f3ca0d9-1e94-7d4b-5123-da1e6b2742ac",
+      "audit_id": "4cce72be-ca9d-51b7-7a73-7fa0de66e487",
+      "audit_hash": "eabe575104ab413a8c1bf1485ecba61ba790effa259704d7702a1f49be590a59"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "80633b53-7ae7-e52a-ef25-149b2b8c3fad",
+      "audit_id": "41dc40d0-f4e0-2ee0-7776-0fe815b84bf2",
+      "audit_hash": "99cb23484cf8ed9f32bf6f5eb432fa74fe873efaa91e81fb6925507dd4657559"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "99b3e3dd-f1b4-befd-753a-25f5f70c1b4f",
+      "audit_id": "b41fc108-f930-874a-a521-e9e5ff17eab9",
+      "audit_hash": "b5f20aeb8cef0d4edeb0c430f37861a1e0b77b7e789de3ffb75faaea3c53403c"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "b8f09fcc-08b9-9eb7-8a1e-1fc97fa41b58",
+      "audit_id": "f44b3853-6b54-096e-7fb2-098df7ee311f",
+      "audit_hash": "17007b9935476b180bf1cbd779fb5e7e2eca8fe999b47141960c225c0e15c062"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "b1a45240-81a7-a9c4-2b2c-5888eeefe115",
+      "audit_id": "eed8b72d-a126-7dce-e5c6-24015ed30ea8",
+      "audit_hash": "2f54ca00a4890fe9a851b0cbd66d5f27944b824fc66b279413efc9c6b919c8bd"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "232bdfd8-0328-3579-9ed2-d3c4cd90f3fb",
+      "audit_id": "6ed45c0f-c17f-7a3b-c4e2-225ab9510a18",
+      "audit_hash": "7f723fa94a4f44b20890c984a975c48afe3e1be73137327a4282b2df90b25e66"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "09b09290-df40-e01e-1767-437e03debec9",
+      "audit_id": "8fadd119-e30b-77d9-784b-9d20521e7b05",
+      "audit_hash": "de0b906829598ccaea64b10ae4d0a9f104c15bbc8311ecb65721dab45ebed9f0"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "d6af6453-e44f-6e4b-da9b-ebe8aaad20ac",
+      "audit_id": "d5441a9a-d4b6-5153-edb0-25604060f533",
+      "audit_hash": "44ef85024a5514825c8cf154d042d0d4b85f053752e3b0f405eb157d82f9bb0e"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "a173a7a7-b0a9-8409-da03-a7dc3038f23c",
+      "audit_id": "e94fd828-63ae-7ce7-31db-597d15c782e5",
+      "audit_hash": "47136574fc49ebb914e566c8aca47e4b05c91f09c4d54cc0fce7bc7381b52fe2"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "bf4ebc6b-ef7c-4402-4862-63d50efedfaa",
+      "audit_id": "a37ca92c-e752-f4bd-618b-b98c9e34a90e",
+      "audit_hash": "f3458a4b9cc0953c66162dc3dab82cb300eab895e62e00350efacee82cfdfe1f"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "10317dc7-547c-71ac-529e-e993980a6a3a",
+      "audit_id": "6e816960-b4f4-664c-8fe8-b78e772a3874",
+      "audit_hash": "8a6b54d61095f7ce8f16d9d7db9666c76af25e470670ebd1bd195d52335fc658"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "2044d4d2-cc5b-b407-cbe2-c7632e21478b",
+      "audit_id": "eb8b03f3-0269-ce7d-20b6-a5f63a530b66",
+      "audit_hash": "07cf1e98623d928071420e892de588a3f7bdd63f3df3c370b1fa3a2bf2149a7f"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "12cf216b-1bd5-686c-1d1e-05714aa38a3d",
+      "audit_id": "c22743d9-0e55-5cb4-4eb3-244b0f9369dc",
+      "audit_hash": "0da40cf40499ee136c63fc21192d9bad474697edbfdf1632b606ab1d947a2c1e"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "8a1489c5-4fa2-12b5-0112-6e04b01e94b5",
+      "audit_id": "7dc5f552-4070-b091-cc69-269cbf65af0c",
+      "audit_hash": "8cef81b795f503b1854ecb2dcc897501b798e162557811c29e8c186cb4f60e39"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "3e21d6e0-7a97-e9ae-86b5-95d6d1a74dcc",
+      "audit_id": "1187b9a9-fbd4-f25d-8259-f5e847fe8df8",
+      "audit_hash": "82c7f732ca2d68ced7b6a86874690a271fac01ce2ade59f94a27014b141fb27a"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "e7f11e1f-8cf9-b375-76c2-36bcb1b6a048",
+      "audit_id": "6c81f535-7034-0f4f-ac7e-8718a4687f1d",
+      "audit_hash": "33e653eb9f49842f6bffb2001003173495d2692f2dc5d95158eb931196d6fde5"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "703f4293-124f-f250-d89c-fb89ec7d7195",
+      "audit_id": "a182c580-bd53-75de-d357-d192a2791d02",
+      "audit_hash": "0dce96164b6e1debcbaea9a7e2b6d0ae370d76abf815ae0a85ccc1de2017a328"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "bf6fe8dc-e76c-2b0b-1bef-d5a1383b0fed",
+      "audit_id": "ae9c679f-e3a8-6071-4254-3e36164fa6fd",
+      "audit_hash": "e31a6ddd413a813e0255527113813dd8842f9b0e67360c8c2254ad1428c0e6fc"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "db02c405-e3be-dbf9-6862-eee371003ae1",
+      "audit_id": "57e1f865-268a-035e-2420-9ede179aebc5",
+      "audit_hash": "b169124a66c096353cad646d8e0f778c3a815e3a5e9a0ed5374ba4e13a36322f"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "4fdf3e11-a78b-0d5e-3daf-10d3d8edb528",
+      "audit_id": "53329235-9a3f-7d8e-3695-ba1684068e3a",
+      "audit_hash": "a007fb90d3314a79818b557d503aca709baab39883ab9ff3e8afa693dfa1ffb0"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "f4a974e6-c90b-adc3-833d-c36ce7ede627",
+      "audit_id": "f62c317f-25a3-724f-97b3-f82c990de7ad",
+      "audit_hash": "ced6a230cdc5ec8da4e692fe48499d3d1e99d206584ab2cc88973e62bebb7bcb"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "b6acb1c7-6894-6b78-9108-ecd4f25ac3df",
+      "audit_id": "f74dc440-1474-5cd1-064c-cd2c9a38a450",
+      "audit_hash": "b6e526b9882bd6bf6ae15f2dac581fcffb91882586ff0dcbc6389becd2777c25"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "e9fabfeb-3cb4-e27c-2fa1-940fc88deae0",
+      "audit_id": "c9a79731-c6ad-0645-d893-a36bc28ff37c",
+      "audit_hash": "0efca9c5f6fe28a388f7b17a9de1d13be92e208b7e24dc1807ef7b01f5a3f6ca"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "3f2b604f-9c5e-6452-00ce-2a03cb92adb9",
+      "audit_id": "3386bfe4-ad81-802b-fbc0-c7f2ad218262",
+      "audit_hash": "d99fda71160c3fa7301066d846f0e62ea6935ff01f3a3cae25db393a3a4197c4"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "7f82822d-b69d-efda-096e-3182ce4063d0",
+      "audit_id": "ed19cf32-61dc-8fee-bf9a-91c8b1d618db",
+      "audit_hash": "d1b756a7f3d66344760c9c070aaf7f1370e25843d2eb44a557e53cf3433753f8"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "c72e7816-cf79-ae8c-be62-fc3285baf877",
+      "audit_id": "bb97d864-2bd0-b6bb-e29f-659548a3030d",
+      "audit_hash": "ec7b138e6c671567c6597ddcd0e7b400fcad54c6f7313783e09181b6f30fe06f"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "de4d21f0-9cb0-3b39-d8da-1ce99e4c7cc0",
+      "audit_id": "4383e74a-7802-202a-0242-f6dab1bb2409",
+      "audit_hash": "081e8be4eb0f9704267455e708604405342858c7f17b53fafd91c6306720be1c"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "044a1e9f-67c9-6854-5e3b-20438c45c4e7",
+      "audit_id": "dea81fca-c150-df0e-f310-2f65d85a4d01",
+      "audit_hash": "add531315da240378edc6276a76b405b9ec5710b386e500ec76284e21bf621d8"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "829763f8-1faa-4a26-15ff-86f934c4bceb",
+      "audit_id": "e17d4599-ab1d-d367-6040-08e061d24d81",
+      "audit_hash": "05e8637d5131ece2019aca23a9f468b749e8613dbc345e60e41fdcd0c6675140"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "cb030c9e-d6bd-2ca2-bed2-17157d5b2964",
+      "audit_id": "a5469647-aad8-8cc3-5914-8d5f1368aa2c",
+      "audit_hash": "89fbba82297739a1f16dbb92071b1000d08361069879425990abd7394b91d385"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "116d67f6-5b77-3883-3e80-9b11566dc7c3",
+      "audit_id": "fccff034-a238-6119-8459-22f21dffe8e2",
+      "audit_hash": "a927dc4c4d331b51604e644f8c987445197aa7889bcdd523313077454794067a"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "01d46368-8770-1e8f-9dd8-3a8608e97487",
+      "audit_id": "45d7978b-d32f-ee8f-e7e0-204910ea6c03",
+      "audit_hash": "82a4262473f9901db663e417b7e0b56c04046dc7a199d036725518fcbe168a84"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "a37b200d-ee15-761b-afea-45ce0f10b481",
+      "audit_id": "f813e62d-2449-03da-78da-65cce7d28fff",
+      "audit_hash": "40ae80186d671525eae5b2e0b96d5fb940f0ce82d31131dbe6f1c3a6ac4c0fb1"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "a3bea32c-f60e-990f-8631-931ee63890bb",
+      "audit_id": "19a95b76-9cba-2b1b-0890-3f89947d3fc5",
+      "audit_hash": "791d098dc9de4e83f22bac7e12eca4f8e4488d1c1184921d83a8c16c8a809755"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "a7ffd321-8f70-8cc1-4650-4a5926ba6ca0",
+      "audit_id": "b161818b-94a5-23d8-8ae6-f008951fca3e",
+      "audit_hash": "d13856ba753b6b233f1e726c12a4c85f86bbd9348e42b77b306184a7c9ec7fbb"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "2648aae8-f604-0bfc-918c-1d6cedd47c55",
+      "audit_id": "fcad58e9-e713-fadd-93af-4183c83b17ed",
+      "audit_hash": "82fed079e0f4f3d7abb4a9687a97272bac972def7e9a6f39e9cc77475b9bb1ae"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "39eacb00-f62a-e184-6f6b-b74858c6e1a6",
+      "audit_id": "78c5a3b8-7516-41d3-b66e-4886f34584e7",
+      "audit_hash": "e6b2649ed81e83a82583cb05beb3479b2ae58e4ab49306947329013ac044e106"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "audit_id": "0ff8ae66-4e2c-41f5-ed91-adb6dcf8911f",
+      "audit_hash": "e929f7f1b655e78d4466eb9037d8d1e87a2d066936d0daad1c57c51074f71161"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "91f99bb2-568c-139d-cb8b-f83a90d07769",
+      "audit_id": "d88422c7-7104-95d7-3750-2c6ab9eddcf7",
+      "audit_hash": "907e900c34fb4ff5c4463922202f0c36ed9dea27e0217e2524e68763c586ad97"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "85e4d478-2aaa-d433-ab1c-df9a5b32d8d2",
+      "audit_id": "ac659ebc-8c0b-637e-2e28-9631477b8df4",
+      "audit_hash": "8f3609f820a570b370c1135910a4e3037add559b16d8a55019a7e605f76bb657"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "271c991f-ede5-0342-ddee-792024c769f0",
+      "audit_id": "8573c3ec-764d-44d9-e0f2-f478e60fff8a",
+      "audit_hash": "907ee6d6b5aedd775f7c05185f8bac9dee1f42db5770c2f78a2a02852f52d92d"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "5135bf14-d83e-37c1-08aa-d5ac08a2bc97",
+      "audit_id": "de173fb7-b4f0-c0cf-e2fd-fa7388d240b9",
+      "audit_hash": "d7932a2d7cd0e9f675d37e36794362f6c504b66c87d63259488e84292584e796"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "b8e58c96-6756-c4b7-3d61-d4329c440d89",
+      "audit_id": "c1520cd0-90aa-58d6-585b-8ce5773ebe9e",
+      "audit_hash": "de293a65264fe0302ca2c0761fb35c73e9b2f044bf6f22fa2d5dfdba5e0b4b5e"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "30dd65ad-7b89-4cc8-dc35-3535db4d2586",
+      "audit_id": "e58dbb68-106f-61d2-50e3-dc03ea7980ee",
+      "audit_hash": "84d909047b9a63336cf4b625f747aa5a470bb7d81afba36c1173c3b144be5fbe"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "779ebe1e-be62-7a71-b2d7-4f2251303684",
+      "audit_id": "cbbc9a25-eb7e-b9c7-4b31-6c9587436007",
+      "audit_hash": "a6ddb546643a6b2fd72c6000a84c5c661080c71d9378d8273b45b736cc7a7a78"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "1c79adfe-a520-5441-7e0f-96f5d8752322",
+      "audit_id": "e72dc451-6e84-99bf-65e1-f982e51bd6d0",
+      "audit_hash": "3649e99f7bbd5a991600a55b904948a426afcb3705b24a55437c9039bb3e312e"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "b50b55b5-a7c9-7bb6-bc23-a949078e1c29",
+      "audit_id": "5a4060b9-21d9-af42-2ecd-7d28d22f245c",
+      "audit_hash": "67252d79e70f3ec0e0e372c4f9ce00b7512c20d1f972bf360744dcd22bfa3d7f"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "639e66db-a4c7-ca0a-2cce-f557ecc151db",
+      "audit_id": "65ee9c2f-eb06-9323-78ef-054fae29c777",
+      "audit_hash": "2ef96d08da5f26ba54b31c1df378fab0afb6d9f8ea8198576422bc0e2e079cea"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "audit_id": "89733fed-a5ae-ae5a-b132-b80b0d459dd5",
+      "audit_hash": "d4a9b9a1cf3ee0fd3b5176831b63b9088b9231bbf32b6e3162e0c115a7c34608"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "9ccb21f5-a4aa-619a-16a4-d32ef8544085",
+      "audit_id": "832d1511-082e-899c-fa35-69959ee75a02",
+      "audit_hash": "e4741e3000829a6125611f6546d8a698aff1c78e8b70cf13aef48db1596b8b78"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "fdc68197-4a79-dea9-a9ea-b4fc3ad244c1",
+      "audit_id": "db0b1230-7db6-6ca1-7b5c-47507f2de06f",
+      "audit_hash": "4705ea76aea5094814d1ca1d8b2645e13912ca5c2259c206d4fcda9e1e2e3e8d"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "0df5fd17-75a6-a8e7-4848-037e48e4b302",
+      "audit_id": "61d40237-355f-0dc2-6ab8-6481cbd01df0",
+      "audit_hash": "6af72aa3285c613426deeef5785ef2b848e867e6f963a3bdb19e5cab6669c7ca"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "c87687dd-26bc-ad05-54d0-fdca44993509",
+      "audit_id": "d4f8da92-3508-0318-ae2c-4d41fb72a5d9",
+      "audit_hash": "247b9638264efa6a6663c52d2f3c850881dfdc3f7b94a2f2e7107b7815230e9c"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "5f5ef5c8-cb7c-1d52-e1de-e646433f7787",
+      "audit_id": "9549853c-9e8f-e9d9-71bc-132bd8e582e5",
+      "audit_hash": "95936f70758a90bd157b63f21cbc8d93b0a388a528ace29f9bc104bcc6b7167b"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "c9f9f54f-d248-3a48-8dd0-89fc353e19c3",
+      "audit_id": "c003ba24-69e7-feb5-6d93-50ed4881c917",
+      "audit_hash": "a7c59ef0b877f936d9dcdcfa0dcc7ec74d7a3da41b353fea3451e431f61f6ca5"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "f7c7c48b-7894-e959-d794-166e3f38839a",
+      "audit_id": "2a84913a-877e-9719-1b54-f37fb97c42dc",
+      "audit_hash": "a7e4762912df93a94d616e0b9a00d3369cbeccd5f91fa6117e9e69b2b6d1f738"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "6cd7c3a3-0dfa-ee1b-b33c-76311f01119d",
+      "audit_id": "ac59ea54-22ee-1fd9-8bf3-b2aed3868d9c",
+      "audit_hash": "52169f8cc95a5e6f7ddaab8574fe811f397ba1fc01ef2058662d320dbb48e2c1"
+    },
+    {
+      "action": "recitation.catalog_label",
+      "table": "recitation",
+      "id": "fcd9c298-c3cd-0c32-0180-a3b5f61861cb",
+      "audit_id": "52a81281-d445-422b-ac02-2e01c59689b5",
+      "audit_hash": "d429dbf7606692ff7ffb3d9694f0c666eca8e3c5106bee39fdf635a7ad01ef5e"
+    }
+  ],
+  "recitations": 69,
+  "changes": 68,
+  "human_labels_preserved": 1,
+  "label_conflicts": [
+    {
+      "slug": "maher_al_muaiqly_qdc",
+      "reasons": [
+        "LEGACY_MURATTAL_PINNED_QUD_MUJAWWAD"
+      ]
+    }
+  ],
+  "passed": true,
+  "finished_at": "2026-10-10T14:16:18.244Z"
+}

@@ -1,0 +1,21 @@
+{
+  "started_at": "2026-10-10T14:42:04.786Z",
+  "target": "local",
+  "applied": false,
+  "sql_sha256": "e1a3af9870833d1a791510c06ed2e16dcd143ca6e12d6e75a1f14c17aadd029e",
+  "sql_bytes": 654,
+  "audit_seed": "1694aea437c99aa47f03ff6286f2f3cc59f0dbe87ecc17f2664d7fa6f71985ed",
+  "audit_tail": "1694aea437c99aa47f03ff6286f2f3cc59f0dbe87ecc17f2664d7fa6f71985ed",
+  "mutations": [],
+  "changes": 0,
+  "links": 7765,
+  "counts": {
+    "available": 6274,
+    "YOUTUBE_SOURCE_PROHIBITED": 1024,
+    "source_unavailable": 459,
+    "AUDIO_REQUEST_FAILED": 8
+  },
+  "checkpoint_sha256": "2107f83b753c2e87275475cd47e2e480584a44981ea52a82756685fbf6ed2b3c",
+  "passed": true,
+  "finished_at": "2026-10-10T14:42:12.605Z"
+}

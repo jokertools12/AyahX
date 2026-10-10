@@ -1,0 +1,28 @@
+{
+  "started_at": "2026-10-10T13:47:49.775Z",
+  "local_only": true,
+  "old_checks": [
+    {
+      "name": "chk_catalog_offset",
+      "clause": "((`offset_verified` = false) or ((`verification_status` = _utf8mb4\\'passed\\') and (`offset_check_score` >= 0.95) and (`offset_check_score` is not null)))"
+    },
+    {
+      "name": "chk_catalog_publish",
+      "clause": "((`status` <> _utf8mb4\\'published\\') or ((`canonical_text_available` = true) and (`offset_verified` = true) and (`verification_status` = _utf8mb4\\'passed\\') and (`timing_quality` = _utf8mb4\\'verified\\') and (`timing_level` in (_utf8mb4\\'word\\',_utf8mb4\\'letter\\')) and (`surah_start_basmala_audio_status` in (_utf8mb4\\'verified\\',_utf8mb4\\'not_applicable\\')) and (json_contains_path(`verification_details`,_utf8mb4\\'one\\',_utf8mb4\\'$.basmala_audio_evidence\\') = 1) and (json_type(json_extract(`verification_details`,_utf8mb4\\'$.basmala_audio_evidence\\')) = _utf8mb4\\'OBJECT\\')))"
+    }
+  ],
+  "apply_twice": true,
+  "new_checks": [
+    {
+      "name": "chk_recitations_offset_gate_v1",
+      "clause": "((ifnull(`offset_verified`,0) = 0) or ((ifnull((`verification_status` = _utf8mb4\\'passed\\'),0) = 1) and (ifnull((`offset_check_score` between 0 and 1),0) = 1) and (ifnull((((`verification_method` = _utf8mb4\\'v1\\') and (`offset_check_score` >= 0.95)) or ((ifnull((`verification_method` = _utf8mb4\\'v2\\'),0) = 1) and (ifnull((`offset_check_score` >= 0.90),0) = 1) and (ifnull((json_unquote(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.cause\\')) = _utf8mb4\\'codec_processing_only\\'),0) = 1) and (ifnull((json_unquote(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.decision\\')) = _utf8mb4\\'accepted_for_data_pipeline_verification\\'),0) = 1) and (ifnull((json_type(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.sample_count\\')) = _utf8mb4\\'INTEGER\\'),0) = 1) and (ifnull((json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.sample_count\\') >= 5),0) = 1) and (ifnull((json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.minimum_VAD_agreement\\') between 0.90 and 1),0) = 1) and (ifnull((json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.maximum_absolute_lag_ms\\') between 0 and 30),0) = 1) and (ifnull((json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.maximum_duration_difference_ms\\') between 0 and 30),0) = 1) and (ifnull((json_type(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.review_blockers\\')) = _utf8mb4\\'ARRAY\\'),0) = 1) and (ifnull((json_length(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.review_blockers\\')) = 0),0) = 1))),0) = 1)))"
+    },
+    {
+      "name": "chk_recitations_publish_gate_v1",
+      "clause": "((`status` <> _utf8mb4\\'published\\') or ((ifnull((`riwayah_code` = _utf8mb4\\'hafs_an_asim\\'),0) = 1) and (ifnull((`canonical_text_available` = 1),0) = 1) and (ifnull((`audio_mode` = _utf8mb4\\'surah_slice\\'),0) = 1) and (ifnull((`offset_verified` = 1),0) = 1) and (ifnull((`verification_status` = _utf8mb4\\'passed\\'),0) = 1) and (ifnull((`timing_quality` = _utf8mb4\\'verified\\'),0) = 1) and (ifnull((`timing_level` in (_utf8mb4\\'word\\',_utf8mb4\\'letter\\')),0) = 1) and (ifnull((`verification_method` in (_utf8mb4\\'v1\\',_utf8mb4\\'v2\\')),0) = 1)))"
+    }
+  ],
+  "passed": false,
+  "failure": "The validation function is expected to return \"true\". Received false\n\nCaught error:\n\nError: Data truncated for column 'audio_mode' at row 1",
+  "finished_at": "2026-10-10T13:47:57.800Z"
+}

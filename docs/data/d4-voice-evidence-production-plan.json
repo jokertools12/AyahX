@@ -1,0 +1,540 @@
+{
+  "started_at": "2026-10-10T15:00:01.601Z",
+  "target": "production",
+  "applied": false,
+  "voice_artifact_sha256": "a307a6bfe89192c0730ec99c477b3186031396b12f702c15937a6e8549d0b8da",
+  "sql_sha256": "246a1f82b78b0ed43910fc3e5d0303efc457ba5be816b1f3b7b1221287e1c539",
+  "sql_bytes": 1058512,
+  "audit_seed": "3431ab7dbe2d601446457e5b9b861520097d62f925a9d2740347b2622f6b5e0a",
+  "audit_tail": "040c8fafc4453f36cbcbe8500eed60c5f7ca063f78cb8c32fed1d7b4602a6535",
+  "mutations": [
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "145f04af-ee8c-61d9-5570-d3375a6e59e3",
+      "audit_id": "dacfae47-568f-1b38-095a-56afbf1cdc02",
+      "audit_hash": "47d6a74473a64650d39695d1af8aa633c86e3654bbbe14f28c827d40b37a971c"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "4b8a17c8-07dd-51bd-949a-b3deffb74a83",
+      "audit_id": "6bcc6fc1-4ce2-07fd-4f4d-c3ca8586315e",
+      "audit_hash": "0cd77b8b626b54aebb03f7f86c914ace3ea2a5d372f0ee512f4f8109cf392fe9"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "5ee98aee-2dd0-13a3-793c-0934afec9a06",
+      "audit_id": "e4525577-fa21-a0a3-fccb-475337e6fdca",
+      "audit_hash": "0fb2a5671c50911543e008054bbf22b9ba36b02c1ccc64d0be64442865b4cf43"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "51567d7d-7729-4997-25d3-99b3c82e6aed",
+      "audit_id": "17afa356-e75e-2c05-7dd7-9ddb2c8fe4e4",
+      "audit_hash": "6fe708385db11a59d6baf7b9f89f15da106c998f85dab13b2983f52b56a59737"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "95650f99-296a-6122-2dac-498b79db8ede",
+      "audit_id": "995db149-ed34-a171-b8b9-5829c7a2b009",
+      "audit_hash": "39a6f99f55e010cc599740b0763d2e8e5c7006b5211b427fa0a5b568e283b8b5"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "7f972ead-c29b-5642-a62a-df91ff150ca5",
+      "audit_id": "adbbc8bf-6cb8-e42a-6cf5-8569eadfdfc4",
+      "audit_hash": "756a0fdc25bf923e415b4ef6833ef12b8655e5dec0c61961684423710d98f3d9"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "c22f1347-80b6-2a9c-f7d7-7fb9ce0bc56a",
+      "audit_id": "8aac706e-34e8-9e8f-ed2a-68025bc5a5c4",
+      "audit_hash": "c1bd132d674e40381dbfc26401dd70ea82e005aee19292773f58c3cdaec36572"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "bc8af87f-bb5f-0bec-9b75-94ee6898e594",
+      "audit_id": "bf624156-0626-b4b9-0541-96e424f9e919",
+      "audit_hash": "f3b56a16bfad5e0dbcb0e1afd1a11f354abe60b6276edd5f0e96ce5e3488a967"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "1be4803e-aa12-eb2b-3cee-ffde092273d3",
+      "audit_id": "40b62d3e-8d70-44ac-2418-0321de6f0dda",
+      "audit_hash": "dca1bad373147ff317e47f8874da66a789489582c16868e443aed1861c4ab214"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "09be4d81-c0e6-4cc7-4d32-70480e377a61",
+      "audit_id": "076c2bd4-5434-f289-e1d6-8a145df36b0a",
+      "audit_hash": "570e1425035a824ec667224f3f449efadaa529af1ee9c95da3b994241da60dcf"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "2f3ca0d9-1e94-7d4b-5123-da1e6b2742ac",
+      "audit_id": "6eeab3db-49f8-c6a5-b571-9c45c353487b",
+      "audit_hash": "c395c5f0708e77d34f46f9d8f7c3aaa76725922709c471f79e345037112d0dbd"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "80633b53-7ae7-e52a-ef25-149b2b8c3fad",
+      "audit_id": "eb1757c7-b6cb-c7ce-ab89-1dc2bb8c20ef",
+      "audit_hash": "5186b3eb4aef9cb4d051e744769fee56358ca11f2bdb829b01e79fce04cb9de2"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "99b3e3dd-f1b4-befd-753a-25f5f70c1b4f",
+      "audit_id": "110229b2-4227-f4ab-4569-bd2809c3a839",
+      "audit_hash": "dfb04f12a4a6ded3397a4fdf2db90a73bebfca7bba30505ebd1e69bc8cc3f95b"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "b8f09fcc-08b9-9eb7-8a1e-1fc97fa41b58",
+      "audit_id": "afa13c1d-174c-338b-8a86-d990afa2d099",
+      "audit_hash": "e53bd9115386a433f7103c614df89e53fecbb54b09cb61d21c6edb0b4410c11e"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "b1a45240-81a7-a9c4-2b2c-5888eeefe115",
+      "audit_id": "c343ee3d-00a4-cede-bb8f-ce4245fcec6e",
+      "audit_hash": "6d89d0f4a71becaf6a8d0820e6006492b631dd62287fd2b80faaeb22d2829e0d"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "232bdfd8-0328-3579-9ed2-d3c4cd90f3fb",
+      "audit_id": "619fb0f9-d236-8545-458a-e8e2b1aee195",
+      "audit_hash": "2bef1dba4a97b6e409cc1f238c074b8b3793d442a926fa0fe88fbd38218ea39b"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "09b09290-df40-e01e-1767-437e03debec9",
+      "audit_id": "3929c5db-0daf-3e71-4469-9dfdcb391b39",
+      "audit_hash": "ee9c3c27a435368b3e0157e052834148b6d9dae954f2c6264490810c2fccdce6"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "d6af6453-e44f-6e4b-da9b-ebe8aaad20ac",
+      "audit_id": "9bcd083f-389a-eb4c-c91b-791e1d4c3973",
+      "audit_hash": "d78ed511a2e1488b934274246b4b4cd9d901479ac7e35b2455db1483b2ad7fb3"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "a173a7a7-b0a9-8409-da03-a7dc3038f23c",
+      "audit_id": "1e6ad0ed-45d2-d219-eb34-491d50075f57",
+      "audit_hash": "ba5e2e28376874c0e88d6ba723e06789f5a7d14f6fe3fd87a4aafbaaa6def2b5"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "bf4ebc6b-ef7c-4402-4862-63d50efedfaa",
+      "audit_id": "e2e4ba26-3924-7c91-c560-9ab8433abf38",
+      "audit_hash": "877c9f599807f243ce79080f6c726d03be1fc9fb04f1a8bebce79472d36dfc04"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "10317dc7-547c-71ac-529e-e993980a6a3a",
+      "audit_id": "5b378750-7be2-e4a2-3dec-a6186a08b931",
+      "audit_hash": "33a63e7e74c45eaa136ab1a1522fae5b4bc812cdbf195c6cbf9f2b452050a723"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "2044d4d2-cc5b-b407-cbe2-c7632e21478b",
+      "audit_id": "1d440f1e-d467-0fc7-cfba-c2279caa8316",
+      "audit_hash": "ab0126b1264fc4dc7b667594bc275ea46d637ee97620aedb927bdc9ae7b0ca83"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "12cf216b-1bd5-686c-1d1e-05714aa38a3d",
+      "audit_id": "9c47e093-c8af-473e-59ca-dfc306990071",
+      "audit_hash": "ba4beee3313fcf8015c1947e4a921f42496fc90dfcdc08c7ed68d5e722cb8994"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "8a1489c5-4fa2-12b5-0112-6e04b01e94b5",
+      "audit_id": "88e2af57-ba10-f664-8d12-0b5db38a9251",
+      "audit_hash": "7fa978c7b59d054c2b0074b595689ecba16c30a58b42418971790400df2751a4"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "3e21d6e0-7a97-e9ae-86b5-95d6d1a74dcc",
+      "audit_id": "4894d607-406e-444a-addb-560a3d53b04c",
+      "audit_hash": "740792371ae69a0276570663ed5f2c4673504f74f2621a6e9c8b795939e6b890"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "e7f11e1f-8cf9-b375-76c2-36bcb1b6a048",
+      "audit_id": "14ae4030-35a4-6736-d0be-748543f6ddbf",
+      "audit_hash": "5abdb921d86e0d010658166f8b3a76f96bdd01ee8374434a67a6964a3435593d"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "703f4293-124f-f250-d89c-fb89ec7d7195",
+      "audit_id": "89f6ef92-b700-9d43-caab-dab6cff3456b",
+      "audit_hash": "be157a0fe89a6fd442a4a9c103d7418f5ab69ba8fc4ef14a3f095110e2d95882"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "4d50476b-6cdf-5a08-bd47-5471ab2d9e5c",
+      "audit_id": "01820c38-886e-189e-b4bb-a15ff24ae634",
+      "audit_hash": "057cefe83ea82b89fc2fdad185ff6350f71f990e567c587e5a1c645f8de3ba55"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "bf6fe8dc-e76c-2b0b-1bef-d5a1383b0fed",
+      "audit_id": "d7577b24-6315-b64a-9418-e46b21eb7f2b",
+      "audit_hash": "f7aa630f546fe128fe20c6c88dd90fdae1d3305fa74da64716114e955d896993"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "db02c405-e3be-dbf9-6862-eee371003ae1",
+      "audit_id": "8d68e5ed-60f3-6d65-bcb8-aad89c87a9b9",
+      "audit_hash": "f0dd2570550f803aa0467fc8ffc904c136dcc87a1ab082956490c11ed783af5a"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "4fdf3e11-a78b-0d5e-3daf-10d3d8edb528",
+      "audit_id": "72c58d1c-d182-9f7f-b916-ad6195f3d92d",
+      "audit_hash": "4fbcae1302ed97bd1a79c7a916620b978e55ba79f6c95e4d1b3bc32f61b59216"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "f4a974e6-c90b-adc3-833d-c36ce7ede627",
+      "audit_id": "2af32df3-dbe7-668c-c4bd-ba3d671f2020",
+      "audit_hash": "30f312a024156d57ce440276e352ccfd93f4a7cda3247d183b2c86e4015f3cff"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "b6acb1c7-6894-6b78-9108-ecd4f25ac3df",
+      "audit_id": "048afbb7-a384-6498-5358-18f6a8a983a6",
+      "audit_hash": "e1d6ce0c3a4852031ecda3373b82c39f02b6f412abccda52c0430dae37ff7569"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "e9fabfeb-3cb4-e27c-2fa1-940fc88deae0",
+      "audit_id": "63d87cdd-5fd0-0390-9439-17add59a5a34",
+      "audit_hash": "d2b6bbc34084eb0b9e85dd07818bbbd81a69333fe2456eb016f9da12a0731fc8"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "3f2b604f-9c5e-6452-00ce-2a03cb92adb9",
+      "audit_id": "ca71a6fa-72e4-8d78-0c47-674938f70ba0",
+      "audit_hash": "893298fdd084adca2669299c89a4bd38a3dce5b67d301a17c3a18b24546ab1aa"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "7f82822d-b69d-efda-096e-3182ce4063d0",
+      "audit_id": "5505404a-0a05-0d28-b9dc-c87b1fbc2fd7",
+      "audit_hash": "d586ebfa4d209bc28849027cbb087c562fe4274ef92855f5d99025def5c97639"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "c72e7816-cf79-ae8c-be62-fc3285baf877",
+      "audit_id": "77a62cbb-800e-630f-92f3-ab531ba384ef",
+      "audit_hash": "f12ade12f6aaec445033af1d074d78a86337d755598b7df428e904f113e8720d"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "de4d21f0-9cb0-3b39-d8da-1ce99e4c7cc0",
+      "audit_id": "962417bc-f41c-c41a-0c95-1fe9237c21a3",
+      "audit_hash": "585b447d5bdc235a89245ee0900ead2a32beb48bcda709c29303821f9b49b50c"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "044a1e9f-67c9-6854-5e3b-20438c45c4e7",
+      "audit_id": "66e0db96-b996-f40c-a784-8b827af4a089",
+      "audit_hash": "236ed5fddfea027a743bcfaead667c5ba6677f990ae20083e055accf3212ce9e"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "829763f8-1faa-4a26-15ff-86f934c4bceb",
+      "audit_id": "bf18df23-7c63-0cb7-1576-a8e032e4ee97",
+      "audit_hash": "75a2e37270b3d7e96e17ab640d4b5888089b6917e051a64acf99072bc1254411"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "cb030c9e-d6bd-2ca2-bed2-17157d5b2964",
+      "audit_id": "a5dc6878-02b2-ee7a-81a0-73e63dbf84c0",
+      "audit_hash": "d69b6e81fd7fa60698ed69084ecb9941cf67a107087f87afe5b4f00274092d2a"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "116d67f6-5b77-3883-3e80-9b11566dc7c3",
+      "audit_id": "1e2403c2-3741-456a-6400-e492db0507b8",
+      "audit_hash": "02d25bd9b742e8bd9f45fa6be29b7e2300c4cb5fe05d50734919a24c6fb6b5de"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "01d46368-8770-1e8f-9dd8-3a8608e97487",
+      "audit_id": "9512ca3c-ccc3-6e3e-8f61-f3eb960c0267",
+      "audit_hash": "f38cf420f562abb3e7898005320e206978e19ac22fbcd77e5a5181bbf9efc826"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "a37b200d-ee15-761b-afea-45ce0f10b481",
+      "audit_id": "76a1001a-bd32-4bd9-57c8-33811f10ce95",
+      "audit_hash": "d6483188e4cc5a946065f51f1b23bac5abc53b4ece548465fad20a2a6f62148b"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "a3bea32c-f60e-990f-8631-931ee63890bb",
+      "audit_id": "89be9521-720c-72c9-b4c0-65e799c4ec4c",
+      "audit_hash": "434abb7e34ca500b87ccec39ff442bcf999df1ee87e1297ad58bc34bdbb2fb9d"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "a7ffd321-8f70-8cc1-4650-4a5926ba6ca0",
+      "audit_id": "6e760bdd-415e-e86c-d7cb-651b065a4ea4",
+      "audit_hash": "882cccc23966906884dba6ea3692079f26b7bcb7a4bbd69d3dfa6afa215b1682"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "2648aae8-f604-0bfc-918c-1d6cedd47c55",
+      "audit_id": "c6851301-dd60-4470-bc4f-1f374dc61934",
+      "audit_hash": "1d794a5842aeb4d47c158802a1dd594cac6268a64f956ce5417d8f1e86efa836"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "39eacb00-f62a-e184-6f6b-b74858c6e1a6",
+      "audit_id": "8d8f56d6-c060-14c9-e4a8-b758ce857e3e",
+      "audit_hash": "0dcd3f3dd18740e958d887834aeb242ebf449be51d0f53ab39c7da8fa18f7f85"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "audit_id": "fb24ac65-a6d8-25d5-8d44-25ba927cc6b9",
+      "audit_hash": "47e81e88c74a950c599f66465021dc98d988a5e9e7249883f98153d1c88033c8"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "91f99bb2-568c-139d-cb8b-f83a90d07769",
+      "audit_id": "1e5e6849-e6e5-9e9c-0861-8fe0dc65df67",
+      "audit_hash": "ada3e237d41089054fc77146b35a051565e6da3a2ad27fe20d8148b6346f9a47"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "85e4d478-2aaa-d433-ab1c-df9a5b32d8d2",
+      "audit_id": "06dbb4fa-4550-3b52-c85e-76c075ae9dae",
+      "audit_hash": "4ce0c27dc0ea29061791786afcef480e6f8a869571efebed214ab5b7f6045309"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "271c991f-ede5-0342-ddee-792024c769f0",
+      "audit_id": "6a9e4fd9-d7a9-fa91-138f-92bc80406aa4",
+      "audit_hash": "356a8525d90cc5e5dd87d320739608e4f4eb8b9b004c47a74735d79cb38e7ddc"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "5135bf14-d83e-37c1-08aa-d5ac08a2bc97",
+      "audit_id": "fab0dab1-5baa-591c-2f20-563ea6c2e8a4",
+      "audit_hash": "5ee476a3f841fcfe7ce86800523f4434de4d7b9f274e2128da13b5586a0c84dd"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "b8e58c96-6756-c4b7-3d61-d4329c440d89",
+      "audit_id": "cd4da5ca-b6bc-0c33-d5af-b4f33385fd2b",
+      "audit_hash": "488719730ca43f04f41fa0050cce9c194b3c77e8b62f3f9542c24fa3f2ad059d"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "30dd65ad-7b89-4cc8-dc35-3535db4d2586",
+      "audit_id": "8ba34d2b-ad22-235f-6ae5-941ad9846d27",
+      "audit_hash": "274b2f14b2cc78155e1f49f04012c80e9202a0c717e186137ab8e30729bbbf00"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "779ebe1e-be62-7a71-b2d7-4f2251303684",
+      "audit_id": "305f709c-fd7e-ffda-2d5b-cb7961c15af5",
+      "audit_hash": "9d09da0e28552a895550036328dedc2718ed4b19dc1ee04073278df843bd37fc"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "1c79adfe-a520-5441-7e0f-96f5d8752322",
+      "audit_id": "dbcb30ab-a9e7-d477-baa2-78a56c0e7f0f",
+      "audit_hash": "efbc0d13ca2bbb938b14076baa8777b7003f73ae5a55117d0bc925985e81c4c3"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "b50b55b5-a7c9-7bb6-bc23-a949078e1c29",
+      "audit_id": "52dd3e49-1f61-bfcc-83c5-6f7dbce6f728",
+      "audit_hash": "4130526523130e7bd26028462a391dbf8e1b4504738fb8ff6454255a09d3bc1e"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "639e66db-a4c7-ca0a-2cce-f557ecc151db",
+      "audit_id": "2efbb1ee-41ea-96f9-91f9-f1fb7c4af9a1",
+      "audit_hash": "17234e6b9f2069123ba42e3efe07b650c598199642df8dec0bad09a38cc56287"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "audit_id": "780864d1-e3ab-1b6f-39e5-532b343b060f",
+      "audit_hash": "2bb56bd50533e23f0d5d521b2699c85d199cc13667c9a5f2eaabcd78ca436309"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "9ccb21f5-a4aa-619a-16a4-d32ef8544085",
+      "audit_id": "80e37c5e-4cc5-71be-0843-a5156841e597",
+      "audit_hash": "ff4970fb68ba07526463f1dc2cc8e13f40f3699e9fe0109077055825a5ff51c5"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "fdc68197-4a79-dea9-a9ea-b4fc3ad244c1",
+      "audit_id": "34a9de58-1bc4-8aa9-90a4-a68463d99f7d",
+      "audit_hash": "9aac5f28638ac0033128405a2cc1dd13009910fc5dcc1ca8defce1b8efa8e8a8"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "0df5fd17-75a6-a8e7-4848-037e48e4b302",
+      "audit_id": "e4d4f4f3-77a2-344c-c728-48ecbde14b86",
+      "audit_hash": "b9b8fb340860dbf812a554461964eed7af6b89d0ce9e4cd176fdd4bf3c83bc27"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "c87687dd-26bc-ad05-54d0-fdca44993509",
+      "audit_id": "fe0aa340-1318-e20d-576f-3b71395212a1",
+      "audit_hash": "dec817dbbd9d5ff2d866c98c036e48f5a44f663ad8955aa4fe1555276d390bca"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "5f5ef5c8-cb7c-1d52-e1de-e646433f7787",
+      "audit_id": "34c37df5-8c7c-ec2b-6b6e-f211f79d9836",
+      "audit_hash": "14a281a8e46fa4f043fe0309afd9b9a67b56cce388becbf2df3800c51f94aea3"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "c9f9f54f-d248-3a48-8dd0-89fc353e19c3",
+      "audit_id": "7cc47d5b-d872-e157-66e8-7d3ca0ba3ef2",
+      "audit_hash": "2ed807e861919073c26ce725b033861f7d165bda4a06fc720521fb4bba58d8eb"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "f7c7c48b-7894-e959-d794-166e3f38839a",
+      "audit_id": "27d66221-66d2-0aa2-49e8-a2d9bf299de1",
+      "audit_hash": "7d9f5e9e0758afaeda1f952890d6f9c17f2d1b33a49f338c5f9c4eb1d542b395"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "6cd7c3a3-0dfa-ee1b-b33c-76311f01119d",
+      "audit_id": "92d4dab4-5652-de45-2aa2-607b6c20faf5",
+      "audit_hash": "83206af0ffb7fc1290e661ec9d5e94cf9a097d7674136b48a4c9eac2201fda44"
+    },
+    {
+      "action": "recitation.voice_auto_evidence",
+      "table": "recitation",
+      "id": "fcd9c298-c3cd-0c32-0180-a3b5f61861cb",
+      "audit_id": "a41287e0-1b89-4c19-8962-11b2ae39e03a",
+      "audit_hash": "040c8fafc4453f36cbcbe8500eed60c5f7ca063f78cb8c32fed1d7b4602a6535"
+    }
+  ],
+  "recitations": 69,
+  "changes": 69,
+  "human_states_preserved": 0,
+  "automatic_status_changes": [],
+  "advisory_status_counts": {
+    "unverified": 69
+  },
+  "actual_aligner_readiness": {
+    "checked_at": "2026-10-10T14:24:12.526Z",
+    "provider": "internal_ctc",
+    "configured_path": "/",
+    "expected_alignment_path": "/v1/align",
+    "alignment_posts": 0,
+    "checks": [
+      {
+        "path": "/health/live",
+        "http_status": 200,
+        "code": null,
+        "status": "alive"
+      },
+      {
+        "path": "/health/ready",
+        "http_status": 503,
+        "code": "MODEL_NOT_CONFIGURED",
+        "status": null
+      }
+    ],
+    "readiness_artifact_sha256": "2f6c89a3bf828a6a4adfa49b32a6039de103f3b81db9845d40452073529b54f2",
+    "v2_credit_granted": false
+  },
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 2,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 603,
+    "transport_response_bytes": 27998
+  },
+  "finished_at": "2026-10-10T15:00:03.029Z"
+}

@@ -7,6 +7,7 @@ import {planRecitationAuditions,type AuditionChapter,type AuditionLinkEvidence} 
 import {canonicalAuditJson} from '../server/services/catalogAudit';
 import {D4AuditSqlPlan,d4Literal,sha256} from './lib/d4AuditSqlPlan';
 import {createLinkCheckpoint,type CatalogLinkCheckpoint,type CatalogLinkTarget} from '../server/services/catalogLinkChecker';
+import {youtubeReference} from '../server/services/catalogYoutubeMetadata';
 import {openRailwayMysqlSession} from './lib/railwayMysqlSession';
 import {ENVIRONMENTS} from './lib/railwayQuranOps';
 const option=(key:string)=>{const i=process.argv.indexOf(key);if(i<0||!process.argv[i+1])throw new Error('REQUIRED_OPTION:'+key);return process.argv[i+1];};
@@ -24,12 +25,16 @@ try{
   const chapters=await read("SELECT JSON_OBJECT('id',id,'recitation_id',recitation_id,'surah',surah,'audio_url',audio_url,'chapter_offset_ms',chapter_offset_ms) record FROM recitation_chapters ORDER BY recitation_id,surah");
   assert.equal(Object.keys(checkpoint.results).length,chapters.length,'LINK_CHECKPOINT_INCOMPLETE');
   const stored=await read("SELECT JSON_OBJECT('id',id,'recitation_id',recitation_id,'sample_key',sample_key,'surah',surah,'start_ms',start_ms,'duration_ms',duration_ms,'selection_details',selection_details) record FROM recitation_audition_samples");
+  const youtubeRows=await read("SELECT JSON_OBJECT('recitation_id',recitation_id,'video_id',video_id,'oembed_status',oembed_status) record FROM recitation_youtube_sources");
   const tails=await read('SELECT JSON_OBJECT(\'hash\',a.hash) record FROM audit_logs a LEFT JOIN audit_logs b ON b.prev_hash=a.hash WHERE b.id IS NULL');assert.ok(tails.length<=1,'AUDIT_CHAIN_CORRUPT');
   const plan=new D4AuditSqlPlan(tails[0]?.hash??'0'.repeat(64));const all:Record<string,unknown>[]=[];let changes=0;
   for(const recitation of recitations){
     const group=chapters.filter(c=>c.recitation_id===recitation.id);const checks:Record<string,AuditionLinkEvidence>={};
     for(const chapter of group){const check=checkpoint.results['chapter:'+chapter.id];assert.ok(check,'LINK_CHECKPOINT_ROW_MISSING');checks[chapter.audio_url]=check.check;}
-    const slots=planRecitationAuditions({recitation_id:recitation.id,chapters:group as AuditionChapter[],allowed_hosts:recitation.allowed_hosts,link_checks:checks});
+    const metadata:Record<string,{status:string}>={};
+    for(const row of youtubeRows.filter(y=>y.recitation_id===recitation.id))if(typeof row.video_id==='string')metadata[row.video_id]={status:String(row.oembed_status)};
+    const youtube=group.filter(c=>{try{return !!youtubeReference(String(c.audio_url));}catch{return false;}});
+    const slots=planRecitationAuditions({recitation_id:recitation.id,chapters:group as AuditionChapter[],allowed_hosts:recitation.allowed_hosts,link_checks:checks,...(youtube.length?{youtube_metadata:metadata}:{})});
     for(const slot of slots){
       const old=stored.find(s=>s.recitation_id===slot.recitation_id&&s.sample_key===slot.sample_key);
       const id=old?.id??sha256(slot.recitation_id+':'+slot.sample_key).slice(0,36);const patch={surah:slot.surah,start_ms:slot.start_ms,duration_ms:slot.duration_ms,selection_details:slot.selection_details};

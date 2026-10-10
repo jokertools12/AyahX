@@ -1,0 +1,1563 @@
+{
+  "started_at": "2026-10-10T14:16:01.909Z",
+  "old_inventory_sha256": "34e6c0db25d7970a523348e40cc6e7e677cac6ef77dd8c19c8bd6bb7dccfa845",
+  "new_hosts": [
+    "ia801001.us.archive.org"
+  ],
+  "checks": [
+    {
+      "target_key": "chapter:6cc20b18-bfca-2366-01d9-0210e39d0d1f",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 1,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:01.910Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/001%20-%20%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:72366bd9-69e9-2bd0-5355-017351b01cd6",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 2,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:02.914Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/002%20-%20%D8%A7%D9%84%D8%A8%D9%82%D8%B1%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:21866e8f-fb65-3261-f373-4b9ba3201c6d",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 3,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:03.542Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/003%20-%20%D8%A2%D9%84%20%D8%B9%D9%85%D8%B1%D8%A7%D9%86.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:796c4180-3f7a-0af8-cf5e-a9c557eab46b",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 4,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:04.565Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/004%20-%20%D8%A7%D9%84%D9%86%D8%B3%D8%A7%D8%A1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:09ea00d5-24b2-2793-9d18-f0f8e9c30c38",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 5,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:05.769Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/005%20-%20%D8%A7%D9%84%D9%85%D8%A7%D8%A6%D8%AF%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:50e619c6-d5f0-4eef-8824-b5d69c782b4b",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 6,
+      "original_url": "https://archive.org/download/a_20251007sss/006%20-%20%D8%A7%D9%84%D8%A3%D9%86%D8%B9%D8%A7%D9%85.mp3",
+      "blocked_redirects": [
+        "https://ia801001.us.archive.org/20/items/a_20251007sss/006%20-%20%D8%A7%D9%84%D8%A3%D9%86%D8%B9%D8%A7%D9%85.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:07.766Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/006%20-%20%D8%A7%D9%84%D8%A3%D9%86%D8%B9%D8%A7%D9%85.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:1e40e00e-51d7-28b3-77f4-48d79306568a",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 7,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:08.764Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/007%20-%20%D8%A7%D9%84%D8%A3%D8%B9%D8%B1%D8%A7%D9%81.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:7c49d2de-b44e-28be-0b2e-1cfc58d6f734",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 8,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:09.542Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/008%20-%20%D8%A7%D9%84%D8%A3%D9%86%D9%81%D8%A7%D9%84.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:b6b50c59-7809-e763-d219-e5e941bc1bfd",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 9,
+      "original_url": "https://archive.org/download/a_20251007sss/009%20-%20%D8%A7%D9%84%D8%AA%D9%88%D8%A8%D8%A9.mp3",
+      "blocked_redirects": [
+        "https://ia801001.us.archive.org/20/items/a_20251007sss/009%20-%20%D8%A7%D9%84%D8%AA%D9%88%D8%A8%D8%A9.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:11.638Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/009%20-%20%D8%A7%D9%84%D8%AA%D9%88%D8%A8%D8%A9.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:c31d2430-04a9-e8d0-5d21-37c03f2f53db",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 10,
+      "original_url": "https://archive.org/download/a_20251007sss/010%20-%20%D9%8A%D9%88%D9%86%D8%B3.mp3",
+      "blocked_redirects": [
+        "https://ia601001.us.archive.org/20/items/a_20251007sss/010%20-%20%D9%8A%D9%88%D9%86%D8%B3.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:13.604Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/010%20-%20%D9%8A%D9%88%D9%86%D8%B3.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:5d996b03-6d44-acce-661f-60954df93fd3",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 11,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:14.577Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/011%20-%20%D9%87%D9%88%D8%AF.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:d1e51b62-b25c-201d-fc1c-fe089a26c680",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 12,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:15.545Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/012%20-%20%D9%8A%D9%88%D8%B3%D9%81.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:9e487baa-b5ea-7c79-7992-b7b17ea39a01",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 13,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:16.603Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/013%20-%20%D8%A7%D9%84%D8%B1%D8%B9%D8%AF.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:d6228064-8018-c155-c2f0-d5073a7f905f",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 14,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:17.620Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/014%20-%20%D8%A5%D8%A8%D8%B1%D8%A7%D9%87%D9%8A%D9%85.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:68d2c362-bf81-93cd-4d5d-8bc3a728f4c1",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 15,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:18.557Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/015%20-%20%D8%A7%D9%84%D8%AD%D8%AC%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:29a5ce85-7569-3942-67c8-81a6a584c299",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 16,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:19.589Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/016%20-%20%D8%A7%D9%84%D9%86%D8%AD%D9%84.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:6c5f8aa1-6d57-1faf-e41c-3e39eadae3ba",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 17,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:20.539Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/017%20-%20%D8%A7%D9%84%D8%A5%D8%B3%D8%B1%D8%A7%D8%A1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:a3cb91e2-f788-3135-d340-5ff2f527d55e",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 18,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:21.574Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/018%20-%20%D8%A7%D9%84%D9%83%D9%87%D9%81.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:a985ede0-c5c7-5c9d-0c32-b0846d22b763",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 19,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:22.598Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/019%20-%20%D9%85%D8%B1%D9%8A%D9%85.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:01f20feb-2127-46a9-7ebd-2c46a265cb2c",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 20,
+      "original_url": "https://archive.org/download/a_20251007sss/020%20-%20%D8%B7%D9%87.mp3",
+      "blocked_redirects": [
+        "https://ia601001.us.archive.org/20/items/a_20251007sss/020%20-%20%D8%B7%D9%87.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:24.594Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/020%20-%20%D8%B7%D9%87.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:80d54e2a-9b03-6a60-b8cd-fce92a585d03",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 21,
+      "original_url": "https://archive.org/download/a_20251007sss/021%20-%20%D8%A7%D9%84%D8%A3%D9%86%D8%A8%D9%8A%D8%A7%D8%A1.mp3",
+      "blocked_redirects": [
+        "https://ia801001.us.archive.org/20/items/a_20251007sss/021%20-%20%D8%A7%D9%84%D8%A3%D9%86%D8%A8%D9%8A%D8%A7%D8%A1.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:26.619Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/021%20-%20%D8%A7%D9%84%D8%A3%D9%86%D8%A8%D9%8A%D8%A7%D8%A1.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:b269a99d-34c3-9c7a-aa20-d29eca6d225d",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 22,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:27.656Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/022%20-%20%D8%A7%D9%84%D8%AD%D8%AC.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:dc3265d3-cddd-b2d5-73f8-0b96591329f2",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 23,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:28.765Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/023%20-%20%D8%A7%D9%84%D9%85%D8%A4%D9%85%D9%86%D9%88%D9%86.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:000f491b-7abf-8ff7-3636-fff6a812b752",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 24,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:29.588Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/024%20-%20%D8%A7%D9%84%D9%86%D9%88%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:949a0b99-713a-859f-2ee3-5bd31ce570a9",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 25,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:30.533Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/025%20-%20%D8%A7%D9%84%D9%81%D8%B1%D9%82%D8%A7%D9%86.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:f0beb9f7-9905-9372-f146-a8377caeb528",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 26,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:31.602Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/026%20-%20%D8%A7%D9%84%D8%B4%D8%B9%D8%B1%D8%A7%D8%A1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:25b6c52e-58c0-c4d2-994c-3cebb65a26b5",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 27,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:32.550Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/027%20-%20%D8%A7%D9%84%D9%86%D9%85%D9%84.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:4c7f75c4-7eaf-acd2-73ea-f289af01fece",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 28,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:33.626Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/028%20-%20%D8%A7%D9%84%D9%82%D8%B5%D8%B5.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:bfe93f48-3177-29c7-de92-62c2764276ed",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 30,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:34.588Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/030%20-%20%D8%A7%D9%84%D8%B1%D9%88%D9%85.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:63eef44f-7ed1-119a-efae-866ac1efa117",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 31,
+      "original_url": "https://archive.org/download/a_20251007sss/031%20-%20%D9%84%D9%82%D9%85%D8%A7%D9%86.mp3",
+      "blocked_redirects": [
+        "https://ia801001.us.archive.org/20/items/a_20251007sss/031%20-%20%D9%84%D9%82%D9%85%D8%A7%D9%86.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:36.568Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/031%20-%20%D9%84%D9%82%D9%85%D8%A7%D9%86.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:2122e5a3-18ad-ede1-0e84-4ccc4d454262",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 32,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:37.584Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/032%20-%20%D8%A7%D9%84%D8%B3%D8%AC%D8%AF%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:381c9bfd-4096-5635-1269-310192da119b",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 33,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:38.612Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/033%20-%20%D8%A7%D9%84%D8%A3%D8%AD%D8%B2%D8%A7%D8%A8.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:b663881f-cf52-4be8-3430-ecf9313a20ee",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 34,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:39.538Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/034%20-%20%D8%B3%D8%A8%D8%A3.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:895e2904-2943-1fe1-5c75-6cc494eae12a",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 35,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:40.627Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/035%20-%20%D9%81%D8%A7%D8%B7%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:ac43bc44-9d5a-a00f-4a59-769443466b2a",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 36,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:41.592Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/036%20-%20%D9%8A%D8%B3.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:9b8637dd-6f5a-7b17-eaa1-24df1b82d0b3",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 37,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:42.585Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/037%20-%20%D8%A7%D9%84%D8%B5%D8%A7%D9%81%D8%A7%D8%AA.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:f05493d3-2b03-2d70-8a58-c6ae5e27878d",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 38,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:43.931Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/038%20-%20%D8%B5.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:9ddf5076-effb-7ca4-1501-cef340716987",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 39,
+      "original_url": "https://archive.org/download/a_20251007sss/039%20-%20%D8%A7%D9%84%D8%B2%D9%85%D8%B1.mp3",
+      "blocked_redirects": [
+        "https://ia801001.us.archive.org/20/items/a_20251007sss/039%20-%20%D8%A7%D9%84%D8%B2%D9%85%D8%B1.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:45.848Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/039%20-%20%D8%A7%D9%84%D8%B2%D9%85%D8%B1.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:1de5904e-191c-71c4-871e-d113d6337c5d",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 40,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:46.638Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/040%20-%20%D8%BA%D8%A7%D9%81%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:65fd706a-fd96-648f-d915-17773f1958f7",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 41,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:47.616Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/041%20-%20%D9%81%D8%B5%D9%84%D8%AA.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:1e11801a-850a-1f25-7218-9ac0be6231af",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 42,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:48.568Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/042%20-%20%D8%A7%D9%84%D8%B4%D9%88%D8%B1%D9%89.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:880eae0d-de09-7a66-71c5-6110aa677679",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 43,
+      "original_url": "https://archive.org/download/a_20251007sss/043%20-%20%D8%A7%D9%84%D8%B2%D8%AE%D8%B1%D9%81.mp3",
+      "blocked_redirects": [
+        "https://ia601001.us.archive.org/20/items/a_20251007sss/043%20-%20%D8%A7%D9%84%D8%B2%D8%AE%D8%B1%D9%81.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:50.637Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/043%20-%20%D8%A7%D9%84%D8%B2%D8%AE%D8%B1%D9%81.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:7f932efb-673b-2738-7516-7221d01879fa",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 44,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:51.623Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/044%20-%20%D8%A7%D9%84%D8%AF%D8%AE%D8%A7%D9%86.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:2afb3b2b-eeef-9d8e-929d-a9c27d1a7cf2",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 45,
+      "original_url": "https://archive.org/download/a_20251007sss/045%20-%20%D8%A7%D9%84%D8%AC%D8%A7%D8%AB%D9%8A%D8%A9.mp3",
+      "blocked_redirects": [
+        "https://ia801001.us.archive.org/20/items/a_20251007sss/045%20-%20%D8%A7%D9%84%D8%AC%D8%A7%D8%AB%D9%8A%D8%A9.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:53.706Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/045%20-%20%D8%A7%D9%84%D8%AC%D8%A7%D8%AB%D9%8A%D8%A9.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:ca39c6d0-1b22-df22-0b30-06a825ff1057",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 46,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:54.562Z",
+        "redirects": [
+          "https://dn710402.ca.archive.org/0/items/qud-adel-al-karbalaei-046-al-ahqaf/046.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:cbaae34a-02b4-c49d-03bb-4b581d77bcf3",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 47,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:55.724Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/047%20-%20%D9%85%D8%AD%D9%85%D8%AF.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:9d59c020-afe6-150e-ff7a-e7541fd345e2",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 49,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:56.589Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/049%20-%20%D8%A7%D9%84%D8%AD%D8%AC%D8%B1%D8%A7%D8%AA.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:36e1cda1-e813-730d-4629-294ae5208726",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 50,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:57.644Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/050%20-%20%D9%82.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:a9744b2a-5af4-ebb3-8047-576d81b14d36",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 51,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:58.720Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/051%20-%20%D8%A7%D9%84%D8%B0%D8%A7%D8%B1%D9%8A%D8%A7%D8%AA.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:9fa49fa9-fbd7-75f7-a6cc-79df25807f15",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 52,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:16:59.597Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/052%20-%20%D8%A7%D9%84%D8%B7%D9%88%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:02e219d3-6215-3d19-8b82-7f71d79abf60",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 53,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:00.574Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/053%20-%20%D8%A7%D9%84%D9%86%D8%AC%D9%85.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:14534cda-2e00-b9a0-8e23-e55ca5a5beaa",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 54,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:01.618Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/054%20-%20%D8%A7%D9%84%D9%82%D9%85%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:5652c0ff-296e-1dd9-939b-862079ef3dbf",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 55,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:02.699Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/055%20-%20%D8%A7%D9%84%D8%B1%D8%AD%D9%85%D9%86.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:54b90f2d-f0be-e9ec-6615-087f718301f9",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 56,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:03.582Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/056%20-%20%D8%A7%D9%84%D9%88%D8%A7%D9%82%D8%B9%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:4bff9815-1160-bde0-5093-0cd9d635c09b",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 57,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:04.630Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/057%20-%20%D8%A7%D9%84%D8%AD%D8%AF%D9%8A%D8%AF.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:7d295c5b-cc49-0ee8-0b64-3e98bb26781a",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 58,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:05.618Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/058%20-%20%D8%A7%D9%84%D9%85%D8%AC%D8%A7%D8%AF%D9%84%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:11ab1a01-c876-ffda-166a-52a91572adca",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 59,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:06.586Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/059%20-%20%D8%A7%D9%84%D8%AD%D8%B4%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:b7f6f3a5-2bc5-64a0-81a2-701dabdae720",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 60,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:07.684Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/060%20-%20%D8%A7%D9%84%D9%85%D9%85%D8%AA%D8%AD%D9%86%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:be35da0d-9753-8af9-678e-dc1e0246c813",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 61,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:08.555Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/061%20-%20%D8%A7%D9%84%D8%B5%D9%81.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:34addc1e-8221-5d25-f86e-cdd0c564734b",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 62,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:09.662Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/062%20-%20%D8%A7%D9%84%D8%AC%D9%85%D8%B9%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:1dabc151-e946-fe69-950f-736aa50f1159",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 63,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:10.586Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/063%20-%20%D8%A7%D9%84%D9%85%D9%86%D8%A7%D9%81%D9%82%D9%88%D9%86.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:ae0f07f8-2f0a-099b-25d8-366e5c83798b",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 64,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:11.620Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/064%20-%20%D8%A7%D9%84%D8%AA%D8%BA%D8%A7%D8%A8%D9%86.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:8c31f250-e66b-4cc1-221f-cdb1774511f3",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 65,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:12.669Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/065%20-%20%D8%A7%D9%84%D8%B7%D9%84%D8%A7%D9%82.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:ae107d97-28fe-7761-e3e5-555b4f23e067",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 66,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:13.564Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/066%20-%20%D8%A7%D9%84%D8%AA%D8%AD%D8%B1%D9%8A%D9%85.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:e6d6bd9a-37e8-6565-d180-d28cfccfef7f",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 67,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:14.554Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/067%20-%20%D8%A7%D9%84%D9%85%D9%84%D9%83.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:9d497621-6f96-9b7f-e4a8-2ecb90392e39",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 68,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:15.570Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/068%20-%20%D8%A7%D9%84%D9%82%D9%84%D9%85.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:7ace98af-1855-9b08-ab06-75abc1b873eb",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 69,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:16.629Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/069%20-%20%D8%A7%D9%84%D8%AD%D8%A7%D9%82%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:4fb4c0a3-5748-0e79-6030-85870805899b",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 70,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:17.598Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/070%20-%20%D8%A7%D9%84%D9%85%D8%B9%D8%A7%D8%B1%D8%AC.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:c18fe131-f202-b582-9cfb-e89db956b155",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 71,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:18.651Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/071%20-%20%D9%86%D9%88%D8%AD.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:e6a5ec55-18ad-788a-eeac-65f7862f9d39",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 72,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:19.641Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/072%20-%20%D8%A7%D9%84%D8%AC%D9%86.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:5dc4d65a-3ba9-8cd4-6d7d-8071c974744c",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 73,
+      "original_url": "https://archive.org/download/a_20251007sss/073%20-%20%D8%A7%D9%84%D9%85%D8%B2%D9%85%D9%84.mp3",
+      "blocked_redirects": [
+        "https://ia801001.us.archive.org/20/items/a_20251007sss/073%20-%20%D8%A7%D9%84%D9%85%D8%B2%D9%85%D9%84.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:21.534Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/073%20-%20%D8%A7%D9%84%D9%85%D8%B2%D9%85%D9%84.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:36d77fcd-14d0-6bf4-53b6-3971d0a44a3d",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 74,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:22.567Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/074%20-%20%D8%A7%D9%84%D9%85%D8%AF%D8%AB%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:46cf9dd4-d69d-fd52-d05b-87916eecf53b",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 75,
+      "original_url": "https://archive.org/download/a_20251007sss/075%20-%20%D8%A7%D9%84%D9%82%D9%8A%D8%A7%D9%85%D8%A9.mp3",
+      "blocked_redirects": [
+        "https://ia801001.us.archive.org/20/items/a_20251007sss/075%20-%20%D8%A7%D9%84%D9%82%D9%8A%D8%A7%D9%85%D8%A9.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": true,
+      "checked": {
+        "status": "available",
+        "httpStatus": 200,
+        "checkedAt": "2026-10-10T14:17:24.561Z",
+        "finalUrl": "https://ia801001.us.archive.org/20/items/a_20251007sss/075%20-%20%D8%A7%D9%84%D9%82%D9%8A%D8%A7%D9%85%D8%A9.mp3",
+        "contentType": "audio/mpeg",
+        "contentLength": 4282571,
+        "redirects": [
+          "https://ia801001.us.archive.org/20/items/a_20251007sss/075%20-%20%D8%A7%D9%84%D9%82%D9%8A%D8%A7%D9%85%D8%A9.mp3"
+        ],
+        "transport_evidence": [
+          {
+            "host": "archive.org",
+            "dns_addresses": [
+              "207.241.224.2"
+            ],
+            "connected_address": "207.241.224.2",
+            "tls_authorized": true,
+            "certificate_sha256": "51:86:C5:EC:3D:3E:7B:93:A7:46:62:22:16:61:94:42:8B:7C:F8:89:35:02:84:A6:D0:C8:40:E7:96:CB:1A:4D"
+          },
+          {
+            "host": "ia801001.us.archive.org",
+            "dns_addresses": [
+              "207.241.228.81"
+            ],
+            "connected_address": "207.241.228.81",
+            "tls_authorized": true,
+            "certificate_sha256": "2F:C8:D2:48:9A:9E:A3:DD:2A:EC:0C:14:40:D8:69:E5:D0:9A:B7:B9:34:20:91:99:52:29:21:31:C0:6D:F7:22"
+          }
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:faaa169a-f889-83a9-f7d2-3b41d35f4fd7",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 76,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:26.254Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/076%20-%20%D8%A7%D9%84%D8%A5%D9%86%D8%B3%D8%A7%D9%86.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:1ee31e37-2f9e-a34c-74a2-2d7a5e1c87d2",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 77,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:26.888Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/077%20-%20%D8%A7%D9%84%D9%85%D8%B1%D8%B3%D9%84%D8%A7%D8%AA.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:a5a0eaf2-62c1-5ca4-4d92-60736c1b9a9a",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 78,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:28.432Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/078%20-%20%D8%A7%D9%84%D9%86%D8%A8%D8%A3.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:2cd1e625-ba72-f62b-0382-8705bdfcc2d5",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 79,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:29.167Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/079%20-%20%D8%A7%D9%84%D9%86%D8%A7%D8%B2%D8%B9%D8%A7%D8%AA.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:806e452c-e0b5-8f97-41ce-f03414f6cc78",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 80,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:30.052Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/080%20-%20%D8%B9%D8%A8%D8%B3.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:b648e81d-a2cf-0fe8-469b-11301556437f",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 81,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:31.073Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/081%20-%20%D8%A7%D9%84%D8%AA%D9%83%D9%88%D9%8A%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:ad8de8bd-74e8-8e33-b5bc-28e0c6b2abf1",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 82,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:32.083Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/082%20-%20%D8%A7%D9%84%D8%A7%D9%86%D9%81%D8%B7%D8%A7%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:e4489e00-a85c-49ad-f193-495431a2ebe3",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 83,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:33.064Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/083%20-%20%D8%A7%D9%84%D9%85%D8%B7%D9%81%D9%81%D9%8A%D9%86.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:a3b54ad4-8ab2-fc23-4d2a-d1dda38e607b",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 84,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:34.049Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/084%20-%20%D8%A7%D9%84%D8%A7%D9%86%D8%B4%D9%82%D8%A7%D9%82.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:8ce991eb-3b6a-4677-6ca1-7d9ad619dd55",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 85,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:35.125Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/085%20-%20%D8%A7%D9%84%D8%A8%D8%B1%D9%88%D8%AC.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:8ef0dc66-564c-3546-e28e-7a71d097e200",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 86,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:36.135Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/086%20-%20%D8%A7%D9%84%D8%B7%D8%A7%D8%B1%D9%82.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:8c68a12e-d98e-303b-134e-16f2f753f621",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 87,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:37.136Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/087%20-%20%D8%A7%D9%84%D8%A3%D8%B9%D9%84%D9%89.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:3f0c02eb-6374-5fdc-f2c4-9de88b949d43",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 88,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:38.486Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/088%20-%20%D8%A7%D9%84%D8%BA%D8%A7%D8%B4%D9%8A%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:c315be18-89c3-2a59-1bb2-a477b4fcbb8a",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 89,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:39.666Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/089%20-%20%D8%A7%D9%84%D9%81%D8%AC%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:ada929cd-7162-61e9-ce99-faae92a9de42",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 90,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:40.735Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/090%20-%20%D8%A7%D9%84%D8%A8%D9%84%D8%AF.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:03f95e84-a60e-c58a-b221-556e5ee7600b",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 91,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:41.844Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/091%20-%20%D8%A7%D9%84%D8%B4%D9%85%D8%B3.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:b03ad85c-2f2a-df50-cbca-db8aee713320",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 92,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:42.876Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/092%20-%20%D8%A7%D9%84%D9%84%D9%8A%D9%84.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:1a502b8a-2a9a-bd63-b30c-21b76d321a29",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 93,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:43.823Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/093%20-%20%D8%A7%D9%84%D8%B6%D8%AD%D9%89.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:330ef8e1-aa4d-a401-3cb7-b36e4f95ce78",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 94,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:44.591Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/094%20-%20%D8%A7%D9%84%D8%B4%D8%B1%D8%AD.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:35f7ca37-3444-9eb8-3d70-06bd32db51e6",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 95,
+      "original_url": "https://archive.org/download/a_20251007sss/095%20-%20%D8%A7%D9%84%D8%AA%D9%8A%D9%86.mp3",
+      "blocked_redirects": [
+        "https://ia801001.us.archive.org/20/items/a_20251007sss/095%20-%20%D8%A7%D9%84%D8%AA%D9%8A%D9%86.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:46.823Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/095%20-%20%D8%A7%D9%84%D8%AA%D9%8A%D9%86.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:940a8319-be87-3edd-89b9-962aefea24ab",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 96,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:47.868Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/096%20-%20%D8%A7%D9%84%D8%B9%D9%84%D9%82.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:064f629c-758e-b31f-fcb5-c848720a1cbf",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 97,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:48.863Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/097%20-%20%D8%A7%D9%84%D9%82%D8%AF%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:4fdf2fcf-415e-9bf7-bf02-9e691f5358ee",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 98,
+      "original_url": "https://archive.org/download/a_20251007sss/098%20-%20%D8%A7%D9%84%D8%A8%D9%8A%D9%86%D8%A9.mp3",
+      "blocked_redirects": [
+        "https://ia601001.us.archive.org/20/items/a_20251007sss/098%20-%20%D8%A7%D9%84%D8%A8%D9%8A%D9%86%D8%A9.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:50.660Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/098%20-%20%D8%A7%D9%84%D8%A8%D9%8A%D9%86%D8%A9.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:8edc64b2-f887-89ac-be7e-532815e06fc9",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 99,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:51.683Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/099%20-%20%D8%A7%D9%84%D8%B2%D9%84%D8%B2%D9%84%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:26c71044-7db3-27a8-4e8a-aa0579a5d849",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 100,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:52.582Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/100%20-%20%D8%A7%D9%84%D8%B9%D8%A7%D8%AF%D9%8A%D8%A7%D8%AA.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:ce92ab5c-c3c2-febf-0c02-12acdbe2bcb8",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 101,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:53.553Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/101%20-%20%D8%A7%D9%84%D9%82%D8%A7%D8%B1%D8%B9%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:0422de63-e2d6-fdf2-5d9a-0eb114cc39c9",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 102,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:54.561Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/102%20-%20%D8%A7%D9%84%D8%AA%D9%83%D8%A7%D8%AB%D8%B1.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:70571449-d9c9-634c-8369-be18131b2b89",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 103,
+      "original_url": "https://archive.org/download/a_20251007sss/103%20-%20%D8%A7%D9%84%D8%B9%D8%B5%D8%B1.mp3",
+      "blocked_redirects": [
+        "https://ia601001.us.archive.org/20/items/a_20251007sss/103%20-%20%D8%A7%D9%84%D8%B9%D8%B5%D8%B1.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:56.514Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/103%20-%20%D8%A7%D9%84%D8%B9%D8%B5%D8%B1.mp3"
+        ]
+      }
+    },
+    {
+      "target_key": "chapter:35da3438-1224-94bd-6824-eb81818dbe4f",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 104,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:57.582Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/104%20-%20%D8%A7%D9%84%D9%87%D9%85%D8%B2%D8%A9.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:8c2a6a27-9096-bb10-39c5-77a2b31f3206",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 106,
+      "blocked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:17:58.656Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/106%20-%20%D9%82%D8%B1%D9%8A%D8%B4.mp3"
+        ]
+      },
+      "approved_namespace": false
+    },
+    {
+      "target_key": "chapter:5e8b7b04-62eb-d242-8a95-07429dfbe1cd",
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "surah": 107,
+      "original_url": "https://archive.org/download/a_20251007sss/107%20-%20%D8%A7%D9%84%D9%85%D8%A7%D8%B9%D9%88%D9%86.mp3",
+      "blocked_redirects": [
+        "https://ia601001.us.archive.org/20/items/a_20251007sss/107%20-%20%D8%A7%D9%84%D9%85%D8%A7%D8%B9%D9%88%D9%86.mp3"
+      ],
+      "namespace": "*.us.archive.org",
+      "approved_namespace": false,
+      "checked": {
+        "status": "AUDIO_HOST_NOT_ALLOWED",
+        "httpStatus": null,
+        "checkedAt": "2026-10-10T14:18:00.539Z",
+        "redirects": [
+          "https://dn721906.ca.archive.org/0/items/a_20251007sss/107%20-%20%D8%A7%D9%84%D9%85%D8%A7%D8%B9%D9%88%D9%86.mp3"
+        ]
+      }
+    }
+  ]
+}

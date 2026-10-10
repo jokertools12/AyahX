@@ -57,7 +57,8 @@ try {
   assert.equal(version[0]?.mysql_version, '9.7.2', 'MYSQL_9_7_2_REQUIRED');
   const condition = selectedRecitation ? ` WHERE r.slug=${sqlLiteral(selectedRecitation)} COLLATE utf8mb4_unicode_ci` : '';
   const chapters = await read(`SELECT JSON_OBJECT('id',c.id,'recitationId',r.id,'reciterId',r.reciter_id,'recitationSlug',r.slug,'surah',c.surah,'url',c.audio_url,'allowedHosts',p.host_allowlist) AS record FROM recitation_chapters c JOIN recitations r ON r.id=c.recitation_id JOIN audio_providers p ON p.id=r.provider_id${condition} ORDER BY r.slug,c.surah`);
-  const alternates = await read(`SELECT JSON_OBJECT('id',a.id,'recitationId',r.id,'reciterId',r.reciter_id,'recitationSlug',r.slug,'surah',a.surah,'url',a.url,'allowedHosts',p.host_allowlist) AS record FROM recitation_source_urls a JOIN recitations r ON r.id=a.recitation_id JOIN audio_providers p ON p.id=r.provider_id${condition} ORDER BY r.slug,a.surah,a.priority,a.id`);
+  const alternateCondition=selectedRecitation?condition+" AND a.kind='alternate_same_recording'":" WHERE a.kind='alternate_same_recording'";
+  const alternates = await read(`SELECT JSON_OBJECT('id',a.id,'recitationId',r.id,'reciterId',r.reciter_id,'recitationSlug',r.slug,'surah',a.surah,'url',a.url,'allowedHosts',p.host_allowlist) AS record FROM recitation_source_urls a JOIN recitations r ON r.id=a.recitation_id JOIN audio_providers p ON p.id=r.provider_id${alternateCondition} ORDER BY r.slug,a.surah,a.priority,a.id`);
   const targets = [...chapters.map(row => ({ ...row, kind: 'chapter', key: 'chapter:' + String(row.id) })),
     ...alternates.map(row => ({ ...row, kind: 'alternate', key: 'alternate:' + String(row.id) }))] as CatalogLinkTarget[];
   if (selectedRecitation && targets.length === 0) throw new Error('RECITATION_NOT_FOUND');

@@ -22,7 +22,7 @@ import quranRouter from './routes/quran';
 import videoTranscodeRouter from './routes/videoTranscode';
 import alignmentsRouter from './routes/alignments';
 import { createCatalogRouter } from './routes/catalog';
-import { catalogService, catalogLinkChecker } from './services/catalogRuntime';
+import { catalogService, catalogLinkChecker,catalogStorageReconciliation } from './services/catalogRuntime';
 
 
 
@@ -264,6 +264,7 @@ process.on('uncaughtException', (err) => {
 // ==============================================================================
 export const server = app.listen(config.port, () => {
   catalogLinkChecker.start();
+  catalogStorageReconciliation.start();
   logger.info(`🚀 Quran Reels MySQL Backend Server running on port ${config.port}`, {
     port: config.port,
     environment: config.nodeEnv,
@@ -287,7 +288,7 @@ export const server = app.listen(config.port, () => {
 export async function gracefulShutdown(signal: string): Promise<void> {
   if (isShuttingDown) return;
   isShuttingDown = true;
-  const catalogClosing = catalogLinkChecker.close();
+  const catalogClosing = Promise.all([catalogLinkChecker.close(),catalogStorageReconciliation.close()]);
   stopAlignmentRetentionCleanup?.();
   stopAlignmentRetentionCleanup = null;
   logger.warn(`Received ${signal}. Initiating graceful shutdown...`);

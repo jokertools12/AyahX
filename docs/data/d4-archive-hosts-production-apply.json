@@ -1,0 +1,62 @@
+{
+  "started_at": "2026-10-10T14:33:24.595Z",
+  "target": "production",
+  "applied": true,
+  "sql_sha256": "1658a93f5ca7256528be87e074db82bc7b4ea2328da79c39c6aff447eb0fb390",
+  "sql_bytes": 3067,
+  "statements": 10,
+  "disk_before": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1732083712,
+    "available_bytes": 2943725568
+  },
+  "protected_checksums_unchanged": true,
+  "d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "timings": 422463,
+  "disk_after": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1732116480,
+    "available_bytes": 2943692800
+  },
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": true,
+    "acknowledged_commands": 17,
+    "writes_halted": false,
+    "batches": [
+      {
+        "ordinal": 1,
+        "row_count": 2,
+        "sql_sha256": "37c30465dfdfccd5d2d795f3ba8e33c7faca1b1c3e95c3ff0f2100f20207074b",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 236,
+        "sql_bytes": 3066,
+        "wire_request_bytes": 1506
+      },
+      {
+        "ordinal": 2,
+        "row_count": 0,
+        "sql_sha256": "2db35aa37c4005aa96055e900adc9bfbbd70d106820fefcb83216b7cc3f95422",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 235,
+        "sql_bytes": 7,
+        "wire_request_bytes": 75
+      }
+    ],
+    "transport_request_bytes": 7365,
+    "transport_response_bytes": 3013863
+  },
+  "finished_at": "2026-10-10T14:35:23.491Z"
+}

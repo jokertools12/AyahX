@@ -19,7 +19,7 @@ try{
   const actor:CatalogActor={id:String(people[0].id),kind:'human',permissions},system:CatalogActor={id:'auto-verifier-v1',kind:'system',permissions};
   const clone=async(table:'recitations'|'audio_providers',patch:Record<string,unknown>)=>{
     const [fields]=await pool.query<RowDataPacket[]>("SELECT COLUMN_NAME name FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=? AND EXTRA NOT LIKE '%GENERATED%' ORDER BY ORDINAL_POSITION",[table]);
-    const names=fields.map(f=>String(f.name));assert.ok(names.every(n=>/^[a-z_]+$/u.test(n)));
+    const names=fields.map(f=>String(f.name));assert.ok(names.every(n=>/^[a-z_][a-z0-9_]*$/u.test(n)),'COLUMN_IDENTIFIER_INVALID');
     const values:unknown[]=[];const projection=names.map(name=>{if(name in patch){values.push(patch[name]);return '?';}return '`'+name+'`';});
     await pool.query(`INSERT INTO ${table}(${names.map(n=>'`'+n+'`').join(',')}) SELECT ${projection.join(',')} FROM ${table} ORDER BY id LIMIT 1`,values);
   };

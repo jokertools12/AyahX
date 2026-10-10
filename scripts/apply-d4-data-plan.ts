@@ -12,7 +12,7 @@ const file=resolve(option('--sql'));const outside=relative(process.cwd(),file);a
 const sql=readFileSync(file,'utf8');const sha=createHash('sha256').update(sql).digest('hex');assert.equal(sha,plan.sql_sha256,'SQL_PLAN_CHANGED');
 // Planner output uses one statement per physical line. Embedded data uses JSON escaping.
 const statements=sql.split(/\r?\n/u).filter(s=>s.trim()&&!s.trim().startsWith('--'));
-for(const s of statements){assert.ok(s.endsWith(';'),'ONE_COMPLETE_STATEMENT_PER_LINE_REQUIRED');assert.ok(/^(?:SET |START TRANSACTION;|COMMIT;|CREATE TEMPORARY TABLE ayahx_d4_|INSERT INTO ayahx_d4_|INSERT INTO audit_logs\(|INSERT INTO recitation_audition_samples\(|UPDATE (?:recitations|audio_providers|recitation_chapters|recitation_source_urls) SET |SELECT RELEASE_LOCK\()/u.test(s),'D4_STATEMENT_NOT_APPROVED');assert.ok(Buffer.byteLength(s)<=256*1024,'ROW_PACKET_MARGIN');}
+for(const s of statements){assert.ok(s.endsWith(';'),'ONE_COMPLETE_STATEMENT_PER_LINE_REQUIRED');assert.ok(/^(?:SET |START TRANSACTION;|COMMIT;|CREATE TEMPORARY TABLE ayahx_d4_|INSERT INTO ayahx_d4_|INSERT INTO (?:audit_logs|recitation_audition_samples|human_review_items|recitation_youtube_sources|recitation_source_urls)\(|UPDATE (?:recitations|audio_providers|recitation_chapters|recitation_source_urls|recitation_youtube_sources|human_review_items) SET |SELECT RELEASE_LOCK\()/u.test(s),'D4_STATEMENT_NOT_APPROVED');assert.ok(Buffer.byteLength(s)<=256*1024,'ROW_PACKET_MARGIN');}
 const baseline=JSON.parse(readFileSync(option('--baseline'),'utf8')) as Inventory;
 if(apply){const dry=JSON.parse(readFileSync(option('--dry-run'),'utf8'));assert.ok(dry.passed&&!dry.applied);assert.equal(dry.sql_sha256,sha);}
 const remote=await openRailwayMysqlSession(ENVIRONMENTS.production,{allowWrites:apply});
@@ -25,7 +25,7 @@ try{
   if(apply){
     const batches:Array<{sql:string;rowCount:number}>=[];let lines:string[]=[];let rows=0;let bytes=0;
     const flush=()=>{if(lines.length)batches.push({sql:lines.join('\n'),rowCount:rows});lines=[];rows=0;bytes=0;};
-    for(const statement of statements){const n=/^(?:UPDATE |INSERT INTO (?:audit_logs|recitation_audition_samples)\()/u.test(statement)?1:0;const size=Buffer.byteLength(statement)+1;if(rows+n>200||bytes+size>256*1024)flush();lines.push(statement);rows+=n;bytes+=size;}flush();
+    for(const statement of statements){const n=/^(?:UPDATE |INSERT INTO (?:audit_logs|recitation_audition_samples|human_review_items|recitation_youtube_sources|recitation_source_urls)\()/u.test(statement)?1:0;const size=Buffer.byteLength(statement)+1;if(rows+n>200||bytes+size>256*1024)flush();lines.push(statement);rows+=n;bytes+=size;}flush();
     const packet=Number((await remote.read('SELECT @@max_allowed_packet;')).trim());
     await remote.executeStatements(batches,async batch=>{const disk=await remote.storage();assert.ok(disk.available_bytes/disk.total_bytes>=.2,'D4_SPACE_GUARD');assert.ok(Buffer.byteLength(batches[batch.ordinal-1].sql)<packet/4,'D4_PACKET_GUARD');});await remote.commit();
   }

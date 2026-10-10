@@ -80,6 +80,10 @@ export function createLinkCheckpoint(targets: readonly CatalogLinkTarget[], prev
       if (!target || result.targetKey !== key || result.inputSha256 !== targetHash(target) ||
         result.evidenceScope !== 'link_only_not_voice_identity' || !Number.isFinite(Date.parse(result.check.checkedAt)) ||
         typeof result.check.status !== 'string' || (result.check.retryAt && !Number.isFinite(Date.parse(result.check.retryAt)))) throw new Error('CATALOG_LINK_CHECKPOINT_CORRUPT');
+      for(const observation of [result.check,result.conflictObservation].filter((v):v is AudioLinkCheck=>!!v)){
+        if((observation.finalUrl&&!reportableAudioUrl(observation.finalUrl))||(observation.status==='available'&&!observation.finalUrl)||
+          observation.redirectChain?.some(url=>!reportableAudioUrl(url)))throw new Error('CATALOG_LINK_CHECKPOINT_PRIVATE_URL');
+      }
     }
     for (const collision of previous.conflicts ?? []) {
       if (!collision.identity || !['original_url_file_identity', 'resolved_url_file_identity'].includes(collision.evidence) || !Array.isArray(collision.targetKeys) || collision.targetKeys.length < 2 || collision.targetKeys.some(key => !current.has(key)) || new Set(collision.targetKeys.map(key => current.get(key)!.reciterId)).size < 2 || !Array.isArray(collision.reciterIds) || !Array.isArray(collision.recitationSlugs) || JSON.stringify([...collision.reciterIds].sort()) !== JSON.stringify([...new Set(collision.targetKeys.map(key => current.get(key)!.reciterId))].sort()) || JSON.stringify([...collision.recitationSlugs].sort()) !== JSON.stringify([...new Set(collision.targetKeys.map(key => current.get(key)!.recitationSlug))].sort()) || collision.targetKeys.some(key => {
@@ -201,7 +205,7 @@ export async function runCatalogLinkChecks(targets: readonly CatalogLinkTarget[]
 }
 
 /** A deterministic review plan only. This module has no database execute capability. */
-export function catalogLinkSqlPlan(targets: readonly CatalogLinkTarget[], checkpoint: CatalogLinkCheckpoint): { sql: string; sha256: string; statements: Array<{ sql: string; rowCount: number }> } {
+export function catalogLinkSqlPlan(targets: readonly CatalogLinkTarget[], checkpoint: CatalogLinkCheckpoint): { sql: string; sha256: string; statements: Array<{ sql: string; rowCount: number; targetKey: string }> } {
   createLinkCheckpoint(targets, checkpoint);
   const excluded = new Set(catalogLinkConflicts(targets, checkpoint).flatMap(c => c.targetKeys));
   if (Object.keys(checkpoint.results).length !== targets.length) throw new Error('CATALOG_LINK_CHECKS_INCOMPLETE');
@@ -213,7 +217,7 @@ export function catalogLinkSqlPlan(targets: readonly CatalogLinkTarget[], checkp
     const fields = target.kind === 'chapter' ? `audio_status=${sqlLiteral(status)},last_verified_at=${sqlLiteral(timestamp)}` : `last_status=${sqlLiteral(status)},last_checked_at=${sqlLiteral(timestamp)}`;
     const urlField = target.kind === 'chapter' ? 'audio_url' : 'url';
     const sql = `UPDATE ${table} SET ${fields} WHERE id=${sqlLiteral(target.id)} COLLATE utf8mb4_unicode_ci AND recitation_id=${sqlLiteral(target.recitationId)} COLLATE utf8mb4_unicode_ci AND BINARY SHA2(CONVERT(${urlField} USING utf8mb4),256)=BINARY ${sqlLiteral(sha(target.url))};`;
-    return { sql, rowCount: 1 };
+    return { sql, rowCount: 1, targetKey: target.key };
   });
   const sql = `-- Link checks only: no voice identity, publication, licensing or timing changes.\nSET time_zone='+00:00';\nSTART TRANSACTION;\n${statements.map(s => s.sql).join('\n')}\nCOMMIT;\n`;
   return { sql, sha256: sha(sql), statements };

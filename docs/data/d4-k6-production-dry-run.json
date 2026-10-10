@@ -1,0 +1,59 @@
+{
+  "target": "production",
+  "applied": false,
+  "sql_sha256": "cf0a0168efeb96cfe1abc6856084176be7f7b266fbd353ac45354e439962f18f",
+  "sql_bytes": 9338,
+  "started_at": "2026-10-10T14:13:10.224Z",
+  "original_column_projection_sha256": {
+    "recitations": "74ade13fed0b17917ec4bc5291e4503e46546ac96ca11acfe6b922df21d0d2ff",
+    "recitation_source_urls": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "before_tables": 57,
+  "disk_before": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1730560000,
+    "available_bytes": 2945249280
+  },
+  "critical_before": {
+    "users": 13,
+    "subscriptions": 16,
+    "plans": null,
+    "payment_requests": 3,
+    "videos": null,
+    "saved_videos": 7,
+    "render_jobs": 72,
+    "system_settings": 13,
+    "user_roles": 13,
+    "notifications": 49
+  },
+  "after_tables": 57,
+  "original_columns_unchanged": true,
+  "protected_checksums_unchanged": true,
+  "d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "timings": 422463,
+  "disk_after": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1730560000,
+    "available_bytes": 2945249280
+  },
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 10,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 5007,
+    "transport_response_bytes": 8187471
+  },
+  "finished_at": "2026-10-10T14:14:12.430Z"
+}

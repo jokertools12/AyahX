@@ -17,6 +17,14 @@ async function run(targets: CatalogLinkTarget[], checkLink = vi.fn(async (url: s
   return { result, persisted, checkLink };
 }
 describe('D4 periodic catalog link checker (unit fixtures; no live network)', () => {
+  it('rejects signed final URLs or redirect evidence imported through checkpoints before SQL/reporting',async()=>{
+    const targets=[target('one')],saved=(await run(targets)).result;
+    const signed=structuredClone(saved);signed.results.one.check.finalUrl='https://audio.example/one.mp3?sig=private';
+    expect(()=>createLinkCheckpoint(targets,signed)).toThrow('CATALOG_LINK_CHECKPOINT_PRIVATE_URL');
+    const redirects=structuredClone(saved);redirects.results.one.check.redirectChain=['https://audio.example/one.mp3?X-Amz-Signature=private'];
+    expect(()=>createLinkCheckpoint(targets,redirects)).toThrow('CATALOG_LINK_CHECKPOINT_PRIVATE_URL');
+    expect(()=>catalogLinkSqlPlan(targets,signed)).toThrow('CATALOG_LINK_CHECKPOINT_PRIVATE_URL');
+  });
   it('keeps Drive case and YouTube video parameters distinct; omits signed URLs from reports', () => {
     expect(audioFileIdentity('https://drive.google.com/file/d/AbC_1/view')).toBe('google_drive_file:AbC_1');
     expect(audioFileIdentity('https://drive.usercontent.google.com/download?id=AbC_1&export=download')).toBe('google_drive_file:AbC_1');
@@ -46,7 +54,7 @@ describe('D4 periodic catalog link checker (unit fixtures; no live network)', ()
     expect(saved.conflicts?.[0]).toMatchObject({ evidence: 'resolved_url_file_identity', reciterIds: ['reader-1', 'reader-2'] });
     expect(saved.results.first.conflictObservation).toEqual(available('https://cdn.example/shared.mp3'));
     expect(saved.results.third.check.status).toBe('available'); expect(saved.stopped).toBeUndefined();
-    const plan = catalogLinkSqlPlan(targets, saved); expect(plan.statements).toHaveLength(1); expect(plan.sql).not.toContain("id='first'"); expect(plan.sql).not.toContain("id='second'");
+    const plan = catalogLinkSqlPlan(targets, saved); expect(plan.statements).toHaveLength(1); expect(plan.statements[0].targetKey).toBe('third'); expect(plan.sql).not.toContain("id='first'"); expect(plan.sql).not.toContain("id='second'");
     const resume = await run(targets, vi.fn(), saved); expect(resume.checkLink).not.toHaveBeenCalled(); expect(resume.result.conflicts).toEqual(saved.conflicts);
   });
   it('resumes every chapter without network; checks stale rows and rejects changed inventory or damaged checkpoints', async () => {

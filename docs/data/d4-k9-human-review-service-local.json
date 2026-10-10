@@ -1,0 +1,21 @@
+{
+  "started_at": "2026-10-10T14:47:49.987Z",
+  "target": "local",
+  "database": "ayahx_d4_k9_rehearsal_20261010",
+  "production_writes": 0,
+  "passed": true,
+  "enqueue_idempotent": true,
+  "system_confirmed_denied": true,
+  "system_permitted_denied": true,
+  "concurrent_decisions": {
+    "accepted": 1,
+    "conflict_rejected": 1,
+    "voice_history_rows": 1
+  },
+  "decision_replay_idempotent": true,
+  "human_decision_preserved": true,
+  "missing_license_evidence_rolled_back": true,
+  "audit_chain_unique_tail": true,
+  "launch_readiness_flag_closed": true,
+  "finished_at": "2026-10-10T14:47:50.172Z"
+}

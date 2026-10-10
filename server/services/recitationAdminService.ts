@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
-import { CatalogError,type CatalogDatabase,type CatalogTx,type CatalogRow,type AvailabilityMode } from './catalogContracts';
+import { CatalogError,isPubliclyVisible,type CatalogDatabase,type CatalogTx,type CatalogRow,type AvailabilityMode,type VoiceGatePolicy } from './catalogContracts';
+import { readCatalogSettings } from './recitationCatalogService';
 import { appendCatalogAudit,requireCatalogPermission,type CatalogActor } from './catalogAudit';
 export interface AlternateRecordingProof {
   primaryUrl:string; primarySha256:string; alternateSha256:string; verifiedAt:string;
@@ -25,7 +26,7 @@ export class RecitationAdminService {
   }
   async setPublic(actor:CatalogActor,id:string,visible:boolean):Promise<void>{
     requireCatalogPermission(actor,'recitations.manage');if(typeof visible!=='boolean')throw new CatalogError('CATALOG_INPUT_INVALID',422);
-    await this.db.transaction(async tx=>{const row=await this.recitation(tx,id);if(visible){const [provider]=await tx.read('SELECT license_status FROM audio_providers WHERE id=?',[row.provider_id]);if(row.status!=='published'||row.voice_identity_status!=='confirmed'||provider?.license_status!=='permitted')throw new CatalogError('RECITATION_PUBLIC_GATES_INCOMPLETE',409);}await tx.execute('UPDATE recitations SET is_public=? WHERE id=?',[visible,id]);await appendCatalogAudit(tx,actor,'recitation.public','recitation',id,{is_public:row.is_public},{is_public:visible});});
+    await this.db.transaction(async tx=>{const row=await this.recitation(tx,id);if(visible){const [provider]=await tx.read('SELECT license_status FROM audio_providers WHERE id=?',[row.provider_id]);const settings=await readCatalogSettings(tx);if(!isPubliclyVisible({status:String(row.status),is_public:true,voice_identity_status:row.voice_identity_status===null?null:String(row.voice_identity_status),license_status:provider?.license_status===null?null:String(provider?.license_status)},true,settings.voiceGatePolicy))throw new CatalogError('RECITATION_PUBLIC_GATES_INCOMPLETE',409);}await tx.execute('UPDATE recitations SET is_public=? WHERE id=?',[visible,id]);await appendCatalogAudit(tx,actor,'recitation.public','recitation',id,{is_public:row.is_public},{is_public:visible});});
   }
   async reviewVoice(actor:CatalogActor,id:string,status:'unverified'|'confirmed'|'mismatch',notes:string):Promise<void>{
     requireCatalogPermission(actor,'recitations.voice.review',true);if(!['unverified','confirmed','mismatch'].includes(status)||!notes?.trim()||notes.length>10000)throw new CatalogError('CATALOG_INPUT_INVALID',422);
@@ -65,5 +66,10 @@ export class RecitationAdminService {
   async setAvailabilityMode(actor:CatalogActor,mode:AvailabilityMode):Promise<void>{
     requireCatalogPermission(actor,'settings.catalog.manage',true);if(!['complete_only','ayah_ranges'].includes(mode))throw new CatalogError('CATALOG_INPUT_INVALID',422);
     await this.db.transaction(async tx=>{const [old]=await tx.read("SELECT value_text FROM system_settings WHERE key_name='availability_mode' FOR UPDATE");await tx.execute("INSERT INTO system_settings(key_name,value_text,is_secret,category) VALUES('availability_mode',?,0,'quran_catalog') ON DUPLICATE KEY UPDATE value_text=VALUES(value_text)",[mode]);await appendCatalogAudit(tx,actor,'catalog.availability_mode','system_setting','availability_mode',old??null,{value_text:mode});});
+  }
+  async setVoiceGatePolicy(actor:CatalogActor,policy:VoiceGatePolicy):Promise<void>{
+    requireCatalogPermission(actor,'settings.catalog.manage',true);
+    if(!['allow_auto_verified','require_confirmed'].includes(policy))throw new CatalogError('CATALOG_INPUT_INVALID',422);
+    await this.db.transaction(async tx=>{const [old]=await tx.read("SELECT value_text FROM system_settings WHERE key_name='voice_gate_policy' FOR UPDATE");await tx.execute("INSERT INTO system_settings(key_name,value_text,is_secret,category) VALUES('voice_gate_policy',?,0,'quran_catalog') ON DUPLICATE KEY UPDATE value_text=VALUES(value_text)",[policy]);await appendCatalogAudit(tx,actor,'catalog.voice_gate_policy','system_setting','voice_gate_policy',old??null,{value_text:policy});});
   }
 }
