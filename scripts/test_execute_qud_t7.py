@@ -214,6 +214,37 @@ class SyntheticMetricTests(unittest.TestCase):
         self.assertEqual(row['full_v1_diagnostic']['best_lag_ms'], 31)
         self.assertFalse(row['t7_v1_passed'])
 
+    def test_raw_ncc_below_threshold_does_not_round_to_success(self):
+        # The legacy compare rounds its report to eight decimal places. T7 must
+        # measure the raw coefficient independently before making its decision.
+        from lib import t7_offset_execution as kernel
+        with patch.object(kernel, 'raw_compare', return_value={
+                'score': 0.949999997, 'score_display': 0.95,
+                'best_lag_ms': 0, 'duration_difference_ms': 0, 'passed': False}):
+            row = self.measure()
+        self.assertEqual(row['interior_v1']['score'], 0.949999997)
+        self.assertFalse(row['t7_v1_passed'])
+
+    def test_real_calculation_preserves_subthreshold_raw_coefficient(self):
+        from lib.t7_offset_execution import raw_compare
+        rng = np.random.default_rng(981)
+        reference = rng.normal(size=16000)
+        reference -= reference.mean()
+        reference /= np.linalg.norm(reference)
+        noise = rng.normal(size=16000)
+        noise -= noise.mean()
+        noise -= np.dot(noise, reference) * reference
+        noise /= np.linalg.norm(noise)
+        coefficient = 0.949999997
+        observed = coefficient * reference + np.sqrt(1 - coefficient ** 2) * noise
+        source = np.concatenate((rng.normal(size=16000), reference, rng.normal(size=16000)))
+        legacy = self.v1.compare(source, observed, 2000, 2000)
+        result = raw_compare(source, observed, 2000, 2000)
+        self.assertEqual(legacy['score'], .95)
+        self.assertEqual(result['score_display'], .95)
+        self.assertAlmostEqual(result['score'], coefficient, places=10)
+        self.assertFalse(result['passed'])
+
     def test_fixed_position_minimum_duration_and_wrong_position(self):
         self.assertFalse(fixed_position_interior(self.source, self.clip[:10000], 16000)['measured'])
         self.assertTrue(fixed_position_interior(self.source, self.clip, 16000)['passed'])

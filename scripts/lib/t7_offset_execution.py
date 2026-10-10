@@ -16,6 +16,7 @@ import urllib.error
 import urllib.request
 
 import numpy as np
+from scipy.signal import correlate
 
 from .acoustic_diagnostics import additional_metrics, encoded_interior_identity
 from .hf_serial_ranges import safe_response_text
@@ -39,6 +40,35 @@ def load_diagnostic_modules():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module, module.v1
+
+
+def raw_compare(source, clip, offset_ms, duration_ms):
+    """Legacy lag search and normalization, with an unrounded decision score.
+
+    Keep historical v1 reports intact. Reporting may round score_display only;
+    score and passed retain the computed float used by the T7 acceptance gate.
+    """
+    center = round(offset_ms * RATE / 1000)
+    margin = round(.300 * RATE)
+    start = max(0, center - margin)
+    end = min(len(source), center + len(clip) + margin)
+    window = source[start:end]
+    if len(window) < len(clip) or len(clip) == 0:
+        return {'passed': False, 'reason': 'source_window_too_short'}
+    observed = clip - clip.mean()
+    scores = correlate(window, observed, mode='valid', method='fft')
+    sums = np.concatenate(([0], np.cumsum(window)))
+    squares = np.concatenate(([0], np.cumsum(window * window)))
+    count = len(observed)
+    energy = squares[count:] - squares[:-count] - (sums[count:] - sums[:-count]) ** 2 / count
+    scores /= np.sqrt(np.maximum(energy * np.dot(observed, observed), 1e-20))
+    lags = (np.arange(len(scores)) + start - center) * 1000 / RATE
+    scores[np.abs(lags) > 300] = -1
+    best = int(np.argmax(scores))
+    score, lag = float(scores[best]), float(lags[best])
+    delta = abs(count * 1000 / RATE - duration_ms)
+    return {'score': score, 'score_display': round(score, 8), 'best_lag_ms': lag,
+            'duration_difference_ms': delta, 'passed': score >= .95 and delta <= 30 and abs(lag) <= 30}
 
 
 def fixed_position_interior(source, clip, start):
@@ -68,11 +98,11 @@ def measured_sample(source, clip, offset_ms, duration_ms, segments, source_bytes
     if (source.ndim != 1 or clip.ndim != 1 or not len(source) or not len(clip)
             or not np.all(np.isfinite(source)) or not np.all(np.isfinite(clip))):
         raise ValueError('FINITE_NONEMPTY_MONO_AUDIO_REQUIRED')
-    full = v1.compare(source, clip, offset_ms, duration_ms)
+    full = raw_compare(source, clip, offset_ms, duration_ms)
     trim = round(TRIM_MS * RATE / 1000)
     internal = {'measured': False, 'reason': 'interior_too_short', 'trim_each_side_ms': TRIM_MS}
     if len(clip) > 2 * trim:
-        candidate = v1.compare(source, clip[trim:-trim], offset_ms + TRIM_MS, (len(clip) - 2 * trim) * 1000 / RATE)
+        candidate = raw_compare(source, clip[trim:-trim], offset_ms + TRIM_MS, (len(clip) - 2 * trim) * 1000 / RATE)
         if 'score' in candidate:
             internal = {'measured': True, 'trim_each_side_ms': TRIM_MS, 'score': candidate['score'],
                         'best_lag_ms': candidate['best_lag_ms'],
