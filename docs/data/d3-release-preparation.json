@@ -1,0 +1,1262 @@
+{
+  "checked_at": "2026-10-10T03:23:15.529Z",
+  "qud_version": "v3.2.0",
+  "importer_version": "release-d3-no-healing-1",
+  "manifest_sha256": "bde8378c423c5e6b30fbc73c42663cce299f2ca4e8bd9f2f4b258ed9467645cf",
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "source": "qud-release-only",
+  "database_writes": false,
+  "results": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "source_sha256": "3808f9f4db6e354a6a8d6385d60d789b651afd8196ccac6d364da54deb0b023a",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6240,
+      "rows": 6236,
+      "prepared_sha256": "9c1078111ee704c88af425ce4ec9144bd6ba28ebaf3286d0d5e8a82669d6cb87",
+      "prepared_bytes": 11522065,
+      "ready": 6071,
+      "needs_review": 165,
+      "covered_words": 76981,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 163,
+        "WORD_DIFF_UNMAPPED": 14,
+        "INVALID_WORD_INTERVAL": 2,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "source_sha256": "418d983cf2efc0bac308de72522faa7021e432bb17b5c219e3a3c059b296e4e6",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6236,
+      "rows": 6236,
+      "prepared_sha256": "aafd721462e66b41c7ba3ed332ce5289743a08e01a501f69669c56a18561c00b",
+      "prepared_bytes": 11534287,
+      "ready": 6080,
+      "needs_review": 156,
+      "covered_words": 76985,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 155,
+        "WORD_DIFF_UNMAPPED": 15,
+        "INVALID_WORD_INTERVAL": 1,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "abdulaziz_al_turki_yt",
+      "source_sha256": "026efea4036baa0e87734dfaaafbff26762310444b3ee2ad29657367dad486bd",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6116,
+      "rows": 6115,
+      "prepared_sha256": "214df156dc0e9d78a690d80856154cb22bcfaec03a7a24886c0256fbda12ce34",
+      "prepared_bytes": 11523599,
+      "ready": 5686,
+      "needs_review": 429,
+      "covered_words": 74609,
+      "expected_words": 76082,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 429,
+        "WORD_DIFF_UNMAPPED": 33
+      }
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "source_sha256": "41ef6119a81562f490a4373882a558b65341e568112e9f64988018d4fadc4f10",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6238,
+      "rows": 6236,
+      "prepared_sha256": "089d9599f864baf6adefa06cc07119d868f840d279621e02e48c70323c078268",
+      "prepared_bytes": 12074144,
+      "ready": 5629,
+      "needs_review": 607,
+      "covered_words": 74526,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 56,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 606,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "source_sha256": "d3646692f484fff29ea47ffc9b1edfd29198eab7ebdd3c2a132d0a068a46e6ec",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6237,
+      "rows": 6236,
+      "prepared_sha256": "724fb02f5562123676667545779fba3ca652c7b40be47124bca3b4d7bb93172d",
+      "prepared_bytes": 11806105,
+      "ready": 5828,
+      "needs_review": 408,
+      "covered_words": 75534,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 407,
+        "WORD_DIFF_UNMAPPED": 27,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_warsh_qdc",
+      "source_sha256": "98ea3f63941a185597706a28d72a3c373d1fc11a7287d187d577ebd96b488478",
+      "script_sha256": "a2961d66629504e9d1004239feb9961ab4095e96686e3cb6122080ae9a2896e4",
+      "source_occurrences": 6222,
+      "rows": 6214,
+      "prepared_sha256": "bed0ffcf63a199c6d8dcf75f7624de897ff4c873d78e9b3c8c260809b7a12d59",
+      "prepared_bytes": 9124519,
+      "ready": 0,
+      "needs_review": 6214,
+      "covered_words": 0,
+      "expected_words": 0,
+      "reason_counts": {
+        "CANONICAL_TEXT_UNAVAILABLE": 6214,
+        "SPOKEN_TEXT_UNAVAILABLE": 6214,
+        "SPOKEN_WORD_COUNT_MISMATCH": 6214
+      }
+    },
+    {
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "source_sha256": "a0312755223035a83acfede5cc87ba78873de84ca3846306589bd80948d5a08b",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6237,
+      "rows": 6236,
+      "prepared_sha256": "5acd154d77a446a66a62f8df4d11eacdb4b4526d70ccdcfe2a87013802cbe67f",
+      "prepared_bytes": 11585245,
+      "ready": 6168,
+      "needs_review": 68,
+      "covered_words": 77211,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 68,
+        "WORD_DIFF_UNMAPPED": 4,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "abdullah_al_mattrod_qdc",
+      "source_sha256": "933bdaab8bc3957cc44bfb0cd66e6b58a106151a760a187da38e3f9afe6ba599",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6263,
+      "rows": 6236,
+      "prepared_sha256": "aab77268952069999c7dbc158ac3115ab0eab94def2e2fb71c85c1670ee52007",
+      "prepared_bytes": 11692402,
+      "ready": 5898,
+      "needs_review": 338,
+      "covered_words": 76355,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 336,
+        "WORD_DIFF_UNMAPPED": 19,
+        "INVALID_WORD_INTERVAL": 2
+      }
+    },
+    {
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "source_sha256": "6034ed5b43bc0c684552dfad6e243b9e8401a23c4ceda5c112d118532d3a0101",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6257,
+      "rows": 6236,
+      "prepared_sha256": "7dd772498e158ec1ebf8df84b65bf53787daf4d5ab903c1af74fc9e516ecd870",
+      "prepared_bytes": 11744849,
+      "ready": 5765,
+      "needs_review": 471,
+      "covered_words": 75662,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 470,
+        "WORD_DIFF_UNMAPPED": 16,
+        "INVALID_WORD_INTERVAL": 1,
+        "MISSING_SOURCE_AYAH": 13
+      }
+    },
+    {
+      "slug": "abdullah_kamel_way2quran",
+      "source_sha256": "3609db369c3cc6fe7fcb575983a919ee70a01c2a47bd80d876022c96b0ceb04c",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 7139,
+      "rows": 6236,
+      "prepared_sha256": "288b47ba5ca0611c757c80cdf9a7dcbf86560119bf9c0cc96d008a29bfa8ba23",
+      "prepared_bytes": 12846301,
+      "ready": 4515,
+      "needs_review": 1721,
+      "covered_words": 71790,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1654,
+        "WORD_DIFF_UNMAPPED": 196,
+        "INVALID_WORD_INTERVAL": 109,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "abdulwadood_haneef_mp3quran",
+      "source_sha256": "f257a676e492449b23845c43d02cca7355fc55a6c54c8020b2f970652b8affea",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6362,
+      "rows": 6236,
+      "prepared_sha256": "1d4bf62750fade8af4392789fff0c0f68695fb9fadd91ef52e41d79bc9320adc",
+      "prepared_bytes": 11806558,
+      "ready": 5511,
+      "needs_review": 725,
+      "covered_words": 75427,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 719,
+        "WORD_DIFF_UNMAPPED": 52,
+        "INVALID_WORD_INTERVAL": 10,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "abdur_rashid_sufi_qdc",
+      "source_sha256": "77c4b65cd802ae2ff0ba67d4ca6e0874add54468901ab7c893225c4877e9f1f0",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6237,
+      "rows": 6236,
+      "prepared_sha256": "208741b30e7fcfde24bcc115f845dacd1990d79513c7c3e4617f43cb33fefd57",
+      "prepared_bytes": 11640022,
+      "ready": 5995,
+      "needs_review": 241,
+      "covered_words": 76426,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 240,
+        "WORD_DIFF_UNMAPPED": 20,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "source_sha256": "800ef0664b6dff1e56ebabdbf753121d021b6c754a7ad28eeb9b56d76f42f846",
+      "script_sha256": "fdac8b93c83c381746029cb7a69923fff498eeabb3103fe90dacdcadb0e616ce",
+      "source_occurrences": 6240,
+      "rows": 6236,
+      "prepared_sha256": "c9103ce0d90484d901806a117cd2a5310390edc418d2d5de83afa1ff87995118",
+      "prepared_bytes": 9029105,
+      "ready": 0,
+      "needs_review": 6236,
+      "covered_words": 0,
+      "expected_words": 0,
+      "reason_counts": {
+        "CANONICAL_TEXT_UNAVAILABLE": 6236,
+        "SPOKEN_TEXT_UNAVAILABLE": 6236,
+        "SPOKEN_WORD_COUNT_MISMATCH": 6236,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "abu_bakr_al_shatri_tarteel",
+      "source_sha256": "c644c4b2afee7767c7efa591eef8b6c9914fe9a6ae5688e8a140f7612f623de3",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6283,
+      "rows": 6236,
+      "prepared_sha256": "053ef3dacdab26b373e0ceceaca13d221b4cb6c0b19def96b4abc49b255812d6",
+      "prepared_bytes": 12168256,
+      "ready": 4379,
+      "needs_review": 1857,
+      "covered_words": 73004,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1853,
+        "WORD_DIFF_UNMAPPED": 123,
+        "INVALID_WORD_INTERVAL": 7
+      }
+    },
+    {
+      "slug": "adel_al_karbalaei_archive_v2",
+      "source_sha256": "aa30948bbbdccee7f3363055242b7083040d31b05fbab92651a5984c21d7b91d",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6243,
+      "rows": 6236,
+      "prepared_sha256": "ed9fdaad55008ad398a06b59a51378be04e271e93468d4f77ab765f4666f66da",
+      "prepared_bytes": 11622674,
+      "ready": 6052,
+      "needs_review": 184,
+      "covered_words": 76815,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 182,
+        "WORD_DIFF_UNMAPPED": 10,
+        "INVALID_WORD_INTERVAL": 2
+      }
+    },
+    {
+      "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+      "source_sha256": "b69336ebe936cf351325bb70ae8d65c309713d6131f27ba2663c2370732ef938",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6236,
+      "rows": 6236,
+      "prepared_sha256": "f32f9bbe5bd82d9d82a8aacfe2b500fbf9a2e8eb54d442449a9c928a47b47397",
+      "prepared_bytes": 11952985,
+      "ready": 5481,
+      "needs_review": 755,
+      "covered_words": 74540,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 53,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 755
+      }
+    },
+    {
+      "slug": "ahmed_al_ajmi_qdc",
+      "source_sha256": "78382b772e027c25d2b98e76f155ac5aa96eff89b4989e7263be72d8837f1e75",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6453,
+      "rows": 6236,
+      "prepared_sha256": "b2775e7acb55d6ad4c647e7dad4244043a67e8a06674781293da318b6b062c36",
+      "prepared_bytes": 12262225,
+      "ready": 4780,
+      "needs_review": 1456,
+      "covered_words": 73104,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 108,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1455,
+        "INVALID_WORD_INTERVAL": 2,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "ahmed_amer_tvquran",
+      "source_sha256": "85f8b2afd876b4f10e3563da6ffbcbf65ffc414b9c20143ba3dd8cdce876c628",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6237,
+      "rows": 6236,
+      "prepared_sha256": "209554e22ae1891ba0b9818001f4774132e966717d8c3a5d70f4adba880e8264",
+      "prepared_bytes": 11744457,
+      "ready": 5893,
+      "needs_review": 343,
+      "covered_words": 75913,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 342,
+        "WORD_DIFF_UNMAPPED": 26,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "ahmed_deban_qalon_mp3quran",
+      "source_sha256": "e4041696b03a8f54df18c3e43b95ef0a743ac0b2d58d87ad781da601843fccdd",
+      "script_sha256": "5a958c29183ee74910db056995721dd55f5892068b769719de7d7727b51a9f22",
+      "source_occurrences": 6217,
+      "rows": 6214,
+      "prepared_sha256": "bfb2a51e4a37f3935d5b852f387e12abf9edd55389149a6919821499cc730556",
+      "prepared_bytes": 9036283,
+      "ready": 0,
+      "needs_review": 6214,
+      "covered_words": 0,
+      "expected_words": 0,
+      "reason_counts": {
+        "CANONICAL_TEXT_UNAVAILABLE": 6214,
+        "SPOKEN_TEXT_UNAVAILABLE": 6214,
+        "SPOKEN_WORD_COUNT_MISMATCH": 6214
+      }
+    },
+    {
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "source_sha256": "2db0e118e8183498a910be79ffaab7fe961ba31116d4e35de44aca6b335fc271",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6242,
+      "rows": 6236,
+      "prepared_sha256": "a83073bf52bb505eacc5520f821f5301f60fd730a36009a91c63af8aa64af535",
+      "prepared_bytes": 11645765,
+      "ready": 5971,
+      "needs_review": 265,
+      "covered_words": 76514,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 260,
+        "WORD_DIFF_UNMAPPED": 23,
+        "INVALID_WORD_INTERVAL": 5,
+        "MISSING_SOURCE_AYAH": 2
+      }
+    },
+    {
+      "slug": "ahmed_kaseb_way2quran",
+      "source_sha256": "82cc8e660cf339999ac663f52720fd42426e1bd0d2a9b9731559cf0fe64f274c",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6241,
+      "rows": 6236,
+      "prepared_sha256": "e5b9ed1582a8dcfa8c001fe94c9177795cf43eed061fb3cdb9891ff6a30e23fb",
+      "prepared_bytes": 11635968,
+      "ready": 5925,
+      "needs_review": 311,
+      "covered_words": 76565,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 309,
+        "WORD_DIFF_UNMAPPED": 23,
+        "INVALID_WORD_INTERVAL": 2,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "ahmed_nuayna_qdc",
+      "source_sha256": "9d1f2ee77b60a9b07fbb9c57b58498c6637f156af756e0f5c5205fbf1d501e97",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6373,
+      "rows": 6236,
+      "prepared_sha256": "1d28256a5838d577088a278111ef60c7a4a50ce0a73b05ad2e5309409d64cb5b",
+      "prepared_bytes": 11723457,
+      "ready": 6015,
+      "needs_review": 221,
+      "covered_words": 76586,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 162,
+        "WORD_DIFF_UNMAPPED": 73,
+        "INVALID_WORD_INTERVAL": 59
+      }
+    },
+    {
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "source_sha256": "bd509eef20c95c39d292d9b4de2a8209a55a9b3cc1f7cdcf6a62d6accf0736c6",
+      "script_sha256": "5a958c29183ee74910db056995721dd55f5892068b769719de7d7727b51a9f22",
+      "source_occurrences": 6216,
+      "rows": 6213,
+      "prepared_sha256": "d61a9f4d79e288ddb4934543b036c8f1c87f83f96ec3109e84cbea3b40fa925e",
+      "prepared_bytes": 9080137,
+      "ready": 0,
+      "needs_review": 6213,
+      "covered_words": 0,
+      "expected_words": 0,
+      "reason_counts": {
+        "CANONICAL_TEXT_UNAVAILABLE": 6213,
+        "SPOKEN_TEXT_UNAVAILABLE": 6213,
+        "SPOKEN_WORD_COUNT_MISMATCH": 6213,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "ahmed_saud_mp3quran",
+      "source_sha256": "2cc895c18521ab21bd86605acb6da612487da10c405f1503fc92c6cb37b661ed",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 327,
+      "rows": 327,
+      "prepared_sha256": "db64f3170bf80fe00ea7f315e4aae3652568081309dfd8fc6b4b12b84a739036",
+      "prepared_bytes": 388671,
+      "ready": 325,
+      "needs_review": 2,
+      "covered_words": 1359,
+      "expected_words": 1363,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 2
+      }
+    },
+    {
+      "slug": "ahmed_shaheen_mp3quran",
+      "source_sha256": "cd6f4619b46e89b9cc67b2cfc3f1c3a553768e5f46ef71798b6ee9b3019e64ca",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6241,
+      "rows": 6236,
+      "prepared_sha256": "bf9ae76b2838ebe3a23187dd8fdeeea5423a868e19544af59c2f12798c37ffe3",
+      "prepared_bytes": 11916729,
+      "ready": 5503,
+      "needs_review": 733,
+      "covered_words": 74698,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 730,
+        "WORD_DIFF_UNMAPPED": 48,
+        "INVALID_WORD_INTERVAL": 3
+      }
+    },
+    {
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "source_sha256": "3518e39a356f4d6ded8c9c4f76e254073e1046b405e4a54d5e56387d4bb97a24",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 5616,
+      "rows": 5561,
+      "prepared_sha256": "eecac530d7d969ed4a730d6ee2110989445aa62d568a3b38924d2653de6a2377",
+      "prepared_bytes": 10375972,
+      "ready": 4951,
+      "needs_review": 610,
+      "covered_words": 65329,
+      "expected_words": 67052,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 601,
+        "WORD_DIFF_UNMAPPED": 47,
+        "INVALID_WORD_INTERVAL": 11
+      }
+    },
+    {
+      "slug": "akram_al_alaqmi_qdc",
+      "source_sha256": "5fda1f4cb266ffb8822975ab012b76ef4371c6c803dd7f4b0c25687ba35756bc",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6236,
+      "rows": 6236,
+      "prepared_sha256": "c0d3c0fb8cf0db281dd2827f408398201d2d64e19856444203e457619c2d3e32",
+      "prepared_bytes": 12010297,
+      "ready": 5233,
+      "needs_review": 1003,
+      "covered_words": 73973,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 69,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1002,
+        "INVALID_WORD_INTERVAL": 1,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "ali_al_huthaifi_mp3quran",
+      "source_sha256": "69538d785009f547305057b68e0028d91a552c0e118a3cfcb0eac1698a42a294",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6236,
+      "rows": 6236,
+      "prepared_sha256": "21bfe9fd7cd8bbfc8285c03a582fd5067e9fe49bb8368336e856c8c8e06f7352",
+      "prepared_bytes": 12012775,
+      "ready": 5301,
+      "needs_review": 935,
+      "covered_words": 74013,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 68,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 935
+      }
+    },
+    {
+      "slug": "ayman_swed_muallim_yt",
+      "source_sha256": "ad420057ac5e11b19c2995392c59a32b1fe0f22a09adc76e5605fce215084aed",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6279,
+      "rows": 6236,
+      "prepared_sha256": "edae058447f8b7e8e38d0acc1c1b756f77eb53ae0be9d2a52cb97677a97a081e",
+      "prepared_bytes": 12272649,
+      "ready": 4881,
+      "needs_review": 1355,
+      "covered_words": 72807,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 102,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1339,
+        "INVALID_WORD_INTERVAL": 20
+      }
+    },
+    {
+      "slug": "badr_al_turki_yt",
+      "source_sha256": "338d64e8ad27c3da2c0f6734563be8ec09d1dbcfaff393e662c5f60925f684ff",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6237,
+      "rows": 6236,
+      "prepared_sha256": "27f710eb18ea05651db1b864909fb838f93cfb6cc157ae8d856bcf8f8dcfc562",
+      "prepared_bytes": 11903339,
+      "ready": 5589,
+      "needs_review": 647,
+      "covered_words": 74786,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 646,
+        "WORD_DIFF_UNMAPPED": 51,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "bandar_baleela_qdc",
+      "source_sha256": "5a29e1fdad9431bfa5351950115ad2fd90df8f6f9997e0d71b6022359c3a4384",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6425,
+      "rows": 6236,
+      "prepared_sha256": "ece52b2e45171cbe0548889fdcbed645476f62fce8f2dfd5d68c289bcdc9704b",
+      "prepared_bytes": 12065964,
+      "ready": 5284,
+      "needs_review": 952,
+      "covered_words": 74382,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 939,
+        "WORD_DIFF_UNMAPPED": 70,
+        "INVALID_WORD_INTERVAL": 23,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "fatih_seferagic_way2quran",
+      "source_sha256": "ff0215cf38ac3ddfcc09f3c51adf94e311f5ceb9f008a3058c94c3a24280a0a0",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6255,
+      "rows": 6236,
+      "prepared_sha256": "c9f07bdc869ebd03702f43162461b659b3711bdf15e24a017206db0897b7c042",
+      "prepared_bytes": 11542472,
+      "ready": 6167,
+      "needs_review": 69,
+      "covered_words": 77216,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 66,
+        "WORD_DIFF_UNMAPPED": 11,
+        "INVALID_WORD_INTERVAL": 5,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "haitham_al_dukhain_mp3quran",
+      "source_sha256": "f1f8107064dd43ea85254f40837a61e533ab4f2eac6c50badc7b5bd0e260946c",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6284,
+      "rows": 6236,
+      "prepared_sha256": "a393cc5279209237ca5d5329faa7395bdcf2397f27b7cf30b1c653de51418c2c",
+      "prepared_bytes": 12036189,
+      "ready": 5122,
+      "needs_review": 1114,
+      "covered_words": 73893,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1112,
+        "WORD_DIFF_UNMAPPED": 73,
+        "INVALID_WORD_INTERVAL": 3
+      }
+    },
+    {
+      "slug": "hani_al_rifai_qdc_128k",
+      "source_sha256": "8154fefe083c324a9c391eb4d79eec6392795aea896c5b0b7ff1c784ef99d898",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6325,
+      "rows": 6236,
+      "prepared_sha256": "7ec5485e7a7bb9f0966c62567ad9157149d981ef3397d4e28f0d3cba8391f137",
+      "prepared_bytes": 11733828,
+      "ready": 5695,
+      "needs_review": 541,
+      "covered_words": 76067,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 531,
+        "WORD_DIFF_UNMAPPED": 31,
+        "INVALID_WORD_INTERVAL": 10,
+        "MISSING_SOURCE_AYAH": 2
+      }
+    },
+    {
+      "slug": "ibrahim_al_akhdar_drive",
+      "source_sha256": "9bd240e45b41782ab657edc94f340f3a562ef8233a62a1d19b9738eafed0ab11",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6237,
+      "rows": 6236,
+      "prepared_sha256": "58eb96885b64e99de0425e27e69aad6c2505e00574773ee19c4779f7bdfa72d0",
+      "prepared_bytes": 11623050,
+      "ready": 6106,
+      "needs_review": 130,
+      "covered_words": 76995,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 130,
+        "WORD_DIFF_UNMAPPED": 13
+      }
+    },
+    {
+      "slug": "imad_zuhair_hafez_mp3quran",
+      "source_sha256": "81baf6e93f1af53535c53d076006e61bcf38d730aa8a7195534de9430ccc7690",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6236,
+      "rows": 6236,
+      "prepared_sha256": "4a85c6ad6a474e1f5901f058634058ef4abe2abc79c8ca332417a663c541506c",
+      "prepared_bytes": 11877593,
+      "ready": 5655,
+      "needs_review": 581,
+      "covered_words": 74998,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 38,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 581
+      }
+    },
+    {
+      "slug": "islam_sobhi_mp3quran",
+      "source_sha256": "6b6cc24872d936ce15f528da5979b24551441deeb6c5141d63181267e075b239",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 5552,
+      "rows": 5334,
+      "prepared_sha256": "1068110f1b831aeffa790d8f32538228e869bd2a91bd6acce16a2387856b3df1",
+      "prepared_bytes": 10034193,
+      "ready": 4683,
+      "needs_review": 651,
+      "covered_words": 61761,
+      "expected_words": 63841,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 647,
+        "WORD_DIFF_UNMAPPED": 30,
+        "INVALID_WORD_INTERVAL": 4
+      }
+    },
+    {
+      "slug": "khalid_al_mohana_drive",
+      "source_sha256": "f7779accd9d14520f5be662270d3d465631f1a27170afb560e04cd61f4c93009",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6237,
+      "rows": 6236,
+      "prepared_sha256": "9edcc5b62eb53ce3377e4fecd70437b7a4d5aa59c150051432f802da27c96cb1",
+      "prepared_bytes": 11691993,
+      "ready": 5973,
+      "needs_review": 263,
+      "covered_words": 76377,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 262,
+        "WORD_DIFF_UNMAPPED": 18,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "khalifa_al_tunaiji_tarteel",
+      "source_sha256": "62492ad2a5ff577e824cfce35812b3aeb68afebad447cf65e44044c6e0ef803e",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6236,
+      "rows": 6236,
+      "prepared_sha256": "4b7a0d3a8d7ac3c0716c3280394393438cd0cd3f010f54e588998d834bcd0de5",
+      "prepared_bytes": 11683675,
+      "ready": 5922,
+      "needs_review": 314,
+      "covered_words": 76254,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 314,
+        "WORD_DIFF_UNMAPPED": 17
+      }
+    },
+    {
+      "slug": "maher_al_muaiqly_qdc",
+      "source_sha256": "538c8ec00170eacfd908872177d4d5446a062f9a0f98c8ddbad467cd78b9b567",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6236,
+      "rows": 6236,
+      "prepared_sha256": "c55efff888ded8c94278f1ac5f307630561682f47ecb55a861f292bf0e940f97",
+      "prepared_bytes": 11765441,
+      "ready": 5910,
+      "needs_review": 326,
+      "covered_words": 75957,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 326,
+        "WORD_DIFF_UNMAPPED": 16
+      }
+    },
+    {
+      "slug": "mahmoud_abdul_hakam_mp3quran",
+      "source_sha256": "d1174b1045db6863eb53e28e1db8a2cdc9f68ae6f941b5430562076111953bb4",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6239,
+      "rows": 6236,
+      "prepared_sha256": "dda4931c772b00ad9239fb699c3601fa846db909354ea820613187db2995c3ae",
+      "prepared_bytes": 11896089,
+      "ready": 5660,
+      "needs_review": 576,
+      "covered_words": 74973,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 576,
+        "WORD_DIFF_UNMAPPED": 42
+      }
+    },
+    {
+      "slug": "mahmoud_ali_al_banna_qdc",
+      "source_sha256": "4f3ea23a7b6a11c4e3036e8baee3cbaa23818177e63766bef2b0daa85549a0f3",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6238,
+      "rows": 6236,
+      "prepared_sha256": "cd5bd37093765a59ddd92c3355a66a0dbd5ea8c4c6fd86d090d1755213ebca28",
+      "prepared_bytes": 11761011,
+      "ready": 5815,
+      "needs_review": 421,
+      "covered_words": 75656,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 420,
+        "WORD_DIFF_UNMAPPED": 31,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mp3quran",
+      "source_sha256": "478e20aa0bdbb3d4a89a55e44788989843e2a46efb99ecd11712791d7b4dbc7e",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6238,
+      "rows": 6236,
+      "prepared_sha256": "c1ab7933d4e2609f6742b4eea1c4421f66d6a8fa4dc070e89e9718072e171fd4",
+      "prepared_bytes": 11791947,
+      "ready": 5907,
+      "needs_review": 329,
+      "covered_words": 76107,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 328,
+        "WORD_DIFF_UNMAPPED": 18,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "source_sha256": "e7d4ab547f441da2b049a81e5047b88ce20caf42680e8d8de491dc3eb3977f83",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6235,
+      "rows": 6236,
+      "prepared_sha256": "9d9d67593605d037698722c0df60f1032382d77e41899ac77a0f5c8d2d9cd217",
+      "prepared_bytes": 11981097,
+      "ready": 5656,
+      "needs_review": 580,
+      "covered_words": 75095,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 41,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 580,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_qdc_128k",
+      "source_sha256": "91edd8454e237a9795fc8388fe74c3bfab58cb997d2421b75a6233d43dc6241d",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6236,
+      "rows": 6236,
+      "prepared_sha256": "81df0e6c7d6b6d460ee2d9d00b92f884cfd87b9e73cfefd997ab416904eaa71b",
+      "prepared_bytes": 11772732,
+      "ready": 5929,
+      "needs_review": 307,
+      "covered_words": 75839,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 307,
+        "WORD_DIFF_UNMAPPED": 35
+      }
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_2008_qdc",
+      "source_sha256": "4eec1becb18dfd3e46250d2df4175a1a5de82b395d495971eb9eb436f45fbffe",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6274,
+      "rows": 6236,
+      "prepared_sha256": "9ddfbda7c9802e05e4811a837a8002697ec1d51be74200f5529d68f8004e9d0f",
+      "prepared_bytes": 11955122,
+      "ready": 5291,
+      "needs_review": 945,
+      "covered_words": 74622,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 944,
+        "WORD_DIFF_UNMAPPED": 47,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_mp3quran",
+      "source_sha256": "2ef64637e14b657fc354c6aab718344d61102b6a4934a32ff214c77bd1e3db69",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6249,
+      "rows": 6236,
+      "prepared_sha256": "e57327e2380d8c0821fda842d7792dd3ded12a56e99ea11f0d2fd5cd1b2eb134",
+      "prepared_bytes": 11888851,
+      "ready": 5404,
+      "needs_review": 832,
+      "covered_words": 74969,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 52,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 831,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "moaz_mahmoud_hamed_qalon_way2quran",
+      "source_sha256": "bf4f0717f5d6cd5d74fbb33b877e8cb823eccbe1fd05d91dd93f2a9d240b6d63",
+      "script_sha256": "5a958c29183ee74910db056995721dd55f5892068b769719de7d7727b51a9f22",
+      "source_occurrences": 6335,
+      "rows": 6177,
+      "prepared_sha256": "40a3285f0d20791bab10dd28f4679810f1a85a8e4edef221777a2d2eaea509e8",
+      "prepared_bytes": 9023610,
+      "ready": 0,
+      "needs_review": 6177,
+      "covered_words": 0,
+      "expected_words": 0,
+      "reason_counts": {
+        "CANONICAL_TEXT_UNAVAILABLE": 6177,
+        "SPOKEN_TEXT_UNAVAILABLE": 6177,
+        "SPOKEN_WORD_COUNT_MISMATCH": 6177
+      }
+    },
+    {
+      "slug": "mohammed_abdulkareem_qdc",
+      "source_sha256": "34644cabb54ed62dea65ac93093b9d9c1f4e7cf531f5fa562cb19a646fd6b4bf",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6316,
+      "rows": 6236,
+      "prepared_sha256": "263ee51253685f6c3ab901ff54d8139c37349c0a247d4303290b78870091ddd0",
+      "prepared_bytes": 12105933,
+      "ready": 4952,
+      "needs_review": 1284,
+      "covered_words": 73300,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1276,
+        "WORD_DIFF_UNMAPPED": 67,
+        "INVALID_WORD_INTERVAL": 11,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "source_sha256": "6618c53ac444c4811c537fb8a9b6fb9e2c8c19872b07d98d742e6ecaf2aa92bd",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6241,
+      "rows": 6236,
+      "prepared_sha256": "76747661662d68515d15a6d5895e34dd58fe3c15c9864181f081598de020429d",
+      "prepared_bytes": 11940030,
+      "ready": 5096,
+      "needs_review": 1140,
+      "covered_words": 74389,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1139,
+        "WORD_DIFF_UNMAPPED": 64,
+        "INVALID_WORD_INTERVAL": 1,
+        "MISSING_SOURCE_AYAH": 2
+      }
+    },
+    {
+      "slug": "mohammed_alghazali_archive",
+      "source_sha256": "9e6f74d8b36c68506ff911bb6a92bfedb72ccac45ce1d2a05155dc1395c70d05",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6243,
+      "rows": 6236,
+      "prepared_sha256": "df2f00398da1c65c070b61481efc18b2b130aa38614919afead66168043bc98e",
+      "prepared_bytes": 12050716,
+      "ready": 5119,
+      "needs_review": 1117,
+      "covered_words": 73766,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1117,
+        "WORD_DIFF_UNMAPPED": 57,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "mohammed_ayyub_drive",
+      "source_sha256": "2001321e00a4ce58b1610d64978817d407afd81f9fe485fd8c4a4eeaf783b797",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6236,
+      "rows": 6236,
+      "prepared_sha256": "431c73710b59797728b37f58acd884f376f422a003bff560e946b45928aa59a2",
+      "prepared_bytes": 12014652,
+      "ready": 5539,
+      "needs_review": 697,
+      "covered_words": 74229,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 697,
+        "WORD_DIFF_UNMAPPED": 48
+      }
+    },
+    {
+      "slug": "mohammed_burhaji_yt",
+      "source_sha256": "faea4863c0228fdebacf85d1284dad179a499404695021a98683330292358a59",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6298,
+      "rows": 6236,
+      "prepared_sha256": "4733c8c294d9cf6768fd2b3f0e5ce2dc773ef4fcca66a8f9f6d924e908649da2",
+      "prepared_bytes": 11969193,
+      "ready": 5163,
+      "needs_review": 1073,
+      "covered_words": 74699,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 67,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1068,
+        "INVALID_WORD_INTERVAL": 10
+      }
+    },
+    {
+      "slug": "mohammed_saayed_warsh_mp3quran",
+      "source_sha256": "93058c95b12a95a701f68e960f2544a859c97ea5ee50358da5f9f9a5f361cf7c",
+      "script_sha256": "a2961d66629504e9d1004239feb9961ab4095e96686e3cb6122080ae9a2896e4",
+      "source_occurrences": 6282,
+      "rows": 6214,
+      "prepared_sha256": "2cc210ffdea6b773623177dd1739980d4a81dcc8572eda292be12be2c524cf47",
+      "prepared_bytes": 9012525,
+      "ready": 0,
+      "needs_review": 6214,
+      "covered_words": 0,
+      "expected_words": 0,
+      "reason_counts": {
+        "CANONICAL_TEXT_UNAVAILABLE": 6214,
+        "SPOKEN_TEXT_UNAVAILABLE": 6214,
+        "SPOKEN_WORD_COUNT_MISMATCH": 6214
+      }
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "source_sha256": "4ad78b42d1d39c1891cfed88cb476c66011f1e67ae5a3d389d1dc2bf16c84398",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6237,
+      "rows": 6236,
+      "prepared_sha256": "8c3fa44368c1794cb34891c8082b34a587b72fc965d6e00be814785a5fdaf801",
+      "prepared_bytes": 11836395,
+      "ready": 5689,
+      "needs_review": 547,
+      "covered_words": 75222,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 45,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 546,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+      "source_sha256": "c69b69cca4d2b320c1129149c0f81bf63390cb5bc8da4362c7f57d86af54d9ce",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6239,
+      "rows": 6236,
+      "prepared_sha256": "734f99b8df0fdcccb40df38294fd16801c85a030347ff210e8ad892679a497a8",
+      "prepared_bytes": 11801386,
+      "ready": 5766,
+      "needs_review": 470,
+      "covered_words": 75510,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 469,
+        "WORD_DIFF_UNMAPPED": 34,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "source_sha256": "a50e04e53b3863162e408c46c8c1a93f65a7ff7c4166314603a0b94fc7429836",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6887,
+      "rows": 6236,
+      "prepared_sha256": "b0f7cd50e58f6e97b2615573307614ffb3f17c3d657f9fe724173f118db47aed",
+      "prepared_bytes": 12747003,
+      "ready": 5281,
+      "needs_review": 955,
+      "covered_words": 73501,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 903,
+        "WORD_DIFF_UNMAPPED": 124,
+        "INVALID_WORD_INTERVAL": 60
+      }
+    },
+    {
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "source_sha256": "4e07e7bf51d4c02942e99f7420cdb7663194cf29496a9fb45f878f8fe794f7fc",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6247,
+      "rows": 6236,
+      "prepared_sha256": "55748b94307534f47dbd5889782f52cbbbef74b3bc7e10fc344dffcc221f6494",
+      "prepared_bytes": 11835848,
+      "ready": 5806,
+      "needs_review": 430,
+      "covered_words": 75660,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 427,
+        "WORD_DIFF_UNMAPPED": 33,
+        "INVALID_WORD_INTERVAL": 4,
+        "MISSING_SOURCE_AYAH": 7
+      }
+    },
+    {
+      "slug": "mustafa_ismail_mp3quran",
+      "source_sha256": "61a70baec5b1e008b65fdf52517aa3636ad0f700b819d9062873839da08853ac",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6237,
+      "rows": 6236,
+      "prepared_sha256": "2f27ce6cee18b6fad79c4c318b5b300e6b79c03310f8128a1fff6956ac10834b",
+      "prepared_bytes": 11741254,
+      "ready": 5922,
+      "needs_review": 314,
+      "covered_words": 76001,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 313,
+        "WORD_DIFF_UNMAPPED": 21,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "nasser_al_qatami_mp3quran",
+      "source_sha256": "5d1102e89035093062402973162ec96c8b8d00e4f62f29f0e1719e3ecbc99ff0",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6530,
+      "rows": 6236,
+      "prepared_sha256": "11f5531158e10eda03831847d476f5940984a67a24ffa6d7de6e6df433581f1d",
+      "prepared_bytes": 12384299,
+      "ready": 4518,
+      "needs_review": 1718,
+      "covered_words": 72390,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1699,
+        "WORD_DIFF_UNMAPPED": 125,
+        "INVALID_WORD_INTERVAL": 28,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "saad_al_ghamdi_tarteel",
+      "source_sha256": "422fb8d06b24803ead9a04fb2297e101c0c568e36a4180c5d9250aef6bcccc11",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6268,
+      "rows": 6236,
+      "prepared_sha256": "9bf176356238d837812d0d317eb7d3872a11aa0933f7e16bc80f6d6d3161ef35",
+      "prepared_bytes": 11851367,
+      "ready": 5481,
+      "needs_review": 755,
+      "covered_words": 75006,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 753,
+        "WORD_DIFF_UNMAPPED": 55,
+        "INVALID_WORD_INTERVAL": 2,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "saber_abdulhakam_qalon_way2quran",
+      "source_sha256": "b3a2ee1256420f8fdc9c8764073783f917253f2c46fe32f47170303bb93e5f23",
+      "script_sha256": "5a958c29183ee74910db056995721dd55f5892068b769719de7d7727b51a9f22",
+      "source_occurrences": 6214,
+      "rows": 6214,
+      "prepared_sha256": "1599432b594cbd5917bdce0e19f5d115d2cfd259516b7e6f28f3dcfd58ef8b15",
+      "prepared_bytes": 9091129,
+      "ready": 0,
+      "needs_review": 6214,
+      "covered_words": 0,
+      "expected_words": 0,
+      "reason_counts": {
+        "CANONICAL_TEXT_UNAVAILABLE": 6214,
+        "SPOKEN_TEXT_UNAVAILABLE": 6214,
+        "SPOKEN_WORD_COUNT_MISMATCH": 6214
+      }
+    },
+    {
+      "slug": "saber_abdulhakam_shubah_way2quran",
+      "source_sha256": "4f5b57ffb7593e5d6aa14f5823c0b12d5354d922e04c5ef52118b2230e8801f5",
+      "script_sha256": "fdac8b93c83c381746029cb7a69923fff498eeabb3103fe90dacdcadb0e616ce",
+      "source_occurrences": 6239,
+      "rows": 6236,
+      "prepared_sha256": "44053563dfbb65712fa5bc7b42d809668ccff0e64ee94868a23e0da0b98da20e",
+      "prepared_bytes": 9179271,
+      "ready": 0,
+      "needs_review": 6236,
+      "covered_words": 0,
+      "expected_words": 0,
+      "reason_counts": {
+        "CANONICAL_TEXT_UNAVAILABLE": 6236,
+        "SPOKEN_TEXT_UNAVAILABLE": 6236,
+        "SPOKEN_WORD_COUNT_MISMATCH": 6236
+      }
+    },
+    {
+      "slug": "saber_abdulhakam_warsh_way2quran",
+      "source_sha256": "7f51ecdc7a8141e81566bea6e53498f7b298e13c335270489dbd71dfc3eed296",
+      "script_sha256": "a2961d66629504e9d1004239feb9961ab4095e96686e3cb6122080ae9a2896e4",
+      "source_occurrences": 6214,
+      "rows": 6214,
+      "prepared_sha256": "c2306650b33030251e9d1a27b347e904deb051c02869cbc5e37835cba835ca49",
+      "prepared_bytes": 9165494,
+      "ready": 0,
+      "needs_review": 6214,
+      "covered_words": 0,
+      "expected_words": 0,
+      "reason_counts": {
+        "CANONICAL_TEXT_UNAVAILABLE": 6214,
+        "SPOKEN_TEXT_UNAVAILABLE": 6214,
+        "SPOKEN_WORD_COUNT_MISMATCH": 6214
+      }
+    },
+    {
+      "slug": "saber_abdulhakam_yt",
+      "source_sha256": "671425be84c0f8c1916f923a47a57afac7f8a319795223913c74f12f863cd2c0",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6236,
+      "rows": 6236,
+      "prepared_sha256": "c07b31294f814865a24603c94e14de7d2a9aff9dd6c6707339cc794946a54fc5",
+      "prepared_bytes": 11840262,
+      "ready": 5630,
+      "needs_review": 606,
+      "covered_words": 75267,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 606,
+        "WORD_DIFF_UNMAPPED": 38
+      }
+    },
+    {
+      "slug": "saud_al_shuraim_mp3quran",
+      "source_sha256": "0b30f23f92874fc54caf7bb83633f3b62da22f992f95a596c1886a681bd36e56",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6261,
+      "rows": 6236,
+      "prepared_sha256": "e5f2046a65babb95faa391a5141e8f095fb47b5aa4be5e0d408226c03dbeb504",
+      "prepared_bytes": 11676864,
+      "ready": 5794,
+      "needs_review": 442,
+      "covered_words": 75932,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 438,
+        "WORD_DIFF_UNMAPPED": 33,
+        "INVALID_WORD_INTERVAL": 4,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "walid_al_naihi_qalon_mp3quran",
+      "source_sha256": "9cca05df400abef6b87771a9c999f1e08e4f18cc2831f68901743213ded7ce54",
+      "script_sha256": "5a958c29183ee74910db056995721dd55f5892068b769719de7d7727b51a9f22",
+      "source_occurrences": 6216,
+      "rows": 6214,
+      "prepared_sha256": "1de4c1e7f90f3d40bbccd6036059e1714d91645d7e9aafed6682791ddfeaa42c",
+      "prepared_bytes": 9049376,
+      "ready": 0,
+      "needs_review": 6214,
+      "covered_words": 0,
+      "expected_words": 0,
+      "reason_counts": {
+        "CANONICAL_TEXT_UNAVAILABLE": 6214,
+        "SPOKEN_TEXT_UNAVAILABLE": 6214,
+        "SPOKEN_WORD_COUNT_MISMATCH": 6214
+      }
+    },
+    {
+      "slug": "walid_atef_way2quran",
+      "source_sha256": "2522435e33273ff08441a7947c3f76c3f3c029c31b9045f9ce9bdc52ef5c807a",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6239,
+      "rows": 6236,
+      "prepared_sha256": "ca6ccf02e132ff55f77c721c29c9e593d466f9118a0d1d4fad18d93aae1b4a41",
+      "prepared_bytes": 12185123,
+      "ready": 4965,
+      "needs_review": 1271,
+      "covered_words": 72980,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 76,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1270,
+        "INVALID_WORD_INTERVAL": 1,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "yasser_al_dosari_archive",
+      "source_sha256": "95c21b19163d306a6327c1177175d7759755149f31bbf2b2d53685b02aef13ed",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6403,
+      "rows": 6236,
+      "prepared_sha256": "26ecb9b87494d71988f8551256823df206fd9e0727dd65bd91b471f0d93c9723",
+      "prepared_bytes": 12089610,
+      "ready": 5148,
+      "needs_review": 1088,
+      "covered_words": 73928,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 1083,
+        "WORD_DIFF_UNMAPPED": 62,
+        "INVALID_WORD_INTERVAL": 7,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    }
+  ]
+}

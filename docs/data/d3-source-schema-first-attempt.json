@@ -1,0 +1,110 @@
+{
+  "checked_at": "2026-10-10T03:18:09.595Z",
+  "qud_version": "v3.2.0",
+  "importer_version": "release-d3-no-healing-1",
+  "manifest_sha256": "bde8378c423c5e6b30fbc73c42663cce299f2ca4e8bd9f2f4b258ed9467645cf",
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "source": "qud-release-only",
+  "database_writes": false,
+  "results": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "source_sha256": "3808f9f4db6e354a6a8d6385d60d789b651afd8196ccac6d364da54deb0b023a",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6240,
+      "rows": 6236,
+      "prepared_sha256": "9c1078111ee704c88af425ce4ec9144bd6ba28ebaf3286d0d5e8a82669d6cb87",
+      "prepared_bytes": 11522065,
+      "ready": 6071,
+      "needs_review": 165,
+      "covered_words": 76981,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 163,
+        "WORD_DIFF_UNMAPPED": 14,
+        "INVALID_WORD_INTERVAL": 2,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "source_sha256": "418d983cf2efc0bac308de72522faa7021e432bb17b5c219e3a3c059b296e4e6",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6236,
+      "rows": 6236,
+      "prepared_sha256": "aafd721462e66b41c7ba3ed332ce5289743a08e01a501f69669c56a18561c00b",
+      "prepared_bytes": 11534287,
+      "ready": 6080,
+      "needs_review": 156,
+      "covered_words": 76985,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 155,
+        "WORD_DIFF_UNMAPPED": 15,
+        "INVALID_WORD_INTERVAL": 1,
+        "MISSING_SOURCE_AYAH": 1
+      }
+    },
+    {
+      "slug": "abdulaziz_al_turki_yt",
+      "source_sha256": "026efea4036baa0e87734dfaaafbff26762310444b3ee2ad29657367dad486bd",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6116,
+      "rows": 6115,
+      "prepared_sha256": "214df156dc0e9d78a690d80856154cb22bcfaec03a7a24886c0256fbda12ce34",
+      "prepared_bytes": 11523599,
+      "ready": 5686,
+      "needs_review": 429,
+      "covered_words": 74609,
+      "expected_words": 76082,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 429,
+        "WORD_DIFF_UNMAPPED": 33
+      }
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "source_sha256": "41ef6119a81562f490a4373882a558b65341e568112e9f64988018d4fadc4f10",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6238,
+      "rows": 6236,
+      "prepared_sha256": "089d9599f864baf6adefa06cc07119d868f840d279621e02e48c70323c078268",
+      "prepared_bytes": 12074144,
+      "ready": 5629,
+      "needs_review": 607,
+      "covered_words": 74526,
+      "expected_words": 77433,
+      "reason_counts": {
+        "WORD_DIFF_UNMAPPED": 56,
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 606,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "source_sha256": "d3646692f484fff29ea47ffc9b1edfd29198eab7ebdd3c2a132d0a068a46e6ec",
+      "script_sha256": "19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86",
+      "source_occurrences": 6237,
+      "rows": 6236,
+      "prepared_sha256": "724fb02f5562123676667545779fba3ca652c7b40be47124bca3b4d7bb93172d",
+      "prepared_bytes": 11806105,
+      "ready": 5828,
+      "needs_review": 408,
+      "covered_words": 75534,
+      "expected_words": 77433,
+      "reason_counts": {
+        "CANONICAL_WORD_COVERAGE_INCOMPLETE": 407,
+        "WORD_DIFF_UNMAPPED": 27,
+        "INVALID_WORD_INTERVAL": 1
+      }
+    }
+  ],
+  "attempt_error": {
+    "code": "RELEASE_TIER_MISSING:letter",
+    "config": "abdulbasit_abdulsamad_warsh_qdc",
+    "cause": "Parser assumed optional letter tier existed; pinned manifest declares only verse and word",
+    "correction": "Read declared tiers, preserve unavailable spoken text as null, no Hafs/HF substitution",
+    "database_writes": false,
+    "checked_at": "2026-10-10T03:20:06.792625+00:00"
+  }
+}

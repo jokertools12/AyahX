@@ -1,0 +1,727 @@
+{
+  "checked_at": "2026-10-10T03:26:44.592541+00:00",
+  "read_only": true,
+  "database_writes": false,
+  "method": "Exact UTF8 bytes of stored textual/JSON column payloads plus declared MySQL scalar widths (SMALLINT 2, INT 4, BIGINT 8, ENUM/BOOLEAN 1); excludes JSON binary layout, InnoDB/pages/indexes/history",
+  "available_bytes": 118530048,
+  "thirty_percent_free_bytes": 35559014.4,
+  "maximum_full_scope_bytes": 500000000,
+  "all": {
+    "recitations": 69,
+    "rows": 422463,
+    "stored_payload_text_estimate_bytes": 580163495,
+    "json_utf8_bytes": 345853507,
+    "non_json_payload_bytes": 234309988,
+    "prepared_file_bytes": 777374427
+  },
+  "reduced_non_failed": {
+    "recitations": 24,
+    "rows": 143590,
+    "stored_payload_text_estimate_bytes": 200586965,
+    "json_utf8_bytes": 118185902,
+    "non_json_payload_bytes": 82401063,
+    "prepared_file_bytes": 267452365
+  },
+  "scope_definition": "v1 not failed plus the three independently accepted v2 cases; source_unavailable retained as not failed but never published",
+  "results": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8635058,
+      "json_utf8_bytes": 4915209,
+      "non_json_payload_bytes": 3719849,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8646900,
+      "json_utf8_bytes": 4927301,
+      "non_json_payload_bytes": 3719599,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abdulaziz_al_turki_yt",
+      "rows": 6115,
+      "stored_payload_text_estimate_bytes": 8687849,
+      "json_utf8_bytes": 5017155,
+      "non_json_payload_bytes": 3670694,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9177539,
+      "json_utf8_bytes": 5402856,
+      "non_json_payload_bytes": 3774683,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8914748,
+      "json_utf8_bytes": 5165264,
+      "non_json_payload_bytes": 3749484,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abdulbasit_abdulsamad_warsh_qdc",
+      "rows": 6214,
+      "stored_payload_text_estimate_bytes": 6121573,
+      "json_utf8_bytes": 4431365,
+      "non_json_payload_bytes": 1690208,
+      "eligible_reduced_scope": true,
+      "v1": "passed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8695862,
+      "json_utf8_bytes": 4980514,
+      "non_json_payload_bytes": 3715348,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abdullah_al_mattrod_qdc",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8801770,
+      "json_utf8_bytes": 5066736,
+      "non_json_payload_bytes": 3735034,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8853260,
+      "json_utf8_bytes": 5110872,
+      "non_json_payload_bytes": 3742388,
+      "eligible_reduced_scope": true,
+      "v1": "passed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abdullah_kamel_way2quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9944031,
+      "json_utf8_bytes": 6012569,
+      "non_json_payload_bytes": 3931462,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abdulwadood_haneef_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8915306,
+      "json_utf8_bytes": 5149760,
+      "non_json_payload_bytes": 3765546,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abdur_rashid_sufi_qdc",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8750964,
+      "json_utf8_bytes": 5020001,
+      "non_json_payload_bytes": 3730963,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 6017667,
+      "json_utf8_bytes": 4321475,
+      "non_json_payload_bytes": 1696192,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "abu_bakr_al_shatri_tarteel",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9266383,
+      "json_utf8_bytes": 5461229,
+      "non_json_payload_bytes": 3805154,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "adel_al_karbalaei_archive_v2",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8732734,
+      "json_utf8_bytes": 5010105,
+      "non_json_payload_bytes": 3722629,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9058064,
+      "json_utf8_bytes": 5288563,
+      "non_json_payload_bytes": 3769501,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ahmed_al_ajmi_qdc",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9363260,
+      "json_utf8_bytes": 5534321,
+      "non_json_payload_bytes": 3828939,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ahmed_amer_tvquran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8853612,
+      "json_utf8_bytes": 5112886,
+      "non_json_payload_bytes": 3740726,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ahmed_deban_qalon_mp3quran",
+      "rows": 6214,
+      "stored_payload_text_estimate_bytes": 6034970,
+      "json_utf8_bytes": 4344762,
+      "non_json_payload_bytes": 1690208,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8755859,
+      "json_utf8_bytes": 5027327,
+      "non_json_payload_bytes": 3728532,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ahmed_kaseb_way2quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8745827,
+      "json_utf8_bytes": 5017488,
+      "non_json_payload_bytes": 3728339,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ahmed_nuayna_qdc",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8833007,
+      "json_utf8_bytes": 5094706,
+      "non_json_payload_bytes": 3738301,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "rows": 6213,
+      "stored_payload_text_estimate_bytes": 6078926,
+      "json_utf8_bytes": 4388990,
+      "non_json_payload_bytes": 1689936,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ahmed_saud_mp3quran",
+      "rows": 327,
+      "stored_payload_text_estimate_bytes": 238298,
+      "json_utf8_bytes": 91754,
+      "non_json_payload_bytes": 146544,
+      "eligible_reduced_scope": true,
+      "v1": "failed",
+      "v2_accepted": true
+    },
+    {
+      "slug": "ahmed_shaheen_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9022654,
+      "json_utf8_bytes": 5256319,
+      "non_json_payload_bytes": 3766335,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "rows": 5561,
+      "stored_payload_text_estimate_bytes": 7797116,
+      "json_utf8_bytes": 4482040,
+      "non_json_payload_bytes": 3315076,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "akram_al_alaqmi_qdc",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9114259,
+      "json_utf8_bytes": 5332989,
+      "non_json_payload_bytes": 3781270,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ali_al_huthaifi_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9116718,
+      "json_utf8_bytes": 5338619,
+      "non_json_payload_bytes": 3778099,
+      "eligible_reduced_scope": true,
+      "v1": "passed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ayman_swed_muallim_yt",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9371393,
+      "json_utf8_bytes": 5562125,
+      "non_json_payload_bytes": 3809268,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "badr_al_turki_yt",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9010081,
+      "json_utf8_bytes": 5242839,
+      "non_json_payload_bytes": 3767242,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "bandar_baleela_qdc",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9170187,
+      "json_utf8_bytes": 5375940,
+      "non_json_payload_bytes": 3794247,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "fatih_seferagic_way2quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8654675,
+      "json_utf8_bytes": 4938580,
+      "non_json_payload_bytes": 3716095,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "haitham_al_dukhain_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9139330,
+      "json_utf8_bytes": 5353663,
+      "non_json_payload_bytes": 3785667,
+      "eligible_reduced_scope": true,
+      "v1": "passed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "hani_al_rifai_qdc_128k",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8842492,
+      "json_utf8_bytes": 5097616,
+      "non_json_payload_bytes": 3744876,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "ibrahim_al_akhdar_drive",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8732786,
+      "json_utf8_bytes": 5013449,
+      "non_json_payload_bytes": 3719337,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "imad_zuhair_hafez_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8984616,
+      "json_utf8_bytes": 5224059,
+      "non_json_payload_bytes": 3760557,
+      "eligible_reduced_scope": true,
+      "v1": "passed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "islam_sobhi_mp3quran",
+      "rows": 5334,
+      "stored_payload_text_estimate_bytes": 7559617,
+      "json_utf8_bytes": 4369376,
+      "non_json_payload_bytes": 3190241,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "khalid_al_mohana_drive",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8801271,
+      "json_utf8_bytes": 5069273,
+      "non_json_payload_bytes": 3731998,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "khalifa_al_tunaiji_tarteel",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8793484,
+      "json_utf8_bytes": 5058933,
+      "non_json_payload_bytes": 3734551,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "maher_al_muaiqly_qdc",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8873557,
+      "json_utf8_bytes": 5133562,
+      "non_json_payload_bytes": 3739995,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mahmoud_abdul_hakam_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9002633,
+      "json_utf8_bytes": 5239601,
+      "non_json_payload_bytes": 3763032,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mahmoud_ali_al_banna_qdc",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8870004,
+      "json_utf8_bytes": 5125066,
+      "non_json_payload_bytes": 3744938,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8898786,
+      "json_utf8_bytes": 5160916,
+      "non_json_payload_bytes": 3737870,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9084921,
+      "json_utf8_bytes": 5326648,
+      "non_json_payload_bytes": 3758273,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_qdc_128k",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8881906,
+      "json_utf8_bytes": 5137413,
+      "non_json_payload_bytes": 3744493,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_2008_qdc",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9059319,
+      "json_utf8_bytes": 5286345,
+      "non_json_payload_bytes": 3772974,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8993646,
+      "json_utf8_bytes": 5231357,
+      "non_json_payload_bytes": 3762289,
+      "eligible_reduced_scope": true,
+      "v1": "failed",
+      "v2_accepted": true
+    },
+    {
+      "slug": "moaz_mahmoud_hamed_qalon_way2quran",
+      "rows": 6177,
+      "stored_payload_text_estimate_bytes": 6039327,
+      "json_utf8_bytes": 4359183,
+      "non_json_payload_bytes": 1680144,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mohammed_abdulkareem_qdc",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9209103,
+      "json_utf8_bytes": 5407498,
+      "non_json_payload_bytes": 3801605,
+      "eligible_reduced_scope": true,
+      "v1": "passed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9043615,
+      "json_utf8_bytes": 5271132,
+      "non_json_payload_bytes": 3772483,
+      "eligible_reduced_scope": true,
+      "v1": "passed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mohammed_alghazali_archive",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9153209,
+      "json_utf8_bytes": 5367815,
+      "non_json_payload_bytes": 3785394,
+      "eligible_reduced_scope": true,
+      "v1": "failed",
+      "v2_accepted": true
+    },
+    {
+      "slug": "mohammed_ayyub_drive",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9120090,
+      "json_utf8_bytes": 5340314,
+      "non_json_payload_bytes": 3779776,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mohammed_burhaji_yt",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9072242,
+      "json_utf8_bytes": 5297825,
+      "non_json_payload_bytes": 3774417,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mohammed_saayed_warsh_mp3quran",
+      "rows": 6214,
+      "stored_payload_text_estimate_bytes": 6011129,
+      "json_utf8_bytes": 4320921,
+      "non_json_payload_bytes": 1690208,
+      "eligible_reduced_scope": true,
+      "v1": "passed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8943850,
+      "json_utf8_bytes": 5189615,
+      "non_json_payload_bytes": 3754235,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8909437,
+      "json_utf8_bytes": 5159778,
+      "non_json_payload_bytes": 3749659,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9847436,
+      "json_utf8_bytes": 5940666,
+      "non_json_payload_bytes": 3906770,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8942081,
+      "json_utf8_bytes": 5196873,
+      "non_json_payload_bytes": 3745208,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "mustafa_ismail_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8850359,
+      "json_utf8_bytes": 5110225,
+      "non_json_payload_bytes": 3740134,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "nasser_al_qatami_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9483227,
+      "json_utf8_bytes": 5635477,
+      "non_json_payload_bytes": 3847750,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "saad_al_ghamdi_tarteel",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8958663,
+      "json_utf8_bytes": 5197383,
+      "non_json_payload_bytes": 3761280,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "saber_abdulhakam_qalon_way2quran",
+      "rows": 6214,
+      "stored_payload_text_estimate_bytes": 6089256,
+      "json_utf8_bytes": 4399048,
+      "non_json_payload_bytes": 1690208,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "saber_abdulhakam_shubah_way2quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 6165788,
+      "json_utf8_bytes": 4469596,
+      "non_json_payload_bytes": 1696192,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "saber_abdulhakam_warsh_way2quran",
+      "rows": 6214,
+      "stored_payload_text_estimate_bytes": 6161884,
+      "json_utf8_bytes": 4471676,
+      "non_json_payload_bytes": 1690208,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "saber_abdulhakam_yt",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8947022,
+      "json_utf8_bytes": 5192665,
+      "non_json_payload_bytes": 3754357,
+      "eligible_reduced_scope": true,
+      "v1": "source_unavailable",
+      "v2_accepted": false
+    },
+    {
+      "slug": "saud_al_shuraim_mp3quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 8787919,
+      "json_utf8_bytes": 5043682,
+      "non_json_payload_bytes": 3744237,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "walid_al_naihi_qalon_mp3quran",
+      "rows": 6214,
+      "stored_payload_text_estimate_bytes": 6048622,
+      "json_utf8_bytes": 4358414,
+      "non_json_payload_bytes": 1690208,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "walid_atef_way2quran",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9286534,
+      "json_utf8_bytes": 5480475,
+      "non_json_payload_bytes": 3806059,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    },
+    {
+      "slug": "yasser_al_dosari_archive",
+      "rows": 6236,
+      "stored_payload_text_estimate_bytes": 9193784,
+      "json_utf8_bytes": 5393310,
+      "non_json_payload_bytes": 3800474,
+      "eligible_reduced_scope": false,
+      "v1": "failed",
+      "v2_accepted": false
+    }
+  ],
+  "scalar_widths": {
+    "surah": 2,
+    "ayah": 2,
+    "source_offset_ms": 8,
+    "start_ms": 8,
+    "end_ms": 8,
+    "coverage_words": 4,
+    "expected_words": 4
+  }
+}
