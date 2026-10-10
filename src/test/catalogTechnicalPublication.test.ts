@@ -43,4 +43,11 @@ describe('technical publication only',()=>{
     const existing=Object.keys(PUBLICATION_CONSTRAINTS),clauses={...PUBLICATION_CONSTRAINTS,chk_recitations_publish_gate_v1:D4_CATALOG_ONLY_PUBLISH_CHECK};
     const [sql]=publicationConstraintSql(existing,clauses);expect(sql).toContain('DROP CHECK chk_recitations_publish_gate_v1');expect(sql).toContain('ADD CONSTRAINT chk_recitations_publish_gate_v1');expect(sql).not.toContain('DROP CHECK chk_recitations_offset_gate_v1');expect(publicationConstraintSql(existing,PUBLICATION_CONSTRAINTS)).toEqual([]);
   });
+  it('preserves grouping and JSON literal case when comparing canonical MySQL CHECK text',()=>{
+    const existing=['chk_recitations_publish_gate_v1'];
+    expect(publicationConstraintSql(existing,{chk_recitations_publish_gate_v1:'a OR (b AND c)'},{chk_recitations_publish_gate_v1:'(a OR b) AND c'})[0]).toContain('DROP CHECK');
+    expect(publicationConstraintSql(existing,{chk_recitations_publish_gate_v1:"name='ActorCase'"},{chk_recitations_publish_gate_v1:"name='actorcase'"})[0]).toContain('DROP CHECK');
+    expect(publicationConstraintSql(existing,{chk_recitations_publish_gate_v1:"a OR (b AND c)"},{chk_recitations_publish_gate_v1:'a   OR (b\n AND c)'})).toHaveLength(1); // Missing offset CHECK alone is added.
+    expect(publicationConstraintSql(Object.keys(PUBLICATION_CONSTRAINTS),{...PUBLICATION_CONSTRAINTS,chk_recitations_publish_gate_v1:'a OR (b AND c)'},{...PUBLICATION_CONSTRAINTS,chk_recitations_publish_gate_v1:'a OR (b AND c)'})).toEqual([]);
+  });
 });

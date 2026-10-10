@@ -65,10 +65,11 @@ const catalogPublish=every(["offset_verified=1","verification_status='passed'","
 export const D4_CATALOG_ONLY_PUBLISH_CHECK=`status<>'published' OR (${every(["riwayah_code='hafs_an_asim'","canonical_text_available=1","audio_mode='surah_slice'","offset_verified=1","verification_status='passed'","timing_quality='verified'","timing_level IN ('word','letter')","verification_method IN ('v1','v2')"])})`;
 export const D4_PUBLISH_CHECK=`status<>'published' OR (${every(["riwayah_code='hafs_an_asim'","canonical_text_available=1","audio_mode='surah_slice'","timing_quality='verified'","timing_level IN ('word','letter')",`(${catalogPublish}) OR (${D4_LICENSED_PUBLISH_CHECK})`])})`;
 export const PUBLICATION_CONSTRAINTS={chk_recitations_offset_gate_v1:D4_OFFSET_CHECK,chk_recitations_publish_gate_v1:D4_PUBLISH_CHECK} as const;
-const normalizeCheck=(expression:string):string=>expression.toLowerCase().replace(/_utf8mb4/gu,'').replace(/`/gu,'').replace(/\s+/gu,'').replace(/[()]/gu,'');
+/** Exact canonical MySQL text comparison, ignoring whitespace only outside quoted literals. */
+const normalizeCheck=(expression:string):string=>{let quote='',out='';for(let i=0;i<expression.length;i++){const c=expression[i];if(quote){out+=c;if(c==='\\'&&i+1<expression.length)out+=expression[++i];else if(c===quote){if(expression[i+1]===quote)out+=expression[++i];else quote='';}}else if(c==="'"||c==='"'||c==='`'){quote=c;out+=c;}else if(!/\s/u.test(c))out+=c;}return out;};
 /** The caller must read CHECK_CLAUSE. Existing names alone cannot certify a changed expression. */
-export function publicationConstraintSql(existing:readonly string[],clauses:Readonly<Record<string,string>>={}):string[]{
-  const changed=Object.entries(PUBLICATION_CONSTRAINTS).filter(([name,expr])=>existing.includes(name)&&clauses[name]!==undefined&&normalizeCheck(clauses[name])!==normalizeCheck(expr));
+export function publicationConstraintSql(existing:readonly string[],clauses:Readonly<Record<string,string>>={},desiredCanonicalClauses:Readonly<Record<string,string>>={}):string[]{
+  const changed=Object.entries(PUBLICATION_CONSTRAINTS).filter(([name,expr])=>existing.includes(name)&&clauses[name]!==undefined&&normalizeCheck(clauses[name])!==normalizeCheck(desiredCanonicalClauses[name]??expr));
   const added=Object.entries(PUBLICATION_CONSTRAINTS).filter(([name])=>!existing.includes(name)||changed.some(([n])=>n===name)).map(([name,expr])=>`ADD CONSTRAINT ${name} CHECK (${expr})`);
   const removed=['chk_catalog_offset','chk_catalog_publish'].filter(n=>existing.includes(n)).map(n=>`DROP CHECK ${n}`);
   return added.length||removed.length?[`ALTER TABLE recitations ${[...removed,...changed.map(([name])=>`DROP CHECK ${name}`),...added].join(', ')};`]:[];

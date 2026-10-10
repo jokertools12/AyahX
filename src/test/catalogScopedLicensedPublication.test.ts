@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import {CatalogLicensedChapterReadiness,createLicensedPublicationDetails,scopedLicensedChapterProof,validLicensedPublicationDetails} from '../../server/services/catalogLicensedReadiness';
 import {CatalogLicensedSourceResolver,type HostedAudioPlan} from '../../server/services/licensedSourceResolver';
 import {technicalPublicationDecision} from '../../server/services/catalogTechnicalPublication';
+import {planScopedTechnicalPublication} from '../../server/services/catalogLicensedPublicationPlanner';
 import {RecitationCatalogService} from '../../server/services/recitationCatalogService';
 import type {CatalogDatabase,CatalogRow} from '../../server/services/catalogContracts';
 const now=Date.parse('2026-10-10T12:00:00Z'),sha='a'.repeat(64),url='https://owned.example/recitation.mp3';
@@ -57,5 +58,17 @@ describe('scoped licensed publication (unit fixtures, not live R2)',()=>{
   it('honors flag OFF before any inventory or licensed network operation',async()=>{
     const db=dbRead(vi.fn()),gate={isChapterReady:vi.fn()},audio={resolveAudioPlan:vi.fn()},service=new RecitationCatalogService(db,async()=>({enabled:false,availabilityMode:'complete_only'}),audio,gate);
     await expect(service.listSurahsForRecitation('x')).rejects.toMatchObject({code:'QURAN_CATALOG_DISABLED',status:404});await expect(service.resolveAudioPlan({recitationId:'x',surah:1,from:1,to:1})).rejects.toMatchObject({code:'QURAN_CATALOG_DISABLED',status:404});expect(db.read).not.toHaveBeenCalled();expect(gate.isChapterReady).not.toHaveBeenCalled();
+  });
+  it('plans only scoped mode/quality/cache and publication, never global offset or human fields, and replays with no timestamp churn',()=>{
+    const row={id:'rec-1',status:'needs_review',riwayah_code:'hafs_an_asim',canonical_text_available:1,audio_mode:'unverified_source',timing_quality:'unverified',timing_level:'word',offset_verified:0,verification_status:'failed',verification_method:'v1',is_public:0,voice_identity_status:'confirmed'};
+    const facts={completeChapters:1,healthyCompleteChapters:0,coverageMismatches:0,links:114,healthyLinks:0,youtube:true,sameAudioConflict:false},details=createLicensedPublicationDetails('rec-1',[proof()],now)!;
+    const result=planScopedTechnicalPublication(row,facts,details,now);expect(result.decision.eligible).toBe(true);expect(result.patch).toMatchObject({audio_mode:'surah_slice',timing_quality:'verified',status:'published',published_by:'rule-v1',licensed_publication_details:details});expect(Object.keys(result.patch)).not.toEqual(expect.arrayContaining(['offset_verified','verification_method','voice_identity_status','is_public']));
+    const replay=planScopedTechnicalPublication({...row,...result.patch,status:'published'},facts,createLicensedPublicationDetails('rec-1',[proof()],now+1000),now+1000);expect(replay.patch).toEqual({});
+    const noFile=planScopedTechnicalPublication(row,facts,null,now);expect(noFile.patch).toEqual({});expect(noFile.decision.reasons).toContain('YOUTUBE_RENDER_REQUIRES_LICENSED_FILE');
+  });
+  it('retains a human publication stamp while refreshing only expired scoped evidence',()=>{
+    const details=createLicensedPublicationDetails('rec-1',[proof()],now)!,row={id:'rec-1',status:'published',published_by:'human-1',published_at:'2026-01-01',riwayah_code:'hafs_an_asim',canonical_text_available:1,audio_mode:'surah_slice',timing_quality:'verified',timing_level:'word',offset_verified:0,verification_status:'failed',licensed_publication_details:details};
+    const facts={completeChapters:1,healthyCompleteChapters:0,coverageMismatches:0,links:114,healthyLinks:0,youtube:true,sameAudioConflict:false};
+    const result=planScopedTechnicalPublication(row,facts,createLicensedPublicationDetails('rec-1',[proof()],now+300001),now+300001);expect(Object.keys(result.patch)).toEqual(['licensed_publication_details']);expect(row.published_by).toBe('human-1');
   });
 });

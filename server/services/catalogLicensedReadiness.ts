@@ -6,7 +6,7 @@ import {assertLicensedOffsetEvidence} from './licensedAudioVerification';
 import type {LicensedAudioPlan,LicensedSourceResolver} from './licensedSourceResolver';
 export const LICENSED_SNAPSHOT_ACTOR='scoped-licensed-verifier-v1';
 export const LICENSED_SNAPSHOT_TTL_MS=5*60*1000;
-export interface LicensedChapterProof {surah:number;source_id:string;source_sha256:string;rights_ref:string;offset_evidence_sha256:string;method:'v1'|'v2';minimum_score:number;maximum_absolute_lag_ms:number;maximum_duration_difference_ms:number;sample_count:number;distinct_surahs:number;distinct_chapter_lengths:number;canonical_complete:boolean;expected_ayahs:number;ready_ayahs:number;coverage_mismatch:number;duration_ms:number;last_word_ms:number;source_chapter_offset_ms:number;adapter:'r2'|'url_reference';v2_human_review_id:string|null}
+export interface LicensedChapterProof {surah:number;source_id:string;source_sha256:string;rights_ref:string;offset_evidence_sha256:string;method:'v1'|'v2';minimum_score:number;maximum_absolute_lag_ms:number;maximum_duration_difference_ms:number;sample_count:number;distinct_surahs:number;distinct_chapter_lengths:number;canonical_complete:boolean;expected_ayahs:number;ready_ayahs:number;coverage_mismatch:number;duration_ms:number;last_word_ms:number;source_chapter_offset_ms:number;adapter:'r2'|'url_reference';v2_human_review_id:string|null;source_binding_sha256?:string;timing_binding_sha256?:string}
 export interface LicensedPublicationDetails {schema_version:1;actor:typeof LICENSED_SNAPSHOT_ACTOR;recitation_id:string;checked_at_epoch_ms:number;expires_at_epoch_ms:number;complete_chapter_count:number;chapters:LicensedChapterProof[]}
 export interface LicensedChapterGate {isChapterReady(recitationId:string,surah:number,completeOnly?:boolean):Promise<boolean>}
 const json=(v:unknown):unknown=>typeof v==='string'?JSON.parse(v):v;
@@ -25,7 +25,9 @@ export function createLicensedPublicationDetails(recitationId:string,chapters:re
   if(!validLicensedPublicationDetails(details,recitationId,nowMs))throw new CatalogError('LICENSED_PUBLICATION_PROOF_INVALID',409);return details;
 }
 export const LICENSED_CHAPTER_FIELDS=['surah','availability_state','coverage_mismatch','expected_ayahs'] as const;
-export const LICENSED_TIMING_FIELDS=['ayah','coordinate','source','source_offset_ms','words','review_status','review_reasons','coverage_words','expected_words','missing_words'] as const;
+export const LICENSED_TIMING_VALUE_FIELDS=['ayah','coordinate','source','source_offset_ms','words','review_status','review_reasons','coverage_words','expected_words','missing_words'] as const;
+export const LICENSED_TIMING_FIELDS=[...LICENSED_TIMING_VALUE_FIELDS,'timing_binding_sha256'] as const;
+export const LICENSED_TIMING_BINDING_EXPRESSION=`SHA2(CAST(JSON_ARRAYAGG(JSON_OBJECT(${LICENSED_TIMING_VALUE_FIELDS.flatMap(f=>["'"+f+"'",f]).join(',')})) OVER (ORDER BY ayah ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS CHAR),256)`;
 /** No permanent collector or permission to approve. Every call rechecks source/rights/current bytes. */
 export class CatalogLicensedChapterReadiness implements LicensedChapterGate {
   constructor(private readonly db:CatalogDatabase,private readonly resolver:LicensedSourceResolver){}
@@ -34,11 +36,11 @@ export class CatalogLicensedChapterReadiness implements LicensedChapterGate {
     const [chapter]=await this.db.read('SELECT c.surah,c.availability_state,c.coverage_mismatch,s.ayah_count expected_ayahs FROM recitation_chapters c JOIN quran_surahs s ON s.number=c.surah WHERE c.recitation_id=? AND c.surah=?',[id,surah]);
     if(!chapter||Number(chapter.coverage_mismatch)!==0||completeOnly&&chapter.availability_state!=='complete')return null;
     const plan=await this.resolver.resolveLicensedSource(id,surah);if(!plan)return null;
-    const rows=await this.db.read('SELECT ayah,coordinate,source,source_offset_ms,words,review_status,review_reasons,coverage_words,expected_words,missing_words FROM ayah_timings WHERE recitation_id=? AND surah=? ORDER BY ayah',[id,surah]);
+    const rows=await this.db.read(`SELECT ${LICENSED_TIMING_VALUE_FIELDS.join(',')},${LICENSED_TIMING_BINDING_EXPRESSION} timing_binding_sha256 FROM ayah_timings WHERE recitation_id=? AND surah=? ORDER BY ayah`,[id,surah]);
     const ready=rows.filter(r=>r.review_status==='ready');if(!ready.length||completeOnly&&ready.length!==Number(chapter.expected_ayahs))return null;
     if(ready.some((r,i)=>completeOnly&&Number(r.ayah)!==i+1||Number(r.coverage_words)!==Number(r.expected_words)||!Array.isArray(json(r.review_reasons))||(json(r.review_reasons) as unknown[]).length!==0||!Array.isArray(json(r.missing_words))||(json(r.missing_words) as unknown[]).length!==0))return null;
     const timings=ready.map(r=>({ayah:Number(r.ayah),coordinate:r.coordinate,source:r.source,source_offset_ms:r.source_offset_ms===null?null:Number(r.source_offset_ms),words:json(r.words)}) as SourceAyahTiming);
-    return scopedLicensedChapterProof(plan,timings,Number(chapter.expected_ayahs),chapter.availability_state==='complete'&&ready.length===Number(chapter.expected_ayahs));
+    const proof=scopedLicensedChapterProof(plan,timings,Number(chapter.expected_ayahs),chapter.availability_state==='complete'&&ready.length===Number(chapter.expected_ayahs));if(proof&&typeof rows[0].timing_binding_sha256==='string')proof.timing_binding_sha256=rows[0].timing_binding_sha256;return proof;
   }
 }
 export function scopedLicensedChapterProof(plan:LicensedAudioPlan,timings:readonly SourceAyahTiming[],expectedAyahs:number,complete:boolean):LicensedChapterProof|null{
@@ -47,5 +49,5 @@ export function scopedLicensedChapterProof(plan:LicensedAudioPlan,timings:readon
   let last:number;try{last=toRenderTimeline(timings,{chapterOffsetMs:plan.sourceChapterOffsetMs,sourceFormat:'qud_release',padMs:0}).sourceWindow.toMs;}
   catch(error){if(error instanceof Error&&error.message.startsWith('TIMELINE_'))return null;throw error;}
   if(last>plan.durationMs+30)return null;
-  const p=plan.offsetEvidence;return {surah:plan.surah,source_id:plan.sourceId,source_sha256:plan.sha256,rights_ref:plan.rightsRef,offset_evidence_sha256:sha(p),method:p.method,minimum_score:Math.min(...p.samples.map(s=>s.ncc)),maximum_absolute_lag_ms:Math.max(...p.samples.map(s=>Math.abs(s.lagMs))),maximum_duration_difference_ms:Math.max(...p.samples.map(s=>Math.abs(s.durationDifferenceMs))),sample_count:p.samples.length,distinct_surahs:new Set(p.samples.map(s=>s.surah)).size,distinct_chapter_lengths:new Set(p.samples.map(s=>s.chapterAyahCount)).size,canonical_complete:complete,expected_ayahs:expectedAyahs,ready_ayahs:timings.length,coverage_mismatch:0,duration_ms:plan.durationMs,last_word_ms:last,source_chapter_offset_ms:plan.sourceChapterOffsetMs,adapter:plan.adapter,v2_human_review_id:p.v2Acceptance?.humanReviewId??null};
+  const p=plan.offsetEvidence;return {surah:plan.surah,source_id:plan.sourceId,source_sha256:plan.sha256,rights_ref:plan.rightsRef,offset_evidence_sha256:sha(p),method:p.method,minimum_score:Math.min(...p.samples.map(s=>s.ncc)),maximum_absolute_lag_ms:Math.max(...p.samples.map(s=>Math.abs(s.lagMs))),maximum_duration_difference_ms:Math.max(...p.samples.map(s=>Math.abs(s.durationDifferenceMs))),sample_count:p.samples.length,distinct_surahs:new Set(p.samples.map(s=>s.surah)).size,distinct_chapter_lengths:new Set(p.samples.map(s=>s.chapterAyahCount)).size,canonical_complete:complete,expected_ayahs:expectedAyahs,ready_ayahs:timings.length,coverage_mismatch:0,duration_ms:plan.durationMs,last_word_ms:last,source_chapter_offset_ms:plan.sourceChapterOffsetMs,adapter:plan.adapter,v2_human_review_id:p.v2Acceptance?.humanReviewId??null,...(plan.sourceBindingSha256?{source_binding_sha256:plan.sourceBindingSha256}:{})};
 }
