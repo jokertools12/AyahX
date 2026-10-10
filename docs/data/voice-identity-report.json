@@ -7812,5 +7812,20 @@
     "current_runtime_effect": "inactive: definition has no callsites in src/server and legacy QF playback is disabled",
     "audio_body_requested": false,
     "stop_trigger": false
+  },
+  "audition_planner": {
+    "status": "pure_planner_unit_accepted; root insertion pending",
+    "source": "server/services/recitationAuditionPlanner.ts",
+    "source_sha256": "79d244c77a2e16b9fa6c529414aec1feb94a904bf12583bd7a614acd5ccaf33b",
+    "contract_document": "docs/data/d4-audition-planner.md",
+    "test_file": "src/test/recitationAuditionPlanner.test.ts",
+    "tests_passed": 16,
+    "strict_typescript": "passed",
+    "changed_file_lint": "zero warnings/errors",
+    "db_writes": 0,
+    "network_requests": 0,
+    "timing_dependency": false,
+    "offset_used": false,
+    "production_samples_applied": false
   }
 }
