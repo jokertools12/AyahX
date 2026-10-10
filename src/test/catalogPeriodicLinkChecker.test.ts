@@ -29,7 +29,7 @@ function fixture(rows: CatalogRow[] = [row('first')]) {
   const transaction = async <T>(work: (tx: CatalogTx) => Promise<T>): Promise<T> => { transactionCalls(); return work(db); };
   const db: CatalogDatabase = { read, execute, transaction };
   const log: PeriodicLinkLogger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() };
-  const source = { checkLink: vi.fn(async (url: string): Promise<AudioLinkCheck> => ({ status: 'available', httpStatus: 200, checkedAt: date, finalUrl: url })) };
+  const source = { restoreRateLimit:vi.fn(),checkLink: vi.fn(async (url: string,_hosts?:string[],_signal?:AbortSignal): Promise<AudioLinkCheck> => ({ status: 'available', httpStatus: 200, checkedAt: date, finalUrl: url })) };
   const checker = new CatalogPeriodicLinkChecker(db, log, source);
   return { checker, db, log, source, rows, audits, fresh, executed, transactionCalls, setEnabled: (value: boolean) => { enabled = value; } };
 }
@@ -80,6 +80,16 @@ describe('periodic catalog links (unit fixtures only; no network or database)', 
     await Promise.resolve(); expect(drained).toBe(false); finish();
     expect((await running).state).toBe('closed'); await closing;
     expect(f.transactionCalls).not.toHaveBeenCalled(); expect(f.executed).toEqual([]);
+  });
+  it('aborts a stalled request immediately on close, preventing writes and shutdown errors',async()=>{
+    const f=fixture();f.source.checkLink.mockImplementationOnce(async(_url,_hosts,signal)=>{await new Promise<void>((_resolve,reject)=>signal!.addEventListener('abort',()=>reject(new Error('ABORTED')),{once:true}));throw new Error('UNREACHABLE');});
+    const running=f.checker.runOnce();await vi.waitFor(()=>expect(f.source.checkLink).toHaveBeenCalledOnce());
+    await f.checker.close();expect((await running).state).toBe('closed');expect(f.executed).toEqual([]);expect(f.log.error).not.toHaveBeenCalled();
+  });
+  it('restores a future Retry-After from audit before checking links after restart',async()=>{
+    const f=fixture();const future=new Date(Date.now()+10*86400000).toISOString();f.audits.push({new_values:{mutations:[{target_key:'chapter:first',retry_at:future,retry_host:'audio.example'}],resolved_observations:[]}});
+    await f.checker.runOnce();expect(f.source.restoreRateLimit).toHaveBeenCalledWith('audio.example',future);
+    expect(f.source.restoreRateLimit.mock.invocationCallOrder[0]).toBeLessThan(f.source.checkLink.mock.invocationCallOrder[0]);
   });
   it('logs expected unavailable links as warning summaries, keeping alternate failure detail in audit', async () => {
     const f = fixture([row('alternative', { kind: 'alternate', surah: null, is_active: true })]);

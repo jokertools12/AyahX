@@ -1,0 +1,33 @@
+{
+  "checked_at": "2026-10-10T10:32:26.197Z",
+  "run_id": "01a1255c-a60f-707c-9abe-5e981e01d203",
+  "summary": {
+    "discovered": 14,
+    "selected": 2,
+    "executed": 2,
+    "passed": 2,
+    "failed": 0,
+    "interrupted": 0,
+    "flaky": 0,
+    "skipped": 0
+  },
+  "selected": [
+    {
+      "file": "tests/catalog-audition.e2e.ts",
+      "target": "desktop",
+      "status": "passed"
+    },
+    {
+      "file": "tests/catalog-audition.e2e.ts",
+      "target": "mobile",
+      "status": "passed"
+    }
+  ],
+  "actual_provider_network": true,
+  "range_request_required_by_test": true,
+  "media_fragment": "1,3 seconds test window; persisted service coordinates milliseconds",
+  "application_ui_modified": false,
+  "fixture": "injected local DOM only",
+  "no_audio_saved": true,
+  "no_model_calls": true
+}

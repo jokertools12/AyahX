@@ -1,0 +1,41 @@
+{
+  "started_at": "2026-10-10T10:39:37.485Z",
+  "target": "production",
+  "applied": false,
+  "sql_sha256": "408914852e5118ebeb2ef6df97ea61f57e152686804edae096c4c01864947603",
+  "sql_bytes": 298400,
+  "statements": 147,
+  "disk_before": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1731489792,
+    "available_bytes": 2944319488
+  },
+  "protected_checksums_unchanged": true,
+  "d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "timings": 422463,
+  "disk_after": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1731489792,
+    "available_bytes": 2944319488
+  },
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 6,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 2549,
+    "transport_response_bytes": 1497689
+  },
+  "finished_at": "2026-10-10T10:40:37.178Z"
+}

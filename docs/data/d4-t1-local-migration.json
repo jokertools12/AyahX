@@ -1,0 +1,40 @@
+{
+  "checked_at": "2026-10-10T09:17:48.618Z",
+  "local_only": true,
+  "mysql": "9.7.2",
+  "passed": true,
+  "migration_twice": true,
+  "down_twice": true,
+  "reapply": true,
+  "explicit_collation_nullable": true,
+  "existing_values_unchanged": true,
+  "no_foreign_keys": true,
+  "indexes": [
+    {
+      "table": "recitations",
+      "name": "idx_recitation_public_reciter",
+      "fields": "status,is_public,voice_identity_status,reciter_id,sort_order"
+    },
+    {
+      "table": "audio_providers",
+      "name": "idx_provider_license",
+      "fields": "license_status,id"
+    },
+    {
+      "table": "recitation_chapters",
+      "name": "idx_chapter_availability",
+      "fields": "recitation_id,availability_state,surah"
+    },
+    {
+      "table": "ayah_timings",
+      "name": "idx_timing_ready_range",
+      "fields": "recitation_id,surah,review_status,ayah"
+    }
+  ],
+  "default_gates": {
+    "n": 69,
+    "public_count": "0",
+    "human_changed": "0"
+  },
+  "timing_rows": 422463
+}

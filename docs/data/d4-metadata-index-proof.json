@@ -1,0 +1,13 @@
+{
+  "checked_at": "2026-10-10T10:36:37.140Z",
+  "target": "local MySQL9.7.2",
+  "query": "ready count per recitation, explicit covering index",
+  "explain": [
+    {
+      "EXPLAIN": "-> Covering index scan on r using uk_recitation_slug  (cost=327 rows=37)\n-> Select #2 (subquery in projection; dependent)\n    -> Aggregate: count(0)  (cost=724 rows=1)\n        -> Filter: (a.review_status = 'ready')  (cost=372 rows=1527)\n            -> Covering index lookup on a using idx_timing_ready_range (recitation_id = r.id)  (cost=372 rows=6108)\n"
+    }
+  ],
+  "elapsed_ms": 541.1012999999999,
+  "recitations": 69,
+  "ready": 321473
+}

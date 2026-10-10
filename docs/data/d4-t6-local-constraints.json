@@ -1,0 +1,17 @@
+{
+  "started_at": "2026-10-10T11:01:49.094Z",
+  "local_only": true,
+  "old_checks": [
+    {
+      "name": "chk_catalog_offset",
+      "clause": "((`offset_verified` = false) or ((`verification_status` = _utf8mb4\\'passed\\') and (`offset_check_score` >= 0.95) and (`offset_check_score` is not null)))"
+    },
+    {
+      "name": "chk_catalog_publish",
+      "clause": "((`status` <> _utf8mb4\\'published\\') or ((`canonical_text_available` = true) and (`offset_verified` = true) and (`verification_status` = _utf8mb4\\'passed\\') and (`timing_quality` = _utf8mb4\\'verified\\') and (`timing_level` in (_utf8mb4\\'word\\',_utf8mb4\\'letter\\')) and (`surah_start_basmala_audio_status` in (_utf8mb4\\'verified\\',_utf8mb4\\'not_applicable\\')) and (json_contains_path(`verification_details`,_utf8mb4\\'one\\',_utf8mb4\\'$.basmala_audio_evidence\\') = 1) and (json_type(json_extract(`verification_details`,_utf8mb4\\'$.basmala_audio_evidence\\')) = _utf8mb4\\'OBJECT\\')))"
+    }
+  ],
+  "passed": false,
+  "failure": "An expression of non-boolean type specified to a check constraint 'chk_catalog_offset'.",
+  "finished_at": "2026-10-10T11:01:55.334Z"
+}

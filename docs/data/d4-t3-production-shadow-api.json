@@ -1,0 +1,83 @@
+{
+  "started_at": "2026-10-10T10:45:37.120Z",
+  "target": "actual production MySQL through loopback HTTP",
+  "writes": 0,
+  "production_flag_changed": false,
+  "responses": [
+    {
+      "local_override": false,
+      "path": "/reciters",
+      "status": 404,
+      "code": "QURAN_CATALOG_DISABLED",
+      "data_count": null
+    },
+    {
+      "local_override": false,
+      "path": "/reciters/ali-al-huthaifi/recitations",
+      "status": 404,
+      "code": "QURAN_CATALOG_DISABLED",
+      "data_count": null
+    },
+    {
+      "local_override": false,
+      "path": "/recitations/ali_al_huthaifi_mp3quran/surahs",
+      "status": 404,
+      "code": "QURAN_CATALOG_DISABLED",
+      "data_count": null
+    },
+    {
+      "local_override": false,
+      "path": "/recitations/ali_al_huthaifi_mp3quran/chapters/1/availability",
+      "status": 404,
+      "code": "QURAN_CATALOG_DISABLED",
+      "data_count": null
+    },
+    {
+      "local_override": true,
+      "path": "/reciters",
+      "status": 200,
+      "code": null,
+      "data_count": 0
+    },
+    {
+      "local_override": true,
+      "path": "/reciters/ali-al-huthaifi/recitations",
+      "status": 200,
+      "code": null,
+      "data_count": 0
+    },
+    {
+      "local_override": true,
+      "path": "/recitations/ali_al_huthaifi_mp3quran/surahs",
+      "status": 404,
+      "code": "RECITATION_NOT_PUBLIC",
+      "data_count": null
+    },
+    {
+      "local_override": true,
+      "path": "/recitations/ali_al_huthaifi_mp3quran/chapters/1/availability",
+      "status": 404,
+      "code": "RECITATION_NOT_PUBLIC",
+      "data_count": null
+    }
+  ],
+  "actual_flag": {
+    "enabled": false,
+    "availabilityMode": "complete_only"
+  },
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 18,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 5885,
+    "transport_response_bytes": 2394
+  },
+  "finished_at": "2026-10-10T10:45:41.744Z"
+}

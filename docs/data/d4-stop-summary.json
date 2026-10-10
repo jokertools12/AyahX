@@ -1,0 +1,50 @@
+{
+  "checked_at": "2026-10-10T11:04:38.463Z",
+  "phase": "D4",
+  "completed": false,
+  "stop_reason": "same local T6 constraint acceptance step failed three times; no fourth attempt",
+  "t6_production_applied": false,
+  "t7_started": false,
+  "link_scan": {
+    "checked": 6052,
+    "total": 7765,
+    "counts": {
+      "available": 4623,
+      "AUDIO_HOST_NOT_ALLOWED": 269,
+      "YOUTUBE_SOURCE_PROHIBITED": 789,
+      "source_unavailable": 369,
+      "AUDIO_REQUEST_FAILED": 2
+    },
+    "network_stopped": true,
+    "cross_reciter_collision_detected": false,
+    "incomplete": true
+  },
+  "budget": {
+    "before": 17.892516611862717,
+    "after": 17.92003160417352,
+    "delta": 0.027514992310802455,
+    "hard_limit": 30,
+    "soft_limit": 20,
+    "remaining": 12.07996839582648,
+    "attribution": "workspace billing change only; not isolated D4 cost or savings"
+  },
+  "attempts": [
+    {
+      "ordinal": 1,
+      "error": "ASSERTION: local CREATE TABLE LIKE had recitations_chk_1/2 instead of chk_catalog_offset/publish",
+      "persistent_data_writes": false
+    },
+    {
+      "ordinal": 2,
+      "error": "ER_PARSE_ERROR: extra closing parenthesis in CHECK",
+      "persistent_data_writes": false
+    },
+    {
+      "ordinal": 3,
+      "error": "ER_NON_BOOLEAN_EXPR_FOR_CHECK_CONSTRAINT: COALESCE expression rejected as nonboolean",
+      "persistent_data_writes": false
+    }
+  ],
+  "local_schema_change": "Renamed cloned old constraints to production names, old logical checks retained; new ALTER failed atomically",
+  "production_publication": "T6 not applied; no public gate or human approval enabled"
+}

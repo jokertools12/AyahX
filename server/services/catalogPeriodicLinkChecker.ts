@@ -40,10 +40,11 @@ export class CatalogPeriodicLinkChecker {
   private inFlight: Promise<PeriodicLinkSummary> | null = null;
   private closed = false;
   private suspended = false;
+  private readonly shutdown = new AbortController();
   private lastSummary: PeriodicLinkSummary = empty('idle');
   // One source object retains host pacing and Retry-After for the life of this checker.
   constructor(private readonly db: CatalogDatabase, private readonly log: PeriodicLinkLogger = applicationLogger,
-    private readonly source: Pick<CatalogAudioSource, 'checkLink'> = new CatalogAudioSource(undefined, 1000)) {}
+    private readonly source: Pick<CatalogAudioSource, 'checkLink'> & Partial<Pick<CatalogAudioSource,'restoreRateLimit'>> = new CatalogAudioSource(undefined, 1000)) {}
   start(): void {
     if (this.closed || this.suspended || this.timer) return;
     this.timer = setInterval(() => { void this.runOnce(); }, INTERVAL_MS);
@@ -54,9 +55,10 @@ export class CatalogPeriodicLinkChecker {
   }
   async close(): Promise<void> {
     this.closed = true;
+    this.shutdown.abort();
     if (this.timer) clearInterval(this.timer);
     this.timer = null;
-    // An already-started bounded HTTP request may finish, but close prevents subsequent checks/writes.
+    // Abort network/pacing immediately; drain a transaction already started before closing the pool.
     if (this.inFlight) await this.inFlight;
   }
   runOnce(): Promise<PeriodicLinkSummary> {
@@ -64,6 +66,7 @@ export class CatalogPeriodicLinkChecker {
     if (this.suspended) return Promise.resolve(empty('suspended', 'CROSS_RECITER_AUDIO_FILE_COLLISION'));
     if (this.inFlight) return Promise.resolve(empty('overlap_skipped'));
     const task = this.performRun().catch(error => {
+      if(this.closed)return this.lastSummary=empty('closed');
       const collision = error instanceof CatalogError && error.code === 'CROSS_RECITER_AUDIO_FILE_COLLISION';
       if (collision) {
         this.suspended = true;
@@ -111,10 +114,17 @@ export class CatalogPeriodicLinkChecker {
     };
     for (const row of current) observe(audioFileIdentity(String(row.url)), String(row.reciter_id));
     // Audited final URLs survive process restarts. Only observations matching the current original URL count.
-    const audits = await this.db.read("SELECT new_values FROM audit_logs WHERE action='catalog.links.checked' AND created_at>=UTC_TIMESTAMP()-INTERVAL 7 DAY");
+    const audits = await this.db.read("SELECT new_values FROM audit_logs a WHERE action='catalog.links.checked' AND (created_at>=UTC_TIMESTAMP()-INTERVAL 7 DAY OR EXISTS(SELECT 1 FROM JSON_TABLE(a.new_values,'$.mutations[*]' COLUMNS(retry_at VARCHAR(64) PATH '$.retry_at')) j WHERE j.retry_at>DATE_FORMAT(UTC_TIMESTAMP(3),'%Y-%m-%dT%H:%i:%s.%fZ')))");
     for (const audit of audits) {
       const value: unknown = typeof audit.new_values === 'string' ? JSON.parse(audit.new_values) : audit.new_values;
       if (!value || typeof value !== 'object' || !('resolved_observations' in value) || !Array.isArray(value.resolved_observations)) throw new Error('CATALOG_PERIODIC_AUDIT_DATA_INVALID');
+      if('mutations' in value&&Array.isArray(value.mutations))for(const mutation of value.mutations){
+        if(mutation&&typeof mutation==='object'&&'retry_at' in mutation&&typeof mutation.retry_at==='string'&&Date.parse(mutation.retry_at)>Date.now()){
+          const original='target_key' in mutation?currentByKey.get(String(mutation.target_key)):undefined;
+          const host='retry_host' in mutation?String(mutation.retry_host):original?new URL(String(original.url)).hostname:null;
+          if(host)this.source.restoreRateLimit?.(host,mutation.retry_at);
+        }
+      }
       for (const observation of value.resolved_observations as ResolvedObservation[]) {
         if (!observation || typeof observation.targetKey !== 'string' || !/^[a-f0-9]{64}$/u.test(observation.originalSha256) ||
           !reportableAudioUrl(observation.finalUrl) || !Number.isFinite(Date.parse(observation.checkedAt))) throw new Error('CATALOG_PERIODIC_AUDIT_DATA_INVALID');
@@ -128,7 +138,7 @@ export class CatalogPeriodicLinkChecker {
       let check: AudioLinkCheck;
       if (isYoutubeAudioUrl(link.target.url)) check = { status: 'YOUTUBE_SOURCE_PROHIBITED', httpStatus: null, checkedAt: new Date().toISOString() };
       else if (!reportableAudioUrl(link.target.url)) check = { status: 'AUDIO_URL_UNSAFE_OR_SIGNED', httpStatus: null, checkedAt: new Date().toISOString() };
-      else check = await this.source.checkLink(link.target.url, link.target.allowedHosts);
+      else check = await this.source.checkLink(link.target.url, link.target.allowedHosts,this.shutdown.signal);
       if (!Number.isFinite(Date.parse(check.checkedAt))) throw new Error('CATALOG_PERIODIC_CHECK_TIMESTAMP_INVALID');
       if (check.status === 'available' && (!check.finalUrl || !reportableAudioUrl(check.finalUrl))) throw new Error('CATALOG_PERIODIC_AVAILABLE_URL_INVALID');
       if (check.status === 'available' && check.finalUrl) observe(audioFileIdentity(check.finalUrl), link.target.reciterId);
@@ -154,7 +164,7 @@ export class CatalogPeriodicLinkChecker {
         summary.updated++;
         mutations.push({ target_key: link.target.key, recitation_id: link.target.recitationId,
           old_status: fresh[0].previous_status ?? null, old_checked_at: fresh[0].previous_checked_at === null ? null : String(fresh[0].previous_checked_at), new_status: status, checked_at: check.checkedAt,
-          link_check_status: check.status, http_status: check.httpStatus, ...(check.retryAt ? { retry_at: check.retryAt } : {}) });
+          link_check_status: check.status, http_status: check.httpStatus, ...(check.retryAt ? { retry_at: check.retryAt,retry_host:check.retryHost??new URL(link.target.url).hostname } : {}) });
         if (check.status === 'available' && check.finalUrl && reportableAudioUrl(check.finalUrl)) resolvedObservations.push({ targetKey: link.target.key,
           originalSha256: sha(link.target.url), finalUrl: reportableAudioUrl(check.finalUrl)!, checkedAt: check.checkedAt });
       }

@@ -1,0 +1,11 @@
+import { pool } from '../db';
+import { catalogDatabaseFromPool } from './catalogMysqlDatabase';
+import { CatalogAudioSource } from './catalogAudioSource';
+import { RecitationAudioResolver } from './recitationAudioResolver';
+import { RecitationCatalogService,readCatalogSettings } from './recitationCatalogService';
+import { CatalogPeriodicLinkChecker } from './catalogPeriodicLinkChecker';
+const db=catalogDatabaseFromPool(pool);
+const settings=()=>readCatalogSettings(db);
+const source=new CatalogAudioSource();
+export const catalogService=new RecitationCatalogService(db,settings,new RecitationAudioResolver(db,source,settings));
+export const catalogLinkChecker=new CatalogPeriodicLinkChecker(db,undefined,source);

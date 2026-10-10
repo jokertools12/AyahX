@@ -21,6 +21,8 @@ import renderJobsRouter from './routes/renderJobs';
 import quranRouter from './routes/quran';
 import videoTranscodeRouter from './routes/videoTranscode';
 import alignmentsRouter from './routes/alignments';
+import { createCatalogRouter } from './routes/catalog';
+import { catalogService, catalogLinkChecker } from './services/catalogRuntime';
 
 
 
@@ -192,6 +194,7 @@ app.use('/api/social', socialRouter);
 app.use('/api/services', servicesRouter);
 app.use('/api/render-jobs', renderJobsRouter);
 app.use('/api/quran', quranRouter);
+app.use('/api/catalog', createCatalogRouter(catalogService));
 app.use('/api/alignments', alignmentsRouter);
 
 // 404 Catch-all for undefined API endpoints
@@ -260,6 +263,7 @@ process.on('uncaughtException', (err) => {
 // HTTP Server Start & Graceful Shutdown Orchestration
 // ==============================================================================
 export const server = app.listen(config.port, () => {
+  catalogLinkChecker.start();
   logger.info(`🚀 Quran Reels MySQL Backend Server running on port ${config.port}`, {
     port: config.port,
     environment: config.nodeEnv,
@@ -283,6 +287,7 @@ export const server = app.listen(config.port, () => {
 export async function gracefulShutdown(signal: string): Promise<void> {
   if (isShuttingDown) return;
   isShuttingDown = true;
+  const catalogClosing = catalogLinkChecker.close();
   stopAlignmentRetentionCleanup?.();
   stopAlignmentRetentionCleanup = null;
   logger.warn(`Received ${signal}. Initiating graceful shutdown...`);
@@ -301,6 +306,7 @@ export async function gracefulShutdown(signal: string): Promise<void> {
     }
     logger.info('HTTP server closed. Draining database connection pool...');
     try {
+      await catalogClosing;
       await closePool();
       logger.info('Database connection pool drained cleanly. Shutdown complete.');
       process.exit(0);

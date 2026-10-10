@@ -22,7 +22,7 @@ export class CatalogLinkCollisionError extends Error {
   constructor(public readonly collisions: CrossReciterFileCollision[]) { super('CROSS_RECITER_AUDIO_FILE_COLLISION'); }
 }
 const sha = (value: string): string => createHash('sha256').update(value).digest('hex');
-const signedKey = /token|signature|credential|expires|x-amz|x-goog|key-pair-id|policy/iu;
+const signedKey = /token|signature|credential|expires|x-amz|x-goog|key-pair-id|policy|^sig$|^api[_-]?key$/iu;
 
 /** Public persistent sources only. Unsafe/signed input is never included in a report or console. */
 export function reportableAudioUrl(raw: string): string | null {
@@ -174,7 +174,7 @@ export function catalogLinkSqlPlan(targets: readonly CatalogLinkTarget[], checkp
     const status = target.kind === 'chapter' ? check.status === 'available' ? 'available' : 'source_unavailable' : check.status;
     const fields = target.kind === 'chapter' ? `audio_status=${sqlLiteral(status)},last_verified_at=${sqlLiteral(timestamp)}` : `last_status=${sqlLiteral(status)},last_checked_at=${sqlLiteral(timestamp)}`;
     const urlField = target.kind === 'chapter' ? 'audio_url' : 'url';
-    const sql = `UPDATE ${table} SET ${fields} WHERE id=${sqlLiteral(target.id)} AND recitation_id=${sqlLiteral(target.recitationId)} AND SHA2(CONVERT(${urlField} USING utf8mb4),256)=${sqlLiteral(sha(target.url))};`;
+    const sql = `UPDATE ${table} SET ${fields} WHERE id=${sqlLiteral(target.id)} COLLATE utf8mb4_unicode_ci AND recitation_id=${sqlLiteral(target.recitationId)} COLLATE utf8mb4_unicode_ci AND BINARY SHA2(CONVERT(${urlField} USING utf8mb4),256)=BINARY ${sqlLiteral(sha(target.url))};`;
     return { sql, rowCount: 1 };
   });
   const sql = `-- Link checks only: no voice identity, publication, licensing or timing changes.\nSET time_zone='+00:00';\nSTART TRANSACTION;\n${statements.map(s => s.sql).join('\n')}\nCOMMIT;\n`;

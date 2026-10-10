@@ -49,13 +49,13 @@ if (database) assert.match(database, /^ayahx_d4_[a-z0-9_]+$/u);
 const local = database ? await mysql.createConnection({ host: '127.0.0.1', port: 33319, user: 'root', database, charset: 'utf8mb4' }) : null;
 const remote = target === 'production' ? await openRailwayMysqlSession(ENVIRONMENTS.production, { allowWrites: false }) : null;
 const read = async (sql: string): Promise<Record<string, unknown>[]> => {
-  if (local) return (await local.query<RowDataPacket[]>(sql))[0].map(row => JSON.parse(String(row.record)) as Record<string, unknown>);
+  if (local) return (await local.query<RowDataPacket[]>(sql))[0].map(row => (typeof row.record==='string'?JSON.parse(row.record):row.record) as Record<string, unknown>);
   return (await remote!.read(sql + ';')).trim().split('\n').filter(Boolean).map(row => JSON.parse(row) as Record<string, unknown>);
 };
 try {
   const version = await read("SELECT JSON_OBJECT('mysql_version',VERSION()) AS record");
   assert.equal(version[0]?.mysql_version, '9.7.2', 'MYSQL_9_7_2_REQUIRED');
-  const condition = selectedRecitation ? ` WHERE r.slug=${sqlLiteral(selectedRecitation)}` : '';
+  const condition = selectedRecitation ? ` WHERE r.slug=${sqlLiteral(selectedRecitation)} COLLATE utf8mb4_unicode_ci` : '';
   const chapters = await read(`SELECT JSON_OBJECT('id',c.id,'recitationId',r.id,'reciterId',r.reciter_id,'recitationSlug',r.slug,'surah',c.surah,'url',c.audio_url,'allowedHosts',p.host_allowlist) AS record FROM recitation_chapters c JOIN recitations r ON r.id=c.recitation_id JOIN audio_providers p ON p.id=r.provider_id${condition} ORDER BY r.slug,c.surah`);
   const alternates = await read(`SELECT JSON_OBJECT('id',a.id,'recitationId',r.id,'reciterId',r.reciter_id,'recitationSlug',r.slug,'surah',a.surah,'url',a.url,'allowedHosts',p.host_allowlist) AS record FROM recitation_source_urls a JOIN recitations r ON r.id=a.recitation_id JOIN audio_providers p ON p.id=r.provider_id${condition} ORDER BY r.slug,a.surah,a.priority,a.id`);
   const targets = [...chapters.map(row => ({ ...row, kind: 'chapter', key: 'chapter:' + String(row.id) })),
