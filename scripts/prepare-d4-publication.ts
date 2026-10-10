@@ -38,7 +38,7 @@ try{
   const configuration=await readCatalogSettings(readonlyDb);
   const conflicts=await read("SELECT JSON_OBJECT('type',type,'subject_type',subject_type,'subject_id',subject_id,'status',status,'evidence',evidence) record FROM human_review_items WHERE type='same_audio_conflict'");
   const nowMs=Date.now();report.link_health_as_of_ms=nowMs;
-  let changes=0;const decisions=[];const changedIds=new Set<string>();for(const row of rows){const group=chapters.filter(c=>c.recitation_id===row.id);
+  let changes=0;const decisions=[];const newlyPublishedIds=new Set<string>();for(const row of rows){const group=chapters.filter(c=>c.recitation_id===row.id);
     const facts=catalogPublicationFacts(row,group,conflicts,nowMs);
     const proofChapters:LicensedChapterProof[]=[];
     const candidates=licensedCandidates.filter(c=>c.recitation_id===row.id&&group.some(g=>g.surah===c.surah&&g.availability_state==='complete'&&Number(g.coverage_mismatch)===0));
@@ -68,10 +68,10 @@ try{
     const oldValues=Object.fromEntries(Object.keys(patch).map(k=>[k,row[k]??null]));
     const set=Object.entries(patch).map(([k,v])=>k+'='+(k==='published_at'?'UTC_TIMESTAMP(3)':d4Literal(v&&typeof v==='object'?JSON.stringify(v):v as string|number|boolean|null))).join(',');
     plan.statements.push(`UPDATE recitations SET ${set} WHERE id=${d4Literal(row.id)};`);
-    plan.append('recitation.technical_publication','recitation',row.id,oldValues,{...patch,facts:scoped.facts,rule:'rule-v1',public_visibility_unchanged:true,global_catalog_offset_unchanged:true});changes++;changedIds.add(String(row.id));
+    plan.append('recitation.technical_publication','recitation',row.id,oldValues,{...patch,facts:scoped.facts,rule:'rule-v1',public_visibility_unchanged:true,global_catalog_offset_unchanged:true});changes++;if(patch.status==='published')newlyPublishedIds.add(String(row.id));
   }
   const finished=plan.finish(),path=resolve(option('--sql-output'));const outside=relative(process.cwd(),path);assert.ok(outside.startsWith('..')||isAbsolute(outside));writeFileSync(path,finished.sql);if(apply)await local!.query(finished.sql);
-  if(apply){const after=await read(rowsSql);assert.equal(after.length,rows.length);for(const old of rows){const row=after.find(r=>r.id===old.id);assert.ok(row);for(const key of ['is_public','voice_identity_status','license_status','offset_verified','offset_check_score','verification_status','verification_method'])assert.equal(row[key],old[key],'PUBLIC_OR_GLOBAL_OFFSET_FIELDS_CHANGED');assert.deepEqual(row.verification_details,old.verification_details);if(changedIds.has(String(old.id))&&old.status!=='published'&&!old.published_by){assert.equal(row.status,'published');assert.equal(row.published_by,'rule-v1');assert.ok(row.published_at);}else for(const key of ['status','published_by','published_at'])assert.equal(row[key],old[key],'EXISTING_PUBLICATION_CHANGED');}}
+  if(apply){const after=await read(rowsSql);assert.equal(after.length,rows.length);for(const old of rows){const row=after.find(r=>r.id===old.id);assert.ok(row);for(const key of ['is_public','voice_identity_status','license_status','offset_verified','offset_check_score','verification_status','verification_method'])assert.equal(row[key],old[key],'PUBLIC_OR_GLOBAL_OFFSET_FIELDS_CHANGED');assert.deepEqual(row.verification_details,old.verification_details);if(newlyPublishedIds.has(String(old.id))){assert.equal(row.status,'published');assert.equal(row.published_by,'rule-v1');assert.ok(row.published_at);}else for(const key of ['status','published_by','published_at'])assert.equal(row[key],old[key],'EXISTING_PUBLICATION_CHANGED');}}
   const {sql:_privateSql,...evidence}=finished;void _privateSql;Object.assign(report,evidence,{changes,decisions,eligible:decisions.filter(d=>d.eligible).length,eligible_readers:new Set(decisions.filter(d=>d.eligible).map(d=>d.reciter_id)).size,passed:true});
 }catch(error){if(local)await local.rollback();report.passed=false;report.failure=error instanceof Error?error.message:'UNKNOWN';throw new Error('D4_PUBLICATION_PLAN_FAILED');}
 finally{if(local)await local.end();if(remote)report.serial=await remote.close();report.finished_at=new Date().toISOString();writeFileSync(option('--report'),JSON.stringify(report,null,2)+'\n');}
