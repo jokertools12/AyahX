@@ -36,6 +36,21 @@ def numeric_gate(row):
             and score >= .9 and abs(lag) <= 30 and agreement >= .9 and 0 <= duration <= 30)
 
 
+def boundary_support(source_count, clip_count, offset_ms, selected_start):
+    """Expose EOF support on the 8k decoded clock, before packet-clock proof."""
+    nominal_start = round(offset_ms * RATE / 1000)
+    overrun = max(0, nominal_start + clip_count - source_count)
+    latest = source_count - clip_count
+    return {'source_decoded_sample_count': source_count, 'clip_decoded_sample_count': clip_count,
+            'nominal_source_start_sample': nominal_start,
+            'nominal_source_end_overrun_ms': overrun * 1000 / RATE,
+            'selected_source_end_margin_ms': (source_count - selected_start - clip_count) * 1000 / RATE,
+            'latest_complete_source_start_sample': latest,
+            'selected_at_latest_complete_start': selected_start == latest,
+            'nominal_interval_extends_source_EOF': overrun > 0,
+            'causal_drift_requires_packet_clock_review': overrun > 0}
+
+
 def lag_trends(rows):
     """Closed-form least squares per chapter, separate from calculator/polyfit."""
     grouped, trends = defaultdict(list), []
@@ -240,8 +255,9 @@ def replay_pcm(record, ffmpeg):
             speech_iou = float(np.logical_and(source_speech, clip_speech).sum() / union) if union else None
             comparisons = [('duration', difference, row['duration_difference_ms']),
                            ('lag', lag, row['envelope']['best_lag_ms']),
-                           ('envelope', env_score, row['envelope']['score']),
-                           ('source_clip_vad', speech_iou, row['vad'].get('source_clip_speech_iou'))]
+                           ('envelope', env_score, row['envelope']['score'])]
+            if row['vad'].get('source_clip_speech_iou') is not None:
+                comparisons.append(('source_clip_vad', speech_iou, row['vad']['source_clip_speech_iou']))
             if interior_score is not None and row['interior_pcm'].get('measured'):
                 comparisons.append(('interior_pcm', interior_score, row['interior_pcm']['score']))
             for name, actual, reported in comparisons:
@@ -250,7 +266,10 @@ def replay_pcm(record, ffmpeg):
             evidence.append({'surah': key[0], 'ayah': key[1], 'clip_decoded_duration_ms': len(clip) * 1000 / RATE,
                              'hf_duration_ms': row['hf_duration_ms'], 'duration_difference_ms': difference,
                              'lag_ms': lag, 'envelope_score': env_score, 'interior_pcm_score': interior_score,
-                             'source_clip_speech_iou': speech_iou, 'complete_source_window': True})
+                             'source_clip_speech_iou': speech_iou, 'complete_source_window': True,
+                             'reported_source_clip_vad_available': row['vad'].get('source_clip_speech_iou') is not None,
+                             'reported_segments_vad_unavailable_reason': row['vad'].get('reason'),
+                             'boundary_support': boundary_support(source_count, len(clip), row['source_offset_ms'], start)})
     return {'config': record['config'], 'errors': errors, 'samples': evidence,
             'duration_definition': 'abs(decoded_HF_clip_duration_ms - HF_duration_ms); not independently measured source duration',
             'supplied_segments_IoU_replayed': False}
@@ -263,6 +282,7 @@ def main():
     parser.add_argument('--cache', type=Path, required=True)
     parser.add_argument('--decode-config')
     parser.add_argument('--ffmpeg', type=Path)
+    parser.add_argument('--output', type=Path)
     args = parser.parse_args()
     raw = args.report.read_bytes()
     report = json.loads(raw)
@@ -274,7 +294,18 @@ def main():
         if args.ffmpeg is None:
             parser.error('--ffmpeg required in local decode mode')
         review['pcm_replay'] = replay_pcm(report['results'][args.decode_config], args.ffmpeg)
-    print(json.dumps(review, ensure_ascii=False, indent=2))
+    rendered = json.dumps(review, ensure_ascii=False, indent=2)
+    if args.output:
+        workspace = Path(__file__).resolve().parent.parent
+        target = args.output.resolve()
+        if not target.is_relative_to(workspace):
+            parser.error('--output must stay in the calling review worktree')
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(rendered + '\n', encoding='utf-8')
+        print(json.dumps({'output': str(target), 'reviewed_configs': len(review['reviewed']),
+                          'errors': review['errors'], 'pcm_errors': review.get('pcm_replay', {}).get('errors', [])}))
+    else:
+        print(rendered)
     return int(bool(review['errors']) or bool(review.get('pcm_replay', {}).get('errors')))
 
 

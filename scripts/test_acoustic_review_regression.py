@@ -7,7 +7,8 @@ import unittest
 import numpy as np
 from scipy.ndimage import uniform_filter1d
 
-from lib.acoustic_diagnostics import RATE, additional_metrics, aligned_source_envelope, rms_envelope
+from lib.acoustic_diagnostics import RATE, additional_metrics, aligned_source_envelope, drift_diagnostics, rms_envelope
+from review_acoustic_checkpoint import boundary_support
 
 
 class SourceEnvelopeAlignmentRegression(unittest.TestCase):
@@ -61,6 +62,35 @@ class SourceEnvelopeAlignmentRegression(unittest.TestCase):
         self.assertEqual(result['envelope']['reason'], 'source_window_too_short')
         self.assertFalse(result['v2_numeric_candidate'])
         self.assertEqual(result['vad']['reason'], 'envelope_match_unavailable')
+
+    def test_trailing_padding_can_constrain_peak_and_mimic_drift(self):
+        # Same spoken PCM throughout; only the final decoder output has 40ms
+        # tail padding. This is a diagnostic limitation, not genuine drift.
+        time = np.arange(RATE * 30) / RATE
+        source = (.12 + .04 * np.sin(.53 * time) + .02 * np.sin(2.13 * time)) * np.sin(
+            2 * np.pi * (173 * time + 1.71 * time * time))
+        source[-2000:] = 0
+        rows = []
+        for offset in (0, 12500, 25000):
+            start = round(offset * RATE / 1000)
+            clip = source[start:start + RATE * 5]
+            if offset == 25000:
+                clip = np.concatenate([clip, np.zeros(320)])
+            duration = len(clip) * 1000 / RATE
+            row = additional_metrics(source, clip, offset, duration, [[1, 1, 0, duration]])
+            row.update(surah=1, source_offset_ms=offset)
+            rows.append(row)
+        self.assertGreaterEqual(rows[-1]['envelope']['score'], .90)
+        self.assertEqual(rows[-1]['envelope']['best_lag_ms'], -40)
+        self.assertEqual(rows[-1]['duration_difference_ms'], 0)
+        trend = drift_diagnostics(rows)[0]
+        self.assertTrue(trend['increasing_drift_evidence'])
+        self.assertAlmostEqual(trend['fitted_lag_change_ms'], 40)
+        self.assertLessEqual(trend['residual_std_ms'], 10)
+        support = boundary_support(len(source), len(clip), 25000, rows[-1]['envelope']['source_sample_start'])
+        self.assertEqual(support['nominal_source_end_overrun_ms'], 40)
+        self.assertTrue(support['selected_at_latest_complete_start'])
+        self.assertTrue(support['causal_drift_requires_packet_clock_review'])
 
 
 if __name__ == '__main__':
