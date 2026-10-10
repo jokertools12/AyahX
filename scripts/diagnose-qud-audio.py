@@ -10,8 +10,8 @@ from datetime import datetime, timezone
 import hashlib
 import importlib.util
 import json
+import math
 from pathlib import Path
-import shutil
 import subprocess
 import tempfile
 import time
@@ -21,8 +21,8 @@ import duckdb
 import numpy as np
 
 from lib.acoustic_diagnostics import (additional_metrics, drift_diagnostics,
-                                      encoded_interior_identity, log_mel, rms_envelope)
-from lib.hf_serial_ranges import SerialTransport, download, range_proxy
+                                      encoded_interior_identity, interior_pcm_match, log_mel, rms_envelope)
+from lib.hf_serial_ranges import SerialTransport, download, range_proxy, safe_response_text
 
 
 spec = importlib.util.spec_from_file_location('retained_offset_auditor', Path(__file__).with_name('verify-qud-offsets.py'))
@@ -33,6 +33,33 @@ PROHIBITED_HOSTS = {'youtube.com', 'www.youtube.com', 'youtu.be', 'music.youtube
 
 def sha(value):
     return hashlib.sha256(value).hexdigest()
+
+
+def validate_resume(report, catalog_sha, original_sha, calculator):
+    if report.get('catalog_sha256') != catalog_sha or report.get('original_evidence_sha256') != original_sha:
+        raise ValueError('RESUME_INPUT_SHA_MISMATCH')
+    if report.get('calculator') != calculator:
+        raise ValueError('RESUME_CALCULATOR_SHA_MISMATCH; preserve_history_then_use_new_report_for_full_audit')
+
+
+def error_status(error, phase):
+    network_failure = isinstance(error, urllib.error.URLError) or isinstance(error, duckdb.HTTPException)
+    decode_failure = (phase in ('decode_catalog_source', 'decode_hf_clip') and
+                      (isinstance(error, subprocess.TimeoutExpired) or
+                       isinstance(error, ValueError) and str(error) == 'AUDIO_DECODE_FAILED'))
+    return 'source_unavailable' if network_failure or decode_failure else 'diagnostic_error'
+
+
+def finite_number(value):
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+
+
+def v2_numeric_acceptance(row):
+    envelope, vad = row.get('envelope', {}), row.get('vad', {})
+    score, lag = envelope.get('score'), envelope.get('best_lag_ms')
+    agreement, duration = vad.get('agreement'), row.get('duration_difference_ms')
+    return (envelope.get('measured') is True and all(finite_number(value) for value in (score, lag, agreement, duration))
+            and score >= .90 and agreement >= .90 and abs(lag) <= 30 and 0 <= duration <= 30)
 
 
 def direct_source_allowed(record, url):
@@ -64,26 +91,83 @@ def hf_rows(files, pairs, transport):
         connection.close()
 
 
-def classify(samples):
+def sample_distribution(samples, proof=None):
+    """Enforce inherited D2 policy: 3 surahs, five fixed distributed ayahs each."""
+    pairs = [(row.get('surah'), row.get('ayah')) for row in samples]
+    if any(not isinstance(surah, int) or not isinstance(ayah, int) or surah <= 0 or ayah <= 0 for surah, ayah in pairs):
+        return {'verified': False, 'reason': 'positive_surah_ayah_ids_required'}
+    if len(set(pairs)) != len(pairs):
+        return {'verified': False, 'reason': 'duplicate_sample_pairs'}
+    if len(pairs) < 5:
+        return {'verified': False, 'reason': 'fewer_than_five_unique_samples'}
+    grouped = defaultdict(list)
+    for surah, ayah in pairs:
+        grouped[surah].append(ayah)
+    if len(grouped) < 3 or any(len(ayahs) < 5 for ayahs in grouped.values()):
+        return {'verified': False, 'reason': 'three_chapters_with_five_samples_each_required'}
+    if proof is None:
+        return {'verified': False, 'reason': 'observed_verse_distribution_proof_required'}
+    if len({proof.get(str(surah), {}).get('observed_ayah_count') for surah in grouped}) < 3:
+        return {'verified': False, 'reason': 'three_distinct_observed_chapter_lengths_required'}
+    for surah, ayahs in grouped.items():
+        expected = proof.get(str(surah), {}).get('fixed_distributed_ayahs')
+        if not expected or sorted(ayahs) != expected:
+            return {'verified': False, 'reason': 'sample_pairs_differ_from_observed_fixed_quintiles'}
+    return {'verified': True, 'unique_sample_count': len(pairs), 'chapter_count': len(grouped),
+            'policy': '3_chapters_with_5_fixed_distributed_ayahs; beginning_quartiles_middle_end', 'chapters': proof}
+
+
+def distribution_proof(cache, slug, samples):
+    target_chapters = {row['surah'] for row in samples}
+    available = defaultdict(set)
+    payload = (cache / f'{slug}.recited.jsonl').read_bytes()
+    for line in payload.decode('utf-8').splitlines():
+        row = json.loads(line)
+        if row['surah'] in target_chapters and row['ayah'] > 0:
+            available[row['surah']].add(row['ayah'])
+    proof = {}
+    for surah, values in available.items():
+        ayahs = sorted(values)
+        if len(ayahs) >= 5:
+            proof[str(surah)] = {'observed_ayah_count': len(ayahs), 'first_observed_ayah': ayahs[0],
+                                 'last_observed_ayah': ayahs[-1],
+                                 'fixed_distributed_ayahs': [ayahs[round(index * (len(ayahs) - 1) / 4)] for index in range(5)],
+                                 'annotation_cache_sha256': sha(payload)}
+    return proof
+
+
+def classify(samples, distribution=None, source_matches_retained=None):
     if not samples:
         return {'pattern': 'unresolved', 'reason': 'no_real_audio_measurements', 'v2_eligible': False}
+    distribution = sample_distribution(samples, distribution)
     trends = drift_diagnostics(samples)
     if any(row['increasing_drift_evidence'] for row in trends):
         return {'pattern': 'increasing_drift', 'reason': 'within_chapter_reliable_lag_trend',
                 'lag_trends': trends, 'v2_eligible': False, 'next_path': 'D5'}
     reliable = [row['envelope']['best_lag_ms'] for row in samples if row['envelope'].get('measured') and row['envelope']['score'] >= .9]
-    if len(reliable) == len(samples) and np.ptp(reliable) <= 20 and abs(float(np.median(reliable))) > 30:
+    if len(reliable) == len(samples) and np.ptp(reliable) <= 20 and all(abs(lag) > 30 for lag in reliable):
         return {'pattern': 'constant_lag', 'reason': 'reliable_envelope_lags_all_outside_acceptance',
                 'lag_median_ms': float(np.median(reliable)), 'lag_range_ms': float(np.ptp(reliable)),
                 'lag_trends': trends, 'v2_eligible': False, 'next_path': 'D5'}
     identity_proven = all(row['encoded_identity']['proven'] for row in samples)
-    envelope_aligned = all(row['envelope'].get('measured') and row['envelope']['score'] >= .9 and abs(row['envelope']['best_lag_ms']) <= 30 for row in samples)
-    spectral_agreement = all(row['log_mel'].get('measured') and row['log_mel']['score'] >= .9 for row in samples)
-    if identity_proven and envelope_aligned:
-        eligible = all(row['v2_numeric_candidate'] for row in samples) and spectral_agreement
+    position_proven = all(row.get('interior_pcm', {}).get('measured') is True
+                          and finite_number(row['interior_pcm'].get('score')) and row['interior_pcm']['score'] >= .95
+                          and finite_number(row['interior_pcm'].get('interior_duration_ms'))
+                          and row['interior_pcm']['interior_duration_ms'] >= 800 for row in samples)
+    old_source_proven = (source_matches_retained is not None and
+                         all(source_matches_retained.get(str(row['surah'])) is True for row in samples))
+    envelope_aligned = all(row['envelope'].get('measured') is True and finite_number(row['envelope'].get('score'))
+                           and finite_number(row['envelope'].get('best_lag_ms')) and row['envelope']['score'] >= .9
+                           and abs(row['envelope']['best_lag_ms']) <= 30 for row in samples)
+    spectral_agreement = all(row['log_mel'].get('measured') is True and finite_number(row['log_mel'].get('score'))
+                             and row['log_mel']['score'] >= .9 for row in samples)
+    if identity_proven and position_proven and old_source_proven and envelope_aligned:
+        eligible = all(v2_numeric_acceptance(row) for row in samples) and spectral_agreement and distribution['verified']
         return {'pattern': 'codec_processing_only', 'reason': 'all_encoded_interiors_are_exact_contiguous_source_copies_with_aligned_envelope',
                 'lag_trends': trends, 'v2_eligible': eligible,
                 'v2_extra_identity_evidence': 'contiguous_encoded_interior_copy_each_sample',
+                'v2_source_position_evidence': 'fixed_200ms_trim_interior_PCM_NCC_ge_0.95; min_800ms; no_lag_search',
+                'sample_distribution': distribution, 'retained_source_hashes_match': old_source_proven,
                 'v2_extra_log_mel_gate_passed': spectral_agreement,
                 'v2_blockers': sorted({reason for row in samples for reason, condition in (
                     ('envelope_below_0.90', not row['envelope'].get('measured') or row['envelope'].get('score', 0) < .9),
@@ -91,7 +175,11 @@ def classify(samples):
                     ('duration_difference_above_30ms', row['duration_difference_ms'] > 30),
                     ('log_mel_below_0.90_or_unavailable', not row['log_mel'].get('measured') or row['log_mel'].get('score', 0) < .9)) if condition})}
     # A poor feature score is not, by itself, proof of another recording.
-    return {'pattern': 'unresolved', 'reason': 'insufficient_identity_or_consistent_lag_evidence; do_not_invent_a_cause',
+    source_reason = ('unproven_old_source' if source_matches_retained is None or
+                     any(source_matches_retained.get(str(row['surah'])) is None for row in samples)
+                     else 'source_changed_since_v1' if not old_source_proven else 'insufficient_position_or_identity_evidence')
+    return {'pattern': 'unresolved', 'reason': source_reason,
+            'sample_distribution': distribution, 'retained_source_hashes_match': old_source_proven,
             'lag_trends': trends, 'v2_eligible': False, 'next_path': 'D5_or_further_read_only_diagnosis'}
 
 
@@ -141,9 +229,16 @@ def audit_record(record, previous, manifest, args, transport):
     if not pairs:
         evidence.update(status='source_unavailable', reason='original_source_unavailable; alternative_source_check_required')
         return evidence
-    if len(pairs) < 5 or len(set(pairs)) != len(pairs):
-        raise ValueError('INSUFFICIENT_OR_DUPLICATE_RETAINED_SAMPLE')
+    proof = distribution_proof(Path(args.cache), slug, previous['samples'])
+    verified_distribution = sample_distribution(previous['samples'], proof)
+    evidence['sample_distribution'] = verified_distribution
+    if not verified_distribution['verified']:
+        evidence.update(status='diagnostic_error', reason='RETAINED_SAMPLE_DISTRIBUTION_NOT_VERIFIED', needs_review=True)
+        return evidence
     folder = Path(tempfile.mkdtemp(prefix='ayahx-d3-acoustic-'))
+    evidence.update(scratch_dir=str(folder), manual_cleanup_required=True, audio_scratch_deleted=False,
+                    retention_reason='automatic_cleanup_disabled_after_command_policy_rejection; no_alternative_deletion')
+    phase = 'fetch_hf'
     try:
         files = [row['url'] for row in manifest['parquet_files'] if row['config'] == slug and row['split'] == 'train']
         rows = hf_rows(files, pairs, transport)
@@ -160,19 +255,24 @@ def audit_record(record, previous, manifest, args, transport):
                 evidence.update(status='source_unavailable', reason='prohibited_or_non_direct_source; no_extraction_attempt')
                 return evidence
             source_path = folder / f'{surah}.audio'
+            phase = 'download_catalog_source'
             download(transport, url, source_path)
             source_bytes = source_path.read_bytes()
+            phase = 'decode_catalog_source'
             source = v1.decode(args.ffmpeg, source_path)
             evidence['source_sha256'][str(surah)] = sha(source_bytes)
             retained_source_sha = previous.get('catalog_source_sha256', {}).get(str(surah))
             evidence['catalog_source_matches_retained'][str(surah)] = (sha(source_bytes) == retained_source_sha) if retained_source_sha else None
+            phase = 'calculate_source_features'
             source_features = {'envelope': rms_envelope(source), 'log_mel': log_mel(source)}
             for old in old_samples:
                 surah, ayah = old['surah'], old['ayah']
                 payload, duration, offset, segments, words = rows[(surah, ayah)]
-                clip_path = folder / 'clip.mp3'
+                clip_path = folder / f'clip-{surah}-{ayah}.mp3'
                 clip_path.write_bytes(payload)
+                phase = 'decode_hf_clip'
                 clip = v1.decode(args.ffmpeg, clip_path)
+                phase = 'calculate_sample_metrics'
                 sample = additional_metrics(source, clip, offset, duration, segments, source_features)
                 sample.update(surah=surah, ayah=ayah, source_offset_ms=offset, hf_duration_ms=duration,
                               hf_audio_sha256=sha(payload), original_hf_audio_sha256=old['hf_audio_sha256'],
@@ -182,32 +282,39 @@ def audit_record(record, previous, manifest, args, transport):
                               encoded_identity=encoded_interior_identity(source_bytes, payload),
                               supplied_segments_sha256=sha(json.dumps(segments, separators=(',', ':')).encode()),
                               word_timestamp_count=len(words), segment_count=len(segments))
+                if sample['envelope'].get('measured'):
+                    sample['interior_pcm'] = interior_pcm_match(source, clip, sample['envelope']['source_sample_start'])
+                else:
+                    sample['interior_pcm'] = {'measured': False, 'passed': False, 'reason': 'source_position_unmeasured'}
                 evidence['samples'].append(sample)
                 if slug in args.plot_config and (surah, ayah) == (plot_sample['surah'], plot_sample['ayah']):
                     evidence['overlay_plot'] = overlay_plot(args.plot_dir, slug, sample, source, clip)
             del source_features, source, source_bytes
-            source_path.unlink()
-        evidence.update(status='measured', classification=classify(evidence['samples']))
+        evidence.update(status='measured', classification=classify(evidence['samples'], proof,
+                                                                  evidence['catalog_source_matches_retained']))
         evidence['all_hf_payloads_match_retained'] = all(row['same_hf_payload_as_original'] and row['same_hf_metadata_as_original'] for row in evidence['samples'])
         if not evidence['all_hf_payloads_match_retained']:
             evidence['classification']['v2_eligible'] = False
             evidence['classification']['v2_blocked_reason'] = 'HF_rolling_snapshot_changed_from_retained_v1'
         return evidence
-    except (urllib.error.URLError, OSError, ValueError, subprocess.TimeoutExpired, duckdb.Error) as error:
-        evidence.update(status='source_unavailable', reason=type(error).__name__,
+    except (urllib.error.URLError, OSError, ValueError, TypeError, KeyError, ArithmeticError,
+            subprocess.TimeoutExpired, duckdb.Error) as error:
+        evidence.update(status=error_status(error, phase),
+                        reason=type(error).__name__, error_phase=phase, needs_review=True,
+                        error_detail=safe_response_text(str(error).encode())[:2000],
                         http_status=getattr(error, 'code', None))
         return evidence
     finally:
         resolved = folder.resolve()
         if not resolved.is_relative_to(Path(tempfile.gettempdir()).resolve()) or not resolved.name.startswith('ayahx-d3-acoustic-'):
             raise ValueError('OWNED_SCRATCH_PATH_VALIDATION_FAILED')
-        shutil.rmtree(resolved)
-        evidence.update(audio_scratch_deleted=not resolved.exists(), finished_at=datetime.now(timezone.utc).isoformat())
+        evidence.update(audio_scratch_deleted=False, manual_cleanup_required=True,
+                        finished_at=datetime.now(timezone.utc).isoformat())
 
 
 def main():
     parser = argparse.ArgumentParser()
-    for option in ('catalog', 'manifest', 'original-evidence', 'ffmpeg', 'report'):
+    for option in ('catalog', 'manifest', 'original-evidence', 'cache', 'ffmpeg', 'report'):
         parser.add_argument('--' + option, required=True)
     parser.add_argument('--config', action='append', default=[])
     parser.add_argument('--plot-config', action='append', default=[])
@@ -227,11 +334,14 @@ def main():
             raise ValueError('LOCAL_PLOT_DIRECTORY_OUTSIDE_REPOSITORY_REQUIRED')
         args.plot_dir.mkdir(parents=True, exist_ok=True)
     target = Path(args.report)
+    calculator = {'method_version': 'B-v2-diagnostics-gridfix-1', 'script_sha256': sha(Path(__file__).read_bytes()),
+                  'kernel_sha256': sha(Path(__file__).with_name('lib').joinpath('acoustic_diagnostics.py').read_bytes()),
+                  'retained_v1_calculator_sha256': sha(Path(__file__).with_name('verify-qud-offsets.py').read_bytes())}
     report = json.loads(target.read_text(encoding='utf-8')) if target.exists() else {
         'read_only': True, 'original_results_replaced': False, 'catalog_sha256': sha(catalog_bytes),
-        'original_evidence_sha256': sha(original_bytes), 'results': {}, 'v2_automatically_published': False}
-    if report['catalog_sha256'] != sha(catalog_bytes) or report['original_evidence_sha256'] != sha(original_bytes):
-        raise ValueError('RESUME_INPUT_SHA_MISMATCH')
+        'original_evidence_sha256': sha(original_bytes), 'results': {}, 'v2_automatically_published': False,
+        'calculator': calculator}
+    validate_resume(report, sha(catalog_bytes), sha(original_bytes), calculator)
     transport = SerialTransport()
     for record in records:
         previous = report['results'].get(record['slug'])
@@ -254,6 +364,8 @@ def main():
         print(json.dumps({'config': record['slug'], 'status': result['status'],
                           'pattern': result.get('classification', {}).get('pattern'),
                           'sample_count': len(result['samples'])}), flush=True)
+        if result['status'] == 'diagnostic_error':
+            raise SystemExit('DIAGNOSTIC_ERROR_REQUIRES_LOCAL_REVIEW; network_audit_stopped')
 
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ import unittest
 
 import numpy as np
 
-from lib.acoustic_diagnostics import (RATE, additional_metrics, drift_diagnostics, encoded_interior_identity, energy_vad,
+from lib.acoustic_diagnostics import (RATE, additional_metrics, aligned_source_envelope, drift_diagnostics, encoded_interior_identity, energy_vad, interior_pcm_match,
                                       feature_match, log_mel, rms_envelope, segments_mask, speech_iou)
 
 
@@ -93,6 +93,49 @@ class DiagnosticTests(unittest.TestCase):
                     'envelope': {'measured': True, 'score': .89, 'best_lag_ms': index * 100}}
                    for index in range(4)]
         self.assertEqual(drift_diagnostics(samples), [])
+
+    def test_clip_anchored_vad_grid_near_eof_does_not_drop_a_frame(self):
+        source = np.random.default_rng(717).normal(0, .1, 16000)
+        for start in (8005, 8006, 8007):
+            with self.subTest(source_sample_start=start):
+                clip = source[start:]
+                duration = len(clip) * 1000 / RATE
+                result = additional_metrics(source, clip, start * 1000 / RATE, duration,
+                                            [[1, 1, 0, duration]])
+                self.assertEqual(result['envelope']['source_sample_start'], start)
+                self.assertEqual(result['envelope']['best_lag_ms'], 0)
+                self.assertEqual(len(aligned_source_envelope(source, start, len(clip))), len(rms_envelope(clip)))
+                self.assertIsNotNone(result['vad']['agreement'])
+                self.assertGreaterEqual(result['vad']['source_clip_speech_iou'], .9)
+
+    def test_aligned_source_envelope_rejects_a_short_window_without_padding(self):
+        source = np.ones(80)
+        with self.assertRaisesRegex(ValueError, 'OUT_OF_BOUNDS'):
+            aligned_source_envelope(source, 40, 41)
+
+    def test_identical_pcm_matches_under_same_envelope_and_stft_boundary_grid(self):
+        source = np.random.default_rng(177).normal(0, .1, RATE * 5)
+        for start in (8000, 8040):
+            with self.subTest(offset_ms=start * 1000 / RATE):
+                clip = source[start:start + 4000]
+                duration = len(clip) * 1000 / RATE
+                result = additional_metrics(source, clip, start * 1000 / RATE, duration,
+                                            [[1, 1, 0, duration]])
+                self.assertEqual(result['envelope']['source_sample_start'], start)
+                self.assertEqual(result['envelope']['best_lag_ms'], 0)
+                self.assertAlmostEqual(result['envelope']['score'], 1)
+                self.assertAlmostEqual(result['log_mel']['score'], 1)
+                self.assertTrue(result['v2_numeric_candidate'])
+
+    def test_interior_pcm_identity_is_tied_to_fixed_source_position(self):
+        source = np.random.default_rng(613).normal(0, .1, RATE * 6)
+        clip = source[RATE:RATE * 3].copy()
+        self.assertTrue(interior_pcm_match(source, clip, RATE)['passed'])
+        self.assertFalse(interior_pcm_match(source, clip, RATE + 1)['passed'])
+        self.assertFalse(interior_pcm_match(source, clip, RATE * 3)['passed'])
+        result = interior_pcm_match(source, clip[:RATE], RATE)
+        self.assertFalse(result['measured'])
+        self.assertEqual(result['reason'], 'insufficient_fixed_interior_duration')
 
     def test_contiguous_encoded_copy_is_identity_evidence_not_an_acceptance_waiver(self):
         payload = np.random.default_rng(91).bytes(12000)

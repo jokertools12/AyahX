@@ -34,6 +34,28 @@ def rms_envelope(audio):
     return np.sqrt(np.maximum(power[::round(ENVELOPE_HOP_MS * RATE / 1000)], 0))
 
 
+def aligned_source_envelope(source, source_sample_start, clip_sample_count):
+    """Sample original-source RMS on the exact clip-anchored PCM grid.
+
+    Retain original signal context for RMS filtering, and use the original EOF
+    boundary. Every requested centre is an existing source sample. Never trim
+    or pad a mismatched window to make masks have equal sizes.
+    """
+    source = _signal(source)
+    if (not isinstance(source_sample_start, (int, np.integer))
+            or not isinstance(clip_sample_count, (int, np.integer))
+            or source_sample_start < 0 or clip_sample_count <= 0
+            or source_sample_start + clip_sample_count > len(source)):
+        raise ValueError('ALIGNED_SOURCE_PCM_WINDOW_OUT_OF_BOUNDS')
+    context = round(ENVELOPE_WINDOW_MS * RATE / 1000)
+    begin = max(0, source_sample_start - context)
+    end = min(len(source), source_sample_start + clip_sample_count + context)
+    power = uniform_filter1d(source[begin:end] ** 2, size=context, mode='constant')
+    positions = source_sample_start - begin + np.arange(0, clip_sample_count,
+                                                       round(ENVELOPE_HOP_MS * RATE / 1000))
+    return np.sqrt(np.maximum(power[positions], 0))
+
+
 def refine_envelope_match(source, clip, offset_ms, coarse):
     """Refine +/-2ms around the fixed-window peak at 8000Hz (0.125ms).
 
@@ -45,20 +67,33 @@ def refine_envelope_match(source, clip, offset_ms, coarse):
         return coarse
     center = round((offset_ms + coarse['best_lag_ms']) * RATE / 1000)
     margin = round(2 * RATE / 1000)
-    start, end = max(0, center - margin), min(len(source), center + len(clip) + margin)
-    context = round(ENVELOPE_WINDOW_MS * RATE / 1000)
-    context_start, context_end = max(0, start - context), min(len(source), end + context)
-    source_power = uniform_filter1d(source[context_start:context_end] ** 2, size=context, mode='constant')
-    source_feature = np.sqrt(np.maximum(source_power[start - context_start:end - context_start], 0))
-    clip_feature = np.sqrt(np.maximum(uniform_filter1d(clip ** 2, size=context, mode='constant'), 0))
-    refined = feature_match(source_feature, clip_feature, offset_ms - start * 1000 / RATE, 1000 / RATE)
-    if not refined['measured']:
-        return refined
-    refined['coarse_score'] = coarse['score']
-    refined['coarse_lag_ms'] = coarse['best_lag_ms']
-    refined['source_sample_start'] = start + refined.pop('source_feature_start')
-    refined['source_feature_start'] = round(refined['source_sample_start'] / (RATE * ENVELOPE_HOP_MS / 1000))
-    return refined
+    first, last = max(0, center - margin), min(len(source) - len(clip), center + margin)
+    size = round(ENVELOPE_WINDOW_MS * RATE / 1000)
+    clip_feature = np.sqrt(np.maximum(uniform_filter1d(clip ** 2, size=size, mode='constant'), 0))
+    centered_clip = clip_feature - np.mean(clip_feature)
+    clip_norm = float(np.linalg.norm(centered_clip))
+    if clip_norm <= 1e-15:
+        return {'measured': False, 'reason': 'constant_or_silent_envelope'}
+    best = None
+    for start in range(first, last + 1):
+        lag = start * 1000 / RATE - offset_ms
+        if abs(lag) > SEARCH_LIMIT_MS:
+            continue
+        # Both complete PCM windows use the SAME zero-boundary convention.
+        # No source samples are trimmed or invented to manufacture a match.
+        window = source[start:start + len(clip)]
+        feature = np.sqrt(np.maximum(uniform_filter1d(window ** 2, size=size, mode='constant'), 0))
+        centered_window = feature - np.mean(feature)
+        denominator = float(np.linalg.norm(centered_window) * clip_norm)
+        if denominator <= 1e-15:
+            continue
+        score = float(np.dot(centered_window, centered_clip) / denominator)
+        if best is None or score > best['score']:
+            best = {'measured': True, 'score': float(np.clip(score, -1, 1)), 'best_lag_ms': lag,
+                    'resolution_ms': 1000 / RATE, 'source_sample_start': start,
+                    'boundary_convention': 'zero_boundary_on_both_complete_PCM_windows',
+                    'coarse_score': coarse['score'], 'coarse_lag_ms': coarse['best_lag_ms']}
+    return best or {'measured': False, 'reason': 'no_complete_source_pcm_window_for_refinement'}
 
 
 def log_mel(audio, bands=32):
@@ -167,7 +202,21 @@ def additional_metrics(source, clip, offset_ms, duration_ms, segments, source_fe
     clip_envelope = rms_envelope(clip)
     envelope = feature_match(source_envelope, clip_envelope, offset_ms, ENVELOPE_HOP_MS)
     envelope = refine_envelope_match(source, clip, offset_ms, envelope)
-    mel = feature_match(source_mel, log_mel(clip), offset_ms, MEL_HOP_MS)
+    clip_mel = log_mel(clip)
+    coarse_mel = feature_match(source_mel, clip_mel, offset_ms, MEL_HOP_MS)
+    mel = {'measured': False, 'reason': 'envelope_position_unmeasured', 'coarse_search': coarse_mel}
+    if envelope.get('measured'):
+        start = envelope['source_sample_start']
+        exact_mel = log_mel(source[start:start + len(clip)])
+        centered_source = exact_mel - np.mean(exact_mel, axis=0)
+        centered_clip = clip_mel - np.mean(clip_mel, axis=0)
+        denominator = float(np.linalg.norm(centered_source) * np.linalg.norm(centered_clip))
+        if denominator > 1e-15:
+            score = float(np.sum(centered_source * centered_clip) / denominator)
+            mel = {'measured': True, 'score': float(np.clip(score, -1, 1)),
+                   'best_lag_ms': envelope['best_lag_ms'], 'source_sample_start': start,
+                   'method': 'fixed_complete_PCM_window_on_exact_clip_STFT_grid; zero_boundary_both_sides',
+                   'coarse_search': coarse_mel}
     duration_difference = abs(len(clip) * 1000 / RATE - duration_ms)
     result = {'envelope': envelope, 'log_mel': mel, 'duration_difference_ms': duration_difference,
               'v2_numeric_candidate': False, 'v2_adoption_requires_codec_identity_evidence': True,
@@ -175,8 +224,7 @@ def additional_metrics(source, clip, offset_ms, duration_ms, segments, source_fe
     if not envelope['measured']:
         result['vad']['reason'] = 'envelope_match_unavailable'
         return result
-    start = envelope['source_feature_start']
-    matched_envelope = source_envelope[start:start + len(clip_envelope)]
+    matched_envelope = aligned_source_envelope(source, envelope['source_sample_start'], len(clip))
     source_vad, source_threshold = energy_vad(matched_envelope)
     clip_vad, clip_threshold = energy_vad(clip_envelope)
     try:
@@ -214,6 +262,34 @@ def encoded_interior_identity(source_bytes, clip_bytes):
             'excluded_header_bytes': trim, 'excluded_trailer_bytes': trim,
             'matched_interior_fraction': len(interior) / len(clip_bytes) if position >= 0 else 0,
             'source_byte_position': position if position >= 0 else None}
+
+
+def interior_pcm_match(source, clip, source_sample_start):
+    """Fixed-position, direct Pearson on the diagnostic PCM interior only.
+
+    Exclude exactly 200ms from each end, require >=800ms remaining, and never
+    search for a better lag. This ties identity evidence to the source position
+    selected by the envelope metric. It neither recomputes nor repairs v1.
+    """
+    source, clip = _signal(source), _signal(clip)
+    trim = round(200 * RATE / 1000)
+    interior_count = len(clip) - 2 * trim
+    result = {'measured': False, 'trim_each_side_ms': 200, 'minimum_interior_duration_ms': 800,
+              'diagnosis_only': True, 'changes_v1_acceptance': False,
+              'source_sample_start': int(source_sample_start)}
+    if interior_count < round(800 * RATE / 1000):
+        return {**result, 'reason': 'insufficient_fixed_interior_duration'}
+    start, end = source_sample_start + trim, source_sample_start + len(clip) - trim
+    if start < 0 or end > len(source):
+        return {**result, 'reason': 'fixed_source_interior_out_of_bounds'}
+    reference, observed = source[start:end], clip[trim:-trim]
+    centered_reference, centered_observed = reference - np.mean(reference), observed - np.mean(observed)
+    denominator = float(np.linalg.norm(centered_reference) * np.linalg.norm(centered_observed))
+    if denominator <= 1e-15:
+        return {**result, 'reason': 'constant_or_silent_interior'}
+    score = float(np.dot(centered_reference, centered_observed) / denominator)
+    return {**result, 'measured': True, 'score': float(np.clip(score, -1, 1)),
+            'interior_duration_ms': interior_count * 1000 / RATE, 'passed': score >= .95}
 
 
 def drift_diagnostics(samples):
