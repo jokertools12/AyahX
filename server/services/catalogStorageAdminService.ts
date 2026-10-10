@@ -3,6 +3,7 @@ import { CatalogError, type CatalogDatabase, type CatalogRow, type CatalogTx } f
 import { appendCatalogAudit, requireCatalogPermission, type CatalogActor } from './catalogAudit';
 import { AUDIO_MULTIPART_PART_BYTES, licensedObjectKey, assertStorageSize, type AudioObjectStorage, type AudioObjectSpec, type LicensedAudioExtension, type StorageSignedCapability } from './catalogStorageContracts';
 import { verifyLicensedAudio, type LicensedOffsetVerifier } from './licensedAudioVerification';
+import type { SourceAyahTiming } from '../../shared/timing/toRenderTimeline';
 
 export interface StorageAdmission { consume(actorId: string, action: string): Promise<void> }
 export interface LicensedStorageHooks { enqueueVoiceReverification(tx: CatalogTx, recitationId: string, storageObjectId: string): Promise<void> }
@@ -71,9 +72,10 @@ export class CatalogStorageAdminService {
     requireCatalogPermission(actor, 'storage.verify'); const row = await this.object(this.db, id);
     if (row.upload_status !== 'uploaded') throw new CatalogError('STORAGE_UPLOAD_STATE_CHANGED', 409);
     await this.rights(this.db, String(row.rights_ref), String(row.recitation_id));
-    const [timing] = await this.db.read("SELECT MAX(w.end_ms) last_word_end_ms FROM ayah_timings t JOIN JSON_TABLE(t.words,'$[*]' COLUMNS(end_ms BIGINT PATH '$[3]')) w WHERE t.recitation_id=? AND t.surah=?", [row.recitation_id, row.surah]);
+    const rawTimings = await this.db.read('SELECT ayah,coordinate,source,source_offset_ms,words FROM ayah_timings WHERE recitation_id=? AND surah=? ORDER BY ayah', [row.recitation_id, row.surah]);
+    const timings = rawTimings.map(t => ({ ayah: Number(t.ayah), coordinate: String(t.coordinate), source: String(t.source), source_offset_ms: t.source_offset_ms === null ? null : Number(t.source_offset_ms), words: typeof t.words === 'string' ? JSON.parse(t.words) : t.words })) as SourceAyahTiming[];
     let result;
-    try { result = await verifyLicensedAudio(this.storage, { spec: this.spec(row), recitationId: String(row.recitation_id), surah: Number(row.surah), lastTimedWordEndMs: Number(timing?.last_word_end_ms), scratchRoot: this.scratchRoot }, this.offset); }
+    try { result = await verifyLicensedAudio(this.storage, { spec: this.spec(row), recitationId: String(row.recitation_id), surah: Number(row.surah), timings, scratchRoot: this.scratchRoot }, this.offset); }
     catch (error) {
       if (!(error instanceof CatalogError)) throw error;
       await this.db.transaction(async tx => { const current = await this.object(tx, id, true); if (current.upload_status !== 'uploaded') throw new CatalogError('STORAGE_UPLOAD_STATE_CHANGED', 409); await tx.execute("UPDATE storage_objects SET upload_status='rejected',rejection_reason=? WHERE id=?", [error.code, id]); await appendCatalogAudit(tx, actor, 'storage.verify_rejected', 'storage_object', id, { upload_status: 'uploaded' }, { upload_status: 'rejected', reason: error.code }); });

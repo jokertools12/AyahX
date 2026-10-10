@@ -8,6 +8,7 @@ import { pipeline } from 'node:stream/promises';
 import { CatalogError } from './catalogContracts';
 import { getFfprobeBinary } from './ffmpegBinary';
 import { assertStorageSize, type AudioObjectStorage, type AudioObjectSpec } from './catalogStorageContracts';
+import { toRenderTimeline, type SourceAyahTiming } from '../../shared/timing/toRenderTimeline';
 
 export interface ProbedAudio { durationMs: number; sampleRate: number; bitrate: number | null; channels: number; codec: string; contentType: string }
 export type OffsetSampleEvidence = { surah: number; ayah: number; chapterAyahCount: number; ncc: number; durationDifferenceMs: number; lagMs: number; vadAgreement?: number };
@@ -64,12 +65,12 @@ export async function probeLicensedAudio(file: string, magic: ReturnType<typeof 
   });
   try { return parseAudioProbe(JSON.parse(raw), magic); } catch (error) { if (error instanceof CatalogError) throw error; throw new CatalogError('AUDIO_PROBE_INVALID', 422); }
 }
-export interface LicensedVerificationInput { spec: AudioObjectSpec; recitationId: string; surah: number; lastTimedWordEndMs: number; scratchRoot: string }
+export interface LicensedVerificationInput { spec: AudioObjectSpec; recitationId: string; surah: number; timings: readonly SourceAyahTiming[]; scratchRoot: string }
 export interface LicensedVerificationResult extends ProbedAudio { sha256: string; sizeBytes: number; offset: LicensedOffsetEvidence; warnings: string[] }
 /** Bounded stream; a client checksum/HEAD/ETag can never grant verified status. */
 export async function verifyLicensedAudio(storage: AudioObjectStorage, input: LicensedVerificationInput, engine: LicensedOffsetVerifier): Promise<LicensedVerificationResult> {
   assertStorageSize(input.spec.sizeBytes);
-  if (!Number.isFinite(input.lastTimedWordEndMs) || input.lastTimedWordEndMs <= 0) throw new CatalogError('LICENSED_TIMINGS_UNAVAILABLE', 409);
+  if (!Array.isArray(input.timings) || !input.timings.length) throw new CatalogError('LICENSED_TIMINGS_UNAVAILABLE', 409);
   const head = await storage.head(input.spec.objectKey);
   if (!head || head.sizeBytes !== input.spec.sizeBytes) throw new CatalogError('AUDIO_UPLOAD_TRUNCATED', 422);
   await mkdir(input.scratchRoot, { recursive: true }); const root = await realpath(input.scratchRoot);
@@ -87,7 +88,9 @@ export async function verifyLicensedAudio(storage: AudioObjectStorage, input: Li
   const audio = await probeLicensedAudio(file, audioMagic(prefix));
   const offset = await engine.verify({ recitationId: input.recitationId, surah: input.surah, localPath: file, sha256 });
   assertLicensedOffsetEvidence(offset, input.recitationId, sha256, input.surah);
-  const lastWordInSourceMs = input.lastTimedWordEndMs + offset.sourceChapterOffsetMs;
+  let lastWordInSourceMs: number;
+  try { lastWordInSourceMs = toRenderTimeline(input.timings, { chapterOffsetMs: offset.sourceChapterOffsetMs, sourceFormat: 'qud_release', padMs: 0 }).sourceWindow.toMs; }
+  catch (error) { if (error instanceof Error && error.message.startsWith('TIMELINE_')) throw new CatalogError('LICENSED_TIMING_COORDINATES_INVALID', 409); throw error; }
   const warnings = Math.abs(audio.durationMs - lastWordInSourceMs) / lastWordInSourceMs > .05 ? ['DURATION_DIFFERS_FROM_LAST_WORD_OVER_5_PERCENT'] : [];
   // This task intentionally retains private scratch files: no filesystem cleanup
   // after the user's denial. Render lifecycle ownership/cleanup belongs to D8.

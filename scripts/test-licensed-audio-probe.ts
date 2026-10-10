@@ -16,7 +16,7 @@ const sha256 = createHash('sha256').update(wav).digest('hex'), probe = await pro
 if (probe.durationMs !== 1000 || probe.sampleRate !== 16000 || probe.channels !== 1 || probe.codec !== 'pcm_s16le') throw new Error('REAL_PROBE_EXPECTATION_FAILED');
 const fixture = { adapter: 'r2', bucket: 'fixture', head: async () => ({ sizeBytes: wav.length, contentType: 'audio/wav', etag: null }), read: async () => ({ body: Readable.from(wav), head: { sizeBytes: wav.length, contentType: 'audio/wav', etag: null } }) } as unknown as AudioObjectStorage;
 const spec = { objectKey: 'not-network-fixture', sizeBytes: wav.length, sha256, contentType: 'audio/wav' };
-const input = { spec, recitationId: 'not-a-real-recitation', surah: 1, lastTimedWordEndMs: 1000, scratchRoot: scratch };
+const input = { spec, recitationId: 'not-a-real-recitation', surah: 1, timings: [{ ayah: 1, coordinate: 'chapter_ms' as const, source: 'owned-synthetic-test-only', source_offset_ms: null, words: [[1, 0, 0, 1000] as [number, number, number, number]] }], scratchRoot: scratch };
 const engine = { verify: async (): Promise<LicensedOffsetEvidence> => { throw new CatalogError('OFFSET_ENGINE_UNAVAILABLE', 503); } };
 const rejection = async (work: () => Promise<unknown>): Promise<string> => { try { await work(); throw new Error('INVALID_AUDIO_ACCEPTED'); } catch (error) { if (!(error instanceof CatalogError)) throw error; return error.code; } };
 const wrongSha = await rejection(() => verifyLicensedAudio(fixture, { ...input, spec: { ...spec, sha256: 'b'.repeat(64) } }, engine));
