@@ -48,6 +48,11 @@ def fixture():
 
 
 class T7PreparationTests(unittest.TestCase):
+    def test_abbreviated_signed_query_keys_are_prohibited_before_lock(self):
+        for key in ('sig', 'api_key', 'apikey', 'api-key'):
+            with self.assertRaisesRegex(ValueError, 'PUBLIC_PERSISTENT'):
+                preparation.public_source('https://audio.example/source.mp3?' + key + '=fixture')
+
     def test_fixed_new_quintiles_distributed_over_three_different_observed_lengths(self):
         previous = {(1, 1), (2, 3), (3, 4)}
         selected = preparation.choose_samples(record('one'), metadata_rows(), previous)

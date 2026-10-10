@@ -34,7 +34,7 @@ def public_source(url):
     host = (parsed.hostname or '').lower()
     if (parsed.scheme != 'https' or parsed.username or parsed.password or parsed.fragment
             or host == 'youtu.be' or 'youtube' in host or host.endswith('.googlevideo.com')
-            or any(re.search(r'token|signature|credential|expires|x-amz|x-goog|policy', key, re.I)
+            or any(re.search(r'token|signature|credential|expires|x-amz|x-goog|policy|^sig$|^api[_-]?key$', key, re.I)
                    for key, _ in parse_qsl(parsed.query))):
         raise ValueError('PUBLIC_PERSISTENT_NON_YOUTUBE_SOURCE_REQUIRED')
     return url

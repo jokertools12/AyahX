@@ -16,7 +16,7 @@ import time
 import urllib.error
 
 from lib.t7_offset_execution import (AuditRequestUnavailable, SingleWindowTransport,
-    canonical, digest, download_once, evaluate_recitation, load_diagnostic_modules, measured_sample)
+    canonical, digest, download_once, evaluate_recitation, load_diagnostic_modules, measured_sample, validate_provider_hosts)
 from lib.acoustic_diagnostics import log_mel, rms_envelope
 from lib.hf_serial_ranges import safe_response_text
 
@@ -270,7 +270,7 @@ def main():
     parser.add_argument('--manifest', type=Path, required=True)
     parser.add_argument('--manifest-sha', required=True)
     parser.add_argument('--execute', action='store_true')
-    parser.add_argument('--approved-t0-t6', action='store_true')
+    parser.add_argument('--approved-t0-t6', '--approved-k2-k4', dest='approved_t0_t6', action='store_true')
     parser.add_argument('--source-hosts', type=Path)
     parser.add_argument('--source-hosts-sha')
     parser.add_argument('--hf-manifest', type=Path)
@@ -295,8 +295,7 @@ def main():
     if not args.ffmpeg.is_file():
         raise ValueError('EXISTING_FFMPEG_REQUIRED')
     hosts = checked_json(args.source_hosts, args.source_hosts_sha)
-    if (set(hosts) != set(manifest['results']) or any(not isinstance(value, list) or not value or
-            any(not isinstance(host, str) or not re.fullmatch(r'[a-z0-9.-]+', host) for host in value) for value in hosts.values())):
+    if set(hosts) != set(manifest['results']) or any(not validate_provider_hosts(value) for value in hosts.values()):
         raise ValueError('EXACT_AUDIO_PROVIDERS_HOST_SNAPSHOT_REQUIRED_FOR_ALL_LOCKED_CONFIGS')
     if bool(args.hf_manifest) != bool(args.hf_manifest_sha):
         raise ValueError('HF_MANIFEST_SHA_REQUIRED')

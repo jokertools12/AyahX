@@ -138,8 +138,27 @@ class TransportTests(unittest.TestCase):
                     'https://youtube.com/watch?v=test', 'https://127.0.0.1/file']:
             with self.assertRaises(AuditRequestUnavailable):
                 transport.validate_url(url)
+        for key in ['sig', 'api_key', 'apikey', 'api-key']:
+            with self.assertRaisesRegex(AuditRequestUnavailable, 'SIGNED_PROVIDER_SOURCE'):
+                transport.validate_url('https://audio.example/file?' + key + '=fixture')
         with self.assertRaisesRegex(ValueError, 'AUTHENTICATION'):
             transport.open('https://audio.example/file', headers={'Authorization': 'fixture'})
+
+    def test_only_audited_archive_suffix_and_maximum_five_redirects(self):
+        from lib.t7_offset_execution import provider_host_allowed, validate_provider_hosts
+        self.assertTrue(validate_provider_hosts(['archive.org', '*.us.archive.org', 'ia600123.ca.archive.org']))
+        self.assertFalse(validate_provider_hosts(['*.archive.org']))
+        self.assertTrue(provider_host_allowed('ia800123.us.archive.org', ['*.us.archive.org']))
+        for host in ['us.archive.org', 'evilarchive.org', 'us.archive.org.evil.example', 'ia800123.ca.archive.org']:
+            self.assertFalse(provider_host_allowed(host, ['*.us.archive.org']))
+        transport, _, _ = self.transport('source')
+        handler = next(row for row in transport.opener.handlers if type(row).__name__ == 'Redirect')
+        import urllib.request
+        request = urllib.request.Request('https://audio.example/first')
+        for index in range(5):
+            request = handler.redirect_request(request, None, 302, 'fixture', {}, f'https://audio.example/{index}')
+        with self.assertRaisesRegex(AuditRequestUnavailable, 'REDIRECT_LIMIT'):
+            handler.redirect_request(request, None, 302, 'fixture', {}, 'https://audio.example/sixth')
 
     def test_hf_windows_require_spacing_and_max_three(self):
         windows = []

@@ -7,11 +7,12 @@ import importlib.util
 import ipaddress
 import json
 import math
+import re
 from pathlib import Path
 import socket
 import threading
 import time
-from urllib.parse import urlparse
+from urllib.parse import parse_qsl, urlparse
 import urllib.error
 import urllib.request
 
@@ -23,6 +24,22 @@ from .hf_serial_ranges import safe_response_text
 
 RATE = 8000
 TRIM_MS = 300
+
+
+def provider_host_allowed(host, hosts):
+    """Only exact hosts and the audited Internet Archive US CDN namespace."""
+    hostname = host.lower()
+    return any(value.lower() == hostname or value == '*.us.archive.org'
+               and hostname.endswith('.us.archive.org') and hostname != 'us.archive.org'
+               for value in hosts)
+
+
+def validate_provider_hosts(hosts):
+    if not isinstance(hosts, list) or not hosts:
+        return False
+    return all(isinstance(host, str) and (host == '*.us.archive.org'
+               or re.fullmatch(r'[a-z0-9.-]+', host) is not None and '*' not in host)
+               for host in hosts)
 
 
 def digest(value):
@@ -173,9 +190,15 @@ class SingleWindowTransport:
 
         class Redirect(urllib.request.HTTPRedirectHandler):
             def redirect_request(self, request, fp, code, message, headers, new_url):
+                hops = getattr(request, 't7_redirect_hops', 0) + 1
+                if hops > 5:
+                    raise AuditRequestUnavailable('AUDIO_REDIRECT_LIMIT', transport.phase)
                 transport.validate_url(new_url)
                 transport.pace()
-                return super().redirect_request(request, fp, code, message, headers, new_url)
+                redirected = super().redirect_request(request, fp, code, message, headers, new_url)
+                if redirected is not None:
+                    redirected.t7_redirect_hops = hops
+                return redirected
 
         class PinnedConnection(http.client.HTTPSConnection):
             def connect(self):
@@ -203,7 +226,10 @@ class SingleWindowTransport:
             allowed = (host in ('datasets-server.huggingface.co', 'huggingface.co')
                        or host.endswith('.huggingface.co') or host.endswith('.hf.co'))
         else:
-            allowed = host in self.hosts
+            allowed = provider_host_allowed(host, self.hosts)
+            if any(re.search(r'token|signature|credential|expires|x-amz|x-goog|policy|^sig$|^api[_-]?key$', key, re.I)
+                   for key, _ in parse_qsl(parsed.query)):
+                raise AuditRequestUnavailable('SIGNED_PROVIDER_SOURCE_PROHIBITED', self.phase)
         if not allowed:
             raise AuditRequestUnavailable('AUDIO_HOST_NOT_ALLOWED', self.phase)
 
