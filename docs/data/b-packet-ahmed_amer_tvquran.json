@@ -1,0 +1,4227 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-10T02:40:18.522295+00:00",
+  "read_only": true,
+  "config": "ahmed_amer_tvquran",
+  "diagnosis_sha256": "87de277218b0c795763196a1826b2c7321772c0c6335994369d3e65c004998ce",
+  "ffprobe_version": "ffprobe version 4.0.2 Copyright (c) 2007-2018 the FFmpeg developers",
+  "analyzer_sha256": "755177d06e9ec7d592097ee7d0912067391fd59c6ddf12b81eba5af2140605f8",
+  "sources": {
+    "74": {
+      "sha256": "369e24f8ca6333631d73d67cc2d8cc171d779d27950e7cb0006cdaa21465c5af",
+      "packet_count": 13462,
+      "first_packet": {
+        "pts": 0,
+        "dts": 0,
+        "duration": 368640,
+        "size": "209",
+        "pos": "17208"
+      },
+      "last_packet": {
+        "pts": 4962263040,
+        "dts": 4962263040,
+        "duration": 368640,
+        "size": "209",
+        "pos": "2830282"
+      },
+      "stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 4962857004,
+        "duration": "351.676375",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "first_packet_skip_samples": 0,
+      "generated_frame_clock_contiguous_from_file_start": true
+    },
+    "85": {
+      "sha256": "0b385af723a4f18a3f81e5fb7ffab3ea3e72fb3537a3c050f621a00a4511c299",
+      "packet_count": 4943,
+      "first_packet": {
+        "pts": 0,
+        "dts": 0,
+        "duration": 368640,
+        "size": "209",
+        "pos": "17202"
+      },
+      "last_packet": {
+        "pts": 1821818880,
+        "dts": 1821818880,
+        "duration": 368640,
+        "size": "209",
+        "pos": "1049979"
+      },
+      "stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 1822413096,
+        "duration": "129.139250",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "first_packet_skip_samples": 0,
+      "generated_frame_clock_contiguous_from_file_start": true
+    },
+    "97": {
+      "sha256": "f1a744803d269f144b1fef46be1a67ba345d4472fbbcda1923a09072761eecb0",
+      "packet_count": 1329,
+      "first_packet": {
+        "pts": 0,
+        "dts": 0,
+        "duration": 368640,
+        "size": "209",
+        "pos": "17201"
+      },
+      "last_packet": {
+        "pts": 489553920,
+        "dts": 489553920,
+        "duration": 368640,
+        "size": "209",
+        "pos": "294726"
+      },
+      "stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 490148568,
+        "duration": "34.732750",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "first_packet_skip_samples": 0,
+      "generated_frame_clock_contiguous_from_file_start": true
+    }
+  },
+  "samples": [
+    {
+      "surah": 74,
+      "ayah": 1,
+      "source_offset_ms": 4206,
+      "hf_duration_ms": 3834,
+      "hf_audio_sha256": "563ecd9b558d7f5a7cd5875f379d6c4a54117d6f5e285b06436b7d90f1443163",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 54190080,
+        "duration": "3.840000",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": -0.25,
+      "retained_interior_pcm_score": 0.9914110174745261,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 50854,
+        "encoded_interior_bytes": 28672,
+        "complete_interior_packets_checked": 137,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 51878,
+            "source_packet_index": 165,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 60825600,
+              "dts": 60825600,
+              "duration": 368640,
+              "size": "209",
+              "pos": "51690"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 211200,
+              "denominator": 49,
+              "value": 4310.2040816326535
+            },
+            "source_packet_end_ms": {
+              "numerator": 212480,
+              "denominator": 49,
+              "value": 4336.326530612245
+            },
+            "packet_shift_ms": {
+              "numerator": 29440,
+              "denominator": 7,
+              "value": 4205.714285714285
+            }
+          },
+          {
+            "clip_byte_position": 8192,
+            "source_byte_position": 59046,
+            "source_packet_index": 200,
+            "clip_packet_index": 39,
+            "source_packet": {
+              "pts": 73728000,
+              "dts": 73728000,
+              "duration": 368640,
+              "size": "209",
+              "pos": "59004"
+            },
+            "clip_packet": {
+              "pts": 14376960,
+              "dts": 14376960,
+              "duration": 368640,
+              "size": "209",
+              "pos": "8150"
+            },
+            "intra_packet_byte_position": 42,
+            "source_packet_start_ms": {
+              "numerator": 256000,
+              "denominator": 49,
+              "value": 5224.489795918367
+            },
+            "source_packet_end_ms": {
+              "numerator": 257280,
+              "denominator": 49,
+              "value": 5250.6122448979595
+            },
+            "packet_shift_ms": {
+              "numerator": 29440,
+              "denominator": 7,
+              "value": 4205.714285714285
+            }
+          },
+          {
+            "clip_byte_position": 15360,
+            "source_byte_position": 66214,
+            "source_packet_index": 234,
+            "clip_packet_index": 73,
+            "source_packet": {
+              "pts": 86261760,
+              "dts": 86261760,
+              "duration": 368640,
+              "size": "209",
+              "pos": "66109"
+            },
+            "clip_packet": {
+              "pts": 26910720,
+              "dts": 26910720,
+              "duration": 368640,
+              "size": "209",
+              "pos": "15255"
+            },
+            "intra_packet_byte_position": 105,
+            "source_packet_start_ms": {
+              "numerator": 299520,
+              "denominator": 49,
+              "value": 6112.65306122449
+            },
+            "source_packet_end_ms": {
+              "numerator": 300800,
+              "denominator": 49,
+              "value": 6138.775510204082
+            },
+            "packet_shift_ms": {
+              "numerator": 29440,
+              "denominator": 7,
+              "value": 4205.714285714285
+            }
+          },
+          {
+            "clip_byte_position": 22528,
+            "source_byte_position": 73382,
+            "source_packet_index": 268,
+            "clip_packet_index": 107,
+            "source_packet": {
+              "pts": 98795520,
+              "dts": 98795520,
+              "duration": 368640,
+              "size": "209",
+              "pos": "73215"
+            },
+            "clip_packet": {
+              "pts": 39444480,
+              "dts": 39444480,
+              "duration": 368640,
+              "size": "209",
+              "pos": "22361"
+            },
+            "intra_packet_byte_position": 167,
+            "source_packet_start_ms": {
+              "numerator": 343040,
+              "denominator": 49,
+              "value": 7000.816326530612
+            },
+            "source_packet_end_ms": {
+              "numerator": 344320,
+              "denominator": 49,
+              "value": 7026.938775510204
+            },
+            "packet_shift_ms": {
+              "numerator": 29440,
+              "denominator": 7,
+              "value": 4205.714285714285
+            }
+          },
+          {
+            "clip_byte_position": 29695,
+            "source_byte_position": 80549,
+            "source_packet_index": 303,
+            "clip_packet_index": 142,
+            "source_packet": {
+              "pts": 111697920,
+              "dts": 111697920,
+              "duration": 368640,
+              "size": "209",
+              "pos": "80529"
+            },
+            "clip_packet": {
+              "pts": 52346880,
+              "dts": 52346880,
+              "duration": 368640,
+              "size": "209",
+              "pos": "29675"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 387840,
+              "denominator": 49,
+              "value": 7915.102040816327
+            },
+            "source_packet_end_ms": {
+              "numerator": 389120,
+              "denominator": 49,
+              "value": 7941.224489795918
+            },
+            "packet_shift_ms": {
+              "numerator": 29440,
+              "denominator": 7,
+              "value": 4205.714285714285
+            }
+          }
+        ],
+        "first_source_packet_index": 161,
+        "first_source_packet": {
+          "pts": 59351040,
+          "dts": 59351040,
+          "duration": 368640,
+          "size": "209",
+          "pos": "50854"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 29440,
+          "denominator": 7,
+          "value": 4205.714285714285
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": -2,
+          "denominator": 7,
+          "value": -0.2857142857142857
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 29440,
+          "denominator": 7,
+          "value": 4205.714285714285
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": -2,
+          "denominator": 7,
+          "value": -0.2857142857142857
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 74,
+      "ayah": 15,
+      "source_offset_ms": 60447,
+      "hf_duration_ms": 4661,
+      "hf_audio_sha256": "b46cbb4baa3aafe87ac7818d712481c945b1257e939070846757ca3776c4a08c",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 65985948,
+        "duration": "4.675875",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": 0.375,
+      "retained_interior_pcm_score": 0.9933964458811867,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 500787,
+        "encoded_interior_bytes": 35359,
+        "complete_interior_packets_checked": 169,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 501811,
+            "source_packet_index": 2318,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 854507520,
+              "dts": 854507520,
+              "duration": 368640,
+              "size": "209",
+              "pos": "501623"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 2967040,
+              "denominator": 49,
+              "value": 60551.836734693876
+            },
+            "source_packet_end_ms": {
+              "numerator": 2968320,
+              "denominator": 49,
+              "value": 60577.95918367347
+            },
+            "packet_shift_ms": {
+              "numerator": 2961920,
+              "denominator": 49,
+              "value": 60447.34693877551
+            }
+          },
+          {
+            "clip_byte_position": 9863,
+            "source_byte_position": 510650,
+            "source_packet_index": 2361,
+            "clip_packet_index": 47,
+            "source_packet": {
+              "pts": 870359040,
+              "dts": 870359040,
+              "duration": 368640,
+              "size": "209",
+              "pos": "510609"
+            },
+            "clip_packet": {
+              "pts": 17326080,
+              "dts": 17326080,
+              "duration": 368640,
+              "size": "209",
+              "pos": "9822"
+            },
+            "intra_packet_byte_position": 41,
+            "source_packet_start_ms": {
+              "numerator": 3022080,
+              "denominator": 49,
+              "value": 61675.102040816324
+            },
+            "source_packet_end_ms": {
+              "numerator": 3023360,
+              "denominator": 49,
+              "value": 61701.22448979592
+            },
+            "packet_shift_ms": {
+              "numerator": 2961920,
+              "denominator": 49,
+              "value": 60447.34693877551
+            }
+          },
+          {
+            "clip_byte_position": 18703,
+            "source_byte_position": 519490,
+            "source_packet_index": 2403,
+            "clip_packet_index": 89,
+            "source_packet": {
+              "pts": 885841920,
+              "dts": 885841920,
+              "duration": 368640,
+              "size": "209",
+              "pos": "519386"
+            },
+            "clip_packet": {
+              "pts": 32808960,
+              "dts": 32808960,
+              "duration": 368640,
+              "size": "209",
+              "pos": "18599"
+            },
+            "intra_packet_byte_position": 104,
+            "source_packet_start_ms": {
+              "numerator": 3075840,
+              "denominator": 49,
+              "value": 62772.244897959186
+            },
+            "source_packet_end_ms": {
+              "numerator": 3077120,
+              "denominator": 49,
+              "value": 62798.36734693877
+            },
+            "packet_shift_ms": {
+              "numerator": 2961920,
+              "denominator": 49,
+              "value": 60447.34693877551
+            }
+          },
+          {
+            "clip_byte_position": 27543,
+            "source_byte_position": 528330,
+            "source_packet_index": 2445,
+            "clip_packet_index": 131,
+            "source_packet": {
+              "pts": 901324800,
+              "dts": 901324800,
+              "duration": 368640,
+              "size": "209",
+              "pos": "528163"
+            },
+            "clip_packet": {
+              "pts": 48291840,
+              "dts": 48291840,
+              "duration": 368640,
+              "size": "209",
+              "pos": "27376"
+            },
+            "intra_packet_byte_position": 167,
+            "source_packet_start_ms": {
+              "numerator": 3129600,
+              "denominator": 49,
+              "value": 63869.38775510204
+            },
+            "source_packet_end_ms": {
+              "numerator": 3130880,
+              "denominator": 49,
+              "value": 63895.510204081635
+            },
+            "packet_shift_ms": {
+              "numerator": 2961920,
+              "denominator": 49,
+              "value": 60447.34693877551
+            }
+          },
+          {
+            "clip_byte_position": 36382,
+            "source_byte_position": 537169,
+            "source_packet_index": 2488,
+            "clip_packet_index": 174,
+            "source_packet": {
+              "pts": 917176320,
+              "dts": 917176320,
+              "duration": 368640,
+              "size": "209",
+              "pos": "537149"
+            },
+            "clip_packet": {
+              "pts": 64143360,
+              "dts": 64143360,
+              "duration": 368640,
+              "size": "209",
+              "pos": "36362"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 3184640,
+              "denominator": 49,
+              "value": 64992.65306122449
+            },
+            "source_packet_end_ms": {
+              "numerator": 3185920,
+              "denominator": 49,
+              "value": 65018.77551020408
+            },
+            "packet_shift_ms": {
+              "numerator": 2961920,
+              "denominator": 49,
+              "value": 60447.34693877551
+            }
+          }
+        ],
+        "first_source_packet_index": 2314,
+        "first_source_packet": {
+          "pts": 853032960,
+          "dts": 853032960,
+          "duration": 368640,
+          "size": "209",
+          "pos": "500787"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 2961920,
+          "denominator": 49,
+          "value": 60447.34693877551
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": 17,
+          "denominator": 49,
+          "value": 0.3469387755102041
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 2961920,
+          "denominator": 49,
+          "value": 60447.34693877551
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": 17,
+          "denominator": 49,
+          "value": 0.3469387755102041
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 74,
+      "ayah": 29,
+      "source_offset_ms": 122436,
+      "hf_duration_ms": 3452,
+      "hf_audio_sha256": "ae42e982886dd71e348951860f6955815dce587fd607ef7ccd48504ea5b373d0",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 49030380,
+        "duration": "3.474375",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": -0.125,
+      "retained_interior_pcm_score": 0.9828729675103681,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 996695,
+        "encoded_interior_bytes": 25747,
+        "complete_interior_packets_checked": 123,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 997719,
+            "source_packet_index": 4691,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 1729290240,
+              "dts": 1729290240,
+              "duration": 368640,
+              "size": "209",
+              "pos": "997531"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 6004480,
+              "denominator": 49,
+              "value": 122540.40816326531
+            },
+            "source_packet_end_ms": {
+              "numerator": 6005760,
+              "denominator": 49,
+              "value": 122566.5306122449
+            },
+            "packet_shift_ms": {
+              "numerator": 5999360,
+              "denominator": 49,
+              "value": 122435.91836734694
+            }
+          },
+          {
+            "clip_byte_position": 7460,
+            "source_byte_position": 1004155,
+            "source_packet_index": 4722,
+            "clip_packet_index": 35,
+            "source_packet": {
+              "pts": 1740718080,
+              "dts": 1740718080,
+              "duration": 368640,
+              "size": "209",
+              "pos": "1004010"
+            },
+            "clip_packet": {
+              "pts": 12902400,
+              "dts": 12902400,
+              "duration": 368640,
+              "size": "209",
+              "pos": "7315"
+            },
+            "intra_packet_byte_position": 145,
+            "source_packet_start_ms": {
+              "numerator": 6044160,
+              "denominator": 49,
+              "value": 123350.20408163265
+            },
+            "source_packet_end_ms": {
+              "numerator": 6045440,
+              "denominator": 49,
+              "value": 123376.32653061225
+            },
+            "packet_shift_ms": {
+              "numerator": 5999360,
+              "denominator": 49,
+              "value": 122435.91836734694
+            }
+          },
+          {
+            "clip_byte_position": 13897,
+            "source_byte_position": 1010592,
+            "source_packet_index": 4753,
+            "clip_packet_index": 66,
+            "source_packet": {
+              "pts": 1752145920,
+              "dts": 1752145920,
+              "duration": 368640,
+              "size": "209",
+              "pos": "1010488"
+            },
+            "clip_packet": {
+              "pts": 24330240,
+              "dts": 24330240,
+              "duration": 368640,
+              "size": "209",
+              "pos": "13793"
+            },
+            "intra_packet_byte_position": 104,
+            "source_packet_start_ms": {
+              "numerator": 124160,
+              "denominator": 1,
+              "value": 124160.0
+            },
+            "source_packet_end_ms": {
+              "numerator": 6085120,
+              "denominator": 49,
+              "value": 124186.12244897959
+            },
+            "packet_shift_ms": {
+              "numerator": 5999360,
+              "denominator": 49,
+              "value": 122435.91836734694
+            }
+          },
+          {
+            "clip_byte_position": 20334,
+            "source_byte_position": 1017029,
+            "source_packet_index": 4784,
+            "clip_packet_index": 97,
+            "source_packet": {
+              "pts": 1763573760,
+              "dts": 1763573760,
+              "duration": 368640,
+              "size": "209",
+              "pos": "1016966"
+            },
+            "clip_packet": {
+              "pts": 35758080,
+              "dts": 35758080,
+              "duration": 368640,
+              "size": "209",
+              "pos": "20271"
+            },
+            "intra_packet_byte_position": 63,
+            "source_packet_start_ms": {
+              "numerator": 6123520,
+              "denominator": 49,
+              "value": 124969.79591836735
+            },
+            "source_packet_end_ms": {
+              "numerator": 6124800,
+              "denominator": 49,
+              "value": 124995.91836734694
+            },
+            "packet_shift_ms": {
+              "numerator": 5999360,
+              "denominator": 49,
+              "value": 122435.91836734694
+            }
+          },
+          {
+            "clip_byte_position": 26770,
+            "source_byte_position": 1023465,
+            "source_packet_index": 4815,
+            "clip_packet_index": 128,
+            "source_packet": {
+              "pts": 1775001600,
+              "dts": 1775001600,
+              "duration": 368640,
+              "size": "209",
+              "pos": "1023445"
+            },
+            "clip_packet": {
+              "pts": 47185920,
+              "dts": 47185920,
+              "duration": 368640,
+              "size": "209",
+              "pos": "26750"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 6163200,
+              "denominator": 49,
+              "value": 125779.59183673469
+            },
+            "source_packet_end_ms": {
+              "numerator": 880640,
+              "denominator": 7,
+              "value": 125805.71428571429
+            },
+            "packet_shift_ms": {
+              "numerator": 5999360,
+              "denominator": 49,
+              "value": 122435.91836734694
+            }
+          }
+        ],
+        "first_source_packet_index": 4687,
+        "first_source_packet": {
+          "pts": 1727815680,
+          "dts": 1727815680,
+          "duration": 368640,
+          "size": "209",
+          "pos": "996695"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 5999360,
+          "denominator": 49,
+          "value": 122435.91836734694
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": -4,
+          "denominator": 49,
+          "value": -0.08163265306122448
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 5999360,
+          "denominator": 49,
+          "value": 122435.91836734694
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": -4,
+          "denominator": 49,
+          "value": -0.08163265306122448
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 74,
+      "ayah": 42,
+      "source_offset_ms": 259788,
+      "hf_duration_ms": 3907,
+      "hf_audio_sha256": "9babc5d9e4805a31dbe5ddcfb82b190a0dba1cb239d66cfd7d259b8eaefadbf1",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 55296108,
+        "duration": "3.918375",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": -0.25,
+      "retained_interior_pcm_score": 0.9997962164289015,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 2095510,
+        "encoded_interior_bytes": 29299,
+        "complete_interior_packets_checked": 140,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 2096534,
+            "source_packet_index": 9949,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 3667599360,
+              "dts": 3667599360,
+              "duration": 368640,
+              "size": "209",
+              "pos": "2096346"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 12734720,
+              "denominator": 49,
+              "value": 259892.24489795917
+            },
+            "source_packet_end_ms": {
+              "numerator": 12736000,
+              "denominator": 49,
+              "value": 259918.3673469388
+            },
+            "packet_shift_ms": {
+              "numerator": 12729600,
+              "denominator": 49,
+              "value": 259787.75510204083
+            }
+          },
+          {
+            "clip_byte_position": 8348,
+            "source_byte_position": 2103858,
+            "source_packet_index": 9984,
+            "clip_packet_index": 39,
+            "source_packet": {
+              "pts": 3680501760,
+              "dts": 3680501760,
+              "duration": 368640,
+              "size": "209",
+              "pos": "2103660"
+            },
+            "clip_packet": {
+              "pts": 14376960,
+              "dts": 14376960,
+              "duration": 368640,
+              "size": "209",
+              "pos": "8150"
+            },
+            "intra_packet_byte_position": 198,
+            "source_packet_start_ms": {
+              "numerator": 12779520,
+              "denominator": 49,
+              "value": 260806.5306122449
+            },
+            "source_packet_end_ms": {
+              "numerator": 12780800,
+              "denominator": 49,
+              "value": 260832.6530612245
+            },
+            "packet_shift_ms": {
+              "numerator": 12729600,
+              "denominator": 49,
+              "value": 259787.75510204083
+            }
+          },
+          {
+            "clip_byte_position": 15673,
+            "source_byte_position": 2111183,
+            "source_packet_index": 10019,
+            "clip_packet_index": 74,
+            "source_packet": {
+              "pts": 3693404160,
+              "dts": 3693404160,
+              "duration": 368640,
+              "size": "209",
+              "pos": "2110975"
+            },
+            "clip_packet": {
+              "pts": 27279360,
+              "dts": 27279360,
+              "duration": 368640,
+              "size": "209",
+              "pos": "15465"
+            },
+            "intra_packet_byte_position": 208,
+            "source_packet_start_ms": {
+              "numerator": 12824320,
+              "denominator": 49,
+              "value": 261720.81632653062
+            },
+            "source_packet_end_ms": {
+              "numerator": 12825600,
+              "denominator": 49,
+              "value": 261746.9387755102
+            },
+            "packet_shift_ms": {
+              "numerator": 12729600,
+              "denominator": 49,
+              "value": 259787.75510204083
+            }
+          },
+          {
+            "clip_byte_position": 22998,
+            "source_byte_position": 2118508,
+            "source_packet_index": 10055,
+            "clip_packet_index": 110,
+            "source_packet": {
+              "pts": 3706675200,
+              "dts": 3706675200,
+              "duration": 368640,
+              "size": "209",
+              "pos": "2118498"
+            },
+            "clip_packet": {
+              "pts": 40550400,
+              "dts": 40550400,
+              "duration": 368640,
+              "size": "209",
+              "pos": "22988"
+            },
+            "intra_packet_byte_position": 10,
+            "source_packet_start_ms": {
+              "numerator": 12870400,
+              "denominator": 49,
+              "value": 262661.2244897959
+            },
+            "source_packet_end_ms": {
+              "numerator": 12871680,
+              "denominator": 49,
+              "value": 262687.3469387755
+            },
+            "packet_shift_ms": {
+              "numerator": 12729600,
+              "denominator": 49,
+              "value": 259787.75510204083
+            }
+          },
+          {
+            "clip_byte_position": 30322,
+            "source_byte_position": 2125832,
+            "source_packet_index": 10090,
+            "clip_packet_index": 145,
+            "source_packet": {
+              "pts": 3719577600,
+              "dts": 3719577600,
+              "duration": 368640,
+              "size": "209",
+              "pos": "2125812"
+            },
+            "clip_packet": {
+              "pts": 53452800,
+              "dts": 53452800,
+              "duration": 368640,
+              "size": "209",
+              "pos": "30302"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 12915200,
+              "denominator": 49,
+              "value": 263575.51020408166
+            },
+            "source_packet_end_ms": {
+              "numerator": 12916480,
+              "denominator": 49,
+              "value": 263601.63265306124
+            },
+            "packet_shift_ms": {
+              "numerator": 12729600,
+              "denominator": 49,
+              "value": 259787.75510204083
+            }
+          }
+        ],
+        "first_source_packet_index": 9945,
+        "first_source_packet": {
+          "pts": 3666124800,
+          "dts": 3666124800,
+          "duration": 368640,
+          "size": "209",
+          "pos": "2095510"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 12729600,
+          "denominator": 49,
+          "value": 259787.75510204083
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": -12,
+          "denominator": 49,
+          "value": -0.24489795918367346
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 12729600,
+          "denominator": 49,
+          "value": 259787.75510204083
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": -12,
+          "denominator": 49,
+          "value": -0.24489795918367346
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 74,
+      "ayah": 56,
+      "source_offset_ms": 337319,
+      "hf_duration_ms": 13896,
+      "hf_audio_sha256": "7a51c46b9f37c6c192260a3ca3e0fd3feb6dec7e494bcdd929aa6b513d90a2cc",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 196117992,
+        "duration": "13.897250",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": 0.125,
+      "retained_interior_pcm_score": 0.9737782740617025,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 2715761,
+        "encoded_interior_bytes": 109130,
+        "complete_interior_packets_checked": 522,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 2716785,
+            "source_packet_index": 12917,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 4761722880,
+              "dts": 4761722880,
+              "duration": 368640,
+              "size": "209",
+              "pos": "2716597"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 16533760,
+              "denominator": 49,
+              "value": 337423.67346938775
+            },
+            "source_packet_end_ms": {
+              "numerator": 16535040,
+              "denominator": 49,
+              "value": 337449.79591836734
+            },
+            "packet_shift_ms": {
+              "numerator": 16528640,
+              "denominator": 49,
+              "value": 337319.1836734694
+            }
+          },
+          {
+            "clip_byte_position": 28306,
+            "source_byte_position": 2744067,
+            "source_packet_index": 13048,
+            "clip_packet_index": 135,
+            "source_packet": {
+              "pts": 4810014720,
+              "dts": 4810014720,
+              "duration": 368640,
+              "size": "209",
+              "pos": "2743974"
+            },
+            "clip_packet": {
+              "pts": 49766400,
+              "dts": 49766400,
+              "duration": 368640,
+              "size": "209",
+              "pos": "28213"
+            },
+            "intra_packet_byte_position": 93,
+            "source_packet_start_ms": {
+              "numerator": 2385920,
+              "denominator": 7,
+              "value": 340845.71428571426
+            },
+            "source_packet_end_ms": {
+              "numerator": 16702720,
+              "denominator": 49,
+              "value": 340871.8367346939
+            },
+            "packet_shift_ms": {
+              "numerator": 16528640,
+              "denominator": 49,
+              "value": 337319.1836734694
+            }
+          },
+          {
+            "clip_byte_position": 55589,
+            "source_byte_position": 2771350,
+            "source_packet_index": 13179,
+            "clip_packet_index": 266,
+            "source_packet": {
+              "pts": 4858306560,
+              "dts": 4858306560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "2771350"
+            },
+            "clip_packet": {
+              "pts": 98058240,
+              "dts": 98058240,
+              "duration": 368640,
+              "size": "209",
+              "pos": "55589"
+            },
+            "intra_packet_byte_position": 0,
+            "source_packet_start_ms": {
+              "numerator": 16869120,
+              "denominator": 49,
+              "value": 344267.7551020408
+            },
+            "source_packet_end_ms": {
+              "numerator": 16870400,
+              "denominator": 49,
+              "value": 344293.8775510204
+            },
+            "packet_shift_ms": {
+              "numerator": 16528640,
+              "denominator": 49,
+              "value": 337319.1836734694
+            }
+          },
+          {
+            "clip_byte_position": 82871,
+            "source_byte_position": 2798632,
+            "source_packet_index": 13309,
+            "clip_packet_index": 396,
+            "source_packet": {
+              "pts": 4906229760,
+              "dts": 4906229760,
+              "duration": 368640,
+              "size": "209",
+              "pos": "2798517"
+            },
+            "clip_packet": {
+              "pts": 145981440,
+              "dts": 145981440,
+              "duration": 368640,
+              "size": "209",
+              "pos": "82756"
+            },
+            "intra_packet_byte_position": 115,
+            "source_packet_start_ms": {
+              "numerator": 17035520,
+              "denominator": 49,
+              "value": 347663.67346938775
+            },
+            "source_packet_end_ms": {
+              "numerator": 17036800,
+              "denominator": 49,
+              "value": 347689.79591836734
+            },
+            "packet_shift_ms": {
+              "numerator": 16528640,
+              "denominator": 49,
+              "value": 337319.1836734694
+            }
+          },
+          {
+            "clip_byte_position": 110153,
+            "source_byte_position": 2825914,
+            "source_packet_index": 13440,
+            "clip_packet_index": 527,
+            "source_packet": {
+              "pts": 4954521600,
+              "dts": 4954521600,
+              "duration": 368640,
+              "size": "209",
+              "pos": "2825894"
+            },
+            "clip_packet": {
+              "pts": 194273280,
+              "dts": 194273280,
+              "duration": 368640,
+              "size": "209",
+              "pos": "110133"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 2457600,
+              "denominator": 7,
+              "value": 351085.71428571426
+            },
+            "source_packet_end_ms": {
+              "numerator": 17204480,
+              "denominator": 49,
+              "value": 351111.8367346939
+            },
+            "packet_shift_ms": {
+              "numerator": 16528640,
+              "denominator": 49,
+              "value": 337319.1836734694
+            }
+          }
+        ],
+        "first_source_packet_index": 12913,
+        "first_source_packet": {
+          "pts": 4760248320,
+          "dts": 4760248320,
+          "duration": 368640,
+          "size": "209",
+          "pos": "2715761"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 16528640,
+          "denominator": 49,
+          "value": 337319.1836734694
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": 9,
+          "denominator": 49,
+          "value": 0.1836734693877551
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 16528640,
+          "denominator": 49,
+          "value": 337319.1836734694
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": 9,
+          "denominator": 49,
+          "value": 0.1836734693877551
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 85,
+      "ayah": 1,
+      "source_offset_ms": 5329,
+      "hf_duration_ms": 4623,
+      "hf_audio_sha256": "aa639dba4ba504b9f88c3cd1d1871a21426d30d421bfafbe90eccc249864e56a",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 65248596,
+        "duration": "4.623625",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": 0.0,
+      "retained_interior_pcm_score": 0.9971053751588793,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 59834,
+        "encoded_interior_bytes": 34941,
+        "complete_interior_packets_checked": 167,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 60858,
+            "source_packet_index": 208,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 76677120,
+              "dts": 76677120,
+              "duration": 368640,
+              "size": "209",
+              "pos": "60670"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 266240,
+              "denominator": 49,
+              "value": 5433.469387755102
+            },
+            "source_packet_end_ms": {
+              "numerator": 267520,
+              "denominator": 49,
+              "value": 5459.591836734694
+            },
+            "packet_shift_ms": {
+              "numerator": 261120,
+              "denominator": 49,
+              "value": 5328.9795918367345
+            }
+          },
+          {
+            "clip_byte_position": 9759,
+            "source_byte_position": 69593,
+            "source_packet_index": 250,
+            "clip_packet_index": 46,
+            "source_packet": {
+              "pts": 92160000,
+              "dts": 92160000,
+              "duration": 368640,
+              "size": "209",
+              "pos": "69447"
+            },
+            "clip_packet": {
+              "pts": 16957440,
+              "dts": 16957440,
+              "duration": 368640,
+              "size": "209",
+              "pos": "9613"
+            },
+            "intra_packet_byte_position": 146,
+            "source_packet_start_ms": {
+              "numerator": 320000,
+              "denominator": 49,
+              "value": 6530.6122448979595
+            },
+            "source_packet_end_ms": {
+              "numerator": 321280,
+              "denominator": 49,
+              "value": 6556.734693877551
+            },
+            "packet_shift_ms": {
+              "numerator": 261120,
+              "denominator": 49,
+              "value": 5328.9795918367345
+            }
+          },
+          {
+            "clip_byte_position": 18494,
+            "source_byte_position": 78328,
+            "source_packet_index": 292,
+            "clip_packet_index": 88,
+            "source_packet": {
+              "pts": 107642880,
+              "dts": 107642880,
+              "duration": 368640,
+              "size": "209",
+              "pos": "78224"
+            },
+            "clip_packet": {
+              "pts": 32440320,
+              "dts": 32440320,
+              "duration": 368640,
+              "size": "209",
+              "pos": "18390"
+            },
+            "intra_packet_byte_position": 104,
+            "source_packet_start_ms": {
+              "numerator": 373760,
+              "denominator": 49,
+              "value": 7627.755102040816
+            },
+            "source_packet_end_ms": {
+              "numerator": 375040,
+              "denominator": 49,
+              "value": 7653.877551020408
+            },
+            "packet_shift_ms": {
+              "numerator": 261120,
+              "denominator": 49,
+              "value": 5328.9795918367345
+            }
+          },
+          {
+            "clip_byte_position": 27229,
+            "source_byte_position": 87063,
+            "source_packet_index": 334,
+            "clip_packet_index": 130,
+            "source_packet": {
+              "pts": 123125760,
+              "dts": 123125760,
+              "duration": 368640,
+              "size": "209",
+              "pos": "87001"
+            },
+            "clip_packet": {
+              "pts": 47923200,
+              "dts": 47923200,
+              "duration": 368640,
+              "size": "209",
+              "pos": "27167"
+            },
+            "intra_packet_byte_position": 62,
+            "source_packet_start_ms": {
+              "numerator": 427520,
+              "denominator": 49,
+              "value": 8724.897959183674
+            },
+            "source_packet_end_ms": {
+              "numerator": 428800,
+              "denominator": 49,
+              "value": 8751.020408163266
+            },
+            "packet_shift_ms": {
+              "numerator": 261120,
+              "denominator": 49,
+              "value": 5328.9795918367345
+            }
+          },
+          {
+            "clip_byte_position": 35964,
+            "source_byte_position": 95798,
+            "source_packet_index": 376,
+            "clip_packet_index": 172,
+            "source_packet": {
+              "pts": 138608640,
+              "dts": 138608640,
+              "duration": 368640,
+              "size": "209",
+              "pos": "95778"
+            },
+            "clip_packet": {
+              "pts": 63406080,
+              "dts": 63406080,
+              "duration": 368640,
+              "size": "209",
+              "pos": "35944"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 481280,
+              "denominator": 49,
+              "value": 9822.040816326531
+            },
+            "source_packet_end_ms": {
+              "numerator": 482560,
+              "denominator": 49,
+              "value": 9848.163265306122
+            },
+            "packet_shift_ms": {
+              "numerator": 261120,
+              "denominator": 49,
+              "value": 5328.9795918367345
+            }
+          }
+        ],
+        "first_source_packet_index": 204,
+        "first_source_packet": {
+          "pts": 75202560,
+          "dts": 75202560,
+          "duration": 368640,
+          "size": "209",
+          "pos": "59834"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 261120,
+          "denominator": 49,
+          "value": 5328.9795918367345
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": -1,
+          "denominator": 49,
+          "value": -0.02040816326530612
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 261120,
+          "denominator": 49,
+          "value": 5328.9795918367345
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": -1,
+          "denominator": 49,
+          "value": -0.02040816326530612
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 85,
+      "ayah": 6,
+      "source_offset_ms": 25130,
+      "hf_duration_ms": 3522,
+      "hf_audio_sha256": "eb7093e26ad597ad3ae5e792f914db8fa3b293216b0063f7919ae765861bc57c",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 49767732,
+        "duration": "3.526625",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": -0.25,
+      "retained_interior_pcm_score": 0.9874388006756541,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 218240,
+        "encoded_interior_bytes": 26165,
+        "complete_interior_packets_checked": 125,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 219264,
+            "source_packet_index": 966,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 356106240,
+              "dts": 356106240,
+              "duration": 368640,
+              "size": "209",
+              "pos": "219076"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 176640,
+              "denominator": 7,
+              "value": 25234.285714285714
+            },
+            "source_packet_end_ms": {
+              "numerator": 1237760,
+              "denominator": 49,
+              "value": 25260.408163265307
+            },
+            "packet_shift_ms": {
+              "numerator": 1231360,
+              "denominator": 49,
+              "value": 25129.79591836735
+            }
+          },
+          {
+            "clip_byte_position": 7565,
+            "source_byte_position": 225805,
+            "source_packet_index": 998,
+            "clip_packet_index": 36,
+            "source_packet": {
+              "pts": 367902720,
+              "dts": 367902720,
+              "duration": 368640,
+              "size": "209",
+              "pos": "225764"
+            },
+            "clip_packet": {
+              "pts": 13271040,
+              "dts": 13271040,
+              "duration": 368640,
+              "size": "209",
+              "pos": "7524"
+            },
+            "intra_packet_byte_position": 41,
+            "source_packet_start_ms": {
+              "numerator": 1277440,
+              "denominator": 49,
+              "value": 26070.20408163265
+            },
+            "source_packet_end_ms": {
+              "numerator": 1278720,
+              "denominator": 49,
+              "value": 26096.326530612245
+            },
+            "packet_shift_ms": {
+              "numerator": 1231360,
+              "denominator": 49,
+              "value": 25129.79591836735
+            }
+          },
+          {
+            "clip_byte_position": 14106,
+            "source_byte_position": 232346,
+            "source_packet_index": 1029,
+            "clip_packet_index": 67,
+            "source_packet": {
+              "pts": 379330560,
+              "dts": 379330560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "232242"
+            },
+            "clip_packet": {
+              "pts": 24698880,
+              "dts": 24698880,
+              "duration": 368640,
+              "size": "209",
+              "pos": "14002"
+            },
+            "intra_packet_byte_position": 104,
+            "source_packet_start_ms": {
+              "numerator": 26880,
+              "denominator": 1,
+              "value": 26880.0
+            },
+            "source_packet_end_ms": {
+              "numerator": 1318400,
+              "denominator": 49,
+              "value": 26906.122448979593
+            },
+            "packet_shift_ms": {
+              "numerator": 1231360,
+              "denominator": 49,
+              "value": 25129.79591836735
+            }
+          },
+          {
+            "clip_byte_position": 20647,
+            "source_byte_position": 238887,
+            "source_packet_index": 1060,
+            "clip_packet_index": 98,
+            "source_packet": {
+              "pts": 390758400,
+              "dts": 390758400,
+              "duration": 368640,
+              "size": "209",
+              "pos": "238720"
+            },
+            "clip_packet": {
+              "pts": 36126720,
+              "dts": 36126720,
+              "duration": 368640,
+              "size": "209",
+              "pos": "20480"
+            },
+            "intra_packet_byte_position": 167,
+            "source_packet_start_ms": {
+              "numerator": 1356800,
+              "denominator": 49,
+              "value": 27689.79591836735
+            },
+            "source_packet_end_ms": {
+              "numerator": 1358080,
+              "denominator": 49,
+              "value": 27715.918367346938
+            },
+            "packet_shift_ms": {
+              "numerator": 1231360,
+              "denominator": 49,
+              "value": 25129.79591836735
+            }
+          },
+          {
+            "clip_byte_position": 27188,
+            "source_byte_position": 245428,
+            "source_packet_index": 1092,
+            "clip_packet_index": 130,
+            "source_packet": {
+              "pts": 402554880,
+              "dts": 402554880,
+              "duration": 368640,
+              "size": "209",
+              "pos": "245408"
+            },
+            "clip_packet": {
+              "pts": 47923200,
+              "dts": 47923200,
+              "duration": 368640,
+              "size": "209",
+              "pos": "27168"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 199680,
+              "denominator": 7,
+              "value": 28525.714285714286
+            },
+            "source_packet_end_ms": {
+              "numerator": 1399040,
+              "denominator": 49,
+              "value": 28551.836734693876
+            },
+            "packet_shift_ms": {
+              "numerator": 1231360,
+              "denominator": 49,
+              "value": 25129.79591836735
+            }
+          }
+        ],
+        "first_source_packet_index": 962,
+        "first_source_packet": {
+          "pts": 354631680,
+          "dts": 354631680,
+          "duration": 368640,
+          "size": "209",
+          "pos": "218240"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 1231360,
+          "denominator": 49,
+          "value": 25129.79591836735
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": -10,
+          "denominator": 49,
+          "value": -0.20408163265306123
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 1231360,
+          "denominator": 49,
+          "value": 25129.79591836735
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": -10,
+          "denominator": 49,
+          "value": -0.20408163265306123
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 85,
+      "ayah": 11,
+      "source_offset_ms": 68232,
+      "hf_duration_ms": 15110,
+      "hf_audio_sha256": "167f2dc0f42989183fd7f498f5c11dce0e4b99668a064d864b293c874128c458",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 213442236,
+        "duration": "15.124875",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": -0.125,
+      "retained_interior_pcm_score": 0.9903289305684351,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 563057,
+        "encoded_interior_bytes": 118951,
+        "complete_interior_packets_checked": 569,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 564081,
+            "source_packet_index": 2616,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 964362240,
+              "dts": 964362240,
+              "duration": 368640,
+              "size": "209",
+              "pos": "563893"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 3348480,
+              "denominator": 49,
+              "value": 68336.32653061225
+            },
+            "source_packet_end_ms": {
+              "numerator": 3349760,
+              "denominator": 49,
+              "value": 68362.44897959183
+            },
+            "packet_shift_ms": {
+              "numerator": 3343360,
+              "denominator": 49,
+              "value": 68231.83673469388
+            }
+          },
+          {
+            "clip_byte_position": 30761,
+            "source_byte_position": 593818,
+            "source_packet_index": 2759,
+            "clip_packet_index": 147,
+            "source_packet": {
+              "pts": 1017077760,
+              "dts": 1017077760,
+              "duration": 368640,
+              "size": "209",
+              "pos": "593777"
+            },
+            "clip_packet": {
+              "pts": 54190080,
+              "dts": 54190080,
+              "duration": 368640,
+              "size": "209",
+              "pos": "30720"
+            },
+            "intra_packet_byte_position": 41,
+            "source_packet_start_ms": {
+              "numerator": 3531520,
+              "denominator": 49,
+              "value": 72071.83673469388
+            },
+            "source_packet_end_ms": {
+              "numerator": 3532800,
+              "denominator": 49,
+              "value": 72097.95918367348
+            },
+            "packet_shift_ms": {
+              "numerator": 3343360,
+              "denominator": 49,
+              "value": 68231.83673469388
+            }
+          },
+          {
+            "clip_byte_position": 60499,
+            "source_byte_position": 623556,
+            "source_packet_index": 2901,
+            "clip_packet_index": 289,
+            "source_packet": {
+              "pts": 1069424640,
+              "dts": 1069424640,
+              "duration": 368640,
+              "size": "209",
+              "pos": "623452"
+            },
+            "clip_packet": {
+              "pts": 106536960,
+              "dts": 106536960,
+              "duration": 368640,
+              "size": "209",
+              "pos": "60395"
+            },
+            "intra_packet_byte_position": 104,
+            "source_packet_start_ms": {
+              "numerator": 3713280,
+              "denominator": 49,
+              "value": 75781.22448979592
+            },
+            "source_packet_end_ms": {
+              "numerator": 3714560,
+              "denominator": 49,
+              "value": 75807.3469387755
+            },
+            "packet_shift_ms": {
+              "numerator": 3343360,
+              "denominator": 49,
+              "value": 68231.83673469388
+            }
+          },
+          {
+            "clip_byte_position": 90237,
+            "source_byte_position": 653294,
+            "source_packet_index": 3043,
+            "clip_packet_index": 431,
+            "source_packet": {
+              "pts": 1121771520,
+              "dts": 1121771520,
+              "duration": 368640,
+              "size": "209",
+              "pos": "653127"
+            },
+            "clip_packet": {
+              "pts": 158883840,
+              "dts": 158883840,
+              "duration": 368640,
+              "size": "209",
+              "pos": "90070"
+            },
+            "intra_packet_byte_position": 167,
+            "source_packet_start_ms": {
+              "numerator": 3895040,
+              "denominator": 49,
+              "value": 79490.61224489796
+            },
+            "source_packet_end_ms": {
+              "numerator": 3896320,
+              "denominator": 49,
+              "value": 79516.73469387754
+            },
+            "packet_shift_ms": {
+              "numerator": 3343360,
+              "denominator": 49,
+              "value": 68231.83673469388
+            }
+          },
+          {
+            "clip_byte_position": 119974,
+            "source_byte_position": 683031,
+            "source_packet_index": 3186,
+            "clip_packet_index": 574,
+            "source_packet": {
+              "pts": 1174487040,
+              "dts": 1174487040,
+              "duration": 368640,
+              "size": "209",
+              "pos": "683011"
+            },
+            "clip_packet": {
+              "pts": 211599360,
+              "dts": 211599360,
+              "duration": 368640,
+              "size": "209",
+              "pos": "119954"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 4078080,
+              "denominator": 49,
+              "value": 83226.12244897959
+            },
+            "source_packet_end_ms": {
+              "numerator": 4079360,
+              "denominator": 49,
+              "value": 83252.24489795919
+            },
+            "packet_shift_ms": {
+              "numerator": 3343360,
+              "denominator": 49,
+              "value": 68231.83673469388
+            }
+          }
+        ],
+        "first_source_packet_index": 2612,
+        "first_source_packet": {
+          "pts": 962887680,
+          "dts": 962887680,
+          "duration": 368640,
+          "size": "209",
+          "pos": "563057"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 3343360,
+          "denominator": 49,
+          "value": 68231.83673469388
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": -8,
+          "denominator": 49,
+          "value": -0.16326530612244897
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 3343360,
+          "denominator": 49,
+          "value": 68231.83673469388
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": -8,
+          "denominator": 49,
+          "value": -0.16326530612244897
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 85,
+      "ayah": 17,
+      "source_offset_ms": 103340,
+      "hf_duration_ms": 3818,
+      "hf_audio_sha256": "46bf5fa2ca63aa58293d2b381e8e592948d9b99bec9b281a36fb2eec66386abb",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 54190080,
+        "duration": "3.840000",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": 0.375,
+      "retained_interior_pcm_score": 0.992534139657981,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 843925,
+        "encoded_interior_bytes": 28672,
+        "complete_interior_packets_checked": 137,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 844949,
+            "source_packet_index": 3960,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 1459814400,
+              "dts": 1459814400,
+              "duration": 368640,
+              "size": "209",
+              "pos": "844761"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 5068800,
+              "denominator": 49,
+              "value": 103444.89795918367
+            },
+            "source_packet_end_ms": {
+              "numerator": 5070080,
+              "denominator": 49,
+              "value": 103471.02040816327
+            },
+            "packet_shift_ms": {
+              "numerator": 5063680,
+              "denominator": 49,
+              "value": 103340.40816326531
+            }
+          },
+          {
+            "clip_byte_position": 8192,
+            "source_byte_position": 852117,
+            "source_packet_index": 3995,
+            "clip_packet_index": 39,
+            "source_packet": {
+              "pts": 1472716800,
+              "dts": 1472716800,
+              "duration": 368640,
+              "size": "209",
+              "pos": "852075"
+            },
+            "clip_packet": {
+              "pts": 14376960,
+              "dts": 14376960,
+              "duration": 368640,
+              "size": "209",
+              "pos": "8150"
+            },
+            "intra_packet_byte_position": 42,
+            "source_packet_start_ms": {
+              "numerator": 5113600,
+              "denominator": 49,
+              "value": 104359.1836734694
+            },
+            "source_packet_end_ms": {
+              "numerator": 5114880,
+              "denominator": 49,
+              "value": 104385.30612244898
+            },
+            "packet_shift_ms": {
+              "numerator": 5063680,
+              "denominator": 49,
+              "value": 103340.40816326531
+            }
+          },
+          {
+            "clip_byte_position": 15360,
+            "source_byte_position": 859285,
+            "source_packet_index": 4029,
+            "clip_packet_index": 73,
+            "source_packet": {
+              "pts": 1485250560,
+              "dts": 1485250560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "859181"
+            },
+            "clip_packet": {
+              "pts": 26910720,
+              "dts": 26910720,
+              "duration": 368640,
+              "size": "209",
+              "pos": "15256"
+            },
+            "intra_packet_byte_position": 104,
+            "source_packet_start_ms": {
+              "numerator": 5157120,
+              "denominator": 49,
+              "value": 105247.3469387755
+            },
+            "source_packet_end_ms": {
+              "numerator": 5158400,
+              "denominator": 49,
+              "value": 105273.4693877551
+            },
+            "packet_shift_ms": {
+              "numerator": 5063680,
+              "denominator": 49,
+              "value": 103340.40816326531
+            }
+          },
+          {
+            "clip_byte_position": 22528,
+            "source_byte_position": 866453,
+            "source_packet_index": 4063,
+            "clip_packet_index": 107,
+            "source_packet": {
+              "pts": 1497784320,
+              "dts": 1497784320,
+              "duration": 368640,
+              "size": "209",
+              "pos": "866286"
+            },
+            "clip_packet": {
+              "pts": 39444480,
+              "dts": 39444480,
+              "duration": 368640,
+              "size": "209",
+              "pos": "22361"
+            },
+            "intra_packet_byte_position": 167,
+            "source_packet_start_ms": {
+              "numerator": 5200640,
+              "denominator": 49,
+              "value": 106135.51020408163
+            },
+            "source_packet_end_ms": {
+              "numerator": 5201920,
+              "denominator": 49,
+              "value": 106161.63265306123
+            },
+            "packet_shift_ms": {
+              "numerator": 5063680,
+              "denominator": 49,
+              "value": 103340.40816326531
+            }
+          },
+          {
+            "clip_byte_position": 29695,
+            "source_byte_position": 873620,
+            "source_packet_index": 4098,
+            "clip_packet_index": 142,
+            "source_packet": {
+              "pts": 1510686720,
+              "dts": 1510686720,
+              "duration": 368640,
+              "size": "209",
+              "pos": "873600"
+            },
+            "clip_packet": {
+              "pts": 52346880,
+              "dts": 52346880,
+              "duration": 368640,
+              "size": "209",
+              "pos": "29675"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 5245440,
+              "denominator": 49,
+              "value": 107049.79591836735
+            },
+            "source_packet_end_ms": {
+              "numerator": 5246720,
+              "denominator": 49,
+              "value": 107075.91836734694
+            },
+            "packet_shift_ms": {
+              "numerator": 5063680,
+              "denominator": 49,
+              "value": 103340.40816326531
+            }
+          }
+        ],
+        "first_source_packet_index": 3956,
+        "first_source_packet": {
+          "pts": 1458339840,
+          "dts": 1458339840,
+          "duration": 368640,
+          "size": "209",
+          "pos": "843925"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 5063680,
+          "denominator": 49,
+          "value": 103340.40816326531
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": 20,
+          "denominator": 49,
+          "value": 0.40816326530612246
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 5063680,
+          "denominator": 49,
+          "value": 103340.40816326531
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": 20,
+          "denominator": 49,
+          "value": 0.40816326530612246
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 85,
+      "ayah": 22,
+      "source_offset_ms": 125466,
+      "hf_duration_ms": 3904,
+      "hf_audio_sha256": "24592e87cb80c7138445ada98398a82029d33617c8aad9e8bcb2d5587667d046",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 51609348,
+        "duration": "3.657125",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": 0.125,
+      "retained_interior_pcm_score": 0.9999772900179759,
+      "retained_v1_passed": false,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 1020931,
+        "encoded_interior_bytes": 27209,
+        "complete_interior_packets_checked": 130,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 1021955,
+            "source_packet_index": 4807,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 1772052480,
+              "dts": 1772052480,
+              "duration": 368640,
+              "size": "209",
+              "pos": "1021767"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 6152960,
+              "denominator": 49,
+              "value": 125570.61224489796
+            },
+            "source_packet_end_ms": {
+              "numerator": 6154240,
+              "denominator": 49,
+              "value": 125596.73469387754
+            },
+            "packet_shift_ms": {
+              "numerator": 6147840,
+              "denominator": 49,
+              "value": 125466.12244897959
+            }
+          },
+          {
+            "clip_byte_position": 7826,
+            "source_byte_position": 1028757,
+            "source_packet_index": 4840,
+            "clip_packet_index": 37,
+            "source_packet": {
+              "pts": 1784217600,
+              "dts": 1784217600,
+              "duration": 368640,
+              "size": "209",
+              "pos": "1028663"
+            },
+            "clip_packet": {
+              "pts": 13639680,
+              "dts": 13639680,
+              "duration": 368640,
+              "size": "209",
+              "pos": "7732"
+            },
+            "intra_packet_byte_position": 94,
+            "source_packet_start_ms": {
+              "numerator": 6195200,
+              "denominator": 49,
+              "value": 126432.6530612245
+            },
+            "source_packet_end_ms": {
+              "numerator": 6196480,
+              "denominator": 49,
+              "value": 126458.77551020408
+            },
+            "packet_shift_ms": {
+              "numerator": 6147840,
+              "denominator": 49,
+              "value": 125466.12244897959
+            }
+          },
+          {
+            "clip_byte_position": 14628,
+            "source_byte_position": 1035559,
+            "source_packet_index": 4872,
+            "clip_packet_index": 69,
+            "source_packet": {
+              "pts": 1796014080,
+              "dts": 1796014080,
+              "duration": 368640,
+              "size": "209",
+              "pos": "1035351"
+            },
+            "clip_packet": {
+              "pts": 25436160,
+              "dts": 25436160,
+              "duration": 368640,
+              "size": "209",
+              "pos": "14420"
+            },
+            "intra_packet_byte_position": 208,
+            "source_packet_start_ms": {
+              "numerator": 890880,
+              "denominator": 7,
+              "value": 127268.57142857143
+            },
+            "source_packet_end_ms": {
+              "numerator": 6237440,
+              "denominator": 49,
+              "value": 127294.69387755102
+            },
+            "packet_shift_ms": {
+              "numerator": 6147840,
+              "denominator": 49,
+              "value": 125466.12244897959
+            }
+          },
+          {
+            "clip_byte_position": 21430,
+            "source_byte_position": 1042361,
+            "source_packet_index": 4905,
+            "clip_packet_index": 102,
+            "source_packet": {
+              "pts": 1808179200,
+              "dts": 1808179200,
+              "duration": 368640,
+              "size": "209",
+              "pos": "1042247"
+            },
+            "clip_packet": {
+              "pts": 37601280,
+              "dts": 37601280,
+              "duration": 368640,
+              "size": "209",
+              "pos": "21316"
+            },
+            "intra_packet_byte_position": 114,
+            "source_packet_start_ms": {
+              "numerator": 6278400,
+              "denominator": 49,
+              "value": 128130.61224489796
+            },
+            "source_packet_end_ms": {
+              "numerator": 6279680,
+              "denominator": 49,
+              "value": 128156.73469387754
+            },
+            "packet_shift_ms": {
+              "numerator": 6147840,
+              "denominator": 49,
+              "value": 125466.12244897959
+            }
+          },
+          {
+            "clip_byte_position": 28232,
+            "source_byte_position": 1049163,
+            "source_packet_index": 4938,
+            "clip_packet_index": 135,
+            "source_packet": {
+              "pts": 1820344320,
+              "dts": 1820344320,
+              "duration": 368640,
+              "size": "209",
+              "pos": "1049143"
+            },
+            "clip_packet": {
+              "pts": 49766400,
+              "dts": 49766400,
+              "duration": 368640,
+              "size": "209",
+              "pos": "28212"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 6320640,
+              "denominator": 49,
+              "value": 128992.6530612245
+            },
+            "source_packet_end_ms": {
+              "numerator": 6321920,
+              "denominator": 49,
+              "value": 129018.77551020408
+            },
+            "packet_shift_ms": {
+              "numerator": 6147840,
+              "denominator": 49,
+              "value": 125466.12244897959
+            }
+          }
+        ],
+        "first_source_packet_index": 4803,
+        "first_source_packet": {
+          "pts": 1770577920,
+          "dts": 1770577920,
+          "duration": 368640,
+          "size": "209",
+          "pos": "1020931"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 6147840,
+          "denominator": 49,
+          "value": 125466.12244897959
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": 6,
+          "denominator": 49,
+          "value": 0.12244897959183673
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 6147840,
+          "denominator": 49,
+          "value": 125466.12244897959
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": 6,
+          "denominator": 49,
+          "value": 0.12244897959183673
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 97,
+      "ayah": 1,
+      "source_offset_ms": 4101,
+      "hf_duration_ms": 5759,
+      "hf_audio_sha256": "3c4988da27c2c0a45281018ccaccb45787da1ce913dd34d14dd67a71dd486364",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 81468576,
+        "duration": "5.773000",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": 0.25,
+      "retained_interior_pcm_score": 0.9948487059126082,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 50011,
+        "encoded_interior_bytes": 44136,
+        "complete_interior_packets_checked": 211,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 51035,
+            "source_packet_index": 161,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 59351040,
+              "dts": 59351040,
+              "duration": 368640,
+              "size": "209",
+              "pos": "50847"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 29440,
+              "denominator": 7,
+              "value": 4205.714285714285
+            },
+            "source_packet_end_ms": {
+              "numerator": 207360,
+              "denominator": 49,
+              "value": 4231.836734693878
+            },
+            "packet_shift_ms": {
+              "numerator": 200960,
+              "denominator": 49,
+              "value": 4101.224489795918
+            }
+          },
+          {
+            "clip_byte_position": 12058,
+            "source_byte_position": 62069,
+            "source_packet_index": 214,
+            "clip_packet_index": 57,
+            "source_packet": {
+              "pts": 78888960,
+              "dts": 78888960,
+              "duration": 368640,
+              "size": "209",
+              "pos": "61923"
+            },
+            "clip_packet": {
+              "pts": 21012480,
+              "dts": 21012480,
+              "duration": 368640,
+              "size": "209",
+              "pos": "11912"
+            },
+            "intra_packet_byte_position": 146,
+            "source_packet_start_ms": {
+              "numerator": 273920,
+              "denominator": 49,
+              "value": 5590.2040816326535
+            },
+            "source_packet_end_ms": {
+              "numerator": 275200,
+              "denominator": 49,
+              "value": 5616.326530612245
+            },
+            "packet_shift_ms": {
+              "numerator": 200960,
+              "denominator": 49,
+              "value": 4101.224489795918
+            }
+          },
+          {
+            "clip_byte_position": 23092,
+            "source_byte_position": 73103,
+            "source_packet_index": 267,
+            "clip_packet_index": 110,
+            "source_packet": {
+              "pts": 98426880,
+              "dts": 98426880,
+              "duration": 368640,
+              "size": "209",
+              "pos": "72999"
+            },
+            "clip_packet": {
+              "pts": 40550400,
+              "dts": 40550400,
+              "duration": 368640,
+              "size": "209",
+              "pos": "22988"
+            },
+            "intra_packet_byte_position": 104,
+            "source_packet_start_ms": {
+              "numerator": 341760,
+              "denominator": 49,
+              "value": 6974.693877551021
+            },
+            "source_packet_end_ms": {
+              "numerator": 343040,
+              "denominator": 49,
+              "value": 7000.816326530612
+            },
+            "packet_shift_ms": {
+              "numerator": 200960,
+              "denominator": 49,
+              "value": 4101.224489795918
+            }
+          },
+          {
+            "clip_byte_position": 34126,
+            "source_byte_position": 84137,
+            "source_packet_index": 320,
+            "clip_packet_index": 163,
+            "source_packet": {
+              "pts": 117964800,
+              "dts": 117964800,
+              "duration": 368640,
+              "size": "209",
+              "pos": "84074"
+            },
+            "clip_packet": {
+              "pts": 60088320,
+              "dts": 60088320,
+              "duration": 368640,
+              "size": "209",
+              "pos": "34063"
+            },
+            "intra_packet_byte_position": 63,
+            "source_packet_start_ms": {
+              "numerator": 409600,
+              "denominator": 49,
+              "value": 8359.183673469388
+            },
+            "source_packet_end_ms": {
+              "numerator": 410880,
+              "denominator": 49,
+              "value": 8385.30612244898
+            },
+            "packet_shift_ms": {
+              "numerator": 200960,
+              "denominator": 49,
+              "value": 4101.224489795918
+            }
+          },
+          {
+            "clip_byte_position": 45159,
+            "source_byte_position": 95170,
+            "source_packet_index": 373,
+            "clip_packet_index": 216,
+            "source_packet": {
+              "pts": 137502720,
+              "dts": 137502720,
+              "duration": 368640,
+              "size": "209",
+              "pos": "95150"
+            },
+            "clip_packet": {
+              "pts": 79626240,
+              "dts": 79626240,
+              "duration": 368640,
+              "size": "209",
+              "pos": "45139"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 477440,
+              "denominator": 49,
+              "value": 9743.673469387755
+            },
+            "source_packet_end_ms": {
+              "numerator": 478720,
+              "denominator": 49,
+              "value": 9769.795918367347
+            },
+            "packet_shift_ms": {
+              "numerator": 200960,
+              "denominator": 49,
+              "value": 4101.224489795918
+            }
+          }
+        ],
+        "first_source_packet_index": 157,
+        "first_source_packet": {
+          "pts": 57876480,
+          "dts": 57876480,
+          "duration": 368640,
+          "size": "209",
+          "pos": "50011"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 200960,
+          "denominator": 49,
+          "value": 4101.224489795918
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": 11,
+          "denominator": 49,
+          "value": 0.22448979591836735
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 200960,
+          "denominator": 49,
+          "value": 4101.224489795918
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": 11,
+          "denominator": 49,
+          "value": 0.22448979591836735
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 97,
+      "ayah": 2,
+      "source_offset_ms": 9927,
+      "hf_duration_ms": 4279,
+      "hf_audio_sha256": "0d1ec7eb91edfef1460dc07bad3de606441e9cd99ed3bd3cf9290a3f03a02b88",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 60457572,
+        "duration": "4.284125",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": -0.5,
+      "retained_interior_pcm_score": 0.9901067089019525,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 96613,
+        "encoded_interior_bytes": 32225,
+        "complete_interior_packets_checked": 154,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 97637,
+            "source_packet_index": 384,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 141557760,
+              "dts": 141557760,
+              "duration": 368640,
+              "size": "209",
+              "pos": "97449"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 491520,
+              "denominator": 49,
+              "value": 10031.020408163266
+            },
+            "source_packet_end_ms": {
+              "numerator": 70400,
+              "denominator": 7,
+              "value": 10057.142857142857
+            },
+            "packet_shift_ms": {
+              "numerator": 486400,
+              "denominator": 49,
+              "value": 9926.530612244898
+            }
+          },
+          {
+            "clip_byte_position": 9080,
+            "source_byte_position": 105693,
+            "source_packet_index": 423,
+            "clip_packet_index": 43,
+            "source_packet": {
+              "pts": 155934720,
+              "dts": 155934720,
+              "duration": 368640,
+              "size": "209",
+              "pos": "105599"
+            },
+            "clip_packet": {
+              "pts": 15851520,
+              "dts": 15851520,
+              "duration": 368640,
+              "size": "209",
+              "pos": "8986"
+            },
+            "intra_packet_byte_position": 94,
+            "source_packet_start_ms": {
+              "numerator": 541440,
+              "denominator": 49,
+              "value": 11049.795918367347
+            },
+            "source_packet_end_ms": {
+              "numerator": 542720,
+              "denominator": 49,
+              "value": 11075.918367346938
+            },
+            "packet_shift_ms": {
+              "numerator": 486400,
+              "denominator": 49,
+              "value": 9926.530612244898
+            }
+          },
+          {
+            "clip_byte_position": 17136,
+            "source_byte_position": 113749,
+            "source_packet_index": 461,
+            "clip_packet_index": 81,
+            "source_packet": {
+              "pts": 169943040,
+              "dts": 169943040,
+              "duration": 368640,
+              "size": "209",
+              "pos": "113541"
+            },
+            "clip_packet": {
+              "pts": 29859840,
+              "dts": 29859840,
+              "duration": 368640,
+              "size": "209",
+              "pos": "16928"
+            },
+            "intra_packet_byte_position": 208,
+            "source_packet_start_ms": {
+              "numerator": 590080,
+              "denominator": 49,
+              "value": 12042.448979591836
+            },
+            "source_packet_end_ms": {
+              "numerator": 84480,
+              "denominator": 7,
+              "value": 12068.57142857143
+            },
+            "packet_shift_ms": {
+              "numerator": 486400,
+              "denominator": 49,
+              "value": 9926.530612244898
+            }
+          },
+          {
+            "clip_byte_position": 25192,
+            "source_byte_position": 121805,
+            "source_packet_index": 500,
+            "clip_packet_index": 120,
+            "source_packet": {
+              "pts": 184320000,
+              "dts": 184320000,
+              "duration": 368640,
+              "size": "209",
+              "pos": "121691"
+            },
+            "clip_packet": {
+              "pts": 44236800,
+              "dts": 44236800,
+              "duration": 368640,
+              "size": "209",
+              "pos": "25078"
+            },
+            "intra_packet_byte_position": 114,
+            "source_packet_start_ms": {
+              "numerator": 640000,
+              "denominator": 49,
+              "value": 13061.224489795919
+            },
+            "source_packet_end_ms": {
+              "numerator": 641280,
+              "denominator": 49,
+              "value": 13087.34693877551
+            },
+            "packet_shift_ms": {
+              "numerator": 486400,
+              "denominator": 49,
+              "value": 9926.530612244898
+            }
+          },
+          {
+            "clip_byte_position": 33248,
+            "source_byte_position": 129861,
+            "source_packet_index": 539,
+            "clip_packet_index": 159,
+            "source_packet": {
+              "pts": 198696960,
+              "dts": 198696960,
+              "duration": 368640,
+              "size": "209",
+              "pos": "129841"
+            },
+            "clip_packet": {
+              "pts": 58613760,
+              "dts": 58613760,
+              "duration": 368640,
+              "size": "209",
+              "pos": "33228"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 14080,
+              "denominator": 1,
+              "value": 14080.0
+            },
+            "source_packet_end_ms": {
+              "numerator": 691200,
+              "denominator": 49,
+              "value": 14106.122448979591
+            },
+            "packet_shift_ms": {
+              "numerator": 486400,
+              "denominator": 49,
+              "value": 9926.530612244898
+            }
+          }
+        ],
+        "first_source_packet_index": 380,
+        "first_source_packet": {
+          "pts": 140083200,
+          "dts": 140083200,
+          "duration": 368640,
+          "size": "209",
+          "pos": "96613"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 486400,
+          "denominator": 49,
+          "value": 9926.530612244898
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": -23,
+          "denominator": 49,
+          "value": -0.46938775510204084
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 486400,
+          "denominator": 49,
+          "value": 9926.530612244898
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": -23,
+          "denominator": 49,
+          "value": -0.46938775510204084
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 97,
+      "ayah": 3,
+      "source_offset_ms": 14237,
+      "hf_duration_ms": 5201,
+      "hf_audio_sha256": "04d07654939934633bc6de9a5db5d775db9c666014bcfc2e1486806c6fe05c54",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 73728144,
+        "duration": "5.224500",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": -0.25,
+      "retained_interior_pcm_score": 0.99841584180584,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 131095,
+        "encoded_interior_bytes": 39748,
+        "complete_interior_packets_checked": 190,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 132119,
+            "source_packet_index": 549,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 202383360,
+              "dts": 202383360,
+              "duration": 368640,
+              "size": "209",
+              "pos": "131931"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 702720,
+              "denominator": 49,
+              "value": 14341.224489795919
+            },
+            "source_packet_end_ms": {
+              "numerator": 704000,
+              "denominator": 49,
+              "value": 14367.34693877551
+            },
+            "packet_shift_ms": {
+              "numerator": 697600,
+              "denominator": 49,
+              "value": 14236.734693877552
+            }
+          },
+          {
+            "clip_byte_position": 10961,
+            "source_byte_position": 142056,
+            "source_packet_index": 597,
+            "clip_packet_index": 52,
+            "source_packet": {
+              "pts": 220078080,
+              "dts": 220078080,
+              "duration": 368640,
+              "size": "209",
+              "pos": "141962"
+            },
+            "clip_packet": {
+              "pts": 19169280,
+              "dts": 19169280,
+              "duration": 368640,
+              "size": "209",
+              "pos": "10867"
+            },
+            "intra_packet_byte_position": 94,
+            "source_packet_start_ms": {
+              "numerator": 764160,
+              "denominator": 49,
+              "value": 15595.102040816326
+            },
+            "source_packet_end_ms": {
+              "numerator": 765440,
+              "denominator": 49,
+              "value": 15621.224489795919
+            },
+            "packet_shift_ms": {
+              "numerator": 697600,
+              "denominator": 49,
+              "value": 14236.734693877552
+            }
+          },
+          {
+            "clip_byte_position": 20898,
+            "source_byte_position": 151993,
+            "source_packet_index": 645,
+            "clip_packet_index": 100,
+            "source_packet": {
+              "pts": 237772800,
+              "dts": 237772800,
+              "duration": 368640,
+              "size": "209",
+              "pos": "151993"
+            },
+            "clip_packet": {
+              "pts": 36864000,
+              "dts": 36864000,
+              "duration": 368640,
+              "size": "209",
+              "pos": "20898"
+            },
+            "intra_packet_byte_position": 0,
+            "source_packet_start_ms": {
+              "numerator": 825600,
+              "denominator": 49,
+              "value": 16848.979591836734
+            },
+            "source_packet_end_ms": {
+              "numerator": 826880,
+              "denominator": 49,
+              "value": 16875.102040816328
+            },
+            "packet_shift_ms": {
+              "numerator": 697600,
+              "denominator": 49,
+              "value": 14236.734693877552
+            }
+          },
+          {
+            "clip_byte_position": 30835,
+            "source_byte_position": 161930,
+            "source_packet_index": 692,
+            "clip_packet_index": 147,
+            "source_packet": {
+              "pts": 255098880,
+              "dts": 255098880,
+              "duration": 368640,
+              "size": "209",
+              "pos": "161815"
+            },
+            "clip_packet": {
+              "pts": 54190080,
+              "dts": 54190080,
+              "duration": 368640,
+              "size": "209",
+              "pos": "30720"
+            },
+            "intra_packet_byte_position": 115,
+            "source_packet_start_ms": {
+              "numerator": 885760,
+              "denominator": 49,
+              "value": 18076.73469387755
+            },
+            "source_packet_end_ms": {
+              "numerator": 126720,
+              "denominator": 7,
+              "value": 18102.85714285714
+            },
+            "packet_shift_ms": {
+              "numerator": 697600,
+              "denominator": 49,
+              "value": 14236.734693877552
+            }
+          },
+          {
+            "clip_byte_position": 40771,
+            "source_byte_position": 171866,
+            "source_packet_index": 740,
+            "clip_packet_index": 195,
+            "source_packet": {
+              "pts": 272793600,
+              "dts": 272793600,
+              "duration": 368640,
+              "size": "209",
+              "pos": "171846"
+            },
+            "clip_packet": {
+              "pts": 71884800,
+              "dts": 71884800,
+              "duration": 368640,
+              "size": "209",
+              "pos": "40751"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 947200,
+              "denominator": 49,
+              "value": 19330.61224489796
+            },
+            "source_packet_end_ms": {
+              "numerator": 948480,
+              "denominator": 49,
+              "value": 19356.73469387755
+            },
+            "packet_shift_ms": {
+              "numerator": 697600,
+              "denominator": 49,
+              "value": 14236.734693877552
+            }
+          }
+        ],
+        "first_source_packet_index": 545,
+        "first_source_packet": {
+          "pts": 200908800,
+          "dts": 200908800,
+          "duration": 368640,
+          "size": "209",
+          "pos": "131095"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 697600,
+          "denominator": 49,
+          "value": 14236.734693877552
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": -13,
+          "denominator": 49,
+          "value": -0.2653061224489796
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 697600,
+          "denominator": 49,
+          "value": 14236.734693877552
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": -13,
+          "denominator": 49,
+          "value": -0.2653061224489796
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 97,
+      "ayah": 4,
+      "source_offset_ms": 19513,
+      "hf_duration_ms": 10249,
+      "hf_audio_sha256": "a0dd3308877331d40da50bd8b0b142ab8416f1a1dea2bf2a6238e19656c22050",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 144875556,
+        "duration": "10.266125",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": 0.5,
+      "retained_interior_pcm_score": 0.9939259084436866,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 173309,
+        "encoded_interior_bytes": 80081,
+        "complete_interior_packets_checked": 383,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 174333,
+            "source_packet_index": 751,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 276848640,
+              "dts": 276848640,
+              "duration": 368640,
+              "size": "209",
+              "pos": "174145"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 961280,
+              "denominator": 49,
+              "value": 19617.95918367347
+            },
+            "source_packet_end_ms": {
+              "numerator": 962560,
+              "denominator": 49,
+              "value": 19644.081632653062
+            },
+            "packet_shift_ms": {
+              "numerator": 956160,
+              "denominator": 49,
+              "value": 19513.469387755104
+            }
+          },
+          {
+            "clip_byte_position": 21044,
+            "source_byte_position": 194353,
+            "source_packet_index": 847,
+            "clip_packet_index": 100,
+            "source_packet": {
+              "pts": 312238080,
+              "dts": 312238080,
+              "duration": 368640,
+              "size": "209",
+              "pos": "194207"
+            },
+            "clip_packet": {
+              "pts": 36864000,
+              "dts": 36864000,
+              "duration": 368640,
+              "size": "209",
+              "pos": "20898"
+            },
+            "intra_packet_byte_position": 146,
+            "source_packet_start_ms": {
+              "numerator": 154880,
+              "denominator": 7,
+              "value": 22125.714285714286
+            },
+            "source_packet_end_ms": {
+              "numerator": 1085440,
+              "denominator": 49,
+              "value": 22151.836734693876
+            },
+            "packet_shift_ms": {
+              "numerator": 956160,
+              "denominator": 49,
+              "value": 19513.469387755104
+            }
+          },
+          {
+            "clip_byte_position": 41064,
+            "source_byte_position": 214373,
+            "source_packet_index": 943,
+            "clip_packet_index": 196,
+            "source_packet": {
+              "pts": 347627520,
+              "dts": 347627520,
+              "duration": 368640,
+              "size": "209",
+              "pos": "214269"
+            },
+            "clip_packet": {
+              "pts": 72253440,
+              "dts": 72253440,
+              "duration": 368640,
+              "size": "209",
+              "pos": "40960"
+            },
+            "intra_packet_byte_position": 104,
+            "source_packet_start_ms": {
+              "numerator": 1207040,
+              "denominator": 49,
+              "value": 24633.469387755104
+            },
+            "source_packet_end_ms": {
+              "numerator": 1208320,
+              "denominator": 49,
+              "value": 24659.591836734693
+            },
+            "packet_shift_ms": {
+              "numerator": 956160,
+              "denominator": 49,
+              "value": 19513.469387755104
+            }
+          },
+          {
+            "clip_byte_position": 61084,
+            "source_byte_position": 234393,
+            "source_packet_index": 1039,
+            "clip_packet_index": 292,
+            "source_packet": {
+              "pts": 383016960,
+              "dts": 383016960,
+              "duration": 368640,
+              "size": "209",
+              "pos": "234331"
+            },
+            "clip_packet": {
+              "pts": 107642880,
+              "dts": 107642880,
+              "duration": 368640,
+              "size": "209",
+              "pos": "61022"
+            },
+            "intra_packet_byte_position": 62,
+            "source_packet_start_ms": {
+              "numerator": 1329920,
+              "denominator": 49,
+              "value": 27141.224489795917
+            },
+            "source_packet_end_ms": {
+              "numerator": 1331200,
+              "denominator": 49,
+              "value": 27167.34693877551
+            },
+            "packet_shift_ms": {
+              "numerator": 956160,
+              "denominator": 49,
+              "value": 19513.469387755104
+            }
+          },
+          {
+            "clip_byte_position": 81104,
+            "source_byte_position": 254413,
+            "source_packet_index": 1135,
+            "clip_packet_index": 388,
+            "source_packet": {
+              "pts": 418406400,
+              "dts": 418406400,
+              "duration": 368640,
+              "size": "209",
+              "pos": "254393"
+            },
+            "clip_packet": {
+              "pts": 143032320,
+              "dts": 143032320,
+              "duration": 368640,
+              "size": "209",
+              "pos": "81084"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 1452800,
+              "denominator": 49,
+              "value": 29648.979591836734
+            },
+            "source_packet_end_ms": {
+              "numerator": 1454080,
+              "denominator": 49,
+              "value": 29675.102040816328
+            },
+            "packet_shift_ms": {
+              "numerator": 956160,
+              "denominator": 49,
+              "value": 19513.469387755104
+            }
+          }
+        ],
+        "first_source_packet_index": 747,
+        "first_source_packet": {
+          "pts": 275374080,
+          "dts": 275374080,
+          "duration": 368640,
+          "size": "209",
+          "pos": "173309"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 956160,
+          "denominator": 49,
+          "value": 19513.469387755104
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": 23,
+          "denominator": 49,
+          "value": 0.46938775510204084
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 956160,
+          "denominator": 49,
+          "value": 19513.469387755104
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": 23,
+          "denominator": 49,
+          "value": 0.46938775510204084
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    },
+    {
+      "surah": 97,
+      "ayah": 5,
+      "source_offset_ms": 29858,
+      "hf_duration_ms": 4697,
+      "hf_audio_sha256": "b653408f9c821cb13dc329e4b7e084013dcb67b38f3371eef2ca96cfda10af47",
+      "clip_stream": {
+        "index": 0,
+        "codec_name": "mp3",
+        "sample_rate": "22050",
+        "channels": 2,
+        "time_base": "1/14112000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 66354624,
+        "duration": "4.702000",
+        "disposition": {
+          "default": 0,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0
+        }
+      },
+      "clip_first_packet_skip_samples": 0,
+      "retained_envelope_lag_ms": 0.0,
+      "retained_interior_pcm_score": 0.9884924044453129,
+      "retained_v1_passed": true,
+      "packet_proof": {
+        "proven": true,
+        "method": "unique_contiguous_copy_with_fixed_landmarks_and_all_complete_interior_packet_clocks",
+        "source_byte_origin_for_clip_byte_zero": 256065,
+        "encoded_interior_bytes": 35568,
+        "complete_interior_packets_checked": 170,
+        "fixed_landmarks": [
+          {
+            "clip_byte_position": 1024,
+            "source_byte_position": 257089,
+            "source_packet_index": 1147,
+            "clip_packet_index": 4,
+            "source_packet": {
+              "pts": 422830080,
+              "dts": 422830080,
+              "duration": 368640,
+              "size": "209",
+              "pos": "256901"
+            },
+            "clip_packet": {
+              "pts": 1474560,
+              "dts": 1474560,
+              "duration": 368640,
+              "size": "209",
+              "pos": "836"
+            },
+            "intra_packet_byte_position": 188,
+            "source_packet_start_ms": {
+              "numerator": 1468160,
+              "denominator": 49,
+              "value": 29962.448979591838
+            },
+            "source_packet_end_ms": {
+              "numerator": 209920,
+              "denominator": 7,
+              "value": 29988.571428571428
+            },
+            "packet_shift_ms": {
+              "numerator": 1463040,
+              "denominator": 49,
+              "value": 29857.95918367347
+            }
+          },
+          {
+            "clip_byte_position": 9916,
+            "source_byte_position": 265981,
+            "source_packet_index": 1190,
+            "clip_packet_index": 47,
+            "source_packet": {
+              "pts": 438681600,
+              "dts": 438681600,
+              "duration": 368640,
+              "size": "209",
+              "pos": "265887"
+            },
+            "clip_packet": {
+              "pts": 17326080,
+              "dts": 17326080,
+              "duration": 368640,
+              "size": "209",
+              "pos": "9822"
+            },
+            "intra_packet_byte_position": 94,
+            "source_packet_start_ms": {
+              "numerator": 217600,
+              "denominator": 7,
+              "value": 31085.714285714286
+            },
+            "source_packet_end_ms": {
+              "numerator": 1524480,
+              "denominator": 49,
+              "value": 31111.836734693876
+            },
+            "packet_shift_ms": {
+              "numerator": 1463040,
+              "denominator": 49,
+              "value": 29857.95918367347
+            }
+          },
+          {
+            "clip_byte_position": 18808,
+            "source_byte_position": 274873,
+            "source_packet_index": 1233,
+            "clip_packet_index": 90,
+            "source_packet": {
+              "pts": 454533120,
+              "dts": 454533120,
+              "duration": 368640,
+              "size": "209",
+              "pos": "274873"
+            },
+            "clip_packet": {
+              "pts": 33177600,
+              "dts": 33177600,
+              "duration": 368640,
+              "size": "209",
+              "pos": "18808"
+            },
+            "intra_packet_byte_position": 0,
+            "source_packet_start_ms": {
+              "numerator": 1578240,
+              "denominator": 49,
+              "value": 32208.979591836734
+            },
+            "source_packet_end_ms": {
+              "numerator": 1579520,
+              "denominator": 49,
+              "value": 32235.102040816328
+            },
+            "packet_shift_ms": {
+              "numerator": 1463040,
+              "denominator": 49,
+              "value": 29857.95918367347
+            }
+          },
+          {
+            "clip_byte_position": 27700,
+            "source_byte_position": 283765,
+            "source_packet_index": 1275,
+            "clip_packet_index": 132,
+            "source_packet": {
+              "pts": 470016000,
+              "dts": 470016000,
+              "duration": 368640,
+              "size": "209",
+              "pos": "283650"
+            },
+            "clip_packet": {
+              "pts": 48660480,
+              "dts": 48660480,
+              "duration": 368640,
+              "size": "209",
+              "pos": "27585"
+            },
+            "intra_packet_byte_position": 115,
+            "source_packet_start_ms": {
+              "numerator": 1632000,
+              "denominator": 49,
+              "value": 33306.12244897959
+            },
+            "source_packet_end_ms": {
+              "numerator": 1633280,
+              "denominator": 49,
+              "value": 33332.244897959186
+            },
+            "packet_shift_ms": {
+              "numerator": 1463040,
+              "denominator": 49,
+              "value": 29857.95918367347
+            }
+          },
+          {
+            "clip_byte_position": 36591,
+            "source_byte_position": 292656,
+            "source_packet_index": 1318,
+            "clip_packet_index": 175,
+            "source_packet": {
+              "pts": 485867520,
+              "dts": 485867520,
+              "duration": 368640,
+              "size": "209",
+              "pos": "292636"
+            },
+            "clip_packet": {
+              "pts": 64512000,
+              "dts": 64512000,
+              "duration": 368640,
+              "size": "209",
+              "pos": "36571"
+            },
+            "intra_packet_byte_position": 20,
+            "source_packet_start_ms": {
+              "numerator": 1687040,
+              "denominator": 49,
+              "value": 34429.38775510204
+            },
+            "source_packet_end_ms": {
+              "numerator": 1688320,
+              "denominator": 49,
+              "value": 34455.510204081635
+            },
+            "packet_shift_ms": {
+              "numerator": 1463040,
+              "denominator": 49,
+              "value": 29857.95918367347
+            }
+          }
+        ],
+        "first_source_packet_index": 1143,
+        "first_source_packet": {
+          "pts": 421355520,
+          "dts": 421355520,
+          "duration": 368640,
+          "size": "209",
+          "pos": "256065"
+        },
+        "first_clip_packet": {
+          "pts": 0,
+          "dts": 0,
+          "duration": 368640,
+          "size": "209",
+          "pos": "0"
+        },
+        "encoded_frame_start_ms": {
+          "numerator": 1463040,
+          "denominator": 49,
+          "value": 29857.95918367347
+        },
+        "encoded_frame_start_minus_declared_offset_ms": {
+          "numerator": -2,
+          "denominator": 49,
+          "value": -0.04081632653061224
+        },
+        "source_decoded_pcm_coordinate_of_clip_decoded_zero_ms": {
+          "numerator": 1463040,
+          "denominator": 49,
+          "value": 29857.95918367347
+        },
+        "decoded_coordinate_minus_declared_offset_ms": {
+          "numerator": -2,
+          "denominator": 49,
+          "value": -0.04081632653061224
+        },
+        "packet_precision_bound_ms": {
+          "numerator": 1280,
+          "denominator": 49,
+          "value": 26.122448979591837
+        },
+        "source_start_pts": 0,
+        "clip_start_pts": 0,
+        "source_time_base": "1/14112000",
+        "clip_time_base": "1/14112000",
+        "decoded_coordinate_can_precede_source_pcm_zero": false,
+        "changes_acceptance": false
+      }
+    }
+  ],
+  "packet_mapping_proven_samples": 15,
+  "all_input_hashes_unchanged": true,
+  "v1_results_replaced": false,
+  "v2_accepted": false,
+  "publication_changed": false,
+  "limitations": [
+    "MP3 PTS is a demuxer-generated frame-count clock, not stored wall-clock timestamps.",
+    "Packet timing establishes encoded position and skip-sample convention; it does not alone prove the cause of a low PCM correlation.",
+    "No frame-boundary correction or resampling-phase change is applied to runtime or acceptance.",
+    "Only this retained recitation and these 15 samples were measured."
+  ],
+  "manual_cleanup_required": true,
+  "private_outputs": "%TEMP%\\ayahx-b-packet-proof",
+  "deletion_or_move_attempted": false
+}

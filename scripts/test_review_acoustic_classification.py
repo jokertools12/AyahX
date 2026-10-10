@@ -6,7 +6,7 @@ import json
 import unittest
 
 from review_acoustic_checkpoint import input_fingerprints
-from review_acoustic_classification import (expand_runs, fraction, native_identity,
+from review_acoustic_classification import (constant_clock, expand_runs, fraction, native_identity,
                                             packet_position, replay_segments, review_record)
 
 
@@ -89,6 +89,26 @@ def reviewed_fixture():
 
 
 class ClassificationReviewTest(unittest.TestCase):
+    def test_log_mel_is_diagnostic_after_exact_codec_proof(self):
+        inputs = reviewed_fixture()
+        inputs[0]['samples'][0]['log_mel']['score'] = .8
+        result = review_record(*inputs)
+        self.assertTrue(result['v2_adoption_candidate'])
+        self.assertEqual(result['log_mel_diagnostic']['minimum_score'], .8)
+        self.assertIsNone(result['log_mel_diagnostic']['acceptance_threshold'])
+
+    def test_constant_lag_requires_multiple_boundary_free_chapters(self):
+        rows = [{'surah': s, 'envelope': {'best_lag_ms': 200 + k}} for s in (1, 2, 3) for k in (-1, 0, 1)]
+        value = constant_clock(rows)
+        self.assertTrue(value['proven'])
+        self.assertFalse(value['offset_correction_applied'])
+        self.assertFalse(constant_clock(rows[:6])['proven'])
+
+    def test_increasing_or_small_lag_is_not_constant_failure(self):
+        for values in ((-20, 0, 20), (10, 15, 20), (100, 150, 200)):
+            rows = [{'surah': s, 'envelope': {'best_lag_ms': lag}} for s in (1, 2, 3) for lag in values]
+            self.assertFalse(constant_clock(rows)['proven'])
+
     def test_complete_independent_proof_can_propose_candidate_without_mutating_raw(self):
         inputs = reviewed_fixture()
         result = review_record(*inputs)

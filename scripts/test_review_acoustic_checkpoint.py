@@ -3,7 +3,7 @@
 import copy
 import unittest
 
-from review_acoustic_checkpoint import lag_trends, numeric_gate
+from review_acoustic_checkpoint import decode_diagnostic, lag_trends, numeric_gate
 
 
 def sample(surah=1, offset=0, lag=0):
@@ -14,6 +14,24 @@ def sample(surah=1, offset=0, lag=0):
 
 
 class IndependentReviewTest(unittest.TestCase):
+    def test_exact_observed_metadata_pair_is_recorded_not_hidden(self):
+        value = decode_diagnostic(0, b'Incorrect BOM value\r\nError reading frame GEOB, skipped\r\n')
+        self.assertEqual(value['diagnostic'], 'ID3_GEOB_METADATA_PAIR')
+        self.assertEqual(len(value['messages']), 2)
+        self.assertFalse(value['audio_decode_diagnostic_accepted'])
+
+    def test_unknown_audio_error_is_not_whitelisted(self):
+        with self.assertRaisesRegex(RuntimeError, 'local_decode_failed'):
+            decode_diagnostic(0, b'Header missing\n')
+
+    def test_metadata_pair_does_not_waive_nonzero_exit(self):
+        with self.assertRaisesRegex(RuntimeError, 'local_decode_failed'):
+            decode_diagnostic(1, b'Incorrect BOM value\nError reading frame GEOB, skipped\n')
+
+    def test_truncated_stderr_is_not_assumed_safe(self):
+        with self.assertRaisesRegex(RuntimeError, 'local_decode_failed'):
+            decode_diagnostic(0, b'', True)
+
     def test_inclusive_numeric_boundaries(self):
         for lag in (-30, 0, 30):
             with self.subTest(lag=lag):

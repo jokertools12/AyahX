@@ -10,6 +10,7 @@ from fractions import Fraction
 import hashlib
 import json
 import math
+from statistics import mean, pstdev
 from pathlib import Path
 
 from review_acoustic_checkpoint import (check_checkpoint, finite, input_fingerprints,
@@ -169,6 +170,19 @@ def native_identity(pcm, packet_position_data, source_count):
             'native_end_overrun_ms': float(max(Fraction(0), start + count - source_count) * Fraction(1000, rate))}
 
 
+def constant_clock(rows):
+    """Diagnostic only: boundary-free packet/PCM clock witnesses, no correction."""
+    chapters = {}
+    for row in rows:
+        chapters.setdefault(row['surah'], []).append(row['envelope']['best_lag_ms'])
+    lags = [lag for values in chapters.values() for lag in values]
+    proven = (len(chapters) >= 3 and all(len(v) >= 3 for v in chapters.values())
+              and all(finite(v) for v in lags) and pstdev(lags) <= 10 and abs(mean(lags)) > 30)
+    return {'proven': bool(proven), 'sample_count': len(lags), 'chapter_count': len(chapters),
+            'mean_lag_ms': mean(lags) if lags else None, 'population_std_ms': pstdev(lags) if lags else None,
+            'offset_correction_applied': False, 'acceptance_changed': False}
+
+
 def review_record(record, pcm_replay, distribution_ok, old, packet_bundle=None, native_bundle=None, supplied=None):
     raw = record.get('classification', {})
     blockers, evidence, errors = [], [], []
@@ -250,6 +264,10 @@ def review_record(record, pcm_replay, distribution_ok, old, packet_bundle=None, 
         item.get('native_identity', {}).get('exact_fixed_interior_identity') is True
         and item.get('packet_position', {}).get('envelope_position_linked') is True for item in evidence)
     independent_trends = lag_trends(wave_clock_rows)
+    constant = constant_clock(wave_clock_rows)
+    # Witnesses above already require exact packet/native identity and full
+    # boundary-free PCM. End-confounded samples remain separate blockers.
+    constant_proven = bool(stable and distribution_ok and replay_valid and constant['proven'])
     genuine_drift = bool(stable and distribution_ok and replay_valid
                          and any(trend['increasing_drift_evidence'] for trend in independent_trends))
     raw_drift = any(t.get('increasing_drift_evidence') is True for t in raw.get('lag_trends', []))
@@ -258,7 +276,7 @@ def review_record(record, pcm_replay, distribution_ok, old, packet_bundle=None, 
                        for item in evidence if item.get('boundary_support'))
     eof_native_unexplained = any(item.get('native_identity', {}).get('native_end_overrun_ms', 0) > 0 for item in evidence)
     codec_proven = identity_position_proven and not duration_unexplained and not eof_native_unexplained
-    pattern = ('increasing_drift' if genuine_drift else 'codec_processing_only' if codec_proven else
+    pattern = ('increasing_drift' if genuine_drift else 'constant_lag' if constant_proven else 'codec_processing_only' if codec_proven else
                'boundary_confounded' if eof_boundary else 'unresolved')
     if raw_drift and not genuine_drift:
         blockers.append('RAW_TREND_HAS_NO_INDEPENDENT_BOUNDARY_FREE_WAVE_CLOCK_PROOF')
@@ -274,9 +292,13 @@ def review_record(record, pcm_replay, distribution_ok, old, packet_bundle=None, 
         blockers.append('EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE')
     if not all(item.get('packet_position', {}).get('lag_within_30ms') is True for item in evidence):
         blockers.append('PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS')
-    if not all(finite(row.get('log_mel', {}).get('score')) and row['log_mel']['score'] >= .9 for row in rows):
-        blockers.append('RETAINED_EXTRA_LOG_MEL_GATE_FAILS')
+    spectral_scores = [row['log_mel']['score'] for row in rows if finite(row.get('log_mel', {}).get('score'))]
     return {'raw_classification': raw, 'reviewed_pattern': pattern,
+            'constant_lag_clock_evidence': constant, 'constant_lag_proven': constant_proven,
+            'log_mel_diagnostic': {'scored_samples': len(spectral_scores),
+                                   'minimum_score': min(spectral_scores) if spectral_scores else None,
+                                   'acceptance_threshold': None,
+                                   'reason': 'User v2 defines four numeric gates; log-mel is diagnostic with no specified threshold'},
             'genuine_drift_proven': genuine_drift, 'independent_packet_lag_trends': independent_trends,
             'codec_identity_position_component_proven': identity_position_proven,
             'codec_cause_proven': codec_proven, 'v2_adoption_candidate': not blockers and not errors and pattern == 'codec_processing_only',

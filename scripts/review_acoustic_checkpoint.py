@@ -193,14 +193,26 @@ def check_checkpoint(report, original, cache):
             'segments_IoU_replayed': False, 'segments_limitation': 'intervals unavailable; SHA/count alone do not permit replay'}
 
 
-def decode_selected_sources(ffmpeg, path, bounds):
+def decode_diagnostic(exit_code, payload, truncated=False):
+    """Explicitly record the one observed ID3 GEOB metadata diagnostic pair."""
+    lines = payload.decode('utf-8', errors='replace').splitlines()
+    observed_pair = ['Incorrect BOM value', 'Error reading frame GEOB, skipped']
+    if exit_code or truncated or (lines and lines != observed_pair):
+        raise RuntimeError(f'local_decode_failed: exit={exit_code}; stderr_sha256={hashlib.sha256(payload).hexdigest()}; truncated={truncated}')
+    return {'exit_code': exit_code, 'stderr_sha256': hashlib.sha256(payload).hexdigest(),
+            'diagnostic': 'ID3_GEOB_METADATA_PAIR' if lines else None,
+            'messages': lines, 'audio_decode_diagnostic_accepted': False,
+            'metadata_source': 'https://github.com/FFmpeg/FFmpeg/blob/n6.1.1/libavformat/id3v2.c'}
+
+
+def decode_selected_sources(ffmpeg, path, bounds, diagnostics=None):
     """Decode complete file once, retain only complete requested windows + context."""
     import numpy as np
     command = [str(ffmpeg), '-nostdin', '-v', 'error', '-i', str(path), '-f', 'f32le', '-ar', str(RATE), '-ac', '1', 'pipe:1']
     pieces = {key: [] for key in bounds}
     count = 0
     with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
-        stderr_size = [0]
+        stderr_parts, stderr_size = [], [0]
 
         def drain_stderr():
             while True:
@@ -208,6 +220,8 @@ def decode_selected_sources(ffmpeg, path, bounds):
                 if not error_chunk:
                     return
                 stderr_size[0] += len(error_chunk)
+                if stderr_size[0] <= 8192:
+                    stderr_parts.append(error_chunk)
 
         stderr_reader = threading.Thread(target=drain_stderr)
         stderr_reader.start()
@@ -223,8 +237,9 @@ def decode_selected_sources(ffmpeg, path, bounds):
             count += len(pcm)
         exit_code = process.wait()
         stderr_reader.join()
-    if exit_code or stderr_size[0]:
-        raise RuntimeError(f'local_decode_failed: exit={exit_code}; stderr_present={bool(stderr_size[0])}')
+    receipt = decode_diagnostic(exit_code, b''.join(stderr_parts), stderr_size[0] > 8192)
+    if receipt['diagnostic'] and diagnostics is not None:
+        diagnostics.append({'file': path.name, **receipt})
     return {key: np.concatenate(value).astype(np.float64) for key, value in pieces.items()}, count
 
 
@@ -243,7 +258,7 @@ def replay_pcm(record, ffmpeg):
         return env >= threshold
 
     scratch = Path(record['scratch_dir'])
-    evidence, errors = [], []
+    evidence, errors, diagnostics = [], [], []
     for surah in sorted({row['surah'] for row in record['samples']}):
         source_path = scratch / f'{surah}.audio'
         if digest(source_path) != record['source_sha256'][str(surah)]:
@@ -255,11 +270,11 @@ def replay_pcm(record, ffmpeg):
             clip_path = scratch / f'clip-{key[0]}-{key[1]}.mp3'
             if digest(clip_path) != row['hf_audio_sha256']:
                 raise RuntimeError('retained_clip_hash_mismatch')
-            clips[key], _ = decode_selected_sources(ffmpeg, clip_path, {key: (0, 2 ** 40)})
+            clips[key], _ = decode_selected_sources(ffmpeg, clip_path, {key: (0, 2 ** 40)}, diagnostics)
             clips[key] = clips[key][key]
             start = row['envelope']['source_sample_start']
             bounds[key] = max(0, start - 160), start + len(clips[key]) + 160
-        windows, source_count = decode_selected_sources(ffmpeg, source_path, bounds)
+        windows, source_count = decode_selected_sources(ffmpeg, source_path, bounds, diagnostics)
         for row in samples:
             key = row['surah'], row['ayah']
             clip = clips[key]
@@ -301,6 +316,7 @@ def replay_pcm(record, ffmpeg):
         if digest(source_path) != record['source_sha256'][str(surah)]:
             raise RuntimeError('retained_source_changed_during_replay')
     return {'config': record['config'], 'errors': errors, 'samples': evidence,
+            'decoder_diagnostics': diagnostics,
             'input_fingerprints': input_fingerprints(record),
             'duration_definition': 'abs(decoded_HF_clip_duration_ms - HF_duration_ms); not independently measured source duration',
             'supplied_segments_IoU_replayed': False}

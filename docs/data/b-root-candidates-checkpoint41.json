@@ -1,0 +1,5783 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-10T02:37:27.991674+00:00",
+  "read_only": true,
+  "live_diagnosis_snapshot_sha256": "87de277218b0c795763196a1826b2c7321772c0c6335994369d3e65c004998ce",
+  "retained_v1_checkout_sha256": "e071bf483c7b44c9157c49cc15287c9aa11ed598d777bfff2bdcb1e8a449a0b9",
+  "analyzer_sha256": "455dcef96f1163b9229df06caeb94df271aa413939a03648858ab7e4105c7c66",
+  "calculator_snapshot": {
+    "method_version": "B-v2-diagnostics-gridfix-1",
+    "script_sha256": "507b5b4046ce9a46f3b9f9f178db41d7b81ea9b9afde5f47a806a9a458299985",
+    "kernel_sha256": "5f43e008c2333a328739e313274369200442915a450fcdae0e4e08c67076bcf1",
+    "retained_v1_calculator_sha256": "282fc30c527a8ed1f35687ee90dd268cf114153e0fad30a3ff90c9cd922de6b8"
+  },
+  "core_bounds": {
+    "envelope_score_min": 0.9,
+    "vad_agreement_min": 0.9,
+    "absolute_lag_max_ms": 30,
+    "duration_difference_max_ms": 30
+  },
+  "records_observed": 42,
+  "all_core_config_count": 2,
+  "local_proof_candidate_count": 2,
+  "configs": [
+    {
+      "config": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 9,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 1,
+          "ayah": 5
+        },
+        {
+          "surah": 2,
+          "ayah": 1
+        },
+        {
+          "surah": 2,
+          "ayah": 143
+        },
+        {
+          "surah": 2,
+          "ayah": 215
+        },
+        {
+          "surah": 2,
+          "ayah": 286
+        },
+        {
+          "surah": 3,
+          "ayah": 51
+        },
+        {
+          "surah": 3,
+          "ayah": 101
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "1.audio",
+          "available": true
+        },
+        {
+          "filename": "2.audio",
+          "available": true
+        },
+        {
+          "filename": "3.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-1-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-5.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-72.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-143.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-215.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-286.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-51.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-101.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-150.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-200.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "abdulbasit_abdulsamad_tarteel",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 7,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 1,
+          "ayah": 7
+        },
+        {
+          "surah": 2,
+          "ayah": 1
+        },
+        {
+          "surah": 2,
+          "ayah": 286
+        },
+        {
+          "surah": 3,
+          "ayah": 200
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "1.audio",
+          "available": true
+        },
+        {
+          "filename": "2.audio",
+          "available": true
+        },
+        {
+          "filename": "3.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-1-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-5.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-72.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-143.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-215.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-286.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-51.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-101.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-150.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-200.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "abdullah_al_mattrod_qdc",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 13,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 2,
+          "ayah": 286
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 1,
+          "ayah": 1
+        },
+        {
+          "surah": 1,
+          "ayah": 3
+        },
+        {
+          "surah": 1,
+          "ayah": 4
+        },
+        {
+          "surah": 1,
+          "ayah": 5
+        },
+        {
+          "surah": 1,
+          "ayah": 7
+        },
+        {
+          "surah": 2,
+          "ayah": 1
+        },
+        {
+          "surah": 2,
+          "ayah": 72
+        },
+        {
+          "surah": 2,
+          "ayah": 143
+        },
+        {
+          "surah": 2,
+          "ayah": 215
+        },
+        {
+          "surah": 2,
+          "ayah": 286
+        },
+        {
+          "surah": 3,
+          "ayah": 1
+        },
+        {
+          "surah": 3,
+          "ayah": 51
+        },
+        {
+          "surah": 3,
+          "ayah": 101
+        },
+        {
+          "surah": 3,
+          "ayah": 150
+        },
+        {
+          "surah": 3,
+          "ayah": 200
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "1.audio",
+          "available": true
+        },
+        {
+          "filename": "2.audio",
+          "available": true
+        },
+        {
+          "filename": "3.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-1-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-5.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-72.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-143.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-215.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-286.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-51.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-101.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-150.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-200.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "abdullah_kamel_way2quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 12,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 1,
+          "ayah": 7
+        },
+        {
+          "surah": 2,
+          "ayah": 1
+        },
+        {
+          "surah": 2,
+          "ayah": 286
+        },
+        {
+          "surah": 3,
+          "ayah": 51
+        },
+        {
+          "surah": 3,
+          "ayah": 150
+        },
+        {
+          "surah": 3,
+          "ayah": 200
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 1,
+          "ayah": 2
+        },
+        {
+          "surah": 1,
+          "ayah": 3
+        },
+        {
+          "surah": 1,
+          "ayah": 4
+        },
+        {
+          "surah": 1,
+          "ayah": 6
+        },
+        {
+          "surah": 1,
+          "ayah": 7
+        },
+        {
+          "surah": 2,
+          "ayah": 1
+        },
+        {
+          "surah": 2,
+          "ayah": 72
+        },
+        {
+          "surah": 2,
+          "ayah": 143
+        },
+        {
+          "surah": 2,
+          "ayah": 215
+        },
+        {
+          "surah": 2,
+          "ayah": 286
+        },
+        {
+          "surah": 3,
+          "ayah": 1
+        },
+        {
+          "surah": 3,
+          "ayah": 51
+        },
+        {
+          "surah": 3,
+          "ayah": 101
+        },
+        {
+          "surah": 3,
+          "ayah": 150
+        },
+        {
+          "surah": 3,
+          "ayah": 200
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "1.audio",
+          "available": true
+        },
+        {
+          "filename": "2.audio",
+          "available": true
+        },
+        {
+          "filename": "3.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-1-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-72.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-143.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-215.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-286.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-51.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-101.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-150.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-200.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "abdulwadood_haneef_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 11,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 1,
+          "ayah": 3
+        },
+        {
+          "surah": 1,
+          "ayah": 6
+        },
+        {
+          "surah": 1,
+          "ayah": 7
+        },
+        {
+          "surah": 3,
+          "ayah": 1
+        },
+        {
+          "surah": 3,
+          "ayah": 150
+        },
+        {
+          "surah": 3,
+          "ayah": 200
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "1.audio",
+          "available": true
+        },
+        {
+          "filename": "2.audio",
+          "available": true
+        },
+        {
+          "filename": "3.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-1-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-72.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-143.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-215.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-286.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-51.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-101.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-150.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-200.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "abdur_rashid_sufi_qdc",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 14,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 2,
+          "ayah": 286
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "1.audio",
+          "available": true
+        },
+        {
+          "filename": "2.audio",
+          "available": true
+        },
+        {
+          "filename": "3.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-1-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-5.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-72.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-143.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-215.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-286.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-51.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-101.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-150.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-200.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "abdur_rashid_sufi_shubah_qdc",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 13,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 2,
+          "ayah": 72
+        },
+        {
+          "surah": 2,
+          "ayah": 286
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 1,
+          "ayah": 1
+        },
+        {
+          "surah": 1,
+          "ayah": 3
+        },
+        {
+          "surah": 1,
+          "ayah": 4
+        },
+        {
+          "surah": 1,
+          "ayah": 5
+        },
+        {
+          "surah": 1,
+          "ayah": 7
+        },
+        {
+          "surah": 2,
+          "ayah": 1
+        },
+        {
+          "surah": 2,
+          "ayah": 72
+        },
+        {
+          "surah": 2,
+          "ayah": 143
+        },
+        {
+          "surah": 2,
+          "ayah": 215
+        },
+        {
+          "surah": 2,
+          "ayah": 286
+        },
+        {
+          "surah": 3,
+          "ayah": 1
+        },
+        {
+          "surah": 3,
+          "ayah": 51
+        },
+        {
+          "surah": 3,
+          "ayah": 101
+        },
+        {
+          "surah": 3,
+          "ayah": 150
+        },
+        {
+          "surah": 3,
+          "ayah": 200
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "1.audio",
+          "available": true
+        },
+        {
+          "filename": "2.audio",
+          "available": true
+        },
+        {
+          "filename": "3.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-1-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-5.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-72.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-143.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-215.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-286.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-51.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-101.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-150.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-200.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "abu_bakr_al_shatri_tarteel",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 14,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 2,
+          "ayah": 1
+        },
+        {
+          "surah": 2,
+          "ayah": 286
+        },
+        {
+          "surah": 3,
+          "ayah": 1
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "1.audio",
+          "available": true
+        },
+        {
+          "filename": "2.audio",
+          "available": true
+        },
+        {
+          "filename": "3.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-1-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-5.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-72.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-143.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-215.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-286.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-51.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-101.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-150.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-200.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "adel_al_karbalaei_archive_v2",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 12,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 1,
+          "ayah": 7
+        },
+        {
+          "surah": 2,
+          "ayah": 286
+        },
+        {
+          "surah": 3,
+          "ayah": 200
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 1,
+          "ayah": 1
+        },
+        {
+          "surah": 1,
+          "ayah": 3
+        },
+        {
+          "surah": 1,
+          "ayah": 4
+        },
+        {
+          "surah": 1,
+          "ayah": 5
+        },
+        {
+          "surah": 1,
+          "ayah": 7
+        },
+        {
+          "surah": 2,
+          "ayah": 1
+        },
+        {
+          "surah": 2,
+          "ayah": 72
+        },
+        {
+          "surah": 2,
+          "ayah": 143
+        },
+        {
+          "surah": 2,
+          "ayah": 215
+        },
+        {
+          "surah": 2,
+          "ayah": 286
+        },
+        {
+          "surah": 3,
+          "ayah": 1
+        },
+        {
+          "surah": 3,
+          "ayah": 51
+        },
+        {
+          "surah": 3,
+          "ayah": 101
+        },
+        {
+          "surah": 3,
+          "ayah": 150
+        },
+        {
+          "surah": 3,
+          "ayah": 200
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "1.audio",
+          "available": true
+        },
+        {
+          "filename": "2.audio",
+          "available": true
+        },
+        {
+          "filename": "3.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-1-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-5.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-1-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-72.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-143.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-215.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-286.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-51.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-101.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-150.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-3-200.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "ahmed_al_ajmi_qdc",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 12,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 6
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "ahmed_amer_tvquran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "codec_processing_only",
+      "raw_classification_reason": "all_encoded_interiors_are_exact_contiguous_source_copies_with_aligned_envelope",
+      "sample_count": 15,
+      "core_candidate_samples": 0,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "ahmed_deban_qalon_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 14,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 28
+        },
+        {
+          "surah": 84,
+          "ayah": 1
+        },
+        {
+          "surah": 84,
+          "ayah": 7
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 28
+        },
+        {
+          "surah": 74,
+          "ayah": 41
+        },
+        {
+          "surah": 74,
+          "ayah": 55
+        },
+        {
+          "surah": 84,
+          "ayah": 1
+        },
+        {
+          "surah": 84,
+          "ayah": 7
+        },
+        {
+          "surah": 84,
+          "ayah": 13
+        },
+        {
+          "surah": 84,
+          "ayah": 19
+        },
+        {
+          "surah": 84,
+          "ayah": 25
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "84.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-28.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-41.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-55.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-13.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-19.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-25.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "ahmed_issa_al_maasaraawi_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 13,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 85,
+          "ayah": 11
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "ahmed_kaseb_way2quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "constant_lag",
+      "raw_classification_reason": "reliable_envelope_lags_all_outside_acceptance",
+      "sample_count": 15,
+      "core_candidate_samples": 0,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "ahmed_nuayna_qdc",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 12,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 6
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "ahmed_saleh_rajab_qalon_way2quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 4,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 84,
+          "ayah": 25
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 14
+        },
+        {
+          "surah": 74,
+          "ayah": 27
+        },
+        {
+          "surah": 74,
+          "ayah": 41
+        },
+        {
+          "surah": 74,
+          "ayah": 55
+        },
+        {
+          "surah": 84,
+          "ayah": 1
+        },
+        {
+          "surah": 84,
+          "ayah": 7
+        },
+        {
+          "surah": 84,
+          "ayah": 13
+        },
+        {
+          "surah": 84,
+          "ayah": 19
+        },
+        {
+          "surah": 84,
+          "ayah": 25
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "84.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-14.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-27.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-41.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-55.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-13.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-19.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-25.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "ahmed_saud_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 15,
+      "all_samples_meet_reported_core": true,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 101,
+          "ayah": 1
+        },
+        {
+          "surah": 102,
+          "ayah": 5
+        },
+        {
+          "surah": 102,
+          "ayah": 8
+        },
+        {
+          "surah": 105,
+          "ayah": 2
+        },
+        {
+          "surah": 105,
+          "ayah": 3
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "101.audio",
+          "available": true
+        },
+        {
+          "filename": "102.audio",
+          "available": true
+        },
+        {
+          "filename": "105.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-101-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-101-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-101-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-101-9.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-101-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-102-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-102-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-102-5.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-102-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-102-8.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-105-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-105-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-105-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-105-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-105-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": true,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "ahmed_shaheen_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 8,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "ahmed_talib_bin_humaid_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 14,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 77,
+          "ayah": 50
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "77.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-77-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-77-13.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-77-25.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-77-38.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-77-50.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "akram_al_alaqmi_qdc",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 13,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 6
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "bandar_baleela_qdc",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 14,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 6
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "fatih_seferagic_way2quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 12,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 6
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "hani_al_rifai_qdc_128k",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 12,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 6
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "islam_sobhi_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 14,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "77.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-77-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-77-13.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-77-25.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-77-38.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-77-50.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "khalifa_al_tunaiji_tarteel",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 0,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "maher_al_muaiqly_qdc",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "unproven_old_source",
+      "sample_count": 15,
+      "core_candidate_samples": 9,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 36,
+          "ayah": 83
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": false,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "2.audio",
+          "available": true
+        },
+        {
+          "filename": "36.audio",
+          "available": true
+        },
+        {
+          "filename": "107.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-2-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-72.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-143.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-215.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-2-286.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-36-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-36-21.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-36-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-36-63.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-36-83.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-107-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-107-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-107-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-107-5.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-107-7.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "mahmoud_abdul_hakam_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 10,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "mahmoud_ali_al_banna_qdc",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 2,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "mahmoud_khalil_al_husary_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 1,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 2,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "mahmoud_khalil_al_husary_qdc_128k",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 2,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 6
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "mishary_rashid_al_afasy_2008_qdc",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 12,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 6
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "mishary_rashid_al_afasy_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 15,
+      "all_samples_meet_reported_core": true,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 42
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": true,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "moaz_mahmoud_hamed_qalon_way2quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 13,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 41
+        },
+        {
+          "surah": 74,
+          "ayah": 55
+        },
+        {
+          "surah": 84,
+          "ayah": 1
+        },
+        {
+          "surah": 84,
+          "ayah": 25
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 28
+        },
+        {
+          "surah": 74,
+          "ayah": 41
+        },
+        {
+          "surah": 74,
+          "ayah": 55
+        },
+        {
+          "surah": 84,
+          "ayah": 1
+        },
+        {
+          "surah": 84,
+          "ayah": 7
+        },
+        {
+          "surah": 84,
+          "ayah": 13
+        },
+        {
+          "surah": 84,
+          "ayah": 19
+        },
+        {
+          "surah": 84,
+          "ayah": 25
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "84.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-28.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-41.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-55.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-13.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-19.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-25.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "mohammed_alghazali_archive",
+      "raw_status": "diagnostic_error",
+      "raw_classification_pattern": null,
+      "raw_classification_reason": null,
+      "sample_count": 0,
+      "core_candidate_samples": 0,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": false,
+        "reported_source_hashes_match_v1": false,
+        "hf_hashes_and_metadata_match_v1": false,
+        "v1_metrics_match": false
+      },
+      "local_files": [],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "mohammed_siddiq_al_minshawi_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 11,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 12,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 6
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "muammar_zainal_al_sukaini_way2quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 13,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 6
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "mustafa_ismail_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 0,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        }
+      ],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "nasser_al_qatami_mp3quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "codec_processing_only",
+      "raw_classification_reason": "all_encoded_interiors_are_exact_contiguous_source_copies_with_aligned_envelope",
+      "sample_count": 15,
+      "core_candidate_samples": 14,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [],
+      "missing_encoded_identity_samples": [],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "saad_al_ghamdi_tarteel",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 10,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 29
+        },
+        {
+          "surah": 74,
+          "ayah": 42
+        },
+        {
+          "surah": 74,
+          "ayah": 56
+        },
+        {
+          "surah": 85,
+          "ayah": 1
+        },
+        {
+          "surah": 85,
+          "ayah": 6
+        },
+        {
+          "surah": 85,
+          "ayah": 11
+        },
+        {
+          "surah": 85,
+          "ayah": 17
+        },
+        {
+          "surah": 85,
+          "ayah": 22
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "85.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-29.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-42.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-56.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-6.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-11.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-17.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-85-22.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    },
+    {
+      "config": "saber_abdulhakam_qalon_way2quran",
+      "raw_status": "measured",
+      "raw_classification_pattern": "unresolved",
+      "raw_classification_reason": "insufficient_position_or_identity_evidence",
+      "sample_count": 15,
+      "core_candidate_samples": 5,
+      "all_samples_meet_reported_core": false,
+      "reported_numeric_markers_agree_with_computed_core": true,
+      "failed_raw_8khz_interior_samples": [
+        {
+          "surah": 74,
+          "ayah": 55
+        },
+        {
+          "surah": 84,
+          "ayah": 25
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "missing_encoded_identity_samples": [
+        {
+          "surah": 74,
+          "ayah": 1
+        },
+        {
+          "surah": 74,
+          "ayah": 15
+        },
+        {
+          "surah": 74,
+          "ayah": 28
+        },
+        {
+          "surah": 74,
+          "ayah": 41
+        },
+        {
+          "surah": 74,
+          "ayah": 55
+        },
+        {
+          "surah": 84,
+          "ayah": 1
+        },
+        {
+          "surah": 84,
+          "ayah": 7
+        },
+        {
+          "surah": 84,
+          "ayah": 13
+        },
+        {
+          "surah": 84,
+          "ayah": 19
+        },
+        {
+          "surah": 84,
+          "ayah": 25
+        },
+        {
+          "surah": 97,
+          "ayah": 1
+        },
+        {
+          "surah": 97,
+          "ayah": 2
+        },
+        {
+          "surah": 97,
+          "ayah": 3
+        },
+        {
+          "surah": 97,
+          "ayah": 4
+        },
+        {
+          "surah": 97,
+          "ayah": 5
+        }
+      ],
+      "provenance_guards": {
+        "fixed_distribution_matches_v1": true,
+        "reported_source_hashes_match_v1": true,
+        "hf_hashes_and_metadata_match_v1": true,
+        "v1_metrics_match": true
+      },
+      "local_files": [
+        {
+          "filename": "74.audio",
+          "available": true
+        },
+        {
+          "filename": "84.audio",
+          "available": true
+        },
+        {
+          "filename": "97.audio",
+          "available": true
+        },
+        {
+          "filename": "clip-74-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-15.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-28.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-41.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-74-55.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-7.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-13.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-19.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-84-25.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-1.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-2.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-3.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-4.mp3",
+          "available": true
+        },
+        {
+          "filename": "clip-97-5.mp3",
+          "available": true
+        }
+      ],
+      "local_audio_hashes_rechecked_here": false,
+      "local_packet_native_proof_candidate": false,
+      "v2_accepted": false,
+      "published": false
+    }
+  ],
+  "audio_decodes_executed": 0,
+  "network_requests": 0,
+  "publication_changed": false,
+  "v2_accepted": false,
+  "raw_classifications_replaced": false,
+  "manual_cleanup_required": true,
+  "private_outputs": "%TEMP%\\ayahx-b-proof-candidates",
+  "limitations": [
+    "Core counts use the retained report measurements; no independent VAD replay occurs here.",
+    "Source/HF provenance compares retained evidence. Actual local audio file hashes are checked again by packet/native tools before a proof.",
+    "Numeric core, packet mapping, native identity, offset bounds, and publication remain separate decisions.",
+    "The running report can advance after this captured snapshot; this inventory does not resume or modify its helper."
+  ]
+}
