@@ -163,6 +163,26 @@ JSON_STORAGE_SIZE مع الحقول الأخرى المقاسة: 645,389,632 byt
 
 ## 3. نتائج الاختبارات
 
+أوامر التحقق الفعلية (الملفات الخاصة في TEMP، دون أسرار أو SQL ناتج في Git):
+
+```powershell
+$env:D3_INPUT_DIRECTORY = "$env:TEMP/ayahx-d3-release-inputs"
+$env:D1_QURAN_CORPUS = "$env:TEMP/ayahx-d1/corpus.json"
+npm test -- --reporter=json --outputFile=docs/data/d3-close-tests-final.json
+npx tsc --noEmit
+npm run build
+npx tsx scripts/verify-qud-timings.ts --corpus "$env:TEMP/ayahx-d1/corpus.json" --baseline docs/data/d3-close-production-before.json --complete --manifest docs/data/d3-release-preparation.json --semantic-baseline docs/data/d3-close-local-acceptance.json --out docs/data/d3-close-production-after.json
+npx tsx scripts/check-qud-storage-capacity.ts --production-read-only --out docs/data/d3-close-capacity-after.json
+```
+
+الاستيراد الأول حُفظ حتى نقطة الانقطاع؛ أمر الاستئناف المنفذ:
+
+```powershell
+npx tsx scripts/resume-qud-timings-serial.ts --confirm-production --local-db ayahx_d2_d3_cli_20261010 --previous-report docs/data/d3-close-production-import-interrupted.json --manifest docs/data/d3-release-preparation.json --corpus "$env:TEMP/ayahx-d1/corpus.json" --input-dir "$env:TEMP/ayahx-d3-release-inputs" --preflight docs/data/d3-close-preflight.json --report docs/data/d3-close-production-resumed.json
+```
+
+البروفة المدمّرة مقيدة بقاعدتي ayahx_d2_d3_cli_20261010 وayahx_d2_d3_kill_20261010 في `scripts/test-qud-timings-db.ts`، من نسختين مستعادتين متحققتين. أمرها تلقى `--local-db` و`--kill-db` و`--first-report docs/data/d3-close-cli-first.json` وبقية المدخلات المثبتة أعلاه، وسجل `docs/data/d3-close-local-acceptance.json`. استئناف البروفة بعد تصحيح guard NULL مسجل بـ`--resume-after-corruption`؛ ليس إعادة اختبار هدم على production. lint شُغّل بـ`npx eslint --format json --output-file docs/data/d3-close-lint-final.json` على قائمة الملفات المتغيرة الفعلية الـ29، وفحص strict مستقل للخدمات والسكربتات الجديدة؛ لا lint عام.
+
 npm test على المدخلات الحقيقية:500 اختبار،494 ناجحة/6 متخطاة/0 فشل. الستة المتخطاة اختبارات queue شرطية موجودة سابقًا؛ قبولD3 والطابور الحقيقيان أعلاه مستقلان. npx tsc --noEmit، strict للملفات الجديدة، وnpm run build ناجحة. lint لكل الملفات المتغيرة:0 أخطاء و0 رسائل جديدة؛ تحذيرا server/index.ts القديمان باقيان دون تغيير. لم يُصلح lint العام.
 
 الأدلة: d3-close-quality-final.json، d3-close-tests-final.json، d3-close-lint-final.json؛ 29 ملفًا وفحص strict إضافي للسكربتات والخدمات. لا تُعامل mocks الوحدات كقبول MySQL/Railway.
