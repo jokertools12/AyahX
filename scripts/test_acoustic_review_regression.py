@@ -11,6 +11,19 @@ from lib.acoustic_diagnostics import RATE, additional_metrics, aligned_source_en
 
 
 class SourceEnvelopeAlignmentRegression(unittest.TestCase):
+    def test_identical_pcm_has_no_source_grid_or_feature_boundary_penalty(self):
+        source = np.random.default_rng(177).normal(0, .1, RATE * 5)
+        for start in (8000, 8024, 8040, 8056):
+            with self.subTest(start_sample=start):
+                clip = source[start:start + RATE]
+                result = additional_metrics(source, clip, start * 1000 / RATE,
+                                            1000, [[1, 1, 0, 1000]])
+                self.assertGreaterEqual(result['envelope']['score'], .90)
+                self.assertEqual(result['envelope']['best_lag_ms'], 0)
+                self.assertGreaterEqual(result['log_mel']['score'], .90)
+                self.assertEqual(result['vad']['agreement'], 1)
+                self.assertTrue(result['v2_numeric_candidate'])
+
     def test_exact_grid_preserves_original_neighbour_audio_context(self):
         source = np.zeros(16000)
         start, count = 8005, 5000
