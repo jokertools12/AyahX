@@ -96,12 +96,21 @@ def validate_resume(report, identity):
         raise ValueError('SEGMENTS_REPLAY_RESUME_INPUT_OR_SCRIPT_SHA_MISMATCH')
 
 
+def select_targets(complete_targets, requested):
+    if not requested:
+        return complete_targets
+    if len(requested) != len(set(requested)) or not set(requested).issubset(complete_targets):
+        raise ValueError('REQUESTED_FAILED_CONFIG_SCOPE_INVALID')
+    return sorted(requested)
+
+
 def main():
     parser = argparse.ArgumentParser()
     for option in ('manifest', 'diagnosis', 'original-evidence', 'output'):
         parser.add_argument('--' + option, required=True)
     parser.add_argument('--execute', action='store_true')
     parser.add_argument('--confirm-main-stopped', action='store_true')
+    parser.add_argument('--config', action='append', default=[])
     args = parser.parse_args()
     diagnosis_bytes = Path(args.diagnosis).read_bytes()
     original_bytes = Path(args.original_evidence).read_bytes()
@@ -115,17 +124,19 @@ def main():
         return
     if not args.confirm_main_stopped:
         raise SystemExit('MAIN_RUN_STOP_CONFIRMATION_REQUIRED_NO_NETWORK_REQUESTED')
-    targets = validate_complete(diagnosis, original, sha(original_bytes))
+    complete_targets = validate_complete(diagnosis, original, sha(original_bytes))
+    targets = select_targets(complete_targets, args.config)
     identity = {'method_version': 'B-segments-only-replay-1', 'diagnosis_snapshot_sha256': sha(diagnosis_bytes),
                 'original_evidence_sha256': sha(original_bytes), 'manifest_sha256': sha(manifest_bytes),
                 'script_sha256': sha(Path(__file__).read_bytes()),
                 'transport_sha256': sha(Path(__file__).with_name('lib').joinpath('hf_serial_ranges.py').read_bytes()),
-                'diagnosis_calculator': diagnosis['calculator']}
+                'diagnosis_calculator': diagnosis['calculator'], 'requested_failed_configs': targets}
     target = Path(args.output)
     report = json.loads(target.read_text(encoding='utf-8')) if target.exists() else {
         'read_only': True, 'audio_bytes_requested': False, 'intervals_transformed': False,
         'selected_fields': SELECTED_FIELDS, 'identity': identity, 'samples': {}, 'configs': {},
-        'target_config_count': len(targets)}
+        'target_config_count': len(targets), 'complete_main_failed_config_count': len(complete_targets),
+        'scope': 'explicit independent replay subset; full B measurements remain in diagnosis'}
     validate_resume(report, identity)
     transport = SerialTransport()
     for slug in targets:

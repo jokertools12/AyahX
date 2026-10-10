@@ -4,7 +4,7 @@ from report_qud_audio_diagnosis import build, markdown
 
 
 def fixture():
-    meta = {'slug': 'actual_slug', 'riwayah': 'hafs', 'channel': 'provider', 'audio_category': 'by_surah', 'style': 'murattal', 'audio': {}}
+    meta = {'slug': 'actual_slug', 'riwayah': 'hafs_an_asim', 'channel': 'provider', 'audio_category': 'by_surah', 'style': 'murattal', 'audio': {}}
     old = {'verification_status': 'failed', 'samples': [{'source_offset_hypothesis': {'score': .8, 'duration_difference_ms': 31, 'best_lag_ms': 0}}]}
     raw = {'status': 'measured', 'classification': {'pattern': 'unresolved'}}
     checked = {'reviewed_pattern': 'unresolved', 'v2_adoption_candidate': False, 'blockers': ['CAUSE_UNPROVEN']}
@@ -14,6 +14,14 @@ def fixture():
 
 
 class ReportTest(unittest.TestCase):
+    def test_non_hafs_is_never_published_even_with_numeric_candidate(self):
+        args = fixture()
+        args[0]['recitations'][0]['riwayah'] = 'warsh_an_nafi'
+        args[3]['results']['actual_slug']['v2_adoption_candidate'] = True
+        row = build(*args)['recitations'][0]
+        self.assertFalse(row['published'])
+        self.assertIn('non_hafs_canonical_text_unavailable', row['publication_reasons'])
+
     def test_unknown_cause_is_not_different_audio_and_counts_overlap(self):
         result = build(*fixture())
         self.assertEqual(result['reviewed_cause_counts'], {'unresolved': 1})

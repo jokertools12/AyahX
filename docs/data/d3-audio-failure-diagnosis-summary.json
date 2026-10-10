@@ -1,0 +1,2488 @@
+{
+  "checked_at": "2026-10-10T03:03:45.226060+00:00",
+  "read_only": true,
+  "v1_results_replaced": false,
+  "database_writes": 0,
+  "publication_changed": false,
+  "v1_status_counts": {
+    "source_unavailable": 13,
+    "failed": 48,
+    "passed": 8
+  },
+  "reviewed_cause_counts": {
+    "codec_processing_only": 4,
+    "boundary_confounded": 31,
+    "unresolved": 12,
+    "constant_lag": 1
+  },
+  "v2_adoption_candidates": [
+    "ahmed_saud_mp3quran",
+    "mishary_rashid_al_afasy_mp3quran",
+    "mohammed_alghazali_archive"
+  ],
+  "grouped": {
+    "provider_group": {
+      "youtube": {
+        "v1": {
+          "source_unavailable": 9
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_source_unavailable": 9
+        },
+        "v2_candidates": 0
+      },
+      "tarteel": {
+        "v1": {
+          "failed": 6
+        },
+        "reviewed_causes": {
+          "codec_processing_only": 1,
+          "boundary_confounded": 5
+        },
+        "v2_candidates": 0
+      },
+      "quranicaudio": {
+        "v1": {
+          "passed": 2,
+          "failed": 12
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_passed": 2,
+          "boundary_confounded": 9,
+          "unresolved": 3
+        },
+        "v2_candidates": 0
+      },
+      "mp3quran": {
+        "v1": {
+          "passed": 6,
+          "failed": 16
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_passed": 6,
+          "boundary_confounded": 8,
+          "unresolved": 6,
+          "codec_processing_only": 2
+        },
+        "v2_candidates": 2
+      },
+      "way2quran": {
+        "v1": {
+          "failed": 10
+        },
+        "reviewed_causes": {
+          "boundary_confounded": 7,
+          "constant_lag": 1,
+          "unresolved": 2
+        },
+        "v2_candidates": 0
+      },
+      "archive_org": {
+        "v1": {
+          "failed": 3
+        },
+        "reviewed_causes": {
+          "boundary_confounded": 2,
+          "codec_processing_only": 1
+        },
+        "v2_candidates": 1
+      },
+      "tvquran": {
+        "v1": {
+          "failed": 1
+        },
+        "reviewed_causes": {
+          "unresolved": 1
+        },
+        "v2_candidates": 0
+      },
+      "drive": {
+        "v1": {
+          "source_unavailable": 4
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_source_unavailable": 4
+        },
+        "v2_candidates": 0
+      }
+    },
+    "channel": {
+      "youtube": {
+        "v1": {
+          "source_unavailable": 9
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_source_unavailable": 9
+        },
+        "v2_candidates": 0
+      },
+      "tarteel": {
+        "v1": {
+          "failed": 6
+        },
+        "reviewed_causes": {
+          "codec_processing_only": 1,
+          "boundary_confounded": 5
+        },
+        "v2_candidates": 0
+      },
+      "quranicaudio": {
+        "v1": {
+          "passed": 2,
+          "failed": 12
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_passed": 2,
+          "boundary_confounded": 9,
+          "unresolved": 3
+        },
+        "v2_candidates": 0
+      },
+      "mp3quran": {
+        "v1": {
+          "passed": 6,
+          "failed": 16
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_passed": 6,
+          "boundary_confounded": 8,
+          "unresolved": 6,
+          "codec_processing_only": 2
+        },
+        "v2_candidates": 2
+      },
+      "way2quran": {
+        "v1": {
+          "failed": 10
+        },
+        "reviewed_causes": {
+          "boundary_confounded": 7,
+          "constant_lag": 1,
+          "unresolved": 2
+        },
+        "v2_candidates": 0
+      },
+      "archive_org": {
+        "v1": {
+          "failed": 3
+        },
+        "reviewed_causes": {
+          "boundary_confounded": 2,
+          "codec_processing_only": 1
+        },
+        "v2_candidates": 1
+      },
+      "tvquran": {
+        "v1": {
+          "failed": 1
+        },
+        "reviewed_causes": {
+          "unresolved": 1
+        },
+        "v2_candidates": 0
+      },
+      "drive": {
+        "v1": {
+          "source_unavailable": 4
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_source_unavailable": 4
+        },
+        "v2_candidates": 0
+      }
+    },
+    "audio_category": {
+      "by_surah": {
+        "v1": {
+          "source_unavailable": 13,
+          "failed": 48,
+          "passed": 8
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_source_unavailable": 13,
+          "codec_processing_only": 4,
+          "boundary_confounded": 31,
+          "not_rechecked_v1_passed": 8,
+          "unresolved": 12,
+          "constant_lag": 1
+        },
+        "v2_candidates": 3
+      }
+    },
+    "style": {
+      "murattal": {
+        "v1": {
+          "source_unavailable": 12,
+          "failed": 44,
+          "passed": 8
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_source_unavailable": 12,
+          "boundary_confounded": 29,
+          "not_rechecked_v1_passed": 8,
+          "unresolved": 11,
+          "constant_lag": 1,
+          "codec_processing_only": 3
+        },
+        "v2_candidates": 3
+      },
+      "mujawwad": {
+        "v1": {
+          "failed": 4
+        },
+        "reviewed_causes": {
+          "codec_processing_only": 1,
+          "unresolved": 1,
+          "boundary_confounded": 2
+        },
+        "v2_candidates": 0
+      },
+      "muallim": {
+        "v1": {
+          "source_unavailable": 1
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_source_unavailable": 1
+        },
+        "v2_candidates": 0
+      }
+    },
+    "riwayah": {
+      "hafs_an_asim": {
+        "v1": {
+          "source_unavailable": 13,
+          "failed": 40,
+          "passed": 6
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_source_unavailable": 13,
+          "codec_processing_only": 4,
+          "boundary_confounded": 26,
+          "not_rechecked_v1_passed": 6,
+          "unresolved": 9,
+          "constant_lag": 1
+        },
+        "v2_candidates": 3
+      },
+      "warsh_an_nafi": {
+        "v1": {
+          "passed": 2,
+          "failed": 1
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_passed": 2,
+          "unresolved": 1
+        },
+        "v2_candidates": 0
+      },
+      "shubah_an_asim": {
+        "v1": {
+          "failed": 2
+        },
+        "reviewed_causes": {
+          "boundary_confounded": 1,
+          "unresolved": 1
+        },
+        "v2_candidates": 0
+      },
+      "qalon_an_nafi": {
+        "v1": {
+          "failed": 5
+        },
+        "reviewed_causes": {
+          "unresolved": 1,
+          "boundary_confounded": 4
+        },
+        "v2_candidates": 0
+      }
+    },
+    "offset_metadata_source": {
+      "chapter_offsets_ms_present": {
+        "v1": {
+          "source_unavailable": 12
+        },
+        "reviewed_causes": {
+          "not_rechecked_v1_source_unavailable": 12
+        },
+        "v2_candidates": 0
+      },
+      "source_offset_ms_only": {
+        "v1": {
+          "failed": 48,
+          "passed": 8,
+          "source_unavailable": 1
+        },
+        "reviewed_causes": {
+          "codec_processing_only": 4,
+          "boundary_confounded": 31,
+          "not_rechecked_v1_passed": 8,
+          "unresolved": 12,
+          "constant_lag": 1,
+          "not_rechecked_v1_source_unavailable": 1
+        },
+        "v2_candidates": 3
+      }
+    }
+  },
+  "recitations": [
+    {
+      "config": "abdul_hamid_ghraio_2025_yt",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "provider_group": "youtube",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "chapter_offsets_ms_present",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 110,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable",
+        "youtube_extraction_prohibited"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "abdul_hamid_ghraio_2026_yt",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "provider_group": "youtube",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "chapter_offsets_ms_present",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 112,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable",
+        "youtube_extraction_prohibited"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "abdulaziz_al_turki_yt",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "provider_group": "youtube",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "chapter_offsets_ms_present",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6115,
+      "complete_chapters_in_HF_audit": 108,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable",
+        "youtube_extraction_prohibited"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "riwayah": "hafs_an_asim",
+      "channel": "tarteel",
+      "provider_group": "tarteel",
+      "audio_category": "by_surah",
+      "style": "mujawwad",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "codec_processing_only",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 107,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 7
+      }
+    },
+    {
+      "config": "abdulbasit_abdulsamad_tarteel",
+      "riwayah": "hafs_an_asim",
+      "channel": "tarteel",
+      "provider_group": "tarteel",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 112,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 4,
+        "large_optimal_lag": 6,
+        "duration_difference": 1
+      }
+    },
+    {
+      "config": "abdulbasit_abdulsamad_warsh_qdc",
+      "riwayah": "warsh_an_nafi",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "passed",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_passed",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6178,
+      "complete_chapters_in_HF_audit": 0,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "non_hafs_canonical_text_unavailable"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "abdullah_al_buaijan_2025_yt",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "provider_group": "youtube",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "chapter_offsets_ms_present",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 113,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable",
+        "youtube_extraction_prohibited"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "abdullah_al_mattrod_qdc",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 111,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 1,
+        "duration_difference": 1
+      }
+    },
+    {
+      "config": "abdullah_al_qarafi_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "passed",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_passed",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6223,
+      "complete_chapters_in_HF_audit": 105,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "abdullah_kamel_way2quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "way2quran",
+      "provider_group": "way2quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 88,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 6,
+        "duration_difference": 3,
+        "large_optimal_lag": 2
+      }
+    },
+    {
+      "config": "abdulwadood_haneef_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 99,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 5,
+        "duration_difference": 2
+      }
+    },
+    {
+      "config": "abdur_rashid_sufi_qdc",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "unresolved",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 113,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 1
+      }
+    },
+    {
+      "config": "abdur_rashid_sufi_shubah_qdc",
+      "riwayah": "shubah_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6230,
+      "complete_chapters_in_HF_audit": 0,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "non_hafs_canonical_text_unavailable",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 2,
+        "duration_difference": 1
+      }
+    },
+    {
+      "config": "abu_bakr_al_shatri_tarteel",
+      "riwayah": "hafs_an_asim",
+      "channel": "tarteel",
+      "provider_group": "tarteel",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 80,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 3,
+        "duration_difference": 1
+      }
+    },
+    {
+      "config": "adel_al_karbalaei_archive_v2",
+      "riwayah": "hafs_an_asim",
+      "channel": "archive_org",
+      "provider_group": "archive_org",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 113,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 3,
+        "duration_difference": 3,
+        "large_optimal_lag": 2
+      }
+    },
+    {
+      "config": "ahmad_naseem_ali_ahmad_2019_yt",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "provider_group": "youtube",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "chapter_offsets_ms_present",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 109,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable",
+        "youtube_extraction_prohibited"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "ahmed_al_ajmi_qdc",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 95,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 5,
+        "duration_difference": 2,
+        "large_optimal_lag": 1
+      }
+    },
+    {
+      "config": "ahmed_amer_tvquran",
+      "riwayah": "hafs_an_asim",
+      "channel": "tvquran",
+      "provider_group": "tvquran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "codec_processing_only",
+      "reviewed_cause": "unresolved",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 112,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "duration_difference": 1
+      }
+    },
+    {
+      "config": "ahmed_deban_qalon_mp3quran",
+      "riwayah": "qalon_an_nafi",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "unresolved",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6190,
+      "complete_chapters_in_HF_audit": 0,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "non_hafs_canonical_text_unavailable",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 5
+      }
+    },
+    {
+      "config": "ahmed_issa_al_maasaraawi_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6234,
+      "complete_chapters_in_HF_audit": 108,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 1,
+        "duration_difference": 1
+      }
+    },
+    {
+      "config": "ahmed_kaseb_way2quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "way2quran",
+      "provider_group": "way2quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "constant_lag",
+      "reviewed_cause": "constant_lag",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 110,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "NATIVE_END_COVERAGE_UNEXPLAINED",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "large_optimal_lag": 15,
+        "low_correlation": 2,
+        "duration_difference": 3
+      }
+    },
+    {
+      "config": "ahmed_nuayna_qdc",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 113,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 4,
+        "duration_difference": 1,
+        "large_optimal_lag": 1
+      }
+    },
+    {
+      "config": "ahmed_saleh_rajab_qalon_way2quran",
+      "riwayah": "qalon_an_nafi",
+      "channel": "way2quran",
+      "provider_group": "way2quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6126,
+      "complete_chapters_in_HF_audit": 0,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "non_hafs_canonical_text_unavailable",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 1,
+        "duration_difference": 1,
+        "large_optimal_lag": 1
+      }
+    },
+    {
+      "config": "ahmed_saud_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "codec_processing_only",
+      "v2_adoption_candidate": true,
+      "unique_ayahs_in_HF_audit": 327,
+      "complete_chapters_in_HF_audit": 30,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {
+        "low_correlation": 5
+      }
+    },
+    {
+      "config": "ahmed_shaheen_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 109,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 6,
+        "duration_difference": 3
+      }
+    },
+    {
+      "config": "ahmed_talib_bin_humaid_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 5561,
+      "complete_chapters_in_HF_audit": 93,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 2,
+        "duration_difference": 1
+      }
+    },
+    {
+      "config": "akram_al_alaqmi_qdc",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 101,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 4,
+        "duration_difference": 2
+      }
+    },
+    {
+      "config": "ali_al_huthaifi_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "passed",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_passed",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 109,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "ayman_swed_muallim_yt",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "provider_group": "youtube",
+      "audio_category": "by_surah",
+      "style": "muallim",
+      "offset_metadata_source": "chapter_offsets_ms_present",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 104,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable",
+        "youtube_extraction_prohibited"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "badr_al_turki_yt",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "provider_group": "youtube",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "chapter_offsets_ms_present",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 109,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable",
+        "youtube_extraction_prohibited"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "bandar_baleela_qdc",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 100,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 4,
+        "duration_difference": 1,
+        "large_optimal_lag": 1
+      }
+    },
+    {
+      "config": "fatih_seferagic_way2quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "way2quran",
+      "provider_group": "way2quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 112,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 3,
+        "duration_difference": 3,
+        "large_optimal_lag": 3
+      }
+    },
+    {
+      "config": "haitham_al_dukhain_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "passed",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_passed",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 102,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "hani_al_rifai_qdc_128k",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6233,
+      "complete_chapters_in_HF_audit": 101,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 4,
+        "duration_difference": 3,
+        "large_optimal_lag": 1
+      }
+    },
+    {
+      "config": "ibrahim_al_akhdar_drive",
+      "riwayah": "hafs_an_asim",
+      "channel": "drive",
+      "provider_group": "drive",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "chapter_offsets_ms_present",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 111,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "imad_zuhair_hafez_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "passed",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_passed",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 114,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "islam_sobhi_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "unresolved",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 5275,
+      "complete_chapters_in_HF_audit": 99,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 1
+      }
+    },
+    {
+      "config": "khalid_al_mohana_drive",
+      "riwayah": "hafs_an_asim",
+      "channel": "drive",
+      "provider_group": "drive",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "chapter_offsets_ms_present",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 112,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "khalifa_al_tunaiji_tarteel",
+      "riwayah": "hafs_an_asim",
+      "channel": "tarteel",
+      "provider_group": "tarteel",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 108,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "large_optimal_lag": 14,
+        "low_correlation": 4,
+        "duration_difference": 3
+      }
+    },
+    {
+      "config": "maher_al_muaiqly_qdc",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "mujawwad",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "unresolved",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 114,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "OLD_SOURCE_OR_HF_INPUT_NOT_PROVEN_STABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 1
+      }
+    },
+    {
+      "config": "mahmoud_abdul_hakam_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 106,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 2,
+        "duration_difference": 2
+      }
+    },
+    {
+      "config": "mahmoud_ali_al_banna_qdc",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "unresolved",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 113,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 1,
+        "duration_difference": 1
+      }
+    },
+    {
+      "config": "mahmoud_khalil_al_husary_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "unresolved",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 113,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 4
+      }
+    },
+    {
+      "config": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "riwayah": "hafs_an_asim",
+      "channel": "tarteel",
+      "provider_group": "tarteel",
+      "audio_category": "by_surah",
+      "style": "mujawwad",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 105,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 6,
+        "duration_difference": 3,
+        "large_optimal_lag": 1
+      }
+    },
+    {
+      "config": "mahmoud_khalil_al_husary_qdc_128k",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 112,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 7,
+        "large_optimal_lag": 1,
+        "duration_difference": 1
+      }
+    },
+    {
+      "config": "mishary_rashid_al_afasy_2008_qdc",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 97,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 7,
+        "duration_difference": 3,
+        "large_optimal_lag": 3
+      }
+    },
+    {
+      "config": "mishary_rashid_al_afasy_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "codec_processing_only",
+      "v2_adoption_candidate": true,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 103,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {
+        "low_correlation": 1
+      }
+    },
+    {
+      "config": "moaz_mahmoud_hamed_qalon_way2quran",
+      "riwayah": "qalon_an_nafi",
+      "channel": "way2quran",
+      "provider_group": "way2quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6175,
+      "complete_chapters_in_HF_audit": 0,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "non_hafs_canonical_text_unavailable",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 5,
+        "duration_difference": 2,
+        "large_optimal_lag": 2
+      }
+    },
+    {
+      "config": "mohammed_abdulkareem_qdc",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "provider_group": "quranicaudio",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "passed",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_passed",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 107,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "mohammed_al_luhaidan_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "passed",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_passed",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6234,
+      "complete_chapters_in_HF_audit": 99,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "mohammed_alghazali_archive",
+      "riwayah": "hafs_an_asim",
+      "channel": "archive_org",
+      "provider_group": "archive_org",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "codec_processing_only",
+      "v2_adoption_candidate": true,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 107,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {
+        "low_correlation": 5
+      }
+    },
+    {
+      "config": "mohammed_ayyub_drive",
+      "riwayah": "hafs_an_asim",
+      "channel": "drive",
+      "provider_group": "drive",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "chapter_offsets_ms_present",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 110,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "mohammed_burhaji_yt",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "provider_group": "youtube",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 97,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable",
+        "youtube_extraction_prohibited"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "mohammed_saayed_warsh_mp3quran",
+      "riwayah": "warsh_an_nafi",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "passed",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_passed",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6214,
+      "complete_chapters_in_HF_audit": 0,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "non_hafs_canonical_text_unavailable"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "mohammed_siddiq_al_minshawi_1967_drive",
+      "riwayah": "hafs_an_asim",
+      "channel": "drive",
+      "provider_group": "drive",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "chapter_offsets_ms_present",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 107,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "mohammed_siddiq_al_minshawi_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "unresolved",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 111,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 5,
+        "duration_difference": 1
+      }
+    },
+    {
+      "config": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "mujawwad",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 102,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 8,
+        "duration_difference": 1,
+        "large_optimal_lag": 1
+      }
+    },
+    {
+      "config": "muammar_zainal_al_sukaini_way2quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "way2quran",
+      "provider_group": "way2quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6229,
+      "complete_chapters_in_HF_audit": 106,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 2
+      }
+    },
+    {
+      "config": "mustafa_ismail_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "unresolved",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 114,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 2
+      }
+    },
+    {
+      "config": "nasser_al_qatami_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "codec_processing_only",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 86,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "duration_difference": 1
+      }
+    },
+    {
+      "config": "saad_al_ghamdi_tarteel",
+      "riwayah": "hafs_an_asim",
+      "channel": "tarteel",
+      "provider_group": "tarteel",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 101,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 7,
+        "duration_difference": 3,
+        "large_optimal_lag": 3
+      }
+    },
+    {
+      "config": "saber_abdulhakam_qalon_way2quran",
+      "riwayah": "qalon_an_nafi",
+      "channel": "way2quran",
+      "provider_group": "way2quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6194,
+      "complete_chapters_in_HF_audit": 0,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "non_hafs_canonical_text_unavailable",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 3,
+        "duration_difference": 3,
+        "large_optimal_lag": 1
+      }
+    },
+    {
+      "config": "saber_abdulhakam_shubah_way2quran",
+      "riwayah": "shubah_an_asim",
+      "channel": "way2quran",
+      "provider_group": "way2quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "unresolved",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 0,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "non_hafs_canonical_text_unavailable",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 1
+      }
+    },
+    {
+      "config": "saber_abdulhakam_warsh_way2quran",
+      "riwayah": "warsh_an_nafi",
+      "channel": "way2quran",
+      "provider_group": "way2quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "unresolved",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6213,
+      "complete_chapters_in_HF_audit": 0,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "non_hafs_canonical_text_unavailable",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 4
+      }
+    },
+    {
+      "config": "saber_abdulhakam_yt",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "provider_group": "youtube",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "chapter_offsets_ms_present",
+      "v1_status": "source_unavailable",
+      "B_status": "not_targeted",
+      "observed_pattern": null,
+      "reviewed_cause": "not_rechecked_v1_source_unavailable",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6236,
+      "complete_chapters_in_HF_audit": 111,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified",
+        "catalog_audio_source_unavailable",
+        "youtube_extraction_prohibited"
+      ],
+      "review_blockers": [],
+      "v1_failed_sample_causes": {}
+    },
+    {
+      "config": "saud_al_shuraim_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "unresolved",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 110,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "duration_difference": 3,
+        "low_correlation": 2
+      }
+    },
+    {
+      "config": "walid_al_naihi_qalon_mp3quran",
+      "riwayah": "qalon_an_nafi",
+      "channel": "mp3quran",
+      "provider_group": "mp3quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6195,
+      "complete_chapters_in_HF_audit": 0,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "non_hafs_canonical_text_unavailable",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 8,
+        "duration_difference": 3,
+        "large_optimal_lag": 3
+      }
+    },
+    {
+      "config": "walid_atef_way2quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "way2quran",
+      "provider_group": "way2quran",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 103,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 5,
+        "duration_difference": 3,
+        "large_optimal_lag": 2
+      }
+    },
+    {
+      "config": "yasser_al_dosari_archive",
+      "riwayah": "hafs_an_asim",
+      "channel": "archive_org",
+      "provider_group": "archive_org",
+      "audio_category": "by_surah",
+      "style": "murattal",
+      "offset_metadata_source": "source_offset_ms_only",
+      "v1_status": "failed",
+      "B_status": "measured",
+      "observed_pattern": "unresolved",
+      "reviewed_cause": "boundary_confounded",
+      "v2_adoption_candidate": false,
+      "unique_ayahs_in_HF_audit": 6235,
+      "complete_chapters_in_HF_audit": 103,
+      "coverage_scope": "historical HF annotation audit, not D3 Release timing completeness",
+      "published": false,
+      "publication_reasons": [
+        "D3_timing_completeness_not_accepted",
+        "D4_audio_health_and_license_attribution_not_accepted",
+        "offset_unverified"
+      ],
+      "review_blockers": [
+        "CODEC_CAUSE_AND_POSITION_NOT_PROVEN_FOR_ALL_SAMPLES",
+        "EXACT_BOUND_SEGMENTS_VAD_REPLAY_NOT_ACCEPTABLE",
+        "ONE_OR_MORE_CORE_NUMERIC_V2_GATES_FAIL",
+        "PACKET_DERIVED_LAG_NOT_PROVEN_WITHIN_30MS",
+        "UNEXPLAINED_DURATION_GATE_FAILURE"
+      ],
+      "v1_failed_sample_causes": {
+        "low_correlation": 6,
+        "duration_difference": 3,
+        "large_optimal_lag": 1
+      }
+    }
+  ],
+  "input_sha256": {
+    "catalog": "b7ee26c2267b086d5758477e21144887c28c6ba884a6ff5157a55cf17df4eed4",
+    "original": "e071bf483c7b44c9157c49cc15287c9aa11ed598d777bfff2bdcb1e8a449a0b9",
+    "raw": "a4b3a518d3daf416e7ce88228450e9634c21b59dcd2c454d899f873410f4fd43",
+    "review": "88138a873f518d77285ca0e662145eae35a8838f26a9d4151af2bf1ae07b03ec",
+    "annotation": "bab3c456e377e643cdbe17b5e2391338800ce8f9c8a891b7c1587c5be8211ee6"
+  }
+}

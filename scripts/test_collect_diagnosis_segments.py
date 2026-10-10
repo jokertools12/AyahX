@@ -10,6 +10,15 @@ spec.loader.exec_module(collector)
 
 
 class SegmentEvidenceTests(unittest.TestCase):
+    def test_explicit_subset_does_not_claim_whole_replay(self):
+        self.assertEqual(collector.select_targets(['a', 'b', 'c'], ['b']), ['b'])
+        self.assertEqual(collector.select_targets(['a', 'b', 'c'], []), ['a', 'b', 'c'])
+
+    def test_unknown_or_duplicate_scope_is_rejected(self):
+        for requested in (['unknown'], ['a', 'a']):
+            with self.assertRaisesRegex(ValueError, 'SCOPE_INVALID'):
+                collector.select_targets(['a', 'b'], requested)
+
     def test_intervals_and_number_types_are_preserved(self):
         segments = [[1, 2, 0.0, 123.625], [3, 3, 124, 250]]
         original = copy.deepcopy(segments)

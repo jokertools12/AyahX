@@ -1,0 +1,632 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-10T02:56:35.282538+00:00",
+  "read_only": true,
+  "config": "mohammed_alghazali_archive",
+  "packet_report_sha256": "866222c5285a81421655ccb24246d3b98a942e903015a5e0a37f5114f5dad56c",
+  "analyzer_sha256": "5daa00a8525b05acb26f0fdd79ff6a176dce5a6190d3a731e5c92a4a8f13b62e",
+  "ffmpeg_version": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers",
+  "decode_settings": {
+    "stream": "0:a:0",
+    "channels": 1,
+    "native_sample_rates_hz": {
+      "74": 44100,
+      "85": 44100,
+      "97": 44100
+    },
+    "format": "f32le",
+    "seek": false,
+    "lag_search": false,
+    "resampling_rate_change": false,
+    "trim_each_side_ms": 200,
+    "minimum_interior_duration_ms": 800,
+    "full_source_pcm_file_written": false,
+    "source_pcm_retained_in_ram": "fixed intervals only"
+  },
+  "source_decoded_native_sample_counts": {
+    "74": 17421312,
+    "85": 7402496,
+    "97": 1710080
+  },
+  "samples": [
+    {
+      "surah": 74,
+      "ayah": 1,
+      "hf_audio_sha256": "8a7b1124e83ce3d40b5ecde8c9aab72fde0a33b1754f5c7e44ae7ddc7b3ce6fe",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 109487,
+      "source_interior_begin_sample": 118307,
+      "source_interior_end_sample_exclusive": 366779,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 257292,
+      "clip_decoded_native_sample_count": 266112,
+      "retained_8khz_interior_pcm_score": 0.9450780456873594,
+      "retained_envelope_lag_ms": -25.25,
+      "decoded_packet_lag_ms": {
+        "numerator": -1594,
+        "denominator": 63,
+        "value": -25.3015873015873
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 13,
+        "denominator": 252,
+        "value": 0.051587301587301584
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 0.9999999999999999,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 248472,
+      "native_interior_duration_ms": {
+        "numerator": 248472000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 74,
+      "ayah": 15,
+      "hf_audio_sha256": "46699fe18b2cec53c267f8d645a55a50303213951169229ef6c1a59062b7fc5d",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 2800559,
+      "source_interior_begin_sample": 2809379,
+      "source_interior_end_sample_exclusive": 3022139,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 221580,
+      "clip_decoded_native_sample_count": 230400,
+      "retained_8khz_interior_pcm_score": 0.997004465401488,
+      "retained_envelope_lag_ms": -25.25,
+      "decoded_packet_lag_ms": {
+        "numerator": -11140,
+        "denominator": 441,
+        "value": -25.26077097505669
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 19,
+        "denominator": 1764,
+        "value": 0.010770975056689343
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 0.9999999999999999,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 212760,
+      "native_interior_duration_ms": {
+        "numerator": 212760000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 74,
+      "ayah": 29,
+      "hf_audio_sha256": "53bc0828d3a81cf9311870fd6291539a73c20c2dee49317aad681eb3b23a57d5",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 5962799,
+      "source_interior_begin_sample": 5971619,
+      "source_interior_end_sample_exclusive": 6096827,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 134028,
+      "clip_decoded_native_sample_count": 142848,
+      "retained_8khz_interior_pcm_score": 0.9952189844378362,
+      "retained_envelope_lag_ms": -25.125,
+      "decoded_packet_lag_ms": {
+        "numerator": -11086,
+        "denominator": 441,
+        "value": -25.138321995464853
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 47,
+        "denominator": 3528,
+        "value": 0.013321995464852607
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 125208,
+      "native_interior_duration_ms": {
+        "numerator": 125208000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 74,
+      "ayah": 42,
+      "hf_audio_sha256": "79eada053d478ec8f1c7c65ec523a2acb6408725b721cd4efe4af82748c689da",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 12682415,
+      "source_interior_begin_sample": 12691235,
+      "source_interior_end_sample_exclusive": 12833723,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 151308,
+      "clip_decoded_native_sample_count": 160128,
+      "retained_8khz_interior_pcm_score": 0.9894145303614318,
+      "retained_envelope_lag_ms": -24.875,
+      "decoded_packet_lag_ms": {
+        "numerator": -10978,
+        "denominator": 441,
+        "value": -24.89342403628118
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 65,
+        "denominator": 3528,
+        "value": 0.018424036281179137
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0000000000000002,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 142488,
+      "native_interior_duration_ms": {
+        "numerator": 142488000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 74,
+      "ayah": 56,
+      "hf_audio_sha256": "d1f55c0a084b31a8173542f9d5f2fba9f1f9d380b032b78d395cd678d2cd6fd7",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 16654511,
+      "source_interior_begin_sample": 16663331,
+      "source_interior_end_sample_exclusive": 17392187,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 737676,
+      "clip_decoded_native_sample_count": 746496,
+      "retained_8khz_interior_pcm_score": 0.9131002678426904,
+      "retained_envelope_lag_ms": -24.75,
+      "decoded_packet_lag_ms": {
+        "numerator": -10888,
+        "denominator": 441,
+        "value": -24.689342403628117
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -107,
+        "denominator": 1764,
+        "value": -0.06065759637188209
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 728856,
+      "native_interior_duration_ms": {
+        "numerator": 728856000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 85,
+      "ayah": 1,
+      "hf_audio_sha256": "c8e1a5b3fe2d3bee389cfb9b7199fb36a873cadf25e2a718455d28c94be66f5e",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 109487,
+      "source_interior_begin_sample": 118307,
+      "source_interior_end_sample_exclusive": 358715,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 249228,
+      "clip_decoded_native_sample_count": 258048,
+      "retained_8khz_interior_pcm_score": 0.9343334314749271,
+      "retained_envelope_lag_ms": -25.25,
+      "decoded_packet_lag_ms": {
+        "numerator": -1594,
+        "denominator": 63,
+        "value": -25.3015873015873
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 13,
+        "denominator": 252,
+        "value": 0.051587301587301584
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 240408,
+      "native_interior_duration_ms": {
+        "numerator": 240408000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 85,
+      "ayah": 6,
+      "hf_audio_sha256": "cfd4a887a13417d01d68efb1c0b0fc8e250d3d8f0418419a0dc41d1eb90ddc49",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 1164719,
+      "source_interior_begin_sample": 1173539,
+      "source_interior_end_sample_exclusive": 1342523,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 177804,
+      "clip_decoded_native_sample_count": 186624,
+      "retained_8khz_interior_pcm_score": 0.9955419862805132,
+      "retained_envelope_lag_ms": -25.125,
+      "decoded_packet_lag_ms": {
+        "numerator": -11086,
+        "denominator": 441,
+        "value": -25.138321995464853
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 47,
+        "denominator": 3528,
+        "value": 0.013321995464852607
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0000000000000002,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 168984,
+      "native_interior_duration_ms": {
+        "numerator": 168984000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 85,
+      "ayah": 11,
+      "hf_audio_sha256": "76b03ff00f07b757fe12c941850f82f4a3ef3c0e3f787c500a77d590ee577e93",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 3755567,
+      "source_interior_begin_sample": 3764387,
+      "source_interior_end_sample_exclusive": 4707515,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 951948,
+      "clip_decoded_native_sample_count": 960768,
+      "retained_8khz_interior_pcm_score": 0.9999901601808804,
+      "retained_envelope_lag_ms": -24.75,
+      "decoded_packet_lag_ms": {
+        "numerator": -10915,
+        "denominator": 441,
+        "value": -24.750566893424036
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 1,
+        "denominator": 1764,
+        "value": 0.0005668934240362812
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 943128,
+      "native_interior_duration_ms": {
+        "numerator": 943128000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 85,
+      "ayah": 17,
+      "hf_audio_sha256": "42531021dfb2057a4648257d7fd87b0d0a56f33b8ac3e643d32b07f2ca531719",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 5796911,
+      "source_interior_begin_sample": 5805731,
+      "source_interior_end_sample_exclusive": 6041531,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 244620,
+      "clip_decoded_native_sample_count": 253440,
+      "retained_8khz_interior_pcm_score": 0.9913002426806407,
+      "retained_envelope_lag_ms": -24.75,
+      "decoded_packet_lag_ms": {
+        "numerator": -10924,
+        "denominator": 441,
+        "value": -24.77097505668934
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 37,
+        "denominator": 1764,
+        "value": 0.020975056689342405
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 235800,
+      "native_interior_duration_ms": {
+        "numerator": 235800000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 85,
+      "ayah": 22,
+      "hf_audio_sha256": "b71de7e2159e113f175fb43fb5d7afc28d68d925e0605988888930775d77ef9e",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 7110191,
+      "source_interior_begin_sample": 7119011,
+      "source_interior_end_sample_exclusive": 7384763,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 274572,
+      "clip_decoded_native_sample_count": 283392,
+      "retained_8khz_interior_pcm_score": 0.95331696757844,
+      "retained_envelope_lag_ms": -25.125,
+      "decoded_packet_lag_ms": {
+        "numerator": -11104,
+        "denominator": 441,
+        "value": -25.179138321995463
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 191,
+        "denominator": 3528,
+        "value": 0.05413832199546485
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0000000000000002,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 265752,
+      "native_interior_duration_ms": {
+        "numerator": 265752000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 97,
+      "ayah": 1,
+      "hf_audio_sha256": "9c543582d2c3de1d29e39f072a57e459ffe9ecb5577972ef0856f3566023a120",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 116399,
+      "source_interior_begin_sample": 125219,
+      "source_interior_end_sample_exclusive": 440507,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 324108,
+      "clip_decoded_native_sample_count": 332928,
+      "retained_8khz_interior_pcm_score": 0.9430306733114311,
+      "retained_envelope_lag_ms": -24.625,
+      "decoded_packet_lag_ms": {
+        "numerator": -10834,
+        "denominator": 441,
+        "value": -24.56689342403628
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -205,
+        "denominator": 3528,
+        "value": -0.05810657596371882
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 0.9999999999999998,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 315288,
+      "native_interior_duration_ms": {
+        "numerator": 315288000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 97,
+      "ayah": 2,
+      "hf_audio_sha256": "88fe3c3c9079ece9acf3be33f72adac071d38f5936b1125b5b1603bb188f00a3",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 449327,
+      "source_interior_begin_sample": 458147,
+      "source_interior_end_sample_exclusive": 680123,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 230796,
+      "clip_decoded_native_sample_count": 239616,
+      "retained_8khz_interior_pcm_score": 0.923112875269006,
+      "retained_envelope_lag_ms": -25.125,
+      "decoded_packet_lag_ms": {
+        "numerator": -11104,
+        "denominator": 441,
+        "value": -25.179138321995463
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 191,
+        "denominator": 3528,
+        "value": 0.05413832199546485
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 0.9999999999999998,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 221976,
+      "native_interior_duration_ms": {
+        "numerator": 221976000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 97,
+      "ayah": 3,
+      "hf_audio_sha256": "b575d17a28953f029d97d7a21170cf082f40463ef444c90c2a6e38bd9e324150",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 690095,
+      "source_interior_begin_sample": 698915,
+      "source_interior_end_sample_exclusive": 926651,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 236556,
+      "clip_decoded_native_sample_count": 245376,
+      "retained_8khz_interior_pcm_score": 0.9663815240941082,
+      "retained_envelope_lag_ms": -24.625,
+      "decoded_packet_lag_ms": {
+        "numerator": -1549,
+        "denominator": 63,
+        "value": -24.58730158730159
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": -19,
+        "denominator": 504,
+        "value": -0.037698412698412696
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 227736,
+      "native_interior_duration_ms": {
+        "numerator": 227736000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 97,
+      "ayah": 4,
+      "hf_audio_sha256": "c04693e5228592e67fdf7321d99661acb3063e707c7fb73f2773930aff862da5",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 935471,
+      "source_interior_begin_sample": 944291,
+      "source_interior_end_sample_exclusive": 1447355,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 511884,
+      "clip_decoded_native_sample_count": 520704,
+      "retained_8khz_interior_pcm_score": 0.9989665024253733,
+      "retained_envelope_lag_ms": -25.5,
+      "decoded_packet_lag_ms": {
+        "numerator": -11248,
+        "denominator": 441,
+        "value": -25.50566893424036
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 5,
+        "denominator": 882,
+        "value": 0.005668934240362812
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 0.9999999999999999,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 503064,
+      "native_interior_duration_ms": {
+        "numerator": 503064000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    },
+    {
+      "surah": 97,
+      "ayah": 5,
+      "hf_audio_sha256": "71efbbb7c8fac1677ed32d57d0cb8120aae6b5827e6eec9f29e797fc6909e1b4",
+      "native_sample_rate_hz": 44100,
+      "exact_native_source_sample_start": 1456175,
+      "source_interior_begin_sample": 1464995,
+      "source_interior_end_sample_exclusive": 1693883,
+      "clip_interior_begin_sample": 8820,
+      "clip_interior_end_sample_exclusive": 237708,
+      "clip_decoded_native_sample_count": 246528,
+      "retained_8khz_interior_pcm_score": 0.9675044579423004,
+      "retained_envelope_lag_ms": -25.125,
+      "decoded_packet_lag_ms": {
+        "numerator": -1585,
+        "denominator": 63,
+        "value": -25.158730158730158
+      },
+      "decoded_packet_lag_within_30ms": true,
+      "full_native_source_window_available": true,
+      "retained_envelope_start_matches_native_within_half_8khz_sample": true,
+      "retained_envelope_start_minus_exact_packet_pcm_start_ms": {
+        "numerator": 17,
+        "denominator": 504,
+        "value": 0.03373015873015873
+      },
+      "native_pcm_identity_proven": true,
+      "correlation": 1.0,
+      "rmse": 0.0,
+      "maximum_absolute_sample_difference": 0.0,
+      "native_interior_sample_count": 228888,
+      "native_interior_duration_ms": {
+        "numerator": 228888000,
+        "denominator": 44100
+      },
+      "diagnosis_only": true,
+      "changes_v1_acceptance": false,
+      "accepts_v2": false
+    }
+  ],
+  "exact_native_pcm_identity_count": 15,
+  "all_input_hashes_unchanged": true,
+  "v1_results_replaced": false,
+  "v2_accepted": false,
+  "publication_changed": false,
+  "manual_cleanup_required": true,
+  "private_outputs": "%TEMP%\\ayahx-b-packet-proof",
+  "deletion_or_move_attempted": false,
+  "limitations": [
+    "Fixed interior identity does not waive retained full-window correlation/duration/lag or VAD requirements.",
+    "No new 8kHz metric or correction is applied. Native diagnosis only separates payload identity from decoded-clock/sample-grid effects.",
+    "Only matching declared source/clip rates from the explicit MP3 native-rate set are supported; other or mismatched rates stop with an explicit UNSUPPORTED error and no forced resampling.",
+    "Only this recitation and these 15 samples were measured."
+  ]
+}

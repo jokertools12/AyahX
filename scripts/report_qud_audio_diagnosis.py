@@ -29,6 +29,15 @@ def build(catalog, original, raw, review, annotation):
             raise ValueError('ANNOTATION_AUDIT_REQUIRED')
         cause = checked['reviewed_pattern'] if checked else 'not_rechecked_v1_' + before['verification_status']
         candidate = checked is not None and checked['v2_adoption_candidate'] is True
+        publication_reasons = ['D3_timing_completeness_not_accepted', 'D4_audio_health_and_license_attribution_not_accepted']
+        if meta['riwayah'] != 'hafs_an_asim':
+            publication_reasons.append('non_hafs_canonical_text_unavailable')
+        if before['verification_status'] != 'passed' and not candidate:
+            publication_reasons.append('offset_unverified')
+        if before['verification_status'] == 'source_unavailable':
+            publication_reasons.append('catalog_audio_source_unavailable')
+        if meta['channel'] == 'youtube':
+            publication_reasons.append('youtube_extraction_prohibited')
         row = {'config': slug, 'riwayah': meta['riwayah'], 'channel': meta['channel'],
                'provider_group': meta['channel'], 'audio_category': meta['audio_category'], 'style': meta['style'],
                'offset_metadata_source': 'chapter_offsets_ms_present' if meta['audio'].get('chapter_offsets_ms') else 'source_offset_ms_only',
@@ -38,7 +47,7 @@ def build(catalog, original, raw, review, annotation):
                'unique_ayahs_in_HF_audit': audits[slug]['unique_ayahs'],
                'complete_chapters_in_HF_audit': sum(c.get('complete_against_hafs') is True for c in audits[slug]['chapters']),
                'coverage_scope': 'historical HF annotation audit, not D3 Release timing completeness',
-               'published': False, 'publication_reason': 'D3/D4 gates and provider audio license/attribution not yet accepted',
+               'published': False, 'publication_reasons': publication_reasons,
                'review_blockers': checked.get('blockers', []) if checked else [],
                'v1_failed_sample_causes': dict(Counter(
                    name for sample in before.get('samples', []) for name, failed in (
@@ -74,7 +83,7 @@ def markdown(report):
         lines.append('')
     lines += ['## كل التلاوات', '', '| التلاوة | الرواية | آيات HF | سور HF كاملة | v1 | نمط عددي B | السبب المراجع | v2 مرشح | النشر |', '|---|---|---:|---:|---|---|---|---|---|']
     for row in report['recitations']:
-        lines.append(f"| {row['config']} | {row['riwayah']} | {row['unique_ayahs_in_HF_audit']} | {row['complete_chapters_in_HF_audit']} | {row['v1_status']} | {row['observed_pattern'] or '—'} | {row['reviewed_cause']} | {'نعم' if row['v2_adoption_candidate'] else 'لا'} | غير منشور: شروط D3/D4 والترخيص غير مقبولة بعد |")
+        lines.append(f"| {row['config']} | {row['riwayah']} | {row['unique_ayahs_in_HF_audit']} | {row['complete_chapters_in_HF_audit']} | {row['v1_status']} | {row['observed_pattern'] or '—'} | {row['reviewed_cause']} | {'نعم' if row['v2_adoption_candidate'] else 'لا'} | {'; '.join(row['publication_reasons'])} |")
     lines += ['', '## الأدلة والقيود', '',
               '- المقاييس لكل عينة والبوابات والأسباب متاحة في تقرير JSON والمراجعة المستقلة المرتبطين بالبصمات أدناه.',
               '- خمس رسوم حقيقية من تلاوات فاشلة فُحصت محليًا؛ بصماتها في b-root-overlay-review.json. الصور والصوت خارج Git.',
