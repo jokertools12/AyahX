@@ -11,9 +11,10 @@ export const STORAGE_RECONCILIATION_WEEK_MS = 7 * 86400000;
 const ACTION = 'storage.weekly_reconciled';
 const ACTOR: CatalogActor = { id: 'storage-weekly-reconciliation', kind: 'system', roleSlug: 'system', permissions: new Set() };
 /** Deliberately cannot read audio, sign URLs, upload, abort or delete. */
-export type StorageInventoryReader = Pick<AudioObjectStorage, 'adapter' | 'bucket' | 'listObjects'>;
+export type StorageInventoryReader = Pick<AudioObjectStorage, 'adapter' | 'bucket' | 'listObjects'> & { close?(): void | Promise<void> };
 export interface WeeklyStorageOptions {
   db: CatalogDatabase;
+  /** A fresh reader owned by this run; its optional close is always called. */
   storageProvider(input: { adapter: 'r2'; access: 'read_only' }): Promise<StorageInventoryReader> | StorageInventoryReader;
   writeReport(report: StorageWeeklyReport): Promise<void>;
   now?: () => number;
@@ -57,7 +58,7 @@ async function isDue(tx: CatalogTx, bucket: string | null, now: number): Promise
 }
 function manifestRows(rows: readonly CatalogRow[]): CatalogRow[] {
   return rows.map(row => {
-    if (!safeId(row.id) || !safeId(row.recitation_id) || !safeKey(row.object_key) || !Number.isSafeInteger(Number(row.size_bytes)) || Number(row.size_bytes) < 1 || !Number.isSafeInteger(Number(row.surah)) || Number(row.surah) < 1 || Number(row.surah) > 114 || !/^[a-f0-9]{64}$/u.test(String(row.sha256)) || !['pending', 'uploaded', 'verified', 'rejected', 'soft_deleted'].includes(String(row.upload_status))) throw new CatalogError('STORAGE_RECONCILIATION_ROW_INVALID', 503);
+    if (!safeId(row.id) || !safeId(row.recitation_id) || !safeKey(row.object_key) || !Number.isSafeInteger(Number(row.size_bytes)) || Number(row.size_bytes) < 1 || !Number.isSafeInteger(Number(row.surah)) || Number(row.surah) < 1 || Number(row.surah) > 114 || !/^[a-f0-9]{64}$/u.test(String(row.sha256)) || !['pending', 'uploaded', 'verified', 'rejected', 'soft_deleted'].includes(String(row.upload_status)) || row.object_key.split('/')[2] !== String(row.surah).padStart(3, '0') || row.object_key.split('/')[3].split('.')[0] !== row.sha256) throw new CatalogError('STORAGE_RECONCILIATION_ROW_INVALID', 503);
     // Explicit projection: no rights files, URLs, evidence, upload IDs, credentials or object bodies.
     return { id: row.id, recitation_id: row.recitation_id, surah: Number(row.surah), object_key: row.object_key, sha256: row.sha256, size_bytes: Number(row.size_bytes), upload_status: row.upload_status };
   });
@@ -102,6 +103,10 @@ export class CatalogWeeklyStorageReconciliation {
     if (await adapter(db) === 'url_reference') return { state: 'disabled' };
     if (this.closed) return { state: 'closed' };
     const storage = await this.options.storageProvider({ adapter: 'r2', access: 'read_only' });
+    try { return await this.performWithStorage(db, storage); }
+    finally { await storage.close?.(); }
+  }
+  private async performWithStorage(db: CatalogDatabase, storage: StorageInventoryReader): Promise<WeeklyStorageSummary> {
     if (storage.adapter !== 'r2' || !storage.bucket || !/^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/u.test(storage.bucket)) throw new CatalogError('STORAGE_RECONCILIATION_PROVIDER_INVALID', 503);
     const now = (this.options.now ?? Date.now)();
     if (!Number.isSafeInteger(now) || now < 0) throw new CatalogError('STORAGE_RECONCILIATION_CLOCK_INVALID', 503);

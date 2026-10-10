@@ -25,11 +25,12 @@ function fixture() {
   });
   const db: CatalogDatabase = { read, execute, transaction: async <T>(work: (tx: CatalogTx) => Promise<T>) => work({ read, execute }) };
   const listObjects = vi.fn(async () => [{ objectKey: key, sizeBytes: 100 }]);
-  const storageProvider = vi.fn(() => ({ adapter: 'r2' as const, bucket: 'ayahx-private', listObjects }));
+  const closeStorage = vi.fn();
+  const storageProvider = vi.fn(() => ({ adapter: 'r2' as const, bucket: 'ayahx-private', listObjects, close: closeStorage }));
   const writeReport = vi.fn(async (_report: StorageWeeklyReport) => {});
   const log = { info: vi.fn(), error: vi.fn() };
   const runner = new CatalogWeeklyStorageReconciliation({ db, storageProvider, writeReport, log, now: () => now });
-  return { db, runner, read, execute, listObjects, storageProvider, writeReport, log, setAdapter: (v: string) => { selected = v; }, setAudit: (v: CatalogRow[]) => { audit = v; }, setRows: (v: CatalogRow[]) => { rows = v; } };
+  return { db, runner, read, execute, listObjects, storageProvider, closeStorage, writeReport, log, setAdapter: (v: string) => { selected = v; }, setAudit: (v: CatalogRow[]) => { audit = v; }, setRows: (v: CatalogRow[]) => { rows = v; } };
 }
 afterEach(() => vi.useRealTimers());
 describe('weekly licensed-storage reconciliation (metadata only; unit DB/storage)', () => {
@@ -94,6 +95,19 @@ describe('weekly licensed-storage reconciliation (metadata only; unit DB/storage
   it('rejects a damaged audit instead of silently resetting its weekly checkpoint', async () => {
     const f = fixture(); f.setAudit([{ new_values: '{}' }]);
     expect((await f.runner.runOnce()).state).toBe('failed'); expect(f.listObjects).not.toHaveBeenCalled(); expect(f.execute).not.toHaveBeenCalled();
+  });
+  it('closes its per-run readonly client on success, not-due and failure, without constructing one when disabled', async () => {
+    const f = fixture(); await f.runner.runOnce(); expect(f.closeStorage).toHaveBeenCalledTimes(1);
+    await f.runner.runOnce(); expect(f.closeStorage).toHaveBeenCalledTimes(2);
+    f.setAudit([]); f.listObjects.mockRejectedValue(new Error('fixture failure')); await f.runner.runOnce(); expect(f.closeStorage).toHaveBeenCalledTimes(3);
+    f.setAdapter('url_reference'); await f.runner.runOnce(); expect(f.closeStorage).toHaveBeenCalledTimes(3);
+  });
+  it('rejects mismatched key/SHA/surah metadata instead of generating a misleading manifest', async () => {
+    const f = fixture();
+    for (const overrides of [{ object_key: key.replace('/001/', '/999/') }, { surah: 2 }, { sha256: 'b'.repeat(64) }]) {
+      f.setRows([row('one', overrides)]); expect((await f.runner.runOnce()).state).toBe('failed');
+    }
+    expect(f.writeReport).not.toHaveBeenCalled(); expect(f.execute).not.toHaveBeenCalled(); expect(f.closeStorage).toHaveBeenCalledTimes(3);
   });
   it('skips overlapping work and close drains the scan without starting a report transaction', async () => {
     const f = fixture(); let finish!: (objects: Array<{ objectKey: string; sizeBytes: number }>) => void;
