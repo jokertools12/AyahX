@@ -1,5 +1,11 @@
+import io
+import json
+import tempfile
 import unittest
-from report_qud_t7_execution import canonical, digest, report
+from contextlib import redirect_stdout
+from pathlib import Path
+from unittest.mock import patch
+from report_qud_t7_execution import canonical, digest, main, report
 
 
 class PublicEvidenceTests(unittest.TestCase):
@@ -34,6 +40,46 @@ class PublicEvidenceTests(unittest.TestCase):
         checkpoint['state']['results']['one']['verification_status'] = 'passed'
         with self.assertRaisesRegex(ValueError, 'SELF_SHA'):
             report(manifest, checkpoint, 'b' * 64)
+
+    def test_resource_proof_retains_hash_without_private_url_or_path(self):
+        manifest, checkpoint = self.fixture()
+        checkpoint.pop('checkpoint_sha256')
+        checkpoint['state']['started_at'] = '2026-10-10T14:41:00+00:00'
+        checkpoint['state']['resources']['hf-index'] = {
+            'status': 'complete', 'sha256': 'c' * 64, 'bytes': 123,
+            'url': 'https://private.invalid/signed', 'path': 'private-file'}
+        checkpoint['checkpoint_sha256'] = digest(canonical(checkpoint))
+        result = report(manifest, checkpoint, 'b' * 64)
+        self.assertEqual(result['hf_index_resource'], {
+            'status': 'complete', 'sha256': 'c' * 64, 'bytes': 123})
+        self.assertEqual(result['run_started_at'], '2026-10-10T14:41:00+00:00')
+
+    def test_cli_hash_matches_written_bytes_and_prior_evidence_is_bound(self):
+        manifest, checkpoint = self.fixture()
+        with tempfile.TemporaryDirectory() as scratch:
+            root = Path(scratch)
+            raw_manifest = canonical(manifest)
+            (root / 'manifest.json').write_bytes(raw_manifest)
+            (root / 'checkpoint.json').write_bytes(canonical(checkpoint))
+            args = ['report', '--manifest', str(root / 'manifest.json'), '--manifest-sha', digest(raw_manifest),
+                    '--checkpoint', str(root / 'checkpoint.json'), '--prior-checkpoint', str(root / 'checkpoint.json'),
+                    '--out', str(root / 'out.json')]
+            output = io.StringIO()
+            with patch('sys.argv', args), redirect_stdout(output):
+                main()
+            raw_result = (root / 'out.json').read_bytes()
+            self.assertEqual(json.loads(output.getvalue())['report_sha256'], digest(raw_result))
+            self.assertNotIn(b'\r\n', raw_result)
+            self.assertEqual(json.loads(raw_result)['previous_invocations'][0]['counts'], {'failed': 1})
+
+            changed = json.loads(canonical(checkpoint))
+            changed.pop('checkpoint_sha256')
+            changed['bindings']['calculator_sha256']['kernel'] = 'c' * 64
+            changed['checkpoint_sha256'] = digest(canonical(changed))
+            (root / 'other.json').write_bytes(canonical(changed))
+            args[args.index('--prior-checkpoint') + 1] = str(root / 'other.json')
+            with patch('sys.argv', args), self.assertRaisesRegex(ValueError, 'PRIOR_CHECKPOINT_BINDINGS_MISMATCH'):
+                main()
 
 
 if __name__ == '__main__':

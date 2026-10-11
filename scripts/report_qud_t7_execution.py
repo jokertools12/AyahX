@@ -75,9 +75,12 @@ def report(manifest, checkpoint, checkpoint_sha):
                       'hf_windows': measured.get('hf_windows', []), 'publication_changed': False,
                       'database_offset_verified_changed': False, 'surah_start_basmala_audio_status': 'unverified'}
     bindings = {key: value for key, value in checkpoint['bindings'].items() if key != 'scratch'}
+    hf_index = state.get('resources', {}).get('hf-index', {})
     return {'checked_at': datetime.now(timezone.utc).isoformat(), 'report_scope': 'Actual private checkpoint observations, no new gate decisions',
             'checkpoint_file_sha256': checkpoint_sha, 'checkpoint_self_sha256': claimed, 'checkpoint_sequence': checkpoint['sequence'],
             'bindings': bindings, 'database_writes': 0, 'publication_changed': False,
+            'run_started_at': state.get('started_at'), 'last_invocation_at': state.get('last_invocation_at'),
+            'hf_index_resource': {key: hf_index[key] for key in ['status', 'phase', 'sha256', 'bytes'] if key in hf_index},
             'counts': dict(Counter(row['verification_status'] for row in rows.values())),
             'method_candidates': dict(Counter(row.get('verification_method_candidate') for row in rows.values()
                                               if row.get('offset_verified_candidate') is True)),
@@ -91,16 +94,27 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for field in ('manifest', 'manifest-sha', 'checkpoint', 'out'):
         parser.add_argument('--' + field, required=True)
+    parser.add_argument('--prior-checkpoint', action='append', default=[])
     args = parser.parse_args()
     raw_manifest = Path(args.manifest).read_bytes()
     if digest(raw_manifest) != args.manifest_sha:
         raise ValueError('MANIFEST_FILE_SHA_MISMATCH')
     raw_checkpoint = Path(args.checkpoint).read_bytes()
     value = report(json.loads(raw_manifest), json.loads(raw_checkpoint), digest(raw_checkpoint))
+    previous = []
+    for path in args.prior_checkpoint:
+        raw_previous = Path(path).read_bytes()
+        prior = report(json.loads(raw_manifest), json.loads(raw_previous), digest(raw_previous))
+        if prior['bindings'] != value['bindings']:
+            raise ValueError('PRIOR_CHECKPOINT_BINDINGS_MISMATCH')
+        previous.append({key: prior[key] for key in ['checkpoint_file_sha256', 'checkpoint_self_sha256',
+                         'checkpoint_sequence', 'last_invocation_at', 'counts', 'measured_samples', 'transport_statistics']})
+    value['previous_invocations'] = previous
     text = json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + '\n'
     if 'https://' in text or 'http://' in text:
         raise ValueError('PUBLIC_REPORT_URL_PRESENT_REVIEW_REQUIRED')
-    Path(args.out).write_text(text, encoding='utf-8')
+    # Preserve the exact bytes whose hash is reported on Windows as well as Linux.
+    Path(args.out).write_bytes(text.encode('utf-8'))
     print(json.dumps({'counts': value['counts'], 'measured_samples': value['measured_samples'],
                       'report_sha256': digest(text.encode())}))
 
