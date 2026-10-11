@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
+import {isDeepStrictEqual} from 'node:util';
 import {D4_OFFSET_CHECK,D4_PUBLISH_CHECK,D4_SLICE_CHECK,PUBLICATION_CONSTRAINTS} from '../../server/services/catalogTechnicalPublication';
 import {humanReviewMigrationSql} from '../../server/db/migrations/005_addHumanReviewsAndLicensedSources';
+import {canonicalAuditJson} from '../../server/services/catalogAudit';
 import type {Inventory} from './railwayQuranOps';
 
 export const digest=(value:string|Buffer):string=>createHash('sha256').update(value).digest('hex');
@@ -83,4 +85,33 @@ export function assertPublicationInventory(before:Inventory,baseline:Inventory,b
 export function assertPublicationDdlUnchanged(before:Record<string,string>,after:Record<string,string>):void{
   assert.deepEqual(Object.keys(after).sort(),Object.keys(before).sort(),'DDL_TABLE_SET_CHANGED');
   for(const name of Object.keys(before))if(name!=='recitations')assert.equal(after[name],before[name],'UNEXPECTED_DDL_CHANGE:'+name);
+}
+/** information_schema JSON_ARRAYAGG order is unspecified after ALTER.
+ * Compare copies, preserve every attribute, and never collapse a duplicate.
+ */
+export function assertPublicationSchemaUnchanged(before:Pick<Inventory,'columns'|'foreign_keys'>,after:Pick<Inventory,'columns'|'foreign_keys'>):void{
+  const columns=(rows:Inventory['columns'])=>{
+    if(!Array.isArray(rows))throw new Error('CHECK_OPERATION_INVALID_COLUMNS');
+    const keys=new Set<string>();
+    for(const row of rows){
+      if(!row||typeof row.table!=='string'||!row.table||typeof row.column!=='string'||!row.column)throw new Error('CHECK_OPERATION_INVALID_COLUMNS');
+      const key=JSON.stringify([row.table,row.column]);if(keys.has(key))throw new Error('CHECK_OPERATION_DUPLICATE_COLUMNS');keys.add(key);
+    }
+    const compare=(a:string,b:string)=>a<b?-1:a>b?1:0;
+    return [...rows].sort((a,b)=>compare(a.table,b.table)||compare(a.column,b.column));
+  };
+  if(!isDeepStrictEqual(columns(before.columns),columns(after.columns)))throw new Error('CHECK_OPERATION_CHANGED_COLUMNS');
+  const foreignKeys=(rows:Inventory['foreign_keys'])=>{
+    if(!Array.isArray(rows))throw new Error('CHECK_OPERATION_INVALID_FOREIGN_KEYS');
+    // Canonicalize key order only. No row attribute/value or multiplicity is dropped.
+    return rows.map(row=>{
+      if(!row||typeof row.table!=='string'||!row.table||typeof row.column!=='string'||!row.column||typeof row.referenced!=='string'||!row.referenced)throw new Error('CHECK_OPERATION_INVALID_FOREIGN_KEYS');
+      try{return canonicalAuditJson(row);}catch{throw new Error('CHECK_OPERATION_INVALID_FOREIGN_KEYS');}
+    }).sort();
+  };
+  if(!isDeepStrictEqual(foreignKeys(before.foreign_keys),foreignKeys(after.foreign_keys)))throw new Error('CHECK_OPERATION_CHANGED_FOREIGN_KEYS');
+}
+/** Assertions/SDK messages may contain whole rows or private values. */
+export function publicationFailureCode(error:unknown):string{
+  return error instanceof Error&&/^[A-Z][A-Z0-9_]*(?::[A-Za-z0-9_]+)*$/u.test(error.message)?error.message:'K1_PRODUCTION_FAILED';
 }

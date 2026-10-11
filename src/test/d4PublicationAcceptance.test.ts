@@ -5,6 +5,7 @@ import {PUBLICATION_CONSTRAINTS} from '../../server/services/catalogTechnicalPub
 import type {Inventory} from '../../scripts/lib/railwayQuranOps';
 import {assertScopedPublicationMetadata} from '../../scripts/lib/d4PublicationMetadataGuard';
 import {d4Literal} from '../../scripts/lib/d4AuditSqlPlan';
+import {assertPublicationSchemaUnchanged,publicationFailureCode} from '../../scripts/lib/d4PublicationAcceptance';
 const rehearsal=():LicensedRehearsal=>({passed:true,scope:'local_synthetic_scratch_only',database:'ayahx_d4_unit',production_written:false,migration_up_twice:true,column_nullable_json:true,global_offset_unchanged:true,catalog_branch_unchanged:true,local_column_down_reapply:true,down005_twice_and_reapply_with_dependent_check:true,slice_branch_tests_passed:true,legacy_slice_clauses:['exact old slice canonical'],rejections:Array.from({length:23},()=>({code:'ER_CHECK_CONSTRAINT_VIOLATED'})),expected_clauses:{...PUBLICATION_CONSTRAINTS},ddl_sha256:digest(licensedPublicationFixtureDdl()),migration_sql_sha256:digest(humanReviewMigrationSql().join('\n'))});
 const now=Date.parse('2026-10-11T12:00:00Z');
 const names=[...protectedPublicationTables,'recitations','arbitrary_table'];
@@ -78,4 +79,33 @@ describe('licensed metadata SQL boundaries (unit mocks only)',()=>{
     expect(()=>assertScopedPublicationMetadata(sql(`licensed_publication_details=${snapshot}`),{...plan,decisions:[{id:'other',metadata_change_planned:true}]})).toThrow('DECISION');
   });
   it('keeps the separate existing offset metadata plan valid without a licensed cache',()=>expect(()=>assertScopedPublicationMetadata(sql("offset_verified=1,verification_method='v1',timing_quality='verified'"),{})).not.toThrow());
+});
+describe('schema readback preserves values while ignoring row order',()=>{
+  const schema=()=>({columns:[{table:'users',column:'id',type:'varchar(36)',charset:'utf8mb4',collation:'utf8mb4_unicode_ci'},{table:'recitations',column:'licensed_publication_details',type:'json',charset:null,collation:null},{table:'users',column:'role',type:'int',charset:null,collation:null}],foreign_keys:[{table:'children',column:'user_id',referenced:'users'},{table:'other',column:'recitation_id',referenced:'recitations'},{table:'children',column:'user_id',referenced:'users'}]});
+  it('accepts independent column/FK permutations and leaves caller arrays untouched',()=>{
+    const before=schema(),after=schema();after.columns.reverse();after.foreign_keys.reverse();const saved=JSON.stringify(after);
+    expect(()=>assertPublicationSchemaUnchanged(before,after)).not.toThrow();expect(JSON.stringify(after)).toBe(saved);
+  });
+  it.each(['table','column','type','charset','collation'] as const)('rejects changing column attribute %s',field=>{
+    const before=schema(),after=schema();after.columns[0][field]='changed';expect(()=>assertPublicationSchemaUnchanged(before,after)).toThrow('CHECK_OPERATION_CHANGED_COLUMNS');
+  });
+  it('rejects missing, additional and duplicate column identities on either side',()=>{
+    const before=schema(),missing=schema();missing.columns.pop();expect(()=>assertPublicationSchemaUnchanged(before,missing)).toThrow('CHECK_OPERATION_CHANGED_COLUMNS');
+    const extra=schema();extra.columns.push({...extra.columns[0],column:'extra'});expect(()=>assertPublicationSchemaUnchanged(before,extra)).toThrow('CHECK_OPERATION_CHANGED_COLUMNS');
+    const duplicate=schema();duplicate.columns.push({...duplicate.columns[0]});expect(()=>assertPublicationSchemaUnchanged(before,duplicate)).toThrow('CHECK_OPERATION_DUPLICATE_COLUMNS');expect(()=>assertPublicationSchemaUnchanged(duplicate,before)).toThrow('CHECK_OPERATION_DUPLICATE_COLUMNS');
+  });
+  it('compares additional column attributes without reducing the recorded projection',()=>{
+    const before=schema(),after=schema();Object.assign(before.columns[0],{nullable:'YES',default_value:null});Object.assign(after.columns[0],{default_value:null,nullable:'YES'});expect(()=>assertPublicationSchemaUnchanged(before,after)).not.toThrow();Object.assign(after.columns[0],{nullable:'NO'});expect(()=>assertPublicationSchemaUnchanged(before,after)).toThrow('CHECK_OPERATION_CHANGED_COLUMNS');
+  });
+  it.each(['table','column','referenced'] as const)('rejects FK attribute %s changes',field=>{
+    const before=schema(),after=schema();after.foreign_keys[0][field]='changed';expect(()=>assertPublicationSchemaUnchanged(before,after)).toThrow('CHECK_OPERATION_CHANGED_FOREIGN_KEYS');
+  });
+  it('preserves FK multiplicity and every additional attribute',()=>{
+    const before=schema(),missing=schema(),extra=schema();missing.foreign_keys.pop();extra.foreign_keys.push({...extra.foreign_keys[0]});expect(()=>assertPublicationSchemaUnchanged(before,missing)).toThrow('CHECK_OPERATION_CHANGED_FOREIGN_KEYS');expect(()=>assertPublicationSchemaUnchanged(before,extra)).toThrow('CHECK_OPERATION_CHANGED_FOREIGN_KEYS');
+    const after=schema();Object.assign(before.foreign_keys[0],{constraint:'fk_1',referenced_column:'id'});Object.assign(after.foreign_keys[0],{referenced_column:'id',constraint:'fk_1'});expect(()=>assertPublicationSchemaUnchanged(before,after)).not.toThrow();Object.assign(after.foreign_keys[0],{constraint:'fk_2'});expect(()=>assertPublicationSchemaUnchanged(before,after)).toThrow('CHECK_OPERATION_CHANGED_FOREIGN_KEYS');
+  });
+  it('emits fixed codes without huge assertion diffs, row data or private messages',()=>{
+    expect(publicationFailureCode(new Error('CHECK_OPERATION_CHANGED_COLUMNS'))).toBe('CHECK_OPERATION_CHANGED_COLUMNS');expect(publicationFailureCode(new Error('CHECK_READBACK_CHANGED:constraint_1'))).toBe('CHECK_READBACK_CHANGED:constraint_1');
+    for(const message of ['CHECK_OPERATION_CHANGED_COLUMNS\n+ private row data', 'private SDK response at https://example.org', 'mysql://private:secret@example.org'])expect(publicationFailureCode(new Error(message))).toBe('K1_PRODUCTION_FAILED');
+  });
 });

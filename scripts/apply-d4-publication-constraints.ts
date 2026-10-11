@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {captureInventory,ENVIRONMENTS,identifier,type Inventory} from './lib/railwayQuranOps';
 import {openRailwayMysqlSession} from './lib/railwayMysqlSession';
-import {acceptedLicensedClauses,assertExpectedCheckClauses,assertFreshPublicationBackup,assertPublicationDdlUnchanged,assertPublicationInventory,digest,licensedPublicationConstraintSql,type LicensedRehearsal,type PublicationBackup} from './lib/d4PublicationAcceptance';
+import {acceptedLicensedClauses,assertExpectedCheckClauses,assertFreshPublicationBackup,assertPublicationDdlUnchanged,assertPublicationInventory,assertPublicationSchemaUnchanged,publicationFailureCode,digest,licensedPublicationConstraintSql,type LicensedRehearsal,type PublicationBackup} from './lib/d4PublicationAcceptance';
 const option=(key:string)=>{const i=process.argv.indexOf(key);if(i<0||!process.argv[i+1])throw new Error('REQUIRED_OPTION:'+key);return process.argv[i+1];};
 assert.equal(option('--target'),'production');const apply=process.argv.includes('--apply');if(apply)assert.ok(process.argv.includes('--confirm-production'));
 const baseline=JSON.parse(readFileSync(option('--baseline'),'utf8')) as Inventory;
@@ -47,10 +47,10 @@ try{
   }
   const after=apply?await captureInventory(ENVIRONMENTS.production,sql=>session.read(sql)):before;
   assert.deepEqual(after.row_counts,before.row_counts);assert.deepEqual(after.checksums,before.checksums,'DDL_CHANGED_CELLS');assert.deepEqual(after.critical_counts,before.critical_counts);
-  assert.deepEqual(after.columns,before.columns,'CHECK_OPERATION_CHANGED_COLUMNS');assert.deepEqual(after.foreign_keys,before.foreign_keys,'CHECK_OPERATION_CHANGED_FOREIGN_KEYS');
+  assertPublicationSchemaUnchanged(before,after);
   const actualAfter=apply?await checks():actual,ddlAfter=apply?await ddlHashes(after):ddlBefore;
   assertPublicationDdlUnchanged(ddlBefore,ddlAfter);if(apply)assertExpectedCheckClauses(actualAfter,expected,legacySliceClauses);
   Object.assign(report,{passed:true,protected_unchanged:true,d1:after.d1_counts,d3:after.row_counts.ayah_timings,canonical_checksum:after.canonical_checksum,checks_after:actualAfter,ddl_checksums_after:ddlAfter,row_counts_after:after.row_counts,checksums_after:after.checksums,disk_after:await session.storage()});
-}catch(error){report.passed=false;report.failure=error instanceof Error?error.message:'K1_PRODUCTION_FAILED';throw new Error(String(report.failure));}
+}catch(error){report.passed=false;report.failure=publicationFailureCode(error);throw new Error(String(report.failure));}
 finally{report.serial=await session.close();report.finished_at=new Date().toISOString();writeFileSync(option('--report'),JSON.stringify(report,null,2)+'\n');}
 console.log(JSON.stringify({passed:report.passed,applied:apply,sql_sha256:report.sql_sha256}));
