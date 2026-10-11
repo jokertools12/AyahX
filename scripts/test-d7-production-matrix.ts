@@ -34,6 +34,7 @@ for(const item of cases){
   const remote=error instanceof D7OperatorError?error.stdout.split(/\r?\n/u).findLast(line=>line.startsWith('{')):null;
   const refusal=remote?JSON.parse(remote):null;
   report.failure=refusal?.error??(error instanceof Error&&/^[A-Z0-9_]+$/u.test(error.message)?error.message:'PRODUCTION_MATRIX_OPERATOR_FAILED');
+  if(refusal?.details)report.refusal_details=refusal.details;
   report.passed=report.failure===item.expected_result;
   if(!report.passed)failed=true;
  }

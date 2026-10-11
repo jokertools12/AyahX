@@ -12,6 +12,7 @@ import { RenderLabService } from '../services/renderLabService';
 import { enqueueRenderJob } from '../services/renderQueueBroker';
 import { catalogStorageFromEnvironment } from '../services/catalogStorageRuntime';
 import { RenderManifestV2Schema } from '../models/renderManifestV2';
+import { redactAdminAudit } from '../admin/adminAuditService';
 async function main(): Promise<void> {
   if(!process.argv.includes('--root-operated'))throw new Error('ROOT_OPERATOR_OPT_IN_REQUIRED');
   const db=catalogDatabaseFromPool(pool);
@@ -48,4 +49,4 @@ async function main(): Promise<void> {
     else{const manifest=await lab.preview(actor,request);console.log(JSON.stringify({dry_run:true,schemaVersion:manifest.schemaVersion,durationMs:manifest.timeline.durationMs,audioPlanHash:manifest.audioPlanHash,timingVersionHash:manifest.timingVersionHash,warnings:manifest.warnings,production_writes:0}));}
   }finally{await closeRenderQueue();await pool.end();}
 }
-void main().catch(error=>{const code=error instanceof CatalogError?error.code:error instanceof Error&&/^[A-Z0-9_]+$/u.test(error.message)?error.message:'RENDER_LAB_CLI_FAILED';console.error(JSON.stringify({error:code}));process.exitCode=1;});
+void main().catch(error=>{const code=error instanceof CatalogError?error.code:error instanceof Error&&/^[A-Z0-9_]+$/u.test(error.message)?error.message:'RENDER_LAB_CLI_FAILED';console.error(JSON.stringify({error:code,details:error instanceof CatalogError?redactAdminAudit(error.details):undefined}));process.exitCode=1;});
