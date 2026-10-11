@@ -31,6 +31,7 @@ const messages: Record<string, string> = {
   ADMIN_RATE_STORE_UNAVAILABLE: 'تعذر التحقق من حد الطلبات. أعد المحاولة لاحقًا.', ADMIN_TOTP_ENROLLMENT_REQUIRED: 'سياسة الأمان تتطلب تفعيل المصادقة الثنائية قبل المتابعة.',
   ADMIN_TOTP_CODE_INVALID: 'رمز التحقق غير صحيح أو استُخدم من قبل.', ADMIN_TOTP_ENROLLMENT_EXPIRED: 'انتهت مهلة إعداد المصادقة الثنائية؛ ابدأ الإعداد مجددًا.',
   ADMIN_TOTP_POLICY_REQUIRED: 'لا يمكن تعطيل المصادقة الثنائية وفق السياسة الحالية.', ADMIN_SETTING_READ_ONLY: 'هذا الإعداد للقراءة فقط؛ لا يملك مستهلكًا قابلًا للتعديل في هذه الدفعة.',
+  ADMIN_2FA_KEY_UNAVAILABLE: 'مفتاح تشفير المصادقة الثنائية غير متاح على الخادم؛ لا يمكن إعدادها أو جعلها إلزامية.',
   ADMIN_CONFIRMATION_REQUIRED: 'التأكيد المكتوب لا يطابق المورد.', ADMIN_SUPER_ADMIN_PROTECTED: 'لا يمكن تقليل صلاحيات المدير الأعلى أو إلغاء وصوله.',
 };
 export function adminErrorResponse(res: Response, error: unknown, requestId: string): void {

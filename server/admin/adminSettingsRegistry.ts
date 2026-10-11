@@ -3,6 +3,7 @@ import type { CatalogDatabase, CatalogRow } from '../services/catalogContracts';
 import { appendCatalogAudit } from '../services/catalogAudit';
 import { encryptSettingSecret, isSettingsSecretEncryptionConfigured } from '../services/secretSettingsCrypto';
 import { AdminError, type AdminRequestContext } from './adminContracts';
+import { isAdminEncryptionConfigured } from './adminTotp';
 export interface AdminSettingDefinition { key: string; type: 'boolean'|'string'|'enum'|'number'; group: string; description: string; default: unknown; validator: Record<string,unknown>; isSecret: boolean; readOnly?: boolean; consumer: string[]; flag?: boolean; schema: ZodType }
 const string = z.string().max(8192), boolean = z.boolean();
 const definition = (key: string, type: AdminSettingDefinition['type'], group: string, description: string, fallback: unknown, schema: ZodType, validator: Record<string,unknown>, consumer: string[], extra: Partial<AdminSettingDefinition> = {}): AdminSettingDefinition => ({key,type,group,description,default:fallback,schema,validator,consumer,isSecret:false,...extra});
@@ -54,6 +55,7 @@ export class AdminSettingsService {
   if(!def||def.readOnly||Boolean(def.flag)!==flags)throw new AdminError('ADMIN_SETTING_READ_ONLY',409);
   if(flags&&(!ctx.user.permissions.includes('launch.manage')||ctx.body.confirmation!==def.key))throw new AdminError(ctx.user.permissions.includes('launch.manage')?'ADMIN_CONFIRMATION_REQUIRED':'ADMIN_FORBIDDEN',ctx.user.permissions.includes('launch.manage')?422:403);
   const parsed=def.schema.safeParse(ctx.body.value);if(!parsed.success)throw new AdminError('ADMIN_INPUT_INVALID',422,{fields:[{path:'value',message:'قيمة لا تطابق تعريف الإعداد'}]});
+  if(def.key==='admin_2fa_policy'&&parsed.data!=='optional'&&!isAdminEncryptionConfigured(this.env))throw new AdminError('ADMIN_2FA_KEY_UNAVAILABLE',503);
   if(def.isSecret&&!isSettingsSecretEncryptionConfigured())throw new AdminError('SETTINGS_ENCRYPTION_KEY_NOT_CONFIGURED',503);
   const plain=typeof parsed.data==='string'?parsed.data:String(parsed.data),stored=def.isSecret?encryptSettingSecret(plain):plain;
   await this.db.transaction(async tx=>{

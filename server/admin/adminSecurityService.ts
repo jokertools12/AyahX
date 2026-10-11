@@ -40,9 +40,9 @@ export class AdminSecurityService {
     return { enabled: true, recoveryCodes: recovery.codes };
   }
   async disable(ctx: AdminRequestContext, code: string): Promise<CatalogRow> {
-    const settings = await readAdminSecuritySettings(this.db);
-    if (requiresAdmin2fa(ctx.user.roles, settings.policy)) throw new AdminError('ADMIN_TOTP_POLICY_REQUIRED', 409);
     await this.db.transaction(async tx => {
+      const settings = await readAdminSecuritySettings(tx);
+      if (requiresAdmin2fa(ctx.user.roles, settings.policy)) throw new AdminError('ADMIN_TOTP_POLICY_REQUIRED', 409);
       const [row] = await tx.read('SELECT * FROM admin_user_extensions WHERE user_id=? FOR UPDATE', [ctx.user.id]);
       if (!row || Number(row.two_factor_enabled) !== 1) throw new AdminError('ADMIN_TOTP_NOT_ENABLED', 409);
       if (!(await this.access.verifyFactor(tx, ctx.user.id, row, code))) throw new AdminError('ADMIN_TOTP_CODE_INVALID', 422);
