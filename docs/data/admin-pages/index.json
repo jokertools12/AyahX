@@ -1,7 +1,7 @@
 {
-  "observed_at": "2026-10-11T12:03:00.023Z",
+  "observed_at": "2026-10-11T12:23:02.472Z",
   "pages_run": "01a12acc-d26e-7183-a414-318fbd9cd5f5",
-  "functional_run": "01a12ad0-24bd-7e4c-9686-294a62443786",
+  "functional_run": "01a12adc-31ec-782f-bacd-674907de411e",
   "page_images": 56,
   "blank_login_images": 4,
   "images": [
@@ -487,7 +487,7 @@
     },
     {
       "file": "docs/data/admin-pages/desktop-admin-login-light.png",
-      "source": "tooling/e2e/.e2e/a1-a2a-functional-final/artifacts/desktop/tests_admin-auth.e2e.ts__blank_20admin_20login_20has_20RTL_20accessibility_20and_20both_20theme_20screenshots-1bb663e2/default/attempt-0/screenshots/001-admin-login-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-functional-security-final/artifacts/desktop/tests_admin-auth.e2e.ts__blank_20admin_20login_20has_20RTL_20accessibility_20and_20both_20theme_20screenshots-1bb663e2/default/attempt-0/screenshots/001-admin-login-light.png",
       "source_sha256": "eeb3da1c746957978a7af4f51b3da1aed4bf0f900f54a59887fbc220d85a62c8",
       "width": 720,
       "height": 500,
@@ -495,7 +495,7 @@
     },
     {
       "file": "docs/data/admin-pages/desktop-admin-login-dark.png",
-      "source": "tooling/e2e/.e2e/a1-a2a-functional-final/artifacts/desktop/tests_admin-auth.e2e.ts__blank_20admin_20login_20has_20RTL_20accessibility_20and_20both_20theme_20screenshots-1bb663e2/default/attempt-0/screenshots/002-admin-login-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-functional-security-final/artifacts/desktop/tests_admin-auth.e2e.ts__blank_20admin_20login_20has_20RTL_20accessibility_20and_20both_20theme_20screenshots-1bb663e2/default/attempt-0/screenshots/002-admin-login-dark.png",
       "source_sha256": "690fa4d8706b8abf2e95acb90547dc01cd04092fa2b5e988eadaa8966f2e20b3",
       "width": 720,
       "height": 500,
@@ -503,7 +503,7 @@
     },
     {
       "file": "docs/data/admin-pages/mobile-admin-login-light.png",
-      "source": "tooling/e2e/.e2e/a1-a2a-functional-final/artifacts/mobile/tests_admin-auth.e2e.ts__blank_20admin_20login_20has_20RTL_20accessibility_20and_20both_20theme_20screenshots-1bb663e2/default/attempt-0/screenshots/001-admin-login-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-functional-security-final/artifacts/mobile/tests_admin-auth.e2e.ts__blank_20admin_20login_20has_20RTL_20accessibility_20and_20both_20theme_20screenshots-1bb663e2/default/attempt-0/screenshots/001-admin-login-light.png",
       "source_sha256": "685240b6d8665312f5da787719bd45acb53b27a9836cb606d82b6ea77f61db32",
       "width": 390,
       "height": 900,
@@ -511,7 +511,7 @@
     },
     {
       "file": "docs/data/admin-pages/mobile-admin-login-dark.png",
-      "source": "tooling/e2e/.e2e/a1-a2a-functional-final/artifacts/mobile/tests_admin-auth.e2e.ts__blank_20admin_20login_20has_20RTL_20accessibility_20and_20both_20theme_20screenshots-1bb663e2/default/attempt-0/screenshots/002-admin-login-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-functional-security-final/artifacts/mobile/tests_admin-auth.e2e.ts__blank_20admin_20login_20has_20RTL_20accessibility_20and_20both_20theme_20screenshots-1bb663e2/default/attempt-0/screenshots/002-admin-login-dark.png",
       "source_sha256": "4c6197c29b7795bbed7ee76bab39736b277b96283650c289295474ca4971131c",
       "width": 390,
       "height": 900,
@@ -545,15 +545,15 @@
     },
     {
       "file": "docs/data/admin-design-parity/card-public.png",
-      "source": "tooling/e2e/.e2e/artifacts/desktop/tests_admin-design.e2e.ts__capture_20existing_20AyahX_20design_20before_20admin_20changes-a580568a/default/attempt-0/screenshots/001-public-home-light.png",
-      "source_sha256": "a670f0204999f65a4b476feb826d394efafcf4457b98f42474f24542997f7f63",
-      "width": 444,
-      "height": 75,
+      "source": "tooling/e2e/.e2e/artifacts/desktop/tests_admin-design.e2e.ts__capture_20existing_20AyahX_20design_20before_20admin_20changes-a580568a/default/attempt-0/screenshots/003-public-surahs-light.png",
+      "source_sha256": "42598c63eea4b090f8d4b5397b02eb952449efab520807d6379f95562b81e2d5",
+      "width": 330,
+      "height": 207,
       "crop": [
-        960,
-        925,
-        444,
-        75
+        1074,
+        317,
+        330,
+        207
       ]
     },
     {

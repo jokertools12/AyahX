@@ -1,0 +1,38 @@
+{
+  "merge_sha": "a209223bc3f4f1d72f3553be83b539b1078391c9",
+  "deployments": [
+    {
+      "id": "8e57df03-5175-46f0-b06c-30a4638faa68",
+      "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "status": "SUCCESS",
+      "commitHash": "a209223bc3f4f1d72f3553be83b539b1078391c9",
+      "updatedAt": "2026-10-11T12:17:13.383Z",
+      "url": "https://railway.com/project/6394b364-57bc-4736-8ce1-10dcf382c1e5/service/68eea2bb-ae45-4af7-8962-ba9e16e466fc?environmentId=c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6&id=8e57df03-5175-46f0-b06c-30a4638faa68"
+    },
+    {
+      "id": "ea141ba3-9545-4b78-a979-9de25e35d47b",
+      "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "status": "SUCCESS",
+      "commitHash": "a209223bc3f4f1d72f3553be83b539b1078391c9",
+      "updatedAt": "2026-10-11T12:17:21.734Z",
+      "url": "https://railway.com/project/6394b364-57bc-4736-8ce1-10dcf382c1e5/service/18de6ea4-108a-4346-8474-c7b05b81943b?environmentId=c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6&id=ea141ba3-9545-4b78-a979-9de25e35d47b"
+    },
+    {
+      "id": "1fe02e6e-7c7d-4ae8-9a22-d4eedc08cc9c",
+      "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "status": "SUCCESS",
+      "commitHash": "a209223bc3f4f1d72f3553be83b539b1078391c9",
+      "updatedAt": "2026-10-11T12:17:33.591Z",
+      "url": "https://railway.com/project/6394b364-57bc-4736-8ce1-10dcf382c1e5/service/1ff57ef9-b793-4130-ae60-ce8392172cf8?environmentId=c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6&id=1fe02e6e-7c7d-4ae8-9a22-d4eedc08cc9c"
+    },
+    {
+      "id": "6a2d12b7-eb82-4378-826f-13cc9a8422d2",
+      "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "status": "SUCCESS",
+      "commitHash": "a209223bc3f4f1d72f3553be83b539b1078391c9",
+      "updatedAt": "2026-10-11T12:16:25.851Z",
+      "url": "https://railway.com/project/6394b364-57bc-4736-8ce1-10dcf382c1e5/service/d8558eff-68f5-4c63-b744-a103ddd743f6?environmentId=c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6&id=6a2d12b7-eb82-4378-826f-13cc9a8422d2"
+    }
+  ],
+  "all_success": true
+}

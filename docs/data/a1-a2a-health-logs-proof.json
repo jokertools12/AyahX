@@ -1,0 +1,64 @@
+{
+  "checked_at": "2026-10-11T12:29:26.419Z",
+  "window_start": "2026-10-11T12:18:10.000Z",
+  "window_end": "2026-10-11T12:29:15.740Z",
+  "window_seconds": 665.74,
+  "raw_logs_persisted": false,
+  "logs": [
+    {
+      "service": "AyahX",
+      "since": "2026-10-11T12:18:10.000Z",
+      "until": "2026-10-11T12:29:15.740Z",
+      "lines": 534,
+      "errors": 0,
+      "error_timestamps": [],
+      "new_totp_key_leaked": false
+    },
+    {
+      "service": "render-control",
+      "since": "2026-10-11T12:18:10.000Z",
+      "until": "2026-10-11T12:29:15.740Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": [],
+      "new_totp_key_leaked": false
+    },
+    {
+      "service": "render-worker-skia",
+      "since": "2026-10-11T12:18:10.000Z",
+      "until": "2026-10-11T12:29:15.740Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": [],
+      "new_totp_key_leaked": false
+    },
+    {
+      "service": "alignment-worker",
+      "since": "2026-10-11T12:18:10.000Z",
+      "until": "2026-10-11T12:29:15.740Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": [],
+      "new_totp_key_leaked": false
+    },
+    {
+      "service": "MySQL",
+      "since": "2026-10-11T12:18:10.000Z",
+      "until": "2026-10-11T12:29:15.740Z",
+      "lines": 0,
+      "errors": 0,
+      "error_timestamps": [],
+      "new_totp_key_leaked": false
+    },
+    {
+      "service": "Redis",
+      "since": "2026-10-11T12:18:10.000Z",
+      "until": "2026-10-11T12:29:15.740Z",
+      "lines": 50,
+      "errors": 0,
+      "error_timestamps": [],
+      "new_totp_key_leaked": false
+    }
+  ],
+  "passed": true
+}
