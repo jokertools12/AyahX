@@ -38,7 +38,7 @@ export function adminErrorResponse(res: Response, error: unknown, requestId: str
   const known = error instanceof AdminError || error instanceof CatalogError;
   const code = known ? error.code : 'ADMIN_UNAVAILABLE', status = known ? error.status : 503;
   const detail = error instanceof AdminError ? error.detail : error instanceof CatalogError ? error.details : {};
-  if (!known) logger.error('Admin operation unavailable', { code: 'ADMIN_UNAVAILABLE', name: error instanceof Error ? error.name : 'UnknownError' }, { requestId });
+  if (!known) { const raw=error&&typeof error==='object'&&'code' in error?String(error.code):'';const causeCode=/^[A-Z0-9_]{1,64}$/u.test(raw)?raw:'ADMIN_UNKNOWN_CAUSE';logger.error('Admin operation unavailable', { code: causeCode, name: error instanceof Error ? error.name : 'UnknownError' }, { requestId, responseCode:'ADMIN_UNAVAILABLE' }); }
   if (status === 429 && typeof detail.retryAfterMs === 'number') res.set('Retry-After', String(Math.max(1, Math.ceil(detail.retryAfterMs / 1000))));
   res.status(status).set('Cache-Control', 'no-store').json({ code, message: messages[code] ?? (status === 503 ? 'تعذر تنفيذ العملية الآن. استخدم معرّف الطلب للمراجعة.' : 'لم تُنفّذ العملية؛ راجع شروطها وأعد المحاولة.'), detail: { ...detail, requestId } });
 }
