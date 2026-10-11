@@ -5,13 +5,15 @@ import {createHash} from 'node:crypto';
 import {resolve,relative,isAbsolute} from 'node:path';
 import {openRailwayMysqlSession} from './lib/railwayMysqlSession';
 import {captureInventory,ENVIRONMENTS,type Inventory} from './lib/railwayQuranOps';
+import {assertScopedPublicationMetadata} from './lib/d4PublicationMetadataGuard';
 const option=(key:string)=>{const i=process.argv.indexOf(key);if(i<0||!process.argv[i+1])throw new Error('REQUIRED_OPTION:'+key);return process.argv[i+1];};
 assert.equal(option('--target'),'production');const apply=process.argv.includes('--apply');if(apply)assert.ok(process.argv.includes('--confirm-production'));
-const plan=JSON.parse(readFileSync(option('--plan'),'utf8')) as {passed:boolean;sql_sha256:string;audit_tail?:string};assert.ok(plan.passed);
+const plan=JSON.parse(readFileSync(option('--plan'),'utf8')) as {passed:boolean;sql_sha256:string;audit_tail?:string;decisions?:Array<{id?:unknown;metadata_change_planned?:unknown}>;mutations?:Array<{id?:unknown;action?:unknown;table?:unknown}>};assert.ok(plan.passed);
 const file=resolve(option('--sql'));const outside=relative(process.cwd(),file);assert.ok(outside.startsWith('..')||isAbsolute(outside),'PRIVATE_SQL_REQUIRED');
 const sql=readFileSync(file,'utf8');const sha=createHash('sha256').update(sql).digest('hex');assert.equal(sha,plan.sql_sha256,'SQL_PLAN_CHANGED');
 // Planner output uses one statement per physical line. Embedded data uses JSON escaping.
 const statements=sql.split(/\r?\n/u).filter(s=>s.trim()&&!s.trim().startsWith('--'));
+for(const statement of statements)assertScopedPublicationMetadata(statement,plan);
 for(const s of statements){assert.ok(s.endsWith(';'),'ONE_COMPLETE_STATEMENT_PER_LINE_REQUIRED');assert.ok(/^(?:SET |START TRANSACTION;|COMMIT;|CREATE TEMPORARY TABLE ayahx_d4_|INSERT INTO ayahx_d4_|INSERT INTO (?:audit_logs|recitation_audition_samples|human_review_items|recitation_youtube_sources|recitation_source_urls)\(|UPDATE (?:recitations|audio_providers|recitation_chapters|recitation_source_urls|recitation_youtube_sources|human_review_items) SET |SELECT RELEASE_LOCK\()/u.test(s),'D4_STATEMENT_NOT_APPROVED');assert.ok(Buffer.byteLength(s)<=256*1024,'ROW_PACKET_MARGIN');}
 const baseline=JSON.parse(readFileSync(option('--baseline'),'utf8')) as Inventory;
 if(apply){const dry=JSON.parse(readFileSync(option('--dry-run'),'utf8'));assert.ok(dry.passed&&!dry.applied);assert.equal(dry.sql_sha256,sha);}
