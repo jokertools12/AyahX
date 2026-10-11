@@ -22,7 +22,8 @@ function buildSession({ connections = 2, corrupt = false, badIndex = false }: { 
   after.columns.push(...addedColumns);
   after.columns.find(c => c.table === 'user_roles' && c.column === 'role')!.type = 'enum(' + [...ADMIN_ROLES, 'user'].map(role => "'" + role + "'").join(',') + ')';
   for (const name of ['permissions', 'admin_auth_attempts', 'admin_catalog_tasks']) after.tables.push({ name, collation: 'utf8mb4_unicode_ci', engine: 'InnoDB', row_format: 'Dynamic' });
-  Object.assign(after.row_counts, { permissions: Object.keys(ADMIN_PERMISSIONS).length, admin_auth_attempts: 0, admin_catalog_tasks: 0, admin_roles: 7, admin_permissions: 1 + ADMIN_ROLES.reduce((n, role) => n + DEFAULT_ROLE_PERMISSIONS[role].length, 0) });
+  // This transport simulates frozen migration006, not the separate D7 grant.
+  Object.assign(after.row_counts, { permissions: Object.keys(ADMIN_PERMISSIONS).filter(key=>key!=='render.test').length, admin_auth_attempts: 0, admin_catalog_tasks: 0, admin_roles: 7, admin_permissions: 1 + ADMIN_ROLES.reduce((n, role) => n + DEFAULT_ROLE_PERMISSIONS[role].filter(key=>key!=='render.test').length, 0) });
   fixture.before = before; fixture.after = after; fixture.applied = false;
   const indexes = [
     ['permissions', 'PRIMARY', 'permission_key'], ['admin_auth_attempts', 'PRIMARY', 'account_hash'], ['admin_auth_attempts', 'idx_admin_attempt_window', 'window_started_at'], ['admin_catalog_tasks', 'PRIMARY', 'id'],
@@ -41,8 +42,8 @@ function buildSession({ connections = 2, corrupt = false, badIndex = false }: { 
       if (sql.includes("'id',id,'role',role_slug")) return json([{ id: 'legacy-permission', role: 'developer', resource: 'legacy', action: 'read' }]);
       if (sql.startsWith('SELECT SHA2')) return ((fixture.applied && corrupt ? 'b' : 'a').repeat(64)) + '\n';
       if (sql.includes("key_name='quran_catalog_v2'")) return 'false\t0\n';
-      if (sql.includes("'role',role_slug,'permission',permission_key")) return json(ADMIN_ROLES.flatMap(role => DEFAULT_ROLE_PERMISSIONS[role].map(permission => ({ role, permission }))));
-      if (sql.includes("'key',permission_key")) return json(Object.keys(ADMIN_PERMISSIONS).map(key => ({ key })));
+      if (sql.includes("'role',role_slug,'permission',permission_key")) return json(ADMIN_ROLES.flatMap(role => DEFAULT_ROLE_PERMISSIONS[role].filter(key=>key!=='render.test').map(permission => ({ role, permission }))));
+      if (sql.includes("'key',permission_key")) return json(Object.keys(ADMIN_PERMISSIONS).filter(key=>key!=='render.test').map(key => ({ key })));
       throw new Error('UNEXPECTED_MOCK_SQL');
     }),
     storage: vi.fn(async () => ({ total_bytes: 5000000000, used_bytes: 1000000000, available_bytes: 4000000000 })),

@@ -1,0 +1,87 @@
+{
+  "checked_at": "2026-10-11T20:04:49.320Z",
+  "passed": true,
+  "mysql": "9.7.2",
+  "redis": "real_6380_db14",
+  "http": "real_express_sessions",
+  "results": [
+    {
+      "name": "unauthenticated_401",
+      "passed": true
+    },
+    {
+      "name": "rbac_super_admin",
+      "passed": true,
+      "detail": {
+        "expected": 202
+      }
+    },
+    {
+      "name": "rbac_admin",
+      "passed": true,
+      "detail": {
+        "expected": 202
+      }
+    },
+    {
+      "name": "rbac_content_manager",
+      "passed": true,
+      "detail": {
+        "expected": 403
+      }
+    },
+    {
+      "name": "rbac_moderator",
+      "passed": true,
+      "detail": {
+        "expected": 403
+      }
+    },
+    {
+      "name": "rbac_support",
+      "passed": true,
+      "detail": {
+        "expected": 403
+      }
+    },
+    {
+      "name": "rbac_finance",
+      "passed": true,
+      "detail": {
+        "expected": 403
+      }
+    },
+    {
+      "name": "rbac_analyst",
+      "passed": true,
+      "detail": {
+        "expected": 403
+      }
+    },
+    {
+      "name": "missing_and_foreign_origin_403",
+      "passed": true
+    },
+    {
+      "name": "client_audio_timing_and_plan_rejected_before_fetch",
+      "passed": true
+    },
+    {
+      "name": "hard_role_boundary_even_with_accidental_grant",
+      "passed": true
+    },
+    {
+      "name": "only_owned_test_queue_entries_removed",
+      "passed": true
+    },
+    {
+      "name": "render_lab_write_rate_enforced_by_real_redis",
+      "passed": true
+    }
+  ],
+  "fixture_jobs": [
+    "f110a208-d614-4f56-b3b7-0de6eaedde2c",
+    "0bf1b832-73bc-4bf5-8242-6e6b7832c1bd"
+  ],
+  "production_writes": 0
+}

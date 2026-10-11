@@ -1,0 +1,76 @@
+{
+  "platform": "linux",
+  "unique_words": 21202,
+  "corpus_sha256": "1fe74853d5041a8c058392a0279948270a6f69689cd07d9606831b6262541f14",
+  "fonts": [
+    {
+      "family": "Amiri",
+      "file": "amiri.ttf",
+      "sha256": "ab391c4147d054c48976e98322ad0eefe1427aa0e0502a12a4c75d80a70cfcd7",
+      "visible_codepoints": 68,
+      "missing": [],
+      "rendered_words": 21202,
+      "words_without_ink": 0,
+      "passed": true
+    },
+    {
+      "family": "Amiri Quran",
+      "file": "amiriquran.ttf",
+      "sha256": "e2a47644762d16bdfb6d33e0d8db8c6ff30beae84150ef5a705316bbd829455c",
+      "visible_codepoints": 68,
+      "missing": [],
+      "rendered_words": 21202,
+      "words_without_ink": 0,
+      "passed": true
+    },
+    {
+      "family": "Noto Naskh Arabic",
+      "file": "notonaskharabic.ttf",
+      "sha256": "67b5a525a661b607971fbd3f96a81b89d3a768e74534fca84f18ac97e6fab72f",
+      "visible_codepoints": 68,
+      "missing": [],
+      "rendered_words": 21202,
+      "words_without_ink": 0,
+      "passed": true
+    },
+    {
+      "family": "Scheherazade New",
+      "file": "scheherazadenew.ttf",
+      "sha256": "794bac8dc9e83d1d620bc471ea694f5f31d0965ce8006490a79dfc51a2d283b3",
+      "visible_codepoints": 68,
+      "missing": [],
+      "rendered_words": 21202,
+      "words_without_ink": 0,
+      "passed": true
+    },
+    {
+      "family": "Lateef",
+      "file": "lateef.ttf",
+      "sha256": "fcbd9e0227a4d7238880defa5fd74c012d69351150709e559a8577446145c2fc",
+      "visible_codepoints": 68,
+      "missing": [],
+      "rendered_words": 21202,
+      "words_without_ink": 0,
+      "passed": true
+    },
+    {
+      "family": "Mada",
+      "file": "mada.ttf",
+      "sha256": "bf4d193ee78cea2fd8bdc9e64e5cb7e8a19ff76ab74f97a9a4a0e80f8f4cefde",
+      "visible_codepoints": 68,
+      "missing": [],
+      "rendered_words": 21202,
+      "words_without_ink": 0,
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "checked_at": "2026-10-11T20:29:18.895Z",
+  "mysql_version": "9.7.2",
+  "source_words": 77433,
+  "network_font_requests": 0,
+  "method": "local_cmap_indices_and_native_raster_every_unique_word_bounded_child_batches",
+  "raster_batch_size": 500,
+  "batches": 43,
+  "sql_writes": 0
+}

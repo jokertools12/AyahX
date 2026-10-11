@@ -1,0 +1,245 @@
+{
+  "target": "production",
+  "applied": true,
+  "passed": true,
+  "started_at": "2026-10-11T20:49:51.770Z",
+  "sql_sha256": "74b7809cf6e6163613a92dee5e6cf327995cd2bd4330c213881a0e492c19eebf",
+  "encrypted_backup_sha256": "93810ab93ae401c4b601591010f62bc35e31c175d33f909b886a31e2c79ee8f2",
+  "planned": {
+    "nullable_columns": [
+      "recitation_id",
+      "audio_plan_hash",
+      "timing_version_hash",
+      "audio_mode_used",
+      "fallback_used",
+      "audio_bytes_fetched",
+      "audio_provider_code",
+      "qa_report_json"
+    ],
+    "permission_catalog_rows": 1,
+    "role_grants": 0
+  },
+  "critical_before": {
+    "users": 13,
+    "subscriptions": 16,
+    "plans": null,
+    "payment_requests": 3,
+    "videos": null,
+    "saved_videos": 7,
+    "render_jobs": 72,
+    "system_settings": 16,
+    "user_roles": 13,
+    "notifications": 49
+  },
+  "d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "d3": 422463,
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "protected_checksums_before": {
+    "users": "465493766",
+    "profiles": "3305835068",
+    "subscriptions": "869915229",
+    "payment_requests": "425435828",
+    "saved_videos": "3253525225",
+    "render_jobs": "1161850010",
+    "system_settings": "1452891046",
+    "user_roles": "2243496482",
+    "notifications": "1549172204",
+    "quran_surahs": "2501341507",
+    "quran_ayahs": "1712042852",
+    "quran_words": "2986733015",
+    "ayah_timings": "2767002486"
+  },
+  "original_render_job_columns_sha256": "d7678a21f291ce7c4a76639ba6da5e709c9e40a36ef9d334e8987c9b57d5dfb4",
+  "disk_before": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1775255552,
+    "available_bytes": 2900553728
+  },
+  "critical_after": {
+    "users": 13,
+    "subscriptions": 16,
+    "plans": null,
+    "payment_requests": 3,
+    "videos": null,
+    "saved_videos": 7,
+    "render_jobs": 72,
+    "system_settings": 16,
+    "user_roles": 13,
+    "notifications": 49
+  },
+  "columns": [
+    {
+      "name": "audio_bytes_fetched",
+      "type": "bigint unsigned",
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "name": "audio_mode_used",
+      "type": "varchar(32)",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "audio_plan_hash",
+      "type": "char(64)",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "audio_provider_code",
+      "type": "varchar(64)",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "fallback_used",
+      "type": "tinyint(1)",
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "name": "qa_report_json",
+      "type": "json",
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "name": "recitation_id",
+      "type": "varchar(36)",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "timing_version_hash",
+      "type": "char(64)",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    }
+  ],
+  "disk_after": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1775255552,
+    "available_bytes": 2900553728
+  },
+  "permission_activated": false,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": true,
+    "acknowledged_commands": 37,
+    "writes_halted": false,
+    "batches": [
+      {
+        "ordinal": 1,
+        "row_count": 0,
+        "sql_sha256": "833168068a3c805c7c94ec9f8f655142a40ee504139b06d8eb8bf6836247c413",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 279,
+        "sql_bytes": 400,
+        "wire_request_bytes": 399
+      },
+      {
+        "ordinal": 2,
+        "row_count": 0,
+        "sql_sha256": "46e1bddc511f184c2f4e34c87282f01a42a799d0175e15369f0b1a0b34e3ca8c",
+        "threads_connected": 3,
+        "max_connections": 60,
+        "elapsed_ms": 254,
+        "sql_bytes": 401,
+        "wire_request_bytes": 399
+      },
+      {
+        "ordinal": 3,
+        "row_count": 0,
+        "sql_sha256": "5f918fec76197b883a1864b76e2d2ae1e82d4c7ee575564c5c32039f514711e4",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 240,
+        "sql_bytes": 409,
+        "wire_request_bytes": 403
+      },
+      {
+        "ordinal": 4,
+        "row_count": 0,
+        "sql_sha256": "9dd2041321216051bce81be7860e7420ecdb67281a2ff43a15586a40ce80d4a3",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 248,
+        "sql_bytes": 404,
+        "wire_request_bytes": 403
+      },
+      {
+        "ordinal": 5,
+        "row_count": 0,
+        "sql_sha256": "87ae11f9f6652dc09aeb70f5e6ecebb043a343bcc627308bc0c1ec73609ba37a",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 239,
+        "sql_bytes": 347,
+        "wire_request_bytes": 355
+      },
+      {
+        "ordinal": 6,
+        "row_count": 0,
+        "sql_sha256": "a2fb2afdc230e41b2ecedc197d7d7503c2996d8ab62e3cf3b9c3561310ba916d",
+        "threads_connected": 3,
+        "max_connections": 60,
+        "elapsed_ms": 250,
+        "sql_bytes": 367,
+        "wire_request_bytes": 371
+      },
+      {
+        "ordinal": 7,
+        "row_count": 0,
+        "sql_sha256": "433db03ebe4c2a1440087d91b36426f2f65b8efe3e241a9d86725372dff16160",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 240,
+        "sql_bytes": 412,
+        "wire_request_bytes": 407
+      },
+      {
+        "ordinal": 8,
+        "row_count": 0,
+        "sql_sha256": "504dc598f6a7d089a46d859dae8abc3d808e5e3f78253c6259b162933971a5c2",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 236,
+        "sql_bytes": 346,
+        "wire_request_bytes": 355
+      },
+      {
+        "ordinal": 9,
+        "row_count": 0,
+        "sql_sha256": "f101f6e054e0601901ddd7f61a3f713cca14fd49b3e1c53a210aff212b29095e",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 219,
+        "sql_bytes": 154,
+        "wire_request_bytes": 247
+      },
+      {
+        "ordinal": 10,
+        "row_count": 0,
+        "sql_sha256": "2db35aa37c4005aa96055e900adc9bfbbd70d106820fefcb83216b7cc3f95422",
+        "threads_connected": 3,
+        "max_connections": 60,
+        "elapsed_ms": 218,
+        "sql_bytes": 7,
+        "wire_request_bytes": 75
+      }
+    ],
+    "transport_request_bytes": 12548,
+    "transport_response_bytes": 3039963
+  },
+  "finished_at": "2026-10-11T20:52:01.557Z"
+}

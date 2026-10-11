@@ -1,0 +1,76 @@
+{
+  "target": "production",
+  "applied": false,
+  "passed": true,
+  "started_at": "2026-10-11T20:48:18.765Z",
+  "sql_sha256": "74b7809cf6e6163613a92dee5e6cf327995cd2bd4330c213881a0e492c19eebf",
+  "encrypted_backup_sha256": "93810ab93ae401c4b601591010f62bc35e31c175d33f909b886a31e2c79ee8f2",
+  "planned": {
+    "nullable_columns": [
+      "recitation_id",
+      "audio_plan_hash",
+      "timing_version_hash",
+      "audio_mode_used",
+      "fallback_used",
+      "audio_bytes_fetched",
+      "audio_provider_code",
+      "qa_report_json"
+    ],
+    "permission_catalog_rows": 1,
+    "role_grants": 0
+  },
+  "critical_before": {
+    "users": 13,
+    "subscriptions": 16,
+    "plans": null,
+    "payment_requests": 3,
+    "videos": null,
+    "saved_videos": 7,
+    "render_jobs": 72,
+    "system_settings": 16,
+    "user_roles": 13,
+    "notifications": 49
+  },
+  "d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "d3": 422463,
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "protected_checksums_before": {
+    "users": "465493766",
+    "profiles": "3305835068",
+    "subscriptions": "869915229",
+    "payment_requests": "425435828",
+    "saved_videos": "3253525225",
+    "render_jobs": "1161850010",
+    "system_settings": "1452891046",
+    "user_roles": "2243496482",
+    "notifications": "1549172204",
+    "quran_surahs": "2501341507",
+    "quran_ayahs": "1712042852",
+    "quran_words": "2986733015",
+    "ayah_timings": "2767002486"
+  },
+  "original_render_job_columns_sha256": "d7678a21f291ce7c4a76639ba6da5e709c9e40a36ef9d334e8987c9b57d5dfb4",
+  "disk_before": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1775255552,
+    "available_bytes": 2900553728
+  },
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 8,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 3644,
+    "transport_response_bytes": 1516379
+  },
+  "finished_at": "2026-10-11T20:49:20.979Z"
+}

@@ -44,9 +44,11 @@ export function adminFoundationMigrationSql(): string[] {
   // Preserve row IDs and permissions. A replay cannot promote newly assigned
   // admin roles after the first seed, or restore deliberately removed grants.
   sql.push("UPDATE user_roles SET role='super_admin',a1_previous_role='admin' WHERE role='admin' AND (SELECT seeded_at FROM admin_roles WHERE slug='super_admin') IS NULL");
-  for (const [permission, description] of Object.entries(ADMIN_PERMISSIONS)) sql.push(`INSERT IGNORE INTO permissions(permission_key,description) VALUES(${lit(permission)},${lit(description)})`);
+  // D7 owns render.test. Keep the already approved migration006 SQL identical
+  // when the live permission registry grows; migration007 seeds this grant.
+  for (const [permission, description] of Object.entries(ADMIN_PERMISSIONS).filter(([key]) => key !== 'render.test')) sql.push(`INSERT IGNORE INTO permissions(permission_key,description) VALUES(${lit(permission)},${lit(description)})`);
   for (const role of ADMIN_ROLES) {
-    for (const permission of DEFAULT_ROLE_PERMISSIONS[role]) {
+    for (const permission of DEFAULT_ROLE_PERMISSIONS[role].filter(key => key !== 'render.test')) {
       const dot = permission.indexOf('.'), resource = permission.slice(0, dot), action = permission.slice(dot + 1);
       // Reuse matching historical rows without granting unrelated legacy APIs.
       sql.push(`UPDATE admin_permissions SET permission_key=${lit(permission)} WHERE role_slug=${lit(role)} AND resource=${lit(resource)} AND action=${lit(action)} AND (SELECT seeded_at FROM admin_roles WHERE slug=${lit(role)}) IS NULL`);

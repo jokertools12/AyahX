@@ -5,6 +5,9 @@ import { query } from '../db';
 import { RenderManifest, validateRenderManifest } from '../models/renderManifest';
 import { validateManifestAssets } from './assetCatalogResolver';
 import { renderDeterministicVideo } from './deterministicVideoRenderer';
+import { RenderManifestV2Schema, toRenderManifestV1Internal, type RenderManifestV2 } from '../models/renderManifestV2';
+import { renderCatalogV2Video } from './renderV2Executor';
+import { RenderV2QaError } from './renderV2Qa';
 import { logger } from '../logger';
 import { config } from '../config';
 import { enqueueRenderJob, resolveRenderQueueEngine, RenderQueueEngine, startRenderWorker } from './renderQueueBroker';
@@ -42,7 +45,7 @@ export interface RenderJobRow {
   queue_position?: number | null;
   progress: number;
   stage: string;
-  manifest: RenderManifest | string;
+  manifest: RenderManifest | RenderManifestV2 | string;
   content_expires_at?: string | null;
   output_path: string | null;
   output_filename: string | null;
@@ -539,13 +542,13 @@ export class RenderJobQueue {
     const replicaEstimate = snapshot.capacity[engine].replicas;
     const slotsPerReplica = snapshot.capacity[engine].slotsPerReplica;
     const slotsTotal = Math.max(1, slotsPerReplica * replicaEstimate);
-    const estimated = estimateRenderJobProfile(engine, {
-      width: manifest?.outputDimensions?.width,
-      height: manifest?.outputDimensions?.height,
-      fps: manifest?.fps,
-      durationSeconds: manifest?.audio?.durationSeconds,
-      backgroundType: manifest?.background?.type,
-    }).estimatedSeconds || 60;
+    const profile = manifest?.schemaVersion === '2.0.0' ? {
+      width: manifest.options.aspectRatio === '9:16' ? 1080 : 1920,
+      height: manifest.options.aspectRatio === '9:16' ? 1920 : 1080,
+      fps: manifest.options.fps, durationSeconds: manifest.timeline.durationMs / 1000, backgroundType: 'solid',
+    } : { width: manifest?.outputDimensions?.width, height: manifest?.outputDimensions?.height,
+      fps: manifest?.fps, durationSeconds: manifest?.audio?.durationSeconds, backgroundType: manifest?.background?.type };
+    const estimated = estimateRenderJobProfile(engine, profile).estimatedSeconds || 60;
     const prefix = engine === 'ffmpeg_ass' ? 'FFMPEG' : engine === 'skia_canvas' ? 'SKIA' : 'BROWSER';
     const p50 = Math.max(1, Number(process.env[`${prefix}_RENDER_P50_SECONDS`] || estimated));
     // A job committed just after the shared snapshot is not present yet. Its
@@ -602,6 +605,9 @@ export class RenderJobQueue {
   public async retryJob(jobId: string, userId?: string, isAdmin: boolean = false): Promise<RenderJobRow | null> {
     const job = await this.getJobById(jobId, userId, isAdmin);
     if (!job || !['failed', 'cancelled'].includes(job.status)) return null;
+    // V2 admission is private and globally serialized. The legacy retry route
+    // must not bypass the render.test/range/concurrency checks of a fresh lab job.
+    if (typeof job.manifest !== 'string' && job.manifest.schemaVersion === '2.0.0') return null;
     if (job.error_code === 'CONTENT_RETENTION_PURGE_PENDING' || job.error_code === 'CONTENT_RETENTION_EXPIRED') return null;
     if (userId) {
       const activeJobs = await query<{ id: string }[]>(
@@ -829,7 +835,9 @@ export class RenderJobQueue {
     let heartbeat: ReturnType<typeof setInterval> | null = null;
 
     try {
-      const manifest: RenderManifest = typeof job.manifest === 'string' ? JSON.parse(job.manifest) : job.manifest;
+      const storedManifest = typeof job.manifest === 'string' ? JSON.parse(job.manifest) : job.manifest;
+      const catalogManifest = storedManifest.schemaVersion === '2.0.0' ? RenderManifestV2Schema.parse(storedManifest) : null;
+      const manifest: RenderManifest = catalogManifest ? toRenderManifestV1Internal(catalogManifest) : storedManifest;
       const userStorageDir = path.join(this.storageDir, job.user_id);
       await fs.promises.mkdir(userStorageDir, { recursive: true });
       const outputFilename = `quran_reel_${manifest.canonicalAyahRange.surahNumber}_${manifest.canonicalAyahRange.startAyah}-${manifest.canonicalAyahRange.endAyah}_${jobId.substring(0, 8)}.mp4`;
@@ -865,12 +873,18 @@ export class RenderJobQueue {
         }
       };
 
-      const renderResult = await renderDeterministicVideo({
+      const renderResult = catalogManifest ? await renderCatalogV2Video({
+        manifest: catalogManifest, outputPath, signal: abortController.signal, onProgress,
+      }) : await renderDeterministicVideo({
         manifest,
         outputPath,
         signal: abortController.signal,
         onProgress,
       });
+      if ('qaReport' in renderResult && 'audioBytesFetched' in renderResult) {
+        await query('UPDATE render_jobs SET qa_report_json=?,audio_bytes_fetched=? WHERE id=? AND status=\'running\'',
+          [JSON.stringify(renderResult.qaReport), renderResult.audioBytesFetched, jobId]);
+      }
       const resourceCpuAfter = readCgroupCpuUsageMicros();
       const resourcePeakAfter = readMemoryPeakBytes();
       const resourceOomAfter = readOomKillCount();
@@ -926,6 +940,8 @@ export class RenderJobQueue {
         void recordRenderAudit(jobId, job.user_id, 'succeeded', { durationSeconds: (Date.now() - startedAt) / 1000, engine, resources });
         logger.info(`Render job [${jobId}] succeeded and is ready for download.`);
 
+        // Private lab artifacts have no library or notification side effects.
+        if (!catalogManifest) {
         // Idea 3: Automatically save completed background video to user's saved_videos library
         const surahNumber = manifest.canonicalAyahRange?.surahNumber || 1;
         const surahName = manifest.canonicalAyahRange?.surahName || 'سورة';
@@ -974,8 +990,13 @@ export class RenderJobQueue {
            VALUES (?, ?, ?, ?, 'video', FALSE)`,
           [notifId, job.user_id, notifTitle, notifMsg]
         ).catch((notifErr) => logger.warn(`Failed creating notification for render job [${jobId}]:`, notifErr));
+        }
       }
     } catch (err: any) {
+      if (err instanceof RenderV2QaError) {
+        await query('UPDATE render_jobs SET qa_report_json=?,audio_bytes_fetched=? WHERE id=? AND status=\'running\'',
+          [JSON.stringify(err.qaReport), err.qaReport.audio_bytes_fetched, jobId]);
+      }
       if (abortController.signal.aborted) {
         logger.info(`Render job [${jobId}] was aborted.`);
         // A user cancellation has already changed the durable status. A

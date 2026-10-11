@@ -106,7 +106,7 @@ export function createAdminRouter(options: AdminRouterOptions): Router {
         const ctx: AdminRequestContext = { ...authenticated, actor: actorWithContext(authenticated.actor, requestId, ip), params: Object.fromEntries(Object.entries(req.params).map(([key, value]) => [key, String(value)])), body: (body?.success ? body.data : {}) as Record<string, unknown>, query: (query?.success ? query.data : {}) as Record<string, unknown>, requestId, ip };
         const result = await definition.handler(ctx);
         if (definition.path === '/auth/logout' || definition.path === '/security/sessions/:id' && ctx.params.id === ctx.sessionId) res.clearCookie(ADMIN_COOKIE, { httpOnly: true, secure: env.NODE_ENV === 'production', sameSite: 'strict', path: '/api/admin' });
-        res.json({ data: result.data, meta: { ...result.meta, requestId } });
+        res.status(definition.responseStatus??200).json({ data: result.data, meta: { ...result.meta, requestId } });
       } catch (error) { adminErrorResponse(res, error, requestId); }
     });
   };

@@ -2,6 +2,7 @@ import type { CatalogActor } from '../services/catalogAudit';
 export const ADMIN_ROLES = ['super_admin', 'admin', 'content_manager', 'moderator', 'support', 'finance', 'analyst'] as const;
 export type AdminRole = typeof ADMIN_ROLES[number];
 export const ADMIN_PERMISSIONS = {
+  'render.test': 'اختبار الريندر الحقيقي: super_admin وadmin فقط',
   'dashboard.read': 'قراءة صحة النظام والمؤشرات',
   'reciters.read': 'قراءة القراء', 'reciters.write': 'تعديل بيانات وترتيب القراء',
   'reciters.visibility': 'إظهار وإخفاء القراء', 'reciters.merge': 'دمج القراء بخريطة صريحة',

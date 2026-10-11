@@ -1,0 +1,113 @@
+{
+  "checked_at": "2026-10-11T19:53:01.378Z",
+  "mysql_version": "9.7.2",
+  "database": "ayahx_d2_d7_restored_20261011",
+  "sql_sha256": "74b7809cf6e6163613a92dee5e6cf327995cd2bd4330c213881a0e492c19eebf",
+  "activation_sha256": "2131bd5a7c1e81410813e79282b7f6453582ca2ad679a91efe4ac2e0fed2f4ee",
+  "up_twice_identical": true,
+  "activation_twice_identical": true,
+  "ddl_does_not_activate_permission": true,
+  "down_twice_removed_columns": true,
+  "down_restored_protected_data": true,
+  "production_down_rejected": true,
+  "reapplied": true,
+  "protected": {
+    "users": {
+      "count": 13,
+      "sha256": "87e24db45fbf16a71b5ac03048e544fc28cf8373ad53b55053f02a107d448130"
+    },
+    "profiles": {
+      "count": 13,
+      "sha256": "0f2285a229aa49194e0669562e0d2f33a52ae4dc2e9353d3f64b63d78a2d2895"
+    },
+    "subscriptions": {
+      "count": 16,
+      "sha256": "16aa1822fa704c7fe7c2512978765a4c5144503e4fec049c7ec6711627be0df7"
+    },
+    "payment_requests": {
+      "count": 3,
+      "sha256": "9bdd81326a47e3fa5ca5d8573a45945dd2779ea64104ecbefb6a5e2076e89ef7"
+    },
+    "saved_videos": {
+      "count": 7,
+      "sha256": "6d17e3008acaacf03a818226a8a37c1e8c24ed8aa8b6891f3fb92f172d54ffaa"
+    },
+    "render_jobs": {
+      "count": 72,
+      "sha256": "b3bb83ed10bf6a9a770cb6ddc42f9302782aa4050db603ed69b7cf646a97e0ef"
+    },
+    "system_settings": {
+      "count": 14,
+      "sha256": "cac5ef8fa55129ebacab6416a657e686612563485c417216f0dae83a4f8f9f0b"
+    },
+    "user_roles": {
+      "count": 13,
+      "sha256": "90508693ffe3a045c63d48c9299fe104b923c68f6427e47679faa28eb22dc731"
+    },
+    "notifications": {
+      "count": 49,
+      "sha256": "f796018b650af6c26ad7beec3d70a30df189c5d7e25551423637551071a3aaa0"
+    }
+  },
+  "catalog": {
+    "quran_surahs": {
+      "count": 114,
+      "checksum": "2501341507"
+    },
+    "quran_ayahs": {
+      "count": 6236,
+      "checksum": "1712042852"
+    },
+    "quran_words": {
+      "count": 77433,
+      "checksum": "2986733015"
+    },
+    "ayah_timings": {
+      "count": 422463,
+      "checksum": "2767002486"
+    }
+  },
+  "columns": [
+    {
+      "name": "audio_bytes_fetched",
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "name": "audio_mode_used",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "audio_plan_hash",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "audio_provider_code",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "fallback_used",
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "name": "qa_report_json",
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "name": "recitation_id",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "name": "timing_version_hash",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    }
+  ],
+  "production_writes": 0
+}

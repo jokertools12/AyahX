@@ -1,0 +1,451 @@
+{
+  "checked_at": "2026-10-11T19:56:04.899Z",
+  "local_only": true,
+  "read_only": true,
+  "database": "ayahx_d2_d7_restored_20261011",
+  "seed": 730071,
+  "requested_ranges": 10000,
+  "audio_measurement": "NOT_PERFORMED: algebraic source/render properties only",
+  "passed": true,
+  "mysql_version": "9.7.2",
+  "candidate_chapters": 1170,
+  "completed_ranges": 10000,
+  "word_checks": 259437,
+  "repetition_ranges": 188,
+  "unique_source_rows": 19649,
+  "visited_chapters": 1170,
+  "source_versions_sha256": "d92edcd42ffe32ecacd67764b897a9d749934f90a8a950f50ab1cebe81648891",
+  "deterministic_ranges_sha256": "408997b40d2b0393767d27ed839366e70c69df8c520365b90c273630282fcba1",
+  "rejected_mutations": [
+    "negative_start",
+    "non_integer_start",
+    "zero_word_interval",
+    "negative_word_interval",
+    "word_outside_ayah",
+    "invalid_canonical_index",
+    "invalid_occurrence",
+    "inconsistent_source_window",
+    "duration_outside_audio",
+    "words_in_ayah_only",
+    "negative_source_timestamp",
+    "pad_above_policy"
+  ],
+  "rejected_source_overlap_ranges": 41,
+  "overlap_evidence": [
+    {
+      "iteration": 352,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 101,
+      "from": 9,
+      "to": 11,
+      "pad_ms": 85,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 652,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 79,
+      "from": 34,
+      "to": 37,
+      "pad_ms": 128,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 1569,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 101,
+      "from": 7,
+      "to": 11,
+      "pad_ms": 131,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 1676,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 96,
+      "from": 1,
+      "to": 18,
+      "pad_ms": 102,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 2239,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 75,
+      "from": 10,
+      "to": 28,
+      "pad_ms": 13,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 2753,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 102,
+      "from": 6,
+      "to": 8,
+      "pad_ms": 61,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 3198,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 99,
+      "from": 3,
+      "to": 7,
+      "pad_ms": 64,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 3223,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 96,
+      "from": 10,
+      "to": 19,
+      "pad_ms": 37,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 3225,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 101,
+      "from": 3,
+      "to": 11,
+      "pad_ms": 59,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 3337,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 99,
+      "from": 3,
+      "to": 8,
+      "pad_ms": 59,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 3720,
+      "recitation_id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "surah": 75,
+      "from": 22,
+      "to": 31,
+      "pad_ms": 30,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 3776,
+      "recitation_id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "surah": 74,
+      "from": 30,
+      "to": 42,
+      "pad_ms": 84,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 3917,
+      "recitation_id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "surah": 75,
+      "from": 17,
+      "to": 26,
+      "pad_ms": 14,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 4018,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 75,
+      "from": 6,
+      "to": 19,
+      "pad_ms": 129,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 4254,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 79,
+      "from": 36,
+      "to": 38,
+      "pad_ms": 116,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 4549,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 99,
+      "from": 3,
+      "to": 7,
+      "pad_ms": 17,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 4750,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 107,
+      "from": 3,
+      "to": 6,
+      "pad_ms": 92,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 4905,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 101,
+      "from": 4,
+      "to": 11,
+      "pad_ms": 64,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 5213,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 102,
+      "from": 7,
+      "to": 8,
+      "pad_ms": 150,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 5216,
+      "recitation_id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "surah": 75,
+      "from": 15,
+      "to": 32,
+      "pad_ms": 148,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 5343,
+      "recitation_id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "surah": 74,
+      "from": 39,
+      "to": 44,
+      "pad_ms": 128,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 5496,
+      "recitation_id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "surah": 75,
+      "from": 19,
+      "to": 34,
+      "pad_ms": 66,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 5926,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 80,
+      "from": 12,
+      "to": 30,
+      "pad_ms": 90,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 6187,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 102,
+      "from": 6,
+      "to": 7,
+      "pad_ms": 125,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 6223,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 83,
+      "from": 22,
+      "to": 36,
+      "pad_ms": 46,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 7099,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 101,
+      "from": 7,
+      "to": 11,
+      "pad_ms": 115,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 7226,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 107,
+      "from": 4,
+      "to": 7,
+      "pad_ms": 126,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 7459,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 51,
+      "from": 56,
+      "to": 58,
+      "pad_ms": 28,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 7570,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 107,
+      "from": 4,
+      "to": 7,
+      "pad_ms": 31,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 7679,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 80,
+      "from": 18,
+      "to": 24,
+      "pad_ms": 117,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 7988,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 96,
+      "from": 5,
+      "to": 19,
+      "pad_ms": 36,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 8210,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 99,
+      "from": 3,
+      "to": 4,
+      "pad_ms": 114,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 8623,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 80,
+      "from": 40,
+      "to": 42,
+      "pad_ms": 139,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 8766,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 99,
+      "from": 3,
+      "to": 7,
+      "pad_ms": 117,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 8951,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 83,
+      "from": 25,
+      "to": 35,
+      "pad_ms": 140,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 9031,
+      "recitation_id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "surah": 75,
+      "from": 22,
+      "to": 33,
+      "pad_ms": 41,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 9432,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 99,
+      "from": 4,
+      "to": 6,
+      "pad_ms": 112,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 9461,
+      "recitation_id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "surah": 75,
+      "from": 15,
+      "to": 29,
+      "pad_ms": 108,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 9589,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 102,
+      "from": 6,
+      "to": 8,
+      "pad_ms": 0,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 9640,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 75,
+      "from": 8,
+      "to": 21,
+      "pad_ms": 42,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    },
+    {
+      "iteration": 9752,
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "surah": 80,
+      "from": 12,
+      "to": 30,
+      "pad_ms": 104,
+      "reason": "SOURCE_AYAH_INTERVAL_OVERLAP",
+      "disposition": "REFUSED_NOT_REPAIRED"
+    }
+  ],
+  "supersedes": [
+    "d7-timeline-property-initial-failure.json",
+    "d7-timeline-property-eligible-initial-failure.json"
+  ],
+  "policy": "10000 successful eligible real source ranges PLUS separately counted real overlapping ranges that must be refused. No source/timing repair; no failure is reported as accepted."
+}
