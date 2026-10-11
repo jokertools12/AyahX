@@ -59,6 +59,7 @@
       let slideshowImages = [];
       let logoWatermarkImage = null;
       let isReady = false;
+      let lastFrameState = null;
 
       // Font family mapping for canvas
       const FONT_MAP = {
@@ -1599,7 +1600,20 @@
             rangeOffsetMs,
             audioDurationSeconds: manifest.audio.durationSeconds,
           });
-          const { activeAyahIndex, currentAyahStartSec, currentAyahEndSec, hasEveryAyahTimeline } = activeAyahTimeline;
+          let { activeAyahIndex, currentAyahStartSec, currentAyahEndSec } = activeAyahTimeline;
+          const { hasEveryAyahTimeline } = activeAyahTimeline;
+          // v2 is server-built and already converted to render_ms in one place.
+          // This branch never changes the legacy scene's timeline resolution.
+          const v2Timeline = manifest.renderV2Timeline;
+          const v2TimeMs = frameTimeSeconds * 1000;
+          let v2Ayah = null;
+          if (v2Timeline) {
+            v2Ayah = v2Timeline.ayahs.find(ayah => ayah.startMs <= v2TimeMs && v2TimeMs < ayah.endMs);
+            if (!v2Ayah) v2Ayah = v2Timeline.ayahs.filter(ayah => ayah.startMs <= v2TimeMs).slice(-1)[0] || v2Timeline.ayahs[0];
+            activeAyahIndex = allAyahs.findIndex(ayah => ayah.numberInSurah === v2Ayah.ayah);
+            currentAyahStartSec = v2Ayah.startMs / 1000;
+            currentAyahEndSec = v2Ayah.endMs / 1000;
+          }
 
           const activeAyah = allAyahs[activeAyahIndex] || allAyahs[0];
           const activeAyahDurationSec = Math.max(currentAyahEndSec - currentAyahStartSec, 0.5);
@@ -1608,7 +1622,8 @@
           // 7. Word-Level Highlighting Resolution
           // Quran editions may encode dagger-alif positioning with an
           // invisible hair/zero-width character inside a single word.
-          const ayahWords = (activeAyah.text || '')
+          const v2CanonicalAyah = v2Timeline && manifest.renderV2CanonicalAyahs.find(ayah => ayah.numberInSurah === activeAyah.numberInSurah);
+          const ayahWords = v2CanonicalAyah ? v2CanonicalAyah.words.map(word => word.text) : (activeAyah.text || '')
             .replace(/[\u200A\u200B\u2060\u2063]/g, '')
             .split(/\s+/)
             .filter(word => stripTashkeel(word).replace(/[\u0640\s]/g, '').length > 0);
@@ -1618,12 +1633,31 @@
             manifest.animationProfile || displaySettings.animationProfile || 'karaoke'
           );
           const animationReducedMotion = manifest.animationReducedMotion === true || displaySettings.animationReducedMotion === true;
-          const hasTrustedWordTiming = Boolean(
+          const hasTrustedWordTiming = v2Ayah ? v2Ayah.highlightMode === 'word' && v2Ayah.words.length > 0 : Boolean(
             timingMap && timingMap.validationStatus === 'approved' && timingMap.words && timingMap.words.length > 0
           );
+          let v2OccurrenceId = null;
+          lastFrameState = v2Timeline ? { frameIndex, timeMs: v2TimeMs, ayah: activeAyah.numberInSurah,
+            mode: hasTrustedWordTiming ? 'word' : 'ayah', occurrenceId: null, held: false, paintedWordKeys: [], paintedWords: [] } : null;
 
           // Case A: Aligned TimingMap has explicit words
-          if (hasTrustedWordTiming) {
+          if (v2Ayah && hasTrustedWordTiming) {
+            // First matching occurrence is selected by TIME. Canonical indices
+            // may jump backwards during repetition; no index monotonicity rule.
+            let event = v2Ayah.words.find(word => word.startMs <= v2TimeMs && v2TimeMs < word.endMs);
+            if (!event) {
+              const previous = v2Ayah.words.filter(word => word.endMs <= v2TimeMs).slice(-1)[0];
+              if (previous && v2TimeMs - previous.endMs <= 250 && v2TimeMs < v2Ayah.endMs) {
+                event = previous; lastFrameState.held = true;
+              }
+            }
+            if (event) {
+              activeWordIndexInAyah = event.wordIndex - 1;
+              activeWordProgress = lastFrameState.held ? 1 : Math.min(1, Math.max(0, (v2TimeMs - event.startMs) / (event.endMs - event.startMs)));
+              v2OccurrenceId = event.occurrenceId;
+              lastFrameState.occurrenceId = v2OccurrenceId;
+            }
+          } else if (!v2Ayah && hasTrustedWordTiming) {
             const words = timingMap.words;
             let activeWord = null;
 
@@ -2067,6 +2101,10 @@
                   ctx.translate(-originX, -y + visualState.translateY);
                 }
                 if (isHighlighted) {
+                  if (lastFrameState) {
+                    const key = v2CanonicalAyah.words[globalWordIdx]?.canonicalWordKey;
+                    if (key) { lastFrameState.paintedWordKeys.push(key); lastFrameState.paintedWords.push({ key, x: cursorX - wWidth, y: y - baseFontSize, width: wWidth, height: baseFontSize * 1.5 }); }
+                  }
                   const pulse = 0.35 + Math.sin(Math.PI * activeWordProgress) * 0.65;
                   let glowColor = '#FFD700';
                   let textColor = '#FFF2A8';
@@ -2197,7 +2235,7 @@
                                     ctx.shadowBlur *= shadowStrength;
                   ctx.shadowOffsetX *= shadowStrength;
                   ctx.shadowOffsetY *= shadowStrength;
-ctx.fillStyle = typography.textColor || '#FFFFFF';
+ctx.fillStyle = v2Ayah && v2Ayah.highlightMode === 'ayah' ? '#FFF2A8' : (typography.textColor || '#FFFFFF');
                   ctx.fillText(w, cursorX, y);
                 }
 
@@ -2489,6 +2527,10 @@ ctx.fillStyle = typography.textColor || '#FFFFFF';
 
         isSceneReady() {
           return isReady;
+        },
+
+        getFrameState() {
+          return lastFrameState ? JSON.parse(JSON.stringify(lastFrameState)) : null;
         },
 
         getVideoBackgroundStatus() {

@@ -4,6 +4,7 @@ import vm from 'vm';
 import { fileURLToPath } from 'url';
 import { createCanvas, GlobalFonts, Image, type Canvas } from '@napi-rs/canvas';
 import { RenderManifest } from '../models/renderManifest';
+import { registerRenderV2Fonts } from '../services/renderV2Fonts';
 
 type CanvasImage = InstanceType<typeof Image>;
 
@@ -149,7 +150,7 @@ async function readImageSource(value: string): Promise<Buffer> {
  * expose load events. The harness expects both, so return the native image
  * while adding browser-compatible asynchronous src/onload behavior to it.
  */
-function createNativeImageConstructor(): new () => CanvasImage {
+function createNativeImageConstructor(allowRemote = true, onExternalRequest?: () => void): new () => CanvasImage {
   return function NativeImage(this: unknown): CanvasImage {
     const image = new Image() as CanvasImage & {
       onload?: (() => void) | null;
@@ -171,6 +172,8 @@ function createNativeImageConstructor(): new () => CanvasImage {
         get: () => image.__nativeSceneSrc || '',
         set: (value: unknown) => {
           const requested = String(value || '');
+          if (/^https?:\/\//i.test(requested)) onExternalRequest?.();
+          if (!allowRemote && /^https?:\/\//i.test(requested)) throw new Error('RENDER_V2_EXTERNAL_ASSET_FORBIDDEN');
           image.__nativeSceneSrc = requested;
           void readImageSource(requested)
             .then(async (bytes) => {
@@ -195,6 +198,13 @@ function createNativeImageConstructor(): new () => CanvasImage {
 interface HarnessController {
   initScene(manifest: RenderManifest): Promise<boolean>;
   renderFrame(frameIndex: number, frameTimeSeconds: number): Promise<void>;
+  getFrameState(): NativeFrameState | null;
+}
+
+export interface NativeFrameState {
+  frameIndex: number; timeMs: number; ayah: number; mode: 'word' | 'ayah';
+  occurrenceId: string | null; held: boolean; paintedWordKeys: string[];
+  paintedWords: Array<{ key: string; x: number; y: number; width: number; height: number }>;
 }
 
 /**
@@ -207,9 +217,11 @@ export class NativeSceneRenderer {
   private readonly context: any;
   private readonly controller: HarnessController;
   private closed = false;
+  private externalAssetRequests = 0;
 
   constructor(private readonly manifest: RenderManifest) {
-    registerNativeFonts();
+    if ('renderV2Timeline' in manifest) registerRenderV2Fonts();
+    else registerNativeFonts();
     this.canvas = createCanvas(manifest.outputDimensions.width, manifest.outputDimensions.height);
     this.context = this.canvas.getContext('2d');
 
@@ -221,7 +233,7 @@ export class NativeSceneRenderer {
     const sandbox = {
       window,
       document,
-      Image: createNativeImageConstructor(),
+      Image: createNativeImageConstructor(!('renderV2Timeline' in manifest), () => { this.externalAssetRequests++; }),
       Promise,
       Map,
       Math,
@@ -271,5 +283,13 @@ export class NativeSceneRenderer {
 
   async close(): Promise<void> {
     this.closed = true;
+  }
+
+  getFrameState(): NativeFrameState | null { return this.controller.getFrameState(); }
+  getExternalAssetRequestCount(): number { return this.externalAssetRequests; }
+
+  capturePng(): Buffer {
+    if (this.closed) throw new Error('Native scene renderer is closed.');
+    return this.canvas.toBuffer('image/png');
   }
 }

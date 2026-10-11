@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import crypto from 'crypto';
-import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
+import { ChildProcessWithoutNullStreams, spawn, type ChildProcess } from 'child_process';
 import { NativeSceneRenderer } from '../renderer/nativeSceneRenderer';
 import { RenderManifest } from '../models/renderManifest';
 import {
@@ -20,6 +20,9 @@ export interface NativeSceneVideoConfig {
   scratchPrefix: string;
   preset: string;
   qualityCrf: string;
+  /** Optional v2 QA observes the scene actually painted; legacy callers omit it. */
+  onFrame?: (frameIndex: number, frameTimeSeconds: number, scene: NativeSceneRenderer) => void | Promise<void>;
+  onChild?: (child: ChildProcess) => void;
 }
 
 function cloneManifest(manifest: RenderManifest): RenderManifest {
@@ -130,6 +133,7 @@ export async function renderNativeSceneVideo(
 
     logger.info(`Starting ${config.label} render [${renderId}]: ${width}x${height} @ ${fps}fps (${totalFrames} frames)`);
     ffmpegProcess = spawn(ffmpegPath, ffmpegArgs, { windowsHide: true });
+    config.onChild?.(ffmpegProcess);
     let stderr = '';
     let inputError: Error | null = null;
     ffmpegProcess.stdin.on('error', (error) => {
@@ -159,6 +163,7 @@ export async function renderNativeSceneVideo(
       if (signal?.aborted) throw new Error('Render cancelled by user.');
       if (inputError) throw new Error(`${config.label} FFmpeg input closed: ${inputError.message}`);
       const frame = await scene.renderFrameRgbaBuffer(frameIndex, frameIndex / fps);
+      await config.onFrame?.(frameIndex, frameIndex / fps, scene);
       await writeFrame(ffmpegProcess.stdin, frame);
       const progress = Math.min(94, Math.round(8 + ((frameIndex + 1) / totalFrames) * 84));
       onProgress?.(progress, frameIndex + 1, totalFrames, `رسم المشهد الكامل عبر ${config.label}...`);
