@@ -1,4 +1,6 @@
 import {describe,it,expect,vi} from 'vitest';
+import {createHash} from 'node:crypto';
+import {canonicalAuditJson} from '../../server/services/catalogAudit';
 import {reorderSlots,literalLike,pageQuery,redactCatalogEvidence} from '../../server/services/adminCatalogUtilities';
 import {publicVisibilityCodes,isPubliclyVisible} from '../../server/services/catalogContracts';
 import type {CatalogDatabase,CatalogRow,CatalogTx} from '../../server/services/catalogContracts';
@@ -28,6 +30,15 @@ describe('A2a boundaries and actual policy reuse',()=>{
   it('provider permission alone cannot bypass actual super-admin requirement',async()=>{const database=db(),reviews=new HumanReviewService(database);await expect(reviews.reviseProviderLicense({...actor,roleSlug:'admin'},'p',{license_status:'permitted',notes:'reviewed',rights_evidence_ref:'evidence',confirmation:'p'})).rejects.toThrow('CATALOG_PERMISSION_DENIED');expect(database.read).not.toHaveBeenCalled();});
   it('consolidates provider and pending review changes into one auditable operation',async()=>{const database=db(async sql=>sql.includes('FROM audio_providers')?[{id:'p',code:'provider',license_status:'unreviewed'}]:sql.includes('FROM human_review_items')?[{id:'review',status:'pending',notes:null,decision:null}]:[]),reviews=new HumanReviewService(database);await reviews.reviseProviderLicense(actor,'p',{license_status:'permitted',notes:'local unit evidence',rights_evidence_ref:'local-unit-only',confirmation:'provider'});const calls=vi.mocked(database.execute).mock.calls;expect(calls.filter(([sql])=>sql.startsWith('INSERT INTO audit_logs'))).toHaveLength(1);expect(calls.some(([sql])=>sql.startsWith('UPDATE human_review_items'))).toBe(true);expect(calls.find(([sql])=>sql.startsWith('INSERT INTO audit_logs'))?.[1]?.[7]).toContain('review');});
   it('consolidates bulk reader visibility into one event with every child before/after',async()=>{const database=db(async sql=>sql.includes('SELECT is_visible')?[{is_visible:1}]:[]),catalog=new AdminCatalogService(database,new RecitationAdminService(database,source),image);await catalog.readerVisibility(actor,['a','b'],false);const calls=vi.mocked(database.execute).mock.calls;expect(calls.filter(([sql])=>sql.startsWith('INSERT INTO audit_logs'))).toHaveLength(1);expect(calls.filter(([sql])=>sql.startsWith('UPDATE reciters'))).toHaveLength(2);expect(calls.find(([sql])=>sql.startsWith('INSERT INTO audit_logs'))?.[1]?.[7]).toContain('"id":"b"');});
+  it('stores confirmed voice timestamp accurately and keeps move audit hash verifiable from stored JSON',async()=>{
+    const confirmedAt=new Date('2026-10-11T12:00:00.000Z');
+    const database=db(async sql=>sql.includes('SELECT * FROM recitations')?[{id:'r',slug:'recording',reciter_id:'old',voice_identity_status:'confirmed',is_public:1,is_default_for_reciter:1,voice_confirmed_by:'human',voice_confirmed_at:confirmedAt}]:sql.includes('FROM reciters')?[{id:'target'}]:[]);
+    await new RecitationAdminService(database,source).moveRecitation(actor,'r','target','Local move timestamp test','recording');
+    const audit=vi.mocked(database.execute).mock.calls.find(([sql])=>sql.startsWith('INSERT INTO audit_logs'))?.[1];expect(audit).toBeDefined();const values=audit!;
+    const oldValues=JSON.parse(String(values[6])),newValues=JSON.parse(String(values[7]));expect(oldValues.voice_confirmed_at).toBe(confirmedAt.toISOString());expect(newValues.voice_confirmed_at).toBeNull();
+    const persistedPayload={id:values[0],actor:values[1],role:values[2],action:values[3],entityType:values[4],entityId:values[5],oldValues,newValues,prev:values[9]};
+    expect(createHash('sha256').update(canonicalAuditJson(persistedPayload)).digest('hex')).toBe(values[8]);
+  });
   it('reauthorizes explicit link writes inside the audit lock without a nested lease transaction',async()=>{
     let lease:string|null=null,depth=0,writeReauthorization=false;
     const database=db(async sql=>sql.includes("WHERE status='pending'")?[{id:'job',actor_id:'actor',recitation_id:'r',type:'check_links',status:'pending',request_id:'http-request'}]:sql.includes('SELECT lease_token')?[{lease_token:lease,status:'running'}]:sql.includes(' total')?[{total:1}]:[]);
