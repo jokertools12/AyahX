@@ -3,7 +3,7 @@ import type { CatalogDatabase, CatalogRow } from '../services/catalogContracts';
 import { CatalogError, publicCatalogSql } from '../services/catalogContracts';
 import { readCatalogSettings } from '../services/recitationCatalogService';
 import { catalogStorageFromEnvironment } from '../services/catalogStorageRuntime';
-import { assessQuranStorage, type StorageMeasurement } from '../services/quranStorageHealth';
+import { assessQuranStorage, type StorageMeasurement } from '../services/quranStorageMeasurement';
 import { AdminAuditService } from './adminAuditService';
 type Check=Record<string,unknown>;
 export class AdminDashboardService {

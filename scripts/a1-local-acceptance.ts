@@ -4,6 +4,9 @@
  */
 import { randomBytes,randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
+import { writeFile,mkdir } from 'node:fs/promises';
+import { dirname,resolve } from 'node:path';
+import { setTimeout as delay } from 'node:timers/promises';
 import type { Server } from 'node:http';
 import assert from 'node:assert/strict';
 import express from 'express';
@@ -34,7 +37,7 @@ export async function runAdminLocalAcceptance(pool:Pool,redis:Redis,env:NodeJS.P
  const [versionRows]=await pool.query('SELECT VERSION() version,DATABASE() db');const version=(versionRows as CatalogRow[])[0];
  assert.match(String(version.version),/^9\.7\.2/,'REAL_MYSQL_9_7_2_REQUIRED');assert.match(String(version.db),/^ayahx_.*(?:verified|rehearsal|local|test)/i,'DISPOSABLE_LOCAL_SCHEMA_REQUIRED');
  assert.equal(await redis.ping(),'PONG','REAL_REDIS_REQUIRED');
- const db=catalogDatabaseFromPool(pool),fixtures=await createAdminAcceptanceFixtures(db),results:Result[]=[];
+ const db=catalogDatabaseFromPool(pool),fixtures=await createAdminAcceptanceFixtures(db),results:Result[]=[],allowedWrites=new Set<string>();
  const rate=new RedisAdminRateGate(env),app=express();app.set('trust proxy','loopback');app.use(express.json());const router=createAdminApplicationRouter({db,env,rate,origins:['http://localhost']});app.use('/api/admin',router);
  const server:Server=await new Promise(resolve=>{const listener=app.listen(0,'127.0.0.1',()=>resolve(listener));});
  const address=server.address();assert(address&&typeof address!=='string');const base=`http://127.0.0.1:${address.port}/api/admin`;
@@ -47,7 +50,7 @@ export async function runAdminLocalAcceptance(pool:Pool,redis:Redis,env:NodeJS.P
  async function clearLocalRate(){let cursor='0';do{const[next,keys]=await redis.scan(cursor,'MATCH','ayahx:admin-rate:*','COUNT',100);cursor=next;if(keys.length)await redis.del(...keys);}while(cursor!=='0');}
  async function login(fixture:Fixture){await clearLocalRate();const response=await request('/auth/login','POST',{email:fixture.email,password:fixture.password},fixture);assert.equal(response.status,200);assert(response.cookie);fixture.cookie=response.cookie;fixture.sessionId=String(data(response).sessionId);assert(!JSON.stringify(response.body).includes('token'));return response;}
  async function auditCount(){const[row]=await db.read('SELECT COUNT(*) count FROM audit_logs');return Number(row.count);}
- async function write(path:string,method:string,body:unknown,fixture:Fixture){await clearLocalRate();const before=await auditCount(),response=await request(path,method,body,fixture);assert.equal(response.status,200,`${method} ${path}: ${response.body.code}`);assert.equal(await auditCount(),before+1,'ONE_IMMUTABLE_AUDIT_PER_MUTATION');const[audit]=await db.read('SELECT request_id,ip_address FROM audit_logs a LEFT JOIN (SELECT prev_hash FROM audit_logs) b ON b.prev_hash=a.hash WHERE b.prev_hash IS NULL');assert(audit.request_id);assert(audit.ip_address);return response;}
+ async function write(path:string,method:string,body:unknown,fixture:Fixture){await clearLocalRate();const before=await auditCount(),response=await request(path,method,body,fixture);assert.equal(response.status,200,`${method} ${path}: ${response.body.code}`);assert.equal(await auditCount(),before+1,'ONE_IMMUTABLE_AUDIT_PER_MUTATION');const[audit]=await db.read('SELECT request_id,ip_address FROM audit_logs a LEFT JOIN (SELECT prev_hash FROM audit_logs) b ON b.prev_hash=a.hash WHERE b.prev_hash IS NULL');assert(audit.request_id);assert(audit.ip_address);const endpoint=adminEndpointInventory(router).find(item=>item.method.toUpperCase()===method&&new RegExp('^'+item.path.replace(/:[a-z]+/g,'[^/]+')+'$').test(path));assert(endpoint);allowedWrites.add(fixture.role+':'+endpoint.method+':'+endpoint.path);return response;}
  try{
   const endpoints=adminEndpointInventory(router);assert.equal(endpoints.length,21);
   for(const endpoint of endpoints){const path=endpoint.path.replace(/:[a-z]+/g,'missing');const response=await request(path,endpoint.method.toUpperCase(),{});assert.equal(response.status,401,`UNAUTH:${path}`);assert.equal(response.headers.get('cache-control'),'no-store');}check('all_unauthenticated_endpoints_401',{endpoints:endpoints.length});
@@ -64,6 +67,7 @@ export async function runAdminLocalAcceptance(pool:Pool,redis:Redis,env:NodeJS.P
   await write(`/users/${ordinary.id}/roles`,'PUT',{roles:['support'],confirmation:ordinary.id},owner);
   await write('/settings/admin_idle_timeout_ms','PATCH',{value:1800000},owner);
   await write('/flags/quran_catalog_v2','PATCH',{value:false,confirmation:'quran_catalog_v2'},owner);check('role_user_setting_flag_mutations_audited');
+  await write('/settings/admin_idle_timeout_ms','PATCH',{value:1800000},fixtures[1]);await write('/flags/quran_catalog_v2','PATCH',{value:false,confirmation:'quran_catalog_v2'},fixtures[1]);
   response=await request('/roles/super_admin/permissions','PUT',{permissions:['roles.manage'],confirmation:'super_admin'},owner);assert.equal(response.status,409);
   response=await request(`/users/${owner.id}/roles`,'PUT',{roles:['user'],confirmation:owner.id},owner);assert.equal(response.status,409);check('super_admin_access_cannot_be_reduced');
   const secretRows=await request('/settings','GET',undefined,owner);assert.equal(secretRows.status,200);for(const row of secretRows.body.data as CatalogRow[])if(row.isSecret){assert.equal(row.value,null);assert(!row.masked||row.masked==='••••••••');}check('secret_registry_never_returns_values');
@@ -78,7 +82,20 @@ export async function runAdminLocalAcceptance(pool:Pool,redis:Redis,env:NodeJS.P
    const regenerated=await write('/security/totp/recovery','POST',{code:codes[0]},fixture),newCodes=data(regenerated).recoveryCodes as string[];
    response=await request('/security/totp/disable','POST',{code:codes[0]},fixture);assert.equal(response.status,422,'OLD_RECOVERY_REJECTED');
    await write('/security/totp/disable','POST',{code:newCodes[0]},fixture);await clearLocalRate();response=await request('/security/sessions','GET',undefined,fixture);assert.equal(response.status,200);
+   await write(`/security/sessions/${fixture.sessionId}`,'DELETE',{},fixture);await login(fixture);await write('/auth/logout','POST',{},fixture);await login(fixture);
   }check('totp_enrollment_replay_recovery_disable_all_roles',{roles:fixtures.length});
+  const expectedWrites=fixtures.flatMap(fixture=>endpoints.filter(endpoint=>endpoint.method!=='get'&&DEFAULT_ROLE_PERMISSIONS[fixture.role].includes(endpoint.permission)&&(!endpoint.superAdminOnly||fixture.role==='super_admin')).map(endpoint=>fixture.role+':'+endpoint.method+':'+endpoint.path));for(const key of expectedWrites)assert(allowedWrites.has(key),'ALLOWED_WRITE_RBAC_NOT_EXERCISED:'+key);check('all_allowed_role_write_endpoints_real_200_and_one_audit',{allowedWrites:allowedWrites.size});
+  // A complete login cycle exercises actual persisted encryption/counters and
+  // recovery hash consumption, rather than only owner-session setup actions.
+  await login(owner);const provision=await write('/security/totp/enroll','POST',{},owner),loginSecret=String(data(provision).secret);const confirmed=await write('/security/totp/confirm','POST',{code:totp(loginSecret)},owner),loginRecovery=data(confirmed).recoveryCodes as string[];await write('/auth/logout','POST',{},owner);await clearLocalRate();
+  response=await request('/auth/login','POST',{email:owner.email,password:owner.password},owner);assert.equal(response.status,401);assert.equal(response.body.code,'ADMIN_TOTP_REQUIRED');
+  response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:totp(loginSecret)},owner);assert.equal(response.status,401,'CONFIRMATION_TOTP_REPLAY_LOGIN_REJECTED');
+  response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:loginRecovery[0]},owner);assert.equal(response.status,200);assert(response.cookie);owner.cookie=response.cookie;owner.sessionId=String(data(response).sessionId);await clearLocalRate();
+  response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:loginRecovery[0]},owner);assert.equal(response.status,401,'CONSUMED_RECOVERY_LOGIN_REJECTED');
+  // Wait for a real next TOTP window; never manufacture a reusable counter.
+  const waitMs=30000-Date.now()%30000+50;await delay(waitMs);await clearLocalRate();
+  response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:totp(loginSecret)},owner);assert.equal(response.status,200);assert(response.cookie);owner.cookie=response.cookie;owner.sessionId=String(data(response).sessionId);
+  response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:totp(loginSecret)},owner);assert.equal(response.status,401,'LOGIN_TOTP_REPLAY_REJECTED');await write('/security/totp/disable','POST',{code:loginRecovery[1]},owner);check('real_totp_and_recovery_login_with_replay_rejection',{actualNextWindowWaitMs:waitMs});
   await login(owner);await clearLocalRate();for(let i=0;i<60;i++){response=await request('/auth/me','GET',undefined,owner);assert.equal(response.status,200);}response=await request('/auth/me','GET',undefined,owner);assert.equal(response.status,429);assert.equal(response.body.code,'ADMIN_RATE_LIMITED');check('real_redis_read_rate_60_per_minute');
   await clearLocalRate();const locked=fixtures[3];for(let i=0;i<5;i++){response=await request('/auth/login','POST',{email:locked.email,password:'incorrect-password'},locked);assert.equal(response.status,401);}response=await request('/auth/login','POST',{email:locked.email,password:locked.password},locked);assert.equal(response.status,429);assert.equal(response.body.code,'ADMIN_LOGIN_LOCKED');check('five_failed_logins_lock_account');
   await login(owner);await write(`/security/sessions/${owner.sessionId}`,'DELETE',{},owner);response=await request('/auth/me','GET',undefined,owner);assert.equal(response.status,401);check('revoked_cookie_is_rejected');
@@ -97,6 +114,6 @@ async function main(){
  assert(['127.0.0.1','localhost','::1'].includes(host));assert(['127.0.0.1','localhost','[::1]'].includes(new URL(redisUrl).hostname));
  const pool=mysql.createPool({host,port,database,user:'root',password:process.env.A1_TEST_DB_PASSWORD??'',connectionLimit:3,dateStrings:true});const redis=new Redis(redisUrl,{maxRetriesPerRequest:1});
  const env:NodeJS.ProcessEnv={NODE_ENV:'test',JWT_SECRET:randomBytes(32).toString('hex'),ADMIN_2FA_ENC_KEY:randomBytes(32).toString('hex'),REDIS_URL:redisUrl,STORAGE_VOLUME_BYTES:'5000000000'};
- try{const results=await runAdminLocalAcceptance(pool,redis,env);console.log(JSON.stringify({scope:'local-rehearsal',passed:results.length,results},null,2));}finally{await pool.end();redis.disconnect();}
+ try{const results=await runAdminLocalAcceptance(pool,redis,env),report={scope:'local-rehearsal',observedAt:new Date().toISOString(),passed:results.length,results};const output=JSON.stringify(report,null,2),index=process.argv.indexOf('--report');if(index>=0){assert(process.argv[index+1],'REPORT_PATH_REQUIRED');const path=resolve(process.argv[index+1]);await mkdir(dirname(path),{recursive:true});await writeFile(path,output+'\n','utf8');}console.log(output);}finally{await pool.end();redis.disconnect();}
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)main().catch(error=>{console.error(error instanceof Error?error.message.replace(/a1-[a-f0-9-]+@example\.test/g,'[fixture]'):'LOCAL_ACCEPTANCE_FAILED');process.exitCode=1;});
