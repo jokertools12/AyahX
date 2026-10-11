@@ -35,6 +35,7 @@ export function verifyTotp(secret: string, code: string, lastCounter: number | n
 }
 function masterKey(env: NodeJS.ProcessEnv): Buffer {
   const raw = env.ADMIN_2FA_ENC_KEY?.trim() ?? '';
+  if (!/^[a-f0-9]{64}$/iu.test(raw) && !/^[A-Za-z0-9+/]{43}=$/u.test(raw)) throw new AdminError('ADMIN_2FA_KEY_UNAVAILABLE', 503);
   const key = /^[a-f0-9]{64}$/iu.test(raw) ? Buffer.from(raw, 'hex') : Buffer.from(raw, 'base64');
   if (key.length !== 32) throw new AdminError('ADMIN_2FA_KEY_UNAVAILABLE', 503);
   return key;

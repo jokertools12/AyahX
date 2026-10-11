@@ -473,7 +473,7 @@ router.post('/contact', contactRateLimiter, async (req: AuthenticatedRequest, re
     try {
       const { query } = await import('../db');
       const adminUsers = await query<any[]>(
-        "SELECT user_id FROM user_roles WHERE role = 'admin'"
+        "SELECT DISTINCT user_id FROM user_roles WHERE role IN ('admin','super_admin')"
       );
       for (const admin of adminUsers) {
         await query(

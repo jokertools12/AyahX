@@ -67,11 +67,11 @@ export class AdminSecurityService {
   }
   async revoke(ctx: AdminRequestContext, id: string): Promise<CatalogRow> {
     await this.db.transaction(async tx => {
-      const [row] = await tx.read('SELECT id,user_id,revoked_at FROM admin_sessions WHERE id=? FOR UPDATE', [id]);
+      const [row] = await tx.read('SELECT id,user_id,revoked_at,is_revoked FROM admin_sessions WHERE id=? FOR UPDATE', [id]);
       if (!row) throw new AdminError('ADMIN_SESSION_NOT_FOUND', 404);
       if (row.user_id !== ctx.user.id && (!ctx.user.roles.includes('super_admin') || !ctx.user.permissions.includes('security.sessions.manage'))) throw new AdminError('ADMIN_FORBIDDEN', 403);
       await tx.execute('UPDATE admin_sessions SET revoked_at=COALESCE(revoked_at,UTC_TIMESTAMP(3)),is_revoked=1 WHERE id=?', [id]);
-      await appendCatalogAudit(tx, ctx.actor, 'admin.session_revoked', 'admin_session', id, { revoked: Boolean(row.revoked_at), user_id: row.user_id }, { revoked: true, user_id: row.user_id });
+      await appendCatalogAudit(tx, ctx.actor, 'admin.session_revoked', 'admin_session', id, { revoked: Boolean(row.revoked_at)||Number(row.is_revoked)===1, user_id: row.user_id }, { revoked: true, user_id: row.user_id });
     }); return { revoked: true, current: id === ctx.sessionId };
   }
 }

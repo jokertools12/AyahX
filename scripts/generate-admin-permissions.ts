@@ -1,0 +1,6 @@
+import { writeFile } from 'node:fs/promises';
+import { ADMIN_PERMISSIONS, ADMIN_ROLES, DEFAULT_ROLE_PERMISSIONS } from '../server/admin/adminPermissions';
+const lines=['# صلاحيات الأدمن','', 'مولّد من `server/admin/adminPermissions.ts`. القرارات الفعلية تُقرأ من قاعدة البيانات في كل طلب.','', 'الجداول المنطقية: roles ← admin_roles، role_permissions ← admin_permissions، permissions سجل التعريفات الجديد. تُحفظ الأدوار والمنح التاريخية؛ المنح ذات permission_key فارغ لا تمنح وصولًا إلى المسارات الجديدة.','', '| الصلاحية | الوصف | '+ADMIN_ROLES.join(' | ')+' |','|---|---|'+ADMIN_ROLES.map(()=>'---').join('|')+'|'];
+for(const [key,description]of Object.entries(ADMIN_PERMISSIONS))lines.push('| '+key+' | '+description+' | '+ADMIN_ROLES.map(role=>DEFAULT_ROLE_PERMISSIONS[role].includes(key as keyof typeof ADMIN_PERMISSIONS)?'✓':'—').join(' | ')+' |');
+lines.push('','super_admin مطلوب بالإضافة إلى الصلاحية لقرارات ترخيص المزوّد وتعديل الأدوار وإدارة جلسات الآخرين. لا يمكن تقليل منح super_admin أو إزالة دوره من الحسابات الموجودة.','', 'الرموز الحالية للواجهة العامة تحتفظ بتمثيل admin للحسابات super_admin؛ هوية جلسة الأدمن وصلاحياتها تبقى منفصلة وتُقرأ كاملة.','');
+await writeFile('docs/admin-permissions.md',lines.join('\n'),'utf8');

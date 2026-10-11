@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { query } from '../db';
+import { publicRole } from '../admin/adminPublicRole';
 
 export interface AuthUser {
   id: string;
@@ -37,11 +38,11 @@ export async function authenticateToken(req: AuthenticatedRequest, res: Response
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as { id: string; email: string };
     const roles = await query<any[]>(
-      'SELECT role FROM user_roles WHERE user_id = ? LIMIT 1',
+      'SELECT role FROM user_roles WHERE user_id = ?',
       [decoded.id]
     );
 
-    const role = roles.length > 0 ? roles[0].role : 'user';
+    const role = publicRole(roles.map(row => String(row.role)));
 
     req.user = {
       id: decoded.id,
