@@ -176,6 +176,8 @@ export async function runAdminFoundationMigration(session: AdminMigrationSession
     for (const table of ADMIN_FOUNDATION_TABLES) check(after.tables.some(t => t.name === table && t.collation === 'utf8mb4_unicode_ci'), '006_TABLE_COLLATION_MISMATCH');
     for (const table of ['admin_auth_attempts', 'admin_catalog_tasks']) check(after.row_counts[table] === (before.row_counts[table] ?? 0), 'UNEXPECTED_RUNTIME_ROWS');
     const grants = jsonRows<{ role: string; permission: string }>(await session.read("SELECT JSON_OBJECT('role',role_slug,'permission',permission_key) FROM admin_permissions WHERE permission_key IS NOT NULL ORDER BY role_slug,permission_key;"));
+    const seededRoles = jsonRows<{ slug: string; seeded_at: string | null }>(await session.read("SELECT JSON_OBJECT('slug',slug,'seeded_at',seeded_at) FROM admin_roles ORDER BY slug;"));
+    for (const role of ADMIN_ROLES) check(Boolean(seededRoles.find(row => row.slug === role)?.seeded_at), 'ROLE_SEED_MARKER_MISSING');
     for (const role of ADMIN_ROLES) if (!roles.find(r => r.slug === role)?.seeded_at) for (const permission of DEFAULT_ROLE_PERMISSIONS[role]) check(grants.some(g => g.role === role && g.permission === permission), 'DEFAULT_GRANT_SEED_MISSING');
     const permissions = jsonRows<{ key: string }>(await session.read("SELECT JSON_OBJECT('key',permission_key) FROM permissions ORDER BY permission_key;"));
     for (const key of Object.keys(ADMIN_PERMISSIONS)) check(permissions.some(p => p.key === key), 'PERMISSION_CATALOG_SEED_MISSING');

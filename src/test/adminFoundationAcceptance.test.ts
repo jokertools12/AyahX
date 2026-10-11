@@ -36,7 +36,7 @@ function buildSession({ connections = 2, corrupt = false, badIndex = false }: { 
       if (sql.includes('information_schema.STATISTICS')) return json(fixture.applied ? indexes.map((row, i) => badIndex && i === 0 ? { ...row, column: 'wrong' } : row) : []);
       if (sql.includes('information_schema.TRIGGERS')) return json(fixture.applied ? ['update', 'delete'].map(event => ({ name: 'ayahx_audit_immutable_' + event, table: 'audit_logs', event: event.toUpperCase(), timing: 'BEFORE', statement: "SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='AUDIT_LOG_IMMUTABLE'" })) : []);
       if (sql.startsWith('SHOW GLOBAL')) return `Threads_connected\t${connections}\nmax_connections\t20\nmax_allowed_packet\t67108864\nUptime\t1000\n`;
-      if (sql.includes("'slug',slug")) return json(ADMIN_ROLES.filter(role => role !== 'support').map(slug => ({ slug })));
+      if (sql.includes("'slug',slug")) return json((fixture.applied ? ADMIN_ROLES : ADMIN_ROLES.filter(role => role !== 'support')).map(slug => ({ slug, ...(fixture.applied ? { seeded_at: '2026-10-11 12:00:00.000' } : {}) })));
       if (sql.includes("COUNT(*) FROM user_roles")) return '2\n';
       if (sql.includes("'id',id,'role',role_slug")) return json([{ id: 'legacy-permission', role: 'developer', resource: 'legacy', action: 'read' }]);
       if (sql.startsWith('SELECT SHA2')) return ((fixture.applied && corrupt ? 'b' : 'a').repeat(64)) + '\n';
