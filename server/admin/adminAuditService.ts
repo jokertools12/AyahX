@@ -12,6 +12,7 @@ export class AdminAuditService {
  constructor(private readonly db:CatalogDatabase){}
  async list(query:Record<string,unknown>){
   const page=Number(query.page),limit=Number(query.limit),clauses:string[]=[],params:unknown[]=[];
+  if(query.q){clauses.push('(action LIKE ? OR entity_type LIKE ? OR entity_id LIKE ? OR request_id LIKE ?)');const term='%'+String(query.q)+'%';params.push(term,term,term,term);}
   for(const [key,column]of Object.entries({action:'action',entityType:'entity_type',entityId:'entity_id',actorId:'user_id'}))if(query[key]){clauses.push(column+'=?');params.push(query[key]);}
   for(const [key,operator]of Object.entries({from:'>=',to:'<='}))if(query[key]){clauses.push('created_at'+operator+'?');params.push(String(query[key]).replace('T',' ').replace('Z',''));}
   const where=clauses.length?' WHERE '+clauses.join(' AND '):'';
