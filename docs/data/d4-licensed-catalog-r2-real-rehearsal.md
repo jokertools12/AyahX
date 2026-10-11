@@ -14,6 +14,7 @@ npx tsx scripts/test-d4-licensed-catalog-r2-real.ts --template ayahx_d4_catalog_
 
 - ثلاثة WAV مولّدة نملكها، مع أطوال مختلفة. طول الفصل الأول يكفي حدود توقيت الفصل القانوني المنسوخ؛ الضوضاء ليست تلاوة قرآن ولا دليل هوية صوتية.
 - upload إلى مفتاح immutable، وHEAD وGET عبر credentials قراءة منفصلة، وSHA فعلي للبايتات، وffprobe ومحاذاة مقاسة بين WAV الأصلية والمنزلة باستخدام helper المملوك سابقًا.
+- رفض توقيت ينتهي بعد مدة بايتات R2 الفعلية بأكثر من 30ms، قبل أي إرفاق مصدر. تستخدم الحالة السلبية الملف المملوك نفسه وffprobe والـ offset الحقيقيين، ولا تغيّر بيانات إنتاج أو توقيتات QUD.
 - rows وJOIN وCHECK ومعاملات MySQL الفعلية، وحقوق بشرية **fixtures محلية اصطناعية** لا تمنح حقوق إنتاج. فرع resolver يأخذ S3LicensedAudioStorage الفعلي للقراءة فقط.
 - AudioPlan حقيقي، وGET مؤقت حقيقي بحد900 ثانية، وSHA للملف المنزّل من الرابط الناتج، وFFmpeg يخرج فيديو خاصًا بصوت نافذة AudioPlan نفسها، ثم ffprobe يقيس مدته ويتأكد من audio/video streams.
 - فصل واحد مرخّص لا يمنح بقية الفصول؛ cache مبالغ فيه عمدًا. flag OFF يمنع قراءة التخزين، وسحب الحقوق أو تغيّر surah في storage object يمنع LaunchReadiness/availability، ويبقى offset_verified=false وحالته العالمية الأصلية ثابتة.

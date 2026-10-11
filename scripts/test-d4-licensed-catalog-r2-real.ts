@@ -80,6 +80,12 @@ try{
   }
   const first=chapters[0],objectKey=prefix+licensedObjectKey('owned-test-fixture',1,first.sha256,'wav');
   const measured=await verifyLicensedAudio(readonly,{spec:{objectKey,sizeBytes:(await readFile(first.originalPath)).length,sha256:first.sha256,contentType:'audio/wav'},recitationId:'owned-test-fixture',surah:1,timings,scratchRoot:scratch},ownedFixtureOffsetVerifier(chapters));
+  // Same physical R2 bytes + measured ffprobe/offset, but a timeline beyond EOF:
+  // no fixture/source attachment may proceed from this rejected verification.
+  const beyondEnd=timings.map(t=>({...t,words:t.words.map(w=>[...w] as typeof w)}));
+  const last=beyondEnd.at(-1)!.words.at(-1)!;last[3]=Math.ceil(measured.durationMs+31)-measured.offset.sourceChapterOffsetMs;
+  await assert.rejects(verifyLicensedAudio(readonly,{spec:{objectKey,sizeBytes:(await readFile(first.originalPath)).length,sha256:first.sha256,contentType:'audio/wav'},recitationId:'owned-test-fixture',surah:1,timings:beyondEnd,scratchRoot:scratch},ownedFixtureOffsetVerifier(chapters)),e=>e instanceof CatalogError&&e.code==='LICENSED_TIMING_COORDINATES_INVALID');
+  checks.push('ACTUAL_R2_SHORT_AUDIO_REJECTED_BEFORE_ATTACH');
   checks.push('ACTUAL_R2_IMMUTABLE_UPLOAD_HEAD_GET_SHA','ACTUAL_FFPROBE_AND_MEASURED_OWNED_OFFSET');report.owned_verification={sha256:measured.sha256,duration_ms:measured.durationMs,sample_rate:measured.sampleRate,codec:measured.codec,offset:measured.offset};
   const id='owned-test-fixture',slug='owned_r2_sql_fixture',rights=randomUUID(),sourceId=randomUUID(),objectId=randomUUID(),human='synthetic-local-human';
   await insert('recitations',{...base,id,slug,provider_id:providers[0].id,channel:'youtube',status:'needs_review',is_public:1,voice_identity_status:'confirmed',offset_verified:0,offset_check_score:.4,verification_status:'failed',verification_method:'v1',verification_details:{synthetic_local_only:true},licensed_publication_details:null,audio_mode:'unverified_source',timing_level:'word',timing_quality:'verified',canonical_text_available:1,published_by:null,published_at:null});

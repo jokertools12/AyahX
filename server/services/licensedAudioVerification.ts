@@ -91,6 +91,8 @@ export async function verifyLicensedAudio(storage: AudioObjectStorage, input: Li
   let lastWordInSourceMs: number;
   try { lastWordInSourceMs = toRenderTimeline(input.timings, { chapterOffsetMs: offset.sourceChapterOffsetMs, sourceFormat: 'qud_release', padMs: 0 }).sourceWindow.toMs; }
   catch (error) { if (error instanceof Error && error.message.startsWith('TIMELINE_')) throw new CatalogError('LICENSED_TIMING_COORDINATES_INVALID', 409); throw error; }
+  // Reject before the caller can mark verified or replace an existing source.
+  if (lastWordInSourceMs > audio.durationMs + 30) throw new CatalogError('LICENSED_TIMING_COORDINATES_INVALID', 409);
   const warnings = Math.abs(audio.durationMs - lastWordInSourceMs) / lastWordInSourceMs > .05 ? ['DURATION_DIFFERS_FROM_LAST_WORD_OVER_5_PERCENT'] : [];
   // This task intentionally retains private scratch files: no filesystem cleanup
   // after the user's denial. Render lifecycle ownership/cleanup belongs to D8.
