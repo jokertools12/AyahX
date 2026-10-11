@@ -1,0 +1,353 @@
+{
+  "checked_at": "2026-10-11T09:58:45.555940+00:00",
+  "scope": "Derived from retained evidence only; no new audio measurements",
+  "database_writes": 0,
+  "alignment_posts": 0,
+  "source_bindings": [
+    {
+      "path": "docs/data/d2-offset-failure-analysis.json",
+      "sha256": "467615449f59d0d65b6e00dec0f028cb11eb3d606e23c53e33ad5eb45c9ea4d3"
+    },
+    {
+      "path": "docs/data/d3-audio-failure-diagnosis-v2.json",
+      "sha256": "a4b3a518d3daf416e7ce88228450e9634c21b59dcd2c454d899f873410f4fd43"
+    },
+    {
+      "path": "docs/data/d4-t7-execution-results.json",
+      "sha256": "b4c686aca252c4afa59f86aaf951d5007abae0b0080439f4c464f9e3e942530a"
+    },
+    {
+      "path": "docs/data/d4-postdeploy-production-inventory.json",
+      "sha256": "4f6743f2caef5ab3f0b6876213f999dcde24f1587e05c43be395281cac61a967"
+    },
+    {
+      "path": "docs/data/near-complete-chapters.json",
+      "sha256": "c66d9e514a01b7f952a8615d9b945312d3d161caac09f17da857d16c566064c5"
+    }
+  ],
+  "recitations": [
+    {
+      "slug": "mahmoud_khalil_al_husary_mp3quran",
+      "d2": {
+        "sample_count": 15,
+        "failed_sample_count": 4,
+        "failure_counts": {
+          "low_correlation": 4
+        },
+        "minimum_correlation": 0.89306233,
+        "maximum_duration_difference_ms": 25.5,
+        "maximum_absolute_lag_ms": 0.5,
+        "declared_end_outside_source": [],
+        "measured_hypothesis": "source_offset_ms"
+      },
+      "b": {
+        "sample_count": 15,
+        "classification": "unresolved",
+        "reason": "insufficient_position_or_identity_evidence",
+        "minimum_raw_ncc": 0.89306233,
+        "minimum_interior_ncc_diagnosis_only": 0.8930621865067355,
+        "minimum_envelope_score_diagnosis_only": 0.9999807492726368,
+        "minimum_log_mel_score_diagnosis_only": 0.9757478588900929,
+        "encoded_interior_identity_proven_count": 15,
+        "retained_source_hashes_match": true,
+        "max_fitted_lag_change_ms": 0.4581959701902256,
+        "increasing_drift_evidence": false
+      },
+      "t7": {
+        "selected": false,
+        "status": null,
+        "summary": null,
+        "failure_counts": null
+      },
+      "current_offset_verified": false
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+      "d2": {
+        "sample_count": 15,
+        "failed_sample_count": 5,
+        "failure_counts": {
+          "low_correlation": 5,
+          "duration_difference": 1
+        },
+        "minimum_correlation": 0.87437985,
+        "maximum_duration_difference_ms": 183.625,
+        "maximum_absolute_lag_ms": 0.5,
+        "declared_end_outside_source": [
+          {
+            "surah": 85,
+            "ayah": 22,
+            "declared_overrun_ms": 183.25
+          }
+        ],
+        "measured_hypothesis": "source_offset_ms"
+      },
+      "b": {
+        "sample_count": 15,
+        "classification": "unresolved",
+        "reason": "insufficient_position_or_identity_evidence",
+        "minimum_raw_ncc": 0.87437985,
+        "minimum_interior_ncc_diagnosis_only": 0.8744440858003247,
+        "minimum_envelope_score_diagnosis_only": 0.999939105409772,
+        "minimum_log_mel_score_diagnosis_only": 0.9012341568906812,
+        "encoded_interior_identity_proven_count": 15,
+        "retained_source_hashes_match": true,
+        "max_fitted_lag_change_ms": 0.5691220507036544,
+        "increasing_drift_evidence": false
+      },
+      "t7": {
+        "selected": false,
+        "status": null,
+        "summary": null,
+        "failure_counts": null
+      },
+      "current_offset_verified": false
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "d2": {
+        "sample_count": 15,
+        "failed_sample_count": 8,
+        "failure_counts": {
+          "low_correlation": 8,
+          "duration_difference": 1,
+          "large_optimal_lag": 1
+        },
+        "minimum_correlation": 0.64401192,
+        "maximum_duration_difference_ms": 273.0,
+        "maximum_absolute_lag_ms": 31.625,
+        "declared_end_outside_source": [
+          {
+            "surah": 85,
+            "ayah": 22,
+            "declared_overrun_ms": 299.5
+          }
+        ],
+        "measured_hypothesis": "source_offset_ms"
+      },
+      "b": {
+        "sample_count": 15,
+        "classification": "unresolved",
+        "reason": "insufficient_position_or_identity_evidence",
+        "minimum_raw_ncc": 0.64401192,
+        "minimum_interior_ncc_diagnosis_only": -0.3797053407881898,
+        "minimum_envelope_score_diagnosis_only": 0.9943308116100528,
+        "minimum_log_mel_score_diagnosis_only": 0.7481443018062377,
+        "encoded_interior_identity_proven_count": 0,
+        "retained_source_hashes_match": true,
+        "max_fitted_lag_change_ms": 0.9951456224041204,
+        "increasing_drift_evidence": false
+      },
+      "t7": {
+        "selected": true,
+        "status": "failed",
+        "summary": {
+          "sample_count": 15,
+          "expected_sample_count": 15,
+          "surah_count": 3,
+          "minimum_interior_NCC_raw": 0.9193867685922478,
+          "minimum_full_NCC_raw": 0.9193794325302969,
+          "maximum_absolute_interior_lag_ms": 25.5,
+          "maximum_absolute_full_lag_ms": 25.5,
+          "maximum_full_duration_difference_ms": 26.125,
+          "sample_v1_pass_count": 12,
+          "sample_v2_numeric_candidate_count": 14,
+          "full_source_window_complete_count": 15
+        },
+        "failure_counts": {
+          "interior_raw_NCC_below_0.95": 3
+        }
+      },
+      "current_offset_verified": false
+    },
+    {
+      "slug": "saud_al_shuraim_mp3quran",
+      "d2": {
+        "sample_count": 15,
+        "failed_sample_count": 4,
+        "failure_counts": {
+          "duration_difference": 3,
+          "low_correlation": 2
+        },
+        "minimum_correlation": 0.74639432,
+        "maximum_duration_difference_ms": 300.5,
+        "maximum_absolute_lag_ms": 0.5,
+        "declared_end_outside_source": [
+          {
+            "surah": 74,
+            "ayah": 56,
+            "declared_overrun_ms": 266.125
+          },
+          {
+            "surah": 85,
+            "ayah": 22,
+            "declared_overrun_ms": 300.125
+          },
+          {
+            "surah": 97,
+            "ayah": 5,
+            "declared_overrun_ms": 299.625
+          }
+        ],
+        "measured_hypothesis": "source_offset_ms"
+      },
+      "b": {
+        "sample_count": 15,
+        "classification": "unresolved",
+        "reason": "insufficient_position_or_identity_evidence",
+        "minimum_raw_ncc": 0.74639432,
+        "minimum_interior_ncc_diagnosis_only": 0.7430848930369551,
+        "minimum_envelope_score_diagnosis_only": 0.9843283071286377,
+        "minimum_log_mel_score_diagnosis_only": 0.7321167534241,
+        "encoded_interior_identity_proven_count": 15,
+        "retained_source_hashes_match": true,
+        "max_fitted_lag_change_ms": 0.6886194708884941,
+        "increasing_drift_evidence": false
+      },
+      "t7": {
+        "selected": false,
+        "status": null,
+        "summary": null,
+        "failure_counts": null
+      },
+      "current_offset_verified": false
+    },
+    {
+      "slug": "mustafa_ismail_mp3quran",
+      "d2": {
+        "sample_count": 15,
+        "failed_sample_count": 2,
+        "failure_counts": {
+          "low_correlation": 2
+        },
+        "minimum_correlation": 0.93735887,
+        "maximum_duration_difference_ms": 24.75,
+        "maximum_absolute_lag_ms": 0.5,
+        "declared_end_outside_source": [],
+        "measured_hypothesis": "source_offset_ms"
+      },
+      "b": {
+        "sample_count": 15,
+        "classification": "unresolved",
+        "reason": "insufficient_position_or_identity_evidence",
+        "minimum_raw_ncc": 0.93735887,
+        "minimum_interior_ncc_diagnosis_only": 0.9373588331995358,
+        "minimum_envelope_score_diagnosis_only": 0.9999926099024034,
+        "minimum_log_mel_score_diagnosis_only": 0.9966748373162273,
+        "encoded_interior_identity_proven_count": 15,
+        "retained_source_hashes_match": true,
+        "max_fitted_lag_change_ms": 0.5133356735644634,
+        "increasing_drift_evidence": false
+      },
+      "t7": {
+        "selected": false,
+        "status": null,
+        "summary": null,
+        "failure_counts": null
+      },
+      "current_offset_verified": false
+    }
+  ],
+  "near_complete": {
+    "chapter_count": 415,
+    "word_count": 914,
+    "chapters_by_missing_word_count": {
+      "1": 93,
+      "3": 177,
+      "2": 145
+    },
+    "missing_word_reasons": {
+      "NO_VALID_MAPPED_SOURCE_INTERVAL": 914
+    },
+    "chapters_by_provider": {
+      "youtube": 71,
+      "tarteel": 30,
+      "quranicaudio": 90,
+      "mp3quran": 126,
+      "way2quran": 43,
+      "archive_org": 30,
+      "tvquran": 4,
+      "drive": 21
+    },
+    "chapters_by_recitation": {
+      "abdul_hamid_ghraio_2025_yt": 12,
+      "abdul_hamid_ghraio_2026_yt": 11,
+      "abdulaziz_al_turki_yt": 6,
+      "abdulbasit_abdulsamad_mujawwad_tarteel": 5,
+      "abdulbasit_abdulsamad_tarteel": 4,
+      "abdullah_al_buaijan_2025_yt": 11,
+      "abdullah_al_mattrod_qdc": 11,
+      "abdullah_al_qarafi_mp3quran": 7,
+      "abdullah_kamel_way2quran": 6,
+      "abdulwadood_haneef_mp3quran": 7,
+      "abdur_rashid_sufi_qdc": 7,
+      "abu_bakr_al_shatri_tarteel": 8,
+      "adel_al_karbalaei_archive_v2": 15,
+      "ahmad_naseem_ali_ahmad_2019_yt": 7,
+      "ahmed_al_ajmi_qdc": 13,
+      "ahmed_amer_tvquran": 4,
+      "ahmed_issa_al_maasaraawi_mp3quran": 8,
+      "ahmed_kaseb_way2quran": 9,
+      "ahmed_nuayna_qdc": 5,
+      "ahmed_saud_mp3quran": 2,
+      "ahmed_shaheen_mp3quran": 5,
+      "ahmed_talib_bin_humaid_mp3quran": 10,
+      "akram_al_alaqmi_qdc": 7,
+      "ali_al_huthaifi_mp3quran": 3,
+      "ayman_swed_muallim_yt": 6,
+      "badr_al_turki_yt": 6,
+      "bandar_baleela_qdc": 9,
+      "fatih_seferagic_way2quran": 18,
+      "haitham_al_dukhain_mp3quran": 14,
+      "hani_al_rifai_qdc_128k": 13,
+      "ibrahim_al_akhdar_drive": 6,
+      "imad_zuhair_hafez_mp3quran": 3,
+      "islam_sobhi_mp3quran": 10,
+      "khalid_al_mohana_drive": 4,
+      "khalifa_al_tunaiji_tarteel": 3,
+      "maher_al_muaiqly_qdc": 2,
+      "mahmoud_abdul_hakam_mp3quran": 6,
+      "mahmoud_ali_al_banna_qdc": 4,
+      "mahmoud_khalil_al_husary_mp3quran": 5,
+      "mahmoud_khalil_al_husary_mujawwad_tarteel": 5,
+      "mahmoud_khalil_al_husary_qdc_128k": 3,
+      "mishary_rashid_al_afasy_2008_qdc": 4,
+      "mishary_rashid_al_afasy_mp3quran": 5,
+      "mohammed_abdulkareem_qdc": 12,
+      "mohammed_al_luhaidan_mp3quran": 9,
+      "mohammed_alghazali_archive": 8,
+      "mohammed_ayyub_drive": 6,
+      "mohammed_burhaji_yt": 6,
+      "mohammed_siddiq_al_minshawi_1967_drive": 5,
+      "mohammed_siddiq_al_minshawi_mp3quran": 4,
+      "mohammed_siddiq_al_minshawi_mujawwad_mp3quran": 3,
+      "muammar_zainal_al_sukaini_way2quran": 4,
+      "mustafa_ismail_mp3quran": 4,
+      "nasser_al_qatami_mp3quran": 9,
+      "saad_al_ghamdi_tarteel": 5,
+      "saber_abdulhakam_yt": 6,
+      "saud_al_shuraim_mp3quran": 12,
+      "walid_atef_way2quran": 6,
+      "yasser_al_dosari_archive": 7
+    },
+    "availability_fingerprint": "e3bf310ebb4786297e3f8c09d3704f3815a731a328fc943fa38a40824038c5ce"
+  },
+  "benchmark": {
+    "attempted_inference": false,
+    "model_id": "hetchyy/tibyan-base-v1",
+    "status": "MODEL_ACCESS_UNAVAILABLE",
+    "public_model_api_status": 401,
+    "public_config_status": 401,
+    "hf_token_in_current_environment": false,
+    "standard_local_hf_token_file_exists": false,
+    "runtime_packages": {
+      "torch": false,
+      "transformers": false,
+      "soundfile": false,
+      "huggingface_hub": false
+    },
+    "measured_rtf": null,
+    "surah_estimate_ms": null,
+    "recitation_estimate_ms": null
+  }
+}

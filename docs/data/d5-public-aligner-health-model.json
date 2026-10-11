@@ -1,0 +1,70 @@
+{
+  "requests": [
+    {
+      "key": "health",
+      "url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/health",
+      "checked_at": "2026-10-11T09:56:48.779036+00:00",
+      "http_status": 200,
+      "bytes": 15,
+      "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+      "safe_response": "{\"status\":\"ok\"}"
+    },
+    {
+      "key": "ready",
+      "url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/ready",
+      "checked_at": "2026-10-11T09:56:49.303724+00:00",
+      "http_status": 404,
+      "bytes": 22,
+      "sha256": "37ec4665a8102d115ffd1ac20dae94c98b4dac64b0c1a68228aa2a531caeb35d",
+      "safe_response": "{\"detail\":\"Not Found\"}"
+    },
+    {
+      "key": "api-openapi",
+      "url": "https://hetchyy-quranic-universal-aligner.hf.space/api/v1/openapi.json",
+      "checked_at": "2026-10-11T09:56:49.753313+00:00",
+      "http_status": 200,
+      "bytes": 41779,
+      "sha256": "c9a042f6f6f4e4482d22d2542c987b2d641f2e0e9e5a254f37e4c245d546f430",
+      "paths": [
+        "/health",
+        "/recitations",
+        "/recitations/{recitation}/chapters/{chapter}/segments",
+        "/audio-recitations",
+        "/recitations/{recitation}/chapters/{chapter}/audio",
+        "/segment/audio",
+        "/align/audio",
+        "/align/url",
+        "/sessions/{audio_id}/realign",
+        "/sessions/{audio_id}/split",
+        "/batches",
+        "/batches/{batch_id}/items/{item_id}/audio/stream",
+        "/extraction/sidecars",
+        "/align/audio/stream",
+        "/align/url/stream",
+        "/sessions/{audio_id}/realign/stream",
+        "/sessions/{audio_id}/timestamps",
+        "/timestamps"
+      ]
+    },
+    {
+      "key": "base-model",
+      "url": "https://huggingface.co/api/models/hetchyy/tibyan-base-v1",
+      "checked_at": "2026-10-11T09:56:50.357376+00:00",
+      "http_status": 401,
+      "bytes": 41,
+      "sha256": "65842e3d84e6b7f62a470c85204e80b953bb8f944e9b69813130a9d7f3eaa1d8"
+    },
+    {
+      "key": "base-config",
+      "url": "https://huggingface.co/hetchyy/tibyan-base-v1/resolve/main/config.json",
+      "checked_at": "2026-10-11T09:56:50.538522+00:00",
+      "http_status": 401,
+      "bytes": 29,
+      "sha256": "45b71fe98efe5f530b825dce6f5049d738e9c16869f10be4370ab81a9912d4a6",
+      "safe_response": "Invalid username or password."
+    }
+  ],
+  "alignment_posts": 0,
+  "retries": 0,
+  "next_readiness_probe_not_before": "2026-10-11T10:57:00Z"
+}

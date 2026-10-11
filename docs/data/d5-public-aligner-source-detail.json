@@ -1,0 +1,35 @@
+{
+  "source_revision": "ad3222b8870ffe9faf6b48d1bac9d32a16a8b10d",
+  "files": [
+    {
+      "path": "src/api/v1/app.py",
+      "url": "https://huggingface.co/spaces/hetchyy/quranic-universal-aligner/raw/ad3222b8870ffe9faf6b48d1bac9d32a16a8b10d/src/api/v1/app.py",
+      "sha256": "01ebfe45c5a84b70788342122253f68b87f5157b96efb047b0437899f31316cf",
+      "bytes": 3678
+    },
+    {
+      "path": "src/api/v1/routes_diagnostics.py",
+      "url": "https://huggingface.co/spaces/hetchyy/quranic-universal-aligner/raw/ad3222b8870ffe9faf6b48d1bac9d32a16a8b10d/src/api/v1/routes_diagnostics.py",
+      "sha256": "666e8ffb0e09450040ca30f8e001d85def65accc6fdb4ad7752017c2165d0f01",
+      "bytes": 3089
+    },
+    {
+      "path": "src/core/install_sdk.py",
+      "url": "https://huggingface.co/spaces/hetchyy/quranic-universal-aligner/raw/ad3222b8870ffe9faf6b48d1bac9d32a16a8b10d/src/core/install_sdk.py",
+      "sha256": "9d940307dddd1b81988a335a5b8b777845549c149297214f75b770a4a44e9e83",
+      "bytes": 5526
+    },
+    {
+      "path": "src/core/deploy_select.py",
+      "url": "https://huggingface.co/spaces/hetchyy/quranic-universal-aligner/raw/ad3222b8870ffe9faf6b48d1bac9d32a16a8b10d/src/core/deploy_select.py",
+      "sha256": "5c21237445d988b8ef7d8d63efa677c1abbe2392aaf9505a2b6cc846f1a6abc5",
+      "bytes": 2041
+    },
+    {
+      "path": "docs/client_api.md",
+      "url": "https://huggingface.co/spaces/hetchyy/quranic-universal-aligner/raw/ad3222b8870ffe9faf6b48d1bac9d32a16a8b10d/docs/client_api.md",
+      "sha256": "f304fbbc7b18cd5ce680c061819baa10dd0db59bade00be7c063dc9f72d8f86a",
+      "bytes": 6045
+    }
+  ]
+}
