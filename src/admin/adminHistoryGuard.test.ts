@@ -1,0 +1,8 @@
+import {describe,it,expect,vi} from 'vitest';
+import {AdminHistoryGuard} from './adminHistoryGuard';
+describe('Unsaved admin history traversal',()=>{
+ it('retains the form through a cancelled back traversal and its restoration without a second prompt',()=>{const confirm=vi.fn(()=>false),go=vi.fn(),event={stopImmediatePropagation:vi.fn()},guard=new AdminHistoryGuard(3,{confirm,go});guard.pop(1,event);expect(event.stopImmediatePropagation).toHaveBeenCalledOnce();expect(go).toHaveBeenCalledWith(2);guard.pop(3,event);expect(event.stopImmediatePropagation).toHaveBeenCalledTimes(2);expect(confirm).toHaveBeenCalledOnce();expect(go).toHaveBeenCalledOnce();});
+ it('restores cancelled forward navigation to the exact original index',()=>{const go=vi.fn(),event={stopImmediatePropagation:vi.fn()},guard=new AdminHistoryGuard(2,{confirm:()=>false,go});guard.pop(4,event);expect(go).toHaveBeenCalledWith(-2);expect(event.stopImmediatePropagation).toHaveBeenCalledOnce();});
+ it('lets an approved traversal reach the router and remembers a later approved route',()=>{const confirm=vi.fn(()=>true),go=vi.fn(),event={stopImmediatePropagation:vi.fn()},guard=new AdminHistoryGuard(4,{confirm,go});guard.pop(3,event);expect(event.stopImmediatePropagation).not.toHaveBeenCalled();guard.remember(5);confirm.mockReturnValue(false);guard.pop(2,event);expect(go).toHaveBeenCalledWith(3);});
+ it('does not replace a pending restoration target if another component effect runs',()=>{const go=vi.fn(),event={stopImmediatePropagation:vi.fn()},guard=new AdminHistoryGuard(5,{confirm:()=>false,go});guard.pop(4,event);guard.remember(4);guard.pop(3,event);expect(go).toHaveBeenLastCalledWith(2);guard.pop(5,event);expect(go).toHaveBeenCalledTimes(2);});
+});
