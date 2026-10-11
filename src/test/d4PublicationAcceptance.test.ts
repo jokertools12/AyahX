@@ -5,7 +5,7 @@ import {PUBLICATION_CONSTRAINTS} from '../../server/services/catalogTechnicalPub
 import type {Inventory} from '../../scripts/lib/railwayQuranOps';
 import {assertScopedPublicationMetadata} from '../../scripts/lib/d4PublicationMetadataGuard';
 import {d4Literal} from '../../scripts/lib/d4AuditSqlPlan';
-const rehearsal=():LicensedRehearsal=>({passed:true,scope:'local_synthetic_scratch_only',database:'ayahx_d4_unit',production_written:false,migration_up_twice:true,column_nullable_json:true,global_offset_unchanged:true,catalog_branch_unchanged:true,local_column_down_reapply:true,down005_twice_and_reapply_with_dependent_check:true,rejections:Array.from({length:23},()=>({code:'ER_CHECK_CONSTRAINT_VIOLATED'})),expected_clauses:{...PUBLICATION_CONSTRAINTS},ddl_sha256:digest(licensedPublicationFixtureDdl()),migration_sql_sha256:digest(humanReviewMigrationSql().join('\n'))});
+const rehearsal=():LicensedRehearsal=>({passed:true,scope:'local_synthetic_scratch_only',database:'ayahx_d4_unit',production_written:false,migration_up_twice:true,column_nullable_json:true,global_offset_unchanged:true,catalog_branch_unchanged:true,local_column_down_reapply:true,down005_twice_and_reapply_with_dependent_check:true,slice_branch_tests_passed:true,legacy_slice_clauses:['exact old slice canonical'],rejections:Array.from({length:23},()=>({code:'ER_CHECK_CONSTRAINT_VIOLATED'})),expected_clauses:{...PUBLICATION_CONSTRAINTS},ddl_sha256:digest(licensedPublicationFixtureDdl()),migration_sql_sha256:digest(humanReviewMigrationSql().join('\n'))});
 const now=Date.parse('2026-10-11T12:00:00Z');
 const names=[...protectedPublicationTables,'recitations','arbitrary_table'];
 const inventory=():Inventory=>({server_uuid:'uuid',canonical_checksum:'legal',d1_counts:{surahs:114,ayahs:6236,words:77433},tables:names.map(name=>({name,collation:'utf8mb4_unicode_ci',engine:'InnoDB',row_format:'Dynamic'})),row_counts:Object.fromEntries(names.map(name=>[name,1])),checksums:Object.fromEntries(names.map(name=>[name,'100']))} as Inventory);
@@ -27,6 +27,19 @@ describe('scoped CHECK production gates (units only)',()=>{
     expect(exactCheckText("actor='ActorCase'")).not.toBe(exactCheckText("actor='actorcase'"));
     expect(exactCheckText('a b')).not.toBe(exactCheckText('ab'));expect(exactCheckText(' a  OR (b\nAND c) ')).toBe(exactCheckText('a OR(b AND c)'));
     const escaped="name = _utf8mb4\\'ExactCase\\'";expect(exactCheckText(escaped)).toBe(escaped);
+  });
+  it('atomically replaces named or auto-named legacy slice only with exact rehearsed canonical evidence',()=>{
+    for(const name of ['chk_catalog_slice','recitations_chk_3']){
+      const actual={...PUBLICATION_CONSTRAINTS,[name]:'exact old slice canonical',recitations_chk_9:'unrelated check'};
+      const [sql]=licensedPublicationConstraintSql(actual,{...PUBLICATION_CONSTRAINTS},['exact old slice canonical']);
+      expect(sql).toContain('DROP CHECK '+name);expect(sql).not.toContain('DROP CHECK recitations_chk_9');
+      // Even when the new slice is already present, replace the old constraint in the same ALTER.
+      expect(sql).not.toContain('DROP CHECK chk_recitations_offset_gate_v1');
+      const initial={chk_recitations_offset_gate_v1:PUBLICATION_CONSTRAINTS.chk_recitations_offset_gate_v1,chk_recitations_publish_gate_v1:PUBLICATION_CONSTRAINTS.chk_recitations_publish_gate_v1,[name]:'exact old slice canonical'};
+      const [replacement]=licensedPublicationConstraintSql(initial,{...PUBLICATION_CONSTRAINTS},['exact old slice canonical']);expect(replacement).toContain('DROP CHECK '+name);expect(replacement).toContain('ADD CONSTRAINT chk_recitations_slice_gate_v1');expect(replacement.match(/ALTER TABLE/gu)).toHaveLength(1);
+    }
+    expect(()=>licensedPublicationConstraintSql({...PUBLICATION_CONSTRAINTS,chk_catalog_slice:'unexpected expression'},PUBLICATION_CONSTRAINTS,['exact old slice canonical'])).toThrow('CANONICAL_EVIDENCE');
+    expect(()=>assertExpectedCheckClauses({...PUBLICATION_CONSTRAINTS,recitations_chk_3:'exact old slice canonical'},PUBLICATION_CONSTRAINTS,['exact old slice canonical'])).toThrow('LEGACY_SLICE_STILL_PRESENT');
   });
   it('readback detects expression mismatch despite matching names and detects legacy CHECKs',()=>{
     expect(()=>assertExpectedCheckClauses({...PUBLICATION_CONSTRAINTS},PUBLICATION_CONSTRAINTS)).not.toThrow();

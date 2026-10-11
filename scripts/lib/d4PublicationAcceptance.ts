@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {D4_OFFSET_CHECK,D4_PUBLISH_CHECK,PUBLICATION_CONSTRAINTS} from '../../server/services/catalogTechnicalPublication';
+import {D4_OFFSET_CHECK,D4_PUBLISH_CHECK,D4_SLICE_CHECK,PUBLICATION_CONSTRAINTS} from '../../server/services/catalogTechnicalPublication';
 import {humanReviewMigrationSql} from '../../server/db/migrations/005_addHumanReviewsAndLicensedSources';
 import type {Inventory} from './railwayQuranOps';
 
@@ -8,7 +8,7 @@ export const digest=(value:string|Buffer):string=>createHash('sha256').update(va
 export const protectedPublicationTables=['users','user_roles','quran_surahs','quran_ayahs','quran_words','ayah_timings','import_jobs','ayah_timing_history'] as const;
 /** Identical source fixture DDL binds an existing real rehearsal to the current CHECK implementation. */
 export function licensedPublicationFixtureDdl():string{
-  return `CREATE TABLE ayahx_d4_licensed_publication_fixture(id VARCHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,status VARCHAR(32),riwayah_code VARCHAR(64),canonical_text_available BOOLEAN,audio_mode VARCHAR(32),offset_verified BOOLEAN,offset_check_score DOUBLE,verification_status VARCHAR(32),verification_method VARCHAR(8),verification_details JSON,timing_quality VARCHAR(32),timing_level VARCHAR(32),licensed_publication_details JSON,CONSTRAINT chk_fixture_catalog_offset CHECK(${D4_OFFSET_CHECK}),CONSTRAINT chk_fixture_scoped_publication CHECK(${D4_PUBLISH_CHECK})) ENGINE=InnoDB`;
+  return `CREATE TABLE ayahx_d4_licensed_publication_fixture(id VARCHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,status VARCHAR(32),riwayah_code VARCHAR(64),canonical_text_available BOOLEAN,audio_mode VARCHAR(32),offset_verified BOOLEAN,offset_check_score DOUBLE,verification_status VARCHAR(32),verification_method VARCHAR(8),verification_details JSON,timing_quality VARCHAR(32),timing_level VARCHAR(32),licensed_publication_details JSON,CONSTRAINT chk_fixture_catalog_offset CHECK(${D4_OFFSET_CHECK}),CONSTRAINT chk_fixture_scoped_publication CHECK(${D4_PUBLISH_CHECK}),CONSTRAINT chk_fixture_scoped_slice CHECK(${D4_SLICE_CHECK})) ENGINE=InnoDB`;
 }
 export interface LicensedRehearsal {
   passed:boolean;scope:string;database:string;production_written:boolean;
@@ -16,6 +16,7 @@ export interface LicensedRehearsal {
   catalog_branch_unchanged:boolean;local_column_down_reapply:boolean;
   down005_twice_and_reapply_with_dependent_check:boolean;
   rejections:Array<{code:string}>;expected_clauses:Record<string,string>;
+  legacy_slice_clauses:string[];slice_branch_tests_passed:boolean;
   ddl_sha256:string;migration_sql_sha256:string;
 }
 export function acceptedLicensedClauses(report:LicensedRehearsal):Record<string,string>{
@@ -26,6 +27,7 @@ export function acceptedLicensedClauses(report:LicensedRehearsal):Record<string,
   assert.equal(report.migration_sql_sha256,digest(humanReviewMigrationSql().join('\n')),'LICENSED_REHEARSED_MIGRATION_CHANGED');
   assert.deepEqual(Object.keys(report.expected_clauses??{}).sort(),Object.keys(PUBLICATION_CONSTRAINTS).sort(),'LICENSED_EXPECTED_CHECK_NAMES_REQUIRED');
   for(const clause of Object.values(report.expected_clauses))assert.ok(typeof clause==='string'&&clause.length>0,'LICENSED_EXPECTED_CHECK_CLAUSE_REQUIRED');
+  assert.ok(report.slice_branch_tests_passed===true&&Array.isArray(report.legacy_slice_clauses)&&report.legacy_slice_clauses.length>0&&report.legacy_slice_clauses.every(c=>typeof c==='string'&&c.length>0),'LICENSED_SLICE_BRANCH_REHEARSAL_REQUIRED');
   return report.expected_clauses;
 }
 /** Preserve parentheses, literal case, escaped strings, and token boundaries. */
@@ -42,15 +44,18 @@ export function exactCheckText(value:string):string{
   }
   assert.equal(quote,'','UNTERMINATED_CHECK_LITERAL');return out;
 }
-export function assertExpectedCheckClauses(actual:Record<string,string>,expected:Record<string,string>):void{
+export function assertExpectedCheckClauses(actual:Record<string,string>,expected:Record<string,string>,legacySliceClauses:readonly string[]=[]):void{
   for(const [name,clause]of Object.entries(expected))assert.equal(exactCheckText(actual[name]??''),exactCheckText(clause),'CHECK_READBACK_CHANGED:'+name);
-  assert.ok(!('chk_catalog_offset'in actual)&&!('chk_catalog_publish'in actual),'LEGACY_CHECK_STILL_PRESENT');
+  assert.ok(!('chk_catalog_offset'in actual)&&!('chk_catalog_publish'in actual)&&!('chk_catalog_slice'in actual),'LEGACY_CHECK_STILL_PRESENT');
+  for(const [name,clause]of Object.entries(actual))if(/^(?:chk_catalog_slice|recitations_chk_\d+)$/u.test(name))assert.ok(!legacySliceClauses.includes(clause),'LEGACY_SLICE_STILL_PRESENT:'+name);
 }
 /** Replace only reviewed CHECKs whose canonical MySQL text actually differs. */
-export function licensedPublicationConstraintSql(actual:Record<string,string>,expected:Record<string,string>):string[]{
+export function licensedPublicationConstraintSql(actual:Record<string,string>,expected:Record<string,string>,legacySliceClauses:readonly string[]=[]):string[]{
   assert.deepEqual(Object.keys(expected).sort(),Object.keys(PUBLICATION_CONSTRAINTS).sort(),'EXPECTED_CONSTRAINT_NAMES_CHANGED');
   const changed=Object.keys(PUBLICATION_CONSTRAINTS).filter(name=>name in actual&&exactCheckText(actual[name])!==exactCheckText(expected[name]));
-  const removed=['chk_catalog_offset','chk_catalog_publish',...changed].filter(name=>name in actual).map(name=>`DROP CHECK ${name}`);
+  const legacyNames=Object.keys(actual).filter(name=>/^(?:chk_catalog_slice|recitations_chk_\d+)$/u.test(name)&&legacySliceClauses.includes(actual[name]));
+  if('chk_catalog_slice'in actual&&!legacyNames.includes('chk_catalog_slice'))throw new Error('LEGACY_SLICE_CANONICAL_EVIDENCE_REQUIRED');
+  const removed=['chk_catalog_offset','chk_catalog_publish',...legacyNames,...changed].filter(name=>name in actual).map(name=>`DROP CHECK ${name}`);
   const added=Object.entries(PUBLICATION_CONSTRAINTS).filter(([name])=>!(name in actual)||changed.includes(name)).map(([name,clause])=>`ADD CONSTRAINT ${name} CHECK (${clause})`);
   return removed.length||added.length?[`ALTER TABLE recitations ${[...removed,...added].join(', ')};`]:[];
 }

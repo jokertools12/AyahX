@@ -9,7 +9,8 @@ assert.equal(option('--target'),'production');const apply=process.argv.includes(
 const baseline=JSON.parse(readFileSync(option('--baseline'),'utf8')) as Inventory;
 const backup=JSON.parse(readFileSync(option('--backup'),'utf8')) as PublicationBackup;
 const rehearsalBytes=readFileSync(option('--licensed-rehearsal'));
-const expected=acceptedLicensedClauses(JSON.parse(rehearsalBytes.toString('utf8')) as LicensedRehearsal);
+const rehearsal=JSON.parse(rehearsalBytes.toString('utf8')) as LicensedRehearsal;
+const expected=acceptedLicensedClauses(rehearsal),legacySliceClauses=rehearsal.legacy_slice_clauses;
 const rehearsalSha=digest(rehearsalBytes);
 assertFreshPublicationBackup(backup,Date.now());assert.equal(digest(readFileSync(backup.encrypted_path)),backup.encrypted_sha256,'ENCRYPTED_BACKUP_CHANGED');
 const session=await openRailwayMysqlSession(ENVIRONMENTS.production,{allowWrites:apply});
@@ -32,7 +33,7 @@ try{
     return result;
   };
   const actual=await checks(),ddlBefore=await ddlHashes(before);
-  const statements=licensedPublicationConstraintSql(actual,expected),sql=statements.join('\n')+'\n',sha=digest(sql);
+  const statements=licensedPublicationConstraintSql(actual,expected,legacySliceClauses),sql=statements.join('\n')+'\n',sha=digest(sql);
   if(apply){
     const dry=JSON.parse(readFileSync(option('--dry-run'),'utf8')) as Record<string,unknown>;
     assert.ok(dry.passed===true&&dry.applied===false&&dry.target==='production','APPROVED_DRY_RUN_REQUIRED');
@@ -48,7 +49,7 @@ try{
   assert.deepEqual(after.row_counts,before.row_counts);assert.deepEqual(after.checksums,before.checksums,'DDL_CHANGED_CELLS');assert.deepEqual(after.critical_counts,before.critical_counts);
   assert.deepEqual(after.columns,before.columns,'CHECK_OPERATION_CHANGED_COLUMNS');assert.deepEqual(after.foreign_keys,before.foreign_keys,'CHECK_OPERATION_CHANGED_FOREIGN_KEYS');
   const actualAfter=apply?await checks():actual,ddlAfter=apply?await ddlHashes(after):ddlBefore;
-  assertPublicationDdlUnchanged(ddlBefore,ddlAfter);if(apply)assertExpectedCheckClauses(actualAfter,expected);
+  assertPublicationDdlUnchanged(ddlBefore,ddlAfter);if(apply)assertExpectedCheckClauses(actualAfter,expected,legacySliceClauses);
   Object.assign(report,{passed:true,protected_unchanged:true,d1:after.d1_counts,d3:after.row_counts.ayah_timings,canonical_checksum:after.canonical_checksum,checks_after:actualAfter,ddl_checksums_after:ddlAfter,row_counts_after:after.row_counts,checksums_after:after.checksums,disk_after:await session.storage()});
 }catch(error){report.passed=false;report.failure=error instanceof Error?error.message:'K1_PRODUCTION_FAILED';throw new Error(String(report.failure));}
 finally{report.serial=await session.close();report.finished_at=new Date().toISOString();writeFileSync(option('--report'),JSON.stringify(report,null,2)+'\n');}
