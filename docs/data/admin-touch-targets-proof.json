@@ -1,0 +1,115 @@
+{
+  "observed_at": "2026-10-11T13:06:37.848Z",
+  "scope": "real local MySQL Redis Chromium; admin touch targets only",
+  "baseline": {
+    "run": "01a12b02-827f-7358-898f-cd8e4bbfb8bc",
+    "status": "failed",
+    "reason": "portal close target about 16px desktop; mobile icon width 32px"
+  },
+  "intermediate": {
+    "run": "01a12b07-852a-7e45-9937-d613f9b3201c",
+    "status": "failed",
+    "reason": "42px while Radix opening scale animation; settled measurement replaces it, never claimed as acceptance"
+  },
+  "final": {
+    "run": "01a12b0f-64bb-7e06-af62-89c38d24fa3a",
+    "status": "passed",
+    "desktop": {
+      "observed_at": "2026-10-11T13:03:15.401Z",
+      "targets": [
+        {
+          "width": 129.078125,
+          "height": 44
+        },
+        {
+          "width": 48,
+          "height": 44
+        },
+        {
+          "width": 73.234375,
+          "height": 44
+        },
+        {
+          "width": 48,
+          "height": 44
+        },
+        {
+          "width": 84,
+          "height": 44
+        }
+      ],
+      "dialogTargets": [
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "confirmField": {
+        "width": 462,
+        "height": 44
+      },
+      "layout": {
+        "viewport": 1440,
+        "body_width": 1440
+      },
+      "passed": true
+    },
+    "mobile": {
+      "observed_at": "2026-10-11T13:03:18.587Z",
+      "targets": [
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 57.234375,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        },
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "dialogTargets": [
+        {
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "confirmField": {
+        "width": 340,
+        "height": 44
+      },
+      "layout": {
+        "viewport": 390,
+        "body_width": 390
+      },
+      "passed": true
+    }
+  },
+  "page_run": "01a12b10-191d-75b1-a0b5-2c3066f83431",
+  "page_status": "passed",
+  "page_states": 56,
+  "axe_critical_serious": 0,
+  "fixture_quota": "local Redis DB10 and this fixture user only; production limit and independent actual 429 acceptance unchanged",
+  "unit_tests": {
+    "passed": 1009,
+    "skipped": 11,
+    "failed": 0,
+    "duration_seconds": 135.92
+  },
+  "release_status": "local_acceptance_passed; CI and live gates must pass before closure",
+  "passed": true
+}

@@ -1,13 +1,16 @@
 import {readFile,writeFile} from 'node:fs/promises';
 const read=async name=>JSON.parse(await readFile(`docs/data/${name}.json`,'utf8'));
-const bundle=await read('admin-bundle-after'),lh=await read('admin-lighthouse'),migration=await read('a1-production-migration-proof'),worker=await read('a2a-worker-local-acceptance'),secrets=await read('a1-secret-scan');
+const bundle=await read('admin-bundle-after'),lh=await read('admin-lighthouse'),migration=await read('a1-production-migration-proof'),worker=await read('a2a-worker-local-acceptance'),secrets=await read('a1-secret-scan'),performance=await read('admin-interaction-performance'),pages=await read('admin-pages/index'),quality=await read('a1-a2a-local-quality');
+let touch=null;try{touch=await read('admin-touch-targets-proof');}catch(error){if(error.code!=='ENOENT')throw error;}
 let shipping=null;try{shipping=await read('a1-a2a-publication');}catch(error){if(error.code!=='ENOENT')throw error;}
-const status=shipping?.passed?'مكتمل مع بوابات النشر المثبتة':'القبول المحلي وتطبيق migration مكتملان؛ CI والدمج والنشر والتحقق اللاحق قيد العمل';
+const status=shipping?.passed&&(!touch||touch.release_status==='deployed_passed')?'مكتمل مع بوابات النشر المثبتة':'القبول المحلي وتطبيق migration مكتملان؛ CI والدمج والنشر والتحقق اللاحق قيد العمل';
 const links=shipping?.pull_requests?.map(item=>`[PR #${item.number}](${item.url})`).join('، ')??'لم يُفتح PR بعد في وقت توليد هذا المستند';
 const max=Math.max(...Object.values(bundle.admin).map(item=>item.gzip_bytes));
 const body=`# تقرير الدفعة 3 — A1 + A2a
 
 الحالة: ${status}. آخر تحديث: ${new Date().toISOString()}. لا تنفيذ D5 ولا A2b.
+
+${touch?'تدقيق اللمس الختامي: قياس سابق 32px للأيقونات وقرابة16px لإغلاق النافذة استُبدل بإصلاح44×44px مقيد بالأدمن، بما فيه portals. اختبار جهازين2/2 و56حالةaxe ناجحة. قياس42px أثناء حركة فتحRadix ليس قبولًا؛ القياس النهائي بعد استقرارها. [الأدلة والحالة الفعلية](admin-touch-targets-proof.json). بوابات إصدار الإصلاح: '+(touch.release_status==='deployed_passed'?'نجحت فعليًا؛ أدلتها في سجل الشحن.':'مطلوبة قبل إغلاق الدفعة.'):''}
 
 ## 1. ما الذي تغيّر
 
@@ -33,7 +36,7 @@ D1 ثابت114/6236/77433 والبصمة eca6ed31262dff3f8013160766e185c5331ef12
 
 | الفحص | النتيجة الفعلية |
 |---|---|
-| npm test -- --maxWorkers=2 |1009 ناجح،11 متخطى،0 فشل؛140 ملف ناجح/5متخطى،133.15s|
+| npm test -- --maxWorkers=2 |1009 ناجح،11 متخطى،0 فشل؛140 ملف ناجح/5متخطى،${quality.npm_test.duration_seconds}s|
 | npx tsc --noEmit |ناجح؛ solution config، يعززه فحص52جذر أدمن حقيقي بصفر أخطاء|
 | TypeScript الخلفية |strict ناجح للجذور المعدلة ومراجعها مع server/types/ffprobe-static.d.ts القائمة|
 | lint الملفات المتغيرة |0 رسائل جديدة؛29تحذيرًا سابقًا دون إصلاح lint العام|
@@ -42,12 +45,12 @@ D1 ثابت114/6236/77433 والبصمة eca6ed31262dff3f8013160766e185c5331ef12
 | تنقل سبعة أدوار |2/2،جدول صلاحيات فعلي لكل دور|
 | صفحات axe/لقطات |14×2ثيم×2جهاز=56،صفرcritical/serious؛4لقطات دخول فارغ إضافية|
 | Lighthouse الرئيسية/القراء/الإعدادات |${lh.pages.map(page=>page.path+':'+page.accessibility+'/'+page.bestPractices+' CLS='+page.cls.toFixed(5)).join('؛ ')}|
-|1000صف virtualized|23tr/10بطاقات،أقصى تفاعل مختبري32ms/48ms؛INPميداني غير متاح|
+|1000صف virtualized|23tr/10بطاقات،أقصى تفاعل مختبري${performance.measurements.map(item=>item.max_interaction_duration_ms+'ms').join('/')}؛INPميداني غير متاح|
 | الحزمة العامة |${bundle.public_before_gzip}→${bundle.public.gzip_bytes}gzip بايت (${bundle.public_change_percent.toFixed(2)}%)،ضمن≤2%زيادة|
 |أقصى مسار أدمن|${max}gzip بايت،ضمن250KiB|
 | الأسرار |${secrets.known_secret_count}قيمة اعتماد معروفة،${secrets.text_files_checked}ملف نصي+لوج محلي؛صفر تسريب جديد،3تطابقات تاريخية غير معدلة مثبتة مقابل baseline|
 
-[Types](admin-types.json)،[lint](a1-a2a-lint.json)،[الحزمة](admin-bundle-after.json)،[Lighthouse](admin-lighthouse.json)،[التفاعل المختبري](admin-interaction-performance.json)،[فحص الأسرار](a1-secret-scan.json). E2Eالنهائي01a12adc-31ec-782f-bacd-674907de411e؛الصورالمحمّلة01a12acc-d26e-7183-a414-318fbd9cd5f5. التقارير/traces/session/rawlogs خاصة وليست فيGit. mocks للوحدات فقط.
+[Types](admin-types.json)،[lint](a1-a2a-lint.json)،[الحزمة](admin-bundle-after.json)،[Lighthouse](admin-lighthouse.json)،[التفاعل المختبري](admin-interaction-performance.json)،[فحص الأسرار](a1-secret-scan.json). E2Eالنهائي${pages.functional_run}؛الصورالمحمّلة${pages.pages_run}. التقارير/traces/session/rawlogs خاصة وليست فيGit. mocks للوحدات فقط.
 
 الشحن: ${links}. ${shipping?.passed?'SUCCESS للخدمات الأربع،health/ready200،smoke قراءة ونافذة10دقائق نظيفة مثبتة في [دليل النشر](a1-a2a-publication.json).':'بوابات الشحن لم تُعلن ناجحة قبل نتائجها الفعلية.'}
 

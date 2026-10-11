@@ -311,3 +311,12 @@ Railway volume5000MB وdf: total4,685,873,152/used325,705,728/free4,350,103,552 
 T1localMySQL9.7.2up2/down2/reapplyPASS؛T2local+productionreplay0نفسالبصمة؛T4metadata70changes/prodreplay0/audit؛productionD1/D3/admin/CHECKSUMثابتة. T3actuallocalAPI/periodic20HEAD+20healthPASS10:58UTC،fixturesrestored؛shadowproduction4off404/write0،flagفعليلميتغير. T5browserRange2/2desktop/mobilePASS. latestfull577pass/6skip قبلآخرالتعديلات،focused31/31بعدAbortSignal/preview/RetryAfter،tsc0/lintchanged0؛index2baselinewarnings. لاقبولCI/buildلـT6اللاحق.
 
 T6rehearsalFAIL3:clonedchecknames/SQLparse/nonbooleanCOALESCE. STOPبالأمرالصريح،no4thattempt/noT6production/noT7. HEADcheckpoint6052/7765partialstopped/nohealthapply/no207auditions؛nofinalD4PRdeploy. reportdocs/data/d4-stop-report.ar.md. health/ready200andprotectedchecksums0diff finalreadonly.
+
+
+## تدقيق اللمس الختامي — 2026-10-11
+
+كشف القياس عرض 32px لأيقونات الجوال وقرابة 16px لإغلاق النافذة؛ لا تُعد النتيجة القديمة قبولًا لشرط اللمس. أضيف حد 44×44px للأزرار والروابط وحقول النماذج وتسميات التحديد، بما فيها Radix/toast portals عند وجود الأدمن فقط. قيس حقل التأكيد وإغلاق النافذة بعد استقرار حركة الفتح، لا أثناء scale animation. لا تغيير لسلوك الموقع العام أو الريندر أو قاعدة الإنتاج.
+
+نجح اختبار اللمس 2/2 وإعادة 56 حالة صفحات/axe بلا أخطاء حرجة أو خطيرة أو تجاوز جسم الصفحة. التفاعل المختبري 24ms/64ms وLighthouse 100/100؛ الحزمة العامة 322504→218677 بايت gzip، وأكبر مسار أدمن 196115 بايت. أُعيدت الوحدات: 1009 نجاح/11 متخطى/0 فشل، 135.92s. عزل عداد حساب اختبار واحد في Redis DB10 محليًا يمنع تداخل قياسات الجودة؛ حد الإنتاج واختبار 429 الحقيقي محفوظان. لا INP ميداني قبل الإطلاق.
+
+القبول المحلي لهذا الملحق ناجح. بوابات CI/الدمج/النشر و10 دقائق السجلات لإصداره ما زالت مطلوبة قبل إغلاق الدفعة النهائي. الأدلة: [دليل اللمس](docs/data/admin-touch-targets-proof.json).
