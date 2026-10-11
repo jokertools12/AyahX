@@ -1,0 +1,37 @@
+/** Real local MySQL/Redis harness. Never imports server startup/background work. */
+import express from 'express';
+import mysql from 'mysql2/promise';
+import {randomBytes} from 'node:crypto';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {join} from 'node:path';
+import {homedir} from 'node:os';
+import {catalogDatabaseFromPool} from '../server/services/catalogMysqlDatabase';
+import {createAdminApplicationRouter} from '../server/routes/admin/adminA1Endpoints';
+import {registerCatalogAdminEndpoints} from '../server/routes/adminCatalog';
+import {AdminCatalogService} from '../server/services/adminCatalogService';
+import {AdminCatalogReadService} from '../server/services/adminCatalogReadService';
+import {AdminCatalogTaskService} from '../server/services/adminCatalogTasks';
+import {AdminCatalogImageValidator} from '../server/services/adminCatalogImageValidator';
+import {RecitationAdminService} from '../server/services/recitationAdminService';
+import {RecitationCatalogService,readCatalogSettings} from '../server/services/recitationCatalogService';
+import {HumanReviewService} from '../server/services/humanReviewService';
+import {CatalogAudioSource} from '../server/services/catalogAudioSource';
+import {createCatalogRouter} from '../server/routes/catalog';
+const schema=process.env.AYAHX_ADMIN_LOCAL_SCHEMA??'ayahx_d2_a1_verified_20261011';
+if(!/^ayahx_d2_a1_[a-z0-9_]+$/.test(schema))throw new Error('LOCAL_SCHEMA_REQUIRED');
+const privateDir=join(process.env.LOCALAPPDATA??join(homedir(),'AppData','Local'),'AyahX','private-backups');await mkdir(privateDir,{recursive:true});
+const privateFile=join(privateDir,'a1-local-admin-runtime.json');
+let secret:{jwt:string;totp:string};try{secret=JSON.parse(await readFile(privateFile,'utf8'));}catch(error){if((error as NodeJS.ErrnoException).code!=='ENOENT')throw error;secret={jwt:randomBytes(32).toString('base64'),totp:randomBytes(32).toString('base64')};await writeFile(privateFile,JSON.stringify(secret),{mode:0o600,flag:'wx'});}
+const env:NodeJS.ProcessEnv={NODE_ENV:'test',JWT_SECRET:secret.jwt,ADMIN_2FA_ENC_KEY:secret.totp,REDIS_URL:'redis://127.0.0.1:6380/10',STORAGE_VOLUME_BYTES:'5000000000'};
+const pool=mysql.createPool({host:'127.0.0.1',port:33319,user:'root',password:'',database:schema,connectionLimit:4,timezone:'Z'});const [versions]=await pool.query<mysql.RowDataPacket[]>('SELECT VERSION() version');if(versions[0].version!=='9.7.2')throw new Error('MYSQL_VERSION_REQUIRED');
+const app=express();app.disable('x-powered-by');app.use(express.json({limit:'64kb'}));app.use((_req,res,next)=>{res.set({'X-Content-Type-Options':'nosniff','X-Frame-Options':'SAMEORIGIN','Referrer-Policy':'strict-origin-when-cross-origin'});next();});
+const db=catalogDatabaseFromPool(pool),source=new CatalogAudioSource();
+const catalog=new RecitationCatalogService(db,()=>readCatalogSettings(db),{resolveAudioPlan:async()=>{throw new Error('LOCAL_HARNESS_AUDIO_DISABLED');}});
+const adminCatalog=new AdminCatalogService(db,new RecitationAdminService(db,source),new AdminCatalogImageValidator(),row=>catalog.publicVisibilityReasons(row));
+app.use('/api/admin',createAdminApplicationRouter({db,env,origins:['http://127.0.0.1:4188','http://localhost:3001','http://127.0.0.1:3001'],register:register=>registerCatalogAdminEndpoints(register,{db,catalog:adminCatalog,read:new AdminCatalogReadService(db),tasks:new AdminCatalogTaskService(db),reviews:new HumanReviewService(db)})}));
+app.use('/api/catalog',createCatalogRouter(catalog));
+app.get('/api/health/ready',async(_req,res)=>{await pool.query('SELECT 1');res.json({status:'ready',mysql:'9.7.2',localOnly:true});});
+app.use(express.static('dist'));
+app.get('/{*path}',(_req,res)=>res.sendFile(join(process.cwd(),'dist','index.html')));
+const server=app.listen(3001,'localhost',()=>console.log(JSON.stringify({local_only:true,mysql:'9.7.2',redis:'real:6380',port:3001,schema,secrets_logged:false})));
+const close=()=>{server.close(()=>{void pool.end().then(()=>process.exit(0));});};process.on('SIGTERM',close);process.on('SIGINT',close);
