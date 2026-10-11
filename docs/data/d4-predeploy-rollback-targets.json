@@ -1,0 +1,146 @@
+{
+  "checked_at": "2026-10-11T08:39:09.450Z",
+  "previous_commit": "ec593cf689a1402155fe41f2016720c82ef78118",
+  "services": [
+    {
+      "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "serviceName": "render-control",
+      "state": "online",
+      "deployments": [
+        {
+          "id": "4829fa0e-d022-4efc-88d0-94d1c9d8e765",
+          "status": "SUCCESS",
+          "createdAt": "2026-10-10T08:59:48.451Z",
+          "statusUpdatedAt": "2026-10-10T09:00:58.675Z"
+        }
+      ],
+      "replicas": {
+        "running": 1,
+        "crashed": 0,
+        "total": 1
+      }
+    },
+    {
+      "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "serviceName": "AyahX",
+      "state": "online",
+      "deployments": [
+        {
+          "id": "6c2088dd-3144-4988-973d-815f7817c42d",
+          "status": "SUCCESS",
+          "createdAt": "2026-10-10T08:59:48.451Z",
+          "statusUpdatedAt": "2026-10-11T08:38:36.926Z"
+        }
+      ],
+      "replicas": {
+        "running": 1,
+        "crashed": 0,
+        "total": 1
+      }
+    },
+    {
+      "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "serviceName": "render-worker-skia",
+      "state": "online",
+      "deployments": [
+        {
+          "id": "ff22fe5b-f9b4-4b9e-a782-1ba66f63bd46",
+          "status": "SUCCESS",
+          "createdAt": "2026-10-10T08:59:48.450Z",
+          "statusUpdatedAt": "2026-10-10T09:00:58.395Z"
+        }
+      ],
+      "replicas": {
+        "running": 1,
+        "crashed": 0,
+        "total": 1
+      }
+    },
+    {
+      "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "serviceName": "alignment-worker",
+      "state": "online",
+      "deployments": [
+        {
+          "id": "32f5679f-d216-4192-8d94-657e21a77e51",
+          "status": "SUCCESS",
+          "createdAt": "2026-10-10T08:59:48.450Z",
+          "statusUpdatedAt": "2026-10-10T09:00:05.138Z"
+        }
+      ],
+      "replicas": {
+        "running": 1,
+        "crashed": 0,
+        "total": 1
+      }
+    },
+    {
+      "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+      "serviceName": "MySQL",
+      "state": "online",
+      "deployments": [
+        {
+          "id": "5688ebb9-d685-4c31-b378-10b1fef748d0",
+          "status": "SUCCESS",
+          "createdAt": "2026-10-09T11:04:38.810Z",
+          "statusUpdatedAt": "2026-10-09T11:04:59.376Z"
+        }
+      ],
+      "replicas": {
+        "running": 1,
+        "crashed": 0,
+        "total": 1
+      }
+    },
+    {
+      "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+      "serviceName": "Redis",
+      "state": "online",
+      "deployments": [
+        {
+          "id": "79cf206c-7ecc-4de1-b409-c41f13c24ecc",
+          "status": "SUCCESS",
+          "createdAt": "2026-10-09T04:54:59.698Z",
+          "statusUpdatedAt": "2026-10-09T04:55:07.266Z"
+        }
+      ],
+      "replicas": {
+        "running": 1,
+        "crashed": 0,
+        "total": 1
+      }
+    }
+  ],
+  "rollback_targets": [
+    {
+      "id": "6c2088dd-3144-4988-973d-815f7817c42d",
+      "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "commit": "ec593cf689a1402155fe41f2016720c82ef78118",
+      "canRollback": true
+    },
+    {
+      "id": "4829fa0e-d022-4efc-88d0-94d1c9d8e765",
+      "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "commit": "ec593cf689a1402155fe41f2016720c82ef78118",
+      "canRollback": true
+    },
+    {
+      "id": "ff22fe5b-f9b4-4b9e-a782-1ba66f63bd46",
+      "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "commit": "ec593cf689a1402155fe41f2016720c82ef78118",
+      "canRollback": true
+    },
+    {
+      "id": "32f5679f-d216-4192-8d94-657e21a77e51",
+      "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "commit": "ec593cf689a1402155fe41f2016720c82ef78118",
+      "canRollback": true
+    }
+  ],
+  "preexisting_empty_staged_patch": {
+    "id": "patch:dea511b8-9877-474e-b254-c7bb3052c251",
+    "status": "staged",
+    "changes": [],
+    "not_modified": true
+  }
+}
