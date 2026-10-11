@@ -26,8 +26,9 @@ export class AdminDashboardService {
   const reviews=await this.db.read("SELECT type,COUNT(*) count FROM human_review_items WHERE status='pending' GROUP BY type ORDER BY type");
   const settings=await readCatalogSettings(this.db);
   const [eligible]=await this.db.read(`SELECT COUNT(*) count FROM recitations r JOIN audio_providers p ON p.id=r.provider_id WHERE ${publicCatalogSql(settings.voiceGatePolicy)} AND EXISTS(SELECT 1 FROM recitation_chapters c WHERE c.recitation_id=r.id AND COALESCE(c.is_enabled,1)=1 AND c.availability_state='complete')`);
+  const [technical]=await this.db.read("SELECT COUNT(*) count FROM recitations WHERE status='published' AND published_by='rule-v1'");
   const [objects]=await this.db.read("SELECT COUNT(*) objects,COALESCE(SUM(size_bytes),0) bytes FROM storage_objects WHERE upload_status NOT IN ('deleted','rejected')");
   const activity=await new AdminAuditService(this.db).list({page:1,limit:10});
-  return{stats:{...counts,eligibleRecitations:Number(eligible?.count||0),recitationStates,renderStates,pendingReviews:reviews,storedAudio:{objects:Number(objects?.objects||0),bytes:Number(objects?.bytes||0)}},health:await this.health(),activity:activity.data,alerts:[{code:'R2_TOKEN_RENEWAL',deadline:'2026-11-09',message:'جدّد رموز R2 قبل 9 نوفمبر؛ راجع حالة الرموز الفعلية في Cloudflare.'}],catalogEnabled:settings.enabled};
+  return{stats:{...counts,eligibleRecitations:Number(technical?.count||0),technicalEligibilitySource:'published_by=rule-v1',publicPotentialRecitations:Number(eligible?.count||0),recitationStates,renderStates,pendingReviews:reviews,storedAudio:{objects:Number(objects?.objects||0),bytes:Number(objects?.bytes||0)}},health:await this.health(),activity:activity.data,alerts:[{code:'R2_TOKEN_RENEWAL',deadline:'2026-11-09',message:'جدّد رموز R2 قبل 9 نوفمبر؛ راجع حالة الرموز الفعلية في Cloudflare.'}],catalogEnabled:settings.enabled};
  }
 }
