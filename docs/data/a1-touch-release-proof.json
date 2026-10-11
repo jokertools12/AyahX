@@ -1,0 +1,193 @@
+{
+  "checked_at": "2026-10-11T13:45:43.090Z",
+  "scope": "A1_A2a_only",
+  "passed": true,
+  "pr": 18,
+  "merge_sha": "bd46f0feb56e6ca8bb24527fc5dc860c16bc2492",
+  "ci": [
+    {
+      "id": 38141974230,
+      "name": "AyahX E2E",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jokertools12/AyahX/actions/runs/38141974230"
+    },
+    {
+      "id": 38141974358,
+      "name": "Catalog quality",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jokertools12/AyahX/actions/runs/38141974358"
+    }
+  ],
+  "deployments": [
+    {
+      "id": "32223627-001a-402c-893a-fc34c4cf1fc3",
+      "service_id": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "status": "SUCCESS",
+      "sha": "bd46f0feb56e6ca8bb24527fc5dc860c16bc2492",
+      "url": null,
+      "updated": "2026-10-11T13:12:29.087Z"
+    },
+    {
+      "id": "b70fd836-3249-4182-835f-559b7e98930f",
+      "service_id": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "status": "SUCCESS",
+      "sha": "bd46f0feb56e6ca8bb24527fc5dc860c16bc2492",
+      "url": null,
+      "updated": "2026-10-11T13:12:25.054Z"
+    },
+    {
+      "id": "ee563a88-9a3a-4951-9c28-aa3246762d42",
+      "service_id": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "status": "SUCCESS",
+      "sha": "bd46f0feb56e6ca8bb24527fc5dc860c16bc2492",
+      "url": null,
+      "updated": "2026-10-11T13:13:05.750Z"
+    },
+    {
+      "id": "d72918c6-d41e-4e4d-90e9-27b7a00fcde3",
+      "service_id": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "status": "SUCCESS",
+      "sha": "bd46f0feb56e6ca8bb24527fc5dc860c16bc2492",
+      "url": null,
+      "updated": "2026-10-11T13:12:27.792Z"
+    }
+  ],
+  "logs": {
+    "checked_at": "2026-10-11T13:24:28.435Z",
+    "window_start": "2026-10-11T13:14:00.000Z",
+    "window_end": "2026-10-11T13:24:16.933Z",
+    "window_seconds": 616.933,
+    "raw_logs_persisted": false,
+    "logs": [
+      {
+        "service": "AyahX",
+        "since": "2026-10-11T13:14:00.000Z",
+        "until": "2026-10-11T13:24:16.933Z",
+        "lines": 392,
+        "errors": 0,
+        "error_timestamps": [],
+        "new_totp_key_leaked": false
+      },
+      {
+        "service": "render-control",
+        "since": "2026-10-11T13:14:00.000Z",
+        "until": "2026-10-11T13:24:16.933Z",
+        "lines": 0,
+        "errors": 0,
+        "error_timestamps": [],
+        "new_totp_key_leaked": false
+      },
+      {
+        "service": "render-worker-skia",
+        "since": "2026-10-11T13:14:00.000Z",
+        "until": "2026-10-11T13:24:16.933Z",
+        "lines": 0,
+        "errors": 0,
+        "error_timestamps": [],
+        "new_totp_key_leaked": false
+      },
+      {
+        "service": "alignment-worker",
+        "since": "2026-10-11T13:14:00.000Z",
+        "until": "2026-10-11T13:24:16.933Z",
+        "lines": 0,
+        "errors": 0,
+        "error_timestamps": [],
+        "new_totp_key_leaked": false
+      },
+      {
+        "service": "MySQL",
+        "since": "2026-10-11T13:14:00.000Z",
+        "until": "2026-10-11T13:24:16.933Z",
+        "lines": 0,
+        "errors": 0,
+        "error_timestamps": [],
+        "new_totp_key_leaked": false
+      },
+      {
+        "service": "Redis",
+        "since": "2026-10-11T13:14:00.000Z",
+        "until": "2026-10-11T13:24:16.933Z",
+        "lines": 55,
+        "errors": 0,
+        "error_timestamps": [],
+        "new_totp_key_leaked": false
+      }
+    ],
+    "passed": true
+  },
+  "health": {
+    "observed_at": "2026-10-11T13:26:03.188Z",
+    "rows": [
+      {
+        "path": "/api/health",
+        "status": 200
+      },
+      {
+        "path": "/api/health/ready",
+        "status": 200
+      }
+    ],
+    "passed": true
+  },
+  "protection": {
+    "checked_at": "2026-10-11T13:18:38.403Z",
+    "passed": true,
+    "read_only": true,
+    "mysql_version": "9.7.2",
+    "d1": {
+      "surahs": 114,
+      "ayahs": 6236,
+      "words": 77433
+    },
+    "d3": 422463,
+    "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+    "critical": {
+      "users": 13,
+      "subscriptions": 16,
+      "payment_requests": 3,
+      "saved_videos": 7,
+      "render_jobs": 72,
+      "system_settings": 14,
+      "user_roles": 13,
+      "notifications": 49
+    },
+    "protected_checksums": {
+      "users": "465493766",
+      "profiles": "3305835068",
+      "user_roles": "2243496482",
+      "quran_surahs": "2501341507",
+      "quran_ayahs": "1712042852",
+      "quran_words": "2986733015",
+      "ayah_timings": "2767002486",
+      "system_settings": "1813780594"
+    },
+    "admin_unchanged_after_authorized_upgrade": true,
+    "catalog_v2": false,
+    "df": {
+      "total_bytes": 4685873152,
+      "used_bytes": 1774206976,
+      "available_bytes": 2901602304
+    }
+  },
+  "smoke": {
+    "run_id": "01a12b1d-6e5e-7af7-931c-7b1edb2d57d3",
+    "started_at": "2026-10-11T13:18:32.637Z",
+    "finished_at": "2026-10-11T13:19:31.212Z",
+    "summary": {
+      "discovered": 50,
+      "selected": 14,
+      "executed": 14,
+      "passed": 14,
+      "failed": 0,
+      "interrupted": 0,
+      "flaky": 0,
+      "skipped": 0
+    },
+    "anonymous": true,
+    "read_only": true,
+    "raw_artifacts_private": true
+  }
+}

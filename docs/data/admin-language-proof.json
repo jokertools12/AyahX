@@ -22,6 +22,7 @@
     "arabic_restored": "rtl"
   },
   "policy": "Admin mount scopes document direction and language; cleanup restores prior attributes and inline direction. Portal heading/close placement uses logical alignment. No public rendering change",
-  "release_status": "local_acceptance_passed",
-  "passed": true
+  "release_status": "deployed_passed",
+  "passed": true,
+  "release_proof": "a1-language-release-proof.json"
 }

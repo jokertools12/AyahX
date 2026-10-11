@@ -110,6 +110,7 @@
     "failed": 0,
     "duration_seconds": 135.92
   },
-  "release_status": "local_acceptance_passed; CI and live gates must pass before closure",
-  "passed": true
+  "release_status": "deployed_passed",
+  "passed": true,
+  "release_proof": "a1-touch-release-proof.json"
 }
