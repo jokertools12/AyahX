@@ -1,0 +1,27 @@
+{
+  "observed_at": "2026-10-11T13:21:06.618Z",
+  "scope": "actual local MySQL Redis Chromium; AR EN document and portal direction",
+  "baseline": {
+    "run": "01a12b18-bd5b-773f-bfec-2e630cec3572",
+    "status": "failed",
+    "reason": "English admin subtree LTR while body portal remained RTL"
+  },
+  "superseded_attempt": {
+    "run": "01a12b19-7add-7e31-89e0-a2dbd13ee88b",
+    "status": "failed",
+    "reason": "document dir attribute alone was overridden by existing html CSS direction:rtl; not accepted"
+  },
+  "final": {
+    "run": "01a12b1a-ed60-7138-b9f7-f2f985fd3a3e",
+    "status": "passed",
+    "passed": 4,
+    "failed": 0,
+    "desktop_and_mobile": true,
+    "english_heading": "Dashboard",
+    "english_portal_direction": "ltr",
+    "arabic_restored": "rtl"
+  },
+  "policy": "Admin mount scopes document direction and language; cleanup restores prior attributes and inline direction. Portal heading/close placement uses logical alignment. No public rendering change",
+  "release_status": "local_acceptance_passed",
+  "passed": true
+}

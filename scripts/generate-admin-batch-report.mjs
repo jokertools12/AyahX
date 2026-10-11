@@ -2,8 +2,10 @@ import {readFile,writeFile} from 'node:fs/promises';
 const read=async name=>JSON.parse(await readFile(`docs/data/${name}.json`,'utf8'));
 const bundle=await read('admin-bundle-after'),lh=await read('admin-lighthouse'),migration=await read('a1-production-migration-proof'),worker=await read('a2a-worker-local-acceptance'),secrets=await read('a1-secret-scan'),performance=await read('admin-interaction-performance'),pages=await read('admin-pages/index'),quality=await read('a1-a2a-local-quality');
 let touch=null;try{touch=await read('admin-touch-targets-proof');}catch(error){if(error.code!=='ENOENT')throw error;}
+let language=null;try{language=await read('admin-language-proof');}catch(error){if(error.code!=='ENOENT')throw error;}
 let shipping=null;try{shipping=await read('a1-a2a-publication');}catch(error){if(error.code!=='ENOENT')throw error;}
-const status=shipping?.passed&&(!touch||touch.release_status==='deployed_passed')?'مكتمل مع بوابات النشر المثبتة':'القبول المحلي وتطبيق migration مكتملان؛ CI والدمج والنشر والتحقق اللاحق قيد العمل';
+const complete=shipping?.passed&&(!touch||touch.release_status==='deployed_passed')&&(!language||language.release_status==='deployed_passed');
+const status=complete?'مكتمل مع بوابات النشر المثبتة':'القبول المحلي وتطبيق migration مكتملان؛ CI والدمج والنشر والتحقق اللاحق قيد العمل';
 const links=shipping?.pull_requests?.map(item=>`[PR #${item.number}](${item.url})`).join('، ')??'لم يُفتح PR بعد في وقت توليد هذا المستند';
 const max=Math.max(...Object.values(bundle.admin).map(item=>item.gzip_bytes));
 const body=`# تقرير الدفعة 3 — A1 + A2a
@@ -11,6 +13,8 @@ const body=`# تقرير الدفعة 3 — A1 + A2a
 الحالة: ${status}. آخر تحديث: ${new Date().toISOString()}. لا تنفيذ D5 ولا A2b.
 
 ${touch?'تدقيق اللمس الختامي: قياس سابق 32px للأيقونات وقرابة16px لإغلاق النافذة استُبدل بإصلاح44×44px مقيد بالأدمن، بما فيه portals. اختبار جهازين2/2 و56حالةaxe ناجحة. قياس42px أثناء حركة فتحRadix ليس قبولًا؛ القياس النهائي بعد استقرارها. [الأدلة والحالة الفعلية](admin-touch-targets-proof.json). بوابات إصدار الإصلاح: '+(touch.release_status==='deployed_passed'?'نجحت فعليًا؛ أدلتها في سجل الشحن.':'مطلوبة قبل إغلاق الدفعة.'):''}
+
+${language?'لغة النوافذ: كشف الاختبار بقاءportal علىRTL بعد تحويل الصفحة للإنجليزية؛ تغييرdir وحده لم يتغلب علىCSS القائمة. المزامنة المقيدة بتركيب الأدمن مع استعادة خصائص المستند عند مغادرته أصلحت الاتجاه، وعناوين/إغلاق النوافذ بمحاذاة منطقية. قبول فعلي4/4 على الجهازين. [الدليل وحالة إصدار الإصلاح](admin-language-proof.json). لا تعديل لسلوك الريندر أو النص أو التوقيت.':''}
 
 ## 1. ما الذي تغيّر
 
@@ -70,7 +74,7 @@ D1 ثابت114/6236/77433 والبصمة eca6ed31262dff3f8013160766e185c5331ef12
 
 ## 6. الخطوة التالية
 
-${shipping?.passed?'التوقف بعد هذا التقرير. لا D5 أو A2b دون تفويض جديد.':'استكمال PR/CI الأخضر،الدمج،SUCCESS للخدمات المتأثرة،health/ready،smoke و10دقائق لوج،وقراءة الفاتورة النهائية؛ثم التوقف دون D5/A2b.'}
+${complete?'التوقف بعد هذا التقرير. لا D5 أو A2b دون تفويض جديد.':'استكمال PR/CI الأخضر،الدمج،SUCCESS للخدمات المتأثرة،health/ready،smoke و10دقائق لوج،وقراءة الفاتورة النهائية؛ثم التوقف دون D5/A2b.'}
 `;
 await writeFile('docs/data/a1-a2a-report.ar.md',body.replace(/([0-9])(?=[\u0600-\u06FF])/gu,'$1 ').replace(/([\u0600-\u06FF])(?=[0-9])/gu,'$1 '),'utf8');
 const header=`# الدفعة 3 — A1 + A2a، 2026-10-11\n\n${status}. [التقرير الحالي](data/a1-a2a-report.ar.md)، [migration006 الإنتاجية](data/a1-production-migration-proof.json)، [مراجعة الواجهة والصور](admin-ui-review.md). 1009اختبار ناجح/11متخطى،20E2Eوظيفي،56axeحالة؛D1/D3ثابتان،صلاحيتا الأدمنترقّتا دون مس بياناتهما؛catalogOFF،stagingمتوقفة.\n\n`;
