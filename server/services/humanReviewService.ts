@@ -36,10 +36,11 @@ export class HumanReviewService {
     await this.db.transaction(async tx=>{
       const [provider]=await tx.read('SELECT id,code,license_status FROM audio_providers WHERE id=? FOR UPDATE',[id]);if(!provider)throw new CatalogError('PROVIDER_NOT_FOUND',404);if(provider.code!==input.confirmation)throw new CatalogError('CONFIRMATION_MISMATCH',422);
       const [review]=await tx.read("SELECT * FROM human_review_items WHERE type='provider_license' AND subject_type='audio_provider' AND subject_id=? FOR UPDATE",[id]);
-      if(input.license_status==='unreviewed'){await tx.execute("UPDATE audio_providers SET license_status='unreviewed' WHERE id=?",[id]);await appendCatalogAudit(tx,actor,'provider.license_review','audio_provider',id,{license_status:provider.license_status},{license_status:'unreviewed',notes:input.notes});}
-      else await this.applyDecision(tx,actor,{type:'provider_license',subject_type:'audio_provider',subject_id:id,id:review?.id??null},{status:input.license_status==='permitted'?'approved':'rejected',notes:input.notes,decision});
-      if(review&&(review.status==='pending'||review.status==='deferred')&&input.license_status!=='unreviewed'){const status=input.license_status==='permitted'?'approved':'rejected';await tx.execute('UPDATE human_review_items SET status=?,decided_by=?,decided_at=CURRENT_TIMESTAMP(3),notes=?,decision=? WHERE id=?',[status,actor.id,input.notes,JSON.stringify(decision),review.id]);await appendCatalogAudit(tx,actor,'review.decide','human_review_item',String(review.id),{status:review.status},{status,notes:input.notes,decision,decided_by:actor.id});}
-      await appendCatalogAudit(tx,actor,'provider.license_revision','audio_provider',id,{license_status:provider.license_status},{...decision,notes:input.notes,confirmation:input.confirmation});
+      if(input.license_status==='unreviewed'){await tx.execute("UPDATE audio_providers SET license_status='unreviewed' WHERE id=?",[id]);}
+      else await this.applyDecision(tx,actor,{type:'provider_license',subject_type:'audio_provider',subject_id:id,id:review?.id??null},{status:input.license_status==='permitted'?'approved':'rejected',notes:input.notes,decision},false);
+      let reviewAfter:CatalogRow|null=null;
+      if(review&&(review.status==='pending'||review.status==='deferred')&&input.license_status!=='unreviewed'){const status=input.license_status==='permitted'?'approved':'rejected';await tx.execute('UPDATE human_review_items SET status=?,decided_by=?,decided_at=CURRENT_TIMESTAMP(3),notes=?,decision=? WHERE id=?',[status,actor.id,input.notes,JSON.stringify(decision),review.id]);reviewAfter={id:review.id,status,notes:input.notes,decision,decided_by:actor.id};}
+      await appendCatalogAudit(tx,actor,'provider.license_revision','audio_provider',id,{license_status:provider.license_status,review:reviewAfter?{id:review!.id,status:review!.status,notes:review!.notes??null,decision:jsonReviewValue(review!.decision)??null,decided_by:review!.decided_by??null}:null},{...decision,notes:input.notes,confirmation:input.confirmation,review:reviewAfter});
     });
   }
   async list(actor:CatalogActor,filter:{status?:'pending'|'approved'|'rejected'|'deferred';type?:HumanReviewType;limit?:number;offset?:number}={}):Promise<CatalogRow[]>{
@@ -73,7 +74,7 @@ export class HumanReviewService {
       await appendCatalogAudit(tx,actor,'review.decide','human_review_item',id,{status:row.status,decision:jsonReviewValue(row.decision)??null},{...input,decision:input.decision??{},decided_by:actor.id});return {changed:true};
     });
   }
-  private async applyDecision(tx:CatalogTx,actor:CatalogActor,row:CatalogRow,input:ReviewDecision):Promise<void>{
+  private async applyDecision(tx:CatalogTx,actor:CatalogActor,row:CatalogRow,input:ReviewDecision,emitAudit=true):Promise<void>{
     if(row.type==='voice_confirmation'){
       requireCatalogPermission(actor,'recitations.voice.review',true);if(row.subject_type!=='recitation')throw new CatalogError('REVIEW_SUBJECT_INVALID',422);
       const [subject]=await tx.read('SELECT id,voice_identity_status FROM recitations WHERE id=? FOR UPDATE',[row.subject_id]);if(!subject)throw new CatalogError('RECITATION_NOT_FOUND',404);
@@ -87,7 +88,7 @@ export class HumanReviewService {
       const reference=input.decision?.rights_evidence_ref;
       if(!['permitted','restricted'].includes(String(status))||(status==='permitted'&&(typeof reference!=='string'||!reference.trim()||reference.length>2000)))throw new CatalogError('LICENSE_EVIDENCE_REQUIRED',422);
       const [subject]=await tx.read('SELECT id,license_status FROM audio_providers WHERE id=? FOR UPDATE',[row.subject_id]);if(!subject)throw new CatalogError('PROVIDER_NOT_FOUND',404);
-      await tx.execute('UPDATE audio_providers SET license_status=? WHERE id=?',[status,subject.id]);await appendCatalogAudit(tx,actor,'provider.license_review','audio_provider',String(subject.id),{license_status:subject.license_status},{license_status:status,evidence:input.decision??{},review_item:row.id});
+      await tx.execute('UPDATE audio_providers SET license_status=? WHERE id=?',[status,subject.id]);if(emitAudit)await appendCatalogAudit(tx,actor,'provider.license_review','audio_provider',String(subject.id),{license_status:subject.license_status},{license_status:status,evidence:input.decision??{},review_item:row.id});
     }else if(row.type==='label_review'){
       requireCatalogPermission(actor,'recitations.manage',true);if(row.subject_type!=='recitation')throw new CatalogError('REVIEW_SUBJECT_INVALID',422);
       if(input.status==='approved'){
