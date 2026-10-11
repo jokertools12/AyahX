@@ -38,6 +38,14 @@ logger: code/message/stack للخطأ الأصلي، JSON error fields للرد�
 
 # FEATURE QA LOG & PRODUCT QUALITY AUDIT
 
+## 2026-10-11 — D7: قبول محلي وDDL إنتاجية، الإغلاق معلّق
+
+ثمانية فيديوهات فعلية محليًا: mp3quran/quranicaudio/archive القصير الكامل وآخر10 آيات، وتكرار وneeds_review حقيقيان؛ NCC من0.9936086 إلى0.9999774، lag=0ms، فرق المدة≤إطار وصفر black/tofu/external assets. رُفض نطاق ناقص مع available_runs ورُفض YouTube بلا ملف مرخّص. قص Range مستقل بعد فهرسة مرجع QA كامل؛ إجمالي بايتات QA يشمل المرجع وRange، ولا نثبت مسارًا عامًا بلا مرجع. ملف ضوضاء مملوك على R2 نجح محليًا بـNCC0.9987766 مع ayah-only/estimated وصفر كتابة كتالوج؛ ليس اعتماد قرآن أو حقوق تلاوة.
+
+MySQL9.7.2/Redis/HTTP: RBAC سبعة أدوار، وOrigin/rate/strict client input/concurrency/audit حقيقي.10,000 نطاق و259,437 فحص كلمة؛41 رفضًا إضافيًا لتداخل آيات المصدر بلا علاج D3. Linux/Skia:21,202 كلمة فريدة×6 خطوط، صفر missing/empty،43 دفعة. up/activation/down مرتان وإعادة التطبيق محليًا؛ down الإنتاجي مرفوض. migration007 الإنتاجية نجحت بعد نسخة مشفرّة جديدة واستعادة63 جدولًا؛ D1/D3/admin ثابتة، لا grant قبل نشر الكود الجديد.
+
+آخر npm test كامل:1052 PASS/11 SKIP، وtsc/build PASS؛ lint46 ملفًا/0 new/17 تحذيرًا سابقًا. إعادة القبول بعد آخر التعديلات وCI مطلوبان. PR/نشر D7 ومصفوفة Railway وv1 قبل وبعد وذاكرة الأبناء و10 دقائق لوج وsmoke والصرف الختامي **معلّقة**؛ لا تُستبدل بهذه النتائج. [التقرير](docs/data/render-verification-report.md). لا D5/D8/A2b.
+
 ## 2026-10-10 — D3: قبول البيانات والكود مكتمل، توقف ولا D4
 
 MySQL 9.7.2 الحقيقي: 422,463 صفًا و69 تلاوة؛ CLI مرتان والتحقق من القيم قبل تخطي checkpoints، قتل فعلي في منتصف تلاوة ثم مطابقة بصمات خمس جداول، فساد فعلي يرفض مع history، down وإعادة التطبيق محليًا، وEXPLAIN uk_timing_ayah في 10.1273ms. Redis 7.2.14: محاولة طابور كاملة ناجحة، 0 stalled/0 فشل تجديد و753 تجديدًا مع قفل 120s وchild process.
