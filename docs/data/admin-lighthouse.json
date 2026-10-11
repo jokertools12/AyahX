@@ -1,6 +1,6 @@
 {
   "scope": "local-production-build",
-  "observedAt": "2026-10-11T12:59:59.262Z",
+  "observedAt": "2026-10-11T13:21:30.253Z",
   "lighthouseVersion": "13.5.0",
   "chromeVersion": "Chrome/149.0.7827.55",
   "settings": {
@@ -19,8 +19,8 @@
       "path": "/admin",
       "accessibility": 100,
       "bestPractices": 100,
-      "cls": 0.011430797889556883,
-      "lcpMs": 458.3415,
+      "cls": 0.011425643641534233,
+      "lcpMs": 460.2759,
       "totalBlockingTimeMs": 0,
       "failedAudits": [
         {
@@ -62,9 +62,9 @@
       "path": "/admin/reciters",
       "accessibility": 100,
       "bestPractices": 100,
-      "cls": 0.026178581420534648,
-      "lcpMs": 462.48774999999995,
-      "totalBlockingTimeMs": 0.5,
+      "cls": 0.038172910785227526,
+      "lcpMs": 455.27444999999994,
+      "totalBlockingTimeMs": 0,
       "failedAudits": [
         {
           "id": "unminified-javascript",
@@ -106,7 +106,7 @@
       "accessibility": 100,
       "bestPractices": 100,
       "cls": 0.01142561445553184,
-      "lcpMs": 480.41179999999997,
+      "lcpMs": 463.79689999999994,
       "totalBlockingTimeMs": 0,
       "failedAudits": [
         {

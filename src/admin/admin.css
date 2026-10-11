@@ -4,6 +4,8 @@
 /* Radix and toast portals live outside .admin-app. Scope targets to an active admin
    page so shared public components retain their existing styles. */
 body:has(.admin-app) button{min-width:44px;min-height:44px}
+body:has(.admin-app) [role=dialog] > button.absolute{left:auto;right:auto;inset-inline-end:16px;display:inline-flex;align-items:center;justify-content:center}
+body:has(.admin-app) [role=dialog] .sm\:text-left{text-align:start;padding-inline-end:44px}
 .admin-app :is(input:not([type=checkbox]):not([type=radio]),select,textarea),body:has(.admin-app) :is([role=dialog],[role=alertdialog]) :is(input:not([type=checkbox]):not([type=radio]),select,textarea){min-height:44px}
 .admin-app a{display:inline-flex;align-items:center;min-width:44px;min-height:44px}
 .admin-check-label{min-width:44px}

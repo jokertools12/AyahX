@@ -1,5 +1,5 @@
 {
-  "observed_at": "2026-10-11T13:01:02.020Z",
+  "observed_at": "2026-10-11T13:22:48.823Z",
   "scope": "local production build; lab interaction timing, not field INP",
   "measurements": [
     {
@@ -23,7 +23,7 @@
       "rendered_rows": 23,
       "rendered_cards": 10,
       "event_samples": 36,
-      "max_interaction_duration_ms": 64,
+      "max_interaction_duration_ms": 32,
       "interaction_count": 12,
       "cls": 0.015079861538461537,
       "profile_overflow": {
