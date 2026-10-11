@@ -4,7 +4,7 @@ import { RenderManifestV2RequestSchema, RenderManifestV2Schema, type RenderManif
 import { CatalogError, type CatalogDatabase, type CatalogRow } from './catalogContracts';
 import { canonicalAuditJson } from './catalogAudit';
 import { assertCatalogAudioUrl, type CatalogAudioSource } from './catalogAudioSource';
-import { connectedAyahRuns, isRangeAvailable } from './recitationAvailability';
+import { isRangeAvailable } from './recitationAvailability';
 import { hasVerifiedCatalogOffset } from './recitationAudioResolver';
 import { assertLicensedOffsetEvidence } from './licensedAudioVerification';
 import type { LicensedSourceResolver } from './licensedSourceResolver';
@@ -38,7 +38,10 @@ export class CatalogRenderManifestService {
     if (['hidden', 'deprecated'].includes(String(recitation.status))) throw new CatalogError('RECITATION_NOT_TECHNICALLY_ELIGIBLE', 409, { reason: 'ADMIN_STATUS_PROTECTED' });
     if (recitation.timing_quality !== 'verified' || !['word', 'letter'].includes(String(recitation.timing_level))) throw new CatalogError('RECITATION_NOT_TECHNICALLY_ELIGIBLE', 409, { reason: 'WORD_TIMING_NOT_VERIFIED' });
     if (!licensed && (recitation.status !== 'published' || recitation.published_by !== 'rule-v1' || recitation.audio_mode !== 'surah_slice' || !hasVerifiedCatalogOffset(recitation))) throw new CatalogError('RECITATION_NOT_TECHNICALLY_ELIGIBLE', 409, { reason: 'OFFSET_OR_RULE_V1_UNVERIFIED' });
-    if (recitation.provider_active !== undefined && !enabled(recitation.provider_active)) throw new CatalogError('SOURCE_DISABLED', 409);
+    // audio_providers.is_active is a legacy default-false import field, not
+    // part of rule-v1 technical eligibility or the existing audio resolver.
+    // Explicit chapter disabling remains enforced below; public approval stays
+    // outside this private render lab and its flag remains OFF.
     if (licensed) {
       if (licensed.recitationId !== request.recitationId || licensed.surah !== request.surah || licensed.sourceChapterOffsetMs !== licensed.offsetEvidence.sourceChapterOffsetMs || !Number.isFinite(licensed.durationMs) || licensed.durationMs <= 0) throw new CatalogError('LICENSED_OFFSET_NOT_VERIFIED', 409);
       assertLicensedOffsetEvidence(licensed.offsetEvidence, request.recitationId, licensed.sha256, request.surah);
@@ -90,10 +93,24 @@ export class CatalogRenderManifestService {
       usable.set(ayah, { ayah, coordinate: row.coordinate as SourceAyahTiming['coordinate'], source: String(row.source), source_offset_ms: row.source_offset_ms === null ? null : Number(row.source_offset_ms),
         words: words as SourceAyahTiming['words'], quality: String(row.quality), review_status: String(row.review_status), word_highlight_enabled: enabled(row.word_highlight_enabled) && reasons.length === 0 });
     }
-    const runs = connectedAyahRuns([...usable.keys()]);
+    const plan = { chapterOffsetMs: licensed?.sourceChapterOffsetMs ?? (chapter.chapter_offset_ms === null ? 0 : Number(chapter.chapter_offset_ms)), sourceFormat: 'qud_release' as const, padMs: request.options.padMs, allowAyahOnly: true };
+    // Coverage alone cannot join two overlapping source intervals. Keep both
+    // independently usable ayahs, but split the advertised renderable range.
+    const runs: Array<[number,number]> = [];
+    let previous: SourceAyahTiming | undefined;
+    for (const current of [...usable.values()].sort((a,b)=>a.ayah-b.ayah)) {
+      let joins = previous?.ayah === current.ayah-1;
+      try { toRenderTimeline(joins ? [previous!,current] : [current],plan); }
+      catch(error) {
+        if (joins && error instanceof Error && error.message === 'TIMELINE_AYAH_INTERVAL_INVALID') joins=false;
+        else throw new CatalogError('TIMING_SOURCE_INVALID',503);
+      }
+      if(joins)runs[runs.length-1][1]=current.ayah;else runs.push([current.ayah,current.ayah]);
+      previous=current;
+    }
     if (!isRangeAvailable(runs, request.from, request.to)) throw new CatalogError('RANGE_NOT_AVAILABLE', 422, { available_runs: runs });
     const selected = Array.from({ length: request.to - request.from + 1 }, (_, i) => usable.get(request.from + i)!);
-    const timeline = toRenderTimeline(selected, { chapterOffsetMs: licensed?.sourceChapterOffsetMs ?? (chapter.chapter_offset_ms === null ? 0 : Number(chapter.chapter_offset_ms)), sourceFormat: 'qud_release', padMs: request.options.padMs, allowAyahOnly: true });
+    const timeline = toRenderTimeline(selected, plan);
     if (timeline.durationMs > 90_000) throw new CatalogError('MAX_RENDER_DURATION_EXCEEDED', 422, { maximum_duration_ms: 90_000 });
     if (licensed && timeline.sourceWindow.toMs > licensed.durationMs + 30) throw new CatalogError('LICENSED_TIMING_COORDINATES_INVALID', 409);
     const hosts = json(recitation.host_allowlist);

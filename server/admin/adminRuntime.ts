@@ -12,6 +12,13 @@ import { registerCatalogAdminEndpoints } from '../routes/adminCatalog';
 import { createAdminApplicationRouter } from '../routes/admin/adminA1Endpoints';
 import { AdminAccessService } from './adminAccessService';
 import { RedisAdminRateGate, type AdminRateGate } from './adminRateGate';
+import { registerRenderLabEndpoints } from '../routes/admin/adminRenderLab';
+import { RenderLabService } from '../services/renderLabService';
+import { CatalogRenderManifestService } from '../services/catalogRenderManifest';
+import { readCatalogSettings } from '../services/recitationCatalogService';
+import { catalogStorageFromEnvironment } from '../services/catalogStorageRuntime';
+import { CatalogLicensedSourceResolver } from '../services/licensedSourceResolver';
+import { enqueueRenderJob } from '../services/renderQueueBroker';
 
 export interface AdminRuntimeOptions {
   db: CatalogDatabase;
@@ -22,6 +29,17 @@ export interface AdminRuntimeOptions {
   rate?: AdminRateGate;
 }
 
+/** Same authorization/admission service for HTTP and the root-operated SSH CLI. */
+export function createRenderLabService(db: CatalogDatabase, source: CatalogAudioSource, env: NodeJS.ProcessEnv = process.env): RenderLabService {
+  return new RenderLabService(db, { async build(request) {
+    const settings = await readCatalogSettings(db);
+    const storage = catalogStorageFromEnvironment(settings.storageAdapter ?? 'url_reference', 'read_only', [], env);
+    try { return await new CatalogRenderManifestService({ db, source, licensedStorage: storage,
+      licensedResolver: new CatalogLicensedSourceResolver(db, storage.adapter === 'r2' ? storage : null, source),
+    }).build(request); } finally { await storage.close?.(); }
+  } }, id => enqueueRenderJob(id, 'skia_canvas', 0, { attempts: 1 }));
+}
+
 /** Constructors perform no I/O or migrations. Only the public API process starts tasks. */
 export function createAdminRuntime(options: AdminRuntimeOptions) {
   const env = options.env ?? process.env;
@@ -29,15 +47,16 @@ export function createAdminRuntime(options: AdminRuntimeOptions) {
   const rate = options.rate ?? new RedisAdminRateGate(env);
   const links = new CatalogPeriodicLinkChecker(options.db, undefined, options.source);
   const worker = new AdminCatalogTaskWorker(options.db, (id, context) => access.actorForUser(id, context), links);
+  const lab = createRenderLabService(options.db, options.source, env);
   const router = createAdminApplicationRouter({
     db: options.db, access, rate, env, origins: options.origins,
-    register: register => registerCatalogAdminEndpoints(register, {
+    register: register => { registerCatalogAdminEndpoints(register, {
       db: options.db,
       catalog: new AdminCatalogService(options.db, new RecitationAdminService(options.db, options.source), new AdminCatalogImageValidator(), row => options.catalog.publicVisibilityReasons(row)),
       read: new AdminCatalogReadService(options.db),
       tasks: new AdminCatalogTaskService(options.db),
       reviews: new HumanReviewService(options.db),
-    }),
+    }); registerRenderLabEndpoints(register, lab); },
   });
   let stopping: Promise<void> | undefined, closing: Promise<void> | undefined;
   const stopTasks = (): Promise<void> => stopping ??= worker.close();

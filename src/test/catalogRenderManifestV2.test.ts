@@ -55,6 +55,12 @@ describe('D7 server-authoritative v2 manifest units', () => {
     const f = fixture(); f.timings[1].words = [[1, 0, 2000, 2500]];
     await expect(f.service.build(request)).rejects.toMatchObject({ code: 'RANGE_NOT_AVAILABLE', details: { available_runs: [[1, 1]] } }); expect(f.checkLink).not.toHaveBeenCalled();
   });
+  it('splits available runs at an actual inter-ayah overlap instead of repairing stored timing', async () => {
+    const f=fixture();f.timings[1].words=[[1,0,1450,1600],[2,1,1650,1900]];
+    await expect(f.service.build(request)).rejects.toMatchObject({code:'RANGE_NOT_AVAILABLE',details:{available_runs:[[1,1],[2,2]]}});
+    expect(f.checkLink).not.toHaveBeenCalled();
+    expect((await f.service.build({...request,to:1})).canonicalAyahRange.endAyah).toBe(1);
+  });
   it.each([
     { words: [[1, 0, 1000, 1100], [2, 0, 1150, 1500]] },
     { words: [[1, 0, 1000, 1200], [2, 1, 1190, 1500]] },

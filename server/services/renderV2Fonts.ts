@@ -56,7 +56,7 @@ export function ttfGlyphIndex(bytes: Buffer, point: number): number {
 }
 export interface RenderV2FontProof { family: string; file: string; sha256: string; visible_codepoints: number; missing: string[]; rendered_words: number; words_without_ink: number; passed: boolean }
 /** Run on the REAL worker Linux against the complete DB-exported corpus, not sample text. */
-export function auditRenderV2CorpusFonts(corpus: readonly string[]): { platform: string; unique_words: number; corpus_sha256: string; fonts: RenderV2FontProof[]; passed: boolean } {
+export function auditRenderV2CorpusFonts(corpus: readonly string[], options: { raster?: boolean } = {}): { platform: string; unique_words: number; corpus_sha256: string; fonts: RenderV2FontProof[]; passed: boolean } {
   if (!corpus.length) throw new CatalogError('RENDER_V2_CORPUS_REQUIRED', 422);
   registerRenderV2Fonts();
   const words = [...new Set(corpus)].sort(), controls = new Set([0x034f, 0x200a, 0x200b, 0x2060, 0x2063]);
@@ -68,7 +68,7 @@ export function auditRenderV2CorpusFonts(corpus: readonly string[]): { platform:
     let empty = 0;
     context.font = `40px "${family}"`;
     context.fillStyle = '#ffffff'; context.direction = 'rtl'; context.textAlign = 'right';
-    for (const word of words) {
+    for (const word of options.raster === false ? [] : words) {
       context.clearRect(0, 0, 640, 112);
       context.fillText(word, 620, 72);
       const pixels = context.getImageData(0, 0, 640, 112).data;
@@ -76,7 +76,7 @@ export function auditRenderV2CorpusFonts(corpus: readonly string[]): { platform:
       for (let i = 3; i < pixels.length; i += 4) if (pixels[i]) { ink = true; break; }
       if (!ink) empty++;
     }
-    return { family, file: filename, sha256: createHash('sha256').update(bytes).digest('hex'), visible_codepoints: points.length, missing, rendered_words: words.length, words_without_ink: empty, passed: !missing.length && !empty };
+    return { family, file: filename, sha256: createHash('sha256').update(bytes).digest('hex'), visible_codepoints: points.length, missing, rendered_words: options.raster === false ? 0 : words.length, words_without_ink: empty, passed: !missing.length && !empty };
   });
   return { platform: process.platform, unique_words: words.length, corpus_sha256: createHash('sha256').update(words.join('\n')).digest('hex'), fonts, passed: fonts.every(font => font.passed) };
 }

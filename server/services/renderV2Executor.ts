@@ -2,7 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { performance } from 'node:perf_hooks';
-import { RenderManifestV2Schema, toRenderManifestV1Internal, type RenderManifestV2 } from '../models/renderManifestV2';
+import { RenderManifestV2Schema, timelineV2ToShared, toRenderManifestV1Internal, type RenderManifestV2 } from '../models/renderManifestV2';
+import { assertTimelineValid } from '../../shared/timing/toRenderTimeline';
+import { probeMediaFile } from './mediaProbeService';
 import { renderNativeSceneVideo } from './nativeSceneVideoRenderer';
 import type { DeterministicRenderOptions, DeterministicRenderResult } from './deterministicVideoRenderer';
 import { prepareRenderV2Audio } from './renderV2Audio';
@@ -29,6 +31,8 @@ export async function renderCatalogV2Video(options: RenderCatalogV2Options): Pro
   try {
     options.onProgress?.(1, 0, 0, 'جلب الصوت المسموح وقياس خطة القص...');
     const audio = await prepareRenderV2Audio(manifest.audioPlan, scratch, manifest.timeline.durationMs, options.signal);
+    const audioProbe = await probeMediaFile(audio.audioPath);
+    assertTimelineValid(timelineV2ToShared(manifest.timeline), Math.round(audioProbe.durationSeconds * 1000));
     const sceneManifest = toRenderManifestV1Internal(manifest, audio.audioPath);
     const targets = buildGoldenTargets(manifest), golden: GoldenFrameProof[] = [];
     const transitions: RenderV2QaReport['highlighting_transitions'] = [];
@@ -55,7 +59,7 @@ export async function renderCatalogV2Video(options: RenderCatalogV2Options): Pro
           painted_words: state.paintedWords, ...image });
       },
     });
-    const correlation = await measureRenderV2AudioSync(options.outputPath, audio, manifest.timeline.sourceWindow.fromMs, options.signal);
+    const correlation = await measureRenderV2AudioSync(options.outputPath, audio, manifest.timeline.sourceWindow.fromMs, options.signal, 1000 / manifest.options.fps);
     const black = await countRenderV2BlackFrames(options.outputPath, options.signal);
     const fontProof = auditRenderV2CorpusFonts(manifest.canonicalAyahRange.ayahs.flatMap(ayah => ayah.words.map(word => word.text)));
     const selectedFont = fontProof.fonts.find(font => font.family === manifest.options.fontFamily)!;
@@ -77,6 +81,13 @@ export async function renderCatalogV2Video(options: RenderCatalogV2Options): Pro
     if (externalAssets !== 0) failures.push('EXTERNAL_ASSET_REQUEST_DETECTED');
     if (!selectedFont.passed) failures.push('TOFU_GLYPHS_DETECTED');
     if (rss.limit !== null && rss.total > rss.limit) failures.push('WORKER_MEMORY_LIMIT_EXCEEDED');
+    const referencePcmBytes=(await fs.promises.stat(audio.referencePcmPath)).size;
+    const sourceDurationMs=referencePcmBytes/(2*16000)*1000;
+    const clipRatio=manifest.timeline.durationMs/sourceDurationMs,fetchRatio=audio.audioBytesFetched/audio.sourceSizeBytes;
+    // A clip <=10% of its chapter must fetch <=25% when Range is supported.
+    // Full short chapters are not compared to the partial-chapter criterion.
+    const rangeEfficiency=audio.rangeSupported&&clipRatio<=.1?fetchRatio<=.25:null;
+    if(rangeEfficiency===false)failures.push('AUDIO_RANGE_EFFICIENCY_FAILED');
     const { rawStreams: _raw, ...probe } = result.probe;
     const qaReport: RenderV2QaReport = { schema_version: 'd7-qa-1', passed: failures.length === 0, failures,
       expected_duration_ms: manifest.timeline.durationMs, video_duration_ms: duration * 1000, duration_difference_ms: difference, duration_tolerance_ms: tolerance,
@@ -85,6 +96,8 @@ export async function renderCatalogV2Video(options: RenderCatalogV2Options): Pro
       audio_correlation: correlation, audio_bytes_fetched: audio.audioBytesFetched, audio_reference_bytes_fetched: audio.referenceBytesFetched,
       audio_total_qa_bytes_fetched: audio.audioBytesFetched + audio.referenceBytesFetched, audio_source_size_bytes: audio.sourceSizeBytes,
       audio_range_supported: audio.rangeSupported, audio_full_download_fallback: audio.fullDownloadFallback, warnings: audio.warnings,
+      audio_seek_method: audio.seekMethod,
+      audio_fetch_to_source_size_ratio:fetchRatio,audio_clip_to_source_duration_ratio:clipRatio,audio_range_efficiency_passed:rangeEfficiency,
       audio_requests: audio.requests, external_asset_requests: externalAssets,
       render_time_ms: performance.now() - started, peak_worker_rss_bytes: rss.worker, peak_worker_and_children_rss_bytes: rss.total,
       memory_limit_bytes: rss.limit, memory_sample_interval_ms: 100, selected_font: manifest.options.fontFamily, font_assets_local: true,

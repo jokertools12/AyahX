@@ -1,0 +1,22 @@
+{
+  "checked_at": "2026-10-11T19:53:01.890Z",
+  "local_only": true,
+  "read_only": true,
+  "database": "ayahx_d2_d7_restored_20261011",
+  "seed": 730071,
+  "requested_ranges": 10000,
+  "audio_measurement": "NOT_PERFORMED: algebraic source/render properties only",
+  "passed": false,
+  "mysql_version": "9.7.2",
+  "candidate_chapters": 6623,
+  "completed_ranges": 282,
+  "failure": "TIMELINE_AYAH_INTERVAL_INVALID",
+  "failure_context": {
+    "iteration": 282,
+    "recitation_id": "c72e7816-cf79-ae8c-be62-fc3285baf877",
+    "surah": 112,
+    "from": 3,
+    "to": 4,
+    "pad_ms": 40
+  }
+}

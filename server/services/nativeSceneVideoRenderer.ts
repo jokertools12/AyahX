@@ -126,7 +126,9 @@ export async function renderNativeSceneVideo(
       '-b:a', audioBitrate,
       '-ar', '44100',
       '-ac', '2',
-      '-shortest',
+      ...((manifest as RenderManifest & { renderV2Timeline?: unknown }).renderV2Timeline
+        ? ['-frames:v', String(totalFrames)]
+        : ['-shortest']),
       '-movflags', '+faststart',
       outputPath,
     ];

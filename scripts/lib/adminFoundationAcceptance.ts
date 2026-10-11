@@ -145,9 +145,11 @@ export async function runAdminFoundationMigration(session: AdminMigrationSession
   const selectors = { admin_roles: roles.length ? 'WHERE slug IN (' + roles.map(r => lit(r.slug)).join(',') + ')' : 'WHERE 1=0', admin_permissions: oldPermissionIds.length ? 'WHERE id IN (' + oldPermissionIds.map(r => lit(r.id)).join(',') + ')' : 'WHERE 1=0' };
   const beforeProjection = await projections(session, before, selectors, promote, false);
   const oldCatalog = before.tables.some(t => t.name === 'permissions') ? jsonRows<{ key: string }>(await session.read("SELECT JSON_OBJECT('key',permission_key) FROM permissions ORDER BY permission_key;")) : [];
-  const newPermissions = Object.keys(ADMIN_PERMISSIONS).filter(key => !oldCatalog.some(p => p.key === key));
+  // Migration007 owns render.test; the approved 006 plan remains frozen.
+  const foundationPermissions = Object.keys(ADMIN_PERMISSIONS).filter(key => key !== 'render.test');
+  const newPermissions = foundationPermissions.filter(key => !oldCatalog.some(p => p.key === key));
   const newRoles = ADMIN_ROLES.filter(role => !roles.some(r => r.slug === role));
-  const newGrants = ADMIN_ROLES.flatMap(role => roles.find(r => r.slug === role)?.seeded_at ? [] : DEFAULT_ROLE_PERMISSIONS[role].filter(key => { const dot = key.indexOf('.'); return !oldPermissionIds.some(g => g.role === role && (g.permission === key || g.resource === key.slice(0, dot) && g.action === key.slice(dot + 1))); }));
+  const newGrants = ADMIN_ROLES.flatMap(role => roles.find(r => r.slug === role)?.seeded_at ? [] : DEFAULT_ROLE_PERMISSIONS[role].filter(key => key !== 'render.test').filter(key => { const dot = key.indexOf('.'); return !oldPermissionIds.some(g => g.role === role && (g.permission === key || g.resource === key.slice(0, dot) && g.action === key.slice(dot + 1))); }));
   const catalogFlag = await session.read("SELECT value_text,is_secret FROM system_settings WHERE key_name='quran_catalog_v2';");
   check(catalogFlag.trim() === 'false\t0' || catalogFlag.trim() === '0\t0' || !catalogFlag.trim(), 'CATALOG_FLAG_MUST_REMAIN_OFF');
   Object.assign(report, { server_uuid: before.server_uuid, mysql_version: before.mysql_version, row_counts_before: before.row_counts, checksums_before: before.checksums, critical_before: before.critical_counts, original_column_sha256_before: beforeProjection, disk_before: diskBefore, connection_preflight: { threads_connected: threads, max_connections: max, max_allowed_packet: packet, uptime_seconds: Number(resources.Uptime) }, planned: { tables: [...ADMIN_FOUNDATION_TABLES], nullable_columns: Object.fromEntries(Object.entries(adminFoundationColumns).map(([table, fields]) => [table, Object.keys(fields)])), role_upgrades: promoteCount, role_seeds: newRoles, permission_catalog_rows_to_insert: newPermissions.length, grant_rows_to_insert: newGrants.length } });
@@ -178,9 +180,9 @@ export async function runAdminFoundationMigration(session: AdminMigrationSession
     const grants = jsonRows<{ role: string; permission: string }>(await session.read("SELECT JSON_OBJECT('role',role_slug,'permission',permission_key) FROM admin_permissions WHERE permission_key IS NOT NULL ORDER BY role_slug,permission_key;"));
     const seededRoles = jsonRows<{ slug: string; seeded_at: string | null }>(await session.read("SELECT JSON_OBJECT('slug',slug,'seeded_at',seeded_at) FROM admin_roles ORDER BY slug;"));
     for (const role of ADMIN_ROLES) check(Boolean(seededRoles.find(row => row.slug === role)?.seeded_at), 'ROLE_SEED_MARKER_MISSING');
-    for (const role of ADMIN_ROLES) if (!roles.find(r => r.slug === role)?.seeded_at) for (const permission of DEFAULT_ROLE_PERMISSIONS[role]) check(grants.some(g => g.role === role && g.permission === permission), 'DEFAULT_GRANT_SEED_MISSING');
+    for (const role of ADMIN_ROLES) if (!roles.find(r => r.slug === role)?.seeded_at) for (const permission of DEFAULT_ROLE_PERMISSIONS[role].filter(key => key !== 'render.test')) check(grants.some(g => g.role === role && g.permission === permission), 'DEFAULT_GRANT_SEED_MISSING');
     const permissions = jsonRows<{ key: string }>(await session.read("SELECT JSON_OBJECT('key',permission_key) FROM permissions ORDER BY permission_key;"));
-    for (const key of Object.keys(ADMIN_PERMISSIONS)) check(permissions.some(p => p.key === key), 'PERMISSION_CATALOG_SEED_MISSING');
+    for (const key of foundationPermissions) check(permissions.some(p => p.key === key), 'PERMISSION_CATALOG_SEED_MISSING');
     report.collation_nullability_indexes_triggers_verified = true;
   }
   Object.assign(report, { passed: true, protected_columns_unchanged: true, settings_unchanged: true, allowed_user_role_upgrade_only: true, d1: after.d1_counts, d3: after.row_counts.ayah_timings, canonical_checksum: after.canonical_checksum, row_counts_after: after.row_counts, checksums_after: after.checksums, critical_after: after.critical_counts, disk_after: await session.storage(), elapsed_ms: (options.now ?? Date.now)() - started });

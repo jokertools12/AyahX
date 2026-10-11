@@ -73,12 +73,13 @@ export async function enqueueRenderJob(
   jobId: string,
   engine: RenderQueueEngine = 'ffmpeg_ass',
   priority = 0,
+  execution: { attempts?: number } = {},
 ): Promise<Job> {
   // MySQL is the source of truth. Redis carries only the opaque job id so a
   // stale manifest can never be replayed from a duplicated BullMQ payload.
   // BullMQ reserves ':' for internal keys; use a textual prefix instead of a
   // numeric-only id while retaining a stable idempotency key.
-  const options: JobsOptions = { jobId: `render-${jobId}`, priority, attempts: 2 };
+  const options: JobsOptions = { jobId: `render-${jobId}`, priority, attempts: execution.attempts ?? 2 };
   activeEnqueues += 1;
   if (producerIdleTimer) clearTimeout(producerIdleTimer);
   try {

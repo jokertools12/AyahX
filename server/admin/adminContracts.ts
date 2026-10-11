@@ -10,6 +10,7 @@ export interface AdminRequestContext {
 export interface AdminEndpointDefinition {
   method: 'get' | 'post' | 'patch' | 'put' | 'delete'; path: string; permission: AdminPermission;
   superAdminOnly?: boolean; enrollmentAllowed?: boolean; writes?: boolean;
+  responseStatus?: 202;
   body?: ZodType; query?: ZodType;
   handler(ctx: AdminRequestContext): Promise<{ data: unknown; meta?: Record<string, unknown> }>;
 }

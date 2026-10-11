@@ -22,9 +22,11 @@ export interface RenderV2QaReport {
   ffprobe: Omit<MediaProbeResult, 'rawStreams'>; black_frames: number; black_scan_frames: number;
   golden_frames: GoldenFrameProof[]; highlighting_transitions: Array<{ time_ms: number; word_keys: string[]; occurrence_id: string | null; ayah: number; mode: string }>;
   highlighting_transition_max_error_ms: number;
-  audio_correlation: { score: number; lag_ms: number; sample_rate: number; compared_samples: number; method: string; passed: boolean };
+  audio_correlation: { score: number; lag_ms: number; sample_rate: number; compared_samples: number; duration_difference_ms: number; duration_tolerance_ms: number; method: string; passed: boolean };
   audio_bytes_fetched: number; audio_reference_bytes_fetched: number; audio_total_qa_bytes_fetched: number;
   audio_source_size_bytes: number; audio_range_supported: boolean; audio_full_download_fallback: boolean; warnings: string[];
+  audio_seek_method: PreparedRenderV2Audio['seekMethod'];
+  audio_fetch_to_source_size_ratio: number; audio_clip_to_source_duration_ratio: number; audio_range_efficiency_passed: boolean | null;
   audio_requests: PreparedRenderV2Audio['requests']; external_asset_requests: number;
   render_time_ms: number; peak_worker_rss_bytes: number; peak_worker_and_children_rss_bytes: number; memory_limit_bytes: number | null; memory_sample_interval_ms: number;
   memory_measurement_scope: 'linux_worker_and_children_sampled_rss' | 'worker_only_children_unavailable';
@@ -46,7 +48,7 @@ export function buildGoldenTargets(manifest: RenderManifestV2): Map<number, Arra
   }
   return targets;
 }
-export function rawPcmCorrelation(reference: Int16Array, actual: Int16Array, sampleRate = 16_000): RenderV2QaReport['audio_correlation'] {
+export function rawPcmCorrelation(reference: Int16Array, actual: Int16Array, sampleRate = 16_000, durationToleranceMs = 1000 / 30): RenderV2QaReport['audio_correlation'] {
   if (reference.length < sampleRate / 10 || actual.length < sampleRate / 10) throw new CatalogError('RENDER_V2_AUDIO_REFERENCE_TOO_SHORT', 422);
   const bound = Math.round(sampleRate * .150), length = Math.min(reference.length, actual.length);
   // Fixed interior sample positions, same for every lag; centered raw PCM NCC.
@@ -66,7 +68,8 @@ export function rawPcmCorrelation(reference: Int16Array, actual: Int16Array, sam
   const center = bestLag;
   for (let lag = Math.max(-bound, center - coarseStep); lag <= Math.min(bound, center + coarseStep); lag++) { const result = scoreAt(lag); if (result.score > best.score) { best = result; bestLag = lag; } }
   const lagMs = bestLag * 1000 / sampleRate;
-  return { score: best.score, lag_ms: lagMs, sample_rate: sampleRate, compared_samples: best.count, method: 'centered_raw_pcm_ncc_full_decode_independent_reference', passed: best.score >= .95 && Math.abs(lagMs) <= 40 };
+  const durationDifferenceMs = Math.abs(reference.length - actual.length) * 1000 / sampleRate;
+  return { score: best.score, lag_ms: lagMs, sample_rate: sampleRate, compared_samples: best.count, duration_difference_ms: durationDifferenceMs, duration_tolerance_ms: durationToleranceMs, method: 'centered_raw_pcm_ncc_full_decode_independent_reference', passed: best.score >= .95 && Math.abs(lagMs) <= 40 && durationDifferenceMs <= durationToleranceMs + .001 };
 }
 function numericFile(file: string): number | null {
   if (!fs.existsSync(file)) return null;
@@ -89,20 +92,22 @@ export function beginRenderV2MemoryMonitor(): { child: (child: ChildProcess) => 
     return { worker: peakWorker, total: peakTotal, limit };
   } };
 }
-export async function measureRenderV2AudioSync(outputPath: string, audio: PreparedRenderV2Audio, sourceFromMs: number, signal?: AbortSignal): Promise<RenderV2QaReport['audio_correlation']> {
+export async function measureRenderV2AudioSync(outputPath: string, audio: PreparedRenderV2Audio, sourceFromMs: number, signal?: AbortSignal, durationToleranceMs = 1000 / 30): Promise<RenderV2QaReport['audio_correlation']> {
   const { stdout } = await runRenderV2Process(getFfmpegBinary(), ['-nostdin', '-v', 'error', '-threads', '1', '-i', outputPath, '-map', '0:a:0', '-vn', '-ac', '1', '-ar', '16000', '-f', 's16le', 'pipe:1'], { signal, outputLimitBytes: 4_000_000 });
   const source = await fs.promises.open(audio.referencePcmPath, 'r');
   const wanted = Math.round(audio.durationMs * 16_000 / 1000) * 2, reference = Buffer.alloc(wanted);
   try { const { bytesRead } = await source.read(reference, 0, wanted, Math.round(sourceFromMs * 16_000 / 1000) * 2); if (bytesRead !== wanted) throw new CatalogError('RENDER_V2_AUDIO_REFERENCE_TRUNCATED', 422); }
   finally { await source.close(); }
   const int16 = (bytes: Buffer) => { const samples = new Int16Array(Math.floor(bytes.length / 2)); for (let i = 0; i < samples.length; i++) samples[i] = bytes.readInt16LE(i*2); return samples; };
-  return rawPcmCorrelation(int16(reference), int16(stdout));
+  return rawPcmCorrelation(int16(reference), int16(stdout), 16_000, durationToleranceMs);
 }
-/** Decode EVERY encoded video frame at 1x1: black count is measured, not inferred from scene settings. */
+/** Decode every full-resolution frame. Maximum luma preserves small text on black. */
 export async function countRenderV2BlackFrames(outputPath: string, signal?: AbortSignal): Promise<{ black: number; frames: number }> {
-  const result = await runRenderV2Process(getFfmpegBinary(), ['-nostdin', '-v', 'error', '-threads', '1', '-i', outputPath, '-map', '0:v:0', '-an', '-vf', 'scale=1:1:flags=area', '-pix_fmt', 'rgb24', '-f', 'rawvideo', 'pipe:1'], { signal, outputLimitBytes: 32_768 });
-  let black = 0; for (let i = 0; i + 2 < result.stdout.length; i += 3) if (Math.max(result.stdout[i], result.stdout[i+1], result.stdout[i+2]) <= 3) black++;
-  return { black, frames: Math.floor(result.stdout.length / 3) };
+  const result = await runRenderV2Process(getFfmpegBinary(), ['-nostdin', '-v', 'error', '-threads', '1', '-i', outputPath, '-map', '0:v:0', '-an', '-vf', 'signalstats,metadata=mode=print:key=lavfi.signalstats.YMAX:file=-', '-f', 'null', '-'], { signal, outputLimitBytes: 2_000_000 });
+  const maxima = [...result.stdout.toString('utf8').matchAll(/lavfi\.signalstats\.YMAX=(\d+)/gu)].map(match => Number(match[1]));
+  if (!maxima.length) throw new CatalogError('RENDER_V2_BLACK_SCAN_EMPTY', 502);
+  // Limited-range luma black is 16; tolerance covers encoder rounding only.
+  return { black: maxima.filter(value => value <= 20).length, frames: maxima.length };
 }
 export async function writeGoldenPng(directory: string, frame: number, bytes: Buffer): Promise<{ png: string; png_sha256: string }> {
   await fs.promises.mkdir(directory, { recursive: true });
