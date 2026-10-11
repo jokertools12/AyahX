@@ -1,0 +1,52 @@
+{
+  "checked_at": "2026-10-11T08:57:52.787Z",
+  "environment": "e726848b-49ec-45ab-bce8-a1462dd85bc8",
+  "read_only": true,
+  "services": [
+    {
+      "name": "admin-media-scanner",
+      "state": "offline",
+      "hasVolume": true,
+      "active_deployments": []
+    },
+    {
+      "name": "alignment-worker",
+      "state": "offline",
+      "hasVolume": false,
+      "active_deployments": []
+    },
+    {
+      "name": "Redis",
+      "state": "offline",
+      "hasVolume": true,
+      "active_deployments": []
+    },
+    {
+      "name": "render-worker-skia",
+      "state": "offline",
+      "hasVolume": false,
+      "active_deployments": []
+    },
+    {
+      "name": "render-control",
+      "state": "offline",
+      "hasVolume": false,
+      "active_deployments": []
+    },
+    {
+      "name": "AyahX",
+      "state": "offline",
+      "hasVolume": false,
+      "active_deployments": []
+    },
+    {
+      "name": "MySQL",
+      "state": "offline",
+      "hasVolume": true,
+      "active_deployments": []
+    }
+  ],
+  "all_offline": true,
+  "configuration_changes": 0,
+  "staging_restarted": false
+}

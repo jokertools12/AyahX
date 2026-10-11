@@ -34,6 +34,8 @@
     "status": "PASSED_REAL_R2_LOCAL_MYSQL_SCOPED_PIPELINE",
     "visual_inspection": "owned fixture expected black portrait frame observed; ffprobe audio/video and 5500ms checked; not product render acceptance or Quran identity"
   },
-  "production_deployment_accepted": false,
-  "short_audio_rejection": "ACTUAL_R2_SHORT_AUDIO_REJECTED_BEFORE_ATTACH passed; rejection preserves old active source and audits reason"
+  "production_deployment_accepted": true,
+  "short_audio_rejection": "ACTUAL_R2_SHORT_AUDIO_REJECTED_BEFORE_ATTACH passed; rejection preserves old active source and audits reason",
+  "production_acceptance_evidence_ref": "docs/data/d4-final-operations-proof.json",
+  "production_acceptance_checked_at": "2026-10-11T09:04:05.037Z"
 }

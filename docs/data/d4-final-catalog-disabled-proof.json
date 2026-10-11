@@ -1,0 +1,33 @@
+{
+  "checked_at": "2026-10-11T08:53:23.372Z",
+  "passed": true,
+  "read_only": true,
+  "requests": [
+    {
+      "path": "/api/catalog/reciters",
+      "http_status": 404,
+      "code": "QURAN_CATALOG_DISABLED",
+      "cache_control": "no-store"
+    },
+    {
+      "path": "/api/catalog/reciters/ahmed-saud/recitations",
+      "http_status": 404,
+      "code": "QURAN_CATALOG_DISABLED",
+      "cache_control": "no-store"
+    },
+    {
+      "path": "/api/catalog/recitations/ahmed_saud_mp3quran/surahs",
+      "http_status": 404,
+      "code": "QURAN_CATALOG_DISABLED",
+      "cache_control": "no-store"
+    },
+    {
+      "path": "/api/catalog/recitations/ahmed_saud_mp3quran/chapters/1/availability",
+      "http_status": 404,
+      "code": "QURAN_CATALOG_DISABLED",
+      "cache_control": "no-store"
+    }
+  ],
+  "database_writes": 0,
+  "model_calls": 0
+}

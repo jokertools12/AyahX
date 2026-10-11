@@ -1,0 +1,27 @@
+{
+  "summary": {
+    "discovered": 16,
+    "selected": 10,
+    "executed": 10,
+    "passed": 10,
+    "failed": 0,
+    "interrupted": 0,
+    "flaky": 0,
+    "skipped": 0
+  },
+  "raw_reports_private": true,
+  "passed": true,
+  "checked_at": "2026-10-11T08:54:37.0107992Z",
+  "report_sha256": "7504f96901b953212dfba8b01ce695147e75f0b219e5862522833e8f9dc47ae3",
+  "finished_at": "2026-10-11T08:53:12.423Z",
+  "authentication_used": false,
+  "run_id": "01a12a2a-0e9e-78a7-a243-bdeec648edf4",
+  "model_calls": 0,
+  "command": "AYAHX_E2E_URL=https://ayahx.com npm run test:e2e -- tests/public.e2e.ts",
+  "api_writes": 0,
+  "targets": [
+    "desktop",
+    "mobile"
+  ],
+  "started_at": "2026-10-11T08:52:42.268Z"
+}

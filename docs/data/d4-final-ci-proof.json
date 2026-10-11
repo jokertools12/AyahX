@@ -1,0 +1,61 @@
+{
+  "checked_at": "2026-10-11T08:46:51.384Z",
+  "pr_url": "https://github.com/jokertools12/AyahX/pull/14",
+  "head_sha": "5e6c9a64e75a6998f8cef8d2b64821628b9dc10b",
+  "base_sha": "ec593cf689a1402155fe41f2016720c82ef78118",
+  "passed": true,
+  "workflows": [
+    {
+      "id": 38125784107,
+      "name": "Catalog quality",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jokertools12/AyahX/actions/runs/38125784107"
+    },
+    {
+      "id": 38125784097,
+      "name": "AyahX E2E",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jokertools12/AyahX/actions/runs/38125784097"
+    }
+  ],
+  "npm_test": {
+    "passed": 893,
+    "failed": 0,
+    "skipped": 11
+  },
+  "lint": {
+    "files": 135,
+    "new_messages": 0,
+    "existing_messages": 2
+  },
+  "tsc": true,
+  "build": true,
+  "ci_summary": [
+    "2026-10-11T08:44:45.9137002Z {\"checked_at\":\"2026-10-11T08:44:45.911Z\",\"base\":\"ec593cf689a1402155fe41f2016720c82ef78118\",\"files\":135,\"new_messages\":[],\"existing_messages\":[{\"file\":\"server/index.ts\",\"rule\":\"@typescript-eslint/no-explicit-any\",\"severity\":1,\"line\":229,\"message\":\"Unexpected any. Specify a different type.\"},{\"file\":\"server/index.ts\",\"rule\":\"@typescript-eslint/no-explicit-any\",\"severity\":1,\"line\":230,\"message\":\"Unexpected any. Specify a different type.\"}],\"passed\":true}",
+    "2026-10-11T08:45:48.6155142Z  Test Files  124 passed | 5 skipped (129)",
+    "2026-10-11T08:45:48.6210888Z       Tests  893 passed | 11 skipped (904)",
+    "2026-10-11T08:45:55.2508086Z ✓ built in 6.17s"
+  ],
+  "initial_failed_run": "https://github.com/jokertools12/AyahX/actions/runs/38125472142",
+  "initial_failure_diagnosis": "docs/data/d4-ci-original-master-diagnosis.json",
+  "main_workflows": [
+    {
+      "url": "https://github.com/jokertools12/AyahX/actions/runs/38126019382",
+      "conclusion": "success",
+      "name": "AyahX E2E",
+      "status": "completed",
+      "id": 38126019382,
+      "event": "push"
+    },
+    {
+      "url": "https://github.com/jokertools12/AyahX/actions/runs/38126019351",
+      "conclusion": "success",
+      "name": "Catalog quality",
+      "status": "completed",
+      "id": 38126019351,
+      "event": "push"
+    }
+  ]
+}

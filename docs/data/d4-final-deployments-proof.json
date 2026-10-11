@@ -1,0 +1,42 @@
+{
+  "checked_at": "2026-10-11T08:52:27.087Z",
+  "project": "6394b364-57bc-4736-8ce1-10dcf382c1e5",
+  "environment": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+  "commit": "e648d86e4fca71d2e3f431f2ef77754eaa286a85",
+  "passed": true,
+  "affected_services": [
+    {
+      "id": "376365e9-bd22-4357-be1f-aee5be129d53",
+      "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "status": "SUCCESS",
+      "commit": "e648d86e4fca71d2e3f431f2ef77754eaa286a85",
+      "updatedAt": "2026-10-11T08:47:31.269Z"
+    },
+    {
+      "id": "fefea1c6-b8da-4989-8593-8c54dee8e503",
+      "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "status": "SUCCESS",
+      "commit": "e648d86e4fca71d2e3f431f2ef77754eaa286a85",
+      "updatedAt": "2026-10-11T08:51:06.494Z"
+    },
+    {
+      "id": "73dabfec-0198-4c7a-964b-e690d44b9e1e",
+      "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "status": "SUCCESS",
+      "commit": "e648d86e4fca71d2e3f431f2ef77754eaa286a85",
+      "updatedAt": "2026-10-11T08:51:24.132Z"
+    },
+    {
+      "id": "35ebc766-fbf0-4d91-8f1e-e403c5895560",
+      "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "status": "SUCCESS",
+      "commit": "e648d86e4fca71d2e3f431f2ef77754eaa286a85",
+      "updatedAt": "2026-10-11T08:51:35.366Z"
+    }
+  ],
+  "logs_window_since": "2026-10-11T08:51:35.366Z",
+  "logs_10_minutes_accepted": true,
+  "baseline_rollback": "docs/data/d4-predeploy-rollback-targets.json",
+  "acceptance_checked_at": "2026-10-11T09:04:05.037Z",
+  "logs_evidence_ref": "docs/data/d4-final-health-logs-proof.json"
+}
