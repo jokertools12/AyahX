@@ -1,0 +1,10 @@
+{
+  "checked_at": "2026-10-11T08:05:06.0848858Z",
+  "scope": "local_unit_mutation_only_no_DB_no_cloud",
+  "file": "server/services/catalogContracts.ts",
+  "mutation": "negate enabled gate in isPubliclyVisible",
+  "mutated_exit": 1,
+  "restored_exit": 0,
+  "source_sha256_restored": "bcacf26da67e927743abb2d967399efc8b2fb5d50315f15f118172f598f8a25c",
+  "passed": true
+}

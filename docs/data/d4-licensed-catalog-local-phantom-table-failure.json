@@ -1,0 +1,87 @@
+{
+  "scope": "local_mysql_real_sql_offline_audio_transports",
+  "database": "ayahx_d4_licensed_acceptance_full_20261011",
+  "template": "ayahx_d4_catalog_20261010",
+  "production_written": false,
+  "cloud_access": false,
+  "network_audio_requests": 0,
+  "actual_r2_acceptance": false,
+  "synthetic_human_approvals": true,
+  "started_at": "2026-10-11T07:40:02.186Z",
+  "checks": [],
+  "mysql_version": "9.7.2",
+  "template_before": {
+    "users": {
+      "count": 13,
+      "checksum": 1797264518
+    },
+    "user_roles": {
+      "count": 13,
+      "checksum": 655683359
+    },
+    "quran_surahs": {
+      "count": 114,
+      "checksum": 1262901823
+    },
+    "quran_ayahs": {
+      "count": 6236,
+      "checksum": 3480017302
+    },
+    "quran_words": {
+      "count": 77433,
+      "checksum": 3191416149
+    },
+    "ayah_timings": {
+      "count": 422463,
+      "checksum": 866958104
+    },
+    "recitations": {
+      "count": 69,
+      "checksum": 1034036773
+    },
+    "recitation_chapters": {
+      "count": 7765,
+      "checksum": 4003462324
+    },
+    "human_review_items": {
+      "count": 640,
+      "checksum": 3401210194
+    },
+    "storage_objects": {
+      "count": 0,
+      "checksum": 0
+    },
+    "recitation_source_urls": {
+      "count": 1024,
+      "checksum": 2954236618
+    }
+  },
+  "scratch_created": true,
+  "template_ddl_sha256": {
+    "audio_providers": "4f7442df305dc342e387c66f585c468186061150bbf84c559491edc7b0ef3c8f",
+    "audit_logs": "983aca628668030e01762f3d75fae8f58205955dda38a202400ce1dd2d2bc4e9",
+    "ayah_timing_history": "62d8482ff9cf253fc92831c01a83c2121bebbe5640fe7a30df69010811233f50",
+    "ayah_timings": "b40ec1ec6573827d62a3e44697fab1a70cb222c8ae752bee8703ef9148dec4eb",
+    "human_review_items": "96853b608213e9062006d9b2b0c0e67eabcabd0d10e3544e7958f3f4374c35af",
+    "import_jobs": "adf4a12cc6a299aabf4686ea4f2b9f70686bac943e8a7dfc3dea49b1089fbb38",
+    "quran_ayahs": "c9233a1e009f994a86f518108ec848662894e1d3543d09ce036a6ef7a332682e",
+    "quran_surahs": "32203d45bca25ae47c7018839d00837ef0ac87c95ee85aa73452eed757e04911",
+    "quran_words": "2cd36ae1bb009f291ba2acfb7365c8d1ccb49c86a5de0baebb6ca06afc4553d1",
+    "recitation_audition_samples": "a284db312a7514069ab7bdc021d5a8caabf9dcc9e29c78a4b294223bdd390a7a",
+    "recitation_chapters": "fe333129fd11ba1e5de8398a8279fab191d28d29e2f5c5520068875c8c6014db",
+    "recitation_source_urls": "4ff5e0f97d0854ff5d9fbccb2aaa45506166ad86f76028eae5bc7e1c289bd62a",
+    "recitation_voice_reviews": "0e47f0dfce71af2be933d0593fde2ea355b5d2a75f6fbe642d01dac5dca484d1",
+    "recitation_youtube_sources": "dd14cb1de0bfa32bb1b4f53efe156d76efd7d56a9dc663b726e0382cb007860a",
+    "recitations": "80c74675d47b7f492b72063103a143c33f69f199cc8740ffd7911bb8fb3c9e21",
+    "reciters": "666ba361327c087b6ace54f7f55d431e90b1fd609128ff7e4a103e5e54139f48",
+    "storage_objects": "6724b1a2348d54787b22cddf4a79668c5381345d3f14ab171e41c237d3ea8c2d",
+    "system_settings": "18f3a081ffd64b258ee3c21e3a8471c6ee630b8b5adf9daf0bf6f7ebd4250186",
+    "user_roles": "11fed2ed35b3916415f35918d0b0cafee3d7dccf77bef248b83efc6b48afd252",
+    "users": "8898addda294d8a95859d9fc5265252b6a5f46297c03790552c8cf3dbee85b3b"
+  },
+  "passed": false,
+  "failure": "Table 'ayahx_d4_licensed_acceptance_full_20261011.riwayat' doesn't exist",
+  "connections_closed": true,
+  "scratch_retained_for_evidence": true,
+  "finished_at": "2026-10-11T07:40:09.797Z"
+}

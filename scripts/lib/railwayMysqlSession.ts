@@ -205,7 +205,8 @@ export class RailwayMysqlSession {
   }
 
   async read(sql: string): Promise<string> {
-    if (!/^\s*(SELECT|SHOW|CHECKSUM)\b/iu.test(sql) || /\b(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE|RENAME|TRUNCATE|INTO\s+OUTFILE)\b/iu.test(sql)) {
+    const showCreateTable = /^\s*SHOW\s+CREATE\s+TABLE\s+`[a-z0-9_]+`\s*;?\s*$/iu.test(sql);
+    if (!showCreateTable && (!/^\s*(SELECT|SHOW|CHECKSUM)\b/iu.test(sql) || /\b(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE|RENAME|TRUNCATE|INTO\s+OUTFILE)\b/iu.test(sql))) {
       throw new SerialMysqlError('READ_ONLY_SQL_REQUIRED', this.evidence);
     }
     return this.command(sql, 'read');

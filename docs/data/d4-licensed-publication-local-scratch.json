@@ -1,0 +1,117 @@
+{
+  "scope": "local_synthetic_scratch_only",
+  "database": "ayahx_d4_catalog_20261010",
+  "production_written": false,
+  "started_at": "2026-10-10T15:17:26.074Z",
+  "rejections": [
+    {
+      "name": "NULL",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "empty",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "actor",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "recitation_binding",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "count_zero",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "count_mismatch",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "ttl",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "source_sha",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "rights",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "canonical_complete",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "canonical_count",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "coverage",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "v1_score",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "lag",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "duration_difference",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "samples",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "distributed_surahs",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "too_short",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "v2_human",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "patch": {
+        "riwayah_code": "warsh"
+      },
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "patch": {
+        "canonical_text_available": null
+      },
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "patch": {
+        "timing_quality": "aligned"
+      },
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "patch": {
+        "offset_verified": 1
+      },
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    }
+  ],
+  "passed": true,
+  "migration_up_twice": true,
+  "column_nullable_json": true,
+  "global_offset_unchanged": true,
+  "catalog_branch_unchanged": true,
+  "local_column_down_reapply": true,
+  "ddl_sha256": "10786372a3a3eebe2269c08a2c394b6a453f7e85f4297e08e5983fc30c390ee9",
+  "migration_sql_sha256": "f014c4b2221dcdda72146a10ae158a0fcdfa2e889988b11808d7eacf9bc51c67",
+  "finished_at": "2026-10-10T15:17:26.673Z"
+}

@@ -1,0 +1,52 @@
+{
+  "target": "local",
+  "database": "ayahx_d4_k9_final_20261010",
+  "production_writes": 0,
+  "started_at": "2026-10-10T15:34:07.300Z",
+  "sql_sha256": "38bafd0947db55e718f9be34c7b92ac306e50d15f40e93f43fb5237180d6cdf6",
+  "sql_bytes": 9713,
+  "before_tables": 17,
+  "original_counts": {
+    "audio_providers": 10,
+    "audit_logs": 0,
+    "ayah_timing_history": 0,
+    "ayah_timings": 422463,
+    "import_jobs": 69,
+    "quran_ayahs": 6236,
+    "quran_surahs": 114,
+    "quran_words": 77433,
+    "recitation_audition_samples": 0,
+    "recitation_chapters": 7765,
+    "recitation_source_urls": 0,
+    "recitation_voice_reviews": 0,
+    "recitations": 69,
+    "reciters": 57,
+    "system_settings": 13,
+    "user_roles": 13,
+    "users": 13
+  },
+  "original_column_projection_sha256": {
+    "recitations": "2c1b81fac59555352112d941468e8a30fdcb2e124b71c85e334d58e3f0562f05",
+    "recitation_source_urls": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "protected_checksums": {
+    "users": "3122148714",
+    "user_roles": "4215014208",
+    "quran_surahs": "3016120619",
+    "quran_ayahs": "689837686",
+    "quran_words": "1564685926",
+    "ayah_timings": "1630643490",
+    "import_jobs": "3266922242",
+    "ayah_timing_history": "0",
+    "recitation_chapters": "1925316935"
+  },
+  "migration_twice": true,
+  "collation_and_nullability_verified": true,
+  "down_twice": true,
+  "reapply": true,
+  "original_columns_unchanged": true,
+  "protected_unchanged": true,
+  "after_tables": 20,
+  "passed": true,
+  "finished_at": "2026-10-10T15:34:38.598Z"
+}

@@ -1,0 +1,29 @@
+{
+  "checked_at": "2026-10-10T10:44:54.958Z",
+  "target": "production",
+  "applied": false,
+  "sql_sha256": "1263876107184fb1f46c11c395c4e421b8010549b2231d0991592bbec50fd656",
+  "sql_bytes": 642,
+  "mutations": [],
+  "audit_seed": "d3d9442294d5e014c33274a022424fb91c2f015d22a54ea0900867eb59103b15",
+  "audit_tail": "d3d9442294d5e014c33274a022424fb91c2f015d22a54ea0900867eb59103b15",
+  "offset_v2_accepted": [
+    "ahmed_saud_mp3quran",
+    "mishary_rashid_al_afasy_mp3quran",
+    "mohammed_alghazali_archive"
+  ],
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 4,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 1135,
+    "transport_response_bytes": 397478
+  }
+}

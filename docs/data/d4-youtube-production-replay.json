@@ -1,0 +1,133 @@
+{
+  "started_at": "2026-10-10T15:14:04.460Z",
+  "target": "production",
+  "applied": false,
+  "network_enabled": false,
+  "minimum_request_interval_ms": 1000,
+  "retry_policy": "one attempt per unique video, no retries; honor global Retry-After",
+  "serial": [
+    {
+      "ssh_exit_code": 0,
+      "ssh_signal": null,
+      "stderr_redacted": "[diagnostic content redacted]",
+      "compression": "gzip",
+      "mysql_close_acknowledged": true,
+      "commit_acknowledged": false,
+      "acknowledged_commands": 1,
+      "writes_halted": false,
+      "batches": [],
+      "transport_request_bytes": 309,
+      "transport_response_bytes": 163865
+    },
+    {
+      "ssh_exit_code": 0,
+      "ssh_signal": null,
+      "stderr_redacted": "[diagnostic content redacted]",
+      "compression": "gzip",
+      "mysql_close_acknowledged": true,
+      "commit_acknowledged": false,
+      "acknowledged_commands": 4,
+      "writes_halted": false,
+      "batches": [],
+      "transport_request_bytes": 1167,
+      "transport_response_bytes": 878750
+    }
+  ],
+  "input_sha256": "34a5a52276d485c03ae4ac5ab34d6655d258608ef493a3ef84ef8a25d8cad6b5",
+  "recitations": 9,
+  "chapter_links": 1024,
+  "unique_videos": 977,
+  "checkpoint_reused_results": 977,
+  "checkpoint_sha256": "6b54d758403ea5de8acfaaa3b41291647e61c2f7c92f691f160993e942e084a3",
+  "requests_this_run": 0,
+  "completed_videos": 977,
+  "complete": true,
+  "status_counts": {
+    "available": 977
+  },
+  "recitation_results": [
+    {
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "chapter_links": 114,
+      "unique_videos": 114,
+      "statuses": {
+        "available": 114
+      }
+    },
+    {
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "chapter_links": 114,
+      "unique_videos": 68,
+      "statuses": {
+        "available": 68
+      }
+    },
+    {
+      "slug": "abdulaziz_al_turki_yt",
+      "chapter_links": 112,
+      "unique_videos": 112,
+      "statuses": {
+        "available": 112
+      }
+    },
+    {
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "chapter_links": 114,
+      "unique_videos": 113,
+      "statuses": {
+        "available": 113
+      }
+    },
+    {
+      "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+      "chapter_links": 114,
+      "unique_videos": 114,
+      "statuses": {
+        "available": 114
+      }
+    },
+    {
+      "slug": "ayman_swed_muallim_yt",
+      "chapter_links": 114,
+      "unique_videos": 114,
+      "statuses": {
+        "available": 114
+      }
+    },
+    {
+      "slug": "badr_al_turki_yt",
+      "chapter_links": 114,
+      "unique_videos": 114,
+      "statuses": {
+        "available": 114
+      }
+    },
+    {
+      "slug": "mohammed_burhaji_yt",
+      "chapter_links": 114,
+      "unique_videos": 114,
+      "statuses": {
+        "available": 114
+      }
+    },
+    {
+      "slug": "saber_abdulhakam_yt",
+      "chapter_links": 114,
+      "unique_videos": 114,
+      "statuses": {
+        "available": 114
+      }
+    }
+  ],
+  "sql_sha256": "b8d2dd767544d399dd3a8c27acffa516e2f8bc857aa191a24f2c83ee45cbdfe7",
+  "sql_bytes": 654,
+  "audit_seed": "040c8fafc4453f36cbcbe8500eed60c5f7ca063f78cb8c32fed1d7b4602a6535",
+  "audit_tail": "040c8fafc4453f36cbcbe8500eed60c5f7ca063f78cb8c32fed1d7b4602a6535",
+  "mutations": [],
+  "youtube_changed": 0,
+  "source_changed": 0,
+  "human_rights_preserved": 0,
+  "plan_prepared": true,
+  "passed": true,
+  "finished_at": "2026-10-10T15:14:15.237Z"
+}

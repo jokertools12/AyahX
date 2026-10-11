@@ -1,0 +1,35 @@
+{
+  "target": "local",
+  "applied": true,
+  "host_evidence_sha256": "032f0734609c79430403d5135e941aac1596e19c03cab62d829d93d7e1ad1889",
+  "added_hosts": [
+    "*.us.archive.org",
+    "dn710809.ca.archive.org",
+    "dn721906.ca.archive.org"
+  ],
+  "sql_sha256": "31165b10833a815e1d13b769652063884b67cd67cbdb456cfcc9fd9f6db75ede",
+  "sql_bytes": 3067,
+  "audit_seed": "83ed7ad547a77e46029fba91650dafeda7bd7633a4a97295cb1900763f313a1d",
+  "audit_tail": "7cdfef2031bca94bd95c5286262023762ac938faa5ea4e1c29aca419294cc968",
+  "mutations": [
+    {
+      "action": "provider.host_allowlist_audited",
+      "table": "audio_provider",
+      "id": "70be0870-79ab-364e-af56-9f6ea9c8e46e",
+      "audit_id": "3dc7e536-96ce-ae79-56ea-cd0e24ab12bf",
+      "audit_hash": "7cdfef2031bca94bd95c5286262023762ac938faa5ea4e1c29aca419294cc968"
+    }
+  ],
+  "provider_changes": 1,
+  "before_inventory_sha256": "34e6c0db25d7970a523348e40cc6e7e677cac6ef77dd8c19c8bd6bb7dccfa845",
+  "after_inventory_sha256": "0a658fc88c3bcc83c4fa8a0c0e81da028496e543f51bd8019d0f1a4f93a20704",
+  "reused_results": 7431,
+  "replaced_host_checks": 334,
+  "counts": {
+    "available": 6274,
+    "YOUTUBE_SOURCE_PROHIBITED": 1024,
+    "source_unavailable": 459,
+    "AUDIO_REQUEST_FAILED": 8
+  },
+  "passed": true
+}

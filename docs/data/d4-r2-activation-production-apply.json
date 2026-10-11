@@ -1,0 +1,96 @@
+{
+  "target": "production",
+  "applied": true,
+  "started_at": "2026-10-11T07:57:34.767Z",
+  "artifact_hashes": {
+    "acceptance": "994638c24305eae7a4e66401e2efe803245692f0dd6d3361e7df630bc8de9409",
+    "logScan": "5b080bacbc77a69ebb5f2b78f032d0bb5985b53144f4b26de7a3d3be0ab0ca80",
+    "browser": "6631284ea18318603b873620390cd2cda06de652b4f795ba64e6d6de9b6c0f3e",
+    "variables": "f3ad6833108f2fcbd9ed3cd0fe379a86bcb1e3aa320610743d03b2b523364ba9",
+    "budget": "4276888608a2d2a53139b84398cb3c15eabaf88c04722b0fb8997177f815535e"
+  },
+  "adapter_only": true,
+  "public_flag_or_human_state_changed": false,
+  "baseline_file_sha256": "a4dfe9607d0aa7a8a60476809daa255dc8bde79d3fc8df1b1fee518bfe8059bd",
+  "protected_inventory_sha256": "39ad3696732e4b735a52307e7d67da6f442935b5168e943af2ce9f3f481cf348",
+  "baseline_d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "baseline_d3": 422463,
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "other_settings_sha256": "a7e28bd6c1bc7e3ad748e07af58b55eb389cdc2eca23db23b33f86927ef3e2fc",
+  "sql_sha256": "fb4d440534c450292577ab1dd38a7a9601cb1c94ecc5b25c59ed22eccf748ea8",
+  "sql_bytes": 2841,
+  "audit_seed": "c40e026ac3317a11f7377d617b74dcff0b011f1d05588b8697090a49a533b33e",
+  "audit_tail": "f8f2da2e8cc68099e9f52e40079112ea6a5fc4905c2f8b8f09cf182c2bf4a42b",
+  "mutations": [
+    {
+      "action": "settings.storage_adapter.activate",
+      "table": "system_settings",
+      "id": "storage_adapter",
+      "audit_id": "25182322-8821-dacd-d956-229e75358683",
+      "audit_hash": "f8f2da2e8cc68099e9f52e40079112ea6a5fc4905c2f8b8f09cf182c2bf4a42b"
+    }
+  ],
+  "settings_row_delta": 1,
+  "changed": true,
+  "setting_before": null,
+  "connections_before": {
+    "threads_connected": 1,
+    "max_connections": 60
+  },
+  "disk_before": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1774747648,
+    "available_bytes": 2901061632
+  },
+  "connections_after": {
+    "threads_connected": 1,
+    "max_connections": 60
+  },
+  "disk_after": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1774764032,
+    "available_bytes": 2901045248
+  },
+  "protected_checksums_unchanged": true,
+  "other_settings_unchanged": true,
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": true,
+    "acknowledged_commands": 26,
+    "writes_halted": false,
+    "batches": [
+      {
+        "ordinal": 1,
+        "row_count": 2,
+        "sql_sha256": "fb4d440534c450292577ab1dd38a7a9601cb1c94ecc5b25c59ed22eccf748ea8",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 259,
+        "sql_bytes": 2841,
+        "wire_request_bytes": 1711
+      },
+      {
+        "ordinal": 2,
+        "row_count": 0,
+        "sql_sha256": "2db35aa37c4005aa96055e900adc9bfbbd70d106820fefcb83216b7cc3f95422",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 217,
+        "sql_bytes": 7,
+        "wire_request_bytes": 75
+      }
+    ],
+    "transport_request_bytes": 9428,
+    "transport_response_bytes": 3017018
+  },
+  "finished_at": "2026-10-11T07:59:39.179Z"
+}

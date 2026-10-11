@@ -1,0 +1,87 @@
+{
+  "checked_at": "2026-10-11T07:22:33.908Z",
+  "reason": "Immutable presigned PUT signs If-None-Match:*; exact header required for browser preflight",
+  "results": [
+    {
+      "bucket": "ayahx-audio-prod",
+      "success": true,
+      "status": 200,
+      "result": {
+        "rules": [
+          {
+            "id": "ayahx-exact-site-origins",
+            "allowed": {
+              "origins": [
+                "https://ayahx.com",
+                "https://ayahx-production.up.railway.app"
+              ],
+              "methods": [
+                "PUT",
+                "GET",
+                "HEAD"
+              ],
+              "headers": [
+                "content-type",
+                "range",
+                "content-md5",
+                "x-amz-checksum-sha256",
+                "x-amz-content-sha256",
+                "x-amz-date",
+                "authorization",
+                "if-none-match"
+              ]
+            },
+            "exposeHeaders": [
+              "ETag",
+              "Content-Length",
+              "Content-Range",
+              "Accept-Ranges",
+              "x-amz-checksum-sha256"
+            ],
+            "maxAgeSeconds": 600
+          }
+        ]
+      }
+    },
+    {
+      "bucket": "ayahx-audio-staging",
+      "success": true,
+      "status": 200,
+      "result": {
+        "rules": [
+          {
+            "id": "ayahx-exact-site-origins",
+            "allowed": {
+              "origins": [
+                "https://ayahx-staging.up.railway.app"
+              ],
+              "methods": [
+                "PUT",
+                "GET",
+                "HEAD"
+              ],
+              "headers": [
+                "content-type",
+                "range",
+                "content-md5",
+                "x-amz-checksum-sha256",
+                "x-amz-content-sha256",
+                "x-amz-date",
+                "authorization",
+                "if-none-match"
+              ]
+            },
+            "exposeHeaders": [
+              "ETag",
+              "Content-Length",
+              "Content-Range",
+              "Accept-Ranges",
+              "x-amz-checksum-sha256"
+            ],
+            "maxAgeSeconds": 600
+          }
+        ]
+      }
+    }
+  ]
+}

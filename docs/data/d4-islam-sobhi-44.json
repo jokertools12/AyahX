@@ -1,0 +1,30 @@
+{
+  "slug": "islam_sobhi_mp3quran",
+  "surah": 44,
+  "catalog_available_ayahs": 0,
+  "catalog_coverage_mismatch": true,
+  "catalog_is_complete": false,
+  "timing_complete": true,
+  "pinned_release_sha256": "6b6cc24872d936ce15f528da5979b24551441deeb6c5141d63181267e075b239",
+  "prepared_sha256_verified": "1068110f1b831aeffa790d8f32538228e869bd2a91bd6acce16a2387856b3df1",
+  "release_timing_rows": 59,
+  "ready_rows": 59,
+  "audio_probe": {
+    "method": "HEAD; no audio body downloaded",
+    "original_url": "https://server14.mp3quran.net/islam/Rewayat-Hafs-A-n-Assem/044.mp3",
+    "original_status": 301,
+    "location": "https://cdn.mp3quran.net/audio/islam-sobhi/r1/044.mp3",
+    "final_status": 200,
+    "content_type": "audio/mpeg",
+    "content_length": 6639247
+  },
+  "conclusion": "Release timings and audio exist; D2 catalog coverage remains inconsistent. Proposed catalog correction requires explicit user decision; not applied.",
+  "catalog_guard_bypassed": false,
+  "production_writes": 0,
+  "voice_identity_confirmed": false,
+  "evidence_recorded_at": "2026-10-10T09:25:13.215Z",
+  "probe_utc_window": {
+    "from": "2026-10-10T09:22:33.615Z",
+    "to": "2026-10-10T09:24:04Z"
+  }
+}

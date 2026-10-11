@@ -1,0 +1,7 @@
+{
+  "checked_at": "2026-10-10T09:15:39.191Z",
+  "failure": "EXISTING_VALUES_CHANGED\n+ actual - expected\n... Skipped lines\n\n  [\n    {\n      Checksum: 1262901823,\n      Table: 'ayahx_d4_catalog_20261010.quran_surahs'\n    },\n...\n    {\n+     Checksum: 3260891721,\n-     Checksum: 3473945818,\n      Table: 'ayahx_d4_catalog_20261010.audio_providers'\n    },\n    {\n+     Checksum: 780232689,\n-     Checksum: 2925197379,\n      Table: 'ayahx_d4_catalog_20261010.recitations'\n    },\n    {\n+     Checksum: 658882849,\n-     Checksum: 1398068777,\n      Table: 'ayahx_d4_catalog_20261010.recitation_chapters'\n    },\n    {\n      Checksum: 866958104,\n      Table: 'ayahx_d4_catalog_20261010.ayah_timings'\n",
+  "passed": false,
+  "production_writes": 0,
+  "diagnosis": "CHECKSUM TABLE includes added columns. Old-cell comparison must project original columns; unchanged D1/D3/admin checksums were already equal."
+}

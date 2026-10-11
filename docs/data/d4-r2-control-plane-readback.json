@@ -1,0 +1,166 @@
+{
+  "checked_at": "2026-10-11T07:15:35.377Z",
+  "results": [
+    {
+      "bucket": "ayahx-audio-prod",
+      "step": "verify/domains/managed",
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "enabled": false,
+        "bucketId": "a7231b592ff3471f944324c71aa6fc8b",
+        "domain": "pub-a7231b592ff3471f944324c71aa6fc8b.r2.dev"
+      },
+      "status": 200
+    },
+    {
+      "bucket": "ayahx-audio-prod",
+      "step": "verify/cors",
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "rules": [
+          {
+            "id": "ayahx-exact-site-origins",
+            "allowed": {
+              "origins": [
+                "https://ayahx.com",
+                "https://ayahx-production.up.railway.app"
+              ],
+              "methods": [
+                "PUT",
+                "GET",
+                "HEAD"
+              ],
+              "headers": [
+                "content-type",
+                "range",
+                "content-md5",
+                "x-amz-checksum-sha256",
+                "x-amz-content-sha256",
+                "x-amz-date",
+                "authorization"
+              ]
+            },
+            "exposeHeaders": [
+              "ETag",
+              "Content-Length",
+              "Content-Range",
+              "Accept-Ranges",
+              "x-amz-checksum-sha256"
+            ],
+            "maxAgeSeconds": 600
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "bucket": "ayahx-audio-prod",
+      "step": "verify/lifecycle",
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "rules": [
+          {
+            "id": "abort-incomplete-multipart-after-one-day",
+            "enabled": true,
+            "conditions": {
+              "prefix": ""
+            },
+            "abortMultipartUploadsTransition": {
+              "condition": {
+                "type": "Age",
+                "maxAge": 86400
+              }
+            }
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "bucket": "ayahx-audio-staging",
+      "step": "verify/domains/managed",
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "enabled": false,
+        "bucketId": "79a0fda88ca9449d8eff1e513829803d",
+        "domain": "pub-79a0fda88ca9449d8eff1e513829803d.r2.dev"
+      },
+      "status": 200
+    },
+    {
+      "bucket": "ayahx-audio-staging",
+      "step": "verify/cors",
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "rules": [
+          {
+            "id": "ayahx-exact-site-origins",
+            "allowed": {
+              "origins": [
+                "https://ayahx-staging.up.railway.app"
+              ],
+              "methods": [
+                "PUT",
+                "GET",
+                "HEAD"
+              ],
+              "headers": [
+                "content-type",
+                "range",
+                "content-md5",
+                "x-amz-checksum-sha256",
+                "x-amz-content-sha256",
+                "x-amz-date",
+                "authorization"
+              ]
+            },
+            "exposeHeaders": [
+              "ETag",
+              "Content-Length",
+              "Content-Range",
+              "Accept-Ranges",
+              "x-amz-checksum-sha256"
+            ],
+            "maxAgeSeconds": 600
+          }
+        ]
+      },
+      "status": 200
+    },
+    {
+      "bucket": "ayahx-audio-staging",
+      "step": "verify/lifecycle",
+      "success": true,
+      "errors": [],
+      "messages": [],
+      "result": {
+        "rules": [
+          {
+            "id": "abort-incomplete-multipart-after-one-day",
+            "enabled": true,
+            "conditions": {
+              "prefix": ""
+            },
+            "abortMultipartUploadsTransition": {
+              "condition": {
+                "type": "Age",
+                "maxAge": 86400
+              }
+            }
+          }
+        ]
+      },
+      "status": 200
+    }
+  ]
+}

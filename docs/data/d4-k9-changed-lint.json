@@ -1,0 +1,233 @@
+{
+  "checked_at": "2026-10-10T14:55:37.216Z",
+  "base": "main",
+  "files": 159,
+  "new_messages": [],
+  "existing_messages": [
+    {
+      "file": "server/index.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 229,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/index.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 230,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 31,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 42,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 57,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 80,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 98,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 113,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 126,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 128,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 149,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 158,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 173,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 181,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 212,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 227,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/alignments.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 269,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 155,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 161,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 266,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 270,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 304,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 333,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 341,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 348,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 394,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 475,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 500,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 514,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 532,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 558,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 573,
+      "message": "Unexpected any. Specify a different type."
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,72 @@
+{
+  "started_at": "2026-10-10T10:41:51.858Z",
+  "target": "production",
+  "applied": true,
+  "sql_sha256": "408914852e5118ebeb2ef6df97ea61f57e152686804edae096c4c01864947603",
+  "sql_bytes": 298400,
+  "statements": 147,
+  "disk_before": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1731489792,
+    "available_bytes": 2944319488
+  },
+  "protected_checksums_unchanged": true,
+  "d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "timings": 422463,
+  "disk_after": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1731624960,
+    "available_bytes": 2944184320
+  },
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": true,
+    "acknowledged_commands": 20,
+    "writes_halted": false,
+    "batches": [
+      {
+        "ordinal": 1,
+        "row_count": 101,
+        "sql_sha256": "cc878bacfe0d10913f1fbb2403ac1a4157df731658f4b68e24589e192de2f914",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 379,
+        "sql_bytes": 229460,
+        "wire_request_bytes": 23538
+      },
+      {
+        "ordinal": 2,
+        "row_count": 39,
+        "sql_sha256": "96ad099f73f6a91302ea0f9bfa71184a7f43b2723cdf92e6fa9ed037f1810434",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 302,
+        "sql_bytes": 68938,
+        "wire_request_bytes": 8875
+      },
+      {
+        "ordinal": 3,
+        "row_count": 0,
+        "sql_sha256": "2db35aa37c4005aa96055e900adc9bfbbd70d106820fefcb83216b7cc3f95422",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 216,
+        "sql_bytes": 7,
+        "wire_request_bytes": 75
+      }
+    ],
+    "transport_request_bytes": 38303,
+    "transport_response_bytes": 2996366
+  },
+  "finished_at": "2026-10-10T10:43:52.156Z"
+}

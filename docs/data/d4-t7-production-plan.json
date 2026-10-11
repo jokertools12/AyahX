@@ -1,0 +1,451 @@
+{
+  "started_at": "2026-10-11T07:36:16.579Z",
+  "target": "production",
+  "applied": false,
+  "t7_artifact_sha256": "b4c686aca252c4afa59f86aaf951d5007abae0b0080439f4c464f9e3e942530a",
+  "sql_sha256": "ef0494e1a67fa0ffd74b159b65e58cf3c02e33a8221dcdcb945f9cabea01548f",
+  "sql_bytes": 5333163,
+  "audit_seed": "040c8fafc4453f36cbcbe8500eed60c5f7ca063f78cb8c32fed1d7b4602a6535",
+  "audit_tail": "470debe8a433ccf0c8c20602728719cc8ffea5b96d7cd09b784d7242f892ebde",
+  "mutations": [
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "95650f99-296a-6122-2dac-498b79db8ede",
+      "audit_id": "98b47676-5683-a5d6-7e3a-1df903f602a6",
+      "audit_hash": "f96f448d0aaf4e6dcfb253f743426ff0ad7442d6a6c64e78550e02f473595d6d"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "bc8af87f-bb5f-0bec-9b75-94ee6898e594",
+      "audit_id": "7888784a-c930-2a22-d3f7-963a00bdd694",
+      "audit_hash": "326e1ba20a119dd955f45d26769deb146fb726c90fb2a869eb9d4055bd4dafaf"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "09be4d81-c0e6-4cc7-4d32-70480e377a61",
+      "audit_id": "69e2f4ee-2a4d-d85b-72ef-e781ea8c645f",
+      "audit_hash": "94306ad9e8db7de4243b6740254a554e4aa14e5c1ad0cdf1d19f87dba0b987b7"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "2f3ca0d9-1e94-7d4b-5123-da1e6b2742ac",
+      "audit_id": "19cbe5ba-d499-eb8b-798b-1c477ad2f774",
+      "audit_hash": "9202b0e37084b1ce4741e347b8f80178db8b316d234722f89f0e427f8a91a127"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "99b3e3dd-f1b4-befd-753a-25f5f70c1b4f",
+      "audit_id": "6e084d01-f147-6a97-f6b8-2ebd284b6381",
+      "audit_hash": "6215e3b13479a79d1432aa43049f165ae7ff0d721b2e4749bd15e08dced4ca5c"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "b8f09fcc-08b9-9eb7-8a1e-1fc97fa41b58",
+      "audit_id": "b6c1571b-08df-12f9-71c7-af0748e31a0d",
+      "audit_hash": "f88c65253a40b40da7fb89c359f99c9e7eb93f8d2a044c0c17e60134cce12b3d"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "b1a45240-81a7-a9c4-2b2c-5888eeefe115",
+      "audit_id": "5c177f66-a920-036b-705c-311195b02574",
+      "audit_hash": "f5f5c2ba32f3e736801216c8b957bc438e3c972ad1c856bce8c48214b2c4aa9d"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "09b09290-df40-e01e-1767-437e03debec9",
+      "audit_id": "7731310d-3f2d-c999-96f0-b2014515ec69",
+      "audit_hash": "d8cc4a4256b5b9be727e42f5cf7a25e15663aea8900102fe7a2b8e928cb4e398"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "bf4ebc6b-ef7c-4402-4862-63d50efedfaa",
+      "audit_id": "174397ee-e563-f111-8be7-9e83b146a502",
+      "audit_hash": "e78be1f37c8cbc77c721f376192829816479587994e55f9e5658b67b624a03b1"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "2044d4d2-cc5b-b407-cbe2-c7632e21478b",
+      "audit_id": "360bd010-ec67-785e-d57b-e1bd01c18af0",
+      "audit_hash": "754c01abeae88f62f84a9d1d2c1500a0c1447cca94a04ea3d1962457d2f5a6a1"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "12cf216b-1bd5-686c-1d1e-05714aa38a3d",
+      "audit_id": "3091fcbf-5b87-210e-aa56-bac31afbdcf9",
+      "audit_hash": "f358e1a8c070f5a4a2417caa1341fb5824ff80fa1b8dad32074c9515d8a35bef"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "3e21d6e0-7a97-e9ae-86b5-95d6d1a74dcc",
+      "audit_id": "55e700cc-741b-f37b-fab5-4f88399a4331",
+      "audit_hash": "6cf8d04cd3bdef39a702ffb778c41a347ca101697bf4b3dbed24ae96b0f67759"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "e7f11e1f-8cf9-b375-76c2-36bcb1b6a048",
+      "audit_id": "22c7acef-96fa-2634-d0ba-3571a1f4745c",
+      "audit_hash": "f6688ec9d5e884447efaa3a993f9515290857fc67edaa80adf23891333a0578f"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "703f4293-124f-f250-d89c-fb89ec7d7195",
+      "audit_id": "1af5fef7-496d-d9bb-50eb-97c11b92027e",
+      "audit_hash": "c59c72a861b2ef5e60a33bbe595130de027fd9aa33475eff585303df6df6a02b"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "4fdf3e11-a78b-0d5e-3daf-10d3d8edb528",
+      "audit_id": "055eb6de-3d1f-5993-b240-a31b0ff9970e",
+      "audit_hash": "5bd29873b5f2f287f575de050e407d0c967c106fe532d6a1e599a821f1555659"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "f4a974e6-c90b-adc3-833d-c36ce7ede627",
+      "audit_id": "c40a943f-2870-6995-7c00-8c1065e3c472",
+      "audit_hash": "9c5beab9d9b9b288382ba83286f2d9662557cc22ff28657b574a57f355cd3ff5"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "e9fabfeb-3cb4-e27c-2fa1-940fc88deae0",
+      "audit_id": "e9eff5ad-4cb2-7df5-68e5-a287cb537fb1",
+      "audit_hash": "f2297e59915cb13af321b976f231bab33ae432f2b4e28c732e01c8940b848966"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "3f2b604f-9c5e-6452-00ce-2a03cb92adb9",
+      "audit_id": "ad52df98-77eb-a26b-53cc-32fe48ffdda9",
+      "audit_hash": "cc07d05ec6f73d25585d6cba96c886cf93da1d973fd7ad2714fd82b63d5c16e3"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "de4d21f0-9cb0-3b39-d8da-1ce99e4c7cc0",
+      "audit_id": "eab714f9-70c6-6983-41d8-655a32dd5cbe",
+      "audit_hash": "3c4a1bb1f70cba5ab59dc2166b43d743d38173063ae73adeb72706509f0b52f9"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "044a1e9f-67c9-6854-5e3b-20438c45c4e7",
+      "audit_id": "bbfff7e3-408b-17de-98e5-52fbf5eb5512",
+      "audit_hash": "0cd47cd893f075d03b07328472b2ed198bc98339d9e933cd8df8fc4403bb148e"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "cb030c9e-d6bd-2ca2-bed2-17157d5b2964",
+      "audit_id": "466d6978-ad63-620c-c821-2c124dae5cb6",
+      "audit_hash": "a4247e72f0e4193714b1446d2b1575316a7177f6c4cddc3a5353d6870098d1be"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "a37b200d-ee15-761b-afea-45ce0f10b481",
+      "audit_id": "781bd5d4-2545-1588-b453-a4ade0a6424b",
+      "audit_hash": "9ca798f0b0ac95344a81c91a550a5c0eb3481a5458649c9255268e2011fbbd20"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "a3bea32c-f60e-990f-8631-931ee63890bb",
+      "audit_id": "223bf5c6-9261-1847-c6cf-8402fbe9bf51",
+      "audit_hash": "4204989a9465b592aa844152fdcf36410154d988ea2e29330739a6b3ef6a3ac4"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "a7ffd321-8f70-8cc1-4650-4a5926ba6ca0",
+      "audit_id": "646a7202-2ac1-a4ee-70fb-7e818946d7c4",
+      "audit_hash": "6d1670aa24f0195445db98e59cbd8c432b9b6c674bc6e68f08b719b0f0933c8c"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "39eacb00-f62a-e184-6f6b-b74858c6e1a6",
+      "audit_id": "9c372aaf-d232-d1e2-a3ae-f474196b4393",
+      "audit_hash": "b3e6552686e8047937ae903fa314216d9f80379af4e7f145f4ade4ca241fd2ee"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "271c991f-ede5-0342-ddee-792024c769f0",
+      "audit_id": "778daa9c-3cf2-6911-6706-272dcaaa1e4f",
+      "audit_hash": "208c368e7022d53040518a0bf0d6537f11d4f7112b2b1a8ce443c2e33729a627"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "30dd65ad-7b89-4cc8-dc35-3535db4d2586",
+      "audit_id": "66bcd5f7-c6b6-e775-978a-adfd18525ec9",
+      "audit_hash": "bddcf66387f7605c768f72b3b7459b2c8160b744c304ef9d5eb896b73c0fc3b0"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "1c79adfe-a520-5441-7e0f-96f5d8752322",
+      "audit_id": "f5ebfd26-2453-5c5b-9ea3-cd266e66bd7d",
+      "audit_hash": "ac4e5bfc30f15a913e1478e09dc363f8cb9e1d9b4624fa20b41c09d412b4afe1"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "b50b55b5-a7c9-7bb6-bc23-a949078e1c29",
+      "audit_id": "2e9bf719-656c-1121-2fe5-aab4b65dc76f",
+      "audit_hash": "86ae97057e1098efd54a9b33ed44fc56a5d41694c7057bb8a4728fe7d8776abd"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "audit_id": "467b5580-f531-ad7a-f770-c901e132b4c9",
+      "audit_hash": "48cdef5415951796342eb055f5f03020a5ce5da64a858b1a68bdee60fed7b0d0"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "9ccb21f5-a4aa-619a-16a4-d32ef8544085",
+      "audit_id": "955c4a19-ac7d-316f-3512-937e10a31b37",
+      "audit_hash": "30788dd75357e6023e9005c7ecbb5a65447f115895c67f1e6d910dfada6a3731"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "fdc68197-4a79-dea9-a9ea-b4fc3ad244c1",
+      "audit_id": "10473414-c889-34c1-f14b-d6966da26cd4",
+      "audit_hash": "df46158fb2ea9bf65790e87e91b3a735a7635ce3de5bc546ed86c23b620e5e53"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "f7c7c48b-7894-e959-d794-166e3f38839a",
+      "audit_id": "6b101837-c06f-ee87-6f63-212c4ca336ac",
+      "audit_hash": "1fb45450b7dd7ab08b52be45ae6fba2c067e508e7485750a954f424b50c8f508"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "6cd7c3a3-0dfa-ee1b-b33c-76311f01119d",
+      "audit_id": "93705ba1-694f-8df8-966d-35014e308f50",
+      "audit_hash": "abbfbf33a582becdb8b50a9fc5e2bd56f84def7d6418629ee4196d0d45083663"
+    },
+    {
+      "action": "recitation.t7_evidence",
+      "table": "recitation",
+      "id": "fcd9c298-c3cd-0c32-0180-a3b5f61861cb",
+      "audit_id": "fcd759b8-8172-938b-40ec-5a3addd03bea",
+      "audit_hash": "470debe8a433ccf0c8c20602728719cc8ffea5b96d7cd09b784d7242f892ebde"
+    }
+  ],
+  "recitations": 35,
+  "changes": 35,
+  "results": [
+    {
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "abdullah_al_mattrod_qdc",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "abdullah_kamel_way2quran",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "abdulwadood_haneef_mp3quran",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "abu_bakr_al_shatri_tarteel",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "adel_al_karbalaei_archive_v2",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "ahmed_al_ajmi_qdc",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "ahmed_nuayna_qdc",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "v1_passed": true,
+      "result_status": "passed"
+    },
+    {
+      "slug": "ahmed_shaheen_mp3quran",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "akram_al_alaqmi_qdc",
+      "v1_passed": true,
+      "result_status": "passed"
+    },
+    {
+      "slug": "bandar_baleela_qdc",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "fatih_seferagic_way2quran",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "hani_al_rifai_qdc_128k",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "ibrahim_al_akhdar_drive",
+      "v1_passed": false,
+      "result_status": "source_unavailable"
+    },
+    {
+      "slug": "khalid_al_mohana_drive",
+      "v1_passed": false,
+      "result_status": "source_unavailable"
+    },
+    {
+      "slug": "khalifa_al_tunaiji_tarteel",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "mahmoud_abdul_hakam_mp3quran",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "mahmoud_khalil_al_husary_qdc_128k",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "mishary_rashid_al_afasy_2008_qdc",
+      "v1_passed": false,
+      "result_status": "source_unavailable"
+    },
+    {
+      "slug": "moaz_mahmoud_hamed_qalon_way2quran",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "mohammed_ayyub_drive",
+      "v1_passed": false,
+      "result_status": "source_unavailable"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "v1_passed": false,
+      "result_status": "source_unavailable"
+    },
+    {
+      "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "nasser_al_qatami_mp3quran",
+      "v1_passed": true,
+      "result_status": "passed"
+    },
+    {
+      "slug": "saad_al_ghamdi_tarteel",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "saber_abdulhakam_qalon_way2quran",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "walid_al_naihi_qalon_mp3quran",
+      "v1_passed": false,
+      "result_status": "failed"
+    },
+    {
+      "slug": "walid_atef_way2quran",
+      "v1_passed": false,
+      "result_status": "source_unavailable"
+    },
+    {
+      "slug": "yasser_al_dosari_archive",
+      "v1_passed": false,
+      "result_status": "failed"
+    }
+  ],
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 2,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 643,
+    "transport_response_bytes": 405378
+  },
+  "finished_at": "2026-10-11T07:36:18.375Z"
+}

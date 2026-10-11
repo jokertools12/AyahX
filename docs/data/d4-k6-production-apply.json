@@ -1,0 +1,231 @@
+{
+  "target": "production",
+  "applied": true,
+  "sql_sha256": "cf0a0168efeb96cfe1abc6856084176be7f7b266fbd353ac45354e439962f18f",
+  "sql_bytes": 9338,
+  "started_at": "2026-10-10T14:14:27.149Z",
+  "original_column_projection_sha256": {
+    "recitations": "74ade13fed0b17917ec4bc5291e4503e46546ac96ca11acfe6b922df21d0d2ff",
+    "recitation_source_urls": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "before_tables": 57,
+  "disk_before": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1730560000,
+    "available_bytes": 2945249280
+  },
+  "critical_before": {
+    "users": 13,
+    "subscriptions": 16,
+    "plans": null,
+    "payment_requests": 3,
+    "videos": null,
+    "saved_videos": 7,
+    "render_jobs": 72,
+    "system_settings": 13,
+    "user_roles": 13,
+    "notifications": 49
+  },
+  "collation_and_nullability_verified": true,
+  "after_tables": 60,
+  "original_columns_unchanged": true,
+  "protected_checksums_unchanged": true,
+  "d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "timings": 422463,
+  "disk_after": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1731002368,
+    "available_bytes": 2944806912
+  },
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": true,
+    "acknowledged_commands": 65,
+    "writes_halted": false,
+    "batches": [
+      {
+        "ordinal": 1,
+        "row_count": 0,
+        "sql_sha256": "3af2d853ad49d1210394393e3cda2f391ab4a515e539e93212601d61eca13d12",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 305,
+        "sql_bytes": 1226,
+        "wire_request_bytes": 599
+      },
+      {
+        "ordinal": 2,
+        "row_count": 0,
+        "sql_sha256": "c2a12853d3aa512a99f7daec006c2bb5b741d0fe4a710c51bf23804732592bc3",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 287,
+        "sql_bytes": 1994,
+        "wire_request_bytes": 827
+      },
+      {
+        "ordinal": 3,
+        "row_count": 0,
+        "sql_sha256": "bbe0bea161d12f04b795a13df2934c8c1400d529715bf7308404db99a339a62b",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 286,
+        "sql_bytes": 1368,
+        "wire_request_bytes": 771
+      },
+      {
+        "ordinal": 4,
+        "row_count": 0,
+        "sql_sha256": "ad3827da7138526e9a500988d53abfbe838a44ae9cb1f2f260bb0c6ca1d5116f",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 281,
+        "sql_bytes": 356,
+        "wire_request_bytes": 355
+      },
+      {
+        "ordinal": 5,
+        "row_count": 0,
+        "sql_sha256": "4125788f686d4458fca8f470039420d59c2acc52812c010646a23cf4ed1184af",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 264,
+        "sql_bytes": 374,
+        "wire_request_bytes": 367
+      },
+      {
+        "ordinal": 6,
+        "row_count": 0,
+        "sql_sha256": "ab8ea98e28f5e7791bef28f3c25c01e887f531d1ba8fa040b64d44c6561d71b6",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 243,
+        "sql_bytes": 357,
+        "wire_request_bytes": 355
+      },
+      {
+        "ordinal": 7,
+        "row_count": 0,
+        "sql_sha256": "c1e06ddd19bc04cb8c98942e118348da52a8d35ae621198cb507f976813bfed5",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 318,
+        "sql_bytes": 467,
+        "wire_request_bytes": 459
+      },
+      {
+        "ordinal": 8,
+        "row_count": 0,
+        "sql_sha256": "1e62db175993122a943225bd5876cf48031f5dbe2cb16add35058b119063ba2e",
+        "threads_connected": 3,
+        "max_connections": 60,
+        "elapsed_ms": 314,
+        "sql_bytes": 409,
+        "wire_request_bytes": 399
+      },
+      {
+        "ordinal": 9,
+        "row_count": 0,
+        "sql_sha256": "3be12ab3ac5e7e916df2da3bade02ab08eb52dfdc88ee9316aa4a1aea6dce201",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 302,
+        "sql_bytes": 398,
+        "wire_request_bytes": 391
+      },
+      {
+        "ordinal": 10,
+        "row_count": 0,
+        "sql_sha256": "c26c074dc4291bc2dcdf609239abd236eb43505868c5a04271e3bb7ced219ac0",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 322,
+        "sql_bytes": 373,
+        "wire_request_bytes": 363
+      },
+      {
+        "ordinal": 11,
+        "row_count": 0,
+        "sql_sha256": "a4f261d5c0b29e205816699e684b483114e7303e00d8faef7a9bae4d7c8c30ec",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 289,
+        "sql_bytes": 466,
+        "wire_request_bytes": 435
+      },
+      {
+        "ordinal": 12,
+        "row_count": 0,
+        "sql_sha256": "4330f1fd5a5fc3affcc3f04738aaa537d9a31234d563070fc1e5c4fb756de77e",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 291,
+        "sql_bytes": 380,
+        "wire_request_bytes": 363
+      },
+      {
+        "ordinal": 13,
+        "row_count": 0,
+        "sql_sha256": "28baf2a34acdc9318036d099d80eb323e575baf9cd03b08e7128d8801b223ab8",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 311,
+        "sql_bytes": 430,
+        "wire_request_bytes": 415
+      },
+      {
+        "ordinal": 14,
+        "row_count": 0,
+        "sql_sha256": "045b13ec97633b1afbf23acf9cb0bc208c596c28a52853595e543846c6592d58",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 302,
+        "sql_bytes": 423,
+        "wire_request_bytes": 407
+      },
+      {
+        "ordinal": 15,
+        "row_count": 0,
+        "sql_sha256": "9fa238a4d24f93526a5d51cdd49cfd3549a707c5fb9f3cd411b50b4182599c77",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 752,
+        "sql_bytes": 188,
+        "wire_request_bytes": 259
+      },
+      {
+        "ordinal": 16,
+        "row_count": 0,
+        "sql_sha256": "0a3a2765ee3dfb4faa0c5122850ce7c1ed515a02eb57908084e10f43999bad1a",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 438,
+        "sql_bytes": 113,
+        "wire_request_bytes": 203
+      },
+      {
+        "ordinal": 17,
+        "row_count": 0,
+        "sql_sha256": "2db35aa37c4005aa96055e900adc9bfbbd70d106820fefcb83216b7cc3f95422",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 236,
+        "sql_bytes": 7,
+        "wire_request_bytes": 75
+      }
+    ],
+    "transport_request_bytes": 18212,
+    "transport_response_bytes": 9780911
+  },
+  "finished_at": "2026-10-10T14:16:42.454Z"
+}

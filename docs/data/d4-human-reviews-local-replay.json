@@ -1,0 +1,30 @@
+{
+  "started_at": "2026-10-10T15:15:03.471Z",
+  "target": "local",
+  "applied": false,
+  "voice_artifact_sha256": "a307a6bfe89192c0730ec99c477b3186031396b12f702c15937a6e8549d0b8da",
+  "sql_sha256": "556ffe8f25aba69e1180c99ddd38cc1ef07b34d98df9b9a1d60274c5e2ff222b",
+  "sql_bytes": 654,
+  "audit_seed": "63e41ee707e7a099428b9745a22e86fc488f622a33344dd5c098b7715582c29f",
+  "audit_tail": "63e41ee707e7a099428b9745a22e86fc488f622a33344dd5c098b7715582c29f",
+  "mutations": [],
+  "planned_items": 640,
+  "changes": 0,
+  "preserved_decisions": 0,
+  "by_type": {
+    "basmala_audio": 69,
+    "voice_confirmation": 69,
+    "near_complete_chapters": 415,
+    "data_conflict": 9,
+    "offset_exception": 38,
+    "storage_rights": 9,
+    "youtube_audio_missing": 9,
+    "youtube_rights": 9,
+    "provider_license": 10,
+    "label_review": 1,
+    "storage_activation": 1,
+    "storage_credentials": 1
+  },
+  "passed": true,
+  "finished_at": "2026-10-10T15:15:03.642Z"
+}

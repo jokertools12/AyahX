@@ -1,0 +1,48 @@
+{
+  "target": "production",
+  "applied": false,
+  "host_evidence_sha256": "032f0734609c79430403d5135e941aac1596e19c03cab62d829d93d7e1ad1889",
+  "added_hosts": [
+    "*.us.archive.org",
+    "dn710809.ca.archive.org",
+    "dn721906.ca.archive.org"
+  ],
+  "sql_sha256": "1658a93f5ca7256528be87e074db82bc7b4ea2328da79c39c6aff447eb0fb390",
+  "sql_bytes": 3067,
+  "audit_seed": "62182cb89b460b1d02eaa7220597be4d01125d6b45e7bebe1e0ffeb714f0fda9",
+  "audit_tail": "2524552aa4d21a8704076818dd5c4998692c723014ab8ac29ff3f89e7402fe2c",
+  "mutations": [
+    {
+      "action": "provider.host_allowlist_audited",
+      "table": "audio_provider",
+      "id": "70be0870-79ab-364e-af56-9f6ea9c8e46e",
+      "audit_id": "8410c6ce-c609-ed4b-e26a-309d09eb7c0a",
+      "audit_hash": "2524552aa4d21a8704076818dd5c4998692c723014ab8ac29ff3f89e7402fe2c"
+    }
+  ],
+  "provider_changes": 1,
+  "before_inventory_sha256": "34e6c0db25d7970a523348e40cc6e7e677cac6ef77dd8c19c8bd6bb7dccfa845",
+  "after_inventory_sha256": "0a658fc88c3bcc83c4fa8a0c0e81da028496e543f51bd8019d0f1a4f93a20704",
+  "reused_results": 7431,
+  "replaced_host_checks": 334,
+  "counts": {
+    "available": 6274,
+    "YOUTUBE_SOURCE_PROHIBITED": 1024,
+    "source_unavailable": 459,
+    "AUDIO_REQUEST_FAILED": 8
+  },
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 3,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 749,
+    "transport_response_bytes": 3530770
+  }
+}

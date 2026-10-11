@@ -1,0 +1,34 @@
+{
+  "started_at": "2026-10-10T15:12:40.882Z",
+  "target": "production",
+  "applied": false,
+  "sql_sha256": "b8d2dd767544d399dd3a8c27acffa516e2f8bc857aa191a24f2c83ee45cbdfe7",
+  "sql_bytes": 654,
+  "audit_seed": "040c8fafc4453f36cbcbe8500eed60c5f7ca063f78cb8c32fed1d7b4602a6535",
+  "audit_tail": "040c8fafc4453f36cbcbe8500eed60c5f7ca063f78cb8c32fed1d7b4602a6535",
+  "mutations": [],
+  "changes": 0,
+  "links": 7765,
+  "counts": {
+    "available": 6274,
+    "YOUTUBE_SOURCE_PROHIBITED": 1024,
+    "source_unavailable": 459,
+    "AUDIO_REQUEST_FAILED": 8
+  },
+  "checkpoint_sha256": "2107f83b753c2e87275475cd47e2e480584a44981ea52a82756685fbf6ed2b3c",
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 4,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 995,
+    "transport_response_bytes": 4003125
+  },
+  "finished_at": "2026-10-10T15:12:55.839Z"
+}

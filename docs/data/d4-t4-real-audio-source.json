@@ -1,0 +1,28 @@
+{
+  "started_at": "2026-10-10T10:41:10.886Z",
+  "actual_https": true,
+  "actual_ffmpeg": true,
+  "audio_files_saved": 0,
+  "primary": {
+    "status": "available",
+    "httpStatus": 200,
+    "checkedAt": "2026-10-10T10:41:10.886Z",
+    "finalUrl": "https://cdn.mp3quran.net/audio/ali-hudhaifi/r1/112.mp3",
+    "contentType": "audio/mpeg",
+    "contentLength": 193838,
+    "redirects": [
+      "https://cdn.mp3quran.net/audio/ali-hudhaifi/r1/112.mp3"
+    ]
+  },
+  "same_recording_proof": {
+    "primaryUrl": "https://server9.mp3quran.net/hthfi/112.mp3",
+    "primarySha256": "d348e65b5a00cf04fb5d99c2edebd038c9b22f5b0cdd9cd3049979c22028bb6d",
+    "alternateSha256": "d348e65b5a00cf04fb5d99c2edebd038c9b22f5b0cdd9cd3049979c22028bb6d",
+    "verifiedAt": "2026-10-10T10:41:13.691Z",
+    "method": "decoded_audio_sha256"
+  },
+  "different_chapter_rejected": true,
+  "unallowlisted_original_rejected": true,
+  "passed": true,
+  "finished_at": "2026-10-10T10:41:16.520Z"
+}

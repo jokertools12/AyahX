@@ -1,3 +1,15 @@
+# D4/K1–K9 — قبول البيانات والمحلي، قبل الشحن النهائي 2026-10-11
+
+893 اختبارًا ناجحًا/11متخطًى/0فشل، tsc/build ناجحان، lint135ملفًا مقابلorigin/main دون رسائل جديدة وتحذيرين سابقين. 7اختبارات توليد تقرير ترفض إغلاق المرحلة دون كل بوابات الشحن، وتقبل source_unavailable كدليل سلبي نهائي دون إخفاء نقص القياسات. اختبار mutation لقلب حارس الظهور فشل ثم نجح بعد استعادة المصدر نفسه.
+
+MySQL9.7.2 وR2 فعليان: مسار ملف مملوك →SHA/ffprobe/offset→Catalog/LaunchReadiness→AudioPlan→GETموقّع→FFmpeg، وتنظيف كائناتtest معHEAD/prefix. الملف الأقصر من إحداثيات الكلمات يُرفض قبل تبديل المصدر القديم؛ اختُبر فعليًا بست حالات وحدات وقبولR2. ليست هذه Fixtures دليل هوية أو حقوق لأي قارئ.
+
+27حالة رفض لقيود النشر الثلاثة معup2/down2/reapply، ونسخةproductionجديدة مشفرة مستعادة تطابق60count/CHECKSUM. التطبيق أكدCOMMITثمأخفق حارس ترتيبJSON_ARRAYAGG؛ قبول مستقل بقراءة فقط أثبت ثبات670تعريف عمود/42FK/60جدولًا والقيود الفعلية. لا تكرارDDL ولا تغيير قياسات T7. rule-v1طُبّق11تلاوة وإعادة0؛640مراجعةpendingوإعادة0، D1/D3/adminثابتة، الـflagOFF. [الأدلة](docs/data/d4-final-local-quality.json)، [القيود](docs/data/d4-three-gate-final-acceptance.json)، [الملف القصير](docs/data/d4-licensed-catalog-r2-short-acceptance.json). CI/النشر/10دقائق لوج وsmoke لم تُقبل بعد في هذه الفقرة.
+
+# قبول D4/T0 المنشور — 2026-10-10
+
+PR13/CI38039600952/ec593cf: SUCCESS للخدمات الأربع، health/ready200، smoke10/10 desktop/mobile، نافذة615.238s بلا أخطاء في الخدمات الست. D1/D3/admin ثابتة؛ صفر كتابةDB. [الدليل](docs/data/d4-t0-publication.json). T1 يبدأ بعد القبول، لا تعديلواجهة أو ريندر.
+
 # 2026-10-10 — D4/T0، قبول محلي فقط قبل الشحن
 
 logger: code/message/stack للخطأ الأصلي، JSON error fields للردود دون اختلاقstack، لا[object Object] من سياقHTTP. حجبconnectionURLs/signedURLs/query strings والأسرار فيmessage/context/stack وAPMhooks، مع معالجةcontextالدائري. resolve-known يحفظcaughtError دون تغييرpayload/status. خمسة اختبارات انحدار فشلت على القديم؛ focused14/14 بعد إصلاح عقدAPM الذي كشفه اختبار قائم. كاملالمشروع499pass/6skip/0fail،tsc/strict/build ناجحة،lint4files/0errors/0newmessages و15تحذيرًا قديمًا باقيًا فيalignments. CI/productionpending؛ لاD4datawrites أوA1/D5. الدليلdocs/data/d4-t0-quality.json.
@@ -272,3 +284,8 @@ Railway volume5000MB وdf: total4,685,873,152/used325,705,728/free4,350,103,552 
 استعيدت نسخة age جديدة على MySQL 9.7.2 وتطابقت COUNT/CHECKSUM لكل 51 جدولًا. البروفة المحلية وصلت إلى 316,539 صفًا في 52 تلاوة فقط، مع سبعة صفوف HF حقيقية في جدول تدقيق needs_review. بعد ثماني رسائل WorkerError على الأقل، فشلت BullMQ برسالة job stalled more than allowable limit. فُعلت نقطة توقف التكرار ولم تُعد المحاولة. القفل المحلي القصير، ثانيتان، سبب مرجح يحتاج قياسًا، وليس سببًا مثبتًا.
 
 جداول D3 غائبة على production؛ D1 والجداول الحرجة وبصمتا users/user_roles ثابتة، وحسابات الأدمن محفوظة. health/ready=200 ولوج بلا أخطاء جديدة ضمن النافذة المسجلة. npm test: 488 ناجحة و6 متخطاة وصفر فشل؛ tsc وbuild ناجحان، ولا رسائل lint جديدة. اختبارات البروفة الكاملة والقتل/الاستئناف والفساد/down والفهارس غير مكتملة، وفحص مساحة health غير منشور. لا دمج أو نشر أو إغلاق D3، ولا D4. التفاصيل والأدلة في docs/data/d3-import-report.md.
+# D4 توقف T6 — 2026-10-10
+
+T1localMySQL9.7.2up2/down2/reapplyPASS؛T2local+productionreplay0نفسالبصمة؛T4metadata70changes/prodreplay0/audit؛productionD1/D3/admin/CHECKSUMثابتة. T3actuallocalAPI/periodic20HEAD+20healthPASS10:58UTC،fixturesrestored؛shadowproduction4off404/write0،flagفعليلميتغير. T5browserRange2/2desktop/mobilePASS. latestfull577pass/6skip قبلآخرالتعديلات،focused31/31بعدAbortSignal/preview/RetryAfter،tsc0/lintchanged0؛index2baselinewarnings. لاقبولCI/buildلـT6اللاحق.
+
+T6rehearsalFAIL3:clonedchecknames/SQLparse/nonbooleanCOALESCE. STOPبالأمرالصريح،no4thattempt/noT6production/noT7. HEADcheckpoint6052/7765partialstopped/nohealthapply/no207auditions؛nofinalD4PRdeploy. reportdocs/data/d4-stop-report.ar.md. health/ready200andprotectedchecksums0diff finalreadonly.

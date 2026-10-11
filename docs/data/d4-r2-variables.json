@@ -1,0 +1,138 @@
+{
+  "started_at": "2026-10-11T07:14:54.620Z",
+  "adapter_changed": false,
+  "deploys_triggered": false,
+  "secrets_logged": false,
+  "results": [
+    {
+      "environment": "production",
+      "service": "AyahX",
+      "variable_names": [
+        "R2_ACCOUNT_ID",
+        "R2_ENDPOINT",
+        "R2_BUCKET",
+        "R2_READ_ACCESS_KEY_ID",
+        "R2_READ_SECRET_ACCESS_KEY",
+        "R2_ACCESS_KEY_ID",
+        "R2_SECRET_ACCESS_KEY"
+      ],
+      "changed_names": [
+        "R2_ACCOUNT_ID",
+        "R2_ENDPOINT",
+        "R2_BUCKET",
+        "R2_READ_ACCESS_KEY_ID",
+        "R2_READ_SECRET_ACCESS_KEY",
+        "R2_ACCESS_KEY_ID",
+        "R2_SECRET_ACCESS_KEY"
+      ],
+      "readback_matched": true,
+      "writer_granted": true
+    },
+    {
+      "environment": "production",
+      "service": "render-worker-skia",
+      "variable_names": [
+        "R2_ACCOUNT_ID",
+        "R2_ENDPOINT",
+        "R2_BUCKET",
+        "R2_READ_ACCESS_KEY_ID",
+        "R2_READ_SECRET_ACCESS_KEY"
+      ],
+      "changed_names": [
+        "R2_ACCOUNT_ID",
+        "R2_ENDPOINT",
+        "R2_BUCKET",
+        "R2_READ_ACCESS_KEY_ID",
+        "R2_READ_SECRET_ACCESS_KEY"
+      ],
+      "readback_matched": true,
+      "writer_granted": false
+    },
+    {
+      "environment": "production",
+      "service": "render-control",
+      "variable_names": [
+        "R2_ACCOUNT_ID",
+        "R2_ENDPOINT",
+        "R2_BUCKET",
+        "R2_READ_ACCESS_KEY_ID",
+        "R2_READ_SECRET_ACCESS_KEY"
+      ],
+      "changed_names": [
+        "R2_ACCOUNT_ID",
+        "R2_ENDPOINT",
+        "R2_BUCKET",
+        "R2_READ_ACCESS_KEY_ID",
+        "R2_READ_SECRET_ACCESS_KEY"
+      ],
+      "readback_matched": true,
+      "writer_granted": false
+    },
+    {
+      "environment": "staging",
+      "service": "AyahX",
+      "variable_names": [
+        "R2_ACCOUNT_ID",
+        "R2_ENDPOINT",
+        "R2_BUCKET",
+        "R2_READ_ACCESS_KEY_ID",
+        "R2_READ_SECRET_ACCESS_KEY",
+        "R2_ACCESS_KEY_ID",
+        "R2_SECRET_ACCESS_KEY"
+      ],
+      "changed_names": [
+        "R2_ACCOUNT_ID",
+        "R2_ENDPOINT",
+        "R2_BUCKET",
+        "R2_READ_ACCESS_KEY_ID",
+        "R2_READ_SECRET_ACCESS_KEY",
+        "R2_ACCESS_KEY_ID",
+        "R2_SECRET_ACCESS_KEY"
+      ],
+      "readback_matched": true,
+      "writer_granted": true
+    },
+    {
+      "environment": "staging",
+      "service": "render-worker-skia",
+      "variable_names": [
+        "R2_ACCOUNT_ID",
+        "R2_ENDPOINT",
+        "R2_BUCKET",
+        "R2_READ_ACCESS_KEY_ID",
+        "R2_READ_SECRET_ACCESS_KEY"
+      ],
+      "changed_names": [
+        "R2_ACCOUNT_ID",
+        "R2_ENDPOINT",
+        "R2_BUCKET",
+        "R2_READ_ACCESS_KEY_ID",
+        "R2_READ_SECRET_ACCESS_KEY"
+      ],
+      "readback_matched": true,
+      "writer_granted": false
+    },
+    {
+      "environment": "staging",
+      "service": "render-control",
+      "variable_names": [
+        "R2_ACCOUNT_ID",
+        "R2_ENDPOINT",
+        "R2_BUCKET",
+        "R2_READ_ACCESS_KEY_ID",
+        "R2_READ_SECRET_ACCESS_KEY"
+      ],
+      "changed_names": [
+        "R2_ACCOUNT_ID",
+        "R2_ENDPOINT",
+        "R2_BUCKET",
+        "R2_READ_ACCESS_KEY_ID",
+        "R2_READ_SECRET_ACCESS_KEY"
+      ],
+      "readback_matched": true,
+      "writer_granted": false
+    }
+  ],
+  "passed": true,
+  "finished_at": "2026-10-11T07:16:18.635Z"
+}

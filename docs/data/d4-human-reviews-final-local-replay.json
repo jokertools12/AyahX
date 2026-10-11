@@ -1,0 +1,31 @@
+{
+  "started_at": "2026-10-11T07:35:19.841Z",
+  "target": "local",
+  "applied": true,
+  "voice_artifact_sha256": "a307a6bfe89192c0730ec99c477b3186031396b12f702c15937a6e8549d0b8da",
+  "youtube_v1_supplement_sha256": "43e952d67c1dff2c313c43b4da912802f7778f80b2f045de29f8e673496c8537",
+  "sql_sha256": "15a80de29fb070fabf1ba98d9b28e3dd964dfd034da8eec22505ba2afe79a16a",
+  "sql_bytes": 654,
+  "audit_seed": "09670c810a557f73fb6be4dfa5cb524388342b2d6114b0c0d10513b6ec1fbe5a",
+  "audit_tail": "09670c810a557f73fb6be4dfa5cb524388342b2d6114b0c0d10513b6ec1fbe5a",
+  "mutations": [],
+  "planned_items": 640,
+  "changes": 0,
+  "preserved_decisions": 0,
+  "by_type": {
+    "basmala_audio": 69,
+    "voice_confirmation": 69,
+    "near_complete_chapters": 415,
+    "data_conflict": 9,
+    "offset_exception": 38,
+    "storage_rights": 9,
+    "youtube_audio_missing": 9,
+    "youtube_rights": 9,
+    "provider_license": 10,
+    "label_review": 1,
+    "storage_activation": 1,
+    "storage_credentials": 1
+  },
+  "passed": true,
+  "finished_at": "2026-10-11T07:35:20.252Z"
+}

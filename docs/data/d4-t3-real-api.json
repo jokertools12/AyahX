@@ -1,0 +1,43 @@
+{
+  "checked_at": "2026-10-10T15:00:05.055Z",
+  "target": "local-only",
+  "mysql": "9.7.2",
+  "approval_fields": "simulated local test fixture; restored; NOT human identity/license evidence",
+  "network_source_checks": "actual provider HTTPS; no audio file persisted",
+  "actual_storage_default_disabled_no_client": true,
+  "actual_voice_gate_policy_both_modes": true,
+  "actual_audio_plan": {
+    "recitationId": "4d50476b-6cdf-5a08-bd47-5471ab2d9e5c",
+    "mode": "surah_slice",
+    "coordinate": "source_ms",
+    "provider": "mp3quran",
+    "license": null,
+    "attribution": "Documented source mp3quran; existing runtime unchanged",
+    "parts": [
+      {
+        "url": "https://cdn.mp3quran.net/audio/ali-hudhaifi/r1/001.mp3",
+        "sliceFromMs": 8100,
+        "sliceToMs": 13910
+      }
+    ],
+    "fallbackUsed": false
+  },
+  "actual_primary_head": "available",
+  "actual_periodic_link_check": {
+    "state": "checked",
+    "checked": 20,
+    "updated": 20,
+    "unavailable": 0,
+    "skipped": 0,
+    "conflicts": 0,
+    "conflictedRecitations": 0
+  },
+  "passed": true,
+  "nonempty_real_database_api": true,
+  "flag_404_all_four": true,
+  "etag_304_revalidated": true,
+  "availability_mode_actual_database": true,
+  "concurrent_audit_unique_tail": true,
+  "no_cross_recitation_substitution": true,
+  "fixture_metadata_restored": true
+}

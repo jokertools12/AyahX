@@ -1,0 +1,354 @@
+{
+  "started_at": "2026-10-11T07:35:01.078Z",
+  "target": "local",
+  "applied": true,
+  "voice_artifact_sha256": "a307a6bfe89192c0730ec99c477b3186031396b12f702c15937a6e8549d0b8da",
+  "youtube_v1_supplement_sha256": "43e952d67c1dff2c313c43b4da912802f7778f80b2f045de29f8e673496c8537",
+  "sql_sha256": "031a0c03fdc1d87fcb316b1906fc67ff0929aeea5f2ae6d587fca10650e79dc5",
+  "sql_bytes": 7281306,
+  "audit_seed": "caf04280e4e76bed1018daf78ecb912e9dda7f6e3045c1c27b01641577665d19",
+  "audit_tail": "09670c810a557f73fb6be4dfa5cb524388342b2d6114b0c0d10513b6ec1fbe5a",
+  "mutations": [
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "0201aca0-9bc4-0b02-19b2-c730ef216e2d",
+      "audit_id": "1335606f-ac84-702f-3a6b-7ea645f3278a",
+      "audit_hash": "204242a7c909d37f1b12cf19abee011d4ee1ff508da60afa0e13e914f01d146c"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "068df46d-5bb7-5598-d1cb-29f9b7ed2910",
+      "audit_id": "ca80a0d3-aea9-a953-1488-3fdb920ffbcd",
+      "audit_hash": "0f1ea34dc6b9da16db22c5ec4865affecfa7b2aa55f2ec02398d09b83eba237a"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "0aeb766d-1816-e42b-7296-4abbf88e6e71",
+      "audit_id": "625e4ad6-b75e-c11c-bc38-c2f5c2d8993d",
+      "audit_hash": "be306d6ea487691ace5ef2fe1d9c4923a6e4d58179d32e7b0ce717eeeef84fe2"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "0c3ab8cb-1514-32db-f0b0-17f802c3f8f7",
+      "audit_id": "6ed7fc5f-7ff7-5ec8-6b91-58c95a284181",
+      "audit_hash": "2304ead75ceec909d233233999d4a8af6fc1f30ca1b21a177e68fec44f434f11"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "1342a342-700e-20b4-6a45-d9ccb9101743",
+      "audit_id": "7fad2ea8-24e9-674c-8a9a-3ff49142a799",
+      "audit_hash": "39d3ebc44a3f71ef614786f7abdaed84b91aa2ade455eb5eb0e6e371ef2e4a17"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "14ec035b-4b78-8089-acd1-b42252d0664f",
+      "audit_id": "44275ec3-d604-9a31-5af7-d51ea01c7515",
+      "audit_hash": "83354d7f257abc18181cbd94d20a2915922f5fd722a8f1693c9bbdff5e105db9"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "177f7fbc-bf34-d483-9b75-a36d7b9588ae",
+      "audit_id": "c3b90561-53d1-2cc7-2475-5762ff02a140",
+      "audit_hash": "44237c21576db17eda3b090b3c73e923f87909949e5341a28ed374ce34688161"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "1eae1280-ab66-7b91-db4d-4d717f498896",
+      "audit_id": "b477dcc6-0312-2a96-d8fe-9793df2c2ff7",
+      "audit_hash": "d81bc60935f29d5c7a2267cbabe89513cdeb5dab0384e1361064bef7b41a1cab"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "25b4c8b4-7c13-11c0-9395-3072e58e70ac",
+      "audit_id": "937afb8a-569a-db62-840d-81f235f28d59",
+      "audit_hash": "3df3c02a4958005676f8a9580a2f81fccac70ab78c60f2c8996fa1cde18d8e48"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "2b5afda0-6c31-1fea-3462-187b100cd6df",
+      "audit_id": "3992c76a-f5d1-ad27-c835-fb9d47e3c40a",
+      "audit_hash": "82d3005f23ee4e4b5d8fe163ac0b6ceb360c802b2945929d459cb17fa7b20e63"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "2b6f005d-e750-305d-df5e-a170046eed25",
+      "audit_id": "55284217-c614-6f5e-3f33-a3a877a73847",
+      "audit_hash": "8d13237d76b8c8ea9ba85c648c6f99cd8346935befc68acf5137c1b7b063f88a"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "2d37ff7d-6ebd-7162-87f1-32be13a12513",
+      "audit_id": "76ccba17-1df1-c23f-e6b5-4c6d83201136",
+      "audit_hash": "c128cccc16c8c33b35b0f886008ba6a10acfad57f84b0b112c8b65da529fcac1"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "2f46cb45-6893-0bf9-f7bc-ff743c31f897",
+      "audit_id": "667308dc-e517-5a98-db0a-59a63230976f",
+      "audit_hash": "d52db399674eace7eb2b9bab5f57f46ca31b4dee67244266487d609189343001"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "32c00518-68ab-8a1a-a897-99435727ee96",
+      "audit_id": "12dbddc4-d52c-fd90-107d-36dad9b198e4",
+      "audit_hash": "08c33e27a0066d31b8c71ac4918da29eeeb129fada720d6c1e8cb50e4109e1c4"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "3586840a-583f-dacc-4500-803634930889",
+      "audit_id": "57ec5416-fec8-4f12-cc24-4cb94c335771",
+      "audit_hash": "07dc23edd79ef09e10c87ebc64970c6dcd992a3eaf69c598188f15b88114d9ee"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "3c6d1451-1d59-b26a-6352-c25408e152da",
+      "audit_id": "1efb9372-262f-55f4-f3b2-e7ba4b71a4cc",
+      "audit_hash": "4d5db6c850c9ffcf39a871d04a4b17f5c290534ac861d9844847199772adc9ad"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "3eb3fafe-9d6f-ad81-83f3-f0a1c00f991e",
+      "audit_id": "a233be05-c5a6-c48d-f37b-ffc9d1b54a15",
+      "audit_hash": "83c2bdf27b4342b5cd14da292e125f6ccb7bd0204e711b2f93a6c95bb4fcd6be"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "3fd86146-e1db-bdaa-1727-ec3af20137ba",
+      "audit_id": "43fb74a0-a1ac-937b-453e-f84081abe8dc",
+      "audit_hash": "5983d023f8b1dad72018c9cce6729f7312d78a98957f6993a8ac16d0cef6de1d"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "4200036d-d929-377e-ca64-1f413c23d2bc",
+      "audit_id": "c5282b7b-c50a-93d2-4ba9-181c7343896f",
+      "audit_hash": "bfe2ab8c394a3c67f5c9e33d72f016c58fbc7f5b6bd884d1fcdf38957219331d"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "478e780e-5a19-39d0-3c40-98d1d1cca0d9",
+      "audit_id": "2944dee6-f538-2a60-a427-fa38d11f75c5",
+      "audit_hash": "d925b4f3464a157904749402e65ba8b434750b83c857478b64879d2f28e7d566"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "56dd0d28-29b7-0ec7-6184-c487d8f3db10",
+      "audit_id": "962b9b05-4517-a355-437e-2aa39e89a3b9",
+      "audit_hash": "6c70575519689af57bb2ddd058683ab852836c7b328850038773640fc7c0120f"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "5822f013-26c0-c7e4-be75-5e38f2d48c65",
+      "audit_id": "21ba59e2-1b8d-bf98-32c4-eaf3cdfd9967",
+      "audit_hash": "eb07710a17f7b9f7b8bf730aa4bf0057964f93a354c84c6ac04e0328f6cf18f6"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "5e55f8c2-3739-22df-3581-c3b4a0427fa8",
+      "audit_id": "da69c99e-e71f-a7ed-7815-5be9e35f6061",
+      "audit_hash": "524e9d5297a022d43f2953e89d5a260a7f34afb192a7fd2f61977342c6771cee"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "60c4ce74-8f3d-7d0c-caa4-5faf7f06dd0e",
+      "audit_id": "96e96dd7-2695-4ec7-5d3d-f4d5b6bb4715",
+      "audit_hash": "8ccf797e6d6951ecbd9709b8de3a7bd76aab5290f7ff47a633553fe2cdc1a944"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "631f096d-50fa-cccc-de81-f24b17438527",
+      "audit_id": "e879de93-959c-75cb-d5b6-1325d88d0879",
+      "audit_hash": "0df95ccb1ad267d36009fb730185c0e45796ffe4f69e1d6bf61d82f7ce3545a6"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "66685b4c-ea02-2ad8-ae9b-dd59d3c593e2",
+      "audit_id": "f5bb6cb1-c7cc-9948-13fe-c37670e5b46a",
+      "audit_hash": "762f2fd9b5b41d0926d1a1717e0a0431194166fa13b7b020f6eb17d84e27be7d"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "6bcedd99-e482-e792-833c-ac17d296ef6b",
+      "audit_id": "e5fc6587-e688-731f-dbc9-e675ddd1d88f",
+      "audit_hash": "868d2de28c4f716d0cc46bd1581a40716f4f071d3717480f972bedc7b7104d6b"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "6ff77e01-05b4-a8d6-b82b-41ca2061fce8",
+      "audit_id": "f54d54de-fcb3-7814-070d-a6e53db579c1",
+      "audit_hash": "926a5429ea436c39fc62f216c1f55750fa29c62f10f31533a7c2b9642a25bb9a"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "840492e2-6ea0-be28-d93b-8e29e2f3dbb1",
+      "audit_id": "9bde17d2-62f8-ca92-8b2e-0b5d9dd9aa5b",
+      "audit_hash": "78824d8c9cdc6ee87f9b3b4baf02fc0d04b17b1bcb239dd38ab5b99ca6eaffa8"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "86d1a333-b9b5-dae6-d4f0-c1a9785db388",
+      "audit_id": "0760ab99-af0d-63c2-c188-7b2500fbdb85",
+      "audit_hash": "e3e441896ff4f7b92e754dd762560ee65408a7692b131ac2f3476539a623e3b2"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "8a2d0d49-e09a-2a4b-ed34-d0f36f3e62c6",
+      "audit_id": "b72e8081-771b-9ba1-7983-25b99042356b",
+      "audit_hash": "81f22a0ee1b0a3c9e10c6e4e6b6610ce820009a2e5bd6c1963d14412ab69f0c5"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "94e8df45-2d5f-a569-8901-279d8306ba26",
+      "audit_id": "5083ad03-5144-521e-1b68-4f5c9c8987b9",
+      "audit_hash": "9df9f667e0963fad3d5098b7033afc9e7367e110a63075ef3aa09bf62b384497"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "95bd74a7-4148-3fc4-9721-1c6d23fe5137",
+      "audit_id": "3e364ca8-8816-a9a9-daf8-8f75c2f1994d",
+      "audit_hash": "d53715e30a8b2084e521f3cc921fb2338213f6419cab8d711245cdcac9491ec0"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "97073a91-fb74-1266-e24e-4847700697a2",
+      "audit_id": "3b7e8585-46cc-2a91-812e-d8c6e9ffa1da",
+      "audit_hash": "46e2c77bef9881055ec083f185619f3f36283d091aa265b223a7e3823a12de96"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "9ea78633-2165-a25f-6658-65c4d836d2a1",
+      "audit_id": "be5abf1b-58e7-b831-4399-65d0a46f6dcb",
+      "audit_hash": "ec555a8ae44aa7fee919695944c80ae52140077979bf413cf02cafaa4dc26d8c"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "a806ad7f-6346-e144-2481-0ad6ccbd4a5b",
+      "audit_id": "179a6880-f46c-5ec7-5898-2ac85115d525",
+      "audit_hash": "186d56b30bed292b0ac51dc2b82890bef1fa7eb9eb940f68855a637142dfc109"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "ad77dab3-0777-9996-6cba-e93cf8546a89",
+      "audit_id": "f274cdb2-244e-db28-4ece-fdc3b8e9c22d",
+      "audit_hash": "a4e9d807c8abf879d9d1cd906545f0ccd819a14910927832a96ac6ca10c74241"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "b1d27699-f781-aab6-272c-36a00afab0b2",
+      "audit_id": "9f78bbc3-18e7-2b5c-9a35-c6c5a038af75",
+      "audit_hash": "bcddde93ac9ee3d74082817fd0cf12e3c0f55b7fd7eb8f14613777a8f867eb41"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "b33372ca-d3d3-910e-9a4d-5593691a6e1e",
+      "audit_id": "769721b1-c1ac-45c6-2c65-4b30d73a60cf",
+      "audit_hash": "354a21910ae6a745fa5dd02f59d181484d886345e644a1b5ffe7ed14af41140a"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "b4c1bbd9-497f-f4bb-24a4-369ffd393b3c",
+      "audit_id": "fcf27fc8-134e-96dc-8184-4f04734009ac",
+      "audit_hash": "e1c8e1100f10ba3214c602c22a7afb15ffcfd401e1df9fb7dae4ab0679200114"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "d65c96ec-f20e-a3ea-4ec2-4d3aab327357",
+      "audit_id": "d9051a10-5e72-2151-b053-52ffab5c9315",
+      "audit_hash": "25105bd7bec6558cc5c323a105a36238a695b95d0b998fe345487b8113b3c173"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "debd8307-6d14-39ce-8ddb-9eb67248ecf2",
+      "audit_id": "683812ba-6dca-798d-46d6-8cb2aa1cf24d",
+      "audit_hash": "8b453479db435b3ba913708652e0cbda97647e90f51493f55ae513004e806a4d"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "eddadf3e-9671-944a-f258-bcd1dae4d787",
+      "audit_id": "bcffe237-dad1-f771-7575-8e8288d87b70",
+      "audit_hash": "4a1a04520294a500a6554d616e4f24491feaeb2422c4eb7b4535611ee1db4521"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "f278e4ca-e7f5-0795-60c6-0ae46ccd420e",
+      "audit_id": "cf309986-1df8-283b-5fb0-6f2f3f6f298e",
+      "audit_hash": "612bc1519122e37110d5d3b5df1319f81365b5a26a3ed463627ffe99934441e6"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "faa36028-5966-9972-f9e6-fa8f912a4250",
+      "audit_id": "e6f56554-abf6-9c84-db48-6fbcd20d48a9",
+      "audit_hash": "c0d0bf8d9fad88badc0317b76befdc798fc6f09cd16901f2eba1869295f4fdfa"
+    },
+    {
+      "action": "review.enqueue",
+      "table": "human_review_item",
+      "id": "fe6cd8a1-bafa-4ab9-9735-10b106dc75e3",
+      "audit_id": "3a26e9aa-f928-3d5d-fdd2-d123af200456",
+      "audit_hash": "09670c810a557f73fb6be4dfa5cb524388342b2d6114b0c0d10513b6ec1fbe5a"
+    }
+  ],
+  "planned_items": 640,
+  "changes": 46,
+  "preserved_decisions": 0,
+  "by_type": {
+    "basmala_audio": 69,
+    "voice_confirmation": 69,
+    "near_complete_chapters": 415,
+    "data_conflict": 9,
+    "offset_exception": 38,
+    "storage_rights": 9,
+    "youtube_audio_missing": 9,
+    "youtube_rights": 9,
+    "provider_license": 10,
+    "label_review": 1,
+    "storage_activation": 1,
+    "storage_credentials": 1
+  },
+  "passed": true,
+  "finished_at": "2026-10-11T07:35:01.842Z"
+}

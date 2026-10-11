@@ -1,0 +1,28 @@
+{
+  "checked_at": "2026-10-11T08:24:23.7773769Z",
+  "source": "authenticated Cloudflare R2 Overview",
+  "period": "September 26 - October 26",
+  "before_usd": 0,
+  "after_usd": 0,
+  "displayed_billable_delta_usd": 0,
+  "class_a_before": 131,
+  "class_b_before": 33,
+  "class_a_after": 179,
+  "class_b_after": 126,
+  "buckets": [
+    {
+      "name": "ayahx-audio-prod",
+      "objects": 0,
+      "bytes": 0
+    },
+    {
+      "name": "ayahx-audio-staging",
+      "objects": 0,
+      "bytes": 0
+    }
+  ],
+  "account_plan_changed": false,
+  "usage_reporting_delay_possible": true,
+  "cost_isolated_to_test_not_proven": true,
+  "overview_metrics_note": "Overview staging count1/41.94MB while actual Objects page is empty and SDK HEAD/prefix cleanup confirmed; usage metrics lag, do not infer residual object from aggregate metric"
+}

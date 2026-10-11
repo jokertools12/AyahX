@@ -1,0 +1,9 @@
+# Imported brand masters are immutable, byte-hashed source artifacts.
+# Preserve their exact supplied bytes on every platform; do not normalize EOL.
+public/brand/01_Primary_Horizontal.svg binary
+public/brand/02_Stacked_Logo.svg binary
+public/brand/03_Symbol_Transparent.svg binary
+public/brand/04_App_Icon.svg binary
+public/brand/05_Favicon.svg binary
+public/brand/06_Monochrome_Black.svg binary
+public/brand/06_Monochrome_White.svg binary

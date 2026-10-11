@@ -1,0 +1,43 @@
+{
+  "started_at": "2026-10-10T14:50:29.307Z",
+  "target": "local",
+  "applied": false,
+  "voice_artifact_sha256": "a307a6bfe89192c0730ec99c477b3186031396b12f702c15937a6e8549d0b8da",
+  "sql_sha256": "c7e9faa5b2879791d6c4ea24030af6336257650df5413b0a88d47eec9a270323",
+  "sql_bytes": 654,
+  "audit_seed": "25bb74cfce7a4b3c94683dea29121dc7e8b67ff76ccdf04008f106372a9226df",
+  "audit_tail": "25bb74cfce7a4b3c94683dea29121dc7e8b67ff76ccdf04008f106372a9226df",
+  "mutations": [],
+  "recitations": 69,
+  "changes": 0,
+  "human_states_preserved": 0,
+  "automatic_status_changes": [],
+  "advisory_status_counts": {
+    "unverified": 69
+  },
+  "actual_aligner_readiness": {
+    "checked_at": "2026-10-10T14:24:12.526Z",
+    "provider": "internal_ctc",
+    "configured_path": "/",
+    "expected_alignment_path": "/v1/align",
+    "alignment_posts": 0,
+    "checks": [
+      {
+        "path": "/health/live",
+        "http_status": 200,
+        "code": null,
+        "status": "alive"
+      },
+      {
+        "path": "/health/ready",
+        "http_status": 503,
+        "code": "MODEL_NOT_CONFIGURED",
+        "status": null
+      }
+    ],
+    "readiness_artifact_sha256": "2f6c89a3bf828a6a4adfa49b32a6039de103f3b81db9845d40452073529b54f2",
+    "v2_credit_granted": false
+  },
+  "passed": true,
+  "finished_at": "2026-10-10T14:50:29.380Z"
+}

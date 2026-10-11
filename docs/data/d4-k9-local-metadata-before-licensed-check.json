@@ -1,0 +1,802 @@
+{
+  "checked_at": "2026-10-10T15:23:16.161Z",
+  "target": "local",
+  "applied": true,
+  "sql_sha256": "124ccebdb11adc744f116e3a9f5b8f360dc15dc0858d6ea9334069ae6a9e0a1e",
+  "sql_bytes": 298400,
+  "mutations": [
+    {
+      "table": "recitations",
+      "id": "145f04af-ee8c-61d9-5570-d3375a6e59e3",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "531bd6ba-d719-6992-c8ec-a3c9bf3c559a",
+      "audit_hash": "31be301d1bfb65e28852752f4ed5c621246e6ba4c53ea8ed09df2ffe1ef8d9c6"
+    },
+    {
+      "table": "recitations",
+      "id": "4b8a17c8-07dd-51bd-949a-b3deffb74a83",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "03c8fa7b-7695-16d8-2c25-2fb8738a20ba",
+      "audit_hash": "e2186e3764dda50cc2ca7b47522b06b77d6753ac858fc63105ff8af471e2c78a"
+    },
+    {
+      "table": "recitations",
+      "id": "5ee98aee-2dd0-13a3-793c-0934afec9a06",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "5b2ed2f7-1c3f-2173-cc1f-48a7c6ac592c",
+      "audit_hash": "7fac08386597e7bc8f23cadbfa9268cfaa026bb212dfd2ca0a76fd4da0575cb2"
+    },
+    {
+      "table": "recitations",
+      "id": "51567d7d-7729-4997-25d3-99b3c82e6aed",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "570b1371-a840-9418-c074-3e967ad05152",
+      "audit_hash": "94d475abd84c9b7d275d7363685c76c6200c53b3e7a8c2b0a7938e8f8b3eecb6"
+    },
+    {
+      "table": "recitations",
+      "id": "95650f99-296a-6122-2dac-498b79db8ede",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "be8e3315-c47f-f501-121f-cd88ffa3a2d8",
+      "audit_hash": "e37f8067b71617ec016734a0830e86d3d33d3b6bb98ead43d31c0ed5fe2ec864"
+    },
+    {
+      "table": "recitations",
+      "id": "7f972ead-c29b-5642-a62a-df91ff150ca5",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "verification_method",
+        "timing_quality"
+      ],
+      "audit_id": "d3bce843-a8c3-7fc8-e2ba-9f220d9c9a14",
+      "audit_hash": "8e8613cef7e7893eb6229b4cc216453c340e5ef4bcc1e6ca1dba667d6bc0b490"
+    },
+    {
+      "table": "recitations",
+      "id": "c22f1347-80b6-2a9c-f7d7-7fb9ce0bc56a",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "abafc8c9-76d3-54c2-a907-405c43f2f1ac",
+      "audit_hash": "499c06917d40b98a5005388f6f4ead9c9d0d4fd1aae30d2fe63b978061cbbfe3"
+    },
+    {
+      "table": "recitations",
+      "id": "bc8af87f-bb5f-0bec-9b75-94ee6898e594",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "74da3b24-6b93-50b0-a61d-a74c43002a2d",
+      "audit_hash": "3a99f6ae0f05b41d3f656dab299ed2f2791074c062cc564e50e69ad35b3b5e08"
+    },
+    {
+      "table": "recitations",
+      "id": "1be4803e-aa12-eb2b-3cee-ffde092273d3",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "verification_method",
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "344928a5-e37f-d6bb-adb1-b1ded68451ca",
+      "audit_hash": "7de50c6ac1b2b270a6990834068d1e1a83fc6015ab806d01eb2dea967484c69f"
+    },
+    {
+      "table": "recitations",
+      "id": "09be4d81-c0e6-4cc7-4d32-70480e377a61",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "bd3c123f-c7ec-397f-5e5f-deb8eeca71ad",
+      "audit_hash": "74f63e1a3f33d55940f138c8796d8de5a5d647e2284c94625983fbc5d1c5dd1e"
+    },
+    {
+      "table": "recitations",
+      "id": "2f3ca0d9-1e94-7d4b-5123-da1e6b2742ac",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "96edf432-cdb2-b295-fef1-4d4d7ad348e2",
+      "audit_hash": "1f540468be6b7bfd75d8a9342d797714292dacad39d59f2f0fee5a3273956671"
+    },
+    {
+      "table": "recitations",
+      "id": "80633b53-7ae7-e52a-ef25-149b2b8c3fad",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "c5697cb8-7520-6d32-395a-1ea92e9a1ac5",
+      "audit_hash": "1bd3005d96f717139d33b4890f72cb08351ef4ca3d29d36dfeb2500198abcd1d"
+    },
+    {
+      "table": "recitations",
+      "id": "99b3e3dd-f1b4-befd-753a-25f5f70c1b4f",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_quality"
+      ],
+      "audit_id": "6009a67d-76bc-bb1f-7e1b-e3f16865439f",
+      "audit_hash": "0031abca59858b3993ecf749b6828c6b4dde31d63cd8d20770b8c2f6dc6be624"
+    },
+    {
+      "table": "recitations",
+      "id": "b8f09fcc-08b9-9eb7-8a1e-1fc97fa41b58",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "b4540bb8-9c74-943a-0913-189e69ec599b",
+      "audit_hash": "dc367852084dff717a47a89acb399f606035358e9438cf3856b05ab7d7182640"
+    },
+    {
+      "table": "recitations",
+      "id": "b1a45240-81a7-a9c4-2b2c-5888eeefe115",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "716f36c8-d261-0540-5cfd-fd295b8571d7",
+      "audit_hash": "3e421cc09c675b359fb699a078107bbfd9516074248bb92ac44f14b3203a4f1d"
+    },
+    {
+      "table": "recitations",
+      "id": "232bdfd8-0328-3579-9ed2-d3c4cd90f3fb",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "5838cbcf-2f24-b834-aa29-5cc05e6a0200",
+      "audit_hash": "c44afa1cafed1d27a90e251c68d66565735006d54fc800b969100d4fb66c36bd"
+    },
+    {
+      "table": "recitations",
+      "id": "09b09290-df40-e01e-1767-437e03debec9",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "17d7bbd3-6f91-4d04-d2d1-6ee0e8c74a01",
+      "audit_hash": "57779901ab92f4c7e78653728a577a13dd4852bc61ff9a8323a9565e96c80606"
+    },
+    {
+      "table": "recitations",
+      "id": "d6af6453-e44f-6e4b-da9b-ebe8aaad20ac",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "e89f4194-ca5f-9be3-6a45-a2629490eea7",
+      "audit_hash": "2542425fa7379e53ce4404e86f0e9a2e6f09eb3d7b9d9794f6e85c45e5653260"
+    },
+    {
+      "table": "recitations",
+      "id": "a173a7a7-b0a9-8409-da03-a7dc3038f23c",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_quality"
+      ],
+      "audit_id": "7a7480f0-e9c6-779b-47cf-5e5ee9790116",
+      "audit_hash": "0d753250a55769d7778b3b4b88cd8b16c51a5dc4910cb2272e53fe4c3ae9e6fe"
+    },
+    {
+      "table": "recitations",
+      "id": "bf4ebc6b-ef7c-4402-4862-63d50efedfaa",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "4dbc62dd-0382-0fd1-690b-fa9ce8a39548",
+      "audit_hash": "08649c18e1c6449ba6a329b1f54783bcbb73083ccba7e2b6a31981e91771d839"
+    },
+    {
+      "table": "recitations",
+      "id": "10317dc7-547c-71ac-529e-e993980a6a3a",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "903e15a5-0ec2-e339-2da4-685744259371",
+      "audit_hash": "a867396fb34461a539bead202cb421ac9d6cecea5686928b3df6f1f77aea288d"
+    },
+    {
+      "table": "recitations",
+      "id": "2044d4d2-cc5b-b407-cbe2-c7632e21478b",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "51cd9f41-8ed0-f42b-2781-0af4c74f336a",
+      "audit_hash": "306cab49aa71d0a3ce7fd1e0752c29be6e24b4ee4f59d6a5e3d29d1edf2a3487"
+    },
+    {
+      "table": "recitations",
+      "id": "12cf216b-1bd5-686c-1d1e-05714aa38a3d",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_quality"
+      ],
+      "audit_id": "e11f8704-e1d6-0ed5-3331-74afe8ea94db",
+      "audit_hash": "c229693cf9f39dba17756e8a233d7e5db280e5be78f093c4add512f91b1d29c3"
+    },
+    {
+      "table": "recitations",
+      "id": "8a1489c5-4fa2-12b5-0112-6e04b01e94b5",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "verification_method",
+        "verification_status",
+        "offset_verified",
+        "offset_check_score",
+        "verification_details",
+        "audio_mode",
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "16299e10-d5a3-d032-a35d-9efa0440a1f2",
+      "audit_hash": "5c57ef70d273e7dca4a03e7c168c72d552f3d25068a7aa2240a3f5cdc95379e9"
+    },
+    {
+      "table": "recitations",
+      "id": "3e21d6e0-7a97-e9ae-86b5-95d6d1a74dcc",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "31c9faaf-84d7-200a-671e-0266224c1352",
+      "audit_hash": "f35b233d2a617553b449e2a7410dd5ca9f35a4f47efc84653c710a6dc16127e2"
+    },
+    {
+      "table": "recitations",
+      "id": "e7f11e1f-8cf9-b375-76c2-36bcb1b6a048",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "0451610a-4bad-3ceb-bebe-9904d58f88be",
+      "audit_hash": "76048b7bb1c406ef9c7506fd5770c3cad81ea3534730f5591ac573b6e6f16113"
+    },
+    {
+      "table": "recitations",
+      "id": "703f4293-124f-f250-d89c-fb89ec7d7195",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "3680f320-9365-e85a-a7a7-8b6aec7a38f0",
+      "audit_hash": "c7274a5a87a2af5e87159b30caa6091b5aaf4c964fb0b4fb73c47f5d7f7593cf"
+    },
+    {
+      "table": "recitations",
+      "id": "4d50476b-6cdf-5a08-bd47-5471ab2d9e5c",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "verification_method",
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "9aa85dbd-49aa-7452-bfc3-4c452d7656b6",
+      "audit_hash": "261a52c7fed92af8bf139f7b5d70f81187888ece4cb889d8fdbe5530ab5000ae"
+    },
+    {
+      "table": "recitations",
+      "id": "bf6fe8dc-e76c-2b0b-1bef-d5a1383b0fed",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "91868534-8de9-8c3c-9acc-31e12f03a904",
+      "audit_hash": "b70e0c5aff70d6d70d7312637114855c716f66f38af7b18211ee7413fd749385"
+    },
+    {
+      "table": "recitations",
+      "id": "db02c405-e3be-dbf9-6862-eee371003ae1",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "a1e20037-4ebe-da62-5b88-b77c2e524599",
+      "audit_hash": "3b74ca4b694f7cca53939c64ca35193282f7170e41681d588e5d7cf629805232"
+    },
+    {
+      "table": "recitations",
+      "id": "4fdf3e11-a78b-0d5e-3daf-10d3d8edb528",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "350531b3-17fe-735a-1b00-116e462d29fb",
+      "audit_hash": "911c4e9f6930e923eba1abd9d7c2f0d4bd43b82ecc436cf509520474a04a30af"
+    },
+    {
+      "table": "recitations",
+      "id": "f4a974e6-c90b-adc3-833d-c36ce7ede627",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "0aa7e4d8-f5a0-4f13-add1-8d4a122278c8",
+      "audit_hash": "7ef55c8f9fe96554add9fd00ef89254a5ed75f93ce8e8223fd80b01b3369ac53"
+    },
+    {
+      "table": "recitations",
+      "id": "b6acb1c7-6894-6b78-9108-ecd4f25ac3df",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "verification_method",
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "3e60b7d1-4553-e9d7-14d5-c010b4c4806b",
+      "audit_hash": "6b540a30707803c3343deabe783e1f70272d1ae8499db71cf9d8813a73c4b058"
+    },
+    {
+      "table": "recitations",
+      "id": "e9fabfeb-3cb4-e27c-2fa1-940fc88deae0",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "d3238ae0-d7f5-8c75-5dea-fe44bda92fa3",
+      "audit_hash": "493bc0e3818b84eb2097b01cdab2f5b4100293820fa24823ca6851395b90ed6f"
+    },
+    {
+      "table": "recitations",
+      "id": "3f2b604f-9c5e-6452-00ce-2a03cb92adb9",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "e0f8f918-4199-f318-485b-e7c9acb72193",
+      "audit_hash": "26dda68cff6f514ff1b07fee5d2de454bfb6644a01b201f990ce1010b2f41650"
+    },
+    {
+      "table": "recitations",
+      "id": "7f82822d-b69d-efda-096e-3182ce4063d0",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "verification_method",
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "6967419b-b2de-6346-fdad-fb6cbb1643a4",
+      "audit_hash": "55c9c1d2fc877c84b1d27b3665a077ebe0e3c218bffbc7712db74c36fbe7864e"
+    },
+    {
+      "table": "recitations",
+      "id": "c72e7816-cf79-ae8c-be62-fc3285baf877",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "ad748ec9-fde9-6bb2-d717-cb3e12c1bb98",
+      "audit_hash": "ecbfb9c79e30906ddd31b32cf755a192787924b20fad350a1faf1e4498cdd9fe"
+    },
+    {
+      "table": "recitations",
+      "id": "de4d21f0-9cb0-3b39-d8da-1ce99e4c7cc0",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "cb5f536f-cdf0-02ef-96b1-f13e4a5da07a",
+      "audit_hash": "2f1dbad44a1e62a4235feae868c9808907149a88bf72b389318099e651148860"
+    },
+    {
+      "table": "recitations",
+      "id": "044a1e9f-67c9-6854-5e3b-20438c45c4e7",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "1604374d-49ef-05ca-4001-84e501bbfa56",
+      "audit_hash": "dd9b956d5ff605c48f07089f748c8ad404fb5642b72da51d180f0d2d060b6596"
+    },
+    {
+      "table": "recitations",
+      "id": "829763f8-1faa-4a26-15ff-86f934c4bceb",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "1ed5bda9-644e-d152-bccb-ea652f31cbf9",
+      "audit_hash": "737ba81247c5476a7724b0a0a7fa18a1c36cee2430cc066e3993e5c96e1f7875"
+    },
+    {
+      "table": "recitations",
+      "id": "cb030c9e-d6bd-2ca2-bed2-17157d5b2964",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "0209651a-d7dc-4ced-1077-69c16354661a",
+      "audit_hash": "eeaa33d5bd47f130dfaa388b9e2c496b2d607136effa23999510af1382813775"
+    },
+    {
+      "table": "recitations",
+      "id": "116d67f6-5b77-3883-3e80-9b11566dc7c3",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "a8c4f77b-e92a-ef7a-32e3-73f3dd132a22",
+      "audit_hash": "50dd936dd1e37abb386fac356543a775e27a1a46cce32e6004ac71ef28f47f6d"
+    },
+    {
+      "table": "recitations",
+      "id": "01d46368-8770-1e8f-9dd8-3a8608e97487",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "6ee28a54-11a4-b5d3-21c3-3acd2fbdc4e7",
+      "audit_hash": "f14c8f5dee80175d8cddcbd336269676d3fbf848a3707c7f8684dbae43405048"
+    },
+    {
+      "table": "recitations",
+      "id": "a37b200d-ee15-761b-afea-45ce0f10b481",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "45da703e-858a-f6ea-e8ed-d2bd21c32194",
+      "audit_hash": "6b4593f59d09d55713a823470bb3e3b8f387ba108e2fb8be0638732955237c41"
+    },
+    {
+      "table": "recitations",
+      "id": "a3bea32c-f60e-990f-8631-931ee63890bb",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "dfcc6c23-cd48-651d-fa82-f7ed79392831",
+      "audit_hash": "5fc17bb499eae1bb6a34f5c0b1fdcd21afa200e59c2487f4eb193b0005c8977d"
+    },
+    {
+      "table": "recitations",
+      "id": "a7ffd321-8f70-8cc1-4650-4a5926ba6ca0",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "a7ee949d-2610-b2f3-25a7-2cad72a35b4c",
+      "audit_hash": "9cd4404c4cd72896531e93e364533fae2e96a55a34e9b5c58f11947f412bfe2d"
+    },
+    {
+      "table": "recitations",
+      "id": "2648aae8-f604-0bfc-918c-1d6cedd47c55",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "verification_method",
+        "verification_status",
+        "offset_verified",
+        "offset_check_score",
+        "verification_details",
+        "audio_mode",
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "8c10c88e-bc6b-9ad9-ec72-48d19654cb29",
+      "audit_hash": "81e18120345ca36f8d7d88052858e277a247d22066b06a0f97a2794f674326ad"
+    },
+    {
+      "table": "recitations",
+      "id": "39eacb00-f62a-e184-6f6b-b74858c6e1a6",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_quality"
+      ],
+      "audit_id": "cc9a8112-7482-169d-84ae-a49c0282794e",
+      "audit_hash": "aecbda6c9a770de48accb4c7fc45ea9894473759bdc63fa305b2dd8e48ff6ca3"
+    },
+    {
+      "table": "recitations",
+      "id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "verification_method",
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "bc3bca2d-16d7-68f7-e464-22d92538c1dd",
+      "audit_hash": "4bcd46c8e0054b9b99760f68479c1b6f345a247ca870a8d2f880b9cc484b06ef"
+    },
+    {
+      "table": "recitations",
+      "id": "91f99bb2-568c-139d-cb8b-f83a90d07769",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "verification_method",
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "2173f4c2-8471-75a2-20ea-4ac8eeb3a018",
+      "audit_hash": "68221ac5e845eca7cea2ef68ffda07cf3bf9a88a903bb9bbcfcce1e9a380064c"
+    },
+    {
+      "table": "recitations",
+      "id": "85e4d478-2aaa-d433-ab1c-df9a5b32d8d2",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "verification_method",
+        "verification_status",
+        "offset_verified",
+        "offset_check_score",
+        "verification_details",
+        "audio_mode",
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "e78de66e-4ffa-3678-2687-efa661664266",
+      "audit_hash": "93f4c28c0e4fa5c2f8a0698102b620eccbe7f8c04d3a15272c8a1e782c092f36"
+    },
+    {
+      "table": "recitations",
+      "id": "271c991f-ede5-0342-ddee-792024c769f0",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "d612f3ce-1548-0a03-ef88-a0df67c111a7",
+      "audit_hash": "1e2ad575cdabba468066c5f043c2672cbd4a46a92ea1946a54033f10bbda6ec3"
+    },
+    {
+      "table": "recitations",
+      "id": "5135bf14-d83e-37c1-08aa-d5ac08a2bc97",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "ceef2ca4-df19-2947-b82f-2c285bd28500",
+      "audit_hash": "07597a4c5ed9764e775b9c43f33f124894d142b5f3872af9cc9e9501e06b26d8"
+    },
+    {
+      "table": "recitations",
+      "id": "b8e58c96-6756-c4b7-3d61-d4329c440d89",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "verification_method",
+        "timing_quality"
+      ],
+      "audit_id": "a0bb2f53-36e8-0257-4d2f-b282086270fd",
+      "audit_hash": "34c20d9fb9dba553ac3597586066c52d3425f3c04afef2dff8c2455bc6f80056"
+    },
+    {
+      "table": "recitations",
+      "id": "30dd65ad-7b89-4cc8-dc35-3535db4d2586",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "35c424b5-52bc-7c58-a81f-dfa9dcb458d4",
+      "audit_hash": "07a3dc2a5f6a70df484ed1f18e4b161763c7d8261ec400ca2093a19967d87253"
+    },
+    {
+      "table": "recitations",
+      "id": "779ebe1e-be62-7a71-b2d7-4f2251303684",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "3f99aea5-a52e-97a0-3ef6-ec5e332dafd1",
+      "audit_hash": "07d75f8cb0bbe826363756270e4caa9b60c079b2da00d6581f4b59afcee75693"
+    },
+    {
+      "table": "recitations",
+      "id": "1c79adfe-a520-5441-7e0f-96f5d8752322",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "21be55dd-2b5d-3d0b-8605-d1d90433343f",
+      "audit_hash": "2857cc30827c0cd4c363c20feeb74cfb38c50271b66454e12e6809ed5b648141"
+    },
+    {
+      "table": "recitations",
+      "id": "b50b55b5-a7c9-7bb6-bc23-a949078e1c29",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "5a990e4d-7a16-d424-ebc9-88725d8fa6a9",
+      "audit_hash": "cee53f832057010f3d7fdbcdd09db895193835387289d39e7948f21c6f371a5d"
+    },
+    {
+      "table": "recitations",
+      "id": "639e66db-a4c7-ca0a-2cce-f557ecc151db",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "f447eab8-a0d3-8c93-1998-431a9407d03c",
+      "audit_hash": "20496eb98aff932fde1a8e061766e896096300b2e527fb79c73f9d649a426bc4"
+    },
+    {
+      "table": "recitations",
+      "id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "7d424f91-6684-e949-49ca-a9a8e1a27fef",
+      "audit_hash": "88288e44f5f5ef2407a264545cdc568b99ebd87097880da62ef0dc326ac000d0"
+    },
+    {
+      "table": "recitations",
+      "id": "9ccb21f5-a4aa-619a-16a4-d32ef8544085",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "edefaf99-fa82-1319-ef21-98cbf0d70b16",
+      "audit_hash": "9ef40ea30ed77b45eafec093dbcea57abe7e98bf18af1d27f34f393f5bb3affc"
+    },
+    {
+      "table": "recitations",
+      "id": "fdc68197-4a79-dea9-a9ea-b4fc3ad244c1",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_quality"
+      ],
+      "audit_id": "1a4b8eae-c15f-5dc6-b607-00c73253855a",
+      "audit_hash": "b5219a9bc277bdb36f93d7f63f0c7be139a451a6a13396f56eb43176fa47c98a"
+    },
+    {
+      "table": "recitations",
+      "id": "0df5fd17-75a6-a8e7-4848-037e48e4b302",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_quality"
+      ],
+      "audit_id": "8aabf69f-b503-77a6-3adb-76cf30be4240",
+      "audit_hash": "a05c8da9b34d71b0a0f7532480ef909aca65ab323dc7bef444b39cf7cbc9954b"
+    },
+    {
+      "table": "recitations",
+      "id": "c87687dd-26bc-ad05-54d0-fdca44993509",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_quality"
+      ],
+      "audit_id": "9a12d81f-6049-df0d-209d-6efcd3cbe497",
+      "audit_hash": "fd2eb51dbfef64c47f434267251bbe5c05b9a43cfaf5eb0d1e0abf0fb5821d21"
+    },
+    {
+      "table": "recitations",
+      "id": "5f5ef5c8-cb7c-1d52-e1de-e646433f7787",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "acabdcc0-529c-bdf6-aae4-e8e2d775a59b",
+      "audit_hash": "4bb153e56bda05807696f34db7f3f931f0ee9d70c6cc89a7d3358329c7f2bbd6"
+    },
+    {
+      "table": "recitations",
+      "id": "c9f9f54f-d248-3a48-8dd0-89fc353e19c3",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "cf85efc4-815c-b31c-51f0-401428429219",
+      "audit_hash": "02484bb8a5314e79dc01467253ffab1f02a7b8829d4fe687e20553c365791f34"
+    },
+    {
+      "table": "recitations",
+      "id": "f7c7c48b-7894-e959-d794-166e3f38839a",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_quality"
+      ],
+      "audit_id": "31dbb5c2-8463-fd62-d9ee-2b550beb76d9",
+      "audit_hash": "39630f8826b671144fdc79382172384dbd1434b3dd8bcf0dcc9d4c4b487497a5"
+    },
+    {
+      "table": "recitations",
+      "id": "6cd7c3a3-0dfa-ee1b-b33c-76311f01119d",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "61e16eba-a81f-215b-2128-cad1fab0ce02",
+      "audit_hash": "2beea34a1a519241f53963bde3e10734fce10c82d7388dc2d63e2ad0373cffd1"
+    },
+    {
+      "table": "recitations",
+      "id": "fcd9c298-c3cd-0c32-0180-a3b5f61861cb",
+      "action": "recitation.offset_timing_metadata",
+      "fields": [
+        "timing_level",
+        "timing_quality"
+      ],
+      "audit_id": "9a025ac0-db8e-f658-0199-59f28d6dfbcf",
+      "audit_hash": "f38e52ecccc367da4cf8556c4a5b7631c99b03d4809f01f07edd0965e994a3b4"
+    },
+    {
+      "table": "audio_providers",
+      "id": "a310db4e-c779-38c3-28ab-3e31a9e08159",
+      "action": "provider.allowlist_redirect",
+      "fields": [
+        "host_allowlist"
+      ],
+      "audit_id": "bb353edd-a3a2-fcf6-3407-4e3e4374f124",
+      "audit_hash": "a18e990ed81f00f7ae24bd6bf8c7a6a69967eaa0099817e3ef9b8536ade5fcdd"
+    }
+  ],
+  "audit_seed": "0042dc38ba029de0f7c65edce435b6ffc03a208048f87701394ac1b5b4fee059",
+  "audit_tail": "a18e990ed81f00f7ae24bd6bf8c7a6a69967eaa0099817e3ef9b8536ade5fcdd",
+  "offset_v2_accepted": [
+    "ahmed_saud_mp3quran",
+    "mishary_rashid_al_afasy_mp3quran",
+    "mohammed_alghazali_archive"
+  ],
+  "passed": true
+}

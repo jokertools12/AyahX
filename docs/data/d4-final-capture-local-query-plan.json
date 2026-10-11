@@ -1,0 +1,18 @@
+{
+  "checked_at": "2026-10-11T08:33:55.834Z",
+  "read_only": true,
+  "mysql": "9.7.2",
+  "database": "ayahx_d4_catalog_20261010",
+  "rows": 107,
+  "rows_sha256": "0a77226eea125c9a09b25dd7f5aca4c4b95247cde3e709828b378b072398707b",
+  "elapsed_ms": 158,
+  "plan": [
+    {
+      "EXPLAIN": "-> Sort: c.id, t.ayah\n    -> Stream results  (cost=8295 rows=4060)\n        -> Nested loop inner join  (cost=8295 rows=4060)\n            -> Nested loop inner join  (cost=3849 rows=154)\n                -> Filter: ((c.coverage_mismatch = 1) or (c.available_ayahs = 0))  (cost=2163 rows=1543)\n                    -> Table scan on c  (cost=2163 rows=8119)\n                -> Filter: (r.canonical_text_available = 1)  (cost=0.993 rows=0.1)\n                    -> Single-row index lookup on r using PRIMARY (id = c.recitation_id)  (cost=0.993 rows=1)\n            -> Filter: ((t.expected_words = t.coverage_words) and (t.expected_words is not null) and (json_length(t.review_reasons) = 0) and (json_length(t.missing_words) = 0))  (cost=25.9 rows=26.3)\n                -> Index lookup on t using idx_timing_ready_range (recitation_id = c.recitation_id, surah = c.surah, review_status = 'ready')  (cost=25.9 rows=29.2)\n"
+    }
+  ],
+  "original_query_elapsed_ms": 91734,
+  "original_query_rows": 107,
+  "change": "Join order only: filter blocked chapters first, then use idx_timing_ready_range. Same predicates and inner-join semantics; no schema or cell writes.",
+  "production_first_timeout_exact_query_known": false
+}
