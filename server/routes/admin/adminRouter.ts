@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { Router, type Request, type Response } from 'express';
+import { Router, json, type Request, type Response } from 'express';
 import { z } from 'zod';
 import type { CatalogDatabase } from '../../services/catalogContracts';
 import { CatalogError } from '../../services/catalogContracts';
@@ -33,6 +33,7 @@ const messages: Record<string, string> = {
   ADMIN_TOTP_POLICY_REQUIRED: 'لا يمكن تعطيل المصادقة الثنائية وفق السياسة الحالية.', ADMIN_SETTING_READ_ONLY: 'هذا الإعداد للقراءة فقط؛ لا يملك مستهلكًا قابلًا للتعديل في هذه الدفعة.',
   ADMIN_2FA_KEY_UNAVAILABLE: 'مفتاح تشفير المصادقة الثنائية غير متاح على الخادم؛ لا يمكن إعدادها أو جعلها إلزامية.',
   ADMIN_CONFIRMATION_REQUIRED: 'التأكيد المكتوب لا يطابق المورد.', ADMIN_SUPER_ADMIN_PROTECTED: 'لا يمكن تقليل صلاحيات المدير الأعلى أو إلغاء وصوله.',
+  ADMIN_ENDPOINT_NOT_FOUND: 'المسار المطلوب غير موجود في لوحة الإدارة.',
 };
 export function adminErrorResponse(res: Response, error: unknown, requestId: string): void {
   const known = error instanceof AdminError || error instanceof CatalogError;
@@ -44,12 +45,40 @@ export function adminErrorResponse(res: Response, error: unknown, requestId: str
 }
 export function createAdminRouter(options: AdminRouterOptions): Router {
   const router = Router(), env = options.env ?? process.env, access = options.access ?? new AdminAccessService(options.db, env), rate = options.rate ?? new RedisAdminRateGate(env), origins = options.origins ?? config.corsOrigin.filter(origin => origin !== '*');
+  const parseJson = json({ limit: '256kb' });
+  const readBody = async (req: Request, res: Response): Promise<void> => {
+    // Existing isolated harnesses can provide a parsed body. Production mounts
+    // this router before public body parsers to preserve auth-before-validation.
+    if (req.body !== undefined) return;
+    await new Promise<void>((resolve, reject) => parseJson(req, res, error => {
+      if (error) reject(new AdminError('ADMIN_INPUT_INVALID', error.status === 413 ? 413 : 422));
+      else resolve();
+    }));
+  };
   const definitions: AdminEndpointDefinition[] = [];
   router.use((req, res, next) => { const requestId = (req as Request & { requestId?: string }).requestId ?? randomUUID(); res.locals.adminRequestId = requestId; res.set('X-Request-Id', requestId).set('Cache-Control', 'no-store'); next(); });
+  // Browser preflight carries no session cookie. It exposes no endpoint data
+  // and permits only the exact configured origins, never the public '*' rule.
+  router.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+      try {
+        assertAdminOrigin(req, origins);
+        const method = req.get('Access-Control-Request-Method');
+        if (!method || !['GET', 'HEAD', 'POST', 'PATCH', 'PUT', 'DELETE'].includes(method)) throw new AdminError('ADMIN_ORIGIN_DENIED', 403);
+        res.set('Access-Control-Allow-Origin', String(req.headers.origin)).set('Access-Control-Allow-Credentials', 'true').vary('Origin');
+        res.set('Access-Control-Allow-Methods', 'GET, HEAD, POST, PATCH, PUT, DELETE').set('Access-Control-Allow-Headers', 'Content-Type, X-Request-Id');
+        res.status(204).end();
+      } catch (error) { adminErrorResponse(res, error, String(res.locals.adminRequestId)); }
+      return;
+    }
+    if (typeof req.headers.origin === 'string' && origins.includes(req.headers.origin)) res.set('Access-Control-Allow-Origin', req.headers.origin).set('Access-Control-Allow-Credentials', 'true').vary('Origin');
+    next();
+  });
   router.post('/auth/login', async (req, res) => {
     const requestId = String(res.locals.adminRequestId), ipAddress = req.ip ?? req.socket.remoteAddress ?? 'unknown';
     try {
       assertAdminOrigin(req, origins); await rate.check(ipAddress, 'login');
+      await readBody(req, res);
       const parsed = z.object({ email: z.string().trim().email().max(191), password: z.string().min(1).max(72), code: z.string().trim().min(6).max(128).optional() }).strict().safeParse(req.body);
       if (!parsed.success) throw new AdminError('ADMIN_INPUT_INVALID', 422, { fields: parsed.error.issues.map(issue => ({ path: issue.path.join('.'), message: 'قيمة غير صالحة' })) });
       const result = await access.login({ email: parsed.data.email!, password: parsed.data.password!, code: parsed.data.code }, { requestId, ipAddress, userAgent: String(req.headers['user-agent'] ?? '') });
@@ -70,6 +99,7 @@ export function createAdminRouter(options: AdminRouterOptions): Router {
         if (!authenticated.user.permissions.includes(definition.permission) || definition.superAdminOnly && !authenticated.user.roles.includes('super_admin')) throw new AdminError('ADMIN_FORBIDDEN', 403);
         if (authenticated.enrollmentRequired && !definition.enrollmentAllowed) throw new AdminError('ADMIN_TOTP_ENROLLMENT_REQUIRED', 403);
         assertAdminOrigin(req, origins); await rate.check(authenticated.user.id, definition.method === 'get' ? 'read' : 'write');
+        await readBody(req, res);
         const body = definition.body?.safeParse(req.body ?? {}), query = definition.query?.safeParse(req.query);
         const invalid = body && !body.success ? body.error : query && !query.success ? query.error : null;
         if (invalid) throw new AdminError('ADMIN_INPUT_INVALID', 422, { fields: invalid.issues.map(issue => ({ path: issue.path.join('.'), message: 'قيمة غير صالحة' })) });
@@ -81,6 +111,19 @@ export function createAdminRouter(options: AdminRouterOptions): Router {
     });
   };
   options.register?.(register, access);
+  // Even an unknown admin path stays inside the cookie boundary. Do not fall
+  // through to the public API's unauthenticated or unstructured 404 response.
+  router.use(async (req, res) => {
+    const requestId = String(res.locals.adminRequestId);
+    try {
+      const token = readAdminCookie(req.headers.cookie); if (!token) throw new AdminError('ADMIN_UNAUTHENTICATED', 401);
+      const authenticated = await access.authenticate(token);
+      if (authenticated.enrollmentRequired) throw new AdminError('ADMIN_TOTP_ENROLLMENT_REQUIRED', 403);
+      assertAdminOrigin(req, origins);
+      await rate.check(authenticated.user.id, ['GET', 'HEAD'].includes(req.method) ? 'read' : 'write');
+      throw new AdminError('ADMIN_ENDPOINT_NOT_FOUND', 404);
+    } catch (error) { adminErrorResponse(res, error, requestId); }
+  });
   // A readable in-process contract generates RBAC tests without a public
   // endpoint inventory or a route that could reveal administrative metadata.
   Object.defineProperty(router, 'adminEndpoints', { value: definitions, enumerable: false });
