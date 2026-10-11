@@ -8,4 +8,4 @@ export async function adminApi<T>(path:string,options:RequestInit={}):Promise<Ad
   return body;
 }
 export const adminWrite=<T>(path:string,method:string,body?:unknown)=>adminApi<T>(path,{method,...(body===undefined?{}:{body:JSON.stringify(body)})});
-export interface AdminUser{id:string;email:string;displayName:string;roles:string[];permissions:string[];sessionId:string;environment:string;totp:{enabled:boolean;required:boolean;encryptionConfigured:boolean}}
+export interface AdminUser{id:string;email:string;displayName:string|null;roles:string[];permissions:string[];sessionId:string;environment:string;totp:{enabled:boolean;required:boolean;encryptionConfigured:boolean}}

@@ -34,6 +34,7 @@ const TermsPage = lazy(() => import("./pages/TermsPage"));
 const FaqPage = lazy(() => import("./pages/FaqPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const AdminRoot = lazy(() => import('./admin/AdminRoot'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -86,6 +87,7 @@ const App = () => (
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/faq" element={<FaqPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/admin/*" element={<AdminRoot />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
             </Routes>
