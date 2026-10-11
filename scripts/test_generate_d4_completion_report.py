@@ -1,7 +1,7 @@
 import tempfile
 import unittest
 from pathlib import Path
-from generate_d4_completion_report import render
+from generate_d4_completion_report import REQUIRED_GATES, render, t7_attempts_terminal
 
 
 class CompletionReportTests(unittest.TestCase):
@@ -69,6 +69,70 @@ class CompletionReportTests(unittest.TestCase):
             operations['gates']['ci']['evidence_ref'] = 'https://github.com/owner/repo/actions/runs/1?token=private'
             with self.assertRaisesRegex(ValueError, 'UNSAFE_PUBLIC_PROOF_URL'):
                 render(root, self.artifacts(), operations=operations)
+
+    def test_completion_requires_all_terminal_gates_and_final_inventory(self):
+        artifacts = self.artifacts()
+        # Final negative evidence is accepted without inventing measurements or identity.
+        artifacts['t7'] = {'real_measurements_complete': False, 'measured_samples': 0,
+                          'counts': {'source_unavailable': 1}, 'results': {'reader_yt': {
+                              'verification_status': 'source_unavailable', 'reason': 'SOURCE_UNAVAILABLE',
+                              'expected_sample_ids': [[1, 1]], 'samples': [], 'measured_samples': 0}}}
+        inventory = {'read_only': True, 'checked_at': 'now', 'flag_enabled': False,
+                     'protected_verification_summary': 'D1/D3/admin verified unchanged',
+                     'recitations': [{'slug': 'reader_yt', 'rule_v1_eligible': False,
+                                      'rule_v1_reasons': ['YOUTUBE_RENDER_REQUIRES_LICENSED_FILE']}]}
+        with tempfile.TemporaryDirectory() as scratch:
+            root = Path(scratch)
+            (root / 'proof.json').write_text('{}', encoding='utf-8')
+            operations = {'gates': {key: {'status': 'passed', 'evidence_ref': 'proof.json'} for key in REQUIRED_GATES}}
+            operations['gates']['deployment_success']['status'] = 'SUCCESS'
+            operations['gates']['merge']['status'] = 'merged'
+            operations['gates']['rollback']['status'] = 'not_needed'
+            value = render(root, artifacts, inventory, operations)
+            self.assertIn('**D4 مكتمل وفق أدلة هذه الدفعة', value)
+            self.assertIn('توقف تام الآن بعد هذا التقرير. لا تبدأ D5 أو A1', value)
+            self.assertIn('المراجعات البشرية التالية لا تُعتبر مقبولة', value)
+            # Removing any gate, including the read-only acceptance checks, reopens the report.
+            for key in REQUIRED_GATES:
+                saved = operations['gates'].pop(key)
+                self.assertIn('**حالة D4: pending', render(root, artifacts, inventory, operations), key)
+                operations['gates'][key] = saved
+            for status in ('building', 'failed', 'passed', 'rolled_back'):
+                operations['gates']['deployment_success']['status'] = status
+                self.assertIn('**حالة D4: pending', render(root, artifacts, inventory, operations), status)
+            operations['gates']['deployment_success']['status'] = 'SUCCESS'
+            operations['gates']['npm_test']['tests'] = {'failed': 1}
+            self.assertIn('**حالة D4: pending', render(root, artifacts, inventory, operations))
+            operations['gates']['npm_test']['tests'] = {'failed': 0, 'passed': 893, 'skipped': 11}
+            self.assertIn('**حالة D4: pending', render(root, artifacts, operations=operations))
+            inventory['flag_enabled'] = True
+            self.assertIn('**حالة D4: pending', render(root, artifacts, inventory, operations))
+            inventory['flag_enabled'] = False
+            artifacts['t7']['results']['reader_yt']['verification_status'] = 'pending'
+            self.assertIn('**حالة D4: pending', render(root, artifacts, inventory, operations))
+
+    def test_terminal_t7_counts_missing_samples_without_granting_success(self):
+        report = {'real_measurements_complete': False, 'measured_samples': 1,
+                  'counts': {'failed': 1, 'source_unavailable': 1}, 'results': {
+                      'measured': {'verification_status': 'failed', 'expected_sample_ids': [[1, 1]],
+                                   'samples': [{'surah': 1, 'ayah': 1}], 'measured_samples': 1},
+                      'missing': {'verification_status': 'source_unavailable', 'reason': 'SOURCE_UNAVAILABLE',
+                                  'expected_sample_ids': [[2, 1]], 'samples': [], 'measured_samples': 0}}}
+        self.assertTrue(t7_attempts_terminal(report))
+        for key, value in [('verification_method_candidate', 'v1'), ('v1_all_samples_passed', True),
+                           ('v2_all_gates_and_cause_proven', True), ('verification_status', 'pending')]:
+            report['results']['missing'][key] = value
+            self.assertFalse(t7_attempts_terminal(report), key)
+            report['results']['missing'].pop(key)
+            report['results']['missing']['verification_status'] = 'source_unavailable'
+        report['results']['measured']['samples'] = []
+        report['results']['measured']['measured_samples'] = 0
+        report['measured_samples'] = 0
+        self.assertFalse(t7_attempts_terminal(report))  # A failed source does not explain missing measurements.
+        report['results']['measured']['samples'] = [{'surah': 1, 'ayah': 1}]
+        report['results']['measured']['measured_samples'] = report['measured_samples'] = 1
+        report['real_measurements_complete'] = True
+        self.assertFalse(t7_attempts_terminal(report))  # Missing source evidence must remain visibly incomplete.
 
 
 if __name__ == '__main__':

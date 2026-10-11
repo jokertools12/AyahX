@@ -10,6 +10,10 @@ from urllib.parse import urlsplit
 
 
 PENDING = 'pending — لم يصل دليل نهائي'
+REQUIRED_GATES = ('tsc', 'changed_lint', 'npm_test', 'build', 'ci', 'merge', 'deployment_success',
+                  'health', 'ready', 'logs_10_minutes', 'read_only_smoke', 'catalog_disabled_404',
+                  'r2_real_acceptance', 'r2_cleanup', 'r2_secret_scan', 'rollback')
+PASS_STATUSES = {'passed', 'pass', 'success', 'green', 'ok'}
 ARTIFACTS = {
     'availability': 'docs/data/availability-summary.json',
     'voice': 'docs/data/voice-auto-verification.json',
@@ -97,6 +101,63 @@ def public_reference(root, value):
     return evidence_link(root, value)
 
 
+def gate_result(root, key, record):
+    if not isinstance(record, dict) or not record.get('status') or not record.get('evidence_ref'):
+        return PENDING, False
+    ref = public_reference(root, record['evidence_ref'])
+    if PENDING in ref:
+        return PENDING, False
+    status = cell(record['status'])
+    accepted = ({'success'} if key == 'deployment_success' else
+                PASS_STATUSES | ({'merged'} if key == 'merge' else
+                                 {'not_needed'} if key == 'rollback' else set()))
+    passed = status.lower() in accepted
+    result = status + '; evidence=' + ref
+    tests = record.get('tests', {})
+    if isinstance(tests, dict) and tests:
+        result += '; tests=' + count_text({k: tests[k] for k in ('total', 'passed', 'failed', 'skipped') if k in tests})
+        # A success label cannot hide an explicitly reported failing test.
+        if 'failed' in tests and numeric(tests['failed']) != 0:
+            passed = False
+    return result, passed
+
+
+def t7_attempts_terminal(report):
+    """Unavailable sources are terminal negative evidence, never measured successes."""
+    rows = report.get('results')
+    if not isinstance(rows, dict) or not rows:
+        return False
+    counts, measured_total, missing_total = Counter(), 0, 0
+    for row in rows.values():
+        status = row.get('verification_status')
+        if status not in {'passed', 'failed', 'source_unavailable'}:
+            return False
+        expected, samples = row.get('expected_sample_ids'), row.get('samples')
+        if not isinstance(expected, list) or not expected or not isinstance(samples, list):
+            return False
+        if any(not isinstance(item, list) or len(item) != 2 or
+               any(not isinstance(x, int) or isinstance(x, bool) or x < 1 for x in item) for item in expected):
+            return False
+        expected_ids = {tuple(item) for item in expected}
+        measured_ids = {(sample.get('surah'), sample.get('ayah')) for sample in samples}
+        if (len(expected_ids) != len(expected) or len(measured_ids) != len(samples)
+                or not measured_ids.issubset(expected_ids) or row.get('measured_samples') != len(samples)):
+            return False
+        missing = len(expected) - len(samples)
+        if status == 'source_unavailable':
+            if (not missing or not row.get('reason') or row.get('verification_method_candidate') is not None
+                    or row.get('v1_all_samples_passed') not in (None, False)
+                    or row.get('v2_all_gates_and_cause_proven') not in (None, False)):
+                return False
+        elif missing:
+            return False
+        counts[status] += 1
+        measured_total += len(samples)
+        missing_total += missing
+    return (dict(counts) == report.get('counts') and measured_total == report.get('measured_samples')
+            and report.get('real_measurements_complete') is (missing_total == 0))
+
+
 def render(root, artifacts, inventory=None, operations=None, extra_proofs=()):
     availability = keyed(artifacts['availability']['recitations'])
     voice = artifacts['voice']['results']
@@ -128,9 +189,17 @@ def render(root, artifacts, inventory=None, operations=None, extra_proofs=()):
     complete_reader_count = len(eligible_readers) if None not in eligible_readers else None
     auto_count = sum(final.get(slug, {}).get('voice_identity_status', voice[slug].get('voice_identity_status'))
                      == 'auto_verified' for slug in availability)
+    gate_results = {key: gate_result(root, key, operations.get('gates', {}).get(key)) for key in REQUIRED_GATES}
+    complete = (bool(final) and unknown_rule == 0 and inventory.get('flag_enabled') is False
+                and bool(inventory.get('protected_verification_summary'))
+                and t7_attempts_terminal(artifacts['t7'])
+                and all(passed for _, passed in gate_results.values()))
+    completion_state = ('**D4 مكتمل وفق أدلة هذه الدفعة؛ توقف تام بعد التقرير، ولا D5 ولا A1.**' if complete else
+                        '**حالة D4: pending — الإغلاق غير مثبت؛ تستكمل أدلة وبوابات هذه الدفعة فقط.**')
     lines = ['# تقرير المرحلة D4 — طبقة الصوت؛ الدفعة K1–K9', '',
              'هذا تقرير مولّد من الأدلة المحلية فقط. لا يستدل من وجود ملف على نجاح نشر أو إغلاق الدفعة. '
              'الجرد النهائي وقرارات rule-v1 وبوابات الإنتاج تأتي من root، والناقص يبقى pending.', '',
+             completion_state, '',
              '## 1. ما الذي تغيّر', '',
              'K1 قيود النشر؛ K2 الروابط والمضيفون؛ K3 عينات الاستماع؛ K4 الفحص الآلي الاستشاري؛ '
              'K5 مصادر YouTube/الملف المرخص والتخزين؛ K6 المراجعة البشرية؛ K7 القياسات المثبتة؛ '
@@ -209,19 +278,7 @@ def render(root, artifacts, inventory=None, operations=None, extra_proofs=()):
               'و[provider-terms-digest.md](provider-terms-digest.md).', '',
               '### أدلة الإنتاج والشحن النهائية', '',
               '| بوابة | النتيجة النهائية المدخلة |', '|---|---|']
-    gates = operations.get('gates', {})
-    for key in ('tsc', 'changed_lint', 'npm_test', 'build', 'ci', 'merge', 'deployment_success',
-                'health', 'ready', 'logs_10_minutes', 'read_only_smoke', 'catalog_disabled_404',
-                'r2_real_acceptance', 'r2_cleanup', 'r2_secret_scan', 'rollback'):
-        record = gates.get(key)
-        if isinstance(record, dict) and record.get('status') and record.get('evidence_ref'):
-            ref = public_reference(root, record['evidence_ref'])
-            result = (cell(record.get('status')) + '; evidence=' + ref) if PENDING not in ref else PENDING
-            tests = record.get('tests', {})
-            if isinstance(tests, dict) and tests:
-                result += '; tests=' + count_text({key: tests[key] for key in ('total', 'passed', 'failed', 'skipped') if key in tests})
-        else:
-            result = PENDING
+    for key, (result, _) in gate_results.items():
         lines.append(f'| {key} | {result} |')
     lines += ['', 'الجرد المحمي النهائي (قراءة): ' + cell((inventory or {}).get('protected_verification_summary')), '',
               'flag_enabled النهائي: ' + cell((inventory or {}).get('flag_enabled')) + '. '
@@ -230,7 +287,8 @@ def render(root, artifacts, inventory=None, operations=None, extra_proofs=()):
               'جميع الأعداد والنتائج تُقرأ من gates المدخلة أعلاه؛ لا يُعلن CI أو نشر SUCCESS دون أثر نهائي. '
               'مؤشرات الوحدات/المحلي مستقلة عن اختبارات Railway وR2 الحقيقي.', '',
               '## 4. ما لم يكتمل أو يحتاج مراجعة، وسببه', '',
-              '- كل pending في الجدول أو البوابات دليل ناقص؛ التقرير لا يعلن إغلاق D4.',
+              ('- D4 مكتمل تقنيًا؛ المراجعات البشرية التالية لا تُعتبر مقبولة بإغلاق هذه الدفعة.' if complete else
+               '- كل pending في الجدول أو البوابات دليل ناقص؛ التقرير لا يعلن إغلاق D4.'),
               '- التأكيد البشري للصوت والرخصة والحقوق والأسماء والبسملة وقبول v2 يذهب إلى مركز المراجعة؛ لا confirmed آلي.',
               '- ملفات YouTube المرخصة غير المثبتة لا تمنح جاهزية ريندر. '
               'R2 الحقيقي له قبول مستقل 1–7، وMinIO/محول محلي لا يُسمى R2.', '',
@@ -257,8 +315,9 @@ def render(root, artifacts, inventory=None, operations=None, extra_proofs=()):
     lines += ['', 'الفرق حساب لقيمتين مدخلتين فقط؛ ليس إسنادًا سببيًا لتكلفة D4 أو توفيرًا دون فاتورة. '
               'حدود الصرف والمتبقي: ' + cell(operations.get('billing', {}).get('budget_summary')), '',
               '## 6. الخطوة التالية المقترحة', '',
-              'تراجع root الأدلة النهائية وتستكمل بوابات هذه الدفعة فقط. بعد تقريرها توقف تام؛ '
-              'لا A1 ولا D5 قبل تفويض جديد.', '', '### القرارات الذاتية المدخلة', '']
+              ('D4 مكتمل؛ توقف تام الآن بعد هذا التقرير. لا تبدأ D5 أو A1 أو أي مرحلة لاحقة قبل تفويض جديد.'
+               if complete else 'D4 يبقى pending. تراجع root الأدلة النهائية وتستكمل بوابات هذه الدفعة فقط. '
+               'بعد تقريرها توقف تام؛ لا A1 ولا D5 قبل تفويض جديد.'), '', '### القرارات الذاتية المدخلة', '']
     for decision in operations.get('self_decisions', [PENDING]):
         lines.append('- ' + cell(decision))
     lines += ['', '### مراجع الأدلة وبصماتها', '']
