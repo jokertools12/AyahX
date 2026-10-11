@@ -2,7 +2,7 @@
 
 هذا تقرير مولّد من الأدلة المحلية فقط. لا يستدل من وجود ملف على نجاح نشر أو إغلاق الدفعة. الجرد النهائي وقرارات rule-v1 وبوابات الإنتاج تأتي من root، والناقص يبقى pending.
 
-**حالة D4: pending — الإغلاق غير مثبت؛ تستكمل أدلة وبوابات هذه الدفعة فقط.**
+**D4 مكتمل وفق أدلة هذه الدفعة؛ توقف تام بعد التقرير، ولا D5 ولا A1.**
 
 ## 1. ما الذي تغيّر
 
@@ -139,22 +139,22 @@ QUD v3.2.0 مصدر metadata/timing وليس إذنًا عامًا لحقوق ك
 
 | بوابة | النتيجة النهائية المدخلة |
 |---|---|
-| tsc | passed; evidence=[docs/data/d4-final-local-quality.json](../../docs/data/d4-final-local-quality.json) — SHA-256 `3b7dd3785dc449820c3a45851253222924cd57818a15a1c40dba03fc45ef4e91` |
+| tsc | passed; evidence=[docs/data/d4-final-local-quality.json](../../docs/data/d4-final-local-quality.json) — SHA-256 `8ec8e1075fe1ab3a5d336a9716010a8a6e7ad50a7ba5253dc02a0b27d908bbc2` |
 | changed_lint | passed; evidence=[docs/data/d4-changed-lint-final.json](../../docs/data/d4-changed-lint-final.json) — SHA-256 `f6d108fa77797e40ff1a55a448ac8a6f155252d4f27b847d70ec6984df42d991` |
-| npm_test | passed; evidence=[docs/data/d4-final-local-quality.json](../../docs/data/d4-final-local-quality.json) — SHA-256 `3b7dd3785dc449820c3a45851253222924cd57818a15a1c40dba03fc45ef4e91`; tests=failed:0, passed:893, skipped:11, total:904 |
-| build | passed; evidence=[docs/data/d4-final-local-quality.json](../../docs/data/d4-final-local-quality.json) — SHA-256 `3b7dd3785dc449820c3a45851253222924cd57818a15a1c40dba03fc45ef4e91` |
-| ci | pending — لم يصل دليل نهائي |
-| merge | pending — لم يصل دليل نهائي |
-| deployment_success | pending — لم يصل دليل نهائي |
-| health | pending — لم يصل دليل نهائي |
-| ready | pending — لم يصل دليل نهائي |
-| logs_10_minutes | pending — لم يصل دليل نهائي |
-| read_only_smoke | pending — لم يصل دليل نهائي |
-| catalog_disabled_404 | pending — لم يصل دليل نهائي |
+| npm_test | passed; evidence=[docs/data/d4-final-local-quality.json](../../docs/data/d4-final-local-quality.json) — SHA-256 `8ec8e1075fe1ab3a5d336a9716010a8a6e7ad50a7ba5253dc02a0b27d908bbc2`; tests=failed:0, passed:893, skipped:11, total:904 |
+| build | passed; evidence=[docs/data/d4-final-local-quality.json](../../docs/data/d4-final-local-quality.json) — SHA-256 `8ec8e1075fe1ab3a5d336a9716010a8a6e7ad50a7ba5253dc02a0b27d908bbc2` |
+| ci | passed; evidence=[docs/data/d4-final-ci-proof.json](../../docs/data/d4-final-ci-proof.json) — SHA-256 `1874a09cb5ae9c461857864091cc20008b40ac56aa7a0880db3ec0ac6acfd8ac` |
+| merge | merged; evidence=[docs/data/d4-final-merge-proof.json](../../docs/data/d4-final-merge-proof.json) — SHA-256 `0e399727333249785ed77808a5f8a29ddccf22948994e461deb76e36b1717618` |
+| deployment_success | SUCCESS; evidence=[docs/data/d4-final-deployments-proof.json](../../docs/data/d4-final-deployments-proof.json) — SHA-256 `f22cfe0cb09730e87f6b997880c3bc5c472d68b9b65918d2cc7d269bfd102dc4` |
+| health | passed; evidence=[docs/data/d4-final-health-logs-proof.json](../../docs/data/d4-final-health-logs-proof.json) — SHA-256 `25e9d13666e3414eed86cbfd65e3d69ecf18786bc28165f00924de5948c5c882` |
+| ready | passed; evidence=[docs/data/d4-final-health-logs-proof.json](../../docs/data/d4-final-health-logs-proof.json) — SHA-256 `25e9d13666e3414eed86cbfd65e3d69ecf18786bc28165f00924de5948c5c882` |
+| logs_10_minutes | passed; evidence=[docs/data/d4-final-health-logs-proof.json](../../docs/data/d4-final-health-logs-proof.json) — SHA-256 `25e9d13666e3414eed86cbfd65e3d69ecf18786bc28165f00924de5948c5c882` |
+| read_only_smoke | passed; evidence=[docs/data/d4-postdeploy-smoke-proof.json](../../docs/data/d4-postdeploy-smoke-proof.json) — SHA-256 `0567ed246de5a04c880a66421939752dc3a0f1e33b828cd93204895a74817ac7`; tests=failed:0, passed:10, skipped:0, total:10 |
+| catalog_disabled_404 | passed; evidence=[docs/data/d4-final-catalog-disabled-proof.json](../../docs/data/d4-final-catalog-disabled-proof.json) — SHA-256 `93dbfc9b714cfbff16c8f6a806041f3631e5ad0552b283e2a4d5ff89f6e8bea4` |
 | r2_real_acceptance | passed; evidence=[docs/data/d4-r2-real-acceptance.json](../../docs/data/d4-r2-real-acceptance.json) — SHA-256 `994638c24305eae7a4e66401e2efe803245692f0dd6d3361e7df630bc8de9409` |
 | r2_cleanup | passed; evidence=[docs/data/d4-licensed-catalog-r2-short-acceptance.json](../../docs/data/d4-licensed-catalog-r2-short-acceptance.json) — SHA-256 `017a3d061600c07d969f311eb520688b40b01094846d439daf0581d45a41ae56` |
-| r2_secret_scan | passed; evidence=[docs/data/d4-final-actual-secret-file-scan.json](../../docs/data/d4-final-actual-secret-file-scan.json) — SHA-256 `b43fd25c85d5d87460ba0b5386f3dab1b585fa19074ffb89aa1ea2173bea66d9` |
-| rollback | pending — لم يصل دليل نهائي |
+| r2_secret_scan | passed; evidence=[docs/data/d4-final-actual-secret-file-scan.json](../../docs/data/d4-final-actual-secret-file-scan.json) — SHA-256 `20c8335f45cba893747461f7866a33ac65d611b12c944e6863751efde5c49db8` |
+| rollback | not_needed; evidence=[docs/data/d4-final-health-logs-proof.json](../../docs/data/d4-final-health-logs-proof.json) — SHA-256 `25e9d13666e3414eed86cbfd65e3d69ecf18786bc28165f00924de5948c5c882` |
 
 الجرد المحمي النهائي (قراءة): Verified baseline match: D1 {"surahs":114,"ayahs":6236,"words":77433}; D3 422463; canonical eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4; users/user_roles and all D1/D3 protected table counts/checksums unchanged; T2 e3bf310ebb4786297e3f8c09d3704f3815a731a328fc943fa38a40824038c5ce
 
@@ -166,7 +166,7 @@ flag_enabled النهائي: لا. لا تعتبر هذه القيمة بديل�
 
 ## 4. ما لم يكتمل أو يحتاج مراجعة، وسببه
 
-- كل pending في الجدول أو البوابات دليل ناقص؛ التقرير لا يعلن إغلاق D4.
+- D4 مكتمل تقنيًا؛ المراجعات البشرية التالية لا تُعتبر مقبولة بإغلاق هذه الدفعة.
 - التأكيد البشري للصوت والرخصة والحقوق والأسماء والبسملة وقبول v2 يذهب إلى مركز المراجعة؛ لا confirmed آلي.
 - ملفات YouTube المرخصة غير المثبتة لا تمنح جاهزية ريندر. R2 الحقيقي له قبول مستقل 1–7، وMinIO/محول محلي لا يُسمى R2.
 
@@ -180,34 +180,36 @@ flag_enabled النهائي: لا. لا تعتبر هذه القيمة بديل�
 
 | بند | قبل $ | بعد $ | الفرق $ | دليل/ملاحظة |
 |---|---|---|---|---|
-| railway | 17.892516611862717 | 18.160036976866973 | 0.267520365004256 | docs/data/d4-budget-pre-shipping.json |
+| railway | 17.892516611862717 | 18.167192598965553 | 0.274675987102836 | docs/data/d4-budget-after-code-deploy.json |
 | cloudflare_r2 | 0 | 0 | 0.0 | docs/data/d4-r2-billing-before-after.json |
 
 عمليات R2؛ أعداد مستقلة عن الدولار:
 
 | نوع العمليات | قبل | بعد |
 |---|---|---|
-| cloudflare_r2/class_a_operations | 131 | 179 |
-| cloudflare_r2/class_b_operations | 33 | 126 |
+| cloudflare_r2/class_a_operations | 131 | 200 |
+| cloudflare_r2/class_b_operations | 33 | 136 |
 
 قد تتأخر الفاتورة؛ لا يُستنتج من هذه الأعداد إنفاق منفرد.
 
-الفرق حساب لقيمتين مدخلتين فقط؛ ليس إسنادًا سببيًا لتكلفة D4 أو توفيرًا دون فاتورة. حدود الصرف والمتبقي: Railway hard30$/alert20$, remaining11.8399630231$ before shipping. Cloudflare account-total-spend alert5$ is not a hard cap. Billing may lag; no isolated D4 cost or proven savings claim.
+الفرق حساب لقيمتين مدخلتين فقط؛ ليس إسنادًا سببيًا لتكلفة D4 أو توفيرًا دون فاتورة. حدود الصرف والمتبقي: Railway hard $30 / alert $20, remaining $11.832807401034447. Workspace total, no isolated D4 cost or proven savings. Cloudflare displayed bill $0; account-total alert $5 is not a hard cap and billing may lag.
 
 ## 6. الخطوة التالية المقترحة
 
-D4 يبقى pending. تراجع root الأدلة النهائية وتستكمل بوابات هذه الدفعة فقط. بعد تقريرها توقف تام؛ لا A1 ولا D5 قبل تفويض جديد.
+D4 مكتمل؛ توقف تام الآن بعد هذا التقرير. لا تبدأ D5 أو A1 أو أي مرحلة لاحقة قبل تفويض جديد.
 
 ### القرارات الذاتية المدخلة
 
-- Preserve original failed CHECK report; accept committed DDL only through independent zero-write readback and complete schema/table comparison.
-- Reject licensed audio shorter than timing coordinates before attaching it or replacing the previous active source.
-- Use owned noise fixtures exclusively for R2 and FFmpeg acceptance; do not rehost provider audio or grant any Quran voice/rights approval from those fixtures.
-- Keep all 69 voice identities unverified because content and speaker calibration gates did not establish identity.
-- Record actual nine YouTube recitations instead of truncating the source to the historical count eight.
-- Keep all terminal unavailable T7 results and missing measurements explicit; do not reselect samples or weaken raw thresholds.
-- Keep production resources unchanged and staging paused; retain local private files after the deletion rejection.
-- Retain quran_catalog_v2 OFF, with public API disabled, and stop after D4 without A1 or D5.
+- حفظ تقرير CHECK الفاشل كما هو، واعتماد DDL المؤكد فقط بعد قراءة مستقلة بلا كتابة ومقارنة كل التعريفات والصفوف والبصمات.
+- رفض الصوت المرخص الأقصر من إحداثيات الكلمات قبل تفعيله أو استبدال المصدر السابق.
+- اختبار R2 وFFmpeg بملفات ضوضاء مملوكة فقط؛ لا إعادة استضافة صوت مزوّد أو منح حقوق أو تأكيد هوية من fixtures.
+- الإبقاء على هوية الصوت غير متحققة للتلاوات الـ 69؛ فشل المحاذاة وتداخل معايرة المتحدث لا يثبتان الهوية.
+- اعتماد العدد الحقيقي 9 لتلاوات YouTube دون تقليصه للعدد التاريخي 8.
+- حفظ الحالات النهائية غير المتاحة وعيناتها الناقصة صراحةً؛ لا إعادة اختيار أو تخفيف عتبات T7 الخام.
+- الإبقاء على موارد الإنتاج و staging المتوقفة والملفات المحلية الخاصة؛ لا تجاوز لرفض الحذف.
+- حفظ بايتات ملفات SVG الأصلية ببصماتها المعتمدة على جميع الأنظمة، دون تغيير التصميم أو البصمات أو اختبار السلامة.
+- الإبقاء على quran_catalog_v2 مغلقًا والتوقف بعد D4 دون A1 أو D5.
+- تحسين ترتيب قراءة الجرد التشخيصية فقط بعد إثبات زمن 91.7 ثانية محليًا؛ لم يُجزم بأن الاستعلام نفسه سبب المهلة الأصلية، ولم تتغير البيانات أو مهلة الحارس.
 
 ### مراجع الأدلة وبصماتها
 
@@ -234,19 +236,25 @@ D4 يبقى pending. تراجع root الأدلة النهائية وتستكم�
 - [docs/data/d4-r2-browser-cors.json](../../docs/data/d4-r2-browser-cors.json) — SHA-256 `6631284ea18318603b873620390cd2cda06de652b4f795ba64e6d6de9b6c0f3e`
 - [docs/data/d4-r2-real-acceptance.json](../../docs/data/d4-r2-real-acceptance.json) — SHA-256 `994638c24305eae7a4e66401e2efe803245692f0dd6d3361e7df630bc8de9409`
 - [docs/data/d4-r2-log-secret-scan.json](../../docs/data/d4-r2-log-secret-scan.json) — SHA-256 `5b080bacbc77a69ebb5f2b78f032d0bb5985b53144f4b26de7a3d3be0ab0ca80`
-- [docs/data/d4-r2-billing-before-after.json](../../docs/data/d4-r2-billing-before-after.json) — SHA-256 `203a41ad772ba56a003c7e4c75113e1a58be2e79bc167833b814770c0ebb6b16`
+- [docs/data/d4-r2-billing-before-after.json](../../docs/data/d4-r2-billing-before-after.json) — SHA-256 `c22b4ba3234f7d6df2b39548edbc28ec0f8870f759ae1403919429851433d588`
 - [docs/data/d4-r2-variables.json](../../docs/data/d4-r2-variables.json) — SHA-256 `f3ad6833108f2fcbd9ed3cd0fe379a86bcb1e3aa320610743d03b2b523364ba9`
 - [docs/data/d4-r2-budget-alert.json](../../docs/data/d4-r2-budget-alert.json) — SHA-256 `8e3ed0453c3687ed6f87ce80bed82317027bfdfd00a1ef571a76fc82025bc268`
 - [docs/data/d4-budget-resume-20261011.json](../../docs/data/d4-budget-resume-20261011.json) — SHA-256 `4276888608a2d2a53139b84398cb3c15eabaf88c04722b0fb8997177f815535e`
 - [docs/data/d4-human-reviews-final-local-apply.json](../../docs/data/d4-human-reviews-final-local-apply.json) — SHA-256 `6752e60a89e80ec4ca02942b07ccc4c859d13150d60a13fc2454805685d194d0`
 - [docs/plan/ADMIN_RECITERS_SOURCES_SPEC.md](../../docs/plan/ADMIN_RECITERS_SOURCES_SPEC.md) — SHA-256 `ae410a6a362d5a383d92fd907de7524958dcee0df1cdb3dc5253e807ea2af31c`
-- [docs/launch-blockers.md](../../docs/launch-blockers.md) — SHA-256 `2e07d2773179f674117ff4f760d532236be7d4422016708b2e3ba99796524dcd`
-- [docs/data/d4-final-production-inventory.json](../../docs/data/d4-final-production-inventory.json) — SHA-256 `d937aa804347e2460e2e0da0accd3a7edb71588bd93ef987b14dcfa76e28c200`
-- [docs/data/d4-final-operations-proof.json](../../docs/data/d4-final-operations-proof.json) — SHA-256 `66abf82861d360a1cc3506e30a213782d2b3e396e9a6918b19d6bb4fd2de0663`
+- [docs/launch-blockers.md](../../docs/launch-blockers.md) — SHA-256 `f14b3dcc44e0d9cdee5790ba3a6eae7991d2cf514e3d634cdf092648546cf8ea`
 - [docs/data/d4-three-gate-final-acceptance.json](../../docs/data/d4-three-gate-final-acceptance.json) — SHA-256 `180e7129bb9eea1c9dd30567057b2615f18c7a885bd8efbb8d1faab9a84b9bae`
 - [docs/data/d4-licensed-catalog-r2-short-acceptance.json](../../docs/data/d4-licensed-catalog-r2-short-acceptance.json) — SHA-256 `017a3d061600c07d969f311eb520688b40b01094846d439daf0581d45a41ae56`
-- [docs/data/d4-final-capture-local-query-plan.json](../../docs/data/d4-final-capture-local-query-plan.json) — SHA-256 `5002ddb9878c3f8ba5233745251e46665c638fac982fe45349faa1de9bcbdf1c`
+- [docs/data/d4-final-ci-proof.json](../../docs/data/d4-final-ci-proof.json) — SHA-256 `1874a09cb5ae9c461857864091cc20008b40ac56aa7a0880db3ec0ac6acfd8ac`
+- [docs/data/d4-final-merge-proof.json](../../docs/data/d4-final-merge-proof.json) — SHA-256 `0e399727333249785ed77808a5f8a29ddccf22948994e461deb76e36b1717618`
+- [docs/data/d4-final-deployments-proof.json](../../docs/data/d4-final-deployments-proof.json) — SHA-256 `f22cfe0cb09730e87f6b997880c3bc5c472d68b9b65918d2cc7d269bfd102dc4`
+- [docs/data/d4-final-health-logs-proof.json](../../docs/data/d4-final-health-logs-proof.json) — SHA-256 `25e9d13666e3414eed86cbfd65e3d69ecf18786bc28165f00924de5948c5c882`
+- [docs/data/d4-postdeploy-smoke-proof.json](../../docs/data/d4-postdeploy-smoke-proof.json) — SHA-256 `0567ed246de5a04c880a66421939752dc3a0f1e33b828cd93204895a74817ac7`
+- [docs/data/d4-final-catalog-disabled-proof.json](../../docs/data/d4-final-catalog-disabled-proof.json) — SHA-256 `93dbfc9b714cfbff16c8f6a806041f3631e5ad0552b283e2a4d5ff89f6e8bea4`
+- [docs/data/d4-critical-counts-before-after.json](../../docs/data/d4-critical-counts-before-after.json) — SHA-256 `86a43182f85b7df93dd90c4d1dd276757767887561b7071e932b3af9fa548110`
+- [docs/data/d4-r2-cors-immutable-header.json](../../docs/data/d4-r2-cors-immutable-header.json) — SHA-256 `c1c0c74d8b4a3fc9a12dbc69e613a9521dbe896e43ba443a1a31aed24ac732fb`
+- [docs/data/d4-production-log-secret-scan.json](../../docs/data/d4-production-log-secret-scan.json) — SHA-256 `36bd122549ac3714cbdf62b7136085be615f9ab72a2d8b38c57464af659e49a1`
 
-- final inventory: SHA-256 `d937aa804347e2460e2e0da0accd3a7edb71588bd93ef987b14dcfa76e28c200`
+- final inventory: SHA-256 `35c713eab7a9bac1f296e6a0545acaabcd4e902ae597710a14574efc41398cd8`
 
-- operations: SHA-256 `66abf82861d360a1cc3506e30a213782d2b3e396e9a6918b19d6bb4fd2de0663`
+- operations: SHA-256 `2d1ecf5f7c11e4b672843b3b95a958ebf01e63dee21e38089cdc381b334d5c4b`

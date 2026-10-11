@@ -1,36 +1,116 @@
 {
   "scope": "D4_K1_K9_shipping_gates_only",
   "gates": {
-    "tsc": {"status":"passed","evidence_ref":"docs/data/d4-final-local-quality.json"},
-    "changed_lint": {"status":"passed","evidence_ref":"docs/data/d4-changed-lint-final.json"},
-    "npm_test": {"status":"passed","evidence_ref":"docs/data/d4-final-local-quality.json","tests":{"total":904,"passed":893,"failed":0,"skipped":11}},
-    "build": {"status":"passed","evidence_ref":"docs/data/d4-final-local-quality.json"},
-    "ci": {"status":"pending"},
-    "merge": {"status":"pending"},
-    "deployment_success": {"status":"pending"},
-    "health": {"status":"pending"},
-    "ready": {"status":"pending"},
-    "logs_10_minutes": {"status":"pending"},
-    "read_only_smoke": {"status":"pending"},
-    "catalog_disabled_404": {"status":"pending"},
-    "r2_real_acceptance": {"status":"passed","evidence_ref":"docs/data/d4-r2-real-acceptance.json"},
-    "r2_cleanup": {"status":"passed","evidence_ref":"docs/data/d4-licensed-catalog-r2-short-acceptance.json"},
-    "r2_secret_scan": {"status":"passed","evidence_ref":"docs/data/d4-final-actual-secret-file-scan.json"},
-    "rollback": {"status":"pending"}
+    "tsc": {
+      "status": "passed",
+      "evidence_ref": "docs/data/d4-final-local-quality.json"
+    },
+    "changed_lint": {
+      "status": "passed",
+      "evidence_ref": "docs/data/d4-changed-lint-final.json"
+    },
+    "npm_test": {
+      "status": "passed",
+      "evidence_ref": "docs/data/d4-final-local-quality.json",
+      "tests": {
+        "total": 904,
+        "passed": 893,
+        "failed": 0,
+        "skipped": 11
+      }
+    },
+    "build": {
+      "status": "passed",
+      "evidence_ref": "docs/data/d4-final-local-quality.json"
+    },
+    "ci": {
+      "status": "passed",
+      "evidence_ref": "docs/data/d4-final-ci-proof.json"
+    },
+    "merge": {
+      "status": "merged",
+      "evidence_ref": "docs/data/d4-final-merge-proof.json"
+    },
+    "deployment_success": {
+      "status": "SUCCESS",
+      "evidence_ref": "docs/data/d4-final-deployments-proof.json"
+    },
+    "health": {
+      "status": "passed",
+      "evidence_ref": "docs/data/d4-final-health-logs-proof.json",
+      "window_seconds": 738.195
+    },
+    "ready": {
+      "status": "passed",
+      "evidence_ref": "docs/data/d4-final-health-logs-proof.json",
+      "window_seconds": 738.195
+    },
+    "logs_10_minutes": {
+      "status": "passed",
+      "evidence_ref": "docs/data/d4-final-health-logs-proof.json",
+      "window_seconds": 738.195
+    },
+    "read_only_smoke": {
+      "evidence_ref": "docs/data/d4-postdeploy-smoke-proof.json",
+      "status": "passed",
+      "tests": {
+        "passed": 10,
+        "total": 10,
+        "skipped": 0,
+        "failed": 0
+      }
+    },
+    "catalog_disabled_404": {
+      "status": "passed",
+      "evidence_ref": "docs/data/d4-final-catalog-disabled-proof.json"
+    },
+    "r2_real_acceptance": {
+      "status": "passed",
+      "evidence_ref": "docs/data/d4-r2-real-acceptance.json"
+    },
+    "r2_cleanup": {
+      "status": "passed",
+      "evidence_ref": "docs/data/d4-licensed-catalog-r2-short-acceptance.json"
+    },
+    "r2_secret_scan": {
+      "status": "passed",
+      "evidence_ref": "docs/data/d4-final-actual-secret-file-scan.json",
+      "production_logs_evidence_ref": "docs/data/d4-production-log-secret-scan.json"
+    },
+    "rollback": {
+      "status": "not_needed",
+      "evidence_ref": "docs/data/d4-final-health-logs-proof.json",
+      "reason": "No regression observed after four SUCCESS deployments, complete log window, live read-only smoke and protected inventory verification; rollback targets retained."
+    }
   },
   "billing": {
-    "railway": {"before_dollars":17.892516611862717,"after_dollars":18.160036976866973,"evidence_ref":"docs/data/d4-budget-pre-shipping.json"},
-    "cloudflare_r2": {"before_dollars":0,"after_dollars":0,"before_class_a_operations":131,"after_class_a_operations":179,"before_class_b_operations":33,"after_class_b_operations":126,"evidence_ref":"docs/data/d4-r2-billing-before-after.json"},
-    "budget_summary":"Railway hard30$/alert20$, remaining11.8399630231$ before shipping. Cloudflare account-total-spend alert5$ is not a hard cap. Billing may lag; no isolated D4 cost or proven savings claim."
+    "railway": {
+      "before_dollars": 17.892516611862717,
+      "after_dollars": 18.167192598965553,
+      "evidence_ref": "docs/data/d4-budget-after-code-deploy.json"
+    },
+    "cloudflare_r2": {
+      "before_dollars": 0,
+      "after_dollars": 0,
+      "before_class_a_operations": 131,
+      "after_class_a_operations": 200,
+      "before_class_b_operations": 33,
+      "after_class_b_operations": 136,
+      "evidence_ref": "docs/data/d4-r2-billing-before-after.json"
+    },
+    "budget_summary": "Railway hard $30 / alert $20, remaining $11.832807401034447. Workspace total, no isolated D4 cost or proven savings. Cloudflare displayed bill $0; account-total alert $5 is not a hard cap and billing may lag."
   },
   "self_decisions": [
-    "Preserve original failed CHECK report; accept committed DDL only through independent zero-write readback and complete schema/table comparison.",
-    "Reject licensed audio shorter than timing coordinates before attaching it or replacing the previous active source.",
-    "Use owned noise fixtures exclusively for R2 and FFmpeg acceptance; do not rehost provider audio or grant any Quran voice/rights approval from those fixtures.",
-    "Keep all 69 voice identities unverified because content and speaker calibration gates did not establish identity.",
-    "Record actual nine YouTube recitations instead of truncating the source to the historical count eight.",
-    "Keep all terminal unavailable T7 results and missing measurements explicit; do not reselect samples or weaken raw thresholds.",
-    "Keep production resources unchanged and staging paused; retain local private files after the deletion rejection.",
-    "Retain quran_catalog_v2 OFF, with public API disabled, and stop after D4 without A1 or D5."
-  ]
+    "حفظ تقرير CHECK الفاشل كما هو، واعتماد DDL المؤكد فقط بعد قراءة مستقلة بلا كتابة ومقارنة كل التعريفات والصفوف والبصمات.",
+    "رفض الصوت المرخص الأقصر من إحداثيات الكلمات قبل تفعيله أو استبدال المصدر السابق.",
+    "اختبار R2 وFFmpeg بملفات ضوضاء مملوكة فقط؛ لا إعادة استضافة صوت مزوّد أو منح حقوق أو تأكيد هوية من fixtures.",
+    "الإبقاء على هوية الصوت غير متحققة للتلاوات الـ 69؛ فشل المحاذاة وتداخل معايرة المتحدث لا يثبتان الهوية.",
+    "اعتماد العدد الحقيقي 9 لتلاوات YouTube دون تقليصه للعدد التاريخي 8.",
+    "حفظ الحالات النهائية غير المتاحة وعيناتها الناقصة صراحةً؛ لا إعادة اختيار أو تخفيف عتبات T7 الخام.",
+    "الإبقاء على موارد الإنتاج و staging المتوقفة والملفات المحلية الخاصة؛ لا تجاوز لرفض الحذف.",
+    "حفظ بايتات ملفات SVG الأصلية ببصماتها المعتمدة على جميع الأنظمة، دون تغيير التصميم أو البصمات أو اختبار السلامة.",
+    "الإبقاء على quran_catalog_v2 مغلقًا والتوقف بعد D4 دون A1 أو D5.",
+    "تحسين ترتيب قراءة الجرد التشخيصية فقط بعد إثبات زمن 91.7 ثانية محليًا؛ لم يُجزم بأن الاستعلام نفسه سبب المهلة الأصلية، ولم تتغير البيانات أو مهلة الحارس."
+  ],
+  "checked_at": "2026-10-11T09:05:25.858Z"
 }

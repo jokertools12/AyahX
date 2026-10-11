@@ -1,0 +1,4896 @@
+{
+  "read_only": true,
+  "checked_at": "2026-10-11T08:54:50.937Z",
+  "publication_sha256": "7c83d1f0c330541e17fc63644edecf375dc9208fbb372dda5de928d1225bd704",
+  "publication_plan_replay_changes": 0,
+  "mysql_version": "9.7.2",
+  "recitations": [
+    {
+      "id": "145f04af-ee8c-61d9-5570-d3375a6e59e3",
+      "slug": "abdul_hamid_ghraio_2025_yt",
+      "reciter_id": "ebddfc45-287f-0362-89c0-bc436992baaf",
+      "name_ar": "عبدالحميد القريو",
+      "provider": "youtube",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 66,
+        "partial": 36,
+        "near_complete": 12
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER",
+        "YOUTUBE_RENDER_REQUIRES_LICENSED_FILE"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": "بحاجة ملف"
+    },
+    {
+      "id": "4b8a17c8-07dd-51bd-949a-b3deffb74a83",
+      "slug": "abdul_hamid_ghraio_2026_yt",
+      "reciter_id": "ebddfc45-287f-0362-89c0-bc436992baaf",
+      "name_ar": "عبدالحميد القريو",
+      "provider": "youtube",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "near_complete": 11,
+        "complete": 62,
+        "partial": 41
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER",
+        "YOUTUBE_RENDER_REQUIRES_LICENSED_FILE"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": "بحاجة ملف"
+    },
+    {
+      "id": "5ee98aee-2dd0-13a3-793c-0934afec9a06",
+      "slug": "abdulaziz_al_turki_yt",
+      "reciter_id": "1e222f81-bfcf-f6aa-da95-9ff6c09508c1",
+      "name_ar": "عبد العزيز التركي",
+      "provider": "youtube",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 57,
+        "partial": 49,
+        "near_complete": 6
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER",
+        "YOUTUBE_RENDER_REQUIRES_LICENSED_FILE"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": "بحاجة ملف"
+    },
+    {
+      "id": "51567d7d-7729-4997-25d3-99b3c82e6aed",
+      "slug": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "reciter_id": "dd1d64be-ec88-4877-65ae-4ff1126d9460",
+      "name_ar": "عبد الباسط عبد الصمد",
+      "provider": "tarteel",
+      "riwayah": "hafs_an_asim",
+      "channel": "tarteel",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.56377778,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 58,
+        "complete": 51,
+        "near_complete": 5
+      },
+      "healthy_complete_chapters_24h": 51,
+      "valid_complete_chapters": 51,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "95650f99-296a-6122-2dac-498b79db8ede",
+      "slug": "abdulbasit_abdulsamad_tarteel",
+      "reciter_id": "dd1d64be-ec88-4877-65ae-4ff1126d9460",
+      "name_ar": "عبد الباسط عبد الصمد",
+      "provider": "tarteel",
+      "riwayah": "hafs_an_asim",
+      "channel": "tarteel",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.37945573,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 57,
+        "partial": 53,
+        "near_complete": 4
+      },
+      "healthy_complete_chapters_24h": 57,
+      "valid_complete_chapters": 57,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "7f972ead-c29b-5642-a62a-df91ff150ca5",
+      "slug": "abdulbasit_abdulsamad_warsh_qdc",
+      "reciter_id": "dd1d64be-ec88-4877-65ae-4ff1126d9460",
+      "name_ar": "عبد الباسط عبد الصمد",
+      "provider": "quranicaudio",
+      "riwayah": "warsh_an_nafi",
+      "channel": "quranicaudio",
+      "status": "imported",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.95882586,
+      "verification_status": "passed",
+      "verification_method": "v1",
+      "timing_level": "none",
+      "timing_quality": "needs_review",
+      "audio_mode": "surah_slice",
+      "offset_method": "v1",
+      "availability_counts": {
+        "unavailable": 114
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "HAFS_CANONICAL_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_COMPLETE_CHAPTER",
+        "COVERAGE_MISMATCH",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "c22f1347-80b6-2a9c-f7d7-7fb9ce0bc56a",
+      "slug": "abdullah_al_buaijan_2025_yt",
+      "reciter_id": "e5e9554d-bb47-a71a-b365-a94d920d4fd6",
+      "name_ar": "عبد الله البعيجان",
+      "provider": "youtube",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 13,
+        "complete": 90,
+        "near_complete": 11
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER",
+        "YOUTUBE_RENDER_REQUIRES_LICENSED_FILE"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": "بحاجة ملف"
+    },
+    {
+      "id": "bc8af87f-bb5f-0bec-9b75-94ee6898e594",
+      "slug": "abdullah_al_mattrod_qdc",
+      "reciter_id": "9a2ee6a8-38cf-ff5f-f7a3-8694c452538a",
+      "name_ar": "عبد الله المطرود",
+      "provider": "quranicaudio",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.23156619,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 45,
+        "complete": 58,
+        "near_complete": 11
+      },
+      "healthy_complete_chapters_24h": 58,
+      "valid_complete_chapters": 58,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "1be4803e-aa12-eb2b-3cee-ffde092273d3",
+      "slug": "abdullah_al_qarafi_mp3quran",
+      "reciter_id": "bd558640-24a0-351f-c373-6be95b77244e",
+      "name_ar": "عبد الله القرافي",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "published",
+      "published_by": "rule-v1",
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.97245763,
+      "verification_status": "passed",
+      "verification_method": "v1",
+      "timing_level": "word",
+      "timing_quality": "verified",
+      "audio_mode": "surah_slice",
+      "offset_method": "v1",
+      "availability_counts": {
+        "complete": 46,
+        "partial": 61,
+        "near_complete": 7
+      },
+      "healthy_complete_chapters_24h": 46,
+      "valid_complete_chapters": 46,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": true,
+      "rule_v1_reasons": [],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "09be4d81-c0e6-4cc7-4d32-70480e377a61",
+      "slug": "abdullah_kamel_way2quran",
+      "reciter_id": "1ad9a777-e023-c110-0707-d339b69b5e7f",
+      "name_ar": "عبد الله كامل",
+      "provider": "way2quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "way2quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.14085619,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 73,
+        "complete": 35,
+        "near_complete": 6
+      },
+      "healthy_complete_chapters_24h": 35,
+      "valid_complete_chapters": 35,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "2f3ca0d9-1e94-7d4b-5123-da1e6b2742ac",
+      "slug": "abdulwadood_haneef_mp3quran",
+      "reciter_id": "163a2a57-27d3-63c5-3cb5-aa624e2375d6",
+      "name_ar": "عبد الودود حنيف",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.82327665,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 56,
+        "complete": 51,
+        "near_complete": 7
+      },
+      "healthy_complete_chapters_24h": 51,
+      "valid_complete_chapters": 51,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "80633b53-7ae7-e52a-ef25-149b2b8c3fad",
+      "slug": "abdur_rashid_sufi_qdc",
+      "reciter_id": "eea16ca0-6438-e43c-86e7-9015ee07af45",
+      "name_ar": "عبد الرشيد صوفي",
+      "provider": "quranicaudio",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.93475225,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "near_complete": 7,
+        "complete": 62,
+        "partial": 45
+      },
+      "healthy_complete_chapters_24h": 62,
+      "valid_complete_chapters": 62,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "99b3e3dd-f1b4-befd-753a-25f5f70c1b4f",
+      "slug": "abdur_rashid_sufi_shubah_qdc",
+      "reciter_id": "eea16ca0-6438-e43c-86e7-9015ee07af45",
+      "name_ar": "عبد الرشيد صوفي",
+      "provider": "quranicaudio",
+      "riwayah": "shubah_an_asim",
+      "channel": "quranicaudio",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.32600671,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "none",
+      "timing_quality": "needs_review",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "unavailable": 114
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "HAFS_CANONICAL_REQUIRED",
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_COMPLETE_CHAPTER",
+        "COVERAGE_MISMATCH",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "b8f09fcc-08b9-9eb7-8a1e-1fc97fa41b58",
+      "slug": "abu_bakr_al_shatri_tarteel",
+      "reciter_id": "fe833b5e-375f-7f29-b81f-8e52596278f9",
+      "name_ar": "أبو بكر الشاطري",
+      "provider": "tarteel",
+      "riwayah": "hafs_an_asim",
+      "channel": "tarteel",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.20549451,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 72,
+        "near_complete": 8,
+        "complete": 34
+      },
+      "healthy_complete_chapters_24h": 34,
+      "valid_complete_chapters": 34,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "b1a45240-81a7-a9c4-2b2c-5888eeefe115",
+      "slug": "adel_al_karbalaei_archive_v2",
+      "reciter_id": "cbb3888b-58e6-75ec-9258-d54e4b674149",
+      "name_ar": "عادل الکربلائي",
+      "provider": "archive_org",
+      "riwayah": "hafs_an_asim",
+      "channel": "archive_org",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.20222689,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 39,
+        "complete": 60,
+        "near_complete": 15
+      },
+      "healthy_complete_chapters_24h": 59,
+      "valid_complete_chapters": 59,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "232bdfd8-0328-3579-9ed2-d3c4cd90f3fb",
+      "slug": "ahmad_naseem_ali_ahmad_2019_yt",
+      "reciter_id": "3d04cace-e62a-4d4a-e175-190164c60724",
+      "name_ar": "أحمد  نسيم على أحمد",
+      "provider": "youtube",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 50,
+        "near_complete": 7,
+        "partial": 57
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER",
+        "YOUTUBE_RENDER_REQUIRES_LICENSED_FILE"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": "بحاجة ملف"
+    },
+    {
+      "id": "09b09290-df40-e01e-1767-437e03debec9",
+      "slug": "ahmed_al_ajmi_qdc",
+      "reciter_id": "3c82dd1e-feca-614c-77f3-9717a30b7d9a",
+      "name_ar": "أحمد بن علي العجمي",
+      "provider": "quranicaudio",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.27977153,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 69,
+        "complete": 32,
+        "near_complete": 13
+      },
+      "healthy_complete_chapters_24h": 32,
+      "valid_complete_chapters": 32,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "d6af6453-e44f-6e4b-da9b-ebe8aaad20ac",
+      "slug": "ahmed_amer_tvquran",
+      "reciter_id": "cce55fc4-c8a1-bf98-a08f-edd1b2f708fb",
+      "name_ar": "أحمد عامر",
+      "provider": "tvquran",
+      "riwayah": "hafs_an_asim",
+      "channel": "tvquran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.97377819,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 54,
+        "complete": 56,
+        "near_complete": 4
+      },
+      "healthy_complete_chapters_24h": 56,
+      "valid_complete_chapters": 56,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "a173a7a7-b0a9-8409-da03-a7dc3038f23c",
+      "slug": "ahmed_deban_qalon_mp3quran",
+      "reciter_id": "7e7bfd7e-18e1-566f-b0e8-8f4f95457b9c",
+      "name_ar": "أحمد ديبان",
+      "provider": "mp3quran",
+      "riwayah": "qalon_an_nafi",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.92241244,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "none",
+      "timing_quality": "needs_review",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "unavailable": 114
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "HAFS_CANONICAL_REQUIRED",
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_COMPLETE_CHAPTER",
+        "COVERAGE_MISMATCH",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "bf4ebc6b-ef7c-4402-4862-63d50efedfaa",
+      "slug": "ahmed_issa_al_maasaraawi_mp3quran",
+      "reciter_id": "668f3c14-49b2-247f-9705-db795977a5f6",
+      "name_ar": "أحمد عيسى المعصراوي",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.9368733,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 63,
+        "partial": 43,
+        "near_complete": 8
+      },
+      "healthy_complete_chapters_24h": 63,
+      "valid_complete_chapters": 63,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "10317dc7-547c-71ac-529e-e993980a6a3a",
+      "slug": "ahmed_kaseb_way2quran",
+      "reciter_id": "57e6be54-1754-7d46-b73c-30f5b9e07fb8",
+      "name_ar": "أحمد كاسب",
+      "provider": "way2quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "way2quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.19738515,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 53,
+        "partial": 52,
+        "near_complete": 9
+      },
+      "healthy_complete_chapters_24h": 53,
+      "valid_complete_chapters": 53,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "2044d4d2-cc5b-b407-cbe2-c7632e21478b",
+      "slug": "ahmed_nuayna_qdc",
+      "reciter_id": "dcae0e14-0c6d-8600-3752-7ed648dbeae6",
+      "name_ar": "أحمد نعينع",
+      "provider": "quranicaudio",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.30031817,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 52,
+        "near_complete": 5,
+        "complete": 57
+      },
+      "healthy_complete_chapters_24h": 57,
+      "valid_complete_chapters": 57,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "12cf216b-1bd5-686c-1d1e-05714aa38a3d",
+      "slug": "ahmed_saleh_rajab_qalon_way2quran",
+      "reciter_id": "53afbb14-fc64-a578-2897-6256758961d9",
+      "name_ar": "أحمد صالح رجب",
+      "provider": "way2quran",
+      "riwayah": "qalon_an_nafi",
+      "channel": "way2quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.9500900168209179,
+      "verification_status": "passed",
+      "verification_method": "v1",
+      "timing_level": "none",
+      "timing_quality": "needs_review",
+      "audio_mode": "surah_slice",
+      "offset_method": "v1",
+      "availability_counts": {
+        "unavailable": 114
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "HAFS_CANONICAL_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_COMPLETE_CHAPTER",
+        "COVERAGE_MISMATCH",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "8a1489c5-4fa2-12b5-0112-6e04b01e94b5",
+      "slug": "ahmed_saud_mp3quran",
+      "reciter_id": "a300bb6c-591a-c1e2-cde7-d621ea79f863",
+      "name_ar": "أحمد سعود",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "published",
+      "published_by": "rule-v1",
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.9997001455077874,
+      "verification_status": "passed",
+      "verification_method": "v2",
+      "timing_level": "word",
+      "timing_quality": "verified",
+      "audio_mode": "surah_slice",
+      "offset_method": "v2",
+      "availability_counts": {
+        "complete": 28,
+        "near_complete": 2
+      },
+      "healthy_complete_chapters_24h": 28,
+      "valid_complete_chapters": 28,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": true,
+      "rule_v1_reasons": [],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "3e21d6e0-7a97-e9ae-86b5-95d6d1a74dcc",
+      "slug": "ahmed_shaheen_mp3quran",
+      "reciter_id": "3ff4a126-6b2d-2ba3-c2d9-8b97a98758c9",
+      "name_ar": "أحمد خليل شاهين",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.80653435,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 51,
+        "partial": 58,
+        "near_complete": 5
+      },
+      "healthy_complete_chapters_24h": 51,
+      "valid_complete_chapters": 51,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "e7f11e1f-8cf9-b375-76c2-36bcb1b6a048",
+      "slug": "ahmed_talib_bin_humaid_mp3quran",
+      "reciter_id": "10dc5755-47eb-fe72-01a4-1f3c3d648605",
+      "name_ar": "أحمد طالب بن حميد",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.89251828,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 55,
+        "complete": 42,
+        "near_complete": 10
+      },
+      "healthy_complete_chapters_24h": 42,
+      "valid_complete_chapters": 42,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "703f4293-124f-f250-d89c-fb89ec7d7195",
+      "slug": "akram_al_alaqmi_qdc",
+      "reciter_id": "e358133d-c16a-4389-516d-83af4a08759d",
+      "name_ar": "أكرم العلاقمي",
+      "provider": "quranicaudio",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "status": "published",
+      "published_by": "rule-v1",
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.9547904566666984,
+      "verification_status": "passed",
+      "verification_method": "v1",
+      "timing_level": "word",
+      "timing_quality": "verified",
+      "audio_mode": "surah_slice",
+      "offset_method": "v1",
+      "availability_counts": {
+        "partial": 68,
+        "complete": 39,
+        "near_complete": 7
+      },
+      "healthy_complete_chapters_24h": 39,
+      "valid_complete_chapters": 39,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": true,
+      "rule_v1_reasons": [],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "4d50476b-6cdf-5a08-bd47-5471ab2d9e5c",
+      "slug": "ali_al_huthaifi_mp3quran",
+      "reciter_id": "39aa30dc-11dd-8a22-aac6-b8b267eac61b",
+      "name_ar": "علي بن عبد الرحمن الحذيفي",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "published",
+      "published_by": "rule-v1",
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.99999829,
+      "verification_status": "passed",
+      "verification_method": "v1",
+      "timing_level": "word",
+      "timing_quality": "verified",
+      "audio_mode": "surah_slice",
+      "offset_method": "v1",
+      "availability_counts": {
+        "partial": 62,
+        "complete": 49,
+        "near_complete": 3
+      },
+      "healthy_complete_chapters_24h": 49,
+      "valid_complete_chapters": 49,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": true,
+      "rule_v1_reasons": [],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "bf6fe8dc-e76c-2b0b-1bef-d5a1383b0fed",
+      "slug": "ayman_swed_muallim_yt",
+      "reciter_id": "a745044a-294f-3b06-7f91-ce4636fd78a0",
+      "name_ar": "أيمن سويد",
+      "provider": "youtube",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 66,
+        "complete": 42,
+        "near_complete": 6
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER",
+        "YOUTUBE_RENDER_REQUIRES_LICENSED_FILE"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": "بحاجة ملف"
+    },
+    {
+      "id": "db02c405-e3be-dbf9-6862-eee371003ae1",
+      "slug": "badr_al_turki_yt",
+      "reciter_id": "0a372f72-4660-2c7a-9c2b-959a8d974026",
+      "name_ar": "بدر التركي",
+      "provider": "youtube",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 50,
+        "partial": 58,
+        "near_complete": 6
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER",
+        "YOUTUBE_RENDER_REQUIRES_LICENSED_FILE"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": "بحاجة ملف"
+    },
+    {
+      "id": "4fdf3e11-a78b-0d5e-3daf-10d3d8edb528",
+      "slug": "bandar_baleela_qdc",
+      "reciter_id": "b5773848-94e8-f38c-e006-84e2b48fd6ab",
+      "name_ar": "بندر بليلة",
+      "provider": "quranicaudio",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.21324602,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 42,
+        "partial": 63,
+        "near_complete": 9
+      },
+      "healthy_complete_chapters_24h": 42,
+      "valid_complete_chapters": 42,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "f4a974e6-c90b-adc3-833d-c36ce7ede627",
+      "slug": "fatih_seferagic_way2quran",
+      "reciter_id": "e0303415-3db5-f1da-d583-e4d873cfe2e6",
+      "name_ar": "فاتح سفراجيك",
+      "provider": "way2quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "way2quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.17826191,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 83,
+        "near_complete": 18,
+        "partial": 13
+      },
+      "healthy_complete_chapters_24h": 83,
+      "valid_complete_chapters": 83,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "b6acb1c7-6894-6b78-9108-ecd4f25ac3df",
+      "slug": "haitham_al_dukhain_mp3quran",
+      "reciter_id": "56b3d6a4-672f-464e-4695-93383d25d601",
+      "name_ar": "هيثم الدخين",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "published",
+      "published_by": "rule-v1",
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.97424173,
+      "verification_status": "passed",
+      "verification_method": "v1",
+      "timing_level": "word",
+      "timing_quality": "verified",
+      "audio_mode": "surah_slice",
+      "offset_method": "v1",
+      "availability_counts": {
+        "partial": 57,
+        "complete": 43,
+        "near_complete": 14
+      },
+      "healthy_complete_chapters_24h": 43,
+      "valid_complete_chapters": 43,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": true,
+      "rule_v1_reasons": [],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "e9fabfeb-3cb4-e27c-2fa1-940fc88deae0",
+      "slug": "hani_al_rifai_qdc_128k",
+      "reciter_id": "3cbda978-5393-fde8-d843-07384f0db36e",
+      "name_ar": "هاني الرفاعي",
+      "provider": "quranicaudio",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.31115219,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 54,
+        "complete": 46,
+        "near_complete": 13,
+        "unavailable": 1
+      },
+      "healthy_complete_chapters_24h": 46,
+      "valid_complete_chapters": 46,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "COVERAGE_MISMATCH"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "3f2b604f-9c5e-6452-00ce-2a03cb92adb9",
+      "slug": "ibrahim_al_akhdar_drive",
+      "reciter_id": "7cada798-caf1-176b-058b-cf8ca981dfc0",
+      "name_ar": "إبراهيم الأخضر",
+      "provider": "drive",
+      "riwayah": "hafs_an_asim",
+      "channel": "drive",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 30,
+        "complete": 78,
+        "near_complete": 6
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "7f82822d-b69d-efda-096e-3182ce4063d0",
+      "slug": "imad_zuhair_hafez_mp3quran",
+      "reciter_id": "f0cf49e4-1590-19f4-766c-9036f3f8df8c",
+      "name_ar": "عماد زهير حافظ",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "published",
+      "published_by": "rule-v1",
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.95000194,
+      "verification_status": "passed",
+      "verification_method": "v1",
+      "timing_level": "word",
+      "timing_quality": "verified",
+      "audio_mode": "surah_slice",
+      "offset_method": "v1",
+      "availability_counts": {
+        "partial": 59,
+        "near_complete": 3,
+        "complete": 52
+      },
+      "healthy_complete_chapters_24h": 52,
+      "valid_complete_chapters": 52,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": true,
+      "rule_v1_reasons": [],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "c72e7816-cf79-ae8c-be62-fc3285baf877",
+      "slug": "islam_sobhi_mp3quran",
+      "reciter_id": "f1bf6882-09d7-e47f-fa7d-5659c8f161fa",
+      "name_ar": "إسلام صبحي",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.94425559,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "near_complete": 10,
+        "partial": 51,
+        "complete": 44,
+        "unavailable": 1
+      },
+      "healthy_complete_chapters_24h": 44,
+      "valid_complete_chapters": 44,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "COVERAGE_MISMATCH"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "de4d21f0-9cb0-3b39-d8da-1ce99e4c7cc0",
+      "slug": "khalid_al_mohana_drive",
+      "reciter_id": "50d51825-0249-d0f5-2f27-124d97b0b93f",
+      "name_ar": "خالد المهنا",
+      "provider": "drive",
+      "riwayah": "hafs_an_asim",
+      "channel": "drive",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 41,
+        "complete": 69,
+        "near_complete": 4
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "044a1e9f-67c9-6854-5e3b-20438c45c4e7",
+      "slug": "khalifa_al_tunaiji_tarteel",
+      "reciter_id": "8fcef52b-54ed-82ac-d836-4f0a28480f6b",
+      "name_ar": "خليفة الطنيجي",
+      "provider": "tarteel",
+      "riwayah": "hafs_an_asim",
+      "channel": "tarteel",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.24713172,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 59,
+        "partial": 52,
+        "near_complete": 3
+      },
+      "healthy_complete_chapters_24h": 59,
+      "valid_complete_chapters": 59,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "829763f8-1faa-4a26-15ff-86f934c4bceb",
+      "slug": "maher_al_muaiqly_qdc",
+      "reciter_id": "8b4f2096-17f2-8515-8fd8-6d135c8ad6db",
+      "name_ar": "ماهر المعيقلي",
+      "provider": "quranicaudio",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.93806561,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 59,
+        "partial": 53,
+        "near_complete": 2
+      },
+      "healthy_complete_chapters_24h": 59,
+      "valid_complete_chapters": 59,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "cb030c9e-d6bd-2ca2-bed2-17157d5b2964",
+      "slug": "mahmoud_abdul_hakam_mp3quran",
+      "reciter_id": "eb987b2c-c757-ecaf-9fa6-0b673399db8c",
+      "name_ar": "محمود عبدالحكم",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.93613915,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 59,
+        "complete": 49,
+        "near_complete": 6
+      },
+      "healthy_complete_chapters_24h": 49,
+      "valid_complete_chapters": 49,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "116d67f6-5b77-3883-3e80-9b11566dc7c3",
+      "slug": "mahmoud_ali_al_banna_qdc",
+      "reciter_id": "5063aad4-a2e5-e529-817f-8f9f689e6ca0",
+      "name_ar": "محمود علي البنا",
+      "provider": "quranicaudio",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.9441084,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 56,
+        "partial": 54,
+        "near_complete": 4
+      },
+      "healthy_complete_chapters_24h": 56,
+      "valid_complete_chapters": 56,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "01d46368-8770-1e8f-9dd8-3a8608e97487",
+      "slug": "mahmoud_khalil_al_husary_mp3quran",
+      "reciter_id": "d2c95485-9ac7-f317-3ff8-f61d80962fd3",
+      "name_ar": "محمود خليل الحصري",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.89306233,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 49,
+        "complete": 60,
+        "near_complete": 5
+      },
+      "healthy_complete_chapters_24h": 60,
+      "valid_complete_chapters": 60,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "a37b200d-ee15-761b-afea-45ce0f10b481",
+      "slug": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "reciter_id": "d2c95485-9ac7-f317-3ff8-f61d80962fd3",
+      "name_ar": "محمود خليل الحصري",
+      "provider": "tarteel",
+      "riwayah": "hafs_an_asim",
+      "channel": "tarteel",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.14771115,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 55,
+        "partial": 54,
+        "near_complete": 5
+      },
+      "healthy_complete_chapters_24h": 55,
+      "valid_complete_chapters": 55,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "a3bea32c-f60e-990f-8631-931ee63890bb",
+      "slug": "mahmoud_khalil_al_husary_qdc_128k",
+      "reciter_id": "d2c95485-9ac7-f317-3ff8-f61d80962fd3",
+      "name_ar": "محمود خليل الحصري",
+      "provider": "quranicaudio",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.28092874,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 64,
+        "partial": 47,
+        "near_complete": 3
+      },
+      "healthy_complete_chapters_24h": 64,
+      "valid_complete_chapters": 64,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "a7ffd321-8f70-8cc1-4650-4a5926ba6ca0",
+      "slug": "mishary_rashid_al_afasy_2008_qdc",
+      "reciter_id": "0d28326c-7a8a-333d-6c53-1bb575fa777a",
+      "name_ar": "مشاري بن راشد العفاسي",
+      "provider": "quranicaudio",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.16867719,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 63,
+        "complete": 47,
+        "near_complete": 4
+      },
+      "healthy_complete_chapters_24h": 47,
+      "valid_complete_chapters": 47,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "2648aae8-f604-0bfc-918c-1d6cedd47c55",
+      "slug": "mishary_rashid_al_afasy_mp3quran",
+      "reciter_id": "0d28326c-7a8a-333d-6c53-1bb575fa777a",
+      "name_ar": "مشاري بن راشد العفاسي",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "published",
+      "published_by": "rule-v1",
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.9991414310357438,
+      "verification_status": "passed",
+      "verification_method": "v2",
+      "timing_level": "word",
+      "timing_quality": "verified",
+      "audio_mode": "surah_slice",
+      "offset_method": "v2",
+      "availability_counts": {
+        "partial": 56,
+        "complete": 53,
+        "near_complete": 5
+      },
+      "healthy_complete_chapters_24h": 53,
+      "valid_complete_chapters": 53,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": true,
+      "rule_v1_reasons": [],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "39eacb00-f62a-e184-6f6b-b74858c6e1a6",
+      "slug": "moaz_mahmoud_hamed_qalon_way2quran",
+      "reciter_id": "bcda50aa-20f8-647f-f97d-a528ff53cd2a",
+      "name_ar": "معاذ محمود حامد",
+      "provider": "way2quran",
+      "riwayah": "qalon_an_nafi",
+      "channel": "way2quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.15092399,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "none",
+      "timing_quality": "needs_review",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "unavailable": 114
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "HAFS_CANONICAL_REQUIRED",
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_COMPLETE_CHAPTER",
+        "COVERAGE_MISMATCH",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "slug": "mohammed_abdulkareem_qdc",
+      "reciter_id": "5f23c52e-eca7-8d37-1388-34bc70ada85e",
+      "name_ar": "محمد عبد الكريم",
+      "provider": "quranicaudio",
+      "riwayah": "hafs_an_asim",
+      "channel": "quranicaudio",
+      "status": "published",
+      "published_by": "rule-v1",
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.95242258,
+      "verification_status": "passed",
+      "verification_method": "v1",
+      "timing_level": "word",
+      "timing_quality": "verified",
+      "audio_mode": "surah_slice",
+      "offset_method": "v1",
+      "availability_counts": {
+        "partial": 67,
+        "complete": 35,
+        "near_complete": 12
+      },
+      "healthy_complete_chapters_24h": 35,
+      "valid_complete_chapters": 35,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": true,
+      "rule_v1_reasons": [],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "91f99bb2-568c-139d-cb8b-f83a90d07769",
+      "slug": "mohammed_al_luhaidan_mp3quran",
+      "reciter_id": "a5f723fb-a094-9658-f1f2-c0c1bf692d7c",
+      "name_ar": "محمد اللحيدان",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "published",
+      "published_by": "rule-v1",
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.96690303,
+      "verification_status": "passed",
+      "verification_method": "v1",
+      "timing_level": "word",
+      "timing_quality": "verified",
+      "audio_mode": "surah_slice",
+      "offset_method": "v1",
+      "availability_counts": {
+        "partial": 61,
+        "complete": 44,
+        "near_complete": 9
+      },
+      "healthy_complete_chapters_24h": 44,
+      "valid_complete_chapters": 44,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": true,
+      "rule_v1_reasons": [],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "85e4d478-2aaa-d433-ab1c-df9a5b32d8d2",
+      "slug": "mohammed_alghazali_archive",
+      "reciter_id": "126afd14-bc25-efbd-eee4-d3456cca6f0d",
+      "name_ar": "محمد الغزالي",
+      "provider": "archive_org",
+      "riwayah": "hafs_an_asim",
+      "channel": "archive_org",
+      "status": "published",
+      "published_by": "rule-v1",
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.9987981569685923,
+      "verification_status": "passed",
+      "verification_method": "v2",
+      "timing_level": "word",
+      "timing_quality": "verified",
+      "audio_mode": "surah_slice",
+      "offset_method": "v2",
+      "availability_counts": {
+        "near_complete": 8,
+        "partial": 68,
+        "complete": 38
+      },
+      "healthy_complete_chapters_24h": 38,
+      "valid_complete_chapters": 38,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": true,
+      "rule_v1_reasons": [],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "271c991f-ede5-0342-ddee-792024c769f0",
+      "slug": "mohammed_ayyub_drive",
+      "reciter_id": "32ffe1a5-0171-5c3d-8b71-75e24ab5f8d9",
+      "name_ar": "محمد أيوب",
+      "provider": "drive",
+      "riwayah": "hafs_an_asim",
+      "channel": "drive",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 51,
+        "partial": 57,
+        "near_complete": 6
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "5135bf14-d83e-37c1-08aa-d5ac08a2bc97",
+      "slug": "mohammed_burhaji_yt",
+      "reciter_id": "1b51b5d4-de50-be46-28ed-e57f53351e87",
+      "name_ar": "محمد برهجي",
+      "provider": "youtube",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 62,
+        "complete": 46,
+        "near_complete": 6
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER",
+        "YOUTUBE_RENDER_REQUIRES_LICENSED_FILE"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": "بحاجة ملف"
+    },
+    {
+      "id": "b8e58c96-6756-c4b7-3d61-d4329c440d89",
+      "slug": "mohammed_saayed_warsh_mp3quran",
+      "reciter_id": "6f3da087-1d11-e707-8ced-2224c4e3adc9",
+      "name_ar": "محمد سايد",
+      "provider": "mp3quran",
+      "riwayah": "warsh_an_nafi",
+      "channel": "mp3quran",
+      "status": "imported",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.9669137,
+      "verification_status": "passed",
+      "verification_method": "v1",
+      "timing_level": "none",
+      "timing_quality": "needs_review",
+      "audio_mode": "surah_slice",
+      "offset_method": "v1",
+      "availability_counts": {
+        "unavailable": 114
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "HAFS_CANONICAL_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_COMPLETE_CHAPTER",
+        "COVERAGE_MISMATCH",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "30dd65ad-7b89-4cc8-dc35-3535db4d2586",
+      "slug": "mohammed_siddiq_al_minshawi_1967_drive",
+      "reciter_id": "3412497a-7797-e9d0-9ae0-f012f09b0089",
+      "name_ar": "محمد صديق المنشاوي",
+      "provider": "drive",
+      "riwayah": "hafs_an_asim",
+      "channel": "drive",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 52,
+        "partial": 57,
+        "near_complete": 5
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "779ebe1e-be62-7a71-b2d7-4f2251303684",
+      "slug": "mohammed_siddiq_al_minshawi_mp3quran",
+      "reciter_id": "3412497a-7797-e9d0-9ae0-f012f09b0089",
+      "name_ar": "محمد صديق المنشاوي",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.87437985,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 56,
+        "complete": 54,
+        "near_complete": 4
+      },
+      "healthy_complete_chapters_24h": 54,
+      "valid_complete_chapters": 54,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "1c79adfe-a520-5441-7e0f-96f5d8752322",
+      "slug": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "reciter_id": "3412497a-7797-e9d0-9ae0-f012f09b0089",
+      "name_ar": "محمد صديق المنشاوي",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.64401192,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 68,
+        "complete": 43,
+        "near_complete": 3
+      },
+      "healthy_complete_chapters_24h": 43,
+      "valid_complete_chapters": 43,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "b50b55b5-a7c9-7bb6-bc23-a949078e1c29",
+      "slug": "muammar_zainal_al_sukaini_way2quran",
+      "reciter_id": "2bc42434-9f9b-87f5-fa78-1dc35c67447e",
+      "name_ar": "معمر زينل السكيني",
+      "provider": "way2quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "way2quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.92592441,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 59,
+        "partial": 51,
+        "near_complete": 4
+      },
+      "healthy_complete_chapters_24h": 59,
+      "valid_complete_chapters": 59,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "639e66db-a4c7-ca0a-2cce-f557ecc151db",
+      "slug": "mustafa_ismail_mp3quran",
+      "reciter_id": "7e97cb8b-808d-712b-b8ae-bcbbac89f974",
+      "name_ar": "مصطفى إسماعيل",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.93735887,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 48,
+        "complete": 62,
+        "near_complete": 4
+      },
+      "healthy_complete_chapters_24h": 62,
+      "valid_complete_chapters": 62,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "slug": "nasser_al_qatami_mp3quran",
+      "reciter_id": "4686f609-8105-7ebf-a0da-fe6730d48205",
+      "name_ar": "ناصر القطامي",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "published",
+      "published_by": "rule-v1",
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": true,
+      "offset_check_score": 0.979078100137601,
+      "verification_status": "passed",
+      "verification_method": "v1",
+      "timing_level": "word",
+      "timing_quality": "verified",
+      "audio_mode": "surah_slice",
+      "offset_method": "v1",
+      "availability_counts": {
+        "partial": 75,
+        "complete": 30,
+        "near_complete": 9
+      },
+      "healthy_complete_chapters_24h": 30,
+      "valid_complete_chapters": 30,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": true,
+      "rule_v1_reasons": [],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "9ccb21f5-a4aa-619a-16a4-d32ef8544085",
+      "slug": "saad_al_ghamdi_tarteel",
+      "reciter_id": "70fef257-86ba-622f-3645-163b8cc712ba",
+      "name_ar": "سعد الغامدي",
+      "provider": "tarteel",
+      "riwayah": "hafs_an_asim",
+      "channel": "tarteel",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.1997949,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 62,
+        "complete": 47,
+        "near_complete": 5
+      },
+      "healthy_complete_chapters_24h": 47,
+      "valid_complete_chapters": 47,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "fdc68197-4a79-dea9-a9ea-b4fc3ad244c1",
+      "slug": "saber_abdulhakam_qalon_way2quran",
+      "reciter_id": "fed24beb-b402-be55-d35f-2c4a08504713",
+      "name_ar": "صابر عبد الحكم",
+      "provider": "way2quran",
+      "riwayah": "qalon_an_nafi",
+      "channel": "way2quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.202516,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "none",
+      "timing_quality": "needs_review",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "unavailable": 114
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "HAFS_CANONICAL_REQUIRED",
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_COMPLETE_CHAPTER",
+        "COVERAGE_MISMATCH",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "0df5fd17-75a6-a8e7-4848-037e48e4b302",
+      "slug": "saber_abdulhakam_shubah_way2quran",
+      "reciter_id": "fed24beb-b402-be55-d35f-2c4a08504713",
+      "name_ar": "صابر عبد الحكم",
+      "provider": "way2quran",
+      "riwayah": "shubah_an_asim",
+      "channel": "way2quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.93022949,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "none",
+      "timing_quality": "needs_review",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "unavailable": 114
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "HAFS_CANONICAL_REQUIRED",
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_COMPLETE_CHAPTER",
+        "COVERAGE_MISMATCH",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "c87687dd-26bc-ad05-54d0-fdca44993509",
+      "slug": "saber_abdulhakam_warsh_way2quran",
+      "reciter_id": "fed24beb-b402-be55-d35f-2c4a08504713",
+      "name_ar": "صابر عبد الحكم",
+      "provider": "way2quran",
+      "riwayah": "warsh_an_nafi",
+      "channel": "way2quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.90106301,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "none",
+      "timing_quality": "needs_review",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "unavailable": 114
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "HAFS_CANONICAL_REQUIRED",
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_COMPLETE_CHAPTER",
+        "COVERAGE_MISMATCH",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "5f5ef5c8-cb7c-1d52-e1de-e646433f7787",
+      "slug": "saber_abdulhakam_yt",
+      "reciter_id": "fed24beb-b402-be55-d35f-2c4a08504713",
+      "name_ar": "صابر عبد الحكم",
+      "provider": "youtube",
+      "riwayah": "hafs_an_asim",
+      "channel": "youtube",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": null,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 56,
+        "complete": 52,
+        "near_complete": 6
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_HEALTHY_COMPLETE_CHAPTER",
+        "YOUTUBE_RENDER_REQUIRES_LICENSED_FILE"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": "بحاجة ملف"
+    },
+    {
+      "id": "c9f9f54f-d248-3a48-8dd0-89fc353e19c3",
+      "slug": "saud_al_shuraim_mp3quran",
+      "reciter_id": "4e60de67-4e11-4940-4698-e58d10876ff5",
+      "name_ar": "سعود الشريم",
+      "provider": "mp3quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.74639432,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "partial": 47,
+        "complete": 55,
+        "near_complete": 12
+      },
+      "healthy_complete_chapters_24h": 55,
+      "valid_complete_chapters": 55,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "f7c7c48b-7894-e959-d794-166e3f38839a",
+      "slug": "walid_al_naihi_qalon_mp3quran",
+      "reciter_id": "e49c8ffc-14ef-05d3-0d42-b473ebcbf79c",
+      "name_ar": "وليد النائحي",
+      "provider": "mp3quran",
+      "riwayah": "qalon_an_nafi",
+      "channel": "mp3quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.19377974,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "none",
+      "timing_quality": "needs_review",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "unavailable": 114
+      },
+      "healthy_complete_chapters_24h": 0,
+      "valid_complete_chapters": 0,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "HAFS_CANONICAL_REQUIRED",
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED",
+        "NO_COMPLETE_CHAPTER",
+        "COVERAGE_MISMATCH",
+        "NO_HEALTHY_COMPLETE_CHAPTER"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "6cd7c3a3-0dfa-ee1b-b33c-76311f01119d",
+      "slug": "walid_atef_way2quran",
+      "reciter_id": "d579b96b-edda-2ba8-c93a-62a5ac150bd9",
+      "name_ar": "وليد عاطف",
+      "provider": "way2quran",
+      "riwayah": "hafs_an_asim",
+      "channel": "way2quran",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.29440389,
+      "verification_status": "source_unavailable",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 37,
+        "partial": 71,
+        "near_complete": 6
+      },
+      "healthy_complete_chapters_24h": 37,
+      "valid_complete_chapters": 37,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    },
+    {
+      "id": "fcd9c298-c3cd-0c32-0180-a3b5f61861cb",
+      "slug": "yasser_al_dosari_archive",
+      "reciter_id": "2f54407b-4e37-41ce-af39-e23eb3da941e",
+      "name_ar": "ياسر الدوسري",
+      "provider": "archive_org",
+      "riwayah": "hafs_an_asim",
+      "channel": "archive_org",
+      "status": "needs_review",
+      "published_by": null,
+      "voice_identity_status": "unverified",
+      "is_public": false,
+      "license_status": "unreviewed",
+      "offset_verified": false,
+      "offset_check_score": 0.16456753,
+      "verification_status": "failed",
+      "verification_method": null,
+      "timing_level": "word",
+      "timing_quality": "aligned",
+      "audio_mode": "unverified_source",
+      "offset_method": null,
+      "availability_counts": {
+        "complete": 38,
+        "near_complete": 7,
+        "partial": 69
+      },
+      "healthy_complete_chapters_24h": 38,
+      "valid_complete_chapters": 38,
+      "verified_licensed_complete_chapters": 0,
+      "rule_v1_eligible": false,
+      "rule_v1_reasons": [
+        "OFFSET_NOT_VERIFIED",
+        "SURAH_SLICE_REQUIRED",
+        "WORD_TIMING_NOT_VERIFIED"
+      ],
+      "public_visible": false,
+      "youtube_audio_state": null
+    }
+  ],
+  "flag_enabled": false,
+  "settings": {
+    "enabled": false,
+    "availabilityMode": "complete_only",
+    "voiceGatePolicy": "allow_auto_verified",
+    "storageAdapter": "r2"
+  },
+  "review_counts_by_type": {
+    "voice_confirmation": 69,
+    "provider_license": 10,
+    "label_review": 1,
+    "offset_exception": 38,
+    "basmala_audio": 69,
+    "youtube_rights": 9,
+    "youtube_audio_missing": 9,
+    "near_complete_chapters": 415,
+    "data_conflict": 9,
+    "storage_activation": 1,
+    "storage_credentials": 1,
+    "storage_rights": 9
+  },
+  "review_pending_counts_by_type": {
+    "voice_confirmation": 69,
+    "provider_license": 10,
+    "label_review": 1,
+    "offset_exception": 38,
+    "basmala_audio": 69,
+    "youtube_rights": 9,
+    "youtube_audio_missing": 9,
+    "near_complete_chapters": 415,
+    "data_conflict": 9,
+    "storage_activation": 1,
+    "storage_credentials": 1,
+    "storage_rights": 9
+  },
+  "review_status_totals": {
+    "pending": 640
+  },
+  "review_counts": [
+    {
+      "type": "voice_confirmation",
+      "count": 69,
+      "status": "pending"
+    },
+    {
+      "type": "provider_license",
+      "count": 10,
+      "status": "pending"
+    },
+    {
+      "type": "label_review",
+      "count": 1,
+      "status": "pending"
+    },
+    {
+      "type": "offset_exception",
+      "count": 38,
+      "status": "pending"
+    },
+    {
+      "type": "basmala_audio",
+      "count": 69,
+      "status": "pending"
+    },
+    {
+      "type": "youtube_rights",
+      "count": 9,
+      "status": "pending"
+    },
+    {
+      "type": "youtube_audio_missing",
+      "count": 9,
+      "status": "pending"
+    },
+    {
+      "type": "near_complete_chapters",
+      "count": 415,
+      "status": "pending"
+    },
+    {
+      "type": "data_conflict",
+      "count": 9,
+      "status": "pending"
+    },
+    {
+      "type": "storage_activation",
+      "count": 1,
+      "status": "pending"
+    },
+    {
+      "type": "storage_credentials",
+      "count": 1,
+      "status": "pending"
+    },
+    {
+      "type": "storage_rights",
+      "count": 9,
+      "status": "pending"
+    }
+  ],
+  "added_hosts": [
+    {
+      "host": "*.us.archive.org",
+      "reason": "Live allowlist matches approved K2 redirect/TLS/ownership evidence",
+      "evidence_ref": "docs/data/d4-archive-hosts-production-plan.json"
+    },
+    {
+      "host": "dn710809.ca.archive.org",
+      "reason": "Live allowlist matches approved K2 redirect/TLS/ownership evidence",
+      "evidence_ref": "docs/data/d4-archive-hosts-production-plan.json"
+    },
+    {
+      "host": "dn721906.ca.archive.org",
+      "reason": "Live allowlist matches approved K2 redirect/TLS/ownership evidence",
+      "evidence_ref": "docs/data/d4-archive-hosts-production-plan.json"
+    }
+  ],
+  "providers": [
+    {
+      "code": "archive_org",
+      "host_allowlist": [
+        "*.us.archive.org",
+        "archive.org",
+        "dn710809.ca.archive.org",
+        "dn721906.ca.archive.org",
+        "ia601406.us.archive.org"
+      ],
+      "license_status": "unreviewed"
+    },
+    {
+      "code": "drive",
+      "host_allowlist": [
+        "drive.google.com"
+      ],
+      "license_status": "unreviewed"
+    },
+    {
+      "code": "everyayah",
+      "host_allowlist": [
+        "everyayah.com"
+      ],
+      "license_status": "unreviewed"
+    },
+    {
+      "code": "mp3quran",
+      "host_allowlist": [
+        "cdn.mp3quran.net",
+        "server10.mp3quran.net",
+        "server11.mp3quran.net",
+        "server13.mp3quran.net",
+        "server14.mp3quran.net",
+        "server16.mp3quran.net",
+        "server6.mp3quran.net",
+        "server7.mp3quran.net",
+        "server8.mp3quran.net",
+        "server9.mp3quran.net"
+      ],
+      "license_status": "unreviewed"
+    },
+    {
+      "code": "qdc",
+      "host_allowlist": [
+        "verses.quran.com"
+      ],
+      "license_status": "unreviewed"
+    },
+    {
+      "code": "quranicaudio",
+      "host_allowlist": [
+        "download.quranicaudio.com"
+      ],
+      "license_status": "unreviewed"
+    },
+    {
+      "code": "tarteel",
+      "host_allowlist": [
+        "audio-cdn.tarteel.ai"
+      ],
+      "license_status": "unreviewed"
+    },
+    {
+      "code": "tvquran",
+      "host_allowlist": [
+        "download.tvquran.com"
+      ],
+      "license_status": "unreviewed"
+    },
+    {
+      "code": "way2quran",
+      "host_allowlist": [
+        "media.way2quran.com"
+      ],
+      "license_status": "unreviewed"
+    },
+    {
+      "code": "youtube",
+      "host_allowlist": [
+        "www.youtube.com"
+      ],
+      "license_status": "unreviewed"
+    }
+  ],
+  "constraints": [
+    {
+      "name": "chk_timing_highlight",
+      "table": "ayah_timings",
+      "clause": "((`word_highlight_enabled` = false) or ((`review_status` in (_utf8mb4\\'ready\\',_utf8mb4\\'approved\\')) and (`ayah_id` is not null) and (`coverage_words` = `expected_words`) and (json_length(`missing_words`) = 0)))",
+      "enforced": "YES"
+    },
+    {
+      "name": "chk_timing_interval",
+      "table": "ayah_timings",
+      "clause": "((`start_ms` is null) or ((`end_ms` is not null) and (`end_ms` > `start_ms`)))",
+      "enforced": "YES"
+    },
+    {
+      "name": "chk_quran_surahs_number",
+      "table": "quran_surahs",
+      "clause": "(`number` >= 1)",
+      "enforced": "YES"
+    },
+    {
+      "name": "chk_audition_duration",
+      "table": "recitation_audition_samples",
+      "clause": "((`duration_ms` is null) or (`duration_ms` > 0))",
+      "enforced": "YES"
+    },
+    {
+      "name": "chk_catalog_chapter_coverage",
+      "table": "recitation_chapters",
+      "clause": "((`ayahs_complete` = false) or ((`expected_ayahs` is not null) and (`available_ayahs` = `expected_ayahs`) and (`coverage_mismatch` = false)))",
+      "enforced": "YES"
+    },
+    {
+      "name": "chk_catalog_chapter_number",
+      "table": "recitation_chapters",
+      "clause": "(`surah` >= 1)",
+      "enforced": "YES"
+    },
+    {
+      "name": "chk_recitations_offset_gate_v1",
+      "table": "recitations",
+      "clause": "((ifnull(`offset_verified`,0) = 0) or ((ifnull((`verification_status` = _utf8mb4\\'passed\\'),0) = 1) and (ifnull((`offset_check_score` between 0 and 1),0) = 1) and (ifnull((((`verification_method` = _utf8mb4\\'v1\\') and (`offset_check_score` >= 0.95)) or ((ifnull((`verification_method` = _utf8mb4\\'v2\\'),0) = 1) and (ifnull((`offset_check_score` >= 0.90),0) = 1) and (ifnull((json_unquote(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.cause\\')) = _utf8mb4\\'codec_processing_only\\'),0) = 1) and (ifnull((json_unquote(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.decision\\')) = _utf8mb4\\'accepted_for_data_pipeline_verification\\'),0) = 1) and (ifnull((json_type(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.sample_count\\')) = _utf8mb4\\'INTEGER\\'),0) = 1) and (ifnull((json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.sample_count\\') >= 5),0) = 1) and (ifnull((json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.minimum_VAD_agreement\\') between 0.90 and 1),0) = 1) and (ifnull((json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.maximum_absolute_lag_ms\\') between 0 and 30),0) = 1) and (ifnull((json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.maximum_duration_difference_ms\\') between 0 and 30),0) = 1) and (ifnull((json_type(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.review_blockers\\')) = _utf8mb4\\'ARRAY\\'),0) = 1) and (ifnull((json_length(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.review_blockers\\')) = 0),0) = 1))),0) = 1)))",
+      "enforced": "YES"
+    },
+    {
+      "name": "chk_recitations_publish_gate_v1",
+      "table": "recitations",
+      "clause": "((`status` <> _utf8mb4\\'published\\') or ((ifnull((`riwayah_code` = _utf8mb4\\'hafs_an_asim\\'),0) = 1) and (ifnull((`canonical_text_available` = 1),0) = 1) and (ifnull((`audio_mode` = _utf8mb4\\'surah_slice\\'),0) = 1) and (ifnull((`timing_quality` = _utf8mb4\\'verified\\'),0) = 1) and (ifnull((`timing_level` in (_utf8mb4\\'word\\',_utf8mb4\\'letter\\')),0) = 1) and (ifnull((((ifnull((`offset_verified` = 1),0) = 1) and (ifnull((`verification_status` = _utf8mb4\\'passed\\'),0) = 1) and (ifnull((`verification_method` in (_utf8mb4\\'v1\\',_utf8mb4\\'v2\\')),0) = 1)) or ((ifnull((json_schema_valid(_utf8mb4\\'{\"type\":\"object\",\"required\":[\"schema_version\",\"actor\",\"recitation_id\",\"checked_at_epoch_ms\",\"expires_at_epoch_ms\",\"complete_chapter_count\",\"chapters\"],\"properties\":{\"schema_version\":{\"enum\":[1]},\"actor\":{\"enum\":[\"scoped-licensed-verifier-v1\"]},\"recitation_id\":{\"type\":\"string\",\"minLength\":1},\"checked_at_epoch_ms\":{\"type\":\"integer\",\"minimum\":0},\"expires_at_epoch_ms\":{\"type\":\"integer\",\"minimum\":0},\"complete_chapter_count\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":1},\"chapters\":{\"type\":\"array\",\"minItems\":1,\"maxItems\":1,\"uniqueItems\":true,\"items\":{\"type\":\"object\",\"required\":[\"surah\",\"source_id\",\"source_sha256\",\"rights_ref\",\"offset_evidence_sha256\",\"method\",\"minimum_score\",\"maximum_absolute_lag_ms\",\"maximum_duration_difference_ms\",\"sample_count\",\"distinct_surahs\",\"distinct_chapter_lengths\",\"canonical_complete\",\"expected_ayahs\",\"ready_ayahs\",\"coverage_mismatch\",\"duration_ms\",\"last_word_ms\",\"source_chapter_offset_ms\",\"adapter\",\"v2_human_review_id\"],\"properties\":{\"surah\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":114},\"source_id\":{\"type\":\"string\",\"minLength\":1},\"source_sha256\":{\"type\":\"string\",\"pattern\":\"^[a-f0-9]{64}$\"},\"rights_ref\":{\"type\":\"string\",\"minLength\":1},\"offset_evidence_sha256\":{\"type\":\"string\",\"pattern\":\"^[a-f0-9]{64}$\"},\"method\":{\"enum\":[\"v1\",\"v2\"]},\"minimum_score\":{\"type\":\"number\",\"minimum\":0.9,\"maximum\":1},\"maximum_absolute_lag_ms\":{\"type\":\"number\",\"minimum\":0,\"maximum\":30},\"maximum_duration_difference_ms\":{\"type\":\"number\",\"minimum\":0,\"maximum\":30},\"sample_count\":{\"type\":\"integer\",\"minimum\":5},\"distinct_surahs\":{\"type\":\"integer\",\"minimum\":3},\"distinct_chapter_lengths\":{\"type\":\"integer\",\"minimum\":3},\"canonical_complete\":{\"enum\":[true]},\"expected_ayahs\":{\"type\":\"integer\",\"minimum\":1},\"ready_ayahs\":{\"type\":\"integer\",\"minimum\":1},\"coverage_mismatch\":{\"enum\":[0]},\"duration_ms\":{\"type\":\"number\",\"exclusiveMinimum\":true,\"minimum\":0},\"last_word_ms\":{\"type\":\"integer\",\"minimum\":1},\"source_chapter_offset_ms\":{\"type\":\"integer\",\"minimum\":0},\"adapter\":{\"enum\":[\"r2\",\"url_reference\"]},\"v2_human_review_id\":{\"type\":[\"string\",\"null\"]}},\"anyOf\":[{\"properties\":{\"method\":{\"enum\":[\"v1\"]},\"minimum_score\":{\"minimum\":0.95}}},{\"properties\":{\"method\":{\"enum\":[\"v2\"]},\"v2_human_review_id\":{\"type\":\"string\",\"minLength\":1}}}]}}}}\\',`licensed_publication_details`) = 1),0) = 1) and (ifnull((json_unquote(json_extract(`licensed_publication_details`,_utf8mb4\\'$.recitation_id\\')) = `id`),0) = 1) and (ifnull((json_extract(`licensed_publication_details`,_utf8mb4\\'$.complete_chapter_count\\') = json_length(json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters\\'))),0) = 1) and (ifnull(((json_extract(`licensed_publication_details`,_utf8mb4\\'$.expires_at_epoch_ms\\') - json_extract(`licensed_publication_details`,_utf8mb4\\'$.checked_at_epoch_ms\\')) = 300000),0) = 1) and (ifnull((json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].ready_ayahs\\') = json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].expected_ayahs\\')),0) = 1) and (ifnull((json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].last_word_ms\\') <= (json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].duration_ms\\') + 30)),0) = 1))),0) = 1)))",
+      "enforced": "YES"
+    },
+    {
+      "name": "chk_recitations_slice_gate_v1",
+      "table": "recitations",
+      "clause": "((ifnull((`audio_mode` <> _utf8mb4\\'surah_slice\\'),0) = 1) or ((ifnull((`audio_mode` = _utf8mb4\\'surah_slice\\'),0) = 1) and (((ifnull((`offset_verified` = 1),0) = 1) and (ifnull((`verification_status` = _utf8mb4\\'passed\\'),0) = 1) and (ifnull((`verification_method` in (_utf8mb4\\'v1\\',_utf8mb4\\'v2\\')),0) = 1)) or ((ifnull((`riwayah_code` = _utf8mb4\\'hafs_an_asim\\'),0) = 1) and (ifnull((`canonical_text_available` = 1),0) = 1) and (ifnull((`timing_quality` = _utf8mb4\\'verified\\'),0) = 1) and (ifnull((`timing_level` in (_utf8mb4\\'word\\',_utf8mb4\\'letter\\')),0) = 1) and (ifnull(((ifnull((json_schema_valid(_utf8mb4\\'{\"type\":\"object\",\"required\":[\"schema_version\",\"actor\",\"recitation_id\",\"checked_at_epoch_ms\",\"expires_at_epoch_ms\",\"complete_chapter_count\",\"chapters\"],\"properties\":{\"schema_version\":{\"enum\":[1]},\"actor\":{\"enum\":[\"scoped-licensed-verifier-v1\"]},\"recitation_id\":{\"type\":\"string\",\"minLength\":1},\"checked_at_epoch_ms\":{\"type\":\"integer\",\"minimum\":0},\"expires_at_epoch_ms\":{\"type\":\"integer\",\"minimum\":0},\"complete_chapter_count\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":1},\"chapters\":{\"type\":\"array\",\"minItems\":1,\"maxItems\":1,\"uniqueItems\":true,\"items\":{\"type\":\"object\",\"required\":[\"surah\",\"source_id\",\"source_sha256\",\"rights_ref\",\"offset_evidence_sha256\",\"method\",\"minimum_score\",\"maximum_absolute_lag_ms\",\"maximum_duration_difference_ms\",\"sample_count\",\"distinct_surahs\",\"distinct_chapter_lengths\",\"canonical_complete\",\"expected_ayahs\",\"ready_ayahs\",\"coverage_mismatch\",\"duration_ms\",\"last_word_ms\",\"source_chapter_offset_ms\",\"adapter\",\"v2_human_review_id\"],\"properties\":{\"surah\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":114},\"source_id\":{\"type\":\"string\",\"minLength\":1},\"source_sha256\":{\"type\":\"string\",\"pattern\":\"^[a-f0-9]{64}$\"},\"rights_ref\":{\"type\":\"string\",\"minLength\":1},\"offset_evidence_sha256\":{\"type\":\"string\",\"pattern\":\"^[a-f0-9]{64}$\"},\"method\":{\"enum\":[\"v1\",\"v2\"]},\"minimum_score\":{\"type\":\"number\",\"minimum\":0.9,\"maximum\":1},\"maximum_absolute_lag_ms\":{\"type\":\"number\",\"minimum\":0,\"maximum\":30},\"maximum_duration_difference_ms\":{\"type\":\"number\",\"minimum\":0,\"maximum\":30},\"sample_count\":{\"type\":\"integer\",\"minimum\":5},\"distinct_surahs\":{\"type\":\"integer\",\"minimum\":3},\"distinct_chapter_lengths\":{\"type\":\"integer\",\"minimum\":3},\"canonical_complete\":{\"enum\":[true]},\"expected_ayahs\":{\"type\":\"integer\",\"minimum\":1},\"ready_ayahs\":{\"type\":\"integer\",\"minimum\":1},\"coverage_mismatch\":{\"enum\":[0]},\"duration_ms\":{\"type\":\"number\",\"exclusiveMinimum\":true,\"minimum\":0},\"last_word_ms\":{\"type\":\"integer\",\"minimum\":1},\"source_chapter_offset_ms\":{\"type\":\"integer\",\"minimum\":0},\"adapter\":{\"enum\":[\"r2\",\"url_reference\"]},\"v2_human_review_id\":{\"type\":[\"string\",\"null\"]}},\"anyOf\":[{\"properties\":{\"method\":{\"enum\":[\"v1\"]},\"minimum_score\":{\"minimum\":0.95}}},{\"properties\":{\"method\":{\"enum\":[\"v2\"]},\"v2_human_review_id\":{\"type\":\"string\",\"minLength\":1}}}]}}}}\\',`licensed_publication_details`) = 1),0) = 1) and (ifnull((json_unquote(json_extract(`licensed_publication_details`,_utf8mb4\\'$.recitation_id\\')) = `id`),0) = 1) and (ifnull((json_extract(`licensed_publication_details`,_utf8mb4\\'$.complete_chapter_count\\') = json_length(json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters\\'))),0) = 1) and (ifnull(((json_extract(`licensed_publication_details`,_utf8mb4\\'$.expires_at_epoch_ms\\') - json_extract(`licensed_publication_details`,_utf8mb4\\'$.checked_at_epoch_ms\\')) = 300000),0) = 1) and (ifnull((json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].ready_ayahs\\') = json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].expected_ayahs\\')),0) = 1) and (ifnull((json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].last_word_ms\\') <= (json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].duration_ms\\') + 30)),0) = 1)),0) = 1)))))",
+      "enforced": "YES"
+    }
+  ],
+  "columns": [
+    {
+      "type": "varchar(36)",
+      "table": "audio_providers",
+      "column": "id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "audio_providers",
+      "column": "code",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "audio_providers",
+      "column": "name",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "audio_providers",
+      "column": "base_url",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "audio_providers",
+      "column": "host_allowlist",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "audio_providers",
+      "column": "adapter_id",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "audio_providers",
+      "column": "is_active",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "enum('unchecked','healthy','unavailable')",
+      "table": "audio_providers",
+      "column": "health_status",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "audio_providers",
+      "column": "priority",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "audio_providers",
+      "column": "last_checked_at",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "audio_providers",
+      "column": "license_text",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "audio_providers",
+      "column": "attribution_text",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "audio_providers",
+      "column": "created_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "audio_providers",
+      "column": "updated_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "enum('unreviewed','permitted','restricted')",
+      "table": "audio_providers",
+      "column": "license_status",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "audio_providers",
+      "column": "terms_url",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "ayah_timings",
+      "column": "id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "ayah_timings",
+      "column": "recitation_id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "ayah_timings",
+      "column": "ayah_id",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "ayah_timings",
+      "column": "surah",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "ayah_timings",
+      "column": "ayah",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "enum('qud','aligner')",
+      "table": "ayah_timings",
+      "column": "source",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('aligned','verified','estimated')",
+      "table": "ayah_timings",
+      "column": "quality",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "ayah_timings",
+      "column": "qud_version",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "char(64)",
+      "table": "ayah_timings",
+      "column": "source_sha256",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "char(64)",
+      "table": "ayah_timings",
+      "column": "canonical_checksum",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('source_ms','chapter_ms','clip_ms')",
+      "table": "ayah_timings",
+      "column": "coordinate",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "bigint",
+      "table": "ayah_timings",
+      "column": "source_offset_ms",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "bigint unsigned",
+      "table": "ayah_timings",
+      "column": "start_ms",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "bigint unsigned",
+      "table": "ayah_timings",
+      "column": "end_ms",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "ayah_timings",
+      "column": "segments",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "ayah_timings",
+      "column": "words",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "mediumtext",
+      "table": "ayah_timings",
+      "column": "spoken_text",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "json",
+      "table": "ayah_timings",
+      "column": "source_rows",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "enum('ready','needs_review','approved','rejected')",
+      "table": "ayah_timings",
+      "column": "review_status",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "ayah_timings",
+      "column": "review_reasons",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "ayah_timings",
+      "column": "word_highlight_enabled",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "enum('canonical','spoken')",
+      "table": "ayah_timings",
+      "column": "repetition_display_mode",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int unsigned",
+      "table": "ayah_timings",
+      "column": "coverage_words",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "ayah_timings",
+      "column": "expected_words",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "ayah_timings",
+      "column": "missing_words",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "char(64)",
+      "table": "ayah_timings",
+      "column": "version_hash",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "ayah_timings",
+      "column": "import_job_id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "ayah_timings",
+      "column": "created_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "ayah_timings",
+      "column": "updated_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "human_review_items",
+      "column": "id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('voice_confirmation','provider_license','label_review','offset_exception','basmala_audio','youtube_rights','youtube_audio_missing','near_complete_chapters','data_conflict','same_audio_conflict','storage_activation','storage_credentials','storage_rights')",
+      "table": "human_review_items",
+      "column": "type",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "human_review_items",
+      "column": "subject_type",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "human_review_items",
+      "column": "subject_id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "json",
+      "table": "human_review_items",
+      "column": "evidence",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "human_review_items",
+      "column": "priority",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "enum('pending','approved','rejected','deferred')",
+      "table": "human_review_items",
+      "column": "status",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "human_review_items",
+      "column": "decided_by",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "datetime(3)",
+      "table": "human_review_items",
+      "column": "decided_at",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "human_review_items",
+      "column": "notes",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "human_review_items",
+      "column": "decision",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "datetime(3)",
+      "table": "human_review_items",
+      "column": "created_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "datetime(3)",
+      "table": "human_review_items",
+      "column": "updated_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_ayahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_ayahs",
+      "column": "text_version_id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "surah",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "ayah",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "quran_ayahs",
+      "column": "text_uthmani",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "text",
+      "table": "quran_ayahs",
+      "column": "text_simple",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "words_count",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "juz",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_ayahs",
+      "column": "page",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_ayahs",
+      "column": "created_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_ayahs",
+      "column": "updated_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_surahs",
+      "column": "id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_surahs",
+      "column": "number",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_surahs",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_surahs",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_surahs",
+      "column": "name_translit",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(32)",
+      "table": "quran_surahs",
+      "column": "revelation_place",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_surahs",
+      "column": "ayah_count",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "quran_surahs",
+      "column": "has_basmala",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_surahs",
+      "column": "juz_start",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_surahs",
+      "column": "page_start",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_surahs",
+      "column": "created_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_surahs",
+      "column": "updated_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_words",
+      "column": "id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "quran_words",
+      "column": "ayah_id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "quran_words",
+      "column": "position",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_words",
+      "column": "text_uthmani",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "quran_words",
+      "column": "text_simple",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_words",
+      "column": "created_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "quran_words",
+      "column": "updated_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitation_chapters",
+      "column": "id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitation_chapters",
+      "column": "recitation_id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "recitation_chapters",
+      "column": "surah",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "recitation_chapters",
+      "column": "audio_url",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int",
+      "table": "recitation_chapters",
+      "column": "chapter_offset_ms",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitation_chapters",
+      "column": "duration_ms",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "enum('unverified','available','source_unavailable')",
+      "table": "recitation_chapters",
+      "column": "audio_status",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "recitation_chapters",
+      "column": "last_verified_at",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "recitation_chapters",
+      "column": "expected_ayahs",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "recitation_chapters",
+      "column": "available_ayahs",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recitation_chapters",
+      "column": "missing_verses",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_chapters",
+      "column": "coverage_mismatch",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_chapters",
+      "column": "ayahs_complete",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_chapters",
+      "column": "timing_complete",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_chapters",
+      "column": "is_complete",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recitation_chapters",
+      "column": "created_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recitation_chapters",
+      "column": "updated_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitation_chapters",
+      "column": "coverage_words",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitation_chapters",
+      "column": "expected_words",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recitation_chapters",
+      "column": "coverage_details",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "enum('complete','near_complete','partial','unavailable')",
+      "table": "recitation_chapters",
+      "column": "availability_state",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "recitation_chapters",
+      "column": "available_runs",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitation_chapters",
+      "column": "run_count",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitation_chapters",
+      "column": "max_run_ayahs",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitation_chapters",
+      "column": "ready_ayahs",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recitation_chapters",
+      "column": "near_complete_missing",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitation_source_urls",
+      "column": "id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitation_source_urls",
+      "column": "recitation_id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "recitation_source_urls",
+      "column": "surah",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "recitation_source_urls",
+      "column": "url",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "int",
+      "table": "recitation_source_urls",
+      "column": "priority",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitation_source_urls",
+      "column": "is_active",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recitation_source_urls",
+      "column": "last_checked_at",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitation_source_urls",
+      "column": "last_status",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "char(64)",
+      "table": "recitation_source_urls",
+      "column": "recording_sha256",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "recitation_source_urls",
+      "column": "identity_evidence",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitation_source_urls",
+      "column": "approved_by",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "recitation_source_urls",
+      "column": "created_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "enum('provider_original','alternate_same_recording','licensed_file')",
+      "table": "recitation_source_urls",
+      "column": "kind",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitation_source_urls",
+      "column": "rights_ref",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "char(64)",
+      "table": "recitation_source_urls",
+      "column": "sha256",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "bigint unsigned",
+      "table": "recitation_source_urls",
+      "column": "duration_ms",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "enum('pending','verified','rejected')",
+      "table": "recitation_source_urls",
+      "column": "verification_status",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "recitation_source_urls",
+      "column": "verification_details",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitation_source_urls",
+      "column": "storage_object_id",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "recitation_source_urls",
+      "column": "channel_title",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitation_youtube_sources",
+      "column": "id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitation_youtube_sources",
+      "column": "recitation_id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "recitation_youtube_sources",
+      "column": "surah",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "varchar(32)",
+      "table": "recitation_youtube_sources",
+      "column": "video_id",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "recitation_youtube_sources",
+      "column": "playlist_id",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "recitation_youtube_sources",
+      "column": "channel_id",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "recitation_youtube_sources",
+      "column": "channel_title",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitation_youtube_sources",
+      "column": "oembed_status",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "datetime(3)",
+      "table": "recitation_youtube_sources",
+      "column": "last_checked_at",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "enum('owner_permission','cc_licensed','own_content','unknown')",
+      "table": "recitation_youtube_sources",
+      "column": "rights_status",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitation_youtube_sources",
+      "column": "rights_evidence_url",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "text",
+      "table": "recitation_youtube_sources",
+      "column": "rights_evidence_note",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "recitations",
+      "column": "slug",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "reciter_id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "provider_id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "riwayah_id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "riwayah_code",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitations",
+      "column": "canonical_text_available",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "style",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "channel",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "recitations",
+      "column": "audio_category",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('unverified_source','surah_slice')",
+      "table": "recitations",
+      "column": "audio_mode",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "recitations",
+      "column": "recording_context",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint",
+      "table": "recitations",
+      "column": "recording_year",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "recitations",
+      "column": "variant_label",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('none','ayah','word','letter')",
+      "table": "recitations",
+      "column": "timing_level",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('unimported','needs_review','aligned','verified')",
+      "table": "recitations",
+      "column": "timing_quality",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitations",
+      "column": "coverage_ayahs",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "recitations",
+      "column": "coverage_words",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitations",
+      "column": "ayahs_complete",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "enum('ayah_1_included','separate_clip','absent')",
+      "table": "recitations",
+      "column": "basmala_mode",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "basmala_reason",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "surah_start_basmala_text_status",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('unverified','verified','not_applicable')",
+      "table": "recitations",
+      "column": "surah_start_basmala_audio_status",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitations",
+      "column": "offset_verified",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "double",
+      "table": "recitations",
+      "column": "offset_check_score",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "recitations",
+      "column": "offset_correction_ms",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "enum('pending','passed','failed','source_unavailable')",
+      "table": "recitations",
+      "column": "verification_status",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "recitations",
+      "column": "verification_details",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "license_text",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "attribution_text",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "source_url",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "qud_version",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "char(64)",
+      "table": "recitations",
+      "column": "catalog_sha256",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "json",
+      "table": "recitations",
+      "column": "catalog_raw",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recitations",
+      "column": "audit_json",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "enum('draft','imported','needs_review','published','hidden','deprecated')",
+      "table": "recitations",
+      "column": "status",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "recitations",
+      "column": "created_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "recitations",
+      "column": "updated_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(255)",
+      "table": "recitations",
+      "column": "display_label_ar",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "recitations",
+      "column": "display_label_en",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitations",
+      "column": "is_public",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitations",
+      "column": "is_default_for_reciter",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "recitations",
+      "column": "sort_order",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "enum('unverified','auto_verified','confirmed','mismatch')",
+      "table": "recitations",
+      "column": "voice_identity_status",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "recitations",
+      "column": "voice_confirmed_by",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "recitations",
+      "column": "voice_confirmed_at",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "voice_notes",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "quality_note",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "recitations",
+      "column": "source_note",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('v1','v2')",
+      "table": "recitations",
+      "column": "verification_method",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(64)",
+      "table": "recitations",
+      "column": "published_by",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "recitations",
+      "column": "published_at",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recitations",
+      "column": "voice_auto_evidence",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "datetime(3)",
+      "table": "recitations",
+      "column": "voice_auto_verified_at",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "recitations",
+      "column": "needs_label_review",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "recitations",
+      "column": "licensed_publication_details",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "reciters",
+      "column": "id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "reciters",
+      "column": "source_reciter_id",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(191)",
+      "table": "reciters",
+      "column": "slug",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "reciters",
+      "column": "name_ar",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "reciters",
+      "column": "name_en",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(255)",
+      "table": "reciters",
+      "column": "country",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "reciters",
+      "column": "bio",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "reciters",
+      "column": "photo_url",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "tinyint(1)",
+      "table": "reciters",
+      "column": "is_featured",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "int",
+      "table": "reciters",
+      "column": "sort_order",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "enum('imported','needs_review')",
+      "table": "reciters",
+      "column": "status",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "timestamp",
+      "table": "reciters",
+      "column": "created_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "timestamp",
+      "table": "reciters",
+      "column": "updated_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "storage_objects",
+      "column": "id",
+      "charset": "utf8mb4",
+      "nullable": "NO",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('url_reference','r2','s3_compatible')",
+      "table": "storage_objects",
+      "column": "adapter",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "storage_objects",
+      "column": "bucket",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "varchar(512)",
+      "table": "storage_objects",
+      "column": "object_key",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "bigint unsigned",
+      "table": "storage_objects",
+      "column": "size_bytes",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "char(64)",
+      "table": "storage_objects",
+      "column": "sha256",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "varchar(128)",
+      "table": "storage_objects",
+      "column": "content_type",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "bigint unsigned",
+      "table": "storage_objects",
+      "column": "duration_ms",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "int unsigned",
+      "table": "storage_objects",
+      "column": "sample_rate",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "bigint unsigned",
+      "table": "storage_objects",
+      "column": "bitrate",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "storage_objects",
+      "column": "channels",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "varchar(64)",
+      "table": "storage_objects",
+      "column": "codec",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "enum('pending','uploaded','verified','rejected','soft_deleted','deleted')",
+      "table": "storage_objects",
+      "column": "upload_status",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(36)",
+      "table": "storage_objects",
+      "column": "uploaded_by",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "datetime(3)",
+      "table": "storage_objects",
+      "column": "verified_at",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "varchar(36)",
+      "table": "storage_objects",
+      "column": "recitation_id",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "smallint unsigned",
+      "table": "storage_objects",
+      "column": "surah",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "text",
+      "table": "storage_objects",
+      "column": "rights_ref",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "text",
+      "table": "storage_objects",
+      "column": "notes",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "varchar(512)",
+      "table": "storage_objects",
+      "column": "upload_id",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_bin"
+    },
+    {
+      "type": "datetime(3)",
+      "table": "storage_objects",
+      "column": "upload_expires_at",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "storage_objects",
+      "column": "upload_parts",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "json",
+      "table": "storage_objects",
+      "column": "verification_evidence",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "varchar(128)",
+      "table": "storage_objects",
+      "column": "rejection_reason",
+      "charset": "utf8mb4",
+      "nullable": "YES",
+      "collation": "utf8mb4_unicode_ci"
+    },
+    {
+      "type": "datetime(3)",
+      "table": "storage_objects",
+      "column": "soft_deleted_at",
+      "charset": null,
+      "nullable": "YES",
+      "collation": null
+    },
+    {
+      "type": "datetime(3)",
+      "table": "storage_objects",
+      "column": "created_at",
+      "charset": null,
+      "nullable": "NO",
+      "collation": null
+    }
+  ],
+  "disk": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1773699072,
+    "available_bytes": 2902110208
+  },
+  "threads_connected": 2,
+  "max_connections": 60,
+  "d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "d3_rows": 422463,
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "protected_tables": {
+    "users": {
+      "rows": 13,
+      "checksum": "465493766",
+      "unchanged": true
+    },
+    "user_roles": {
+      "rows": 13,
+      "checksum": "1812061936",
+      "unchanged": true
+    },
+    "quran_surahs": {
+      "rows": 114,
+      "checksum": "2501341507",
+      "unchanged": true
+    },
+    "quran_ayahs": {
+      "rows": 6236,
+      "checksum": "1712042852",
+      "unchanged": true
+    },
+    "quran_words": {
+      "rows": 77433,
+      "checksum": "2986733015",
+      "unchanged": true
+    },
+    "ayah_timings": {
+      "rows": 422463,
+      "checksum": "2767002486",
+      "unchanged": true
+    },
+    "import_jobs": {
+      "rows": 69,
+      "checksum": "3761574700",
+      "unchanged": true
+    },
+    "ayah_timing_history": {
+      "rows": 0,
+      "checksum": "0",
+      "unchanged": true
+    }
+  },
+  "availability_fingerprint": "e3bf310ebb4786297e3f8c09d3704f3815a731a328fc943fa38a40824038c5ce",
+  "availability_totals": {
+    "complete": 3043,
+    "near_complete": 415,
+    "partial": 3165,
+    "unavailable": 1243
+  },
+  "protected_verification_summary": "Verified baseline match: D1 {\"surahs\":114,\"ayahs\":6236,\"words\":77433}; D3 422463; canonical eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4; users/user_roles and all D1/D3 protected table counts/checksums unchanged; T2 e3bf310ebb4786297e3f8c09d3704f3815a731a328fc943fa38a40824038c5ce",
+  "eligible_recitations": 11,
+  "eligible_readers": 11,
+  "public_visible_count": 0,
+  "verified_licensed_candidate_count": 0,
+  "database_writes": 0,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 15,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 5893,
+    "transport_response_bytes": 13655993
+  }
+}

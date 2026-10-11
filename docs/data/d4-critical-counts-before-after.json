@@ -1,0 +1,64 @@
+{
+  "admin_full_checksums_unchanged": true,
+  "d4_system_settings_delta": {
+    "after_activation": 14,
+    "evidence": "docs/data/d4-r2-activation-production-apply.json",
+    "before_activation": 13,
+    "reason": "new storage_adapter=r2 key only"
+  },
+  "passed": true,
+  "checked_at": "2026-10-11T08:54:50.937Z",
+  "scope": "after R2 setting insertion, through K8 and deployed D4 code",
+  "tables": [
+    {
+      "before_rows": 13,
+      "unchanged": true,
+      "table": "users",
+      "after_rows": 13
+    },
+    {
+      "before_rows": 16,
+      "unchanged": true,
+      "table": "subscriptions",
+      "after_rows": 16
+    },
+    {
+      "before_rows": 3,
+      "unchanged": true,
+      "table": "payment_requests",
+      "after_rows": 3
+    },
+    {
+      "before_rows": 7,
+      "unchanged": true,
+      "table": "saved_videos",
+      "after_rows": 7
+    },
+    {
+      "before_rows": 72,
+      "unchanged": true,
+      "table": "render_jobs",
+      "after_rows": 72
+    },
+    {
+      "before_rows": 14,
+      "unchanged": true,
+      "table": "system_settings",
+      "after_rows": 14
+    },
+    {
+      "before_rows": 13,
+      "unchanged": true,
+      "table": "user_roles",
+      "after_rows": 13
+    },
+    {
+      "before_rows": 49,
+      "unchanged": true,
+      "table": "notifications",
+      "after_rows": 49
+    }
+  ],
+  "canonical_and_d3_unchanged": true,
+  "read_only": true
+}
