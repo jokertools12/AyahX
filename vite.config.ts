@@ -35,12 +35,16 @@ export default defineConfig(({ mode }) => ({
     dedupe: ["react", "react-dom", "react/jsx-runtime"],
   },
   build: {
+    manifest: true,
     chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+            if (id.includes('clsx') || id.includes('class-variance-authority') || id.includes('tailwind-merge')) return 'shared-utils';
+            if (id.includes('@radix-ui') || id.includes('lucide-react')) return 'ui-vendor';
+            if (id.includes('@tanstack')) return 'tanstack-vendor';
+            if (/\/node_modules\/(react|react-dom|react-router|react-router-dom|scheduler)\//.test(id)) {
               return 'react-vendor';
             }
             if (id.includes('@radix-ui') || id.includes('lucide-react')) {

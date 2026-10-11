@@ -1,19 +1,21 @@
-import { readFile, readdir, writeFile } from 'node:fs/promises';
-import { gzipSync } from 'node:zlib';
-import { join } from 'node:path';
-// Compare the same entry graph rather than summing every lazy route.
-const html=await readFile('dist/index.html','utf8');
-const files=new Map((await Promise.all((await readdir('dist/assets')).filter(n=>/\.(js|css)$/.test(n)).map(async n=>[n,await readFile(join('dist/assets',n))]))));
-const entry=/src="\/assets\/([^"]+\.js)"/.exec(html)?.[1];
-if(!entry)throw new Error('ENTRY_MISSING');
-function graph(name,seen=new Set()) {
-  if(seen.has(name))return seen;seen.add(name);
-  const contents=files.get(name)?.toString();if(!contents)throw new Error('ASSET_MISSING');
-  for(const match of contents.matchAll(/(?:from|import)\s*["']\.\/([^"']+\.js)["']/g))graph(match[1],seen);
-  return seen;
+import {readFile,writeFile} from 'node:fs/promises';
+import {gzipSync} from 'node:zlib';
+import {join} from 'node:path';
+const manifest=JSON.parse(await readFile('dist/.vite/manifest.json','utf8'));
+function graph(key,seen=new Set(),assets=new Set()){
+ if(seen.has(key))return assets;seen.add(key);const item=manifest[key];if(!item)throw new Error('MANIFEST_ENTRY_MISSING:'+key);
+ assets.add(item.file);for(const css of item.css??[])assets.add(css);
+ for(const dependency of item.imports??[])graph(dependency,seen,assets);return assets;
 }
-const publicAssets=[...graph(entry),...html.matchAll(/href="\/assets\/([^"]+\.css)"/g)].map(x=>typeof x==='string'?x:x[1]);
-const measure=names=>({files:names.map(name=>({name,bytes:files.get(name).length,gzip_bytes:gzipSync(files.get(name)).length})),gzip_bytes:names.reduce((n,name)=>n+gzipSync(files.get(name)).length,0)});
-const report={measured_at:new Date().toISOString(),public:measure([...new Set(publicAssets)]),admin:Object.fromEntries([...files.keys()].filter(n=>n.startsWith('Admin')&&n.endsWith('.js')).map(n=>[n,measure([...graph(n)])]))};
-await writeFile(process.argv[2]||'docs/data/admin-bundle-after.json',JSON.stringify(report,null,2)+'\n');
-console.log(JSON.stringify({public_gzip:report.public.gzip_bytes,admin_routes:Object.keys(report.admin).length}));
+async function measure(keys){const assets=new Set();for(const key of keys)graph(key,new Set(),assets);const files=[];for(const name of [...assets].sort()){const bytes=await readFile(join('dist',name));files.push({name,bytes:bytes.length,gzip_bytes:gzipSync(bytes).length});}return{files,gzip_bytes:files.reduce((sum,file)=>sum+file.gzip_bytes,0)};}
+const entry='index.html',publicRoot=Object.keys(manifest).find(key=>manifest[key].name==='App'),adminRoot='src/admin/AdminEntry.tsx';
+if(!publicRoot)throw new Error('PUBLIC_ROOT_MISSING');
+const routes=Object.keys(manifest).filter(key=>/^src\/admin\/(?:pages\/.*\.tsx|AdminKit\.tsx)$/.test(key));
+const admin={};for(const route of routes)admin[route]=await measure([entry,adminRoot,route]);
+admin.login=await measure([entry,adminRoot]);
+const before=JSON.parse(await readFile('docs/data/admin-bundle-before.json','utf8'));
+const publicMeasure=await measure([entry,publicRoot]);
+const report={measured_at:new Date().toISOString(),method:'Gzip sum of initial entry + selected lazy root + route static imports + all CSS; route alternatives excluded',public:publicMeasure,public_before_gzip:before.public.gzip_bytes,public_change_percent:100*(publicMeasure.gzip_bytes/before.public.gzip_bytes-1),admin,public_increase_pass:publicMeasure.gzip_bytes<=before.public.gzip_bytes*1.02,admin_initial_pass:Object.values(admin).every(route=>route.gzip_bytes<=250*1024)};
+await writeFile(process.argv[2]??'docs/data/admin-bundle-after.json',JSON.stringify(report,null,2)+'\n');
+console.log(JSON.stringify({public_before:report.public_before_gzip,public_after:publicMeasure.gzip_bytes,change_percent:report.public_change_percent,max_admin_gzip:Math.max(...Object.values(admin).map(route=>route.gzip_bytes)),public_increase_pass:report.public_increase_pass,admin_initial_pass:report.admin_initial_pass}));
+if(!report.public_increase_pass||!report.admin_initial_pass)process.exitCode=1;
