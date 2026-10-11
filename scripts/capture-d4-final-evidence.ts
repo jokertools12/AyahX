@@ -63,11 +63,20 @@ export async function captureD4FinalEvidence(argv:string[]):Promise<void>{
   const expected=readJson(resolve(root,'docs/data/availability-summary.json')) as {fingerprint:string;totals:Record<string,number>;recitations:Array<{slug:string}>};
   const hostPlan=readJson(resolve(root,'docs/data/d4-archive-hosts-production-plan.json')) as {passed:boolean;added_hosts:string[]};
   assert.equal(hostPlan.passed,true,'D4_FINAL_APPROVED_HOST_PLAN_REQUIRED');
+  const progress=argv.includes('--progress');let readOrdinal=0;
   const session=await openRailwayMysqlSession(ENVIRONMENTS.production,{allowWrites:false});
+  const readSql=async(sql:string)=>{
+    const ordinal=++readOrdinal,started=Date.now();
+    // Fixed labels and timings only: never SQL, row values, URLs or credentials.
+    if(progress)console.log(JSON.stringify({stage:'final_inventory_read',ordinal,state:'started'}));
+    const result=await session.read(sql);
+    if(progress)console.log(JSON.stringify({stage:'final_inventory_read',ordinal,state:'completed',elapsed_ms:Date.now()-started}));
+    return result;
+  };
   let publicEvidence:Record<string,unknown>|undefined,privateEvidence:Record<string,unknown>|undefined;
   try{
-    const current=await captureInventory(ENVIRONMENTS.production,sql=>session.read(sql));assertFinalProtected(current,baseline);
-    const read=async(sql:string)=>parse(await session.read(sql.trimEnd().endsWith(';')?sql:sql+';'));
+    const current=await captureInventory(ENVIRONMENTS.production,readSql);assertFinalProtected(current,baseline);
+    const read=async(sql:string)=>parse(await readSql(sql.trimEnd().endsWith(';')?sql:sql+';'));
     const settingsDb:Pick<CatalogDatabase,'read'>={read:async()=>read("SELECT JSON_OBJECT('key_name',key_name,'value_text',value_text,'is_secret',is_secret) record FROM system_settings WHERE key_name IN ('quran_catalog_v2','availability_mode','voice_gate_policy','storage_adapter')")};
     const settings=await readCatalogSettings(settingsDb) as Awaited<ReturnType<typeof readCatalogSettings>>&{
       voiceGatePolicy:'allow_auto_verified'|'require_confirmed';storageAdapter:'url_reference'|'r2'};
@@ -78,7 +87,7 @@ export async function captureD4FinalEvidence(argv:string[]):Promise<void>{
     assert.equal(new Set(rows.map(row=>row.slug)).size,rows.length,'D4_FINAL_DUPLICATE_CATALOG_SLUG');
     assert.deepEqual(rows.map(row=>String(row.slug)).sort(),expected.recitations.map(row=>row.slug).sort(),'D4_FINAL_CATALOG_SLUGS_CHANGED');
     const chapters=await read("SELECT JSON_OBJECT('id',c.id,'recitation_id',c.recitation_id,'surah',c.surah,'canonical',r.canonical_text_available,'available_ayahs',c.available_ayahs,'coverage_mismatch',c.coverage_mismatch,'availability_state',c.availability_state,'available_runs',c.available_runs,'run_count',c.run_count,'max_run_ayahs',c.max_run_ayahs,'ready_ayahs',c.ready_ayahs,'near_complete_missing',c.near_complete_missing,'audio_status',c.audio_status,'checked_epoch_ms',UNIX_TIMESTAMP(c.last_verified_at)*1000) record FROM recitation_chapters c JOIN recitations r ON r.id=c.recitation_id ORDER BY c.id");
-    const blockedReady=await read("SELECT JSON_OBJECT('chapter_id',c.id,'ayah',t.ayah) record FROM recitation_chapters c JOIN recitations r ON r.id=c.recitation_id JOIN ayah_timings t ON t.recitation_id=c.recitation_id AND t.surah=c.surah WHERE r.canonical_text_available=1 AND (c.coverage_mismatch=1 OR c.available_ayahs=0) AND t.expected_words IS NOT NULL AND t.coverage_words=t.expected_words AND t.review_status='ready' AND JSON_LENGTH(t.review_reasons)=0 AND JSON_LENGTH(t.missing_words)=0 ORDER BY c.id,t.ayah");
+    const blockedReady=await read("SELECT JSON_OBJECT('chapter_id',c.id,'ayah',t.ayah) record FROM recitation_chapters c STRAIGHT_JOIN recitations r ON r.id=c.recitation_id STRAIGHT_JOIN ayah_timings t ON t.recitation_id=c.recitation_id AND t.surah=c.surah WHERE r.canonical_text_available=1 AND (c.coverage_mismatch=1 OR c.available_ayahs=0) AND t.expected_words IS NOT NULL AND t.coverage_words=t.expected_words AND t.review_status='ready' AND JSON_LENGTH(t.review_reasons)=0 AND JSON_LENGTH(t.missing_words)=0 ORDER BY c.id,t.ayah");
     const coverage=storedAvailabilityProof(chapters,blockedReady);
     assert.equal(coverage.fingerprint,baseline.availability_fingerprint??expected.fingerprint,'D4_FINAL_T2_FINGERPRINT_CHANGED');
     assert.equal(coverage.fingerprint,expected.fingerprint,'D4_FINAL_T2_ACCEPTED_FINGERPRINT_CHANGED');

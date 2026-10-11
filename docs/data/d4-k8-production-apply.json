@@ -1,0 +1,72 @@
+{
+  "started_at": "2026-10-11T08:22:10.662Z",
+  "target": "production",
+  "applied": true,
+  "sql_sha256": "109fe920c4d72b574da6c290b8964160da44ae5fcd218604f4fbad04edbdb4c2",
+  "sql_bytes": 346333,
+  "statements": 41,
+  "disk_before": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1773699072,
+    "available_bytes": 2902110208
+  },
+  "protected_checksums_unchanged": true,
+  "d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "timings": 422463,
+  "disk_after": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1773715456,
+    "available_bytes": 2902093824
+  },
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": true,
+    "acknowledged_commands": 20,
+    "writes_halted": false,
+    "batches": [
+      {
+        "ordinal": 1,
+        "row_count": 20,
+        "sql_sha256": "4ea755fb4d833a38e10bc863eb34bb04097102d2d736da53e29afd62cca9cd89",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 520,
+        "sql_bytes": 259628,
+        "wire_request_bytes": 41174
+      },
+      {
+        "ordinal": 2,
+        "row_count": 2,
+        "sql_sha256": "2c7038c2562e42ce7901658dc2d1a0c14d0d37934627ec9f201ac6aed0458e06",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 250,
+        "sql_bytes": 86703,
+        "wire_request_bytes": 15799
+      },
+      {
+        "ordinal": 3,
+        "row_count": 0,
+        "sql_sha256": "2db35aa37c4005aa96055e900adc9bfbbd70d106820fefcb83216b7cc3f95422",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 210,
+        "sql_bytes": 7,
+        "wire_request_bytes": 75
+      }
+    ],
+    "transport_request_bytes": 63031,
+    "transport_response_bytes": 3014637
+  },
+  "finished_at": "2026-10-11T08:24:11.359Z"
+}

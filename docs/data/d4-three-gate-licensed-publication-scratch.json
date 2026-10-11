@@ -1,0 +1,143 @@
+{
+  "scope": "local_synthetic_scratch_only",
+  "database": "ayahx_d4_k9_final_20261010",
+  "production_written": false,
+  "started_at": "2026-10-11T07:48:56.034Z",
+  "rejections": [
+    {
+      "name": "NULL",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "empty",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "actor",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "recitation_binding",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "count_zero",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "count_mismatch",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "ttl",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "source_sha",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "rights",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "canonical_complete",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "canonical_count",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "coverage",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "v1_score",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "lag",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "duration_difference",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "samples",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "distributed_surahs",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "too_short",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "v2_human",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "patch": {
+        "riwayah_code": "warsh"
+      },
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "patch": {
+        "canonical_text_available": null
+      },
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "patch": {
+        "timing_quality": "aligned"
+      },
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "patch": {
+        "offset_verified": 1
+      },
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "unpublished_slice_null",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "unpublished_slice_{}",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "unpublished_slice_{\"schema_version\":1,\"actor\":\"browser\",\"recitation_id\":\"fixture-recitation\",\"checked_at_epoch_ms\":1791704936636,\"expires_at_epoch_ms\":1791705236636,\"complete_chapter_count\":1,\"chapters\":[{\"surah\":1,\"source_id\":\"fixture-source\",\"source_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"rights_ref\":\"fixture-human-rights\",\"offset_evidence_sha256\":\"64e19c27e50180f70175ef004d076c4cedde36f9e94202afa0da64b216059d3d\",\"method\":\"v1\",\"minimum_score\":0.98,\"maximum_absolute_lag_ms\":0,\"maximum_duration_difference_ms\":0,\"sample_count\":5,\"distinct_surahs\":3,\"distinct_chapter_lengths\":3,\"canonical_complete\":true,\"expected_ayahs\":1,\"ready_ayahs\":1,\"coverage_mismatch\":0,\"duration_ms\":3000,\"last_word_ms\":2000,\"source_chapter_offset_ms\":1000,\"adapter\":\"url_reference\",\"v2_human_review_id\":null}]}",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "unpublished_null_audio_mode",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    }
+  ],
+  "slice_branch_tests_passed": true,
+  "legacy_slice_clauses": [
+    "((`audio_mode` <> _utf8mb4\\'surah_slice\\') or ((`offset_verified` = true) and (`verification_status` = _utf8mb4\\'passed\\')))"
+  ],
+  "expected_clauses": {
+    "chk_recitations_offset_gate_v1": "((ifnull(`offset_verified`,0) = 0) or ((ifnull((`verification_status` = _utf8mb4\\'passed\\'),0) = 1) and (ifnull((`offset_check_score` between 0 and 1),0) = 1) and (ifnull((((`verification_method` = _utf8mb4\\'v1\\') and (`offset_check_score` >= 0.95)) or ((ifnull((`verification_method` = _utf8mb4\\'v2\\'),0) = 1) and (ifnull((`offset_check_score` >= 0.90),0) = 1) and (ifnull((json_unquote(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.cause\\')) = _utf8mb4\\'codec_processing_only\\'),0) = 1) and (ifnull((json_unquote(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.decision\\')) = _utf8mb4\\'accepted_for_data_pipeline_verification\\'),0) = 1) and (ifnull((json_type(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.sample_count\\')) = _utf8mb4\\'INTEGER\\'),0) = 1) and (ifnull((json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.sample_count\\') >= 5),0) = 1) and (ifnull((json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.minimum_VAD_agreement\\') between 0.90 and 1),0) = 1) and (ifnull((json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.maximum_absolute_lag_ms\\') between 0 and 30),0) = 1) and (ifnull((json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.maximum_duration_difference_ms\\') between 0 and 30),0) = 1) and (ifnull((json_type(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.review_blockers\\')) = _utf8mb4\\'ARRAY\\'),0) = 1) and (ifnull((json_length(json_extract(`verification_details`,_utf8mb4\\'$.v2_acceptance.review_blockers\\')) = 0),0) = 1))),0) = 1)))",
+    "chk_recitations_publish_gate_v1": "((`status` <> _utf8mb4\\'published\\') or ((ifnull((`riwayah_code` = _utf8mb4\\'hafs_an_asim\\'),0) = 1) and (ifnull((`canonical_text_available` = 1),0) = 1) and (ifnull((`audio_mode` = _utf8mb4\\'surah_slice\\'),0) = 1) and (ifnull((`timing_quality` = _utf8mb4\\'verified\\'),0) = 1) and (ifnull((`timing_level` in (_utf8mb4\\'word\\',_utf8mb4\\'letter\\')),0) = 1) and (ifnull((((ifnull((`offset_verified` = 1),0) = 1) and (ifnull((`verification_status` = _utf8mb4\\'passed\\'),0) = 1) and (ifnull((`verification_method` in (_utf8mb4\\'v1\\',_utf8mb4\\'v2\\')),0) = 1)) or ((ifnull((json_schema_valid(_utf8mb4\\'{\"type\":\"object\",\"required\":[\"schema_version\",\"actor\",\"recitation_id\",\"checked_at_epoch_ms\",\"expires_at_epoch_ms\",\"complete_chapter_count\",\"chapters\"],\"properties\":{\"schema_version\":{\"enum\":[1]},\"actor\":{\"enum\":[\"scoped-licensed-verifier-v1\"]},\"recitation_id\":{\"type\":\"string\",\"minLength\":1},\"checked_at_epoch_ms\":{\"type\":\"integer\",\"minimum\":0},\"expires_at_epoch_ms\":{\"type\":\"integer\",\"minimum\":0},\"complete_chapter_count\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":1},\"chapters\":{\"type\":\"array\",\"minItems\":1,\"maxItems\":1,\"uniqueItems\":true,\"items\":{\"type\":\"object\",\"required\":[\"surah\",\"source_id\",\"source_sha256\",\"rights_ref\",\"offset_evidence_sha256\",\"method\",\"minimum_score\",\"maximum_absolute_lag_ms\",\"maximum_duration_difference_ms\",\"sample_count\",\"distinct_surahs\",\"distinct_chapter_lengths\",\"canonical_complete\",\"expected_ayahs\",\"ready_ayahs\",\"coverage_mismatch\",\"duration_ms\",\"last_word_ms\",\"source_chapter_offset_ms\",\"adapter\",\"v2_human_review_id\"],\"properties\":{\"surah\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":114},\"source_id\":{\"type\":\"string\",\"minLength\":1},\"source_sha256\":{\"type\":\"string\",\"pattern\":\"^[a-f0-9]{64}$\"},\"rights_ref\":{\"type\":\"string\",\"minLength\":1},\"offset_evidence_sha256\":{\"type\":\"string\",\"pattern\":\"^[a-f0-9]{64}$\"},\"method\":{\"enum\":[\"v1\",\"v2\"]},\"minimum_score\":{\"type\":\"number\",\"minimum\":0.9,\"maximum\":1},\"maximum_absolute_lag_ms\":{\"type\":\"number\",\"minimum\":0,\"maximum\":30},\"maximum_duration_difference_ms\":{\"type\":\"number\",\"minimum\":0,\"maximum\":30},\"sample_count\":{\"type\":\"integer\",\"minimum\":5},\"distinct_surahs\":{\"type\":\"integer\",\"minimum\":3},\"distinct_chapter_lengths\":{\"type\":\"integer\",\"minimum\":3},\"canonical_complete\":{\"enum\":[true]},\"expected_ayahs\":{\"type\":\"integer\",\"minimum\":1},\"ready_ayahs\":{\"type\":\"integer\",\"minimum\":1},\"coverage_mismatch\":{\"enum\":[0]},\"duration_ms\":{\"type\":\"number\",\"exclusiveMinimum\":true,\"minimum\":0},\"last_word_ms\":{\"type\":\"integer\",\"minimum\":1},\"source_chapter_offset_ms\":{\"type\":\"integer\",\"minimum\":0},\"adapter\":{\"enum\":[\"r2\",\"url_reference\"]},\"v2_human_review_id\":{\"type\":[\"string\",\"null\"]}},\"anyOf\":[{\"properties\":{\"method\":{\"enum\":[\"v1\"]},\"minimum_score\":{\"minimum\":0.95}}},{\"properties\":{\"method\":{\"enum\":[\"v2\"]},\"v2_human_review_id\":{\"type\":\"string\",\"minLength\":1}}}]}}}}\\',`licensed_publication_details`) = 1),0) = 1) and (ifnull((json_unquote(json_extract(`licensed_publication_details`,_utf8mb4\\'$.recitation_id\\')) = `id`),0) = 1) and (ifnull((json_extract(`licensed_publication_details`,_utf8mb4\\'$.complete_chapter_count\\') = json_length(json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters\\'))),0) = 1) and (ifnull(((json_extract(`licensed_publication_details`,_utf8mb4\\'$.expires_at_epoch_ms\\') - json_extract(`licensed_publication_details`,_utf8mb4\\'$.checked_at_epoch_ms\\')) = 300000),0) = 1) and (ifnull((json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].ready_ayahs\\') = json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].expected_ayahs\\')),0) = 1) and (ifnull((json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].last_word_ms\\') <= (json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].duration_ms\\') + 30)),0) = 1))),0) = 1)))",
+    "chk_recitations_slice_gate_v1": "((ifnull((`audio_mode` <> _utf8mb4\\'surah_slice\\'),0) = 1) or ((ifnull((`audio_mode` = _utf8mb4\\'surah_slice\\'),0) = 1) and (((ifnull((`offset_verified` = 1),0) = 1) and (ifnull((`verification_status` = _utf8mb4\\'passed\\'),0) = 1) and (ifnull((`verification_method` in (_utf8mb4\\'v1\\',_utf8mb4\\'v2\\')),0) = 1)) or ((ifnull((`riwayah_code` = _utf8mb4\\'hafs_an_asim\\'),0) = 1) and (ifnull((`canonical_text_available` = 1),0) = 1) and (ifnull((`timing_quality` = _utf8mb4\\'verified\\'),0) = 1) and (ifnull((`timing_level` in (_utf8mb4\\'word\\',_utf8mb4\\'letter\\')),0) = 1) and (ifnull(((ifnull((json_schema_valid(_utf8mb4\\'{\"type\":\"object\",\"required\":[\"schema_version\",\"actor\",\"recitation_id\",\"checked_at_epoch_ms\",\"expires_at_epoch_ms\",\"complete_chapter_count\",\"chapters\"],\"properties\":{\"schema_version\":{\"enum\":[1]},\"actor\":{\"enum\":[\"scoped-licensed-verifier-v1\"]},\"recitation_id\":{\"type\":\"string\",\"minLength\":1},\"checked_at_epoch_ms\":{\"type\":\"integer\",\"minimum\":0},\"expires_at_epoch_ms\":{\"type\":\"integer\",\"minimum\":0},\"complete_chapter_count\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":1},\"chapters\":{\"type\":\"array\",\"minItems\":1,\"maxItems\":1,\"uniqueItems\":true,\"items\":{\"type\":\"object\",\"required\":[\"surah\",\"source_id\",\"source_sha256\",\"rights_ref\",\"offset_evidence_sha256\",\"method\",\"minimum_score\",\"maximum_absolute_lag_ms\",\"maximum_duration_difference_ms\",\"sample_count\",\"distinct_surahs\",\"distinct_chapter_lengths\",\"canonical_complete\",\"expected_ayahs\",\"ready_ayahs\",\"coverage_mismatch\",\"duration_ms\",\"last_word_ms\",\"source_chapter_offset_ms\",\"adapter\",\"v2_human_review_id\"],\"properties\":{\"surah\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":114},\"source_id\":{\"type\":\"string\",\"minLength\":1},\"source_sha256\":{\"type\":\"string\",\"pattern\":\"^[a-f0-9]{64}$\"},\"rights_ref\":{\"type\":\"string\",\"minLength\":1},\"offset_evidence_sha256\":{\"type\":\"string\",\"pattern\":\"^[a-f0-9]{64}$\"},\"method\":{\"enum\":[\"v1\",\"v2\"]},\"minimum_score\":{\"type\":\"number\",\"minimum\":0.9,\"maximum\":1},\"maximum_absolute_lag_ms\":{\"type\":\"number\",\"minimum\":0,\"maximum\":30},\"maximum_duration_difference_ms\":{\"type\":\"number\",\"minimum\":0,\"maximum\":30},\"sample_count\":{\"type\":\"integer\",\"minimum\":5},\"distinct_surahs\":{\"type\":\"integer\",\"minimum\":3},\"distinct_chapter_lengths\":{\"type\":\"integer\",\"minimum\":3},\"canonical_complete\":{\"enum\":[true]},\"expected_ayahs\":{\"type\":\"integer\",\"minimum\":1},\"ready_ayahs\":{\"type\":\"integer\",\"minimum\":1},\"coverage_mismatch\":{\"enum\":[0]},\"duration_ms\":{\"type\":\"number\",\"exclusiveMinimum\":true,\"minimum\":0},\"last_word_ms\":{\"type\":\"integer\",\"minimum\":1},\"source_chapter_offset_ms\":{\"type\":\"integer\",\"minimum\":0},\"adapter\":{\"enum\":[\"r2\",\"url_reference\"]},\"v2_human_review_id\":{\"type\":[\"string\",\"null\"]}},\"anyOf\":[{\"properties\":{\"method\":{\"enum\":[\"v1\"]},\"minimum_score\":{\"minimum\":0.95}}},{\"properties\":{\"method\":{\"enum\":[\"v2\"]},\"v2_human_review_id\":{\"type\":\"string\",\"minLength\":1}}}]}}}}\\',`licensed_publication_details`) = 1),0) = 1) and (ifnull((json_unquote(json_extract(`licensed_publication_details`,_utf8mb4\\'$.recitation_id\\')) = `id`),0) = 1) and (ifnull((json_extract(`licensed_publication_details`,_utf8mb4\\'$.complete_chapter_count\\') = json_length(json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters\\'))),0) = 1) and (ifnull(((json_extract(`licensed_publication_details`,_utf8mb4\\'$.expires_at_epoch_ms\\') - json_extract(`licensed_publication_details`,_utf8mb4\\'$.checked_at_epoch_ms\\')) = 300000),0) = 1) and (ifnull((json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].ready_ayahs\\') = json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].expected_ayahs\\')),0) = 1) and (ifnull((json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].last_word_ms\\') <= (json_extract(`licensed_publication_details`,_utf8mb4\\'$.chapters[0].duration_ms\\') + 30)),0) = 1)),0) = 1)))))"
+  },
+  "down005_twice_and_reapply_with_dependent_check": true,
+  "passed": true,
+  "migration_up_twice": true,
+  "column_nullable_json": true,
+  "global_offset_unchanged": true,
+  "catalog_branch_unchanged": true,
+  "local_column_down_reapply": true,
+  "ddl_sha256": "d863ea47d72dcce5b398e4594b35093cc092b40c4e5695f294ce5d33f94a3918",
+  "migration_sql_sha256": "f014c4b2221dcdda72146a10ae158a0fcdfa2e889988b11808d7eacf9bc51c67",
+  "finished_at": "2026-10-11T07:48:58.900Z"
+}

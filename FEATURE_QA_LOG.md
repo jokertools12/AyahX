@@ -1,3 +1,11 @@
+# D4/K1–K9 — قبول البيانات والمحلي، قبل الشحن النهائي 2026-10-11
+
+893 اختبارًا ناجحًا/11متخطًى/0فشل، tsc/build ناجحان، lint135ملفًا مقابلorigin/main دون رسائل جديدة وتحذيرين سابقين. 7اختبارات توليد تقرير ترفض إغلاق المرحلة دون كل بوابات الشحن، وتقبل source_unavailable كدليل سلبي نهائي دون إخفاء نقص القياسات. اختبار mutation لقلب حارس الظهور فشل ثم نجح بعد استعادة المصدر نفسه.
+
+MySQL9.7.2 وR2 فعليان: مسار ملف مملوك →SHA/ffprobe/offset→Catalog/LaunchReadiness→AudioPlan→GETموقّع→FFmpeg، وتنظيف كائناتtest معHEAD/prefix. الملف الأقصر من إحداثيات الكلمات يُرفض قبل تبديل المصدر القديم؛ اختُبر فعليًا بست حالات وحدات وقبولR2. ليست هذه Fixtures دليل هوية أو حقوق لأي قارئ.
+
+27حالة رفض لقيود النشر الثلاثة معup2/down2/reapply، ونسخةproductionجديدة مشفرة مستعادة تطابق60count/CHECKSUM. التطبيق أكدCOMMITثمأخفق حارس ترتيبJSON_ARRAYAGG؛ قبول مستقل بقراءة فقط أثبت ثبات670تعريف عمود/42FK/60جدولًا والقيود الفعلية. لا تكرارDDL ولا تغيير قياسات T7. rule-v1طُبّق11تلاوة وإعادة0؛640مراجعةpendingوإعادة0، D1/D3/adminثابتة، الـflagOFF. [الأدلة](docs/data/d4-final-local-quality.json)، [القيود](docs/data/d4-three-gate-final-acceptance.json)، [الملف القصير](docs/data/d4-licensed-catalog-r2-short-acceptance.json). CI/النشر/10دقائق لوج وsmoke لم تُقبل بعد في هذه الفقرة.
+
 # قبول D4/T0 المنشور — 2026-10-10
 
 PR13/CI38039600952/ec593cf: SUCCESS للخدمات الأربع، health/ready200، smoke10/10 desktop/mobile، نافذة615.238s بلا أخطاء في الخدمات الست. D1/D3/admin ثابتة؛ صفر كتابةDB. [الدليل](docs/data/d4-t0-publication.json). T1 يبدأ بعد القبول، لا تعديلواجهة أو ريندر.

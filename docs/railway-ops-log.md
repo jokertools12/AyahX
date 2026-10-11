@@ -1,3 +1,12 @@
+## 2026-10-11 — D4، قبل شحن K9 النهائي
+
+K8طبق rule-v1 على11تلاوة/11قارئ وإعادة التخطيط0؛ بقي الظهور العام0 والـflagOFF، والصوت69unverified والحقوقunreviewed. المراجعات640pending وإعادة التخطيط0. R2productionمفعّل بعد قبول1–7 فعلي؛ أضيف storage_adapter فقط (system_settings13→14)، والإعدادات الأخرى والجداول المحمية ثابتة. البروفة المشتركة MySQL9.7.2/R2/AudioPlan/FFmpeg واختبار رفض الملف الأقصر فعليان؛ كائناتtestحذفت وHEAD/prefixتحقق. لا حذف ملفات محلية ولا snapshotجديد ولا stageتشغيل.
+
+قبل3CHECKfreshdump.age استعيد محليًا وكل60count/CHECKSUMمطابق. COMMITطبق ثمظهر حارس ترتيبmetadata؛ القراءة المستقلة أثبتت670column/42FK/60tablesثابتة، والقراءة3CHECK0writesنجحت. الحارس أصلح ليقارنكلالقيم دون افتراض ترتيب، وليس تجاوزحارس.
+
+dfقبل K8:total4685873152/free2902110208bytes. Railway08:25:45UTC:usage18.1600369769$،estimate22.3021775467$،hard30$/soft20$،remaining11.8399630231$؛ لا إسناد منفرد لـD4 ولا توفير مثبت. R2read08:25:currentbill0$،ClassA179/B126 بعد131/33،والفاتورةقدتتأخر؛ تنبيه5$accounttotal وليسhardcap. إنتاجمواردثابتة،stagingpausedمعvolumes/watchpatterns.
+
+[تطبيقK8](data/d4-k8-production-apply.json)؛[replay](data/d4-k8-production-replay.json)؛[المراجعات](data/d4-human-reviews-production-replay.json)؛[قبولالقيود](data/d4-three-gate-final-acceptance.json)؛[الميزانية](data/d4-budget-pre-shipping.json). CI/merge/4SUCCESS/healthready/10minlogs/smokeلمتقبلبعد.
 # D4/T0 — قبول النشر، 2026-10-10
 
 PR13/CI38039600952، merge ec593cf: التطبيق/control/Skia/alignment SUCCESS. health/ready200 وsmoke10/10؛ لوج09:02:00–09:12:15.238UTC=615.238s بلا خطأ جديد بالخدمات الست. D1=114/6236/77433 والبصمةeca6ed31…4fe4، D3=422463، users/user_roles وجداول توقيتD3 ثابتة. df: total4685873152/used1666068480/free3009740800bytes. لا كتابةDB أو تغيير موارد/flag. [الدليل](data/d4-t0-publication.json). ملفcorpus القديم لم يوجد؛ أُعيد بناء النص منReleasev3.2.0 المثبت والتحقق منSHAالمصدرين والبصمة القانونية قبل فحص الإنتاج. سبب503 التاريخي لم يثبت.

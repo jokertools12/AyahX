@@ -1,0 +1,252 @@
+{
+  "scope": "real_local_mysql_real_staging_r2_owned_fixture",
+  "database": "ayahx_d4_licensed_acceptance_r2_short_20261011",
+  "template": "ayahx_d4_catalog_20261010",
+  "production_written": false,
+  "fixture_scope": "OWNED_NOISE_NOT_QUD_RECORDING_OR_VOICE_IDENTITY",
+  "synthetic_human_rights": true,
+  "status": "PASSED_REAL_R2_LOCAL_MYSQL_SCOPED_PIPELINE",
+  "started_at": "2026-10-11T08:09:05.175Z",
+  "checks": [
+    "REAL_MYSQL_THREE_SCOPED_CHECKS",
+    "ACTUAL_R2_SHORT_AUDIO_REJECTED_BEFORE_ATTACH",
+    "ACTUAL_R2_IMMUTABLE_UPLOAD_HEAD_GET_SHA",
+    "ACTUAL_FFPROBE_AND_MEASURED_OWNED_OFFSET",
+    "REAL_SQL_AUDIO_PLAN_REAL_SIGNED_GET_REAL_RENDER",
+    "ONE_FILE_DOES_NOT_GRANT_OTHER_CHAPTERS",
+    "FLAG_OFF_PUBLIC_CALL_REJECTED",
+    "REAL_R2_SQL_HUMAN_RIGHTS_RECHECK",
+    "REAL_R2_OBJECT_SURAH_BINDING",
+    "GLOBAL_OFFSET_FALSE_AND_HUMAN_STATE_STABLE",
+    "AUDIT_NO_AUDIO_CAPABILITY"
+  ],
+  "actual_r2_acceptance": true,
+  "test_objects_deleted": true,
+  "staging_bucket": "ayahx-audio-staging",
+  "prefix": "test/1b686a34-0a55-40c0-90b8-ce9909b3ff6d/",
+  "mysql_version": "9.7.2",
+  "template_before": {
+    "users": {
+      "count": 13,
+      "checksum": 1797264518
+    },
+    "user_roles": {
+      "count": 13,
+      "checksum": 655683359
+    },
+    "quran_surahs": {
+      "count": 114,
+      "checksum": 1262901823
+    },
+    "quran_ayahs": {
+      "count": 6236,
+      "checksum": 3480017302
+    },
+    "quran_words": {
+      "count": 77433,
+      "checksum": 3191416149
+    },
+    "ayah_timings": {
+      "count": 422463,
+      "checksum": 866958104
+    },
+    "recitations": {
+      "count": 69,
+      "checksum": 2156928174
+    },
+    "recitation_chapters": {
+      "count": 7765,
+      "checksum": 4003462324
+    },
+    "human_review_items": {
+      "count": 640,
+      "checksum": 3401210194
+    },
+    "storage_objects": {
+      "count": 0,
+      "checksum": 0
+    },
+    "recitation_source_urls": {
+      "count": 1024,
+      "checksum": 2954236618
+    }
+  },
+  "scratch_created": true,
+  "owned_verification": {
+    "sha256": "88a407b96267f2b549b6ab79140dc312a2b798b3148901a3034c49d531a8bafd",
+    "duration_ms": 56218,
+    "sample_rate": 8000,
+    "codec": "pcm_s16le",
+    "offset": {
+      "method": "v1",
+      "recitationId": "owned-test-fixture",
+      "sourceSha256": "88a407b96267f2b549b6ab79140dc312a2b798b3148901a3034c49d531a8bafd",
+      "sourceSurah": 1,
+      "sourceChapterOffsetMs": 0,
+      "qudVersion": "v0.0.0",
+      "protocol": "distributed_3_surahs_interior_300ms",
+      "samples": [
+        {
+          "surah": 1,
+          "ayah": 1,
+          "chapterAyahCount": 5,
+          "ncc": 1,
+          "lagMs": 0,
+          "durationDifferenceMs": 0
+        },
+        {
+          "surah": 1,
+          "ayah": 3,
+          "chapterAyahCount": 5,
+          "ncc": 0.9999999999999989,
+          "lagMs": 0,
+          "durationDifferenceMs": 0
+        },
+        {
+          "surah": 1,
+          "ayah": 5,
+          "chapterAyahCount": 5,
+          "ncc": 0.9999999999999936,
+          "lagMs": 0,
+          "durationDifferenceMs": 0
+        },
+        {
+          "surah": 2,
+          "ayah": 1,
+          "chapterAyahCount": 6,
+          "ncc": 0.9999999999999944,
+          "lagMs": 0,
+          "durationDifferenceMs": 0
+        },
+        {
+          "surah": 2,
+          "ayah": 3,
+          "chapterAyahCount": 6,
+          "ncc": 1,
+          "lagMs": 0,
+          "durationDifferenceMs": 0
+        },
+        {
+          "surah": 2,
+          "ayah": 6,
+          "chapterAyahCount": 6,
+          "ncc": 1,
+          "lagMs": 0,
+          "durationDifferenceMs": 0
+        },
+        {
+          "surah": 3,
+          "ayah": 1,
+          "chapterAyahCount": 7,
+          "ncc": 1,
+          "lagMs": 0,
+          "durationDifferenceMs": 0
+        },
+        {
+          "surah": 3,
+          "ayah": 4,
+          "chapterAyahCount": 7,
+          "ncc": 1,
+          "lagMs": 0,
+          "durationDifferenceMs": 0
+        },
+        {
+          "surah": 3,
+          "ayah": 7,
+          "chapterAyahCount": 7,
+          "ncc": 1,
+          "lagMs": 0,
+          "durationDifferenceMs": 0
+        }
+      ]
+    }
+  },
+  "render": {
+    "sha256": "0e71216e9cb7220eb72f4f5e3bb0effab9284f7a3f596dc743649da5a128284e",
+    "duration_ms": 5500,
+    "source_window_ms": {
+      "fromMs": 12410,
+      "toMs": 17860
+    },
+    "actual_ffmpeg": true
+  },
+  "launch_readiness": {
+    "flag_enabled": true,
+    "voice_gate_policy": "require_confirmed",
+    "availability_mode": "complete_only",
+    "pending_by_type": {},
+    "pending_total": 0,
+    "public_potential_recitations": 1,
+    "public_potential_readers": 1,
+    "recitations": [
+      {
+        "id": "owned-test-fixture",
+        "slug": "owned_r2_sql_fixture",
+        "reciter_id": "ebddfc45-287f-0362-89c0-bc436992baaf",
+        "visible_if_flag_open": true,
+        "currently_visible": true,
+        "blockers": []
+      }
+    ],
+    "launch_blockers": []
+  },
+  "template_after": {
+    "users": {
+      "count": 13,
+      "checksum": 1797264518
+    },
+    "user_roles": {
+      "count": 13,
+      "checksum": 655683359
+    },
+    "quran_surahs": {
+      "count": 114,
+      "checksum": 1262901823
+    },
+    "quran_ayahs": {
+      "count": 6236,
+      "checksum": 3480017302
+    },
+    "quran_words": {
+      "count": 77433,
+      "checksum": 3191416149
+    },
+    "ayah_timings": {
+      "count": 422463,
+      "checksum": 866958104
+    },
+    "recitations": {
+      "count": 69,
+      "checksum": 2156928174
+    },
+    "recitation_chapters": {
+      "count": 7765,
+      "checksum": 4003462324
+    },
+    "human_review_items": {
+      "count": 640,
+      "checksum": 3401210194
+    },
+    "storage_objects": {
+      "count": 0,
+      "checksum": 0
+    },
+    "recitation_source_urls": {
+      "count": 1024,
+      "checksum": 2954236618
+    }
+  },
+  "source_sha256": {
+    "catalogRuntime": "8376b96a6b23a36b43f15a36cb5767e8697a8315df533f52e604b4b01cc2ca13",
+    "launchReadinessService": "c8ea3089771c544721d2b556cc3ec964be39dab40aa75589bd45a3ff1932f591",
+    "recitationAudioResolver": "23f5fb04180b85537db5ed97ed107b95fbf1f9a491b98cd4f0145db2ae4f410e",
+    "licensedSourceResolver": "078039aa597e148d925339ea40d9c6daa7098847ff222a648ae9447a3e5caeb5",
+    "catalogLicensedReadiness": "d7a1315aa1c0d8b722ec690904daf7f7947de82558456ea663eae6641c50d1bf"
+  },
+  "cleanup_failure_codes": [],
+  "connections_closed": true,
+  "local_files_retained": true,
+  "scratch_database_retained": true,
+  "finished_at": "2026-10-11T08:10:27.603Z",
+  "secret_report_scan_passed": true
+}

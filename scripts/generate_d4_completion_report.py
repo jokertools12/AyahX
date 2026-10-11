@@ -223,7 +223,10 @@ def render(root, artifacts, inventory=None, operations=None, extra_proofs=()):
         actual = t7.get(slug)
         t7_value = (f"{actual['verification_status']}/{actual.get('verification_method_candidate', '—')}; "
                     f"samples={actual.get('measured_samples', 0)}" if actual else 'خارج T7؛ لم يُعد قياسه')
-        db_offset = f"{cell(f.get('offset_verified'))}/{cell(f.get('offset_method', f.get('verification_method')))}"
+        method = f.get('offset_method', f.get('verification_method'))
+        method_display = ('غير معتمد' if method is None and
+                          ('offset_method' in f or 'verification_method' in f) else cell(method))
+        db_offset = f"{cell(f.get('offset_verified'))}/{method_display}"
         reasons = f.get('rule_v1_reasons')
         rule = cell(f.get('rule_v1_eligible')) + '; ' + (', '.join(map(cell, reasons)) if isinstance(reasons, list) else PENDING)
         source = f.get('provider', a['source'])

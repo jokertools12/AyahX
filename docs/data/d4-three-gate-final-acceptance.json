@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "status": "COMMITTED_DDL_ACCEPTED_BY_INDEPENDENT_READ_ONLY_READBACK",
+  "original_apply_evidence": "docs/data/d4-three-gate-production-apply.json",
+  "original_post_guard_passed": false,
+  "original_sql_committed_acknowledged": true,
+  "approved_sql_sha256": "9824b58db8765edba2f1dd5feb8eb3a9f241a3ce130f4e283a9532f8c4a3403c",
+  "diagnosis_evidence": "docs/data/d4-three-gate-order-diagnosis.json",
+  "diagnosis": "Unordered information_schema JSON_ARRAYAGG changed sequence after ALTER. All 670 column definitions, 42 foreign-key entries and 60 table counts/checksums are identical. The original failed report is retained unchanged.",
+  "readback_evidence": "docs/data/d4-three-gate-production-readback.json",
+  "readback_passed": true,
+  "readback_database_write_statements": 0,
+  "constraints": ["chk_recitations_offset_gate_v1", "chk_recitations_publish_gate_v1", "chk_recitations_slice_gate_v1"],
+  "actual_constraints_match_rehearsed_clauses": true,
+  "backup_evidence": "docs/data/d4-three-gate-backup-verification.json",
+  "backup_tables_verified": 60,
+  "schema_comparison_helper_tests": 39,
+  "ddl_repeated_after_diagnosis": false
+}

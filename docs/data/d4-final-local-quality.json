@@ -1,0 +1,39 @@
+{
+  "checked_at": "2026-10-11T08:21:06.303373Z",
+  "scope": "root_local_final_code_checks",
+  "npm_test": {
+    "command": "npm test",
+    "exit_code": 0,
+    "passed": 893,
+    "skipped": 11,
+    "failed": 0,
+    "files_passed": 124,
+    "files_skipped": 5,
+    "duration_seconds": 58.11,
+    "initial_failure": "outdated positional assumption in migration005 down unit test; guard retained and verified before enum narrowing",
+    "rerun": true
+  },
+  "tsc": {
+    "command": "npx tsc --noEmit",
+    "exit_code": 0
+  },
+  "build": {
+    "command": "npm run build",
+    "exit_code": 0
+  },
+  "changed_lint": {
+    "command": "node scripts/lint-changed-files.mjs --base origin/main --include-untracked",
+    "evidence": "docs/data/d4-changed-lint-final.json",
+    "new_messages": 0,
+    "existing_messages": 2
+  },
+  "final_capture_offline_guards": 6,
+  "completion_generator_unit_tests": 7,
+  "real_pipeline": {
+    "evidence": "docs/data/d4-licensed-catalog-r2-short-acceptance.json",
+    "status": "PASSED_REAL_R2_LOCAL_MYSQL_SCOPED_PIPELINE",
+    "visual_inspection": "owned fixture expected black portrait frame observed; ffprobe audio/video and 5500ms checked; not product render acceptance or Quran identity"
+  },
+  "production_deployment_accepted": false,
+  "short_audio_rejection": "ACTUAL_R2_SHORT_AUDIO_REJECTED_BEFORE_ATTACH passed; rejection preserves old active source and audits reason"
+}

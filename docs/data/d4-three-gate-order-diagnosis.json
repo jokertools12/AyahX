@@ -1,0 +1,16 @@
+{
+  "checked_at": "2026-10-11T08:14:06.6648808Z",
+  "read_only": true,
+  "columns_compared": 670,
+  "foreign_key_entries_compared": 42,
+  "all_columns_definitions_identical": true,
+  "foreign_keys_identical": true,
+  "all_tables_counts_and_checksums_identical": true,
+  "tables_compared": 60,
+  "diagnosis": "information_schema JSON_ARRAYAGG changed ordering after ALTER; no column definition or cell changed",
+  "database_writes": 0,
+  "original_failed_post_guard": "docs/data/d4-three-gate-production-apply.json",
+  "passed": true,
+  "reviewed_helper_acceptance": true,
+  "helper_test_count": 39
+}
