@@ -1,6 +1,6 @@
 # الدفعة 3 — A1 + A2a، 2026-10-11
 
-القبول المحلي وتطبيق migration مكتملان؛ CI والدمج والنشر والتحقق اللاحق قيد العمل. [التقرير الحالي](data/a1-a2a-report.ar.md)، [migration006 الإنتاجية](data/a1-production-migration-proof.json)، [مراجعة الواجهة والصور](admin-ui-review.md). 1009اختبار ناجح/11متخطى،20E2Eوظيفي،56axeحالة؛D1/D3ثابتان،صلاحيتا الأدمنترقّتا دون مس بياناتهما؛catalogOFF،stagingمتوقفة.
+مكتمل مع بوابات النشر المثبتة. [التقرير الحالي](data/a1-a2a-report.ar.md)، [migration006 الإنتاجية](data/a1-production-migration-proof.json)، [مراجعة الواجهة والصور](admin-ui-review.md). 1009اختبار ناجح/11متخطى،20E2Eوظيفي،56axeحالة؛D1/D3ثابتان،صلاحيتا الأدمنترقّتا دون مس بياناتهما؛catalogOFF،stagingمتوقفة.
 
 # إغلاق الدفعة 2 — D4 / K1–K9، 2026-10-11
 

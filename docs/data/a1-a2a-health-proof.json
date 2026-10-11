@@ -1,0 +1,42 @@
+{
+  "checked_at": "2026-10-11T12:29:28.149Z",
+  "health": [
+    {
+      "path": "/api/health",
+      "http_status": 200,
+      "status": "ok",
+      "database": "connected",
+      "storage": {
+        "status": "ok",
+        "totalBytes": 5000000000,
+        "allocatedTableBytes": 1414627328,
+        "baseTableBytes": 99368960,
+        "timingTableBytes": 1315258368,
+        "availableBytes": 3585372672,
+        "freePercent": 71.71,
+        "observedAt": "2026-10-11T12:29:29.339Z",
+        "source": "information_schema",
+        "limitation": "Table allocation estimate; excludes redo, undo, binlog and other filesystem files."
+      }
+    },
+    {
+      "path": "/api/health/ready",
+      "http_status": 200,
+      "status": "ready",
+      "database": "connected",
+      "storage": {
+        "status": "ok",
+        "totalBytes": 5000000000,
+        "allocatedTableBytes": 1414627328,
+        "baseTableBytes": 99368960,
+        "timingTableBytes": 1315258368,
+        "availableBytes": 3585372672,
+        "freePercent": 71.71,
+        "observedAt": "2026-10-11T12:29:29.339Z",
+        "source": "information_schema",
+        "limitation": "Table allocation estimate; excludes redo, undo, binlog and other filesystem files."
+      }
+    }
+  ],
+  "passed": true
+}

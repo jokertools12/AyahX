@@ -71,5 +71,5 @@ ${shipping?.passed?'التوقف بعد هذا التقرير. لا D5 أو A2b 
 `;
 await writeFile('docs/data/a1-a2a-report.ar.md',body.replace(/([0-9])(?=[\u0600-\u06FF])/gu,'$1 ').replace(/([\u0600-\u06FF])(?=[0-9])/gu,'$1 '),'utf8');
 const header=`# الدفعة 3 — A1 + A2a، 2026-10-11\n\n${status}. [التقرير الحالي](data/a1-a2a-report.ar.md)، [migration006 الإنتاجية](data/a1-production-migration-proof.json)، [مراجعة الواجهة والصور](admin-ui-review.md). 1009اختبار ناجح/11متخطى،20E2Eوظيفي،56axeحالة؛D1/D3ثابتان،صلاحيتا الأدمنترقّتا دون مس بياناتهما؛catalogOFF،stagingمتوقفة.\n\n`;
-for(const path of ['docs/progress.md','docs/launch-blockers.md','docs/railway-ops-log.md','FEATURE_QA_LOG.md']){let text=await readFile(path,'utf8');text=text.replace(/^# الدفعة 3 — A1 \+ A2a، 2026-10-11\n[\s\S]*?\n\n(?=# )/u,'');await writeFile(path,header+text,'utf8');}
+for(const path of ['docs/progress.md','docs/launch-blockers.md','docs/railway-ops-log.md','FEATURE_QA_LOG.md']){let text=await readFile(path,'utf8');text=text.replace(/^# الدفعة 3 — A1 \+ A2a، 2026-10-11\n[\s\S]*?\n\n(?=# )/u,'');const localHeader=path==='FEATURE_QA_LOG.md'?header.replaceAll('(data/','(docs/data/').replace('(admin-ui-review.md)','(docs/admin-ui-review.md)'):header;await writeFile(path,localHeader+text,'utf8');}
 console.log(JSON.stringify({status,report:'docs/data/a1-a2a-report.ar.md'}));

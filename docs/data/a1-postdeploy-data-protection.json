@@ -1,0 +1,43 @@
+{
+  "checked_at": "2026-10-11T12:20:00.191Z",
+  "passed": true,
+  "read_only": true,
+  "mysql_version": "9.7.2",
+  "d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "d3": 422463,
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "critical": {
+    "users": 13,
+    "subscriptions": 16,
+    "plans": null,
+    "payment_requests": 3,
+    "videos": null,
+    "saved_videos": 7,
+    "render_jobs": 72,
+    "system_settings": 14,
+    "user_roles": 13,
+    "notifications": 49
+  },
+  "protected_checksums": {
+    "users": "465493766",
+    "profiles": "3305835068",
+    "user_roles": "2243496482",
+    "quran_surahs": "2501341507",
+    "quran_ayahs": "1712042852",
+    "quran_words": "2986733015",
+    "ayah_timings": "2767002486",
+    "system_settings": "1813780594"
+  },
+  "admin_unchanged_after_authorized_upgrade": true,
+  "catalog_v2": false,
+  "df": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1774206976,
+    "available_bytes": 2901602304
+  },
+  "catalog_v2_storage": "No explicit system_settings row; readCatalogSettings default false, confirmed by public404 QURAN_CATALOG_DISABLED"
+}

@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-10-11T12:24:04.994Z",
+  "authentication_used": false,
+  "model_calls": 0,
+  "api_writes": 0,
+  "public": {
+    "passed": 10,
+    "failed": 0,
+    "run": "01a12ae6-e556-718e-b0a9-c850f9d14c57",
+    "started_at": "2026-10-11T12:18:58.126Z",
+    "finished_at": "2026-10-11T12:19:28.804Z"
+  },
+  "admin": {
+    "passed": 4,
+    "failed": 0,
+    "run": "01a12ae9-71d3-7fdd-9090-cc056bb645e1",
+    "started_at": "2026-10-11T12:21:45.163Z",
+    "finished_at": "2026-10-11T12:22:07.949Z",
+    "checks": [
+      "all_declared_GET_admin_routes_401_no_store_no_disclosure",
+      "case_insensitive_unknown_routes_401",
+      "public_entry_does_not_load_AdminEntry",
+      "admin_route_loads_lazy_entry_and_blank_login"
+    ]
+  },
+  "superseded_failure": {
+    "run": "01a12ae8-7e59-73cb-b3bb-a15b7f192115",
+    "reason": "Incorrect expected Arabic heading in new smoke test; actual source and browser both display دخول الإدارة. No application change or weakened assertion."
+  },
+  "passed": true
+}
