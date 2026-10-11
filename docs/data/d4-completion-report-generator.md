@@ -77,3 +77,23 @@ $python = 'C:/Users/cpazi/.cache/codex-runtimes/codex-primary-runtime/dependenci
 مفاتيح gates المدعومة: tsc،changed_lint،npm_test،build،ci،merge،deployment_success،health،ready،logs_10_minutes،read_only_smoke،catalog_disabled_404،r2_real_acceptance،r2_cleanup،r2_secret_scan،rollback. بوابة بلا status ودليل مرتبط = pending، ولا يكفي وجود artifact وحده لاستنتاج نجاحه. rollback يجوز توثيقه not_needed بدليل فحص عدم التراجع؛ لا يحوّل عدم وجوده إلى تنفيذ مزعوم. الفاتورة قبل/بعد أرقام فعلية، والفرق حساب عشري فقط بلا ادعاء تكلفة سببية أو توفير. حقول R2 الاختيارية `before_class_a_operations/after_class_a_operations/before_class_b_operations/after_class_b_operations` أعداد عمليات، وتُعرض صراحة دون نسبتها للدولار. `operations.changes` قائمة تفاصيل الملفات/الجداول/endpoints الفعلية.
 
 تقرير المعاينة الحقيقي في TEMP بتاريخ 2026-10-11 جمع 69 تلاوة و9 YouTube حسب المصدر الفعلي، وبقي rule-v1 والجرد النهائي والفاتورة وبوابات الشحن pending. لا يعد ذلك قبولًا للإنتاج. اختبار المولّد: `python -m unittest test_generate_d4_completion_report` من scripts؛ يفحص pending، الجرد الجزئي/bool غير الصحيح، عدم تسريب الحقول غير المختارة، والمراجع التي تتجاوز repo.
+
+## التقاط الجرد النهائي؛ root وحده يشغّل
+
+`scripts/capture-d4-final-evidence.ts` يفتح جلسة SSH/MySQL واحدة بـ `allowWrites:false`. استعماله بعد K8 وبعد تحضير publication plan **جديد للقراءة فقط، changes=0**؛ لا يستهلك خطة pre-apply ذات تغييرات معلقة:
+
+```powershell
+npx tsx scripts/capture-d4-final-evidence.ts `
+  --baseline "$env:TEMP/actual-approved-private-before-inventory.json" `
+  --publication docs/data/actual-fresh-production-publication-plan.json `
+  --out docs/data/d4-final-production-inventory.json `
+  --inventory-output "$env:TEMP/ayahx-d4-final-private-inventory.json"
+```
+
+هذه مسارات مثال؛ root يمرر baseline الخاص الفعلي وخطة النشر الفعلية، ولا يكتب فوق baseline. baseline وinventory-output يجب أن يكونا خارج Git، والمخرج العام داخل docs/data. ينفّذ captureInventory ويفرض ثبات count/CHECKSUM لـusers/user_roles وجداول D1/D3 مع بصمة النص القانوني، ويعيد بناء بصمة T2 من الحقول المخزنة وdiagnostic READY runs للفصول canonical المحجوبة فقط. يقارنها بـavailability-summary وbaseline إن احتوى availability_fingerprint. لا يُنقل corpus التوقيت كله ولا صوت.
+
+يُرفض اختلاف IDs/slugs/المزوّد/الرواية أو وقائع complete/healthy-complete في آخر24h أو حالة المؤهلة المنشورة عن خطة root. eligible/reasons تُنقل من الخطة نفسها ولا تُخترع. يلتزم flag المغلق ويستعمل isPubliclyVisible الحالية. verified licensed candidates=0 تُثبت حالتها من live query، ولا يصبح YouTube جاهزًا من stamp؛ إن وُجد مرشح تستعمل الخدمة الأصلية CatalogLicensedChapterReadiness/SourceResolver وتتحقق من binding والحقوق والتوقيت ومصدر القراءة بدل اعتبار row verified قبولًا. لذلك قد تجري تلك الحالة قراءة المصدر عبر المحول الأصلي لدى root؛ الحالة الحالية بلا مرشحين لا تفعلها.
+
+المخرج العام whitelist: لا audio URLs أو verification_details الخام أو صفوف الحسابات أو مسار النسخة/الجرد الخاص أو secrets. يتضمن counts/checksums المحمية، metadata التلاوات، review total/pending بكل نوع، allowlist live وثلاث إضافات Archive المعتمدة من proof plan، actual constraints/nullable/collation،df وThreads_connected، وبصمة خطة النشر. private inventory منفصل خارج Git. الفشل يطبع code ثابتًا فقط ويخرج1؛ لا يكتب تقرير نجاح. نجاح القراءة لا يثبت CI/deploy/health/logs، وهي تبقى في operations.
+
+التحقق المحلي للكود: `npx tsx scripts/test-capture-d4-final-evidence.ts`؛ ستة حراس offline ناجحة، وlint الملفات الجديدة بلا رسائل، وtsc scoped ناجح مع declaration ffprobe-static الموجودة. **لم يُشغّل التقاط Railway بواسطة الوكيل الفرعي**؛ الدليل الفعلي يكتبه root بعد التنفيذ.

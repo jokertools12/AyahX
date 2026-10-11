@@ -193,13 +193,14 @@ def render(root, artifacts, inventory=None, operations=None, extra_proofs=()):
             lines.append('- الجرد النهائي يثبت صفر مضيفين مضافين.')
     else:
         lines.append('- المضيفون وأدلة redirect/TLS/الملكية: ' + PENDING)
-    lines += ['', '| نوع المراجعة | البنود من الجرد النهائي |', '|---|---|']
+    lines += ['', '| نوع المراجعة | جميع البنود من الجرد النهائي | pending |', '|---|---|---|']
     review = (inventory or {}).get('review_counts_by_type')
+    pending_review = (inventory or {}).get('review_pending_counts_by_type', {})
     if isinstance(review, dict):
         for key, value in sorted(review.items()):
-            lines.append(f'| {cell(key)} | {cell(value)} |')
+            lines.append(f'| {cell(key)} | {cell(value)} | {cell(pending_review.get(key))} |')
     else:
-        lines.append('| جميع الأنواع | ' + PENDING + ' |')
+        lines.append('| جميع الأنواع | ' + PENDING + ' | ' + PENDING + ' |')
     lines += ['', '### السبب الجذري K1 ومنشأ الصوت', '',
               'التشخيص المصدر من scratch K1: ' + cell(artifacts['k1'].get('diagnosis')), '',
               'QUD v3.2.0 مصدر metadata/timing وليس إذنًا عامًا لحقوق كل تسجيل. '
