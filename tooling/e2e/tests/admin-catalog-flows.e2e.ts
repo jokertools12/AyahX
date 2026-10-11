@@ -2,6 +2,8 @@ import {test,type Browser} from '@e2e-dev/web';
 import {expect} from 'e2e';
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
+import {createHash} from 'node:crypto';
+import Redis from 'ioredis';
 
 const enabled=process.env.AYAHX_ADMIN_E2E==='1';
 interface Recording{id:string;slug:string;reciter_id:string;display_label_ar:string|null;display_label_en:string|null;generated_label_en?:string;is_default_for_reciter:number;voice_identity_status:string}
@@ -9,7 +11,7 @@ interface Reader{id:string;slug:string;name_ar:string;name_en:string|null}
 interface Manifest{local_only:boolean;prefix:string;fixture:{reader:string;target:string;primary:string;secondary:string;partial:string};surah:number;reciters:Reader[];recitations:Recording[];provider:{id:string;code:string};chapters:Array<{id:string;recitation_id:string;surah:number;name_ar:string;ayah_count:number}>}
 const privateDirectory=process.env.LOCALAPPDATA?join(process.env.LOCALAPPDATA,'AyahX','private-backups'):null;
 const manifest:Manifest|null=enabled?JSON.parse(readFileSync(join(privateDirectory!,'a2a-browser-catalog-fixtures.json'),'utf8')):null;
-const sessionFixture:{super_admin:{cookie:string}}|null=enabled?JSON.parse(readFileSync(join(privateDirectory!,'a1-browser-fixtures.json'),'utf8')):null;
+const sessionFixture:{super_admin:{cookie:string;id:string}}|null=enabled?JSON.parse(readFileSync(join(privateDirectory!,'a1-browser-fixtures.json'),'utf8')):null;
 function fixtures(){if(!manifest?.local_only||!manifest.prefix||!sessionFixture)throw new Error('LOCAL_CATALOG_FIXTURES_REQUIRED');const reader=manifest.reciters.find(r=>r.id===manifest.fixture.reader),target=manifest.reciters.find(r=>r.id===manifest.fixture.target),primary=manifest.recitations.find(r=>r.id===manifest.fixture.primary);if(!reader||!target||!primary)throw new Error('LOCAL_CATALOG_MANIFEST_INVALID');return {manifest,reader,target,primary};}
 async function readRows<T>(browser:Browser,path:string):Promise<T[]>{const encoded=await browser.evaluate(async route=>{if(!route.startsWith('/api/'))throw new Error('SAME_ORIGIN_API_ONLY');const response=await fetch(route,{credentials:route.startsWith('/api/admin/')?'same-origin':'omit',cache:'no-store'});if(!response.ok)throw new Error('LOCAL_READ_STATUS_'+response.status);const body=await response.json();if(!Array.isArray(body.data))throw new Error('LOCAL_READ_SHAPE');return JSON.stringify(body.data);},path);return JSON.parse(encoded) as T[];}
 const publicPath=(reader:Reader)=>'/api/catalog/reciters/'+encodeURIComponent(reader.slug)+'/recitations';
@@ -25,6 +27,9 @@ if(enabled)test.setup('restore local catalog fixture session',{sessions:['admin-
  await app.open('/admin');await expect(browser.locator('h1')).toHaveText('Dashboard');await session.save('admin-catalog-local');
 });
 const options={session:enabled?'admin-catalog-local':undefined,timeout:120000};
+// Fixture isolation only: real rate-limit acceptance is exercised separately.
+// This loopback Redis DB belongs exclusively to the local browser harness.
+test.beforeEach(async()=>{if(!enabled)return;fixtures();const redis=new Redis('redis://127.0.0.1:6380/10',{maxRetriesPerRequest:1});try{const hash=createHash('sha256').update(sessionFixture!.super_admin.id).digest('hex');let cursor='0';do{const [next,keys]=await redis.scan(cursor,'MATCH','ayahx:admin-rate:*:*:'+hash,'COUNT',100);cursor=next;if(keys.length)await redis.del(...keys);}while(cursor!=='0');}finally{await redis.quit();}});
 
 test('catalog inline Enter edit and reader default reach public reads with immutable audit diff',options,async({app,browser,screen})=>{
  test.skip(!enabled,'Opt-in actual local catalog fixtures');const {manifest:m,reader,target,primary}=fixtures();
@@ -47,6 +52,14 @@ test('catalog inline Enter edit and reader default reach public reads with immut
  await app.open('/admin/recitations?q='+encodeURIComponent(m.prefix));await recordingRow(browser,primary.id,await isMobile(browser)).getByRole('button',label).tap();await screen.getByRole('textbox','Edit name').fill(original);await screen.getByRole('textbox','Edit name').press('Enter');await expect.poll(async()=> (await readRows<Recording>(browser,publicPath(reader))).find(r=>r.id===primary.id)?.display_label_en).toBe(original);
 });
 
+test('catalog descriptive text remains literal and never executes HTML',options,async({app,browser,screen})=>{
+ test.skip(!enabled,'Opt-in actual local catalog fixtures');const {manifest:m,reader,primary}=fixtures();await app.open('/admin/recitations?q='+encodeURIComponent(m.prefix));await expect(browser.locator('h1')).toHaveText('Recitations and sources');
+ const before=(await readRows<Recording>(browser,listPath(m.prefix))).find(r=>r.id===primary.id)!,original=before.display_label_en??before.generated_label_en!,payload='<img src=x onerror="window.ayahxUnsafeLabelExecuted=true">';
+ const row=recordingRow(browser,primary.id,await isMobile(browser));
+ try{await row.getByRole('button',original).tap();await screen.getByRole('textbox','Edit name').fill(payload);await screen.getByRole('textbox','Edit name').press('Enter');await expect(row.getByRole('button',payload)).toBeVisible();await expect.poll(async()=> (await readRows<Recording>(browser,publicPath(reader))).find(r=>r.id===primary.id)?.display_label_en).toBe(payload);expect(await browser.evaluate(()=>({executed:Boolean((window as unknown as {ayahxUnsafeLabelExecuted?:boolean}).ayahxUnsafeLabelExecuted),injectedImages:document.querySelectorAll('img[src="x"]').length}))).toEqual({executed:false,injectedImages:0});}
+ finally{await app.open('/admin/recitations?q='+encodeURIComponent(m.prefix));await recordingRow(browser,primary.id,await isMobile(browser)).getByRole('button',payload).tap();await screen.getByRole('textbox','Edit name').fill(original);await screen.getByRole('textbox','Edit name').press('Enter');await expect.poll(async()=> (await readRows<Recording>(browser,publicPath(reader))).find(r=>r.id===primary.id)?.display_label_en).toBe(original);}
+});
+
 test('catalog keyboard ordering and desktop drag persist actual ranks and Undo restores them',options,async({app,browser})=>{
  test.skip(!enabled,'Opt-in actual local catalog fixtures');const {manifest:m}=fixtures();await app.open('/admin/recitations?q='+encodeURIComponent(m.prefix));await expect(browser.locator('h1')).toHaveText('Recitations and sources');
  const before=(await readRows<Recording>(browser,listPath(m.prefix))).map(r=>r.id);expect(before.length).toBeGreaterThan(1);const mobile=await isMobile(browser),swapped=[before[1],before[0],...before.slice(2)];
@@ -64,7 +77,7 @@ test('chapter matrix supports keyboard focus and stored timing SVG JSON and vali
 test('voice gate setting changes the real public consumer and is restored through settings UI',options,async({app,browser,screen})=>{
  test.skip(!enabled,'Opt-in actual local catalog fixtures');const {manifest:m,reader}=fixtures();await app.open('/admin/settings');await expect(browser.locator('h1')).toHaveText('Settings and flags');
  const card=browser.locator('section.admin-card').filter({hasText:'voice_gate_policy'}),select=card.getByLabel('Value'),original=await select.inputValue();
- await select.selectOption({value:'require_confirmed'});await card.getByRole('button','Save').tap();await expect.poll(async()=> (await readRows<Recording>(browser,publicPath(reader))).some(r=>r.id===m.fixture.secondary)).toBe(false);
+ if(original!=='require_confirmed'){await select.selectOption({value:'require_confirmed'});await card.getByRole('button','Save').tap();}await expect.poll(async()=> (await readRows<Recording>(browser,publicPath(reader))).some(r=>r.id===m.fixture.secondary)).toBe(false);
  try{await select.selectOption({value:'allow_auto_verified'});await card.getByRole('button','Save').tap();await expect.poll(async()=> (await readRows<Recording>(browser,publicPath(reader))).some(r=>r.id===m.fixture.secondary)).toBe(true);}
  finally{await select.selectOption({value:original});await card.getByRole('button','Save').tap();await expect.poll(()=>select.inputValue()).toBe(original);}
  if(original==='require_confirmed')await expect.poll(async()=> (await readRows<Recording>(browser,publicPath(reader))).some(r=>r.id===m.fixture.secondary)).toBe(false);

@@ -1,0 +1,52 @@
+{
+  "observed_at": "2026-10-11T11:42:03.488Z",
+  "scope": "local production build; lab interaction timing, not field INP",
+  "measurements": [
+    {
+      "viewport": 1440,
+      "declared_rows": 1000,
+      "rendered_rows": 23,
+      "rendered_cards": 10,
+      "event_samples": 36,
+      "max_interaction_duration_ms": 32,
+      "interaction_count": 12,
+      "cls": 0.014743695290858725,
+      "profile_overflow": {
+        "viewport": 1440,
+        "body_width": 1425,
+        "offenders": []
+      }
+    },
+    {
+      "viewport": 390,
+      "declared_rows": 1000,
+      "rendered_rows": 23,
+      "rendered_cards": 10,
+      "event_samples": 36,
+      "max_interaction_duration_ms": 48,
+      "interaction_count": 12,
+      "cls": 0.015079861538461537,
+      "profile_overflow": {
+        "viewport": 390,
+        "body_width": 375,
+        "offenders": [
+          {
+            "tag": "DIV",
+            "classes": "inline-flex min-h-10 h-auto min-w-0 items-stretch justify-center rounded-md bg-muted p-1 text-muted-foreground",
+            "left": 16,
+            "right": 471.6875,
+            "width": 455.6875
+          },
+          {
+            "tag": "BUTTON",
+            "classes": "inline-flex min-h-11 min-w-0 items-center justify-center whitespace-normal break-words text-center rounded-sm px-3 py-2 text-sm leading-5 font-medium [&_svg]:shrink-0 ring-offset-background transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+            "left": 384.875,
+            "right": 467.6875,
+            "width": 82.8125
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true
+}

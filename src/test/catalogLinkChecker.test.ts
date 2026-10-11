@@ -21,7 +21,7 @@ describe('D4 periodic catalog link checker (unit fixtures; no live network)', ()
     const targets=[target('one')],saved=(await run(targets)).result;
     const signed=structuredClone(saved);signed.results.one.check.finalUrl='https://audio.example/one.mp3?sig=private';
     expect(()=>createLinkCheckpoint(targets,signed)).toThrow('CATALOG_LINK_CHECKPOINT_PRIVATE_URL');
-    const redirects=structuredClone(saved);redirects.results.one.check.redirectChain=['https://audio.example/one.mp3?X-Amz-Signature=private'];
+    const redirects=structuredClone(saved);redirects.results.one.check.redirects=['https://audio.example/one.mp3?X-Amz-Signature=private'];
     expect(()=>createLinkCheckpoint(targets,redirects)).toThrow('CATALOG_LINK_CHECKPOINT_PRIVATE_URL');
     expect(()=>catalogLinkSqlPlan(targets,signed)).toThrow('CATALOG_LINK_CHECKPOINT_PRIVATE_URL');
   });

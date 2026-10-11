@@ -1,10 +1,10 @@
 name: Catalog quality
 on:
   pull_request:
-    paths: ['server/**', 'shared/**', 'scripts/**', 'src/test/**', 'package*.json', '.github/workflows/catalog-quality.yml']
+    paths: ['server/**', 'shared/**', 'scripts/**', 'src/test/**', 'src/admin/**', 'package*.json', '.github/workflows/catalog-quality.yml']
   push:
     branches: [main]
-    paths: ['server/**', 'shared/**', 'scripts/**', 'src/test/**', 'package*.json', '.github/workflows/catalog-quality.yml']
+    paths: ['server/**', 'shared/**', 'scripts/**', 'src/test/**', 'src/admin/**', 'package*.json', '.github/workflows/catalog-quality.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -25,6 +25,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx tsc --noEmit
+      - name: Check actual admin TypeScript roots
+        run: node scripts/verify-admin-types.mjs
       - name: Lint changed files against baseline
         run: node scripts/lint-changed-files.mjs --base "${{ github.event.pull_request.base.sha || github.event.before || 'HEAD^' }}"
       - run: npm test

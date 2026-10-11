@@ -1,0 +1,26 @@
+{
+  "sql_sha256": "5e2d72adfba4cc059b075fe854c46f7bb5e3ced6bf5a1c15b03b4f182c35a720",
+  "checked_at": "2026-10-11T11:20:38.134Z",
+  "mysql_version": "9.7.2",
+  "up_twice_identical": true,
+  "down_restored_protected_data": true,
+  "reapplied": true,
+  "protected_counts": {
+    "users": 13,
+    "profiles": 13,
+    "subscriptions": 16,
+    "payment_requests": 3,
+    "saved_videos": 7,
+    "render_jobs": 72,
+    "system_settings": 14,
+    "user_roles": 13,
+    "notifications": 49
+  },
+  "catalog_counts": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433,
+    "timings": 422463
+  },
+  "production_writes": 0
+}

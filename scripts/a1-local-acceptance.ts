@@ -35,7 +35,7 @@ export async function createAdminAcceptanceFixtures(db:CatalogDatabase):Promise<
 /** Reusable real-HTTP checker; no production allow switch exists. */
 export async function runAdminLocalAcceptance(pool:Pool,redis:Redis,env:NodeJS.ProcessEnv):Promise<Result[]> {
  const [versionRows]=await pool.query('SELECT VERSION() version,DATABASE() db');const version=(versionRows as CatalogRow[])[0];
- assert.match(String(version.version),/^9\.7\.2/,'REAL_MYSQL_9_7_2_REQUIRED');assert.match(String(version.db),/^ayahx_.*(?:verified|rehearsal|local|test)/i,'DISPOSABLE_LOCAL_SCHEMA_REQUIRED');
+ assert.match(String(version.version),/^9\.7\.2/,'REAL_MYSQL_9_7_2_REQUIRED');assert.match(String(version.db),/^ayahx_.*(?:verified|rehearsal|local|test|migration_final)/i,'DISPOSABLE_LOCAL_SCHEMA_REQUIRED');
  assert.equal(await redis.ping(),'PONG','REAL_REDIS_REQUIRED');
  const db=catalogDatabaseFromPool(pool),fixtures=await createAdminAcceptanceFixtures(db),results:Result[]=[],allowedWrites=new Set<string>();
  const rate=new RedisAdminRateGate(env),app=express();app.set('trust proxy','loopback');app.use(express.json());const router=createAdminApplicationRouter({db,env,rate,origins:['http://localhost']});app.use('/api/admin',router);
@@ -75,10 +75,10 @@ export async function runAdminLocalAcceptance(pool:Pool,redis:Redis,env:NodeJS.P
   // artificial wait for the next TOTP tick while exercising one-use hashes.
   for(const fixture of fixtures){await login(fixture);const second=await login({...fixture});const oldSession=String(data(second).sessionId);
    const enrollment=await write('/security/totp/enroll','POST',{},fixture);const secret=String(data(enrollment).secret);assert(String(data(enrollment).otpauthUri).startsWith('otpauth://totp/'));
-   const confirmation=await write('/security/totp/confirm','POST',{code:totp(secret)},fixture);const codes=data(confirmation).recoveryCodes as string[];assert.equal(codes.length,10);
+   const usedEnrollmentCode=totp(secret),confirmation=await write('/security/totp/confirm','POST',{code:usedEnrollmentCode},fixture);const codes=data(confirmation).recoveryCodes as string[];assert.equal(codes.length,10);
    const[stored]=await db.read('SELECT two_factor_secret_encrypted,recovery_code_hashes FROM admin_user_extensions WHERE user_id=?',[fixture.id]);assert(!String(stored.two_factor_secret_encrypted).includes(secret));assert(!JSON.stringify(stored.recovery_code_hashes).includes(codes[0]));
    const[revoked]=await db.read('SELECT is_revoked FROM admin_sessions WHERE id=?',[oldSession]);assert.equal(Number(revoked.is_revoked),1);
-   response=await request('/security/totp/recovery','POST',{code:totp(secret)},fixture);assert.equal(response.status,422,'USED_TOTP_REJECTED');
+   response=await request('/security/totp/recovery','POST',{code:usedEnrollmentCode},fixture);assert.equal(response.status,422,'USED_TOTP_REJECTED');
    const regenerated=await write('/security/totp/recovery','POST',{code:codes[0]},fixture),newCodes=data(regenerated).recoveryCodes as string[];
    response=await request('/security/totp/disable','POST',{code:codes[0]},fixture);assert.equal(response.status,422,'OLD_RECOVERY_REJECTED');
    await write('/security/totp/disable','POST',{code:newCodes[0]},fixture);await clearLocalRate();response=await request('/security/sessions','GET',undefined,fixture);assert.equal(response.status,200);
@@ -87,15 +87,15 @@ export async function runAdminLocalAcceptance(pool:Pool,redis:Redis,env:NodeJS.P
   const expectedWrites=fixtures.flatMap(fixture=>endpoints.filter(endpoint=>endpoint.method!=='get'&&DEFAULT_ROLE_PERMISSIONS[fixture.role].includes(endpoint.permission)&&(!endpoint.superAdminOnly||fixture.role==='super_admin')).map(endpoint=>fixture.role+':'+endpoint.method+':'+endpoint.path));for(const key of expectedWrites)assert(allowedWrites.has(key),'ALLOWED_WRITE_RBAC_NOT_EXERCISED:'+key);check('all_allowed_role_write_endpoints_real_200_and_one_audit',{allowedWrites:allowedWrites.size});
   // A complete login cycle exercises actual persisted encryption/counters and
   // recovery hash consumption, rather than only owner-session setup actions.
-  await login(owner);const provision=await write('/security/totp/enroll','POST',{},owner),loginSecret=String(data(provision).secret);const confirmed=await write('/security/totp/confirm','POST',{code:totp(loginSecret)},owner),loginRecovery=data(confirmed).recoveryCodes as string[];await write('/auth/logout','POST',{},owner);await clearLocalRate();
+  await login(owner);const provision=await write('/security/totp/enroll','POST',{},owner),loginSecret=String(data(provision).secret),usedConfirmationCode=totp(loginSecret);const confirmed=await write('/security/totp/confirm','POST',{code:usedConfirmationCode},owner),loginRecovery=data(confirmed).recoveryCodes as string[];await write('/auth/logout','POST',{},owner);await clearLocalRate();
   response=await request('/auth/login','POST',{email:owner.email,password:owner.password},owner);assert.equal(response.status,401);assert.equal(response.body.code,'ADMIN_TOTP_REQUIRED');
-  response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:totp(loginSecret)},owner);assert.equal(response.status,401,'CONFIRMATION_TOTP_REPLAY_LOGIN_REJECTED');
+  response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:usedConfirmationCode},owner);assert.equal(response.status,401,'CONFIRMATION_TOTP_REPLAY_LOGIN_REJECTED');
   response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:loginRecovery[0]},owner);assert.equal(response.status,200);assert(response.cookie);owner.cookie=response.cookie;owner.sessionId=String(data(response).sessionId);await clearLocalRate();
   response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:loginRecovery[0]},owner);assert.equal(response.status,401,'CONSUMED_RECOVERY_LOGIN_REJECTED');
   // Wait for a real next TOTP window; never manufacture a reusable counter.
   const waitMs=30000-Date.now()%30000+50;await delay(waitMs);await clearLocalRate();
-  response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:totp(loginSecret)},owner);assert.equal(response.status,200);assert(response.cookie);owner.cookie=response.cookie;owner.sessionId=String(data(response).sessionId);
-  response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:totp(loginSecret)},owner);assert.equal(response.status,401,'LOGIN_TOTP_REPLAY_REJECTED');await write('/security/totp/disable','POST',{code:loginRecovery[1]},owner);check('real_totp_and_recovery_login_with_replay_rejection',{actualNextWindowWaitMs:waitMs});
+  const usedLoginCode=totp(loginSecret);response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:usedLoginCode},owner);assert.equal(response.status,200);assert(response.cookie);owner.cookie=response.cookie;owner.sessionId=String(data(response).sessionId);
+  response=await request('/auth/login','POST',{email:owner.email,password:owner.password,code:usedLoginCode},owner);assert.equal(response.status,401,'LOGIN_TOTP_REPLAY_REJECTED');await write('/security/totp/disable','POST',{code:loginRecovery[1]},owner);check('real_totp_and_recovery_login_with_replay_rejection',{actualNextWindowWaitMs:waitMs});
   await login(owner);await clearLocalRate();for(let i=0;i<60;i++){response=await request('/auth/me','GET',undefined,owner);assert.equal(response.status,200);}response=await request('/auth/me','GET',undefined,owner);assert.equal(response.status,429);assert.equal(response.body.code,'ADMIN_RATE_LIMITED');check('real_redis_read_rate_60_per_minute');
   await clearLocalRate();const locked=fixtures[3];for(let i=0;i<5;i++){response=await request('/auth/login','POST',{email:locked.email,password:'incorrect-password'},locked);assert.equal(response.status,401);}response=await request('/auth/login','POST',{email:locked.email,password:locked.password},locked);assert.equal(response.status,429);assert.equal(response.body.code,'ADMIN_LOGIN_LOCKED');check('five_failed_logins_lock_account');
   await login(owner);await write(`/security/sessions/${owner.sessionId}`,'DELETE',{},owner);response=await request('/auth/me','GET',undefined,owner);assert.equal(response.status,401);check('revoked_cookie_is_rejected');

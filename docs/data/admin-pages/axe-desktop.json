@@ -1,0 +1,145 @@
+{
+  "observed_at": "2026-10-11T11:51:01.138Z",
+  "evidence": [
+    {
+      "route": "/admin",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/roles",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/roles",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/users?q=a1-local.example.test",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/users?q=a1-local.example.test",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/audit",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/audit",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/settings",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/settings",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/security",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/security",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/_kit",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/_kit",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/reciters",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/reciters",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/reciters/ebddfc45-287f-0362-89c0-bc436992baaf",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/reciters/ebddfc45-287f-0362-89c0-bc436992baaf",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/recitations",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/recitations",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/availability?recitation_id=145f04af-ee8c-61d9-5570-d3375a6e59e3",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/availability?recitation_id=145f04af-ee8c-61d9-5570-d3375a6e59e3",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/providers",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/providers",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/quran",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/quran",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/admin/timings?recitation_id=145f04af-ee8c-61d9-5570-d3375a6e59e3",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/admin/timings?recitation_id=145f04af-ee8c-61d9-5570-d3375a6e59e3",
+      "theme": "dark",
+      "violations": []
+    }
+  ]
+}

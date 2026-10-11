@@ -1,0 +1,36 @@
+{
+  "observed_at": "2026-10-11T12:11:25.609Z",
+  "npm_test": {
+    "command": "npm test -- --maxWorkers=2",
+    "passed": 1009,
+    "skipped": 11,
+    "failed": 0,
+    "files_passed": 140,
+    "files_skipped": 5,
+    "duration_seconds": 133.15
+  },
+  "typechecks": {
+    "solution_no_emit": true,
+    "admin_roots": 52,
+    "admin_errors": 0,
+    "external_errors": 0,
+    "server_strict": true,
+    "server_existing_declaration": "server/types/ffprobe-static.d.ts"
+  },
+  "build": {
+    "frontend": true,
+    "server": true
+  },
+  "e2e": {
+    "functional_passed": 20,
+    "functional_failed": 0,
+    "run": "01a12adc-31ec-782f-bacd-674907de411e",
+    "pages_passed": 4,
+    "pages_run": "01a12acc-d26e-7183-a414-318fbd9cd5f5",
+    "role_navigation_passed": 2,
+    "role_navigation_run": "01a12aac-c64a-7162-8b56-725ee7604e75",
+    "model_calls": 0,
+    "network_mocks": 0,
+    "public_flag_enabled": "local_only"
+  }
+}

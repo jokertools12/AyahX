@@ -1,0 +1,212 @@
+{
+  "checked_at": "2026-10-11T12:11:39.719Z",
+  "base": "d1c0a1c7838b826a12969d7581171ae9701486d6",
+  "files": 138,
+  "new_messages": [],
+  "existing_messages": [
+    {
+      "file": "server/middleware/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 40,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 38,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 91,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 117,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 132,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 136,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 154,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 164,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 179,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 212,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 249,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 267,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 283,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/auth.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 304,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 155,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 161,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 266,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 270,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 304,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 333,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 341,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 348,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 394,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 475,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 500,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 514,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 532,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 558,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/routes/services.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 573,
+      "message": "Unexpected any. Specify a different type."
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,58 @@
+{
+  "observed_at": "2026-10-11T11:43:52.616Z",
+  "local_only": true,
+  "entrypoint": "server/index.ts",
+  "mysql": "9.7.2",
+  "redis": "real local isolated DB12",
+  "catalog_flag": "off",
+  "checks": [
+    {
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "path": "/api/health/ready",
+      "status": 200
+    },
+    {
+      "path": "/api/admin/auth/me",
+      "status": 401,
+      "code": "ADMIN_UNAUTHENTICATED"
+    },
+    {
+      "path": "/api/admin/catalog/reciters",
+      "status": 401,
+      "code": "ADMIN_UNAUTHENTICATED"
+    },
+    {
+      "path": "/api/admin/not-a-route",
+      "status": 401,
+      "code": "ADMIN_UNAUTHENTICATED"
+    },
+    {
+      "path": "/API/ADMIN/catalog/reciters",
+      "status": 401,
+      "code": "ADMIN_UNAUTHENTICATED"
+    },
+    {
+      "name": "authentication_before_malformed_json",
+      "status": 401
+    },
+    {
+      "name": "origin_before_login_parser",
+      "status": 403
+    },
+    {
+      "name": "sanitized_login_parse_failure",
+      "status": 422
+    },
+    {
+      "name": "actual_static_admin_spa",
+      "status": 200
+    }
+  ],
+  "graceful_exit": 0,
+  "shutdown_method": "actual SIGTERM handler dispatched over local IPC on Windows",
+  "raw_logs_private": true,
+  "passed": true
+}
