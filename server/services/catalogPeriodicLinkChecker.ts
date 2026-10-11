@@ -18,7 +18,7 @@ export interface PeriodicLinkLogger {
 export interface PeriodicLinkSummary {
   state: 'disabled' | 'idle' | 'checked' | 'overlap_skipped' | 'closed' | 'failed';
   checked: number; updated: number; unavailable: number; skipped: number; errorCode?: string;
-  conflicts?:number;conflictedRecitations?:number;
+  conflicts?:number;conflictedRecitations?:number; completed_keys?:string[];
 }
 interface SelectedLink { target: CatalogLinkTarget; oldStatus: string | null; oldCheckedAt: string | null }
 interface ResolvedObservation { targetKey: string; originalSha256: string; finalUrl: string; checkedAt: string }
@@ -77,20 +77,24 @@ export class CatalogPeriodicLinkChecker {
     this.inFlight = task;
     return task;
   }
-  private async performRun(): Promise<PeriodicLinkSummary> {
-    if (!(await readCatalogSettings(this.db)).enabled) return this.lastSummary = empty('disabled');
+  async checkRecitation(recitationId:string,actor:CatalogActor,completedKeys:string[],authorize:()=>Promise<CatalogActor>):Promise<PeriodicLinkSummary>{
+    requireCatalogPermission(actor,'recitations.sources.manage',true);
+    return this.performRun({recitationId,actor,completedKeys,authorize});
+  }
+  private async performRun(explicit?:{recitationId:string;actor:CatalogActor;completedKeys:string[];authorize:()=>Promise<CatalogActor>}): Promise<PeriodicLinkSummary> {
+    if (!explicit && !(await readCatalogSettings(this.db)).enabled) return this.lastSummary = empty('disabled');
     if (this.closed) return this.lastSummary = empty('closed');
     const rows = await this.db.read(`SELECT * FROM (
       SELECT 'chapter' kind,c.id,c.recitation_id,r.reciter_id,r.slug,c.surah,c.audio_url url,p.host_allowlist,
         c.audio_status previous_status,c.last_verified_at previous_checked_at,NULL source_kind
       FROM recitation_chapters c JOIN recitations r ON r.id=c.recitation_id JOIN audio_providers p ON p.id=r.provider_id
-      WHERE r.status='published' AND (c.last_verified_at IS NULL OR c.last_verified_at<UTC_TIMESTAMP()-INTERVAL 24 HOUR)
+      WHERE ${explicit?'r.id=? AND COALESCE(c.is_enabled,1)=1':"r.status='published' AND COALESCE(c.is_enabled,1)=1 AND (c.last_verified_at IS NULL OR c.last_verified_at<UTC_TIMESTAMP()-INTERVAL 24 HOUR)"}
       UNION ALL
       SELECT 'alternate' kind,a.id,a.recitation_id,r.reciter_id,r.slug,a.surah,a.url,p.host_allowlist,
         a.last_status previous_status,a.last_checked_at previous_checked_at,a.kind source_kind
       FROM recitation_source_urls a JOIN recitations r ON r.id=a.recitation_id JOIN audio_providers p ON p.id=r.provider_id
-      WHERE r.status='published' AND a.is_active=TRUE AND a.kind='alternate_same_recording' AND (a.last_checked_at IS NULL OR a.last_checked_at<UTC_TIMESTAMP()-INTERVAL 24 HOUR)
-    ) links ORDER BY previous_checked_at,kind,id LIMIT 20`);
+      WHERE ${explicit?'r.id=?':"r.status='published'"} AND a.is_active=TRUE AND a.kind='alternate_same_recording' ${explicit?'':"AND (a.last_checked_at IS NULL OR a.last_checked_at<UTC_TIMESTAMP()-INTERVAL 24 HOUR)"}
+    ) links ${explicit&&explicit.completedKeys.length?"WHERE CONCAT(kind,':',id) NOT IN ("+explicit.completedKeys.map(()=>'?').join(',')+')':''} ORDER BY previous_checked_at,kind,id LIMIT 20`,explicit?[explicit.recitationId,explicit.recitationId,...explicit.completedKeys]:[]);
     if (rows.length > BATCH_LIMIT) throw new Error('CATALOG_PERIODIC_BATCH_LIMIT_EXCEEDED');
     const selected = rows.filter(r=>r.kind==='chapter'||r.source_kind==='alternate_same_recording').map(selectedLink);
     if (!selected.length) return this.lastSummary = empty('idle');
@@ -129,6 +133,7 @@ export class CatalogPeriodicLinkChecker {
     }
     const results: Array<{ link: SelectedLink; check: AudioLinkCheck;observation?:AudioLinkCheck }> = [];
     for (const link of selected) {
+      if(explicit)await explicit.authorize();
       if (this.closed) return this.lastSummary = empty('closed');
       let check: AudioLinkCheck;
       if(conflicted().has(link.target.key))check={status:'SAME_AUDIO_CONFLICT',httpStatus:null,checkedAt:new Date().toISOString()};
@@ -147,14 +152,16 @@ export class CatalogPeriodicLinkChecker {
     for(const key of conflictKeys)if(!results.some(r=>r.link.target.key===key)){
       const original=currentByKey.get(key)!;const saved=savedObservations.get(key);results.push({link:{target:{kind:String(original.kind) as CatalogLinkTarget['kind'],key,id:String(original.id),recitationId:String(original.recitation_id),reciterId:String(original.reciter_id),recitationSlug:String(original.slug),surah:original.surah===null?null:Number(original.surah),url:String(original.url),allowedHosts:[]},oldStatus:null,oldCheckedAt:null},check:{status:'SAME_AUDIO_CONFLICT',httpStatus:null,checkedAt:new Date().toISOString()},observation:saved?{status:'available',httpStatus:null,checkedAt:saved.checkedAt,finalUrl:saved.finalUrl}:undefined});
     }
-    if(!(await readCatalogSettings(this.db)).enabled)return this.lastSummary={state:'disabled',checked:selected.length,updated:0,unavailable:0,skipped:results.length};
+    if(!explicit&&!(await readCatalogSettings(this.db)).enabled)return this.lastSummary={state:'disabled',checked:selected.length,updated:0,unavailable:0,skipped:results.length};
+    let writeActor=explicit?await explicit.authorize():SYSTEM_ACTOR;if(explicit)requireCatalogPermission(writeActor,'recitations.sources.manage',true);
     const reviewIds:string[]=[];
     for(const [identity,items]of groups){const rows=[...items.values()].map(r=>r.row),keys=[...items.keys()].sort();const result=await this.reviews.enqueue(SYSTEM_ACTOR,{type:'same_audio_conflict',subject_type:'audio_conflict',subject_id:sha(identity),priority:1000,evidence:{identity_sha256:sha(identity),recitations:[...new Set(rows.map(r=>String(r.slug)))].sort(),recitation_ids:[...new Set(rows.map(r=>String(r.recitation_id)))].sort(),reciter_ids:[...new Set(rows.map(r=>String(r.reciter_id)))].sort(),target_count:keys.length,target_keys_sha256:sha(JSON.stringify(keys)),target_keys_sample:keys.slice(0,20),evidence:[...items.values()].some(r=>r.resolved)?'resolved_url_file_identity':'original_url_file_identity',evidence_scope:'same_resource_file_identity_not_decoded_audio_hash',exclude_from_rule_v1:true,required_action:'Human review actual source ownership; no automated identity confirmation.'}});reviewIds.push(result.id);}
     requireCatalogPermission(SYSTEM_ACTOR, 'catalog.links.check');
-    const summary: PeriodicLinkSummary = { state: 'checked', checked: selected.length, updated: 0,
+    const summary: PeriodicLinkSummary = { state: 'checked', checked: selected.length, completed_keys:selected.map(s=>s.target.key), updated: 0,
       unavailable: results.filter(r => r.check.status !== 'available').length, skipped: 0,conflicts:groups.length,conflictedRecitations:new Set(groups.flatMap(([,items])=>[...items.values()].map(r=>r.row.recitation_id))).size };
     await this.db.transaction(async tx => {
-      if (this.closed || !(await readCatalogSettings(tx)).enabled) { summary.state = this.closed ? 'closed' : 'disabled'; summary.skipped = results.length; return; }
+      if(explicit){writeActor=await explicit.authorize();requireCatalogPermission(writeActor,'recitations.sources.manage',true);}
+      if (this.closed || (!explicit&&!(await readCatalogSettings(tx)).enabled)) { summary.state = this.closed ? 'closed' : 'disabled'; summary.skipped = results.length; return; }
       const mutations: CatalogRow[] = [];
       const resolvedObservations: ResolvedObservation[] = [];
       for (const { link, check,observation } of results) {
@@ -162,7 +169,7 @@ export class CatalogPeriodicLinkChecker {
         const urlColumn = chapter ? 'audio_url' : 'url'; const statusColumn = chapter ? 'audio_status' : 'last_status';
         const timeColumn = chapter ? 'last_verified_at' : 'last_checked_at';
         const fresh = await tx.read(`SELECT x.${urlColumn} url,x.${statusColumn} previous_status,x.${timeColumn} previous_checked_at,r.reciter_id,r.status${chapter ? '' : ',x.is_active,x.kind source_kind'} FROM ${table} x JOIN recitations r ON r.id=x.recitation_id WHERE x.id=? COLLATE utf8mb4_unicode_ci AND x.recitation_id=? COLLATE utf8mb4_unicode_ci FOR UPDATE`, [link.target.id, link.target.recitationId]);
-        if (fresh.length !== 1 || fresh[0].url !== link.target.url || fresh[0].reciter_id !== link.target.reciterId || fresh[0].status !== 'published' || (!chapter && (!fresh[0].is_active||fresh[0].source_kind!=='alternate_same_recording'))) { summary.skipped++; continue; }
+        if (fresh.length !== 1 || fresh[0].url !== link.target.url || fresh[0].reciter_id !== link.target.reciterId || (!explicit&&fresh[0].status !== 'published') || (!chapter && (!fresh[0].is_active||fresh[0].source_kind!=='alternate_same_recording'))) { summary.skipped++; continue; }
         const status = chapter ? check.status === 'available' ? 'available' : 'source_unavailable' : check.status;
         // FROM_UNIXTIME renders this UTC instant in MySQL's session zone; TIMESTAMP stores the same instant.
         await tx.execute(`UPDATE ${table} SET ${statusColumn}=?,${timeColumn}=FROM_UNIXTIME(?) WHERE id=? COLLATE utf8mb4_unicode_ci AND recitation_id=? COLLATE utf8mb4_unicode_ci`, [status, Date.parse(check.checkedAt) / 1000, link.target.id, link.target.recitationId]);
@@ -172,7 +179,7 @@ export class CatalogPeriodicLinkChecker {
           link_check_status: check.status, http_status: check.httpStatus, ...(check.retryAt ? { retry_at: check.retryAt,retry_host:check.retryHost??new URL(link.target.url).hostname } : {}) });
         if (observation?.finalUrl&&reportableAudioUrl(observation.finalUrl)) resolvedObservations.push({ targetKey:link.target.key,originalSha256:sha(link.target.url),finalUrl:reportableAudioUrl(observation.finalUrl)!,checkedAt:observation.checkedAt });
       }
-      await appendCatalogAudit(tx, SYSTEM_ACTOR, 'catalog.links.checked', 'catalog_link_batch', randomUUID(), null,
+      await appendCatalogAudit(tx, writeActor, 'catalog.links.checked', 'catalog_link_batch', randomUUID(), null,
         { ...summary, mutations, resolved_observations: resolvedObservations,critical_review_ids:reviewIds,evidence_scope: 'link_only_not_voice_identity' });
     });
     const context = { ...summary, evidence_scope: 'link_only_not_voice_identity' };

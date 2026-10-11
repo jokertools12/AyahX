@@ -32,12 +32,17 @@ export class RecitationAdminService {
     requireCatalogPermission(actor,'recitations.voice.review',true);if(!['unverified','confirmed','mismatch'].includes(status)||!notes?.trim()||notes.length>10000)throw new CatalogError('CATALOG_INPUT_INVALID',422);
     await this.db.transaction(async tx=>{const row=await this.recitation(tx,id);await tx.execute('INSERT INTO recitation_voice_reviews(id,recitation_id,status,reviewer_id,notes) VALUES(?,?,?,?,?)',[randomUUID(),id,status,actor.id,notes]);await tx.execute("UPDATE recitations SET voice_identity_status=?,voice_confirmed_by=?,voice_confirmed_at=CASE WHEN ?='confirmed' THEN CURRENT_TIMESTAMP ELSE NULL END,voice_notes=?,is_public=CASE WHEN ?='confirmed' THEN is_public ELSE 0 END WHERE id=?",[status,status==='confirmed'?actor.id:null,status,notes,status,id]);await appendCatalogAudit(tx,actor,'recitation.voice_review','recitation',id,{status:row.voice_identity_status},{status,notes});});
   }
-  async moveRecitation(actor:CatalogActor,id:string,reciterId:string,reason:string):Promise<void>{
-    requireCatalogPermission(actor,'recitations.move',true);if(!reason?.trim())throw new CatalogError('CATALOG_INPUT_INVALID',422);
-    await this.db.transaction(async tx=>{const row=await this.recitation(tx,id);const [target]=await tx.read('SELECT id FROM reciters WHERE id=? FOR UPDATE',[reciterId]);if(!target)throw new CatalogError('RECITER_NOT_FOUND',404);
-      await tx.execute("UPDATE recitations SET reciter_id=?,is_default_for_reciter=0,is_public=0,voice_identity_status='unverified',voice_confirmed_by=NULL,voice_confirmed_at=NULL WHERE id=?",[reciterId,id]);
-      await tx.execute('INSERT INTO recitation_voice_reviews(id,recitation_id,status,reviewer_id,notes) VALUES(?,?,\'unverified\',?,?)',[randomUUID(),id,actor.id,'RECITER_CHANGED: '+reason]);
-      await appendCatalogAudit(tx,actor,'recitation.move','recitation',id,{reciter_id:row.reciter_id,voice_identity_status:row.voice_identity_status},{reciter_id:reciterId,voice_identity_status:'unverified',is_public:false,reason});});
+  async moveRecitationInTransaction(tx:CatalogTx,actor:CatalogActor,id:string,reciterId:string,reason:string,confirmation?:string):Promise<void>{
+    requireCatalogPermission(actor,'recitations.move',true);if(!reason?.trim()||reason.length>10000)throw new CatalogError('CATALOG_INPUT_INVALID',422);
+    const row=await this.recitation(tx,id);if(confirmation!==undefined&&confirmation!==row.slug)throw new CatalogError('CONFIRMATION_MISMATCH',422);
+    const [target]=await tx.read('SELECT id FROM reciters WHERE id=? FOR UPDATE',[reciterId]);if(!target)throw new CatalogError('RECITER_NOT_FOUND',404);
+    if(row.reciter_id===reciterId)throw new CatalogError('RECITER_UNCHANGED',409);
+    await tx.execute("UPDATE recitations SET reciter_id=?,is_default_for_reciter=0,is_public=0,voice_identity_status='unverified',voice_confirmed_by=NULL,voice_confirmed_at=NULL WHERE id=?",[reciterId,id]);
+    await tx.execute("INSERT INTO recitation_voice_reviews(id,recitation_id,status,reviewer_id,notes) VALUES(?,?, 'unverified',?,?)",[randomUUID(),id,actor.id,'RECITER_CHANGED: '+reason]);
+    await appendCatalogAudit(tx,actor,'recitation.move','recitation',id,{reciter_id:row.reciter_id,voice_identity_status:row.voice_identity_status,is_public:row.is_public,is_default_for_reciter:row.is_default_for_reciter},{reciter_id:reciterId,voice_identity_status:'unverified',is_public:false,is_default_for_reciter:false,reason});
+  }
+  async moveRecitation(actor:CatalogActor,id:string,reciterId:string,reason:string,confirmation?:string):Promise<void>{
+    requireCatalogPermission(actor,'recitations.move',true);await this.db.transaction(tx=>this.moveRecitationInTransaction(tx,actor,id,reciterId,reason,confirmation));
   }
   async addAlternate(actor:CatalogActor,input:{recitationId:string;surah:number;url:string;priority:number}):Promise<string>{
     requireCatalogPermission(actor,'recitations.sources.manage',true);

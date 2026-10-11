@@ -27,6 +27,21 @@ export function validateReviewInput(input:ReviewInput):void{
 /** No routes. The A2 RBAC adapter must supply a real authenticated actor. */
 export class HumanReviewService {
   constructor(private readonly db:CatalogDatabase){}
+  /** A2a explicit human license revision. Historical decisions remain immutable. */
+  async reviseProviderLicense(actor:CatalogActor,id:string,input:{license_status:'unreviewed'|'permitted'|'restricted';notes:string;rights_evidence_ref?:string;confirmation:string}):Promise<void>{
+    requireCatalogPermission(actor,'providers.license.review',true);
+    if(actor.roleSlug!=='super_admin')throw new CatalogError('CATALOG_PERMISSION_DENIED',403);
+    if(!['unreviewed','permitted','restricted'].includes(input.license_status)||!input.notes.trim()||input.notes.length>10000)throw new CatalogError('REVIEW_DECISION_INVALID',422);
+    const decision={license_status:input.license_status,...(input.rights_evidence_ref?{rights_evidence_ref:input.rights_evidence_ref}:{})};validateReviewEvidence(decision);
+    await this.db.transaction(async tx=>{
+      const [provider]=await tx.read('SELECT id,code,license_status FROM audio_providers WHERE id=? FOR UPDATE',[id]);if(!provider)throw new CatalogError('PROVIDER_NOT_FOUND',404);if(provider.code!==input.confirmation)throw new CatalogError('CONFIRMATION_MISMATCH',422);
+      const [review]=await tx.read("SELECT * FROM human_review_items WHERE type='provider_license' AND subject_type='audio_provider' AND subject_id=? FOR UPDATE",[id]);
+      if(input.license_status==='unreviewed'){await tx.execute("UPDATE audio_providers SET license_status='unreviewed' WHERE id=?",[id]);await appendCatalogAudit(tx,actor,'provider.license_review','audio_provider',id,{license_status:provider.license_status},{license_status:'unreviewed',notes:input.notes});}
+      else await this.applyDecision(tx,actor,{type:'provider_license',subject_type:'audio_provider',subject_id:id,id:review?.id??null},{status:input.license_status==='permitted'?'approved':'rejected',notes:input.notes,decision});
+      if(review&&(review.status==='pending'||review.status==='deferred')&&input.license_status!=='unreviewed'){const status=input.license_status==='permitted'?'approved':'rejected';await tx.execute('UPDATE human_review_items SET status=?,decided_by=?,decided_at=CURRENT_TIMESTAMP(3),notes=?,decision=? WHERE id=?',[status,actor.id,input.notes,JSON.stringify(decision),review.id]);await appendCatalogAudit(tx,actor,'review.decide','human_review_item',String(review.id),{status:review.status},{status,notes:input.notes,decision,decided_by:actor.id});}
+      await appendCatalogAudit(tx,actor,'provider.license_revision','audio_provider',id,{license_status:provider.license_status},{...decision,notes:input.notes,confirmation:input.confirmation});
+    });
+  }
   async list(actor:CatalogActor,filter:{status?:'pending'|'approved'|'rejected'|'deferred';type?:HumanReviewType;limit?:number;offset?:number}={}):Promise<CatalogRow[]>{
     requireCatalogPermission(actor,'reviews.read');const limit=filter.limit??100,offset=filter.offset??0;
     if((filter.status&&!['pending','approved','rejected','deferred'].includes(filter.status))||(filter.type&&!reviewTypes.includes(filter.type))||!Number.isSafeInteger(limit)||limit<1||limit>1000||!Number.isSafeInteger(offset)||offset<0)throw new CatalogError('REVIEW_INPUT_INVALID',422);
