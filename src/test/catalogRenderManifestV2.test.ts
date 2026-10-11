@@ -55,6 +55,19 @@ describe('D7 server-authoritative v2 manifest units', () => {
     const f = fixture(); f.timings[1].words = [[1, 0, 2000, 2500]];
     await expect(f.service.build(request)).rejects.toMatchObject({ code: 'RANGE_NOT_AVAILABLE', details: { available_runs: [[1, 1]] } }); expect(f.checkLink).not.toHaveBeenCalled();
   });
+  it.each([
+    { words: [[1, 0, 1000, 1100], [2, 0, 1150, 1500]] },
+    { words: [[1, 0, 1000, 1200], [2, 1, 1190, 1500]] },
+    { words: [[1, 0, 1000.5, 1200], [2, 1, 1250, 1500]] },
+    { coordinate: 'clip_ms', source_offset_ms: null }, { canonical_checksum: 'd'.repeat(64) },
+    { source: 'aligner', review_status: 'ready' }, { expected_words: 3 }, { missing_words: [[1, 'MISSING']] },
+  ])('rejects stored corruption/unapproved timing without fetch %j', async change => {
+    const f = fixture(); Object.assign(f.timings[0], change); await expect(f.service.build(request)).rejects.toMatchObject({ code: 'RANGE_NOT_AVAILABLE', details: { available_runs: [[2, 2]] } }); expect(f.checkLink).not.toHaveBeenCalled();
+  });
+  it('refuses a range over 90 seconds with a stable error before source access', async () => {
+    const f = fixture(); f.timings[1].words = [[1, 0, 100000, 100200], [2, 1, 100250, 100500]];
+    await expect(f.service.build(request)).rejects.toMatchObject({ code: 'MAX_RENDER_DURATION_EXCEEDED', status: 422 }); expect(f.checkLink).not.toHaveBeenCalled();
+  });
   it('allows fully covered review or estimated rows only as ayah highlight', async () => {
     const f = fixture(); f.timings[0].review_status = 'needs_review'; f.timings[0].review_reasons = ['REVIEW']; f.timings[0].word_highlight_enabled = 0; f.timings[1].quality = 'estimated';
     const manifest = await f.service.build(request); expect(manifest.timeline.ayahs.every(a => a.highlightMode === 'ayah' && a.words.length === 0)).toBe(true);
