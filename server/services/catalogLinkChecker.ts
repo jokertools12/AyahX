@@ -82,7 +82,7 @@ export function createLinkCheckpoint(targets: readonly CatalogLinkTarget[], prev
         typeof result.check.status !== 'string' || (result.check.retryAt && !Number.isFinite(Date.parse(result.check.retryAt)))) throw new Error('CATALOG_LINK_CHECKPOINT_CORRUPT');
       for(const observation of [result.check,result.conflictObservation].filter((v):v is AudioLinkCheck=>!!v)){
         if((observation.finalUrl&&!reportableAudioUrl(observation.finalUrl))||(observation.status==='available'&&!observation.finalUrl)||
-          observation.redirectChain?.some(url=>!reportableAudioUrl(url)))throw new Error('CATALOG_LINK_CHECKPOINT_PRIVATE_URL');
+          observation.redirects?.some(url=>!reportableAudioUrl(url)))throw new Error('CATALOG_LINK_CHECKPOINT_PRIVATE_URL');
       }
     }
     for (const collision of previous.conflicts ?? []) {

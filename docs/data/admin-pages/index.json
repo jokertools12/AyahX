@@ -1,0 +1,678 @@
+{
+  "observed_at": "2026-10-11T12:03:00.023Z",
+  "pages_run": "01a12acc-d26e-7183-a414-318fbd9cd5f5",
+  "functional_run": "01a12ad0-24bd-7e4c-9686-294a62443786",
+  "page_images": 56,
+  "blank_login_images": 4,
+  "images": [
+    {
+      "file": "docs/data/admin-pages/desktop-admin-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/001-admin-light.png",
+      "source_sha256": "142193a9b9ae647d9492d057997823a2d86582ec8da21c81dc02d3703c364ada",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/002-admin-dark.png",
+      "source_sha256": "3091d201e2c79818ca582d3dac60ace024c6dc71cdfe5877066c1c6581d76214",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-roles-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/003-admin-roles-light.png",
+      "source_sha256": "4702598855c58b14757502be92083558269aba525beeac562b13faa40e34d42d",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-roles-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/004-admin-roles-dark.png",
+      "source_sha256": "b55de8aefc9b72235fbf304b307143e17b25e51c00559a973890ccc8a6d0ce74",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-users-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/005-admin-users-light.png",
+      "source_sha256": "95b4b14db6e865f4e67f70d828cef5a00a7a999d1e32710d5626428e73529f8e",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-users-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/006-admin-users-dark.png",
+      "source_sha256": "46f58e5f17f5c6ae3c796accb64fd0d4616adae69128c533c092bdc00c68cfd2",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-audit-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/007-admin-audit-light.png",
+      "source_sha256": "76ae1c81bda155d9e0231ed80e97d48d05a68a3647cd4a52f66f5d88a9b0f929",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-audit-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/008-admin-audit-dark.png",
+      "source_sha256": "061c9b80478a3f34b6b5fcbe1d04bf82ac7f6d116b61af4e9446084831b21363",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-settings-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/009-admin-settings-light.png",
+      "source_sha256": "a157aeb7d35f130f992a43c4274d68c5488f0fb858ef63765b216227b97cf4f4",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-settings-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/010-admin-settings-dark.png",
+      "source_sha256": "6ad4d19b66fee710ded35bf520cb4f7dca8154972de83cd42fdfde16d3d1e556",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-security-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/011-admin-security-light.png",
+      "source_sha256": "1e818b95bfa18aeb6cec0fe5e7338d3c8a10402d0ca45b9c8705d0648da05211",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-security-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/012-admin-security-dark.png",
+      "source_sha256": "afe30251185ea4ae0d02cd97c7455368192268e0cd0399c563edcf4a19f4f27d",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-_kit-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/013-admin-_kit-light.png",
+      "source_sha256": "187025328147daaba3c2552cec1028b4b054d9e91eac327bd6e7de23697e0b97",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-ui-kit/desktop-admin-_kit-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/013-admin-_kit-light.png",
+      "source_sha256": "187025328147daaba3c2552cec1028b4b054d9e91eac327bd6e7de23697e0b97",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-_kit-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/014-admin-_kit-dark.png",
+      "source_sha256": "dd440f7491fcf6c4a1049fefd359c55b8e2b9770cb5ebf4cc45ded066d1baf0e",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-ui-kit/desktop-admin-_kit-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/014-admin-_kit-dark.png",
+      "source_sha256": "dd440f7491fcf6c4a1049fefd359c55b8e2b9770cb5ebf4cc45ded066d1baf0e",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-reciters-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/015-admin-reciters-light.png",
+      "source_sha256": "382095cc254ae13f507be7ae3d01c2fa631085a4073b0f7f5038ab4d3ead1909",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-reciters-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/016-admin-reciters-dark.png",
+      "source_sha256": "23781dc7d6033dbc9c3d36f9cde11eecd5665e319836e0b08c0dce2c47e71be9",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-reciters-detail-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/017-admin-reciters-ebddfc45-287f-0362-89c0-bc436992baaf-light.png",
+      "source_sha256": "40e7aa3c3b47951b8173ba03aad91b976cc6671b617a9098d736b4f68e86ac94",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-reciters-detail-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/018-admin-reciters-ebddfc45-287f-0362-89c0-bc436992baaf-dark.png",
+      "source_sha256": "a68ca6e78301925c1efb0a8c0fb50260f25310a6748aa8caf2297f325d12f250",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-recitations-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/019-admin-recitations-light.png",
+      "source_sha256": "34d36b652894d2eb425445cec58dc6d5c85051de74acea3a750850660f4b92ec",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-recitations-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/020-admin-recitations-dark.png",
+      "source_sha256": "e31d16df85828bbdcf9acebb6ddf6cc833160f46824fbecb3cd8f76f146615ef",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-availability-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/021-admin-availability-light.png",
+      "source_sha256": "b9fb4d6e449df6a2382af12f4a7a92973f706d9652814e46cd38cf5fe6b74967",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-availability-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/022-admin-availability-dark.png",
+      "source_sha256": "17dc7c9d530a0143b84eb7a565741d1b3c1f17f27d708b8105d783b574fc94b5",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-providers-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/023-admin-providers-light.png",
+      "source_sha256": "17fbd08a85edf75c562bb54fd84df9d87524b58490be50d96a86305cf936b892",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-providers-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/024-admin-providers-dark.png",
+      "source_sha256": "c186ef2697532fb30fe666a8cd31b762cd8dfb45c42e39ebbb58cbcbcf74c5d7",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-quran-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/025-admin-quran-light.png",
+      "source_sha256": "0c76956b43001c2d7d45f708a791a6d4ffc386b6a59765cdc3f4718043c92ea0",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-quran-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/026-admin-quran-dark.png",
+      "source_sha256": "e1fc954f5fd5217dc41a7b30bb2229962c884204d9af2a7f7fe9d98225bbbb12",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-timings-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/027-admin-timings-light.png",
+      "source_sha256": "c749e9339e5d1825cb285945ee0b6a88b42e55d86a9b42851499a02aa35e8584",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-timings-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/028-admin-timings-dark.png",
+      "source_sha256": "f2dd7bdb2bf9c59e50cda942f3c596bc0c9def8e895e4894ecdd9728af8e0f9b",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/001-admin-light.png",
+      "source_sha256": "9d26012962e8d21ceb9c96cd1054d8a985dbee7793410c0d9c780e536469c954",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/002-admin-dark.png",
+      "source_sha256": "dafb5b793edca3578d62834c4c1a3bc4f7e8d03cc9bb06f0bd33b71b26ce94dc",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-roles-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/003-admin-roles-light.png",
+      "source_sha256": "b925d5cf99c1732bbc0fae571ef8ba9163b77028312d39d48a4495680c474fcf",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-roles-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/004-admin-roles-dark.png",
+      "source_sha256": "e9c0f28e24d0536e5b283731effb0b70a047790e69554eddcc02fa78d361c031",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-users-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/005-admin-users-light.png",
+      "source_sha256": "c7d815e643b8d7df1a6d66ed51ddca796a98301da67f2f7fd21833e71c4b6f1a",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-users-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/006-admin-users-dark.png",
+      "source_sha256": "8837ac113b23e800d896d382aaa031f906581e76b941a490d8973850ed6d4d31",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-audit-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/007-admin-audit-light.png",
+      "source_sha256": "ad6cc4c27ba1ca69d336d47cceac225bb93fd5bc7dbbceb26d4730327a177502",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-audit-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/008-admin-audit-dark.png",
+      "source_sha256": "a14cc7a1d0934061f8baf61ddbb1c31d9d4aa72368e363862bbfb6887e29f440",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-settings-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/009-admin-settings-light.png",
+      "source_sha256": "6dae15d7bf3855bc46563e82803aedaa5fce1f20a8e6630b033b11c255c2689f",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-settings-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/010-admin-settings-dark.png",
+      "source_sha256": "6f020aba352e6cd1a57e8fb4c41aa79469e21566fc482947eb03f20ea2517dac",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-security-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/011-admin-security-light.png",
+      "source_sha256": "a07bd1d07e271e84f0a8307eac8783c002210e00345690d8a23a05fc95341764",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-security-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/012-admin-security-dark.png",
+      "source_sha256": "b4230a3eb659202c14de2abaf0b136c0985d4df4172c343757576462de26702a",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-_kit-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/013-admin-_kit-light.png",
+      "source_sha256": "8ea00d9833474b894640816523cd8e2b068cb61ddd84800bf25393e0d6b4d8ba",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-ui-kit/mobile-admin-_kit-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/013-admin-_kit-light.png",
+      "source_sha256": "8ea00d9833474b894640816523cd8e2b068cb61ddd84800bf25393e0d6b4d8ba",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-_kit-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/014-admin-_kit-dark.png",
+      "source_sha256": "7542ab0e0bb2e9590b82cd09fda0d8059ee6ba4790a6edb53a8fc8aeaff7c345",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-ui-kit/mobile-admin-_kit-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/014-admin-_kit-dark.png",
+      "source_sha256": "7542ab0e0bb2e9590b82cd09fda0d8059ee6ba4790a6edb53a8fc8aeaff7c345",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-reciters-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/015-admin-reciters-light.png",
+      "source_sha256": "6ef8a7884360dc3600da2095dd2618e74c4f30244ff3f72e9c4ddf29d651ab1a",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-reciters-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/016-admin-reciters-dark.png",
+      "source_sha256": "ee76582f74a8f7c01b7d94c6ebea360e121b83b237f6700c49467b77bf636c65",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-reciters-detail-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/017-admin-reciters-ebddfc45-287f-0362-89c0-bc436992baaf-light.png",
+      "source_sha256": "21b23bf7cfc733264ec42fe2e2590d8aee4628b6ee85835ef937fe1cb53e295e",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-reciters-detail-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/018-admin-reciters-ebddfc45-287f-0362-89c0-bc436992baaf-dark.png",
+      "source_sha256": "e3b3c6cadfadb3117da05260c9180ed548ace2ecd709789c2f3253fa1a3c4516",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-recitations-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/019-admin-recitations-light.png",
+      "source_sha256": "a84ffcecf152b2e97abdea3f87ad5004fac67e6d5be9b1ee760e2ecc7128b3ae",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-recitations-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/020-admin-recitations-dark.png",
+      "source_sha256": "9b797e1c0738af4e59b867f1330dc8381f4b3d0a454227fa2d442ad6d96c6f20",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-availability-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/021-admin-availability-light.png",
+      "source_sha256": "c2cd799b7b13911acc96135b098eec42ea384da72aa223bc061dd530acd5950b",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-availability-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/022-admin-availability-dark.png",
+      "source_sha256": "5f6e069b1b19f6376c56752ebf82e73470a36ff613c7c9b7879d3b55a33a50c3",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-providers-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/023-admin-providers-light.png",
+      "source_sha256": "8e06e533e6bf7c4a7bc1457a5f025c3765d26a16d2c16f47ff77b86ec052aa95",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-providers-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/024-admin-providers-dark.png",
+      "source_sha256": "3a2157c2cd9e7ba5804846546094e4dd7acf7638c94496e490c93547f2519f6a",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-quran-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/025-admin-quran-light.png",
+      "source_sha256": "8dceb02530646764f0433d5add7ae3bc80c1ab3e183f253487c2a585a7ce8886",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-quran-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/026-admin-quran-dark.png",
+      "source_sha256": "b499bf9fcb64bade35cd9bd887503d3ecf0c9eae4dd8a4358938694d44682f95",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-timings-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/027-admin-timings-light.png",
+      "source_sha256": "83d8db634cc3e0d43875e88ba6f103e7c2f2ecb5bdeb402d7dc882b8eb3a93b3",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-timings-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/mobile/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/028-admin-timings-dark.png",
+      "source_sha256": "093e6672eaf31b72fe769c797a022c0b19dca535f5e554957f87d0730a43471a",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-login-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-functional-final/artifacts/desktop/tests_admin-auth.e2e.ts__blank_20admin_20login_20has_20RTL_20accessibility_20and_20both_20theme_20screenshots-1bb663e2/default/attempt-0/screenshots/001-admin-login-light.png",
+      "source_sha256": "eeb3da1c746957978a7af4f51b3da1aed4bf0f900f54a59887fbc220d85a62c8",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/desktop-admin-login-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-functional-final/artifacts/desktop/tests_admin-auth.e2e.ts__blank_20admin_20login_20has_20RTL_20accessibility_20and_20both_20theme_20screenshots-1bb663e2/default/attempt-0/screenshots/002-admin-login-dark.png",
+      "source_sha256": "690fa4d8706b8abf2e95acb90547dc01cd04092fa2b5e988eadaa8966f2e20b3",
+      "width": 720,
+      "height": 500,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-login-light.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-functional-final/artifacts/mobile/tests_admin-auth.e2e.ts__blank_20admin_20login_20has_20RTL_20accessibility_20and_20both_20theme_20screenshots-1bb663e2/default/attempt-0/screenshots/001-admin-login-light.png",
+      "source_sha256": "685240b6d8665312f5da787719bd45acb53b27a9836cb606d82b6ea77f61db32",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-pages/mobile-admin-login-dark.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-functional-final/artifacts/mobile/tests_admin-auth.e2e.ts__blank_20admin_20login_20has_20RTL_20accessibility_20and_20both_20theme_20screenshots-1bb663e2/default/attempt-0/screenshots/002-admin-login-dark.png",
+      "source_sha256": "4c6197c29b7795bbed7ee76bab39736b277b96283650c289295474ca4971131c",
+      "width": 390,
+      "height": 900,
+      "crop": null
+    },
+    {
+      "file": "docs/data/admin-design-parity/button-public.png",
+      "source": "tooling/e2e/.e2e/artifacts/desktop/tests_admin-design.e2e.ts__capture_20existing_20AyahX_20design_20before_20admin_20changes-a580568a/default/attempt-0/screenshots/001-public-home-light.png",
+      "source_sha256": "a670f0204999f65a4b476feb826d394efafcf4457b98f42474f24542997f7f63",
+      "width": 200,
+      "height": 65,
+      "crop": [
+        840,
+        542,
+        200,
+        65
+      ]
+    },
+    {
+      "file": "docs/data/admin-design-parity/button-admin.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/013-admin-_kit-light.png",
+      "source_sha256": "187025328147daaba3c2552cec1028b4b054d9e91eac327bd6e7de23697e0b97",
+      "width": 120,
+      "height": 80,
+      "crop": [
+        995,
+        275,
+        120,
+        80
+      ]
+    },
+    {
+      "file": "docs/data/admin-design-parity/card-public.png",
+      "source": "tooling/e2e/.e2e/artifacts/desktop/tests_admin-design.e2e.ts__capture_20existing_20AyahX_20design_20before_20admin_20changes-a580568a/default/attempt-0/screenshots/001-public-home-light.png",
+      "source_sha256": "a670f0204999f65a4b476feb826d394efafcf4457b98f42474f24542997f7f63",
+      "width": 444,
+      "height": 75,
+      "crop": [
+        960,
+        925,
+        444,
+        75
+      ]
+    },
+    {
+      "file": "docs/data/admin-design-parity/card-admin.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/013-admin-_kit-light.png",
+      "source_sha256": "187025328147daaba3c2552cec1028b4b054d9e91eac327bd6e7de23697e0b97",
+      "width": 720,
+      "height": 93,
+      "crop": [
+        30,
+        218,
+        1115,
+        144
+      ]
+    },
+    {
+      "file": "docs/data/admin-design-parity/field-public.png",
+      "source": "tooling/e2e/.e2e/artifacts/desktop/tests_admin-design.e2e.ts__capture_20existing_20AyahX_20design_20before_20admin_20changes-a580568a/default/attempt-0/screenshots/005-public-auth-light.png",
+      "source_sha256": "6ee2d4de45c45b0491b55939b68acaa3ca3abe59e92767fae71dca52913d6f93",
+      "width": 420,
+      "height": 80,
+      "crop": [
+        510,
+        500,
+        420,
+        80
+      ]
+    },
+    {
+      "file": "docs/data/admin-design-parity/field-admin.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/013-admin-_kit-light.png",
+      "source_sha256": "187025328147daaba3c2552cec1028b4b054d9e91eac327bd6e7de23697e0b97",
+      "width": 260,
+      "height": 110,
+      "crop": [
+        860,
+        451,
+        260,
+        110
+      ]
+    },
+    {
+      "file": "docs/data/admin-design-parity/form-public.png",
+      "source": "tooling/e2e/.e2e/artifacts/desktop/tests_admin-design.e2e.ts__capture_20existing_20AyahX_20design_20before_20admin_20changes-a580568a/default/attempt-0/screenshots/005-public-auth-light.png",
+      "source_sha256": "6ee2d4de45c45b0491b55939b68acaa3ca3abe59e92767fae71dca52913d6f93",
+      "width": 460,
+      "height": 355,
+      "crop": [
+        490,
+        382,
+        460,
+        355
+      ]
+    },
+    {
+      "file": "docs/data/admin-design-parity/form-admin.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/013-admin-_kit-light.png",
+      "source_sha256": "187025328147daaba3c2552cec1028b4b054d9e91eac327bd6e7de23697e0b97",
+      "width": 720,
+      "height": 298,
+      "crop": [
+        30,
+        380,
+        1115,
+        461
+      ]
+    },
+    {
+      "file": "docs/data/admin-design-parity/table-public.png",
+      "source": "tooling/e2e/.e2e/artifacts/desktop/tests_admin-design.e2e.ts__capture_20existing_20AyahX_20design_20before_20admin_20changes-a580568a/default/attempt-0/screenshots/003-public-surahs-light.png",
+      "source_sha256": "42598c63eea4b090f8d4b5397b02eb952449efab520807d6379f95562b81e2d5",
+      "width": 680,
+      "height": 418,
+      "crop": [
+        725,
+        316,
+        680,
+        418
+      ]
+    },
+    {
+      "file": "docs/data/admin-design-parity/table-admin.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/019-admin-recitations-light.png",
+      "source_sha256": "34d36b652894d2eb425445cec58dc6d5c85051de74acea3a750850660f4b92ec",
+      "width": 720,
+      "height": 336,
+      "crop": [
+        31,
+        465,
+        1115,
+        520
+      ]
+    },
+    {
+      "file": "docs/data/admin-design-parity/chip-public.png",
+      "source": "tooling/e2e/.e2e/artifacts/desktop/tests_admin-design.e2e.ts__capture_20existing_20AyahX_20design_20before_20admin_20changes-a580568a/default/attempt-0/screenshots/001-public-home-light.png",
+      "source_sha256": "a670f0204999f65a4b476feb826d394efafcf4457b98f42474f24542997f7f63",
+      "width": 287,
+      "height": 40,
+      "crop": [
+        580,
+        192,
+        287,
+        40
+      ]
+    },
+    {
+      "file": "docs/data/admin-design-parity/chip-admin.png",
+      "source": "tooling/e2e/.e2e/a1-a2a-pages-loaded/artifacts/desktop/tests_admin-pages.e2e.ts__A1_20A2a_20pages_20have_20actual_20local_20data_20RTL_20no_20overflow_20and_20axe_20g-1db76402/default/attempt-0/screenshots/013-admin-_kit-light.png",
+      "source_sha256": "187025328147daaba3c2552cec1028b4b054d9e91eac327bd6e7de23697e0b97",
+      "width": 180,
+      "height": 66,
+      "crop": [
+        89,
+        919,
+        180,
+        66
+      ]
+    }
+  ],
+  "notes": "Actual local MySQL/Redis/Chromium pixels, resized or cropped only; UI Kit is an explicit component demonstration. Public cards are compared with admin tables because the public page has no data table."
+}

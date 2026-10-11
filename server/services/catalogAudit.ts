@@ -1,6 +1,6 @@
 import { randomUUID,createHash } from 'node:crypto';
 import { CatalogError,type CatalogRow,type CatalogTx } from './catalogContracts';
-export interface CatalogActor { id:string; kind:'human'|'system'; permissions:ReadonlySet<string>; roleSlug?:string }
+export interface CatalogActor { id:string; kind:'human'|'system'; permissions:ReadonlySet<string>; roleSlug?:string; requestId?:string; ipAddress?:string }
 export function requireCatalogPermission(actor:CatalogActor,permission:string,humanOnly=false):void{
   if(!actor.id||!actor.permissions.has(permission)||(humanOnly&&actor.kind!=='human'))throw new CatalogError('CATALOG_PERMISSION_DENIED',403);
 }
@@ -20,6 +20,9 @@ export async function appendCatalogAudit(tx:CatalogTx,actor:CatalogActor,action:
   const prev=last?String(last.hash):'0'.repeat(64);const id=randomUUID();
   const payload={id,actor:actor.kind==='human'?actor.id:null,role:actor.roleSlug??null,action,entityType,entityId,oldValues,newValues,prev};
   const hash=createHash('sha256').update(canonicalAuditJson(payload)).digest('hex');
-  await tx.execute('INSERT INTO audit_logs(id,user_id,role_slug,action,entity_type,entity_id,old_values,new_values,hash,prev_hash) VALUES(?,?,?,?,?,?,?,?,?,?)',
-    [id,payload.actor,payload.role,action,entityType,entityId,oldValues===null?null:JSON.stringify(oldValues),newValues===null?null:JSON.stringify(newValues),hash,prev]);
+  const values=[id,payload.actor,payload.role,action,entityType,entityId,oldValues===null?null:JSON.stringify(oldValues),newValues===null?null:JSON.stringify(newValues),hash,prev];
+  // Old CLI/system writers remain compatible before migration006; request
+  // metadata is nullable and does not rewrite the historical hash format.
+  if(actor.requestId)await tx.execute('INSERT INTO audit_logs(id,user_id,role_slug,action,entity_type,entity_id,old_values,new_values,hash,prev_hash,request_id,ip_address) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',[...values,actor.requestId,actor.ipAddress??null]);
+  else await tx.execute('INSERT INTO audit_logs(id,user_id,role_slug,action,entity_type,entity_id,old_values,new_values,hash,prev_hash) VALUES(?,?,?,?,?,?,?,?,?,?)',values);
 }

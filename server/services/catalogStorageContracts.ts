@@ -15,6 +15,8 @@ export interface StorageSignedCapability { url: string; expiresAt: string; requi
 export interface AudioObjectStorage {
   readonly adapter: StorageAdapterName;
   readonly bucket: string | null;
+  /** SDK adapters release connections; reference-only adapters need no teardown. */
+  close?(): void | Promise<void>;
   head(key: string): Promise<StoredAudioHead | null>;
   read(key: string, range?: { start: number; end: number }): Promise<{ body: Readable; head: StoredAudioHead }>;
   presignGet(key: string, expiresSeconds?: number): Promise<StorageSignedCapability>;

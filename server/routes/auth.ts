@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { query, transaction } from '../db';
 import { AuthenticatedRequest, signToken, requireAuth } from '../middleware/auth';
 import { authRateLimiter } from '../middleware/rateLimiter';
+import { publicRole } from '../admin/adminPublicRole';
 
 const router = Router();
 
@@ -133,7 +134,7 @@ router.post('/login', authRateLimiter, async (req, res: Response) => {
       [user.id]
     );
     const roles = await query<any[]>(
-      'SELECT role FROM user_roles WHERE user_id = ? LIMIT 1',
+      'SELECT role FROM user_roles WHERE user_id = ?',
       [user.id]
     );
 
@@ -147,7 +148,7 @@ router.post('/login', authRateLimiter, async (req, res: Response) => {
         display_name: profiles[0]?.display_name || user.email.split('@')[0],
         avatar_url: profiles[0]?.avatar_url || null,
         bio: profiles[0]?.bio || null,
-        role: roles[0]?.role || 'user',
+        role: publicRole(roles.map(row => String(row.role))),
       },
     });
   } catch (err: any) {

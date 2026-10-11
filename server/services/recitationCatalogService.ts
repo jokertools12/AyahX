@@ -1,13 +1,13 @@
-import { CatalogError,isPubliclyVisible,publicCatalogSql,parseRuns,type CatalogDatabase,type CatalogSettings,type CatalogRow,type PublicRecitation,type CatalogAudioResolver,type AudioPlanInput } from './catalogContracts';
+import { CatalogError,isPubliclyVisible,publicVisibilityCodes,publicCatalogSql,parseRuns,type CatalogDatabase,type CatalogSettings,type CatalogRow,type PublicRecitation,type CatalogAudioResolver,type AudioPlanInput } from './catalogContracts';
 import { isRangeAvailable } from './recitationAvailability';
 import { auditionPreview } from './catalogAuditionSamples';
 import {hasVerifiedCatalogOffset} from './recitationAudioResolver';
 import type {LicensedChapterGate} from './catalogLicensedReadiness';
 export const requiresScopedLicensedSource=(r:CatalogRow):boolean=>r.channel==='youtube'||r.provider==='youtube'||r.licensed_publication_details!==null&&r.licensed_publication_details!==undefined&&!hasVerifiedCatalogOffset(r);
 const licensedSelection='r.channel,p.code provider,r.licensed_publication_details,r.offset_verified,r.offset_check_score,r.verification_status,r.verification_method,r.verification_details';
-const chapterSql=(settings:CatalogSettings):string=>settings.availabilityMode==='complete_only'?"c.availability_state='complete'":"c.run_count>0 AND c.availability_state IN ('complete','near_complete','partial')";
+const chapterSql=(settings:CatalogSettings):string=>"COALESCE(c.is_enabled,1)=1 AND "+(settings.availabilityMode==='complete_only'?"c.availability_state='complete'":"c.run_count>0 AND c.availability_state IN ('complete','near_complete','partial')");
 export async function readCatalogSettings(db: Pick<CatalogDatabase,'read'>):Promise<CatalogSettings>{
-  const rows=await db.read("SELECT key_name,value_text,is_secret FROM system_settings WHERE key_name IN ('quran_catalog_v2','availability_mode','voice_gate_policy','storage_adapter')");
+  const rows=await db.read("SELECT key_name,value_text,is_secret FROM system_settings WHERE key_name IN ('quran_catalog_v2','availability_mode','voice_gate_policy','storage_adapter','show_timing_badges','default_attribution_text')");
   const values=new Map(rows.map(r=>[String(r.key_name),r]));
   for(const row of rows)if(Number(row.is_secret)!==0)throw new CatalogError('CATALOG_SETTING_INVALID',503);
   const policy=values.get('voice_gate_policy')?.value_text??'allow_auto_verified';
@@ -15,7 +15,9 @@ export async function readCatalogSettings(db: Pick<CatalogDatabase,'read'>):Prom
   const storage=values.get('storage_adapter')?.value_text??'url_reference';if(!['url_reference','r2'].includes(String(storage)))throw new CatalogError('CATALOG_SETTING_INVALID',503);
   const flag=values.get('quran_catalog_v2')?.value_text??'false';const mode=values.get('availability_mode')?.value_text??'complete_only';
   if(!['true','false','1','0'].includes(String(flag))||!['complete_only','ayah_ranges'].includes(String(mode)))throw new CatalogError('CATALOG_SETTING_INVALID',503);
-  return {enabled:flag==='true'||flag==='1',availabilityMode:mode as CatalogSettings['availabilityMode'],voiceGatePolicy:policy as CatalogSettings['voiceGatePolicy'],storageAdapter:storage as CatalogSettings['storageAdapter']};
+  const badges=String(values.get('show_timing_badges')?.value_text??'true');const attribution=String(values.get('default_attribution_text')?.value_text??'');
+  if(!['true','false','1','0'].includes(badges)||attribution.length>500)throw new CatalogError('CATALOG_SETTING_INVALID',503);
+  return {showTimingBadges:badges==='true'||badges==='1',defaultAttributionText:attribution,enabled:flag==='true'||flag==='1',availabilityMode:mode as CatalogSettings['availabilityMode'],voiceGatePolicy:policy as CatalogSettings['voiceGatePolicy'],storageAdapter:storage as CatalogSettings['storageAdapter']};
 }
 export class RecitationCatalogService {
   constructor(private readonly db:CatalogDatabase,private readonly settings:()=>Promise<CatalogSettings>,private readonly audio:CatalogAudioResolver,private readonly licensed?:LicensedChapterGate){}
@@ -24,11 +26,13 @@ export class RecitationCatalogService {
     if(!this.licensed)return [];
     const ready:CatalogRow[]=[];for(const chapter of chapters)if(await this.licensed.isChapterReady(String(r.id),Number(chapter.surah),settings.availabilityMode==='complete_only'))ready.push(chapter);return ready;
   }
+  async presentationSettings():Promise<{show_timing_badges:boolean;default_attribution_text:string}>{const s=await this.settings();return {show_timing_badges:s.showTimingBadges!==false,default_attribution_text:s.defaultAttributionText??''};}
+  async publicVisibilityReasons(row:CatalogRow):Promise<string[]>{const settings=await this.settings(),codes=publicVisibilityCodes(row as unknown as PublicRecitation,settings.enabled,settings.voiceGatePolicy);if(codes.length)return codes;const chapters=await this.db.read(`SELECT c.surah,c.availability_state FROM recitation_chapters c WHERE c.recitation_id=? AND ${chapterSql(settings)}`,[row.id]);if(!(await this.usableChapters({...row,provider:row.provider_code??row.provider},settings,chapters)).length)codes.push(requiresScopedLicensedSource({...row,provider:row.provider_code??row.provider})?'LICENSED_SOURCE_NOT_READY':'NO_AVAILABLE_CHAPTERS');return codes;}
   async configuration():Promise<CatalogSettings>{return this.settings();}
   async requireEnabled():Promise<CatalogSettings>{const settings=await this.settings();if(!settings.enabled)throw new CatalogError('QURAN_CATALOG_DISABLED',404);return settings;}
   async listReciters():Promise<CatalogRow[]>{
     const settings=await this.requireEnabled();
-    const readers=await this.db.read(`SELECT e.id,e.slug,e.name_ar,e.name_en,e.country,e.photo_url,e.is_featured,e.sort_order,COUNT(DISTINCT r.id) public_recitations,MAX((SELECT COUNT(*) FROM recitation_chapters x WHERE x.recitation_id=r.id AND x.availability_state='complete')) best_complete_chapters FROM reciters e JOIN recitations r ON r.reciter_id=e.id JOIN audio_providers p ON p.id=r.provider_id WHERE ${publicCatalogSql(settings.voiceGatePolicy)} AND EXISTS(SELECT 1 FROM recitation_chapters c WHERE c.recitation_id=r.id AND ${chapterSql(settings)}) GROUP BY e.id ORDER BY COALESCE(e.is_featured,0) DESC,COALESCE(e.sort_order,2147483647),e.slug`);
+    const readers=await this.db.read(`SELECT e.id,e.slug,e.name_ar,e.name_en,e.country,e.photo_url,e.is_featured,e.sort_order,COUNT(DISTINCT r.id) public_recitations,MAX((SELECT COUNT(*) FROM recitation_chapters x WHERE x.recitation_id=r.id AND x.availability_state='complete' AND COALESCE(x.is_enabled,1)=1)) best_complete_chapters FROM reciters e JOIN recitations r ON r.reciter_id=e.id JOIN audio_providers p ON p.id=r.provider_id WHERE ${publicCatalogSql(settings.voiceGatePolicy)} AND EXISTS(SELECT 1 FROM recitation_chapters c WHERE c.recitation_id=r.id AND ${chapterSql(settings)}) GROUP BY e.id ORDER BY COALESCE(e.is_featured,0) DESC,COALESCE(e.sort_order,2147483647),e.slug`);
     const kept:CatalogRow[]=[];for(const reader of readers){
       const recitations=await this.db.read(`SELECT r.id,${licensedSelection} FROM recitations r JOIN audio_providers p ON p.id=r.provider_id WHERE r.reciter_id=? AND ${publicCatalogSql(settings.voiceGatePolicy)}`,[reader.id]);
       if(!recitations.some(requiresScopedLicensedSource)){kept.push(reader);continue;}
@@ -38,13 +42,14 @@ export class RecitationCatalogService {
   }
   async listRecitationsForReciter(slug:string):Promise<CatalogRow[]>{
     const settings=await this.requireEnabled();
-    const candidates=await this.db.read(`SELECT r.id,r.slug,r.display_label_ar,r.display_label_en,r.style,r.recording_year,r.recording_context,r.quality_note,r.source_note,r.is_default_for_reciter,r.sort_order,r.timing_level,r.timing_quality,r.riwayah_code,r.attribution_text,p.name provider_name,p.license_text,${licensedSelection} FROM recitations r JOIN reciters e ON e.id=r.reciter_id JOIN audio_providers p ON p.id=r.provider_id WHERE e.slug=? AND ${publicCatalogSql(settings.voiceGatePolicy)} AND EXISTS(SELECT 1 FROM recitation_chapters c WHERE c.recitation_id=r.id AND ${chapterSql(settings)}) ORDER BY COALESCE(r.is_default_for_reciter,0) DESC,COALESCE(r.sort_order,2147483647),r.slug`,[slug]);
+    const candidates=await this.db.read(`SELECT r.id,r.slug,r.display_label_ar,r.display_label_en,r.style,r.recording_year,r.recording_context,r.quality_note,r.source_note,r.is_default_for_reciter,r.sort_order,r.timing_level,r.timing_quality,r.riwayah_code,r.attribution_text,p.attribution_text provider_attribution_text,p.name provider_name,p.license_text,${licensedSelection} FROM recitations r JOIN reciters e ON e.id=r.reciter_id JOIN audio_providers p ON p.id=r.provider_id WHERE e.slug=? AND ${publicCatalogSql(settings.voiceGatePolicy)} AND EXISTS(SELECT 1 FROM recitation_chapters c WHERE c.recitation_id=r.id AND ${chapterSql(settings)}) ORDER BY COALESCE(r.is_default_for_reciter,0) DESC,COALESCE(r.sort_order,2147483647),r.slug`,[slug]);
     const recitations:CatalogRow[]=[];for(const r of candidates){if(requiresScopedLicensedSource(r)){const chapters=await this.db.read(`SELECT c.surah,c.availability_state FROM recitation_chapters c WHERE c.recitation_id=? AND ${chapterSql(settings)}`,[r.id]);if(!(await this.usableChapters(r,settings,chapters)).length)continue;}recitations.push(r);}
     for(const r of recitations){
+      r.show_timing_badges=settings.showTimingBadges!==false;r.attribution_text=r.attribution_text||r.provider_attribution_text||settings.defaultAttributionText||null;delete r.provider_attribution_text;if(settings.showTimingBadges===false){r.timing_level=null;r.timing_quality=null;}
       if(requiresScopedLicensedSource(r)){
         const chapters=await this.usableChapters(r,settings,await this.db.read(`SELECT c.surah,c.availability_state,c.ready_ayahs,c.max_run_ayahs FROM recitation_chapters c WHERE c.recitation_id=? AND ${chapterSql(settings)}`,[r.id]));
         const counts=new Map<string,CatalogRow>();for(const c of chapters){const key=String(c.availability_state),entry=counts.get(key)??{availability_state:key,chapters:0,ready_ayahs:0,max_run_ayahs:0};entry.chapters=Number(entry.chapters)+1;entry.ready_ayahs=Number(entry.ready_ayahs)+Number(c.ready_ayahs);entry.max_run_ayahs=Math.max(Number(entry.max_run_ayahs),Number(c.max_run_ayahs));counts.set(key,entry);}r.availability=[...counts.values()];
-      }else r.availability=(await this.db.read("SELECT availability_state,COUNT(*) chapters,SUM(ready_ayahs) ready_ayahs,MAX(max_run_ayahs) max_run_ayahs FROM recitation_chapters WHERE recitation_id=? GROUP BY availability_state ORDER BY availability_state",[r.id]));
+      }else r.availability=(await this.db.read("SELECT availability_state,COUNT(*) chapters,SUM(ready_ayahs) ready_ayahs,MAX(max_run_ayahs) max_run_ayahs FROM recitation_chapters WHERE recitation_id=? AND COALESCE(is_enabled,1)=1 GROUP BY availability_state ORDER BY availability_state",[r.id]));
       const samples=await this.db.read("SELECT a.sample_key,a.surah,a.start_ms,a.duration_ms,a.selection_details,c.audio_url,c.chapter_offset_ms,p.host_allowlist FROM recitation_audition_samples a LEFT JOIN recitation_chapters c ON c.recitation_id=a.recitation_id AND c.surah=a.surah JOIN recitations r ON r.id=a.recitation_id JOIN audio_providers p ON p.id=r.provider_id WHERE a.recitation_id=? ORDER BY a.sample_key",[r.id]);
       r.audition_samples=samples.map(sample=>{const hosts=typeof sample.host_allowlist==='string'?JSON.parse(sample.host_allowlist):sample.host_allowlist;if(!Array.isArray(hosts)||hosts.some(h=>typeof h!=='string'))throw new CatalogError('AUDIO_PROVIDER_INVALID',503);return auditionPreview(sample,hosts);});
       for(const key of ['provider','licensed_publication_details','offset_verified','offset_check_score','verification_status','verification_method','verification_details'])delete r[key];
@@ -53,7 +58,7 @@ export class RecitationCatalogService {
   }
   private async publicRecitation(slug:string):Promise<CatalogRow>{
     const settings=await this.requireEnabled();
-    const rows=await this.db.read(`SELECT r.id,r.slug,r.status,r.is_public,r.voice_identity_status,p.license_status,${licensedSelection} FROM recitations r JOIN audio_providers p ON p.id=r.provider_id WHERE r.slug=?`,[slug]);
+    const rows=await this.db.read(`SELECT r.id,r.slug,r.status,r.is_public,r.voice_identity_status,p.license_status,(SELECT COALESCE(pv.is_visible,1) FROM reciters pv WHERE pv.id=r.reciter_id) reciter_is_visible,(SELECT pr.is_active FROM riwayat pr WHERE pr.id=r.riwayah_id) riwayah_is_active,${licensedSelection} FROM recitations r JOIN audio_providers p ON p.id=r.provider_id WHERE r.slug=?`,[slug]);
     if(!rows.length||!isPubliclyVisible(rows[0] as unknown as PublicRecitation,settings.enabled,settings.voiceGatePolicy))throw new CatalogError('RECITATION_NOT_PUBLIC',404);
     return rows[0];
   }
@@ -65,9 +70,9 @@ export class RecitationCatalogService {
   async getAvailability(slug:string,surah:number):Promise<CatalogRow>{
     if(!Number.isSafeInteger(surah)||surah<1)throw new CatalogError('RANGE_NOT_AVAILABLE',422,{available_runs:[]});
     const r=await this.publicRecitation(slug);const settings=await this.settings();
-    const chapters=await this.db.read('SELECT surah,availability_state,available_runs,ready_ayahs,max_run_ayahs,near_complete_missing FROM recitation_chapters WHERE recitation_id=? AND surah=?',[r.id,surah]);
+    const chapters=await this.db.read('SELECT surah,is_enabled,availability_state,available_runs,ready_ayahs,max_run_ayahs,near_complete_missing FROM recitation_chapters WHERE recitation_id=? AND surah=?',[r.id,surah]);
     if(!chapters.length)throw new CatalogError('RANGE_NOT_AVAILABLE',422,{available_runs:[]});
-    const chapter=chapters[0];const runs=parseRuns(chapter.available_runs);
+    const chapter=chapters[0];if(chapter.is_enabled===false||chapter.is_enabled===0)throw new CatalogError('SOURCE_DISABLED',409,{available_runs:[]});const runs=parseRuns(chapter.available_runs);
     if(requiresScopedLicensedSource(r)&&!(await this.usableChapters(r,settings,[chapter])).length)throw new CatalogError('YOUTUBE_RENDER_REQUIRES_LICENSED_FILE',409,{available_runs:[]});
     const usable=settings.availabilityMode==='ayah_ranges'||chapter.availability_state==='complete';
     return {...chapter,available_runs:usable?runs:[],availability_mode:settings.availabilityMode};

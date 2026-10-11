@@ -1,6 +1,8 @@
 import type { E2EConfig } from 'e2e';
 import { web } from '@e2e-dev/web';
 import { fileURLToPath } from 'node:url';
+import {readFileSync} from 'node:fs';
+import {join} from 'node:path';
 
 // API/config source: node_modules/e2e/docs/{web,reference/config}.mdx
 const externalUrl = process.env.AYAHX_E2E_URL;
@@ -10,6 +12,9 @@ if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.
   throw new Error('AYAHX_E2E_URL must be an HTTP(S) URL without credentials.');
 }
 const agentMode = process.env.AYAHX_E2E_AGENT === '1';
+const adminMode=process.env.AYAHX_ADMIN_E2E==='1';
+if(adminMode&&!['localhost','127.0.0.1','[::1]'].includes(parsed.hostname))throw new Error('ADMIN_FIXTURES_LOCAL_ONLY');
+const adminFixtures:Record<string,{email:string;password:string;cookie:string}>=adminMode?JSON.parse(readFileSync(join(process.env.LOCALAPPDATA!,'AyahX','private-backups','a1-browser-fixtures.json'),'utf8')):{};
 if (agentMode && !['localhost', '127.0.0.1', '[::1]'].includes(parsed.hostname)) {
   throw new Error('Agent tests are restricted to a local test app.');
 }
@@ -50,6 +55,7 @@ export default {
   trace: 'retain-on-failure',
   output: '.e2e',
   reporters: ['list', 'junit', 'markdown'],
+  ...(adminMode?{credentials:Object.fromEntries(Object.entries(adminFixtures).filter(([,fixture])=>typeof fixture.cookie==='string').map(([role,fixture])=>[role,{username:fixture.email,password:fixture.password}])),secrets:Object.fromEntries(Object.entries(adminFixtures).filter(([,fixture])=>typeof fixture.cookie==='string').map(([role,fixture])=>['local-session-'+role,fixture.cookie]))}:{}),
   ...(process.env.AYAHX_R2_CORS_TEST==='staging-test-prefix-only' ? {secrets:{
     'r2-cors-get':process.env.R2_CORS_TEST_GET_URL!,
     'r2-cors-put':process.env.R2_CORS_TEST_PUT_URL!,

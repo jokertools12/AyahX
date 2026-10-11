@@ -1,0 +1,1699 @@
+{
+  "local_only": true,
+  "checked_at": "2026-10-11T11:27:06.949Z",
+  "checks": [
+    "all_registered_endpoints_anonymous_401",
+    "seven_roles_all_endpoint_rbac",
+    "all_authorized_http_writes_exact_one_aggregate_audit",
+    "actual_public_labels_default_order_visibility_source_riwayah_license_settings_voice_availability_consumers",
+    "move_resets_public_default_and_voice_gates",
+    "actual_explain_and_timing_range_under_50_ms",
+    "canonical_and_existing_admin_roles_unchanged"
+  ],
+  "endpoint_count": 29,
+  "role_count": 7,
+  "matrix": [
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/reciters",
+      "permission": "reciters.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/reciters/:id",
+      "permission": "reciters.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/recitations",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/recitations/:id",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/recitations/:id/chapters",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/tasks/:id",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/sources",
+      "permission": "sources.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/providers",
+      "permission": "providers.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/providers/:id",
+      "permission": "providers.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/quran/surahs",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/quran/integrity",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/quran/surahs/:surah/ayahs",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/quran/riwayat",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "get",
+      "path": "/catalog/timings",
+      "permission": "timings.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "patch",
+      "path": "/catalog/reciters/:id/profile",
+      "permission": "reciters.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "post",
+      "path": "/catalog/reciters/visibility",
+      "permission": "reciters.visibility",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "post",
+      "path": "/catalog/reciters/:id/visibility",
+      "permission": "reciters.visibility",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "post",
+      "path": "/catalog/reciters/reorder",
+      "permission": "reciters.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "patch",
+      "path": "/catalog/recitations/:id/presentation",
+      "permission": "recitations.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "post",
+      "path": "/catalog/recitations/:id/visibility",
+      "permission": "recitations.visibility",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "post",
+      "path": "/catalog/recitations/:id/default",
+      "permission": "recitations.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "post",
+      "path": "/catalog/recitations/reorder",
+      "permission": "recitations.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "post",
+      "path": "/catalog/recitations/:id/recalculate",
+      "permission": "recitations.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "post",
+      "path": "/catalog/recitations/:id/check-links",
+      "permission": "sources.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "post",
+      "path": "/catalog/sources/:id/active",
+      "permission": "sources.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "patch",
+      "path": "/catalog/providers/:id/license",
+      "permission": "providers.license.decide",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "patch",
+      "path": "/catalog/quran/riwayat/:code",
+      "permission": "quran.riwayah.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "post",
+      "path": "/catalog/recitations/:id/move",
+      "permission": "recitations.move",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "super_admin",
+      "method": "post",
+      "path": "/catalog/reciters/:id/merge",
+      "permission": "reciters.merge",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/reciters",
+      "permission": "reciters.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/reciters/:id",
+      "permission": "reciters.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/recitations",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/recitations/:id",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/recitations/:id/chapters",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/tasks/:id",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/sources",
+      "permission": "sources.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/providers",
+      "permission": "providers.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/providers/:id",
+      "permission": "providers.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/quran/surahs",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/quran/integrity",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/quran/surahs/:surah/ayahs",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/quran/riwayat",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "get",
+      "path": "/catalog/timings",
+      "permission": "timings.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "patch",
+      "path": "/catalog/reciters/:id/profile",
+      "permission": "reciters.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "post",
+      "path": "/catalog/reciters/visibility",
+      "permission": "reciters.visibility",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "post",
+      "path": "/catalog/reciters/:id/visibility",
+      "permission": "reciters.visibility",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "post",
+      "path": "/catalog/reciters/reorder",
+      "permission": "reciters.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "patch",
+      "path": "/catalog/recitations/:id/presentation",
+      "permission": "recitations.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "post",
+      "path": "/catalog/recitations/:id/visibility",
+      "permission": "recitations.visibility",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "post",
+      "path": "/catalog/recitations/:id/default",
+      "permission": "recitations.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "post",
+      "path": "/catalog/recitations/reorder",
+      "permission": "recitations.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "post",
+      "path": "/catalog/recitations/:id/recalculate",
+      "permission": "recitations.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "post",
+      "path": "/catalog/recitations/:id/check-links",
+      "permission": "sources.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "post",
+      "path": "/catalog/sources/:id/active",
+      "permission": "sources.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "patch",
+      "path": "/catalog/providers/:id/license",
+      "permission": "providers.license.decide",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "admin",
+      "method": "patch",
+      "path": "/catalog/quran/riwayat/:code",
+      "permission": "quran.riwayah.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "post",
+      "path": "/catalog/recitations/:id/move",
+      "permission": "recitations.move",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "admin",
+      "method": "post",
+      "path": "/catalog/reciters/:id/merge",
+      "permission": "reciters.merge",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/reciters",
+      "permission": "reciters.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/reciters/:id",
+      "permission": "reciters.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/recitations",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/recitations/:id",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/recitations/:id/chapters",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/tasks/:id",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/sources",
+      "permission": "sources.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/providers",
+      "permission": "providers.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/providers/:id",
+      "permission": "providers.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/quran/surahs",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/quran/integrity",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/quran/surahs/:surah/ayahs",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/quran/riwayat",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "get",
+      "path": "/catalog/timings",
+      "permission": "timings.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "patch",
+      "path": "/catalog/reciters/:id/profile",
+      "permission": "reciters.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "post",
+      "path": "/catalog/reciters/visibility",
+      "permission": "reciters.visibility",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "post",
+      "path": "/catalog/reciters/:id/visibility",
+      "permission": "reciters.visibility",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "post",
+      "path": "/catalog/reciters/reorder",
+      "permission": "reciters.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "patch",
+      "path": "/catalog/recitations/:id/presentation",
+      "permission": "recitations.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "post",
+      "path": "/catalog/recitations/:id/visibility",
+      "permission": "recitations.visibility",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "post",
+      "path": "/catalog/recitations/:id/default",
+      "permission": "recitations.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "post",
+      "path": "/catalog/recitations/reorder",
+      "permission": "recitations.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "post",
+      "path": "/catalog/recitations/:id/recalculate",
+      "permission": "recitations.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "post",
+      "path": "/catalog/recitations/:id/check-links",
+      "permission": "sources.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "post",
+      "path": "/catalog/sources/:id/active",
+      "permission": "sources.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "patch",
+      "path": "/catalog/providers/:id/license",
+      "permission": "providers.license.decide",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "content_manager",
+      "method": "patch",
+      "path": "/catalog/quran/riwayat/:code",
+      "permission": "quran.riwayah.write",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "post",
+      "path": "/catalog/recitations/:id/move",
+      "permission": "recitations.move",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "content_manager",
+      "method": "post",
+      "path": "/catalog/reciters/:id/merge",
+      "permission": "reciters.merge",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/reciters",
+      "permission": "reciters.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/reciters/:id",
+      "permission": "reciters.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/recitations",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/recitations/:id",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/recitations/:id/chapters",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/tasks/:id",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/sources",
+      "permission": "sources.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/providers",
+      "permission": "providers.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/providers/:id",
+      "permission": "providers.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/quran/surahs",
+      "permission": "quran.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/quran/integrity",
+      "permission": "quran.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/quran/surahs/:surah/ayahs",
+      "permission": "quran.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/quran/riwayat",
+      "permission": "quran.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "get",
+      "path": "/catalog/timings",
+      "permission": "timings.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "patch",
+      "path": "/catalog/reciters/:id/profile",
+      "permission": "reciters.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "post",
+      "path": "/catalog/reciters/visibility",
+      "permission": "reciters.visibility",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "post",
+      "path": "/catalog/reciters/:id/visibility",
+      "permission": "reciters.visibility",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "post",
+      "path": "/catalog/reciters/reorder",
+      "permission": "reciters.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "patch",
+      "path": "/catalog/recitations/:id/presentation",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "post",
+      "path": "/catalog/recitations/:id/visibility",
+      "permission": "recitations.visibility",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "post",
+      "path": "/catalog/recitations/:id/default",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "post",
+      "path": "/catalog/recitations/reorder",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "post",
+      "path": "/catalog/recitations/:id/recalculate",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "post",
+      "path": "/catalog/recitations/:id/check-links",
+      "permission": "sources.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "post",
+      "path": "/catalog/sources/:id/active",
+      "permission": "sources.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "patch",
+      "path": "/catalog/providers/:id/license",
+      "permission": "providers.license.decide",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "patch",
+      "path": "/catalog/quran/riwayat/:code",
+      "permission": "quran.riwayah.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "post",
+      "path": "/catalog/recitations/:id/move",
+      "permission": "recitations.move",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "moderator",
+      "method": "post",
+      "path": "/catalog/reciters/:id/merge",
+      "permission": "reciters.merge",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/reciters",
+      "permission": "reciters.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/reciters/:id",
+      "permission": "reciters.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/recitations",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/recitations/:id",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/recitations/:id/chapters",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/tasks/:id",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/sources",
+      "permission": "sources.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/providers",
+      "permission": "providers.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/providers/:id",
+      "permission": "providers.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/quran/surahs",
+      "permission": "quran.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/quran/integrity",
+      "permission": "quran.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/quran/surahs/:surah/ayahs",
+      "permission": "quran.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/quran/riwayat",
+      "permission": "quran.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "get",
+      "path": "/catalog/timings",
+      "permission": "timings.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "patch",
+      "path": "/catalog/reciters/:id/profile",
+      "permission": "reciters.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "post",
+      "path": "/catalog/reciters/visibility",
+      "permission": "reciters.visibility",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "post",
+      "path": "/catalog/reciters/:id/visibility",
+      "permission": "reciters.visibility",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "post",
+      "path": "/catalog/reciters/reorder",
+      "permission": "reciters.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "patch",
+      "path": "/catalog/recitations/:id/presentation",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "post",
+      "path": "/catalog/recitations/:id/visibility",
+      "permission": "recitations.visibility",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "post",
+      "path": "/catalog/recitations/:id/default",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "post",
+      "path": "/catalog/recitations/reorder",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "post",
+      "path": "/catalog/recitations/:id/recalculate",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "post",
+      "path": "/catalog/recitations/:id/check-links",
+      "permission": "sources.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "post",
+      "path": "/catalog/sources/:id/active",
+      "permission": "sources.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "patch",
+      "path": "/catalog/providers/:id/license",
+      "permission": "providers.license.decide",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "patch",
+      "path": "/catalog/quran/riwayat/:code",
+      "permission": "quran.riwayah.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "post",
+      "path": "/catalog/recitations/:id/move",
+      "permission": "recitations.move",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "support",
+      "method": "post",
+      "path": "/catalog/reciters/:id/merge",
+      "permission": "reciters.merge",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/reciters",
+      "permission": "reciters.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/reciters/:id",
+      "permission": "reciters.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/recitations",
+      "permission": "recitations.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/recitations/:id",
+      "permission": "recitations.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/recitations/:id/chapters",
+      "permission": "recitations.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/tasks/:id",
+      "permission": "recitations.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/sources",
+      "permission": "sources.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/providers",
+      "permission": "providers.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/providers/:id",
+      "permission": "providers.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/quran/surahs",
+      "permission": "quran.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/quran/integrity",
+      "permission": "quran.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/quran/surahs/:surah/ayahs",
+      "permission": "quran.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/quran/riwayat",
+      "permission": "quran.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "get",
+      "path": "/catalog/timings",
+      "permission": "timings.read",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "patch",
+      "path": "/catalog/reciters/:id/profile",
+      "permission": "reciters.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "post",
+      "path": "/catalog/reciters/visibility",
+      "permission": "reciters.visibility",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "post",
+      "path": "/catalog/reciters/:id/visibility",
+      "permission": "reciters.visibility",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "post",
+      "path": "/catalog/reciters/reorder",
+      "permission": "reciters.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "patch",
+      "path": "/catalog/recitations/:id/presentation",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "post",
+      "path": "/catalog/recitations/:id/visibility",
+      "permission": "recitations.visibility",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "post",
+      "path": "/catalog/recitations/:id/default",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "post",
+      "path": "/catalog/recitations/reorder",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "post",
+      "path": "/catalog/recitations/:id/recalculate",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "post",
+      "path": "/catalog/recitations/:id/check-links",
+      "permission": "sources.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "post",
+      "path": "/catalog/sources/:id/active",
+      "permission": "sources.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "patch",
+      "path": "/catalog/providers/:id/license",
+      "permission": "providers.license.decide",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "patch",
+      "path": "/catalog/quran/riwayat/:code",
+      "permission": "quran.riwayah.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "post",
+      "path": "/catalog/recitations/:id/move",
+      "permission": "recitations.move",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "finance",
+      "method": "post",
+      "path": "/catalog/reciters/:id/merge",
+      "permission": "reciters.merge",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/reciters",
+      "permission": "reciters.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/reciters/:id",
+      "permission": "reciters.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/recitations",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/recitations/:id",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/recitations/:id/chapters",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/tasks/:id",
+      "permission": "recitations.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/sources",
+      "permission": "sources.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/providers",
+      "permission": "providers.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/providers/:id",
+      "permission": "providers.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/quran/surahs",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/quran/integrity",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/quran/surahs/:surah/ayahs",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/quran/riwayat",
+      "permission": "quran.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "get",
+      "path": "/catalog/timings",
+      "permission": "timings.read",
+      "status": 200,
+      "allowed": true
+    },
+    {
+      "role": "analyst",
+      "method": "patch",
+      "path": "/catalog/reciters/:id/profile",
+      "permission": "reciters.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "post",
+      "path": "/catalog/reciters/visibility",
+      "permission": "reciters.visibility",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "post",
+      "path": "/catalog/reciters/:id/visibility",
+      "permission": "reciters.visibility",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "post",
+      "path": "/catalog/reciters/reorder",
+      "permission": "reciters.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "patch",
+      "path": "/catalog/recitations/:id/presentation",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "post",
+      "path": "/catalog/recitations/:id/visibility",
+      "permission": "recitations.visibility",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "post",
+      "path": "/catalog/recitations/:id/default",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "post",
+      "path": "/catalog/recitations/reorder",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "post",
+      "path": "/catalog/recitations/:id/recalculate",
+      "permission": "recitations.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "post",
+      "path": "/catalog/recitations/:id/check-links",
+      "permission": "sources.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "post",
+      "path": "/catalog/sources/:id/active",
+      "permission": "sources.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "patch",
+      "path": "/catalog/providers/:id/license",
+      "permission": "providers.license.decide",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "patch",
+      "path": "/catalog/quran/riwayat/:code",
+      "permission": "quran.riwayah.write",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "post",
+      "path": "/catalog/recitations/:id/move",
+      "permission": "recitations.move",
+      "status": 403,
+      "allowed": false
+    },
+    {
+      "role": "analyst",
+      "method": "post",
+      "path": "/catalog/reciters/:id/merge",
+      "permission": "reciters.merge",
+      "status": 403,
+      "allowed": false
+    }
+  ],
+  "baseline_dataset": {
+    "recitations": 69,
+    "chapters": 7765,
+    "timings": 422463
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "index_plans": [
+    {
+      "name": "recitation_reader",
+      "keys": [
+        "idx_recitation_reciter"
+      ],
+      "type": [
+        "ref"
+      ],
+      "elapsed_ms": [
+        0.5718999999990046,
+        0.4493000000002212,
+        0.4364999999997963,
+        0.4014999999999418,
+        0.3371000000006461
+      ]
+    },
+    {
+      "name": "chapter_recitation_surah",
+      "keys": [
+        "uk_catalog_chapter"
+      ],
+      "type": [
+        "const"
+      ],
+      "elapsed_ms": [
+        0.7812999999987369,
+        0.6473000000005413,
+        0.3974999999991269,
+        0.3746000000010099,
+        0.3742000000002008
+      ]
+    },
+    {
+      "name": "timing_recitation_surah_range",
+      "keys": [
+        "idx_timing_ready_range"
+      ],
+      "type": [
+        "ref"
+      ],
+      "elapsed_ms": [
+        0.4839000000010856,
+        0.4248999999999796,
+        0.43260000000009313,
+        0.39240000000063446,
+        0.38289999999869906
+      ]
+    }
+  ],
+  "kept_local_fixtures": true,
+  "network_source_checks": false
+}

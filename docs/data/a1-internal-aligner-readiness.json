@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-10-11T10:09:34.967Z",
+  "provider": "internal_ctc",
+  "configured_path": "/",
+  "expected_alignment_path": "/v1/align",
+  "alignment_posts": 0,
+  "checks": [
+    {
+      "path": "/health/live",
+      "http_status": 200,
+      "code": null,
+      "status": "alive"
+    },
+    {
+      "path": "/health/ready",
+      "http_status": 503,
+      "code": "MODEL_NOT_CONFIGURED",
+      "status": null
+    }
+  ]
+}

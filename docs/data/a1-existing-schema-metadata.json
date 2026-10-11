@@ -1,0 +1,1853 @@
+{
+  "roles": [
+    {
+      "slug": "admin",
+      "name_ar": "مدير النظام (Admin)",
+      "name_en": "Administrator"
+    },
+    {
+      "slug": "analyst",
+      "name_ar": "محلل البيانات (Analyst)",
+      "name_en": "Data Analyst"
+    },
+    {
+      "slug": "content_manager",
+      "name_ar": "مدير المحتوى (Content Manager)",
+      "name_en": "Content Manager"
+    },
+    {
+      "slug": "developer",
+      "name_ar": "مطور النظام (Developer)",
+      "name_en": "Developer / DevOps"
+    },
+    {
+      "slug": "finance",
+      "name_ar": "المسؤول المالي (Finance)",
+      "name_en": "Finance Manager"
+    },
+    {
+      "slug": "moderator",
+      "name_ar": "مشرف الرقابة (Moderator)",
+      "name_en": "Moderator"
+    },
+    {
+      "slug": "super_admin",
+      "name_ar": "المدير العام (Super Admin)",
+      "name_en": "Super Administrator"
+    },
+    {
+      "slug": "support_agent",
+      "name_ar": "وكيل الدعم الفني (Support Agent)",
+      "name_en": "Support Agent"
+    }
+  ],
+  "settings": [
+    {
+      "key": "AI_IMAGE_PROVIDER",
+      "category": "ai",
+      "is_secret": 0
+    },
+    {
+      "key": "AI_PROVIDER",
+      "category": "ai",
+      "is_secret": 0
+    },
+    {
+      "key": "OPENROUTER_ALLOW_PROVIDER_FALLBACKS",
+      "category": "ai",
+      "is_secret": 0
+    },
+    {
+      "key": "OPENROUTER_DATA_COLLECTION",
+      "category": "ai",
+      "is_secret": 0
+    },
+    {
+      "key": "OPENROUTER_FREE_ONLY",
+      "category": "ai",
+      "is_secret": 0
+    },
+    {
+      "key": "OPENROUTER_MODEL_FALLBACKS_ENABLED",
+      "category": "ai",
+      "is_secret": 0
+    },
+    {
+      "key": "OPENROUTER_SITE_URL",
+      "category": "ai",
+      "is_secret": 0
+    },
+    {
+      "key": "OPENROUTER_TEXT_FALLBACK_MODELS",
+      "category": "ai",
+      "is_secret": 0
+    },
+    {
+      "key": "OPENROUTER_TEXT_MODEL",
+      "category": "ai",
+      "is_secret": 0
+    },
+    {
+      "key": "REELS_AUDIO_BITRATE",
+      "category": "reels",
+      "is_secret": 0
+    },
+    {
+      "key": "REELS_DEFAULT_FPS",
+      "category": "reels",
+      "is_secret": 0
+    },
+    {
+      "key": "REELS_DEFAULT_GLOW",
+      "category": "reels",
+      "is_secret": 0
+    },
+    {
+      "key": "REELS_DEFAULT_QUALITY",
+      "category": "reels",
+      "is_secret": 0
+    },
+    {
+      "key": "storage_adapter",
+      "category": "catalog",
+      "is_secret": 0
+    }
+  ],
+  "checked_at": "2026-10-11 10:19:28.000000",
+  "extensions": {
+    "count": 2,
+    "legacy_admin_count": 2,
+    "totp_enabled_count": 0
+  },
+  "permissions": [
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "analytics"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "analytics"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "analytics"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "analytics"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "analytics"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "analytics"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "billing"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "billing"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "billing"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "billing"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "billing"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "billing"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "cms"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "cms"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "cms"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "cms"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "cms"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "cms"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "media"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "media"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "media"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "media"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "media"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "media"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "moderation"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "moderation"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "moderation"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "moderation"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "moderation"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "moderation"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "quran"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "quran"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "quran"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "quran"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "quran"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "quran"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "reciters"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "reciters"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "reciters"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "reciters"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "reciters"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "reciters"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "render_queue"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "render_queue"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "render_queue"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "render_queue"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "render_queue"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "render_queue"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "security"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "security"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "security"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "security"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "security"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "security"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "settings"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "settings"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "settings"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "settings"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "settings"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "settings"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "support"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "support"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "support"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "support"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "support"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "support"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "system"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "system"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "system"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "system"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "system"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "system"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "templates"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "templates"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "templates"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "templates"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "templates"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "templates"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "users"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "users"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "users"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "users"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "users"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "users"
+    },
+    {
+      "role": "admin",
+      "action": "create",
+      "resource": "videos"
+    },
+    {
+      "role": "admin",
+      "action": "delete",
+      "resource": "videos"
+    },
+    {
+      "role": "admin",
+      "action": "export",
+      "resource": "videos"
+    },
+    {
+      "role": "admin",
+      "action": "publish",
+      "resource": "videos"
+    },
+    {
+      "role": "admin",
+      "action": "read",
+      "resource": "videos"
+    },
+    {
+      "role": "admin",
+      "action": "update",
+      "resource": "videos"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "analytics"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "analytics"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "billing"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "billing"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "cms"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "cms"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "media"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "media"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "moderation"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "moderation"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "quran"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "quran"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "reciters"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "reciters"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "render_queue"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "render_queue"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "security"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "security"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "settings"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "settings"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "support"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "support"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "system"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "system"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "templates"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "templates"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "users"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "users"
+    },
+    {
+      "role": "analyst",
+      "action": "export",
+      "resource": "videos"
+    },
+    {
+      "role": "analyst",
+      "action": "read",
+      "resource": "videos"
+    },
+    {
+      "role": "content_manager",
+      "action": "create",
+      "resource": "cms"
+    },
+    {
+      "role": "content_manager",
+      "action": "export",
+      "resource": "cms"
+    },
+    {
+      "role": "content_manager",
+      "action": "publish",
+      "resource": "cms"
+    },
+    {
+      "role": "content_manager",
+      "action": "read",
+      "resource": "cms"
+    },
+    {
+      "role": "content_manager",
+      "action": "update",
+      "resource": "cms"
+    },
+    {
+      "role": "content_manager",
+      "action": "create",
+      "resource": "media"
+    },
+    {
+      "role": "content_manager",
+      "action": "export",
+      "resource": "media"
+    },
+    {
+      "role": "content_manager",
+      "action": "publish",
+      "resource": "media"
+    },
+    {
+      "role": "content_manager",
+      "action": "read",
+      "resource": "media"
+    },
+    {
+      "role": "content_manager",
+      "action": "update",
+      "resource": "media"
+    },
+    {
+      "role": "content_manager",
+      "action": "create",
+      "resource": "quran"
+    },
+    {
+      "role": "content_manager",
+      "action": "export",
+      "resource": "quran"
+    },
+    {
+      "role": "content_manager",
+      "action": "publish",
+      "resource": "quran"
+    },
+    {
+      "role": "content_manager",
+      "action": "read",
+      "resource": "quran"
+    },
+    {
+      "role": "content_manager",
+      "action": "update",
+      "resource": "quran"
+    },
+    {
+      "role": "content_manager",
+      "action": "create",
+      "resource": "reciters"
+    },
+    {
+      "role": "content_manager",
+      "action": "export",
+      "resource": "reciters"
+    },
+    {
+      "role": "content_manager",
+      "action": "publish",
+      "resource": "reciters"
+    },
+    {
+      "role": "content_manager",
+      "action": "read",
+      "resource": "reciters"
+    },
+    {
+      "role": "content_manager",
+      "action": "update",
+      "resource": "reciters"
+    },
+    {
+      "role": "content_manager",
+      "action": "create",
+      "resource": "templates"
+    },
+    {
+      "role": "content_manager",
+      "action": "export",
+      "resource": "templates"
+    },
+    {
+      "role": "content_manager",
+      "action": "publish",
+      "resource": "templates"
+    },
+    {
+      "role": "content_manager",
+      "action": "read",
+      "resource": "templates"
+    },
+    {
+      "role": "content_manager",
+      "action": "update",
+      "resource": "templates"
+    },
+    {
+      "role": "content_manager",
+      "action": "create",
+      "resource": "videos"
+    },
+    {
+      "role": "content_manager",
+      "action": "export",
+      "resource": "videos"
+    },
+    {
+      "role": "content_manager",
+      "action": "publish",
+      "resource": "videos"
+    },
+    {
+      "role": "content_manager",
+      "action": "read",
+      "resource": "videos"
+    },
+    {
+      "role": "content_manager",
+      "action": "update",
+      "resource": "videos"
+    },
+    {
+      "role": "developer",
+      "action": "export",
+      "resource": "analytics"
+    },
+    {
+      "role": "developer",
+      "action": "read",
+      "resource": "analytics"
+    },
+    {
+      "role": "developer",
+      "action": "update",
+      "resource": "analytics"
+    },
+    {
+      "role": "developer",
+      "action": "export",
+      "resource": "render_queue"
+    },
+    {
+      "role": "developer",
+      "action": "read",
+      "resource": "render_queue"
+    },
+    {
+      "role": "developer",
+      "action": "update",
+      "resource": "render_queue"
+    },
+    {
+      "role": "developer",
+      "action": "export",
+      "resource": "settings"
+    },
+    {
+      "role": "developer",
+      "action": "read",
+      "resource": "settings"
+    },
+    {
+      "role": "developer",
+      "action": "update",
+      "resource": "settings"
+    },
+    {
+      "role": "developer",
+      "action": "export",
+      "resource": "system"
+    },
+    {
+      "role": "developer",
+      "action": "read",
+      "resource": "system"
+    },
+    {
+      "role": "developer",
+      "action": "update",
+      "resource": "system"
+    },
+    {
+      "role": "finance",
+      "action": "approve",
+      "resource": "billing"
+    },
+    {
+      "role": "finance",
+      "action": "export",
+      "resource": "billing"
+    },
+    {
+      "role": "finance",
+      "action": "read",
+      "resource": "billing"
+    },
+    {
+      "role": "finance",
+      "action": "update",
+      "resource": "billing"
+    },
+    {
+      "role": "moderator",
+      "action": "export",
+      "resource": "moderation"
+    },
+    {
+      "role": "moderator",
+      "action": "read",
+      "resource": "moderation"
+    },
+    {
+      "role": "moderator",
+      "action": "update",
+      "resource": "moderation"
+    },
+    {
+      "role": "moderator",
+      "action": "export",
+      "resource": "users"
+    },
+    {
+      "role": "moderator",
+      "action": "read",
+      "resource": "users"
+    },
+    {
+      "role": "moderator",
+      "action": "update",
+      "resource": "users"
+    },
+    {
+      "role": "moderator",
+      "action": "export",
+      "resource": "videos"
+    },
+    {
+      "role": "moderator",
+      "action": "read",
+      "resource": "videos"
+    },
+    {
+      "role": "moderator",
+      "action": "update",
+      "resource": "videos"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "analytics"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "analytics"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "analytics"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "analytics"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "analytics"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "analytics"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "analytics"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "billing"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "billing"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "billing"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "billing"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "billing"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "billing"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "billing"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "cms"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "cms"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "cms"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "cms"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "cms"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "cms"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "cms"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "media"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "media"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "media"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "media"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "media"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "media"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "media"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "moderation"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "moderation"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "moderation"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "moderation"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "moderation"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "moderation"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "moderation"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "quran"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "quran"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "quran"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "quran"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "quran"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "quran"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "quran"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "reciters"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "reciters"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "reciters"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "reciters"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "reciters"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "reciters"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "reciters"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "render_queue"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "render_queue"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "render_queue"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "render_queue"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "render_queue"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "render_queue"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "render_queue"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "security"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "security"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "security"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "security"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "security"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "security"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "security"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "settings"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "settings"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "settings"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "settings"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "settings"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "settings"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "settings"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "support"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "support"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "support"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "support"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "support"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "support"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "support"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "system"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "system"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "system"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "system"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "system"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "system"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "system"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "templates"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "templates"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "templates"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "templates"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "templates"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "templates"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "templates"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "users"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "users"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "users"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "users"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "users"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "users"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "users"
+    },
+    {
+      "role": "super_admin",
+      "action": "approve",
+      "resource": "videos"
+    },
+    {
+      "role": "super_admin",
+      "action": "create",
+      "resource": "videos"
+    },
+    {
+      "role": "super_admin",
+      "action": "delete",
+      "resource": "videos"
+    },
+    {
+      "role": "super_admin",
+      "action": "export",
+      "resource": "videos"
+    },
+    {
+      "role": "super_admin",
+      "action": "publish",
+      "resource": "videos"
+    },
+    {
+      "role": "super_admin",
+      "action": "read",
+      "resource": "videos"
+    },
+    {
+      "role": "super_admin",
+      "action": "update",
+      "resource": "videos"
+    },
+    {
+      "role": "support_agent",
+      "action": "create",
+      "resource": "support"
+    },
+    {
+      "role": "support_agent",
+      "action": "read",
+      "resource": "support"
+    },
+    {
+      "role": "support_agent",
+      "action": "update",
+      "resource": "support"
+    },
+    {
+      "role": "support_agent",
+      "action": "read",
+      "resource": "users"
+    }
+  ],
+  "schema": {
+    "columns": [
+      {
+        "type": "varchar(50)",
+        "table": "admin_permissions",
+        "column": "action",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "timestamp",
+        "table": "admin_permissions",
+        "column": "created_at",
+        "default": "CURRENT_TIMESTAMP",
+        "nullable": "NO"
+      },
+      {
+        "type": "varchar(36)",
+        "table": "admin_permissions",
+        "column": "id",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "varchar(50)",
+        "table": "admin_permissions",
+        "column": "resource",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "varchar(50)",
+        "table": "admin_permissions",
+        "column": "role_slug",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "timestamp",
+        "table": "admin_roles",
+        "column": "created_at",
+        "default": "CURRENT_TIMESTAMP",
+        "nullable": "NO"
+      },
+      {
+        "type": "text",
+        "table": "admin_roles",
+        "column": "description_ar",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "text",
+        "table": "admin_roles",
+        "column": "description_en",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "tinyint(1)",
+        "table": "admin_roles",
+        "column": "is_system",
+        "default": "1",
+        "nullable": "NO"
+      },
+      {
+        "type": "varchar(100)",
+        "table": "admin_roles",
+        "column": "name_ar",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "varchar(100)",
+        "table": "admin_roles",
+        "column": "name_en",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "varchar(50)",
+        "table": "admin_roles",
+        "column": "slug",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "timestamp",
+        "table": "admin_sessions",
+        "column": "created_at",
+        "default": "CURRENT_TIMESTAMP",
+        "nullable": "NO"
+      },
+      {
+        "type": "timestamp",
+        "table": "admin_sessions",
+        "column": "expires_at",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "varchar(36)",
+        "table": "admin_sessions",
+        "column": "id",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "varchar(45)",
+        "table": "admin_sessions",
+        "column": "ip_address",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "tinyint(1)",
+        "table": "admin_sessions",
+        "column": "is_revoked",
+        "default": "0",
+        "nullable": "NO"
+      },
+      {
+        "type": "timestamp",
+        "table": "admin_sessions",
+        "column": "last_active_at",
+        "default": "CURRENT_TIMESTAMP",
+        "nullable": "NO"
+      },
+      {
+        "type": "varchar(64)",
+        "table": "admin_sessions",
+        "column": "token_hash",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "text",
+        "table": "admin_sessions",
+        "column": "user_agent",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "varchar(36)",
+        "table": "admin_sessions",
+        "column": "user_id",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "timestamp",
+        "table": "admin_user_extensions",
+        "column": "created_at",
+        "default": "CURRENT_TIMESTAMP",
+        "nullable": "NO"
+      },
+      {
+        "type": "int",
+        "table": "admin_user_extensions",
+        "column": "failed_login_attempts",
+        "default": "0",
+        "nullable": "NO"
+      },
+      {
+        "type": "timestamp",
+        "table": "admin_user_extensions",
+        "column": "last_login_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "varchar(45)",
+        "table": "admin_user_extensions",
+        "column": "last_login_ip",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp",
+        "table": "admin_user_extensions",
+        "column": "locked_until",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "varchar(50)",
+        "table": "admin_user_extensions",
+        "column": "role_slug",
+        "default": "admin",
+        "nullable": "NO"
+      },
+      {
+        "type": "text",
+        "table": "admin_user_extensions",
+        "column": "two_factor_backup_codes_encrypted",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "tinyint(1)",
+        "table": "admin_user_extensions",
+        "column": "two_factor_enabled",
+        "default": "0",
+        "nullable": "NO"
+      },
+      {
+        "type": "text",
+        "table": "admin_user_extensions",
+        "column": "two_factor_secret_encrypted",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp",
+        "table": "admin_user_extensions",
+        "column": "updated_at",
+        "default": "CURRENT_TIMESTAMP",
+        "nullable": "NO"
+      },
+      {
+        "type": "varchar(36)",
+        "table": "admin_user_extensions",
+        "column": "user_id",
+        "default": null,
+        "nullable": "NO"
+      }
+    ],
+    "indexes": [
+      {
+        "index": "PRIMARY",
+        "table": "admin_roles",
+        "column": "slug",
+        "non_unique": 0
+      },
+      {
+        "index": "PRIMARY",
+        "table": "admin_permissions",
+        "column": "id",
+        "non_unique": 0
+      },
+      {
+        "index": "uk_role_resource_action",
+        "table": "admin_permissions",
+        "column": "role_slug",
+        "non_unique": 0
+      },
+      {
+        "index": "uk_role_resource_action",
+        "table": "admin_permissions",
+        "column": "resource",
+        "non_unique": 0
+      },
+      {
+        "index": "uk_role_resource_action",
+        "table": "admin_permissions",
+        "column": "action",
+        "non_unique": 0
+      },
+      {
+        "index": "idx_perm_role",
+        "table": "admin_permissions",
+        "column": "role_slug",
+        "non_unique": 1
+      },
+      {
+        "index": "PRIMARY",
+        "table": "admin_user_extensions",
+        "column": "user_id",
+        "non_unique": 0
+      },
+      {
+        "index": "idx_admin_user_role",
+        "table": "admin_user_extensions",
+        "column": "role_slug",
+        "non_unique": 1
+      },
+      {
+        "index": "PRIMARY",
+        "table": "admin_sessions",
+        "column": "id",
+        "non_unique": 0
+      },
+      {
+        "index": "uk_admin_session_token",
+        "table": "admin_sessions",
+        "column": "token_hash",
+        "non_unique": 0
+      },
+      {
+        "index": "idx_admin_session_user",
+        "table": "admin_sessions",
+        "column": "user_id",
+        "non_unique": 1
+      },
+      {
+        "index": "idx_admin_session_user",
+        "table": "admin_sessions",
+        "column": "is_revoked",
+        "non_unique": 1
+      },
+      {
+        "index": "idx_admin_session_expiry",
+        "table": "admin_sessions",
+        "column": "expires_at",
+        "non_unique": 1
+      }
+    ],
+    "permissions_catalog_exists": 0
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "scope": "local-rehearsal",
+  "observedAt": "2026-10-11T11:38:02.959Z",
+  "passed": 19,
+  "results": [
+    {
+      "name": "all_unauthenticated_endpoints_401",
+      "passed": true,
+      "detail": {
+        "endpoints": 21
+      }
+    },
+    {
+      "name": "seven_real_role_logins",
+      "passed": true,
+      "detail": {
+        "roles": 7
+      }
+    },
+    {
+      "name": "real_rbac_denied_and_allowed_reads",
+      "passed": true,
+      "detail": {
+        "roles": 7,
+        "endpoints": 21,
+        "denied": 47,
+        "allowedReads": 52
+      }
+    },
+    {
+      "name": "origin_rejects_foreign_and_missing",
+      "passed": true
+    },
+    {
+      "name": "zod_validation_and_maximum_100",
+      "passed": true
+    },
+    {
+      "name": "role_user_setting_flag_mutations_audited",
+      "passed": true
+    },
+    {
+      "name": "super_admin_access_cannot_be_reduced",
+      "passed": true
+    },
+    {
+      "name": "secret_registry_never_returns_values",
+      "passed": true
+    },
+    {
+      "name": "totp_enrollment_replay_recovery_disable_all_roles",
+      "passed": true,
+      "detail": {
+        "roles": 7
+      }
+    },
+    {
+      "name": "all_allowed_role_write_endpoints_real_200_and_one_audit",
+      "passed": true,
+      "detail": {
+        "allowedWrites": 48
+      }
+    },
+    {
+      "name": "real_totp_and_recovery_login_with_replay_rejection",
+      "passed": true,
+      "detail": {
+        "actualNextWindowWaitMs": 5535
+      }
+    },
+    {
+      "name": "real_redis_read_rate_60_per_minute",
+      "passed": true
+    },
+    {
+      "name": "five_failed_logins_lock_account",
+      "passed": true
+    },
+    {
+      "name": "revoked_cookie_is_rejected",
+      "passed": true
+    },
+    {
+      "name": "idle_timeout_real_stored_session",
+      "passed": true
+    },
+    {
+      "name": "logout_revokes_real_session",
+      "passed": true
+    },
+    {
+      "name": "audit_update_delete_triggers_reject_real_sql",
+      "passed": true
+    },
+    {
+      "name": "emergency_grant_preserves_existing_roles_and_audits",
+      "passed": true
+    },
+    {
+      "name": "audit_chain_has_no_missing_predecessor",
+      "passed": true
+    }
+  ]
+}

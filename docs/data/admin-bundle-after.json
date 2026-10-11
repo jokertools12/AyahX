@@ -1,0 +1,1705 @@
+{
+  "measured_at": "2026-10-11T12:01:50.728Z",
+  "method": "Gzip sum of initial entry + selected lazy root + route static imports + all CSS; route alternatives excluded",
+  "public": {
+    "files": [
+      {
+        "name": "assets/App-BLD2gEmy.js",
+        "bytes": 58615,
+        "gzip_bytes": 17131
+      },
+      {
+        "name": "assets/BrandLogo-CdzrrWWM.js",
+        "bytes": 39561,
+        "gzip_bytes": 12044
+      },
+      {
+        "name": "assets/index-BEmaV3kf.css",
+        "bytes": 98493,
+        "gzip_bytes": 17039
+      },
+      {
+        "name": "assets/index-DrDKrzyK.js",
+        "bytes": 2768,
+        "gzip_bytes": 1447
+      },
+      {
+        "name": "assets/motion-vendor-BlXSU5HL.js",
+        "bytes": 120814,
+        "gzip_bytes": 39862
+      },
+      {
+        "name": "assets/react-vendor-JAJIZWn6.js",
+        "bytes": 165389,
+        "gzip_bytes": 53855
+      },
+      {
+        "name": "assets/shared-utils-B2rm_Apj.js",
+        "bytes": 21034,
+        "gzip_bytes": 7128
+      },
+      {
+        "name": "assets/tanstack-vendor-C797mCQD.js",
+        "bytes": 36736,
+        "gzip_bytes": 11075
+      },
+      {
+        "name": "assets/ui-vendor-BglaIsZ0.js",
+        "bytes": 207813,
+        "gzip_bytes": 59085
+      }
+    ],
+    "gzip_bytes": 218666
+  },
+  "public_before_gzip": 322504,
+  "public_change_percent": -32.197430109393984,
+  "admin": {
+    "src/admin/AdminKit.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminInteractions-Blo4lqtQ.js",
+          "bytes": 1990,
+          "gzip_bytes": 1075
+        },
+        {
+          "name": "assets/AdminKit-6ph9BXfZ.js",
+          "bytes": 7353,
+          "gzip_bytes": 2845
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/ChapterMatrix-D7O1aSuc.js",
+          "bytes": 1752,
+          "gzip_bytes": 919
+        },
+        {
+          "name": "assets/DataTable-BmP9i8Lg.js",
+          "bytes": 7744,
+          "gzip_bytes": 3187
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        }
+      ],
+      "gzip_bytes": 183801
+    },
+    "src/admin/pages/AdminAudit.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminAudit-ByJQJ1uk.js",
+          "bytes": 2474,
+          "gzip_bytes": 1329
+        },
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/DataTable-BmP9i8Lg.js",
+          "bytes": 7744,
+          "gzip_bytes": 3187
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminList-cEQzSf_p.js",
+          "bytes": 773,
+          "gzip_bytes": 480
+        }
+      ],
+      "gzip_bytes": 180771
+    },
+    "src/admin/pages/AdminDashboard.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminDashboard-DYaU1Nkq.js",
+          "bytes": 3412,
+          "gzip_bytes": 1585
+        },
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminResource-BxLdK918.js",
+          "bytes": 808,
+          "gzip_bytes": 560
+        }
+      ],
+      "gzip_bytes": 177920
+    },
+    "src/admin/pages/AdminRoles.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminRoles-CvTkihD1.js",
+          "bytes": 4101,
+          "gzip_bytes": 2014
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminResource-BxLdK918.js",
+          "bytes": 808,
+          "gzip_bytes": 560
+        },
+        {
+          "name": "assets/useDirtyGuard-MFXM42-5.js",
+          "bytes": 435,
+          "gzip_bytes": 298
+        }
+      ],
+      "gzip_bytes": 178647
+    },
+    "src/admin/pages/AdminSecurity.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/AdminSecurity-BO-XLKw4.js",
+          "bytes": 5911,
+          "gzip_bytes": 2432
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/DataTable-BmP9i8Lg.js",
+          "bytes": 7744,
+          "gzip_bytes": 3187
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminResource-BxLdK918.js",
+          "bytes": 808,
+          "gzip_bytes": 560
+        }
+      ],
+      "gzip_bytes": 181954
+    },
+    "src/admin/pages/AdminSettings.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/AdminSettings-CL_eEg9W.js",
+          "bytes": 5295,
+          "gzip_bytes": 2422
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminResource-BxLdK918.js",
+          "bytes": 808,
+          "gzip_bytes": 560
+        },
+        {
+          "name": "assets/useDirtyGuard-MFXM42-5.js",
+          "bytes": 435,
+          "gzip_bytes": 298
+        }
+      ],
+      "gzip_bytes": 179055
+    },
+    "src/admin/pages/AdminUsers.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/AdminUsers-BOI2FWhG.js",
+          "bytes": 3152,
+          "gzip_bytes": 1599
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/DataTable-BmP9i8Lg.js",
+          "bytes": 7744,
+          "gzip_bytes": 3187
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminList-cEQzSf_p.js",
+          "bytes": 773,
+          "gzip_bytes": 480
+        },
+        {
+          "name": "assets/useAdminResource-BxLdK918.js",
+          "bytes": 808,
+          "gzip_bytes": 560
+        }
+      ],
+      "gzip_bytes": 181601
+    },
+    "src/admin/pages/catalog/AvailabilityPage.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminInteractions-Blo4lqtQ.js",
+          "bytes": 1990,
+          "gzip_bytes": 1075
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/AvailabilityPage-mvY-vr2m.js",
+          "bytes": 1793,
+          "gzip_bytes": 1071
+        },
+        {
+          "name": "assets/AvailabilityPanel-Dx0BCE2V.js",
+          "bytes": 3304,
+          "gzip_bytes": 1641
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/CatalogShared-CYKhahru.js",
+          "bytes": 1592,
+          "gzip_bytes": 774
+        },
+        {
+          "name": "assets/ChapterMatrix-D7O1aSuc.js",
+          "bytes": 1752,
+          "gzip_bytes": 919
+        },
+        {
+          "name": "assets/catalog-B_kFxUI7.js",
+          "bytes": 1404,
+          "gzip_bytes": 765
+        },
+        {
+          "name": "assets/catalog-dlPhGzeH.css",
+          "bytes": 2659,
+          "gzip_bytes": 857
+        },
+        {
+          "name": "assets/catalogFormatting-kWAL0_KY.js",
+          "bytes": 568,
+          "gzip_bytes": 393
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminResource-BxLdK918.js",
+          "bytes": 808,
+          "gzip_bytes": 560
+        }
+      ],
+      "gzip_bytes": 183830
+    },
+    "src/admin/pages/catalog/ProvidersPage.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/CatalogShared-CYKhahru.js",
+          "bytes": 1592,
+          "gzip_bytes": 774
+        },
+        {
+          "name": "assets/DataTable-BmP9i8Lg.js",
+          "bytes": 7744,
+          "gzip_bytes": 3187
+        },
+        {
+          "name": "assets/ProvidersPage-wroJc95Z.js",
+          "bytes": 6371,
+          "gzip_bytes": 2867
+        },
+        {
+          "name": "assets/catalog-B_kFxUI7.js",
+          "bytes": 1404,
+          "gzip_bytes": 765
+        },
+        {
+          "name": "assets/catalog-dlPhGzeH.css",
+          "bytes": 2659,
+          "gzip_bytes": 857
+        },
+        {
+          "name": "assets/catalogTypes-CdwDB6aU.js",
+          "bytes": 36,
+          "gzip_bytes": 53
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminList-cEQzSf_p.js",
+          "bytes": 773,
+          "gzip_bytes": 480
+        },
+        {
+          "name": "assets/useAdminResource-BxLdK918.js",
+          "bytes": 808,
+          "gzip_bytes": 560
+        }
+      ],
+      "gzip_bytes": 185318
+    },
+    "src/admin/pages/catalog/QuranPage.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/DataTable-BmP9i8Lg.js",
+          "bytes": 7744,
+          "gzip_bytes": 3187
+        },
+        {
+          "name": "assets/QuranPage-C4mVIU1Y.js",
+          "bytes": 7872,
+          "gzip_bytes": 3398
+        },
+        {
+          "name": "assets/catalog-B_kFxUI7.js",
+          "bytes": 1404,
+          "gzip_bytes": 765
+        },
+        {
+          "name": "assets/catalog-dlPhGzeH.css",
+          "bytes": 2659,
+          "gzip_bytes": 857
+        },
+        {
+          "name": "assets/catalogFormatting-kWAL0_KY.js",
+          "bytes": 568,
+          "gzip_bytes": 393
+        },
+        {
+          "name": "assets/catalogTypes-CdwDB6aU.js",
+          "bytes": 36,
+          "gzip_bytes": 53
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminList-cEQzSf_p.js",
+          "bytes": 773,
+          "gzip_bytes": 480
+        },
+        {
+          "name": "assets/useAdminResource-BxLdK918.js",
+          "bytes": 808,
+          "gzip_bytes": 560
+        }
+      ],
+      "gzip_bytes": 185468
+    },
+    "src/admin/pages/catalog/RecitationsPage.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminInteractions-Blo4lqtQ.js",
+          "bytes": 1990,
+          "gzip_bytes": 1075
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/CatalogFilters-CkT2_7pw.js",
+          "bytes": 3304,
+          "gzip_bytes": 1481
+        },
+        {
+          "name": "assets/CatalogShared-CYKhahru.js",
+          "bytes": 1592,
+          "gzip_bytes": 774
+        },
+        {
+          "name": "assets/DataTable-BmP9i8Lg.js",
+          "bytes": 7744,
+          "gzip_bytes": 3187
+        },
+        {
+          "name": "assets/RecitationDrawer-CtIjuijX.js",
+          "bytes": 11975,
+          "gzip_bytes": 4672
+        },
+        {
+          "name": "assets/RecitationsPage-DRC5X_Nu.js",
+          "bytes": 2181,
+          "gzip_bytes": 1229
+        },
+        {
+          "name": "assets/catalog-B_kFxUI7.js",
+          "bytes": 1404,
+          "gzip_bytes": 765
+        },
+        {
+          "name": "assets/catalog-dlPhGzeH.css",
+          "bytes": 2659,
+          "gzip_bytes": 857
+        },
+        {
+          "name": "assets/catalogTypes-CdwDB6aU.js",
+          "bytes": 36,
+          "gzip_bytes": 53
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminList-cEQzSf_p.js",
+          "bytes": 773,
+          "gzip_bytes": 480
+        },
+        {
+          "name": "assets/useAdminResource-BxLdK918.js",
+          "bytes": 808,
+          "gzip_bytes": 560
+        },
+        {
+          "name": "assets/useDirtyGuard-MFXM42-5.js",
+          "bytes": 435,
+          "gzip_bytes": 298
+        }
+      ],
+      "gzip_bytes": 191206
+    },
+    "src/admin/pages/catalog/ReciterDetailPage.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminInteractions-Blo4lqtQ.js",
+          "bytes": 1990,
+          "gzip_bytes": 1075
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/AvailabilityPanel-Dx0BCE2V.js",
+          "bytes": 3304,
+          "gzip_bytes": 1641
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/CatalogShared-CYKhahru.js",
+          "bytes": 1592,
+          "gzip_bytes": 774
+        },
+        {
+          "name": "assets/ChapterMatrix-D7O1aSuc.js",
+          "bytes": 1752,
+          "gzip_bytes": 919
+        },
+        {
+          "name": "assets/DataTable-BmP9i8Lg.js",
+          "bytes": 7744,
+          "gzip_bytes": 3187
+        },
+        {
+          "name": "assets/RecitationDrawer-CtIjuijX.js",
+          "bytes": 11975,
+          "gzip_bytes": 4672
+        },
+        {
+          "name": "assets/ReciterDetailPage-DSM5PQfO.js",
+          "bytes": 12283,
+          "gzip_bytes": 5066
+        },
+        {
+          "name": "assets/catalog-B_kFxUI7.js",
+          "bytes": 1404,
+          "gzip_bytes": 765
+        },
+        {
+          "name": "assets/catalog-dlPhGzeH.css",
+          "bytes": 2659,
+          "gzip_bytes": 857
+        },
+        {
+          "name": "assets/catalogFormatting-kWAL0_KY.js",
+          "bytes": 568,
+          "gzip_bytes": 393
+        },
+        {
+          "name": "assets/catalogTypes-CdwDB6aU.js",
+          "bytes": 36,
+          "gzip_bytes": 53
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminResource-BxLdK918.js",
+          "bytes": 808,
+          "gzip_bytes": 560
+        },
+        {
+          "name": "assets/useDirtyGuard-MFXM42-5.js",
+          "bytes": 435,
+          "gzip_bytes": 298
+        }
+      ],
+      "gzip_bytes": 196035
+    },
+    "src/admin/pages/catalog/RecitersPage.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/CatalogFilters-CkT2_7pw.js",
+          "bytes": 3304,
+          "gzip_bytes": 1481
+        },
+        {
+          "name": "assets/CatalogShared-CYKhahru.js",
+          "bytes": 1592,
+          "gzip_bytes": 774
+        },
+        {
+          "name": "assets/DataTable-BmP9i8Lg.js",
+          "bytes": 7744,
+          "gzip_bytes": 3187
+        },
+        {
+          "name": "assets/RecitersPage-B8c7KaCY.js",
+          "bytes": 5871,
+          "gzip_bytes": 2701
+        },
+        {
+          "name": "assets/catalog-B_kFxUI7.js",
+          "bytes": 1404,
+          "gzip_bytes": 765
+        },
+        {
+          "name": "assets/catalog-dlPhGzeH.css",
+          "bytes": 2659,
+          "gzip_bytes": 857
+        },
+        {
+          "name": "assets/catalogTypes-CdwDB6aU.js",
+          "bytes": 36,
+          "gzip_bytes": 53
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminList-cEQzSf_p.js",
+          "bytes": 773,
+          "gzip_bytes": 480
+        },
+        {
+          "name": "assets/useAdminResource-BxLdK918.js",
+          "bytes": 808,
+          "gzip_bytes": 560
+        }
+      ],
+      "gzip_bytes": 186633
+    },
+    "src/admin/pages/catalog/TimingsPage.tsx": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminInteractions-Blo4lqtQ.js",
+          "bytes": 1990,
+          "gzip_bytes": 1075
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/CatalogShared-CYKhahru.js",
+          "bytes": 1592,
+          "gzip_bytes": 774
+        },
+        {
+          "name": "assets/DataTable-BmP9i8Lg.js",
+          "bytes": 7744,
+          "gzip_bytes": 3187
+        },
+        {
+          "name": "assets/TimingsPage-B_zIa4Fj.js",
+          "bytes": 7947,
+          "gzip_bytes": 3319
+        },
+        {
+          "name": "assets/catalog-B_kFxUI7.js",
+          "bytes": 1404,
+          "gzip_bytes": 765
+        },
+        {
+          "name": "assets/catalog-dlPhGzeH.css",
+          "bytes": 2659,
+          "gzip_bytes": 857
+        },
+        {
+          "name": "assets/catalogFormatting-kWAL0_KY.js",
+          "bytes": 568,
+          "gzip_bytes": 393
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        },
+        {
+          "name": "assets/useAdminResource-BxLdK918.js",
+          "bytes": 808,
+          "gzip_bytes": 560
+        }
+      ],
+      "gzip_bytes": 186705
+    },
+    "login": {
+      "files": [
+        {
+          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "bytes": 815,
+          "gzip_bytes": 493
+        },
+        {
+          "name": "assets/AdminRoot-CO70zie6.css",
+          "bytes": 7568,
+          "gzip_bytes": 2006
+        },
+        {
+          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "bytes": 28686,
+          "gzip_bytes": 9457
+        },
+        {
+          "name": "assets/BrandLogo-CdzrrWWM.js",
+          "bytes": 39561,
+          "gzip_bytes": 12044
+        },
+        {
+          "name": "assets/index-BEmaV3kf.css",
+          "bytes": 98493,
+          "gzip_bytes": 17039
+        },
+        {
+          "name": "assets/index-DrDKrzyK.js",
+          "bytes": 2768,
+          "gzip_bytes": 1447
+        },
+        {
+          "name": "assets/input-DKLXPUnd.js",
+          "bytes": 624,
+          "gzip_bytes": 381
+        },
+        {
+          "name": "assets/radio-group-Bji_XUhb.js",
+          "bytes": 789,
+          "gzip_bytes": 427
+        },
+        {
+          "name": "assets/react-vendor-JAJIZWn6.js",
+          "bytes": 165389,
+          "gzip_bytes": 53855
+        },
+        {
+          "name": "assets/shared-utils-B2rm_Apj.js",
+          "bytes": 21034,
+          "gzip_bytes": 7128
+        },
+        {
+          "name": "assets/switch-CVG2a7C9.js",
+          "bytes": 857,
+          "gzip_bytes": 455
+        },
+        {
+          "name": "assets/tabs-tFP-BVAT.js",
+          "bytes": 1240,
+          "gzip_bytes": 538
+        },
+        {
+          "name": "assets/tanstack-vendor-C797mCQD.js",
+          "bytes": 36736,
+          "gzip_bytes": 11075
+        },
+        {
+          "name": "assets/textarea-CtUWjkjR.js",
+          "bytes": 526,
+          "gzip_bytes": 345
+        },
+        {
+          "name": "assets/ui-vendor-BglaIsZ0.js",
+          "bytes": 207813,
+          "gzip_bytes": 59085
+        }
+      ],
+      "gzip_bytes": 175775
+    }
+  },
+  "public_increase_pass": true,
+  "admin_initial_pass": true
+}

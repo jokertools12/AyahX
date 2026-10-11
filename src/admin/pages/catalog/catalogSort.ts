@@ -1,0 +1,1 @@
+export function withCatalogSort(params:URLSearchParams,key:string,direction:'asc'|'desc'){const next=new URLSearchParams(params);next.set('sort',key);next.set('direction',direction);next.delete('page');return next;}

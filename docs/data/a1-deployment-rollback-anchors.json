@@ -1,0 +1,197 @@
+{
+  "environment": {
+    "id": "c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6",
+    "name": "production"
+  },
+  "pendingWork": [
+    {
+      "changes": [],
+      "id": "patch:dea511b8-9877-474e-b254-c7bb3052c251",
+      "kind": "EnvironmentPatch",
+      "startedAt": "2026-10-10T03:58:21.840Z",
+      "status": "staged",
+      "workflowId": "commitChanges/c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6/dea511b8-9877-474e-b254-c7bb3052c251"
+    }
+  ],
+  "services": [
+    {
+      "activeDeployments": [
+        {
+          "createdAt": "2026-10-11T09:10:20.071Z",
+          "id": "fd6426e7-32c2-40b3-b9a4-5f98e240b57c",
+          "status": "SUCCESS",
+          "statusUpdatedAt": "2026-10-11T09:11:26.526Z"
+        }
+      ],
+      "cronJob": null,
+      "hasIssues": false,
+      "hasVolume": false,
+      "isCronJob": false,
+      "issues": {
+        "criticalCount": 0,
+        "warningCount": 0
+      },
+      "recentFailedDeployments": [],
+      "recentFailures": 0,
+      "replicaStatus": {
+        "crashed": 0,
+        "running": 1,
+        "total": 1
+      },
+      "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "serviceName": "AyahX",
+      "state": "online",
+      "statusText": "Online"
+    },
+    {
+      "activeDeployments": [
+        {
+          "createdAt": "2026-10-11T09:10:20.070Z",
+          "id": "d5dea2ce-f4d0-4577-be95-aa16c8cb924b",
+          "status": "SUCCESS",
+          "statusUpdatedAt": "2026-10-11T09:11:01.574Z"
+        }
+      ],
+      "cronJob": null,
+      "hasIssues": false,
+      "hasVolume": false,
+      "isCronJob": false,
+      "issues": {
+        "criticalCount": 0,
+        "warningCount": 0
+      },
+      "recentFailedDeployments": [],
+      "recentFailures": 0,
+      "replicaStatus": {
+        "crashed": 0,
+        "running": 1,
+        "total": 1
+      },
+      "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "serviceName": "render-control",
+      "state": "online",
+      "statusText": "Online"
+    },
+    {
+      "activeDeployments": [
+        {
+          "createdAt": "2026-10-11T09:10:20.068Z",
+          "id": "ce0c9020-1e51-4bcb-a46a-e100ce763844",
+          "status": "SUCCESS",
+          "statusUpdatedAt": "2026-10-11T09:11:16.750Z"
+        }
+      ],
+      "cronJob": null,
+      "hasIssues": false,
+      "hasVolume": false,
+      "isCronJob": false,
+      "issues": {
+        "criticalCount": 0,
+        "warningCount": 0
+      },
+      "recentFailedDeployments": [],
+      "recentFailures": 0,
+      "replicaStatus": {
+        "crashed": 0,
+        "running": 1,
+        "total": 1
+      },
+      "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "serviceName": "render-worker-skia",
+      "state": "online",
+      "statusText": "Online"
+    },
+    {
+      "activeDeployments": [
+        {
+          "createdAt": "2026-10-11T09:10:20.068Z",
+          "id": "cd81920c-52db-4137-b02d-b758bdc7e27d",
+          "status": "SUCCESS",
+          "statusUpdatedAt": "2026-10-11T09:10:37.908Z"
+        }
+      ],
+      "cronJob": null,
+      "hasIssues": false,
+      "hasVolume": false,
+      "isCronJob": false,
+      "issues": {
+        "criticalCount": 0,
+        "warningCount": 0
+      },
+      "recentFailedDeployments": [],
+      "recentFailures": 0,
+      "replicaStatus": {
+        "crashed": 0,
+        "running": 1,
+        "total": 1
+      },
+      "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "serviceName": "alignment-worker",
+      "state": "online",
+      "statusText": "Online"
+    },
+    {
+      "activeDeployments": [
+        {
+          "createdAt": "2026-10-09T11:04:38.810Z",
+          "id": "5688ebb9-d685-4c31-b378-10b1fef748d0",
+          "status": "SUCCESS",
+          "statusUpdatedAt": "2026-10-09T11:04:59.376Z"
+        }
+      ],
+      "cronJob": null,
+      "hasIssues": false,
+      "hasVolume": true,
+      "isCronJob": false,
+      "issues": {
+        "criticalCount": 0,
+        "warningCount": 0
+      },
+      "recentFailedDeployments": [],
+      "recentFailures": 0,
+      "replicaStatus": {
+        "crashed": 0,
+        "running": 1,
+        "total": 1
+      },
+      "serviceId": "2b03e60f-d2fc-446c-b278-f340d472dfd4",
+      "serviceName": "MySQL",
+      "state": "online",
+      "statusText": "Online"
+    },
+    {
+      "activeDeployments": [
+        {
+          "createdAt": "2026-10-09T04:54:59.698Z",
+          "id": "79cf206c-7ecc-4de1-b409-c41f13c24ecc",
+          "status": "SUCCESS",
+          "statusUpdatedAt": "2026-10-09T04:55:07.266Z"
+        }
+      ],
+      "cronJob": null,
+      "hasIssues": false,
+      "hasVolume": true,
+      "isCronJob": false,
+      "issues": {
+        "criticalCount": 0,
+        "warningCount": 0
+      },
+      "recentFailedDeployments": [],
+      "recentFailures": 0,
+      "replicaStatus": {
+        "crashed": 0,
+        "running": 1,
+        "total": 1
+      },
+      "serviceId": "72fdd003-f982-4ef7-a95d-243fee381fbb",
+      "serviceName": "Redis",
+      "state": "online",
+      "statusText": "Online"
+    }
+  ],
+  "summary": {
+    "servicesWithIssues": 0,
+    "totalFailures": 0,
+    "totalServices": 6
+  }
+}

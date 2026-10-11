@@ -22,7 +22,10 @@ import quranRouter from './routes/quran';
 import videoTranscodeRouter from './routes/videoTranscode';
 import alignmentsRouter from './routes/alignments';
 import { createCatalogRouter } from './routes/catalog';
-import { catalogService, catalogLinkChecker,catalogStorageReconciliation } from './services/catalogRuntime';
+import { catalogService, catalogLinkChecker,catalogStorageReconciliation, catalogDatabase, catalogAudioSource } from './services/catalogRuntime';
+import { createAdminRuntime, isAdminApiPath } from './admin/adminRuntime';
+import { AdminError } from './admin/adminContracts';
+import { adminErrorResponse } from './routes/admin/adminRouter';
 
 
 
@@ -36,6 +39,7 @@ import { renderJobQueue } from './services/renderJobQueue';
 import { prometheusMetrics } from './services/renderObservability';
 
 const app = express();
+const adminRuntime = createAdminRuntime({ db: catalogDatabase, source: catalogAudioSource, catalog: catalogService });
 let isShuttingDown = false;
 let stopAlignmentRetentionCleanup: (() => void) | null = null;
 
@@ -74,9 +78,9 @@ app.use((_req, res, next) => {
   next();
 });
 
-// 4. Controlled CORS configuration
-app.use(
-  cors({
+// Admin requests own their exact Origin policy and structured errors. The
+// public CORS wildcard/development allowance must not preempt that policy.
+const publicCors = cors({
     origin: (origin, callback) => {
       if (!origin || !config.isProd || config.corsOrigin.includes(origin) || config.corsOrigin.includes('*')) {
         callback(null, true);
@@ -85,8 +89,8 @@ app.use(
       }
     },
     credentials: true,
-  })
-);
+  });
+app.use((req, res, next) => isAdminApiPath(req.path) ? next() : publicCors(req, res, next));
 
 // 5. Request correlation ID & Structured HTTP Access Logging
 app.use(requestLogger);
@@ -100,13 +104,15 @@ app.use((_req, res, next) => {
   next();
 });
 
+// Admin JSON is bounded and read only after its cookie/RBAC/Origin/rate gates.
+app.use('/api/admin', adminRuntime.router);
+
 app.use(express.raw({
   type: ['video/webm', 'video/mp4', 'application/octet-stream'],
   limit: '200mb',
 }));
 app.use(express.json({ limit: '60mb' }));
 app.use(express.urlencoded({ extended: true, limit: '60mb' }));
-
 
 // Global JWT authentication middleware
 app.use(authenticateToken);
@@ -226,15 +232,19 @@ if (fs.existsSync(path.join(staticDir, 'index.html'))) {
 }
 
 // Centralized Express Error Handling Middleware (safe JSON error output with correlation ID)
-app.use((err: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  const requestId = (req as any).requestId;
+app.use((err: Error & {status?:number;body?:unknown}, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  const requestId = (req as express.Request & {requestId?:string}).requestId;
+  if (res.headersSent) return;
+  if (isAdminApiPath(req.path)) {
+    // Parser failures must not log the submitted body (credentials may be in it).
+    adminErrorResponse(res, err instanceof SyntaxError && 'body' in err ? new AdminError('ADMIN_INPUT_INVALID', 422) : err, requestId ?? 'unavailable');
+    return;
+  }
   logger.error('Unhandled server error caught by middleware', err, {
     requestId,
     path: req.originalUrl || req.url,
     method: req.method,
   });
-
-  if (res.headersSent) return;
 
   if (err instanceof SyntaxError && 'body' in err) {
     return res.status(400).json({
@@ -263,6 +273,7 @@ process.on('uncaughtException', (err) => {
 // HTTP Server Start & Graceful Shutdown Orchestration
 // ==============================================================================
 export const server = app.listen(config.port, () => {
+  adminRuntime.start();
   catalogLinkChecker.start();
   catalogStorageReconciliation.start();
   logger.info(`🚀 Quran Reels MySQL Backend Server running on port ${config.port}`, {
@@ -288,7 +299,7 @@ export const server = app.listen(config.port, () => {
 export async function gracefulShutdown(signal: string): Promise<void> {
   if (isShuttingDown) return;
   isShuttingDown = true;
-  const catalogClosing = Promise.all([catalogLinkChecker.close(),catalogStorageReconciliation.close()]);
+  const catalogClosing = Promise.all([catalogLinkChecker.close(),catalogStorageReconciliation.close(),adminRuntime.stopTasks()]);
   stopAlignmentRetentionCleanup?.();
   stopAlignmentRetentionCleanup = null;
   logger.warn(`Received ${signal}. Initiating graceful shutdown...`);
@@ -307,7 +318,7 @@ export async function gracefulShutdown(signal: string): Promise<void> {
     }
     logger.info('HTTP server closed. Draining database connection pool...');
     try {
-      await catalogClosing;
+      await Promise.all([catalogClosing, adminRuntime.close()]);
       await closePool();
       logger.info('Database connection pool drained cleanly. Shutdown complete.');
       process.exit(0);

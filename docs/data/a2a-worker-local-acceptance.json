@@ -1,0 +1,50 @@
+{
+  "local_only": true,
+  "mysql_version": "9.7.2",
+  "schema": "ayahx_d2_a1_migration_final_20261011",
+  "source_host": "server16.mp3quran.net",
+  "real_network_checks": [
+    {
+      "host": "server16.mp3quran.net",
+      "status": "available",
+      "http_status": 200,
+      "tls_verified": true,
+      "transport_hops": 2
+    }
+  ],
+  "transport": "real CatalogAudioSource: HEAD; bounded range fallback only on HTTP405/501",
+  "full_audio_download": false,
+  "audio_persisted": false,
+  "bounded_probe_only": true,
+  "fixture_timing_rows": 3,
+  "jobs": [
+    {
+      "type": "check_links",
+      "state": "completed",
+      "elapsed_ms": 952.7209000000003
+    },
+    {
+      "type": "recalculate_availability",
+      "state": "completed",
+      "changed": 1,
+      "elapsed_ms": 128.38859999999931
+    }
+  ],
+  "audit": [
+    {
+      "type": "check_links",
+      "origin_audits": 1,
+      "worker_events": 5,
+      "separate_worker_request_ids": true
+    },
+    {
+      "type": "recalculate_availability",
+      "origin_audits": 1,
+      "worker_events": 5,
+      "separate_worker_request_ids": true
+    }
+  ],
+  "original_rows_unchanged": true,
+  "admin_roles_unchanged": true,
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4"
+}

@@ -30,11 +30,22 @@ function completion(child: ReturnType<typeof spawn>, label: string): Promise<voi
   });
 }
 // Official age recipient/identity workflow: https://github.com/FiloSottile/age#usage
-const recipientProcess = spawn(age.replace(/age\.exe$/u, 'age-keygen.exe'), ['-y', key], { stdio: ['ignore', 'pipe', 'pipe'] });
-const recipientParts: Buffer[] = [];
-recipientProcess.stdout.on('data', (data: Buffer) => recipientParts.push(data));
-await completion(recipientProcess, 'AGE_RECIPIENT');
-const recipient = Buffer.concat(recipientParts).toString('utf8').trim();
+let recipient: string;
+if (process.argv.includes('--recipient-from-key-comment')) {
+  // Official age-keygen identities include their public recipient as a comment.
+  // Read only that comment; do not manufacture a replacement keygen executable.
+  const identity = await readFile(key, 'utf8');
+  const match = /^# public key: (age1[a-z0-9]+)$/mu.exec(identity);
+  if (!match) throw new Error('AGE_PUBLIC_RECIPIENT_COMMENT_MISSING');
+  recipient = match[1];
+} else {
+  const recipientProcess = spawn(age.replace(/age\.exe$/u, 'age-keygen.exe'), ['-y', key], { stdio: ['ignore', 'pipe', 'pipe'] });
+  const recipientParts: Buffer[] = [];
+  recipientProcess.stdout.on('data', (data: Buffer) => recipientParts.push(data));
+  await completion(recipientProcess, 'AGE_RECIPIENT');
+  recipient = Buffer.concat(recipientParts).toString('utf8').trim();
+}
+if (!/^age1[a-z0-9]+$/u.test(recipient)) throw new Error('AGE_RECIPIENT_INVALID');
 const dump = spawn(railwayBinary, sshArgs(ENVIRONMENTS.production,
   'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" mysqldump --single-transaction --routines --triggers --events --no-tablespaces --skip-comments --hex-blob --set-gtid-purged=OFF "$MYSQL_DATABASE"'), { env: railwayEnv, stdio: ['ignore', 'pipe', 'pipe'] });
 const encrypted = spawn(age, ['-r', recipient, '-o', archive], { stdio: ['pipe', 'ignore', 'pipe'] });
