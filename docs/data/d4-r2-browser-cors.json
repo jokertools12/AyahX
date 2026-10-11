@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-10-11T07:23:07Z",
+  "actual_r2": true,
+  "bucket": "ayahx-audio-staging",
+  "browser": "chromium",
+  "allowed_origin": "https://ayahx-staging.up.railway.app",
+  "denied_origin": "https://ayahx.com",
+  "checks": {"allowed_put": true,"allowed_get": true,"range_status": 206,"range_bytes": 1000,"range_bytes_match": true,"etag_exposed": true,"content_range_exposed": true,"disallowed_blocked": true},
+  "real_r2_requests_intercepted": false,
+  "inert_origin_fixture_intercepted": true,
+  "application_or_staging_service_changed": false,
+  "test_objects_prefix": "test/",
+  "capability_ttl_seconds": 900,
+  "test_file": "tooling/e2e/tests/r2-cors.e2e.ts",
+  "run_id": "01a129d8-0493-7600-aad2-ca4b7bd90f1d",
+  "test_result": "1 passed, 0 failed",
+  "prior_failures_retained": [{"reason":"Owned inert HTML missing UTF-8 charset, label failed before R2 network"},{"reason":"Immutable PUT requires exact If-None-Match signed header and CORS allowlist entry"}],
+  "credentials_or_signed_urls_in_public_evidence": false
+}

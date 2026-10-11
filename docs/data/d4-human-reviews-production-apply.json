@@ -1,0 +1,492 @@
+{
+  "started_at": "2026-10-11T07:45:37.738Z",
+  "target": "production",
+  "applied": true,
+  "sql_sha256": "5823aa2664fdef77f5f5ce7d0095b34a7b0e1187fe8561dceb05c28c6f937fba",
+  "sql_bytes": 9629347,
+  "statements": 1288,
+  "disk_before": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1758113792,
+    "available_bytes": 2917695488
+  },
+  "protected_checksums_unchanged": true,
+  "d1": {
+    "surahs": 114,
+    "ayahs": 6236,
+    "words": 77433
+  },
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "timings": 422463,
+  "disk_after": {
+    "total_bytes": 4685873152,
+    "used_bytes": 1774764032,
+    "available_bytes": 2901045248
+  },
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": true,
+    "acknowledged_commands": 146,
+    "writes_halted": false,
+    "batches": [
+      {
+        "ordinal": 1,
+        "row_count": 3,
+        "sql_sha256": "b342b40526a54e1ed27ea56144b65f5edeae73cd7f45ea64882db238310b4cae",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 270,
+        "sql_bytes": 157336,
+        "wire_request_bytes": 12586
+      },
+      {
+        "ordinal": 2,
+        "row_count": 21,
+        "sql_sha256": "8c47355ecd7c1c92acd4789922a8877d37bced715d92a206b63aec50f6a4f3dd",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 243,
+        "sql_bytes": 192624,
+        "wire_request_bytes": 16739
+      },
+      {
+        "ordinal": 3,
+        "row_count": 1,
+        "sql_sha256": "127f9bf67a81ddab7fe78de871f421f7d21e72137138b1e3bc9179e01bd48a5d",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 253,
+        "sql_bytes": 150217,
+        "wire_request_bytes": 12871
+      },
+      {
+        "ordinal": 4,
+        "row_count": 21,
+        "sql_sha256": "a80c559b69da7f7649104b7eb1ec8319d15c1017e4cda410ba5978d61af0a169",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 255,
+        "sql_bytes": 198933,
+        "wire_request_bytes": 19003
+      },
+      {
+        "ordinal": 5,
+        "row_count": 11,
+        "sql_sha256": "5876342fb77356194dfe0ec124ede3ac3b37b3f4391b52f8789bb2b53d5e8855",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 309,
+        "sql_bytes": 224566,
+        "wire_request_bytes": 31535
+      },
+      {
+        "ordinal": 6,
+        "row_count": 36,
+        "sql_sha256": "43191d3bc2fccf038bce89a15732939e428f45aa38f2eb686397fd476ce04125",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 284,
+        "sql_bytes": 211948,
+        "wire_request_bytes": 28759
+      },
+      {
+        "ordinal": 7,
+        "row_count": 6,
+        "sql_sha256": "c7db2bcdefdcd5398ae8509ea9d038596e5d842b4f7a38733932e0e325276547",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 283,
+        "sql_bytes": 195723,
+        "wire_request_bytes": 25687
+      },
+      {
+        "ordinal": 8,
+        "row_count": 14,
+        "sql_sha256": "845116c7277be2edd14c55f501b11a6c40ab35aee27587224eba49d9a0dce092",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 286,
+        "sql_bytes": 261281,
+        "wire_request_bytes": 29835
+      },
+      {
+        "ordinal": 9,
+        "row_count": 57,
+        "sql_sha256": "b07a119a35cf5d255e0d994f35b4f660caeb0a7c5bd8d9eeaa7fca7450c8929c",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 402,
+        "sql_bytes": 246112,
+        "wire_request_bytes": 32815
+      },
+      {
+        "ordinal": 10,
+        "row_count": 1,
+        "sql_sha256": "42fa74c9eacd0b685b004931a4aedf2a945d58d569e1b06adb345d228aab3677",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 233,
+        "sql_bytes": 141989,
+        "wire_request_bytes": 12051
+      },
+      {
+        "ordinal": 11,
+        "row_count": 36,
+        "sql_sha256": "f5dc5142ffee6a817adf7b062c92c8151e1ca71d52714951e034245c67821f8e",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 251,
+        "sql_bytes": 253322,
+        "wire_request_bytes": 23255
+      },
+      {
+        "ordinal": 12,
+        "row_count": 4,
+        "sql_sha256": "5f04e928420560ce02156d625ba17ab35a73c673488d49cd5da47b42c0bc6c21",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 265,
+        "sql_bytes": 220721,
+        "wire_request_bytes": 31731
+      },
+      {
+        "ordinal": 13,
+        "row_count": 24,
+        "sql_sha256": "cd6a7d7981f912ddd2984aa99c6000d2099157329ca9b10f6ea09fd0b8741133",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 281,
+        "sql_bytes": 260595,
+        "wire_request_bytes": 37999
+      },
+      {
+        "ordinal": 14,
+        "row_count": 24,
+        "sql_sha256": "7766f61829a4a34528fc9d0f4abcd6fa52f98664fd868ed4c31856e460071668",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 244,
+        "sql_bytes": 191004,
+        "wire_request_bytes": 18171
+      },
+      {
+        "ordinal": 15,
+        "row_count": 13,
+        "sql_sha256": "8f600721803b04baa65f7653b74ee266a6fc8730b363cea7565e176888265851",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 240,
+        "sql_bytes": 165891,
+        "wire_request_bytes": 15499
+      },
+      {
+        "ordinal": 16,
+        "row_count": 10,
+        "sql_sha256": "14d9dc3e9d8294a86d662ea5d03cac821a7f49aa148b0ad4aa29f58b23673d13",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 248,
+        "sql_bytes": 260964,
+        "wire_request_bytes": 23011
+      },
+      {
+        "ordinal": 17,
+        "row_count": 40,
+        "sql_sha256": "e7f60c888e2716d3823d856f9cfaafdef2f4fd1ecb2d5cb0cf730fa1136ca12e",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 261,
+        "sql_bytes": 224334,
+        "wire_request_bytes": 28783
+      },
+      {
+        "ordinal": 18,
+        "row_count": 11,
+        "sql_sha256": "6b6b6d7bababc595c59544d2be22de2f3d882d41702ce43b0d8983457e0b3a7a",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 263,
+        "sql_bytes": 224154,
+        "wire_request_bytes": 30579
+      },
+      {
+        "ordinal": 19,
+        "row_count": 53,
+        "sql_sha256": "f98082495f1078c0cebfcd300b0adb7e64e974127ed70405639c68c26d4208fb",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 278,
+        "sql_bytes": 201861,
+        "wire_request_bytes": 24691
+      },
+      {
+        "ordinal": 20,
+        "row_count": 30,
+        "sql_sha256": "3feb38444504dba4b9a1d873aabe05709e168711412e4933681049aa3abed8c8",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 281,
+        "sql_bytes": 261039,
+        "wire_request_bytes": 33683
+      },
+      {
+        "ordinal": 21,
+        "row_count": 56,
+        "sql_sha256": "2ce9689d5c577770b6538fb492441b125700c773d487d6c48ed5834f4092d409",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 270,
+        "sql_bytes": 256900,
+        "wire_request_bytes": 33511
+      },
+      {
+        "ordinal": 22,
+        "row_count": 1,
+        "sql_sha256": "f300ab410590a5fc7afc5a028da3b5535d962c8a7975518e53b4dba4595d4cf6",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 232,
+        "sql_bytes": 145993,
+        "wire_request_bytes": 10727
+      },
+      {
+        "ordinal": 23,
+        "row_count": 41,
+        "sql_sha256": "dba66c1977cde1573fb44aa34be95512555340b891476336507e62619d7423e6",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 247,
+        "sql_bytes": 231152,
+        "wire_request_bytes": 21291
+      },
+      {
+        "ordinal": 24,
+        "row_count": 13,
+        "sql_sha256": "09309d26d28acc51da89bbd065567334141d64dabab67a75494428fca17ff2b5",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 269,
+        "sql_bytes": 241271,
+        "wire_request_bytes": 34523
+      },
+      {
+        "ordinal": 25,
+        "row_count": 23,
+        "sql_sha256": "a2bc25773049c2f1b8331bb94b51a40da99d3e773e898e055ce4c4a3aef960d1",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 281,
+        "sql_bytes": 254729,
+        "wire_request_bytes": 35615
+      },
+      {
+        "ordinal": 26,
+        "row_count": 40,
+        "sql_sha256": "1c97e0c96c8172a1d84ef2efb9a722b7e9a0ac4bc6290ca09e5fadc19fb8d271",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 257,
+        "sql_bytes": 218090,
+        "wire_request_bytes": 29179
+      },
+      {
+        "ordinal": 27,
+        "row_count": 34,
+        "sql_sha256": "ccffdaca8396622a3a173819faf8f7abeb1dc672dbaf8ea42acde0d8fa996102",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 268,
+        "sql_bytes": 262111,
+        "wire_request_bytes": 33051
+      },
+      {
+        "ordinal": 28,
+        "row_count": 54,
+        "sql_sha256": "c86337700af8b1bb83438d45066bfade80cb5b6dd3abc136244fe370d96b0ec7",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 258,
+        "sql_bytes": 213701,
+        "wire_request_bytes": 19519
+      },
+      {
+        "ordinal": 29,
+        "row_count": 61,
+        "sql_sha256": "8290483d6e0639d3858523f4c4c6c73dd4f8fdde4ff3b04d731b17af76b1398f",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 270,
+        "sql_bytes": 261945,
+        "wire_request_bytes": 34743
+      },
+      {
+        "ordinal": 30,
+        "row_count": 10,
+        "sql_sha256": "dde54506c46500d4d3b67c14a16df15b60b8e7422a48481376ddcb27a2706790",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 240,
+        "sql_bytes": 162052,
+        "wire_request_bytes": 14491
+      },
+      {
+        "ordinal": 31,
+        "row_count": 10,
+        "sql_sha256": "e2565686ffbc893f4002595b6d517eddc86b6a6f066a950c2192682f6a95f928",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 250,
+        "sql_bytes": 234319,
+        "wire_request_bytes": 24331
+      },
+      {
+        "ordinal": 32,
+        "row_count": 38,
+        "sql_sha256": "ed41b087db3d1e68e0460f3935054bd93835375f36c543992c5fb38eac680259",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 267,
+        "sql_bytes": 212263,
+        "wire_request_bytes": 29352
+      },
+      {
+        "ordinal": 33,
+        "row_count": 49,
+        "sql_sha256": "88c820c84d08cdd82b1ef76a72d5e95bc7ff580627f5acdc88b99b0d136044eb",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 289,
+        "sql_bytes": 230579,
+        "wire_request_bytes": 27536
+      },
+      {
+        "ordinal": 34,
+        "row_count": 30,
+        "sql_sha256": "765d1671c4c388fa26958e1f42e5ac4b4e18500a503abdcd021ac7280a72931b",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 258,
+        "sql_bytes": 212431,
+        "wire_request_bytes": 27904
+      },
+      {
+        "ordinal": 35,
+        "row_count": 13,
+        "sql_sha256": "f0893aee3a7ed133086db433529e96d27c38c8db780e3f2ef760b62b246ae83d",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 262,
+        "sql_bytes": 226900,
+        "wire_request_bytes": 31356
+      },
+      {
+        "ordinal": 36,
+        "row_count": 32,
+        "sql_sha256": "50090ce6f04773dd455af695e6dd3dc810afbbbffc48cd4af788394f19637de1",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 272,
+        "sql_bytes": 260613,
+        "wire_request_bytes": 35588
+      },
+      {
+        "ordinal": 37,
+        "row_count": 113,
+        "sql_sha256": "395626b43c24f3c2ad4626b1abf8ad98562a932ef6b3bca658c4fe0e1555f67d",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 269,
+        "sql_bytes": 257558,
+        "wire_request_bytes": 27240
+      },
+      {
+        "ordinal": 38,
+        "row_count": 43,
+        "sql_sha256": "6bb762c8d6365b38be92d93d40f2be57d80464a26aa0cb35216aa0518a3c48ba",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 252,
+        "sql_bytes": 221639,
+        "wire_request_bytes": 25056
+      },
+      {
+        "ordinal": 39,
+        "row_count": 55,
+        "sql_sha256": "cdeb411c5bf8b8ff61a9a5ca97c0a3886a0ca3cc52ebd60bb7720454565fd385",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 247,
+        "sql_bytes": 192590,
+        "wire_request_bytes": 23676
+      },
+      {
+        "ordinal": 40,
+        "row_count": 49,
+        "sql_sha256": "2657167454fe4f1c5dde28484e44ba5fce912cb0d9191c4af28d202c49d6af3a",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 276,
+        "sql_bytes": 261821,
+        "wire_request_bytes": 33220
+      },
+      {
+        "ordinal": 41,
+        "row_count": 26,
+        "sql_sha256": "0ff63011cb71475bc562de9c16c48a6ed02c4856d9b23c3a6a0fb83b5c2a327a",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 241,
+        "sql_bytes": 222199,
+        "wire_request_bytes": 18884
+      },
+      {
+        "ordinal": 42,
+        "row_count": 10,
+        "sql_sha256": "09bc89ac8d92e7ed76a33c503a9337fe7b59d3e626420d6475372efa93927c1c",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 250,
+        "sql_bytes": 230895,
+        "wire_request_bytes": 23952
+      },
+      {
+        "ordinal": 43,
+        "row_count": 51,
+        "sql_sha256": "2c2df24f8802043599a2a7a852e77c558fa2078797fd11dc73af2011a9fa7608",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 313,
+        "sql_bytes": 214245,
+        "wire_request_bytes": 25776
+      },
+      {
+        "ordinal": 44,
+        "row_count": 12,
+        "sql_sha256": "28cb2cc00b55d958790d0f816893aa54a5fc907df41fcb13b9aa1c834ab1fe5b",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 250,
+        "sql_bytes": 158693,
+        "wire_request_bytes": 21988
+      },
+      {
+        "ordinal": 45,
+        "row_count": 0,
+        "sql_sha256": "2db35aa37c4005aa96055e900adc9bfbbd70d106820fefcb83216b7cc3f95422",
+        "threads_connected": 1,
+        "max_connections": 60,
+        "elapsed_ms": 221,
+        "sql_bytes": 7,
+        "wire_request_bytes": 76
+      }
+    ],
+    "transport_request_bytes": 1146243,
+    "transport_response_bytes": 3033326
+  },
+  "finished_at": "2026-10-11T07:48:08.747Z"
+}

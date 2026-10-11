@@ -1,0 +1,27 @@
+{
+  "checked_at": "2026-10-11T07:34:06.019Z",
+  "source": "authenticated Cloudflare R2 Overview",
+  "period": "September 26 - October 26",
+  "before_usd": 0,
+  "after_usd": 0,
+  "displayed_billable_delta_usd": 0,
+  "class_a_before": 131,
+  "class_b_before": 33,
+  "class_a_after": 161,
+  "class_b_after": 80,
+  "buckets": [
+    {
+      "name": "ayahx-audio-prod",
+      "objects": 0,
+      "bytes": 0
+    },
+    {
+      "name": "ayahx-audio-staging",
+      "objects": 0,
+      "bytes": 0
+    }
+  ],
+  "account_plan_changed": false,
+  "usage_reporting_delay_possible": true,
+  "cost_isolated_to_test_not_proven": true
+}

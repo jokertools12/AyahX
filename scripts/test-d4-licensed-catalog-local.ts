@@ -56,7 +56,9 @@ try{
   try{for(const table of tables){const [ddl]=await connection.query<RowDataPacket[]>(`SHOW CREATE TABLE ${identifier(String(table.name))}`);const text=String(ddl[0]['Create Table']);assertLocalCloneDdl(text,template);ddlHashes[String(table.name)]=digest(text);await pool.query(text);}}
   finally{await pool.query('SET FOREIGN_KEY_CHECKS=1');}
   report.template_ddl_sha256=ddlHashes;
-  for(const table of ['riwayat','quran_text_versions','quran_surahs','quran_ayahs','quran_words'])await pool.query(`INSERT INTO ${identifier(table)} SELECT * FROM ${identifier(template)}.${identifier(table)}`);
+  // Canonical corpus uses these three actual tables. Do not invent riwayat or
+  // quran_text_versions tables that are absent from AyahX's real D1 schema.
+  for(const table of ['quran_surahs','quran_ayahs','quran_words'])await pool.query(`INSERT INTO ${identifier(table)} SELECT * FROM ${identifier(template)}.${identifier(table)}`);
   for(const table of ['quran_surahs','quran_ayahs','quran_words']){const sums:RowDataPacket[]=(await pool.query<RowDataPacket[]>(`CHECKSUM TABLE ${identifier(table)}`))[0];assert.equal(sums[0].Checksum,(before[table] as {checksum:unknown}).checksum,'CANONICAL_COPY_CHANGED');}
   const [columns]=await pool.query<RowDataPacket[]>("SELECT TABLE_NAME t,COLUMN_NAME c,EXTRA extra FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=?",[database]);
   assert.ok(columns.some(c=>c.t==='recitations'&&c.c==='licensed_publication_details'),'CURRENT_MIGRATION005_REQUIRED');

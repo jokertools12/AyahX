@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-10-11T07:33:45.314Z",
+  "current_usage_dollars": 18.14880407484438,
+  "estimated_bill_dollars": 22.325174340521496,
+  "hard_limit": 30,
+  "soft_limit": 20,
+  "remaining_dollars": 11.851195925155618,
+  "line_items": [
+    {
+      "currentUsageDollars": 0.8934083136342593,
+      "label": "CPU"
+    },
+    {
+      "currentUsageDollars": 17.04191162361679,
+      "label": "Memory"
+    },
+    {
+      "currentUsageDollars": 0.0889891185,
+      "label": "Egress"
+    },
+    {
+      "currentUsageDollars": 0.11308938325333333,
+      "label": "Volume"
+    },
+    {
+      "currentUsageDollars": 0.01140563584,
+      "label": "Backup"
+    }
+  ],
+  "scope": "workspace_total_not_isolated_D4_cost"
+}

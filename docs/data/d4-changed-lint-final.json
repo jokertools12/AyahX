@@ -1,0 +1,23 @@
+{
+  "checked_at": "2026-10-11T07:40:21.156Z",
+  "base": "origin/main",
+  "files": 127,
+  "new_messages": [],
+  "existing_messages": [
+    {
+      "file": "server/index.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 229,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/index.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 230,
+      "message": "Unexpected any. Specify a different type."
+    }
+  ],
+  "passed": true
+}

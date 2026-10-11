@@ -1,0 +1,3999 @@
+{
+  "started_at": "2026-10-10T15:14:43.809Z",
+  "target": "production",
+  "applied": false,
+  "sql_sha256": "b8d2dd767544d399dd3a8c27acffa516e2f8bc857aa191a24f2c83ee45cbdfe7",
+  "sql_bytes": 654,
+  "audit_seed": "040c8fafc4453f36cbcbe8500eed60c5f7ca063f78cb8c32fed1d7b4602a6535",
+  "audit_tail": "040c8fafc4453f36cbcbe8500eed60c5f7ca063f78cb8c32fed1d7b4602a6535",
+  "mutations": [],
+  "changes": 0,
+  "slots": 207,
+  "available": 177,
+  "samples": [
+    {
+      "recitation": "abdul_hamid_ghraio_2025_yt",
+      "recitation_id": "145f04af-ee8c-61d9-5570-d3375a6e59e3",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=OEk9JS8Y58c",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "abdul_hamid_ghraio_2025_yt",
+      "recitation_id": "145f04af-ee8c-61d9-5570-d3375a6e59e3",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=sFnfH3MwryA",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "abdul_hamid_ghraio_2025_yt",
+      "recitation_id": "145f04af-ee8c-61d9-5570-d3375a6e59e3",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=l168I_vSDYs",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "abdul_hamid_ghraio_2026_yt",
+      "recitation_id": "4b8a17c8-07dd-51bd-949a-b3deffb74a83",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=BM-hCR3ketY",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "abdul_hamid_ghraio_2026_yt",
+      "recitation_id": "4b8a17c8-07dd-51bd-949a-b3deffb74a83",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 2629235,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://www.youtube.com/watch?v=zchS1jHBDNA",
+        "playback_url": "https://www.youtube.com/watch?v=zchS1jHBDNA",
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe",
+        "chapter_offset_ms": 2629235
+      }
+    },
+    {
+      "recitation": "abdul_hamid_ghraio_2026_yt",
+      "recitation_id": "4b8a17c8-07dd-51bd-949a-b3deffb74a83",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=YeIIU2RH6HU",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "abdulaziz_al_turki_yt",
+      "recitation_id": "5ee98aee-2dd0-13a3-793c-0934afec9a06",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=CAXuiGDr_YI",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "abdulaziz_al_turki_yt",
+      "recitation_id": "5ee98aee-2dd0-13a3-793c-0934afec9a06",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=bR197I-Wi2M",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "abdulaziz_al_turki_yt",
+      "recitation_id": "5ee98aee-2dd0-13a3-793c-0934afec9a06",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=gXeG1xqGL7I",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "recitation_id": "51567d7d-7729-4997-25d3-99b3c82e6aed",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/mujawwad/mp3/001.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/mujawwad/mp3/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "recitation_id": "51567d7d-7729-4997-25d3-99b3c82e6aed",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/mujawwad/mp3/112.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/mujawwad/mp3/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdulbasit_abdulsamad_mujawwad_tarteel",
+      "recitation_id": "51567d7d-7729-4997-25d3-99b3c82e6aed",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/mujawwad/mp3/036.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/mujawwad/mp3/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdulbasit_abdulsamad_tarteel",
+      "recitation_id": "95650f99-296a-6122-2dac-498b79db8ede",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/murattal/mp3/001.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/murattal/mp3/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdulbasit_abdulsamad_tarteel",
+      "recitation_id": "95650f99-296a-6122-2dac-498b79db8ede",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/murattal/mp3/112.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/murattal/mp3/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdulbasit_abdulsamad_tarteel",
+      "recitation_id": "95650f99-296a-6122-2dac-498b79db8ede",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/murattal/mp3/036.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/abdulBasit/murattal/mp3/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdulbasit_abdulsamad_warsh_qdc",
+      "recitation_id": "7f972ead-c29b-5642-a62a-df91ff150ca5",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/abdulbaset_warsh/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/abdulbaset_warsh/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdulbasit_abdulsamad_warsh_qdc",
+      "recitation_id": "7f972ead-c29b-5642-a62a-df91ff150ca5",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/abdulbaset_warsh/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/abdulbaset_warsh/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdulbasit_abdulsamad_warsh_qdc",
+      "recitation_id": "7f972ead-c29b-5642-a62a-df91ff150ca5",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/abdulbaset_warsh/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/abdulbaset_warsh/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdullah_al_buaijan_2025_yt",
+      "recitation_id": "c22f1347-80b6-2a9c-f7d7-7fb9ce0bc56a",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=7qcvvbEJTPk",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "abdullah_al_buaijan_2025_yt",
+      "recitation_id": "c22f1347-80b6-2a9c-f7d7-7fb9ce0bc56a",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=mZgyhV9X_E4",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "abdullah_al_buaijan_2025_yt",
+      "recitation_id": "c22f1347-80b6-2a9c-f7d7-7fb9ce0bc56a",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=ImdeTHdFq1Q",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "abdullah_al_mattrod_qdc",
+      "recitation_id": "bc8af87f-bb5f-0bec-9b75-94ee6898e594",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/abdullah_matroud/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/abdullah_matroud/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdullah_al_mattrod_qdc",
+      "recitation_id": "bc8af87f-bb5f-0bec-9b75-94ee6898e594",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/abdullah_matroud/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/abdullah_matroud/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdullah_al_mattrod_qdc",
+      "recitation_id": "bc8af87f-bb5f-0bec-9b75-94ee6898e594",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/abdullah_matroud/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/abdullah_matroud/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdullah_al_qarafi_mp3quran",
+      "recitation_id": "1be4803e-aa12-eb2b-3cee-ffde092273d3",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/a_alqrafi/Rewayat-Hafs-A-n-Assem/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/abdullah-qarafi/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdullah_al_qarafi_mp3quran",
+      "recitation_id": "1be4803e-aa12-eb2b-3cee-ffde092273d3",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/a_alqrafi/Rewayat-Hafs-A-n-Assem/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/abdullah-qarafi/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdullah_al_qarafi_mp3quran",
+      "recitation_id": "1be4803e-aa12-eb2b-3cee-ffde092273d3",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/a_alqrafi/Rewayat-Hafs-A-n-Assem/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/abdullah-qarafi/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdullah_kamel_way2quran",
+      "recitation_id": "09be4d81-c0e6-4cc7-4d32-70480e377a61",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/abdullah-kamel/hafs-an-asim/001.mp3",
+        "playback_url": "https://media.way2quran.com/abdullah-kamel/hafs-an-asim/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdullah_kamel_way2quran",
+      "recitation_id": "09be4d81-c0e6-4cc7-4d32-70480e377a61",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/abdullah-kamel/hafs-an-asim/112.mp3",
+        "playback_url": "https://media.way2quran.com/abdullah-kamel/hafs-an-asim/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdullah_kamel_way2quran",
+      "recitation_id": "09be4d81-c0e6-4cc7-4d32-70480e377a61",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/abdullah-kamel/hafs-an-asim/036.mp3",
+        "playback_url": "https://media.way2quran.com/abdullah-kamel/hafs-an-asim/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdulwadood_haneef_mp3quran",
+      "recitation_id": "2f3ca0d9-1e94-7d4b-5123-da1e6b2742ac",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server8.mp3quran.net/wdod/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/abdulwadood-haneef/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdulwadood_haneef_mp3quran",
+      "recitation_id": "2f3ca0d9-1e94-7d4b-5123-da1e6b2742ac",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server8.mp3quran.net/wdod/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/abdulwadood-haneef/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdulwadood_haneef_mp3quran",
+      "recitation_id": "2f3ca0d9-1e94-7d4b-5123-da1e6b2742ac",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server8.mp3quran.net/wdod/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/abdulwadood-haneef/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdur_rashid_sufi_qdc",
+      "recitation_id": "80633b53-7ae7-e52a-ef25-149b2b8c3fad",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdur_rashid_sufi_qdc",
+      "recitation_id": "80633b53-7ae7-e52a-ef25-149b2b8c3fad",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdur_rashid_sufi_qdc",
+      "recitation_id": "80633b53-7ae7-e52a-ef25-149b2b8c3fad",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdur_rashid_sufi_shubah_qdc",
+      "recitation_id": "99b3e3dd-f1b4-befd-753a-25f5f70c1b4f",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi_shu3ba/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi_shu3ba/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdur_rashid_sufi_shubah_qdc",
+      "recitation_id": "99b3e3dd-f1b4-befd-753a-25f5f70c1b4f",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi_shu3ba/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi_shu3ba/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abdur_rashid_sufi_shubah_qdc",
+      "recitation_id": "99b3e3dd-f1b4-befd-753a-25f5f70c1b4f",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi_shu3ba/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/abdurrashid_sufi_shu3ba/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abu_bakr_al_shatri_tarteel",
+      "recitation_id": "b8f09fcc-08b9-9eb7-8a1e-1fc97fa41b58",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/abuBakrAlShatri/murattal/mp3/001.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/abuBakrAlShatri/murattal/mp3/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abu_bakr_al_shatri_tarteel",
+      "recitation_id": "b8f09fcc-08b9-9eb7-8a1e-1fc97fa41b58",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/abuBakrAlShatri/murattal/mp3/112.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/abuBakrAlShatri/murattal/mp3/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "abu_bakr_al_shatri_tarteel",
+      "recitation_id": "b8f09fcc-08b9-9eb7-8a1e-1fc97fa41b58",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/abuBakrAlShatri/murattal/mp3/036.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/abuBakrAlShatri/murattal/mp3/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "recitation_id": "b1a45240-81a7-a9c4-2b2c-5888eeefe115",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://archive.org/download/a_20251007sss/001%20-%20%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9.mp3",
+        "playback_url": "https://dn721906.ca.archive.org/0/items/a_20251007sss/001%20-%20%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "recitation_id": "b1a45240-81a7-a9c4-2b2c-5888eeefe115",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://archive.org/download/a_20251007sss/112%20-%20%D8%A7%D9%84%D8%A5%D8%AE%D9%84%D8%A7%D8%B5.mp3",
+        "playback_url": "https://dn721906.ca.archive.org/0/items/a_20251007sss/112%20-%20%D8%A7%D9%84%D8%A5%D8%AE%D9%84%D8%A7%D8%B5.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "adel_al_karbalaei_archive_v2",
+      "recitation_id": "b1a45240-81a7-a9c4-2b2c-5888eeefe115",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://archive.org/download/a_20251007sss/036%20-%20%D9%8A%D8%B3.mp3",
+        "playback_url": "https://dn721906.ca.archive.org/0/items/a_20251007sss/036%20-%20%D9%8A%D8%B3.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmad_naseem_ali_ahmad_2019_yt",
+      "recitation_id": "232bdfd8-0328-3579-9ed2-d3c4cd90f3fb",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 10250,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://www.youtube.com/watch?v=kTuag2gaPaY",
+        "playback_url": "https://www.youtube.com/watch?v=kTuag2gaPaY",
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe",
+        "chapter_offset_ms": 10250
+      }
+    },
+    {
+      "recitation": "ahmad_naseem_ali_ahmad_2019_yt",
+      "recitation_id": "232bdfd8-0328-3579-9ed2-d3c4cd90f3fb",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 10290,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://www.youtube.com/watch?v=ysAb0iSRKMA",
+        "playback_url": "https://www.youtube.com/watch?v=ysAb0iSRKMA",
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe",
+        "chapter_offset_ms": 10290
+      }
+    },
+    {
+      "recitation": "ahmad_naseem_ali_ahmad_2019_yt",
+      "recitation_id": "232bdfd8-0328-3579-9ed2-d3c4cd90f3fb",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 10710,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://www.youtube.com/watch?v=wXbO5BdkGNo",
+        "playback_url": "https://www.youtube.com/watch?v=wXbO5BdkGNo",
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe",
+        "chapter_offset_ms": 10710
+      }
+    },
+    {
+      "recitation": "ahmed_al_ajmi_qdc",
+      "recitation_id": "09b09290-df40-e01e-1767-437e03debec9",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/ahmed_ibn_3ali_al-3ajamy/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/ahmed_ibn_3ali_al-3ajamy/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_al_ajmi_qdc",
+      "recitation_id": "09b09290-df40-e01e-1767-437e03debec9",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/ahmed_ibn_3ali_al-3ajamy/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/ahmed_ibn_3ali_al-3ajamy/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_al_ajmi_qdc",
+      "recitation_id": "09b09290-df40-e01e-1767-437e03debec9",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/ahmed_ibn_3ali_al-3ajamy/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/ahmed_ibn_3ali_al-3ajamy/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_amer_tvquran",
+      "recitation_id": "d6af6453-e44f-6e4b-da9b-ebe8aaad20ac",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.tvquran.com/download/recitations/197/143/001.mp3",
+        "playback_url": "https://download.tvquran.com/download/recitations/197/143/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_amer_tvquran",
+      "recitation_id": "d6af6453-e44f-6e4b-da9b-ebe8aaad20ac",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.tvquran.com/download/recitations/197/143/112.mp3",
+        "playback_url": "https://download.tvquran.com/download/recitations/197/143/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_amer_tvquran",
+      "recitation_id": "d6af6453-e44f-6e4b-da9b-ebe8aaad20ac",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.tvquran.com/download/recitations/197/143/036.mp3",
+        "playback_url": "https://download.tvquran.com/download/recitations/197/143/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_deban_qalon_mp3quran",
+      "recitation_id": "a173a7a7-b0a9-8409-da03-a7dc3038f23c",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/deban/Rewayat-Qalon-A-n-Nafi/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-deeban/r5/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_deban_qalon_mp3quran",
+      "recitation_id": "a173a7a7-b0a9-8409-da03-a7dc3038f23c",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/deban/Rewayat-Qalon-A-n-Nafi/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-deeban/r5/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_deban_qalon_mp3quran",
+      "recitation_id": "a173a7a7-b0a9-8409-da03-a7dc3038f23c",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/deban/Rewayat-Qalon-A-n-Nafi/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-deeban/r5/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_issa_al_maasaraawi_mp3quran",
+      "recitation_id": "bf4ebc6b-ef7c-4402-4862-63d50efedfaa",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/a_maasaraawi/Rewayat-Hafs-A-n-Assem/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-masarawi/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_issa_al_maasaraawi_mp3quran",
+      "recitation_id": "bf4ebc6b-ef7c-4402-4862-63d50efedfaa",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/a_maasaraawi/Rewayat-Hafs-A-n-Assem/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-masarawi/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_issa_al_maasaraawi_mp3quran",
+      "recitation_id": "bf4ebc6b-ef7c-4402-4862-63d50efedfaa",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/a_maasaraawi/Rewayat-Hafs-A-n-Assem/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-masarawi/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_kaseb_way2quran",
+      "recitation_id": "10317dc7-547c-71ac-529e-e993980a6a3a",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/ahmed-kaseb/hafs-an-asim/001.mp3",
+        "playback_url": "https://media.way2quran.com/ahmed-kaseb/hafs-an-asim/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_kaseb_way2quran",
+      "recitation_id": "10317dc7-547c-71ac-529e-e993980a6a3a",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/ahmed-kaseb/hafs-an-asim/112.mp3",
+        "playback_url": "https://media.way2quran.com/ahmed-kaseb/hafs-an-asim/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_kaseb_way2quran",
+      "recitation_id": "10317dc7-547c-71ac-529e-e993980a6a3a",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/ahmed-kaseb/hafs-an-asim/036.mp3",
+        "playback_url": "https://media.way2quran.com/ahmed-kaseb/hafs-an-asim/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_nuayna_qdc",
+      "recitation_id": "2044d4d2-cc5b-b407-cbe2-c7632e21478b",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/ahmad_nauina/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/ahmad_nauina/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_nuayna_qdc",
+      "recitation_id": "2044d4d2-cc5b-b407-cbe2-c7632e21478b",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/ahmad_nauina/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/ahmad_nauina/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_nuayna_qdc",
+      "recitation_id": "2044d4d2-cc5b-b407-cbe2-c7632e21478b",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/ahmad_nauina/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/ahmad_nauina/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_saleh_rajab_qalon_way2quran",
+      "recitation_id": "12cf216b-1bd5-686c-1d1e-05714aa38a3d",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/ahmed-saleh-rajab/qalun-an-nafi/001.mp3",
+        "playback_url": "https://media.way2quran.com/ahmed-saleh-rajab/qalun-an-nafi/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_saleh_rajab_qalon_way2quran",
+      "recitation_id": "12cf216b-1bd5-686c-1d1e-05714aa38a3d",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/ahmed-saleh-rajab/qalun-an-nafi/112.mp3",
+        "playback_url": "https://media.way2quran.com/ahmed-saleh-rajab/qalun-an-nafi/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_saleh_rajab_qalon_way2quran",
+      "recitation_id": "12cf216b-1bd5-686c-1d1e-05714aa38a3d",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/ahmed-saleh-rajab/qalun-an-nafi/036.mp3",
+        "playback_url": "https://media.way2quran.com/ahmed-saleh-rajab/qalun-an-nafi/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_saud_mp3quran",
+      "recitation_id": "8a1489c5-4fa2-12b5-0112-6e04b01e94b5",
+      "sample_key": "fatiha_25s",
+      "surah": 85,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "NEAREST_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "CHAPTER_NOT_IN_CATALOG",
+        "unavailable_reason": null,
+        "original_url": "https://server11.mp3quran.net/saud/085.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-saud/r1/085.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_saud_mp3quran",
+      "recitation_id": "8a1489c5-4fa2-12b5-0112-6e04b01e94b5",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server11.mp3quran.net/saud/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-saud/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_saud_mp3quran",
+      "recitation_id": "8a1489c5-4fa2-12b5-0112-6e04b01e94b5",
+      "sample_key": "yasin_25s",
+      "surah": 85,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "NEAREST_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "CHAPTER_NOT_IN_CATALOG",
+        "unavailable_reason": null,
+        "original_url": "https://server11.mp3quran.net/saud/085.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-saud/r1/085.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_shaheen_mp3quran",
+      "recitation_id": "3e21d6e0-7a97-e9ae-86b5-95d6d1a74dcc",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/shaheen/Rewayat-Hafs-A-n-Assem/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-shaheen/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_shaheen_mp3quran",
+      "recitation_id": "3e21d6e0-7a97-e9ae-86b5-95d6d1a74dcc",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/shaheen/Rewayat-Hafs-A-n-Assem/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-shaheen/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_shaheen_mp3quran",
+      "recitation_id": "3e21d6e0-7a97-e9ae-86b5-95d6d1a74dcc",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/shaheen/Rewayat-Hafs-A-n-Assem/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-shaheen/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_talib_bin_humaid_mp3quran",
+      "recitation_id": "e7f11e1f-8cf9-b375-76c2-36bcb1b6a048",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/a_binhameed/Rewayat-Hafs-A-n-Assem/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-humaid/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_talib_bin_humaid_mp3quran",
+      "recitation_id": "e7f11e1f-8cf9-b375-76c2-36bcb1b6a048",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/a_binhameed/Rewayat-Hafs-A-n-Assem/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-humaid/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ahmed_talib_bin_humaid_mp3quran",
+      "recitation_id": "e7f11e1f-8cf9-b375-76c2-36bcb1b6a048",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/a_binhameed/Rewayat-Hafs-A-n-Assem/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ahmad-humaid/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "akram_al_alaqmi_qdc",
+      "recitation_id": "703f4293-124f-f250-d89c-fb89ec7d7195",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/akram_al_alaqmi/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/akram_al_alaqmi/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "akram_al_alaqmi_qdc",
+      "recitation_id": "703f4293-124f-f250-d89c-fb89ec7d7195",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/akram_al_alaqmi/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/akram_al_alaqmi/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "akram_al_alaqmi_qdc",
+      "recitation_id": "703f4293-124f-f250-d89c-fb89ec7d7195",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/akram_al_alaqmi/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/akram_al_alaqmi/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ali_al_huthaifi_mp3quran",
+      "recitation_id": "4d50476b-6cdf-5a08-bd47-5471ab2d9e5c",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server9.mp3quran.net/hthfi/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ali-hudhaifi/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ali_al_huthaifi_mp3quran",
+      "recitation_id": "4d50476b-6cdf-5a08-bd47-5471ab2d9e5c",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server9.mp3quran.net/hthfi/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ali-hudhaifi/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ali_al_huthaifi_mp3quran",
+      "recitation_id": "4d50476b-6cdf-5a08-bd47-5471ab2d9e5c",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server9.mp3quran.net/hthfi/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/ali-hudhaifi/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ayman_swed_muallim_yt",
+      "recitation_id": "bf6fe8dc-e76c-2b0b-1bef-d5a1383b0fed",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 330,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://www.youtube.com/watch?v=LzflYxNwe7s",
+        "playback_url": "https://www.youtube.com/watch?v=LzflYxNwe7s",
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe",
+        "chapter_offset_ms": 330
+      }
+    },
+    {
+      "recitation": "ayman_swed_muallim_yt",
+      "recitation_id": "bf6fe8dc-e76c-2b0b-1bef-d5a1383b0fed",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=6sK06jBe4UE",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "ayman_swed_muallim_yt",
+      "recitation_id": "bf6fe8dc-e76c-2b0b-1bef-d5a1383b0fed",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 510,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://www.youtube.com/watch?v=GEe5LbGIH0M",
+        "playback_url": "https://www.youtube.com/watch?v=GEe5LbGIH0M",
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe",
+        "chapter_offset_ms": 510
+      }
+    },
+    {
+      "recitation": "badr_al_turki_yt",
+      "recitation_id": "db02c405-e3be-dbf9-6862-eee371003ae1",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=bLkIzLqqJ8g",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "badr_al_turki_yt",
+      "recitation_id": "db02c405-e3be-dbf9-6862-eee371003ae1",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=oKVCi1CykUg",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "badr_al_turki_yt",
+      "recitation_id": "db02c405-e3be-dbf9-6862-eee371003ae1",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=hMs7soqvqlA",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "bandar_baleela_qdc",
+      "recitation_id": "4fdf3e11-a78b-0d5e-3daf-10d3d8edb528",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/bandar_baleela/complete/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/bandar_baleela/complete/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "bandar_baleela_qdc",
+      "recitation_id": "4fdf3e11-a78b-0d5e-3daf-10d3d8edb528",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/bandar_baleela/complete/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/bandar_baleela/complete/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "bandar_baleela_qdc",
+      "recitation_id": "4fdf3e11-a78b-0d5e-3daf-10d3d8edb528",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/bandar_baleela/complete/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/bandar_baleela/complete/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "fatih_seferagic_way2quran",
+      "recitation_id": "f4a974e6-c90b-adc3-833d-c36ce7ede627",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/fatih-sefercik/hafs-an-asim/001.mp3",
+        "playback_url": "https://media.way2quran.com/fatih-sefercik/hafs-an-asim/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "fatih_seferagic_way2quran",
+      "recitation_id": "f4a974e6-c90b-adc3-833d-c36ce7ede627",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/fatih-sefercik/hafs-an-asim/112.mp3",
+        "playback_url": "https://media.way2quran.com/fatih-sefercik/hafs-an-asim/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "fatih_seferagic_way2quran",
+      "recitation_id": "f4a974e6-c90b-adc3-833d-c36ce7ede627",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/fatih-sefercik/hafs-an-asim/036.mp3",
+        "playback_url": "https://media.way2quran.com/fatih-sefercik/hafs-an-asim/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "haitham_al_dukhain_mp3quran",
+      "recitation_id": "b6acb1c7-6894-6b78-9108-ecd4f25ac3df",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/h_dukhain/Rewayat-Hafs-A-n-Assem/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/haitham-dukhain/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "haitham_al_dukhain_mp3quran",
+      "recitation_id": "b6acb1c7-6894-6b78-9108-ecd4f25ac3df",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/h_dukhain/Rewayat-Hafs-A-n-Assem/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/haitham-dukhain/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "haitham_al_dukhain_mp3quran",
+      "recitation_id": "b6acb1c7-6894-6b78-9108-ecd4f25ac3df",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/h_dukhain/Rewayat-Hafs-A-n-Assem/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/haitham-dukhain/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "hani_al_rifai_qdc_128k",
+      "recitation_id": "e9fabfeb-3cb4-e27c-2fa1-940fc88deae0",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/qdc/hani_ar_rifai/murattal/1.mp3",
+        "playback_url": "https://download.quranicaudio.com/qdc/hani_ar_rifai/murattal/1.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "hani_al_rifai_qdc_128k",
+      "recitation_id": "e9fabfeb-3cb4-e27c-2fa1-940fc88deae0",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/qdc/hani_ar_rifai/murattal/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/qdc/hani_ar_rifai/murattal/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "hani_al_rifai_qdc_128k",
+      "recitation_id": "e9fabfeb-3cb4-e27c-2fa1-940fc88deae0",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/qdc/hani_ar_rifai/murattal/36.mp3",
+        "playback_url": "https://download.quranicaudio.com/qdc/hani_ar_rifai/murattal/36.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ibrahim_al_akhdar_drive",
+      "recitation_id": "3f2b604f-9c5e-6452-00ce-2a03cb92adb9",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "original_url": null,
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ibrahim_al_akhdar_drive",
+      "recitation_id": "3f2b604f-9c5e-6452-00ce-2a03cb92adb9",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "original_url": null,
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "ibrahim_al_akhdar_drive",
+      "recitation_id": "3f2b604f-9c5e-6452-00ce-2a03cb92adb9",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "LINK_UNAVAILABLE",
+        "unavailable_reason": "LINK_UNAVAILABLE",
+        "original_url": null,
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "imad_zuhair_hafez_mp3quran",
+      "recitation_id": "7f82822d-b69d-efda-096e-3182ce4063d0",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server6.mp3quran.net/hafz/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/imad-hafez/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "imad_zuhair_hafez_mp3quran",
+      "recitation_id": "7f82822d-b69d-efda-096e-3182ce4063d0",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server6.mp3quran.net/hafz/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/imad-hafez/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "imad_zuhair_hafez_mp3quran",
+      "recitation_id": "7f82822d-b69d-efda-096e-3182ce4063d0",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server6.mp3quran.net/hafz/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/imad-hafez/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "islam_sobhi_mp3quran",
+      "recitation_id": "c72e7816-cf79-ae8c-be62-fc3285baf877",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server14.mp3quran.net/islam/Rewayat-Hafs-A-n-Assem/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/islam-sobhi/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "islam_sobhi_mp3quran",
+      "recitation_id": "c72e7816-cf79-ae8c-be62-fc3285baf877",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server14.mp3quran.net/islam/Rewayat-Hafs-A-n-Assem/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/islam-sobhi/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "islam_sobhi_mp3quran",
+      "recitation_id": "c72e7816-cf79-ae8c-be62-fc3285baf877",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server14.mp3quran.net/islam/Rewayat-Hafs-A-n-Assem/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/islam-sobhi/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "khalid_al_mohana_drive",
+      "recitation_id": "de4d21f0-9cb0-3b39-d8da-1ce99e4c7cc0",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "original_url": null,
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "khalid_al_mohana_drive",
+      "recitation_id": "de4d21f0-9cb0-3b39-d8da-1ce99e4c7cc0",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "original_url": null,
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "khalid_al_mohana_drive",
+      "recitation_id": "de4d21f0-9cb0-3b39-d8da-1ce99e4c7cc0",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "original_url": null,
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "khalifa_al_tunaiji_tarteel",
+      "recitation_id": "044a1e9f-67c9-6854-5e3b-20438c45c4e7",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/khalifaAlTunaiji/murattal/mp3/001.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/khalifaAlTunaiji/murattal/mp3/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "khalifa_al_tunaiji_tarteel",
+      "recitation_id": "044a1e9f-67c9-6854-5e3b-20438c45c4e7",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/khalifaAlTunaiji/murattal/mp3/112.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/khalifaAlTunaiji/murattal/mp3/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "khalifa_al_tunaiji_tarteel",
+      "recitation_id": "044a1e9f-67c9-6854-5e3b-20438c45c4e7",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/khalifaAlTunaiji/murattal/mp3/036.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/khalifaAlTunaiji/murattal/mp3/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "maher_al_muaiqly_qdc",
+      "recitation_id": "829763f8-1faa-4a26-15ff-86f934c4bceb",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "maher_al_muaiqly_qdc",
+      "recitation_id": "829763f8-1faa-4a26-15ff-86f934c4bceb",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "maher_al_muaiqly_qdc",
+      "recitation_id": "829763f8-1faa-4a26-15ff-86f934c4bceb",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/maher_almu3aiqly/year1440/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_abdul_hakam_mp3quran",
+      "recitation_id": "cb030c9e-d6bd-2ca2-bed2-17157d5b2964",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/m_abdelhakam/Rewayat-Hafs-A-n-Assem/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/mahmoud-abdulhakam/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_abdul_hakam_mp3quran",
+      "recitation_id": "cb030c9e-d6bd-2ca2-bed2-17157d5b2964",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/m_abdelhakam/Rewayat-Hafs-A-n-Assem/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/mahmoud-abdulhakam/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_abdul_hakam_mp3quran",
+      "recitation_id": "cb030c9e-d6bd-2ca2-bed2-17157d5b2964",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/m_abdelhakam/Rewayat-Hafs-A-n-Assem/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/mahmoud-abdulhakam/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_ali_al_banna_qdc",
+      "recitation_id": "116d67f6-5b77-3883-3e80-9b11566dc7c3",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/mahmood_ali_albana/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/mahmood_ali_albana/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_ali_al_banna_qdc",
+      "recitation_id": "116d67f6-5b77-3883-3e80-9b11566dc7c3",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/mahmood_ali_albana/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/mahmood_ali_albana/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_ali_al_banna_qdc",
+      "recitation_id": "116d67f6-5b77-3883-3e80-9b11566dc7c3",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/mahmood_ali_albana/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/mahmood_ali_albana/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_khalil_al_husary_mp3quran",
+      "recitation_id": "01d46368-8770-1e8f-9dd8-3a8608e97487",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server13.mp3quran.net/husr/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/mahmoud-husary/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_khalil_al_husary_mp3quran",
+      "recitation_id": "01d46368-8770-1e8f-9dd8-3a8608e97487",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server13.mp3quran.net/husr/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/mahmoud-husary/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_khalil_al_husary_mp3quran",
+      "recitation_id": "01d46368-8770-1e8f-9dd8-3a8608e97487",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server13.mp3quran.net/husr/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/mahmoud-husary/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "recitation_id": "a37b200d-ee15-761b-afea-45ce0f10b481",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/husary/mujawwad/mp3/001.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/husary/mujawwad/mp3/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "recitation_id": "a37b200d-ee15-761b-afea-45ce0f10b481",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/husary/mujawwad/mp3/112.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/husary/mujawwad/mp3/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_khalil_al_husary_mujawwad_tarteel",
+      "recitation_id": "a37b200d-ee15-761b-afea-45ce0f10b481",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/husary/mujawwad/mp3/036.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/husary/mujawwad/mp3/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_khalil_al_husary_qdc_128k",
+      "recitation_id": "a3bea32c-f60e-990f-8631-931ee63890bb",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree_iza3a/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree_iza3a/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_khalil_al_husary_qdc_128k",
+      "recitation_id": "a3bea32c-f60e-990f-8631-931ee63890bb",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree_iza3a/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree_iza3a/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mahmoud_khalil_al_husary_qdc_128k",
+      "recitation_id": "a3bea32c-f60e-990f-8631-931ee63890bb",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree_iza3a/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree_iza3a/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mishary_rashid_al_afasy_2008_qdc",
+      "recitation_id": "a7ffd321-8f70-8cc1-4650-4a5926ba6ca0",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/mishaari_california/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/mishaari_california/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mishary_rashid_al_afasy_2008_qdc",
+      "recitation_id": "a7ffd321-8f70-8cc1-4650-4a5926ba6ca0",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/mishaari_california/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/mishaari_california/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mishary_rashid_al_afasy_2008_qdc",
+      "recitation_id": "a7ffd321-8f70-8cc1-4650-4a5926ba6ca0",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/mishaari_california/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/mishaari_california/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mishary_rashid_al_afasy_mp3quran",
+      "recitation_id": "2648aae8-f604-0bfc-918c-1d6cedd47c55",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server8.mp3quran.net/afs/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/mishary-alafasy/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mishary_rashid_al_afasy_mp3quran",
+      "recitation_id": "2648aae8-f604-0bfc-918c-1d6cedd47c55",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server8.mp3quran.net/afs/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/mishary-alafasy/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mishary_rashid_al_afasy_mp3quran",
+      "recitation_id": "2648aae8-f604-0bfc-918c-1d6cedd47c55",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server8.mp3quran.net/afs/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/mishary-alafasy/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "moaz_mahmoud_hamed_qalon_way2quran",
+      "recitation_id": "39eacb00-f62a-e184-6f6b-b74858c6e1a6",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/moaz-mahmoud-hamed/qalun-an-nafi/001.mp3",
+        "playback_url": "https://media.way2quran.com/moaz-mahmoud-hamed/qalun-an-nafi/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "moaz_mahmoud_hamed_qalon_way2quran",
+      "recitation_id": "39eacb00-f62a-e184-6f6b-b74858c6e1a6",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/moaz-mahmoud-hamed/qalun-an-nafi/112.mp3",
+        "playback_url": "https://media.way2quran.com/moaz-mahmoud-hamed/qalun-an-nafi/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "moaz_mahmoud_hamed_qalon_way2quran",
+      "recitation_id": "39eacb00-f62a-e184-6f6b-b74858c6e1a6",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/moaz-mahmoud-hamed/qalun-an-nafi/036.mp3",
+        "playback_url": "https://media.way2quran.com/moaz-mahmoud-hamed/qalun-an-nafi/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_abdulkareem_qdc",
+      "recitation_id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/muhammad_abdulkareem/001.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/muhammad_abdulkareem/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_abdulkareem_qdc",
+      "recitation_id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/muhammad_abdulkareem/112.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/muhammad_abdulkareem/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_abdulkareem_qdc",
+      "recitation_id": "bc07dfff-b987-762d-75e6-b35689e2b022",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://download.quranicaudio.com/quran/muhammad_abdulkareem/036.mp3",
+        "playback_url": "https://download.quranicaudio.com/quran/muhammad_abdulkareem/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_al_luhaidan_mp3quran",
+      "recitation_id": "91f99bb2-568c-139d-cb8b-f83a90d07769",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server8.mp3quran.net/lhdan/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/muhammad-luhaidan/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_al_luhaidan_mp3quran",
+      "recitation_id": "91f99bb2-568c-139d-cb8b-f83a90d07769",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server8.mp3quran.net/lhdan/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/muhammad-luhaidan/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_al_luhaidan_mp3quran",
+      "recitation_id": "91f99bb2-568c-139d-cb8b-f83a90d07769",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server8.mp3quran.net/lhdan/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/muhammad-luhaidan/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_alghazali_archive",
+      "recitation_id": "85e4d478-2aaa-d433-ab1c-df9a5b32d8d2",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://ia601406.us.archive.org/16/items/Mohammed-Al-Ghazali/001.mp3",
+        "playback_url": "https://ia800701.us.archive.org/33/items/Mohammed-Al-Ghazali/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_alghazali_archive",
+      "recitation_id": "85e4d478-2aaa-d433-ab1c-df9a5b32d8d2",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://ia601406.us.archive.org/16/items/Mohammed-Al-Ghazali/112.mp3",
+        "playback_url": "https://ia600701.us.archive.org/33/items/Mohammed-Al-Ghazali/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_alghazali_archive",
+      "recitation_id": "85e4d478-2aaa-d433-ab1c-df9a5b32d8d2",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://ia601406.us.archive.org/16/items/Mohammed-Al-Ghazali/036.mp3",
+        "playback_url": "https://ia600701.us.archive.org/33/items/Mohammed-Al-Ghazali/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_ayyub_drive",
+      "recitation_id": "271c991f-ede5-0342-ddee-792024c769f0",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "original_url": null,
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_ayyub_drive",
+      "recitation_id": "271c991f-ede5-0342-ddee-792024c769f0",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "original_url": null,
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_ayyub_drive",
+      "recitation_id": "271c991f-ede5-0342-ddee-792024c769f0",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "original_url": null,
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_burhaji_yt",
+      "recitation_id": "5135bf14-d83e-37c1-08aa-d5ac08a2bc97",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=RXZqoXkm7UY",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "mohammed_burhaji_yt",
+      "recitation_id": "5135bf14-d83e-37c1-08aa-d5ac08a2bc97",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=I9KWtH4km9s",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "mohammed_burhaji_yt",
+      "recitation_id": "5135bf14-d83e-37c1-08aa-d5ac08a2bc97",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "unavailable_reason": "YOUTUBE_OFFSET_UNAVAILABLE",
+        "original_url": "https://www.youtube.com/watch?v=BRQ8MRdcq9Q",
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe"
+      }
+    },
+    {
+      "recitation": "mohammed_saayed_warsh_mp3quran",
+      "recitation_id": "b8e58c96-6756-c4b7-3d61-d4329c440d89",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/m_sayed/Rewayat-Warsh-A-n-Nafi/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/muhammad-saayed/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_saayed_warsh_mp3quran",
+      "recitation_id": "b8e58c96-6756-c4b7-3d61-d4329c440d89",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/m_sayed/Rewayat-Warsh-A-n-Nafi/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/muhammad-saayed/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_saayed_warsh_mp3quran",
+      "recitation_id": "b8e58c96-6756-c4b7-3d61-d4329c440d89",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server16.mp3quran.net/m_sayed/Rewayat-Warsh-A-n-Nafi/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/muhammad-saayed/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_siddiq_al_minshawi_1967_drive",
+      "recitation_id": "30dd65ad-7b89-4cc8-dc35-3535db4d2586",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "unavailable_reason": "SOURCE_NOT_INDEPENDENT",
+        "original_url": null,
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_siddiq_al_minshawi_1967_drive",
+      "recitation_id": "30dd65ad-7b89-4cc8-dc35-3535db4d2586",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "LINK_UNAVAILABLE",
+        "unavailable_reason": "LINK_UNAVAILABLE",
+        "original_url": null,
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_siddiq_al_minshawi_1967_drive",
+      "recitation_id": "30dd65ad-7b89-4cc8-dc35-3535db4d2586",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "unavailable",
+        "selection_reason": "NO_AVAILABLE_INDEPENDENT_SURAH",
+        "requested_unavailable_reason": "LINK_UNAVAILABLE",
+        "unavailable_reason": "LINK_UNAVAILABLE",
+        "original_url": null,
+        "playback_url": null,
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_siddiq_al_minshawi_mp3quran",
+      "recitation_id": "779ebe1e-be62-7a71-b2d7-4f2251303684",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server10.mp3quran.net/minsh/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/muhammad-minshawi/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_siddiq_al_minshawi_mp3quran",
+      "recitation_id": "779ebe1e-be62-7a71-b2d7-4f2251303684",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server10.mp3quran.net/minsh/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/muhammad-minshawi/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_siddiq_al_minshawi_mp3quran",
+      "recitation_id": "779ebe1e-be62-7a71-b2d7-4f2251303684",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server10.mp3quran.net/minsh/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/muhammad-minshawi/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "recitation_id": "1c79adfe-a520-5441-7e0f-96f5d8752322",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server10.mp3quran.net/minsh/Almusshaf-Al-Mojawwad/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/muhammad-minshawi/r2/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "recitation_id": "1c79adfe-a520-5441-7e0f-96f5d8752322",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server10.mp3quran.net/minsh/Almusshaf-Al-Mojawwad/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/muhammad-minshawi/r2/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mohammed_siddiq_al_minshawi_mujawwad_mp3quran",
+      "recitation_id": "1c79adfe-a520-5441-7e0f-96f5d8752322",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server10.mp3quran.net/minsh/Almusshaf-Al-Mojawwad/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/muhammad-minshawi/r2/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "muammar_zainal_al_sukaini_way2quran",
+      "recitation_id": "b50b55b5-a7c9-7bb6-bc23-a949078e1c29",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/muammar-zainal-al-sukaini/hafs-an-asim/001.mp3",
+        "playback_url": "https://media.way2quran.com/muammar-zainal-al-sukaini/hafs-an-asim/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "muammar_zainal_al_sukaini_way2quran",
+      "recitation_id": "b50b55b5-a7c9-7bb6-bc23-a949078e1c29",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/muammar-zainal-al-sukaini/hafs-an-asim/112.mp3",
+        "playback_url": "https://media.way2quran.com/muammar-zainal-al-sukaini/hafs-an-asim/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "muammar_zainal_al_sukaini_way2quran",
+      "recitation_id": "b50b55b5-a7c9-7bb6-bc23-a949078e1c29",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/muammar-zainal-al-sukaini/hafs-an-asim/036.mp3",
+        "playback_url": "https://media.way2quran.com/muammar-zainal-al-sukaini/hafs-an-asim/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mustafa_ismail_mp3quran",
+      "recitation_id": "639e66db-a4c7-ca0a-2cce-f557ecc151db",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server8.mp3quran.net/mustafa/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/mustafa-ismail/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mustafa_ismail_mp3quran",
+      "recitation_id": "639e66db-a4c7-ca0a-2cce-f557ecc151db",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server8.mp3quran.net/mustafa/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/mustafa-ismail/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "mustafa_ismail_mp3quran",
+      "recitation_id": "639e66db-a4c7-ca0a-2cce-f557ecc151db",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server8.mp3quran.net/mustafa/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/mustafa-ismail/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "nasser_al_qatami_mp3quran",
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server6.mp3quran.net/qtm/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/nasser-qatami/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "nasser_al_qatami_mp3quran",
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server6.mp3quran.net/qtm/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/nasser-qatami/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "nasser_al_qatami_mp3quran",
+      "recitation_id": "2216fbc8-e31a-fac0-cf0f-6467d25613f6",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server6.mp3quran.net/qtm/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/nasser-qatami/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saad_al_ghamdi_tarteel",
+      "recitation_id": "9ccb21f5-a4aa-619a-16a4-d32ef8544085",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/ghamadi/murattal/mp3/001.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/ghamadi/murattal/mp3/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saad_al_ghamdi_tarteel",
+      "recitation_id": "9ccb21f5-a4aa-619a-16a4-d32ef8544085",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/ghamadi/murattal/mp3/112.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/ghamadi/murattal/mp3/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saad_al_ghamdi_tarteel",
+      "recitation_id": "9ccb21f5-a4aa-619a-16a4-d32ef8544085",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://audio-cdn.tarteel.ai/quran/surah/ghamadi/murattal/mp3/036.mp3",
+        "playback_url": "https://audio-cdn.tarteel.ai/quran/surah/ghamadi/murattal/mp3/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saber_abdulhakam_qalon_way2quran",
+      "recitation_id": "fdc68197-4a79-dea9-a9ea-b4fc3ad244c1",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/saber-abdel-hakam/qalun-an-nafi/001.mp3",
+        "playback_url": "https://media.way2quran.com/saber-abdel-hakam/qalun-an-nafi/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saber_abdulhakam_qalon_way2quran",
+      "recitation_id": "fdc68197-4a79-dea9-a9ea-b4fc3ad244c1",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/saber-abdel-hakam/qalun-an-nafi/112.mp3",
+        "playback_url": "https://media.way2quran.com/saber-abdel-hakam/qalun-an-nafi/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saber_abdulhakam_qalon_way2quran",
+      "recitation_id": "fdc68197-4a79-dea9-a9ea-b4fc3ad244c1",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/saber-abdel-hakam/qalun-an-nafi/036.mp3",
+        "playback_url": "https://media.way2quran.com/saber-abdel-hakam/qalun-an-nafi/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saber_abdulhakam_shubah_way2quran",
+      "recitation_id": "0df5fd17-75a6-a8e7-4848-037e48e4b302",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/saber-abdel-hakam/shubah-an-asim/001.mp3",
+        "playback_url": "https://media.way2quran.com/saber-abdel-hakam/shubah-an-asim/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saber_abdulhakam_shubah_way2quran",
+      "recitation_id": "0df5fd17-75a6-a8e7-4848-037e48e4b302",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/saber-abdel-hakam/shubah-an-asim/112.mp3",
+        "playback_url": "https://media.way2quran.com/saber-abdel-hakam/shubah-an-asim/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saber_abdulhakam_shubah_way2quran",
+      "recitation_id": "0df5fd17-75a6-a8e7-4848-037e48e4b302",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/saber-abdel-hakam/shubah-an-asim/36.mp3",
+        "playback_url": "https://media.way2quran.com/saber-abdel-hakam/shubah-an-asim/36.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saber_abdulhakam_warsh_way2quran",
+      "recitation_id": "c87687dd-26bc-ad05-54d0-fdca44993509",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/saber-abdel-hakam/warsh-an-nafi/001.mp3",
+        "playback_url": "https://media.way2quran.com/saber-abdel-hakam/warsh-an-nafi/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saber_abdulhakam_warsh_way2quran",
+      "recitation_id": "c87687dd-26bc-ad05-54d0-fdca44993509",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/saber-abdel-hakam/warsh-an-nafi/112.mp3",
+        "playback_url": "https://media.way2quran.com/saber-abdel-hakam/warsh-an-nafi/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saber_abdulhakam_warsh_way2quran",
+      "recitation_id": "c87687dd-26bc-ad05-54d0-fdca44993509",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/saber-abdel-hakam/warsh-an-nafi/036.mp3",
+        "playback_url": "https://media.way2quran.com/saber-abdel-hakam/warsh-an-nafi/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saber_abdulhakam_yt",
+      "recitation_id": "5f5ef5c8-cb7c-1d52-e1de-e646433f7787",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 90,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://www.youtube.com/watch?v=JRVS4Zod3GY",
+        "playback_url": "https://www.youtube.com/watch?v=JRVS4Zod3GY",
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe",
+        "chapter_offset_ms": 90
+      }
+    },
+    {
+      "recitation": "saber_abdulhakam_yt",
+      "recitation_id": "5f5ef5c8-cb7c-1d52-e1de-e646433f7787",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 190,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://www.youtube.com/watch?v=G2LdJWrW7y4",
+        "playback_url": "https://www.youtube.com/watch?v=G2LdJWrW7y4",
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe",
+        "chapter_offset_ms": 190
+      }
+    },
+    {
+      "recitation": "saber_abdulhakam_yt",
+      "recitation_id": "5f5ef5c8-cb7c-1d52-e1de-e646433f7787",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 250,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://www.youtube.com/watch?v=LUk5RejZlHE",
+        "playback_url": "https://www.youtube.com/watch?v=LUk5RejZlHE",
+        "timing_dependency": false,
+        "offset_used": false,
+        "playback_kind": "youtube_iframe",
+        "chapter_offset_ms": 250
+      }
+    },
+    {
+      "recitation": "saud_al_shuraim_mp3quran",
+      "recitation_id": "c9f9f54f-d248-3a48-8dd0-89fc353e19c3",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server7.mp3quran.net/shur/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/saud-shuraim/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saud_al_shuraim_mp3quran",
+      "recitation_id": "c9f9f54f-d248-3a48-8dd0-89fc353e19c3",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server7.mp3quran.net/shur/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/saud-shuraim/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "saud_al_shuraim_mp3quran",
+      "recitation_id": "c9f9f54f-d248-3a48-8dd0-89fc353e19c3",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server7.mp3quran.net/shur/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/saud-shuraim/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "walid_al_naihi_qalon_mp3quran",
+      "recitation_id": "f7c7c48b-7894-e959-d794-166e3f38839a",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server9.mp3quran.net/waleed/001.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/waleed-naehi/r1/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "walid_al_naihi_qalon_mp3quran",
+      "recitation_id": "f7c7c48b-7894-e959-d794-166e3f38839a",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server9.mp3quran.net/waleed/112.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/waleed-naehi/r1/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "walid_al_naihi_qalon_mp3quran",
+      "recitation_id": "f7c7c48b-7894-e959-d794-166e3f38839a",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://server9.mp3quran.net/waleed/036.mp3",
+        "playback_url": "https://cdn.mp3quran.net/audio/waleed-naehi/r1/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "walid_atef_way2quran",
+      "recitation_id": "6cd7c3a3-0dfa-ee1b-b33c-76311f01119d",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/walid-atef/hafs-an-asim/001.mp3",
+        "playback_url": "https://media.way2quran.com/walid-atef/hafs-an-asim/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "walid_atef_way2quran",
+      "recitation_id": "6cd7c3a3-0dfa-ee1b-b33c-76311f01119d",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/walid-atef/hafs-an-asim/112.mp3",
+        "playback_url": "https://media.way2quran.com/walid-atef/hafs-an-asim/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "walid_atef_way2quran",
+      "recitation_id": "6cd7c3a3-0dfa-ee1b-b33c-76311f01119d",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://media.way2quran.com/walid-atef/hafs-an-asim/036.mp3",
+        "playback_url": "https://media.way2quran.com/walid-atef/hafs-an-asim/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "yasser_al_dosari_archive",
+      "recitation_id": "fcd9c298-c3cd-0c32-0180-a3b5f61861cb",
+      "sample_key": "fatiha_25s",
+      "surah": 1,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 1,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://archive.org/download/Yasser_Aldosari_MP3_Quran/001.mp3",
+        "playback_url": "https://dn710809.ca.archive.org/0/items/Yasser_Aldosari_MP3_Quran/001.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "yasser_al_dosari_archive",
+      "recitation_id": "fcd9c298-c3cd-0c32-0180-a3b5f61861cb",
+      "sample_key": "ikhlas_full",
+      "surah": 112,
+      "start_ms": 0,
+      "duration_ms": null,
+      "selection_details": {
+        "requested_surah": 112,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://archive.org/download/Yasser_Aldosari_MP3_Quran/112.mp3",
+        "playback_url": "https://dn710809.ca.archive.org/0/items/Yasser_Aldosari_MP3_Quran/112.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    },
+    {
+      "recitation": "yasser_al_dosari_archive",
+      "recitation_id": "fcd9c298-c3cd-0c32-0180-a3b5f61861cb",
+      "sample_key": "yasin_25s",
+      "surah": 36,
+      "start_ms": 0,
+      "duration_ms": 25000,
+      "selection_details": {
+        "requested_surah": 36,
+        "status": "available",
+        "selection_reason": "REQUESTED_SURAH",
+        "requested_unavailable_reason": null,
+        "unavailable_reason": null,
+        "original_url": "https://archive.org/download/Yasser_Aldosari_MP3_Quran/036.mp3",
+        "playback_url": "https://dn710809.ca.archive.org/0/items/Yasser_Aldosari_MP3_Quran/036.mp3",
+        "timing_dependency": false,
+        "offset_used": false
+      }
+    }
+  ],
+  "passed": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": false,
+    "acknowledged_commands": 6,
+    "writes_halted": false,
+    "batches": [],
+    "transport_request_bytes": 1455,
+    "transport_response_bytes": 5101553
+  },
+  "finished_at": "2026-10-10T15:14:48.376Z"
+}

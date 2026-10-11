@@ -1,0 +1,111 @@
+{
+  "scope": "local_synthetic_scratch_only",
+  "database": "ayahx_d4_k9_rehearsal_20261010",
+  "production_written": false,
+  "started_at": "2026-10-10T15:22:04.083Z",
+  "rejections": [
+    {
+      "name": "NULL",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "empty",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "actor",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "recitation_binding",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "count_zero",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "count_mismatch",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "ttl",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "source_sha",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "rights",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "canonical_complete",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "canonical_count",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "coverage",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "v1_score",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "lag",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "duration_difference",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "samples",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "distributed_surahs",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "too_short",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "name": "v2_human",
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "patch": {
+        "riwayah_code": "warsh"
+      },
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "patch": {
+        "canonical_text_available": null
+      },
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "patch": {
+        "timing_quality": "aligned"
+      },
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    },
+    {
+      "patch": {
+        "offset_verified": 1
+      },
+      "code": "ER_CHECK_CONSTRAINT_VIOLATED"
+    }
+  ],
+  "passed": false,
+  "failure": "Check constraint 'chk_recitations_offset_gate_v1' is violated.",
+  "finished_at": "2026-10-10T15:22:04.867Z"
+}

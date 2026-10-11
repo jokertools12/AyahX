@@ -142,6 +142,15 @@ describe('single-session Railway mysql transport', () => {
     expect(mock.received).toHaveLength(0);
     await session.close();
   });
+  it('allows exactly a quoted SHOW CREATE TABLE readback while rejecting appended or unquoted statements', async () => {
+    const { mock, session } = await sessionFor();
+    await session.read('SHOW CREATE TABLE `recitations`;');
+    for (const sql of ['SHOW CREATE TABLE `recitations`; DROP TABLE users;', 'SHOW CREATE TABLE recitations;', 'SHOW CREATE TABLE `bad-name`;']) {
+      await expect(session.read(sql)).rejects.toMatchObject({ code: 'READ_ONLY_SQL_REQUIRED' });
+    }
+    expect(mock.received).toEqual(['SHOW CREATE TABLE `recitations`;']);
+    await session.close();
+  });
   it('retains real COMMIT acknowledgement but rejects a later SSH exit 1', async () => {
     const { mock, session } = await sessionFor(undefined, { allowWrites: true });
     await session.commit();

@@ -50,5 +50,9 @@ export default {
   trace: 'retain-on-failure',
   output: '.e2e',
   reporters: ['list', 'junit', 'markdown'],
+  ...(process.env.AYAHX_R2_CORS_TEST==='staging-test-prefix-only' ? {secrets:{
+    'r2-cors-get':process.env.R2_CORS_TEST_GET_URL!,
+    'r2-cors-put':process.env.R2_CORS_TEST_PUT_URL!,
+  }} : {}),
   ...(agents ? { agents } : {}),
 } satisfies E2EConfig;

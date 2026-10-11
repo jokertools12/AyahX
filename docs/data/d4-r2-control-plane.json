@@ -1,0 +1,279 @@
+{
+  "checked_at": "2026-10-11T07:33:45.312Z",
+  "control_plane": [
+    {
+      "bucket": "ayahx-audio-prod",
+      "step": "create",
+      "success": true,
+      "status": 200,
+      "result": {
+        "name": "ayahx-audio-prod",
+        "creation_date": "2026-10-10T15:21:28.893Z",
+        "location": "EEUR",
+        "storage_class": "Standard",
+        "jurisdiction": "default"
+      },
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-prod",
+      "step": "/domains/managed",
+      "success": true,
+      "status": 200,
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-prod",
+      "step": "/cors",
+      "success": true,
+      "status": 200,
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-prod",
+      "step": "/lifecycle",
+      "success": true,
+      "status": 200,
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-prod",
+      "step": "verify/domains/managed",
+      "success": true,
+      "status": 200,
+      "result": {
+        "enabled": false,
+        "bucketId": "a7231b592ff3471f944324c71aa6fc8b",
+        "domain": "pub-a7231b592ff3471f944324c71aa6fc8b.r2.dev"
+      },
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-prod",
+      "step": "verify/cors",
+      "success": true,
+      "status": 200,
+      "result": {
+        "rules": [
+          {
+            "id": "ayahx-exact-site-origins",
+            "allowed": {
+              "origins": [
+                "https://ayahx.com",
+                "https://ayahx-production.up.railway.app"
+              ],
+              "methods": [
+                "PUT",
+                "GET",
+                "HEAD"
+              ],
+              "headers": [
+                "content-type",
+                "range",
+                "content-md5",
+                "x-amz-checksum-sha256",
+                "x-amz-content-sha256",
+                "x-amz-date",
+                "authorization"
+              ]
+            },
+            "exposeHeaders": [
+              "ETag",
+              "Content-Length",
+              "Content-Range",
+              "Accept-Ranges",
+              "x-amz-checksum-sha256"
+            ],
+            "maxAgeSeconds": 600
+          }
+        ]
+      },
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-prod",
+      "step": "verify/lifecycle",
+      "success": true,
+      "status": 200,
+      "result": {
+        "rules": [
+          {
+            "id": "abort-incomplete-multipart-after-one-day",
+            "enabled": true,
+            "conditions": {
+              "prefix": ""
+            },
+            "abortMultipartUploadsTransition": {
+              "condition": {
+                "type": "Age",
+                "maxAge": 86400
+              }
+            }
+          }
+        ]
+      },
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-staging",
+      "step": "create",
+      "success": true,
+      "status": 200,
+      "result": {
+        "name": "ayahx-audio-staging",
+        "creation_date": "2026-10-10T15:21:39.744Z",
+        "location": "EEUR",
+        "storage_class": "Standard",
+        "jurisdiction": "default"
+      },
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-staging",
+      "step": "/domains/managed",
+      "success": true,
+      "status": 200,
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-staging",
+      "step": "/cors",
+      "success": true,
+      "status": 200,
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-staging",
+      "step": "/lifecycle",
+      "success": true,
+      "status": 200,
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-staging",
+      "step": "verify/domains/managed",
+      "success": true,
+      "status": 200,
+      "result": {
+        "enabled": false,
+        "bucketId": "79a0fda88ca9449d8eff1e513829803d",
+        "domain": "pub-79a0fda88ca9449d8eff1e513829803d.r2.dev"
+      },
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-staging",
+      "step": "verify/cors",
+      "success": true,
+      "status": 200,
+      "result": {
+        "rules": [
+          {
+            "id": "ayahx-exact-site-origins",
+            "allowed": {
+              "origins": [
+                "https://ayahx-staging.up.railway.app"
+              ],
+              "methods": [
+                "PUT",
+                "GET",
+                "HEAD"
+              ],
+              "headers": [
+                "content-type",
+                "range",
+                "content-md5",
+                "x-amz-checksum-sha256",
+                "x-amz-content-sha256",
+                "x-amz-date",
+                "authorization"
+              ]
+            },
+            "exposeHeaders": [
+              "ETag",
+              "Content-Length",
+              "Content-Range",
+              "Accept-Ranges",
+              "x-amz-checksum-sha256"
+            ],
+            "maxAgeSeconds": 600
+          }
+        ]
+      },
+      "errors": []
+    },
+    {
+      "bucket": "ayahx-audio-staging",
+      "step": "verify/lifecycle",
+      "success": true,
+      "status": 200,
+      "result": {
+        "rules": [
+          {
+            "id": "abort-incomplete-multipart-after-one-day",
+            "enabled": true,
+            "conditions": {
+              "prefix": ""
+            },
+            "abortMultipartUploadsTransition": {
+              "condition": {
+                "type": "Age",
+                "maxAge": 86400
+              }
+            }
+          }
+        ]
+      },
+      "errors": []
+    }
+  ],
+  "objects_uploaded": 0,
+  "credentials_created": 4,
+  "adapter_changed": false,
+  "actual_storage_acceptance": true,
+  "account_type": "standard",
+  "account_plan_changed": false,
+  "other_paid_products_activated": false,
+  "token_management": {
+    "available": false,
+    "code": 9109,
+    "reason": "Unauthorized to access requested resource",
+    "api_failure_historical": true,
+    "browser_completed": true
+  },
+  "billing_read": {
+    "available": false,
+    "code": 10000,
+    "reason": "Authentication error"
+  },
+  "budget_usd_month": 5,
+  "budget_enforced_by_provider": false,
+  "billing_before_usd": 0,
+  "billing_after_usd": 0,
+  "browser_billing_read": {
+    "available": true,
+    "period": "September 26 - October 26",
+    "billable_usage_usd": 0,
+    "message": "No billable usage incurred yet",
+    "source": "Authenticated Cloudflare R2 Overview",
+    "read_on": "2026-10-11"
+  },
+  "browser_token_preparation": {
+    "created": true,
+    "approval_pending": false,
+    "ttl_days": 30,
+    "scopes": [
+      "ayahx-audio-prod: object read/write",
+      "ayahx-audio-prod: object read only",
+      "ayahx-audio-staging: object read/write",
+      "ayahx-audio-staging: object read only"
+    ],
+    "user_approved": true
+  },
+  "object_cost_claim": "Authenticated R2 Overview displays USD0 before and after actual acceptance; invoice reporting may lag. Test prefix verified empty. No isolated test charge or savings claim.",
+  "original_control_plane_checked_at": "2026-10-10T15:21:44.632Z",
+  "acceptance_artifact": "docs/data/d4-r2-real-acceptance.json",
+  "credentials_readback_artifact": "docs/data/d4-r2-variables.json",
+  "latest_cors_artifact": "docs/data/d4-r2-cors-immutable-header.json",
+  "budget_alert_artifact": "docs/data/d4-r2-budget-alert.json"
+}

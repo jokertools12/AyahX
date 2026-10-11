@@ -3,6 +3,7 @@ import {humanReviewId,validateReviewInput,type ReviewInput} from './humanReviewS
 export interface ReviewPreparation {
   recitations:CatalogRow[];providers:CatalogRow[];auditions:CatalogRow[];near_complete:CatalogRow[];
   voice_evidence?:Record<string,CatalogRow>;offset_evidence?:Record<string,CatalogRow>;same_audio_conflicts?:CatalogRow[];label_conflicts?:CatalogRow[];storage_reviews?:CatalogRow[];
+  additional_reviews?:ReviewInput[];
 }
 /** Pure deterministic metadata plan. Does not invent listening or licensing. */
 export function planHumanReviews(input:ReviewPreparation):Array<ReviewInput&{id:string}>{
@@ -26,6 +27,7 @@ export function planHumanReviews(input:ReviewPreparation):Array<ReviewInput&{id:
   for(const conflict of input.same_audio_conflicts??[])add('same_audio_conflict','audio_conflict',String(conflict.id),{...conflict,exclude_from_rule_v1:true},1000);
   for(const conflict of input.label_conflicts??[]){const r=input.recitations.find(r=>r.slug===conflict.slug);if(r&&!items.some(i=>i.type==='label_review'&&i.subject_id===r.id))add('label_review','recitation',String(r.id),conflict,65);}
   for(const review of input.storage_reviews??[])add(review.type as ReviewInput['type'],String(review.subject_type??'storage_adapter'),String(review.subject_id??review.id),review,95);
+  for(const review of input.additional_reviews??[])items.push(review);
   for(const item of items)validateReviewInput(item);
   const keys=items.map(humanReviewId);if(new Set(keys).size!==keys.length)throw new Error('DUPLICATE_REVIEW_PLAN');
   return items.map((item,index)=>({...item,id:keys[index]})).sort((a,b)=>a.id.localeCompare(b.id));

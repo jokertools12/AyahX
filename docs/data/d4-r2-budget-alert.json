@@ -1,0 +1,38 @@
+{
+  "checked_at": "2026-10-11T07:21:00Z",
+  "readback": {
+    "success": true,
+    "status": 200,
+    "errors": [],
+    "policies": [
+      {
+        "id": "3c10aef0c64e47969b8b2fffc7b85651",
+        "name": "Default budget alert (auto-created)",
+        "enabled": true,
+        "alert_type": "billing_budget_alert",
+        "filters": {
+          "total_spend_dollars": [
+            "10"
+          ]
+        },
+        "recipient_count": 1
+      },
+      {
+        "id": "bf76c686607b4d22ab73ab8a07575961",
+        "name": "AyahX R2 monthly budget $5",
+        "enabled": true,
+        "alert_type": "billing_budget_alert",
+        "filters": {
+          "total_spend_dollars": [
+            "5"
+          ]
+        },
+        "recipient_count": 1
+      }
+    ]
+  },
+  "scope": "account_total_spend",
+  "budget_alert_usd": 5,
+  "hard_spending_cap": false,
+  "other_notifications_unchanged": true
+}

@@ -1,0 +1,358 @@
+{
+  "mode": "r2",
+  "actual_r2": true,
+  "started_at": "2026-10-11T07:29:10.462Z",
+  "status": "PASSED_STORAGE_ACCEPTANCE_1_TO_7",
+  "fixture_scope": "OWNED_SYNTHETIC_PIPELINE_NOT_QUD_OR_VOICE_IDENTITY",
+  "no_provider_audio": true,
+  "bucket": "ayahx-audio-staging",
+  "prefix": "test/2c8594cb-ee46-4430-9349-39b759db202f/",
+  "results": {
+    "multipart": {
+      "bytes": 52428844,
+      "parts": 7,
+      "milliseconds": 55626,
+      "resume_from_persisted_checkpoint_fresh_client": true,
+      "process_kill_test": false
+    },
+    "read_range_sha": {
+      "files": 3,
+      "bytes": 52812932,
+      "milliseconds": 17183,
+      "full_sha256_matches": true,
+      "range_status": 206,
+      "range_bytes": 1000,
+      "signed_ttl_seconds": 300
+    },
+    "credential_scoping": {
+      "read_only_put": 403,
+      "read_only_delete": 403,
+      "writer_existing_production_bucket_list": 403,
+      "production_mutations": 0
+    },
+    "immutable_object": "STORAGE_OBJECT_IMMUTABLE",
+    "actual_verification": [
+      {
+        "surah": 1,
+        "sha256": "2a840b48f79a5e21e1802309a43fe3da7f239f6a78a84af2b23ccfdd04e7b368",
+        "bytes": 52428844,
+        "duration_ms": 3276800,
+        "codec": "pcm_s16le",
+        "sample_rate": 8000,
+        "warnings": [],
+        "offset": {
+          "method": "v1",
+          "recitationId": "owned-test-fixture",
+          "sourceSha256": "2a840b48f79a5e21e1802309a43fe3da7f239f6a78a84af2b23ccfdd04e7b368",
+          "sourceSurah": 1,
+          "sourceChapterOffsetMs": 0,
+          "qudVersion": "v0.0.0",
+          "protocol": "distributed_3_surahs_interior_300ms",
+          "samples": [
+            {
+              "surah": 1,
+              "ayah": 1,
+              "chapterAyahCount": 5,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 1,
+              "ayah": 3,
+              "chapterAyahCount": 5,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 1,
+              "ayah": 5,
+              "chapterAyahCount": 5,
+              "ncc": 0.9999999999999979,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 2,
+              "ayah": 1,
+              "chapterAyahCount": 6,
+              "ncc": 0.9999999999999944,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 2,
+              "ayah": 3,
+              "chapterAyahCount": 6,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 2,
+              "ayah": 6,
+              "chapterAyahCount": 6,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 3,
+              "ayah": 1,
+              "chapterAyahCount": 7,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 3,
+              "ayah": 4,
+              "chapterAyahCount": 7,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 3,
+              "ayah": 7,
+              "chapterAyahCount": 7,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            }
+          ]
+        }
+      },
+      {
+        "surah": 2,
+        "sha256": "7cc70cd84412436d2165cfe2b2f528d4b1289a03fd5cb023cc1f33f9f086bbbb",
+        "bytes": 160044,
+        "duration_ms": 10000,
+        "codec": "pcm_s16le",
+        "sample_rate": 8000,
+        "warnings": [],
+        "offset": {
+          "method": "v1",
+          "recitationId": "owned-test-fixture",
+          "sourceSha256": "7cc70cd84412436d2165cfe2b2f528d4b1289a03fd5cb023cc1f33f9f086bbbb",
+          "sourceSurah": 2,
+          "sourceChapterOffsetMs": 0,
+          "qudVersion": "v0.0.0",
+          "protocol": "distributed_3_surahs_interior_300ms",
+          "samples": [
+            {
+              "surah": 1,
+              "ayah": 1,
+              "chapterAyahCount": 5,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 1,
+              "ayah": 3,
+              "chapterAyahCount": 5,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 1,
+              "ayah": 5,
+              "chapterAyahCount": 5,
+              "ncc": 0.9999999999999979,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 2,
+              "ayah": 1,
+              "chapterAyahCount": 6,
+              "ncc": 0.9999999999999944,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 2,
+              "ayah": 3,
+              "chapterAyahCount": 6,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 2,
+              "ayah": 6,
+              "chapterAyahCount": 6,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 3,
+              "ayah": 1,
+              "chapterAyahCount": 7,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 3,
+              "ayah": 4,
+              "chapterAyahCount": 7,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 3,
+              "ayah": 7,
+              "chapterAyahCount": 7,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            }
+          ]
+        }
+      },
+      {
+        "surah": 3,
+        "sha256": "eb22e556f08af79503a1eaf9aad9b17963e1b00349f8320b4052efafd18c3f10",
+        "bytes": 224044,
+        "duration_ms": 14000,
+        "codec": "pcm_s16le",
+        "sample_rate": 8000,
+        "warnings": [],
+        "offset": {
+          "method": "v1",
+          "recitationId": "owned-test-fixture",
+          "sourceSha256": "eb22e556f08af79503a1eaf9aad9b17963e1b00349f8320b4052efafd18c3f10",
+          "sourceSurah": 3,
+          "sourceChapterOffsetMs": 0,
+          "qudVersion": "v0.0.0",
+          "protocol": "distributed_3_surahs_interior_300ms",
+          "samples": [
+            {
+              "surah": 1,
+              "ayah": 1,
+              "chapterAyahCount": 5,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 1,
+              "ayah": 3,
+              "chapterAyahCount": 5,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 1,
+              "ayah": 5,
+              "chapterAyahCount": 5,
+              "ncc": 0.9999999999999979,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 2,
+              "ayah": 1,
+              "chapterAyahCount": 6,
+              "ncc": 0.9999999999999944,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 2,
+              "ayah": 3,
+              "chapterAyahCount": 6,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 2,
+              "ayah": 6,
+              "chapterAyahCount": 6,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 3,
+              "ayah": 1,
+              "chapterAyahCount": 7,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 3,
+              "ayah": 4,
+              "chapterAyahCount": 7,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            },
+            {
+              "surah": 3,
+              "ayah": 7,
+              "chapterAyahCount": 7,
+              "ncc": 1,
+              "lagMs": 0,
+              "durationDifferenceMs": 0
+            }
+          ]
+        }
+      }
+    ],
+    "audio_plan_render": {
+      "kind": "licensed_file",
+      "source_sha256": "7cc70cd84412436d2165cfe2b2f528d4b1289a03fd5cb023cc1f33f9f086bbbb",
+      "source_window_ms": {
+        "fromMs": 300,
+        "toMs": 2300
+      },
+      "duration_ms": 2000,
+      "sha256": "7e1ff8afaf608eaa9f6c367f42f396fc169a7b4602db09da3f7531493bc8dbc6",
+      "audio_and_video": true,
+      "actual_ffmpeg": true,
+      "synthetic_only": true
+    },
+    "rejections": {
+      "above_1gb": "AUDIO_OBJECT_SIZE_LIMIT",
+      "truncated": "AUDIO_UPLOAD_TRUNCATED",
+      "wrong_sha": "AUDIO_SHA256_MISMATCH",
+      "invalid_magic": "AUDIO_MAGIC_INVALID",
+      "video_stream": "AUDIO_STREAMS_INVALID"
+    },
+    "abort_incomplete_upload": {
+      "populated_part_aborted": true,
+      "list_parts_status": 404
+    },
+    "lifecycle_day_one": {
+      "status": "PASSED",
+      "evidence_sha256": "c30b233fe0d150d206ebfdb8895847ce794900dbb7a7477c10afd4b7d41ef005",
+      "checked_at": "2026-10-11T07:15:35.377Z",
+      "abort_after_seconds": 86400,
+      "expiry_observed": false,
+      "evidence_scope": "CONFIGURATION_READBACK_NOT_24_HOUR_EXPIRY"
+    },
+    "browser_cors": {
+      "status": "PASSED",
+      "evidence_sha256": "6631284ea18318603b873620390cd2cda06de652b4f795ba64e6d6de9b6c0f3e",
+      "checked_at": "2026-10-11T07:23:07Z",
+      "browser": "chromium",
+      "exact_origins": true
+    }
+  },
+  "active_check": "EXTERNAL_PROOFS",
+  "test_objects_deleted": true,
+  "cleanup_failure_codes": [],
+  "finished_at": "2026-10-11T07:31:16.349Z",
+  "milliseconds": 125887,
+  "secret_scan": "PASSED_REPORT_AND_REDACTED_ERROR_FIELDS"
+}
