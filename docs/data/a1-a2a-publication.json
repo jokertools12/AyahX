@@ -1,91 +1,101 @@
 {
-  "checked_at": "2026-10-11T12:30:43.737Z",
+  "checked_at": "2026-10-11T13:45:43.147Z",
   "scope": "A1_A2a_only",
   "passed": true,
-  "merge_sha": "a209223bc3f4f1d72f3553be83b539b1078391c9",
+  "merge_sha": "75c4ae6c2a2d519e372f95e79c160bc3157680b8",
   "pull_requests": [
     {
       "number": 16,
       "url": "https://github.com/jokertools12/AyahX/pull/16"
+    },
+    {
+      "number": 17,
+      "url": "https://github.com/jokertools12/AyahX/pull/17"
+    },
+    {
+      "number": 18,
+      "url": "https://github.com/jokertools12/AyahX/pull/18"
+    },
+    {
+      "number": 19,
+      "url": "https://github.com/jokertools12/AyahX/pull/19"
     }
   ],
   "ci_runs": [
     {
-      "id": 38138396160,
-      "name": "Catalog quality",
-      "status": "completed",
-      "conclusion": "success",
-      "run_number": 4,
-      "jobs_url": "https://api.github.com/repos/jokertools12/AyahX/actions/runs/38138396160/jobs",
-      "logs_url": "https://api.github.com/repos/jokertools12/AyahX/actions/runs/38138396160/logs",
-      "workflow_id": 381125208,
-      "url": "https://github.com/jokertools12/AyahX/actions/runs/38138396160"
-    },
-    {
-      "id": 38138396145,
+      "id": 38143033419,
       "name": "AyahX E2E",
       "status": "completed",
       "conclusion": "success",
-      "run_number": 30,
-      "jobs_url": "https://api.github.com/repos/jokertools12/AyahX/actions/runs/38138396145/jobs",
-      "logs_url": "https://api.github.com/repos/jokertools12/AyahX/actions/runs/38138396145/logs",
-      "workflow_id": 378158722,
-      "url": "https://github.com/jokertools12/AyahX/actions/runs/38138396145"
+      "url": "https://github.com/jokertools12/AyahX/actions/runs/38143033419"
+    },
+    {
+      "id": 38143033382,
+      "name": "Catalog quality",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jokertools12/AyahX/actions/runs/38143033382"
     }
   ],
   "deployments": [
     {
-      "id": "8e57df03-5175-46f0-b06c-30a4638faa68",
-      "serviceId": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
+      "id": "f5d81758-f260-4abc-b99c-057a3942ee87",
+      "service_id": "68eea2bb-ae45-4af7-8962-ba9e16e466fc",
       "status": "SUCCESS",
-      "commitHash": "a209223bc3f4f1d72f3553be83b539b1078391c9",
-      "updatedAt": "2026-10-11T12:17:13.383Z",
-      "url": "https://railway.com/project/6394b364-57bc-4736-8ce1-10dcf382c1e5/service/68eea2bb-ae45-4af7-8962-ba9e16e466fc?environmentId=c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6&id=8e57df03-5175-46f0-b06c-30a4638faa68"
+      "sha": "75c4ae6c2a2d519e372f95e79c160bc3157680b8",
+      "url": null,
+      "updated": "2026-10-11T13:29:24.057Z"
     },
     {
-      "id": "ea141ba3-9545-4b78-a979-9de25e35d47b",
-      "serviceId": "18de6ea4-108a-4346-8474-c7b05b81943b",
+      "id": "eea9938a-3aef-4dbf-891f-e96a8718cd83",
+      "service_id": "d8558eff-68f5-4c63-b744-a103ddd743f6",
       "status": "SUCCESS",
-      "commitHash": "a209223bc3f4f1d72f3553be83b539b1078391c9",
-      "updatedAt": "2026-10-11T12:17:21.734Z",
-      "url": "https://railway.com/project/6394b364-57bc-4736-8ce1-10dcf382c1e5/service/18de6ea4-108a-4346-8474-c7b05b81943b?environmentId=c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6&id=ea141ba3-9545-4b78-a979-9de25e35d47b"
+      "sha": "75c4ae6c2a2d519e372f95e79c160bc3157680b8",
+      "url": null,
+      "updated": "2026-10-11T13:29:19.258Z"
     },
     {
-      "id": "1fe02e6e-7c7d-4ae8-9a22-d4eedc08cc9c",
-      "serviceId": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
+      "id": "3e11000e-feef-48df-8745-88cdccd2b1f8",
+      "service_id": "1ff57ef9-b793-4130-ae60-ce8392172cf8",
       "status": "SUCCESS",
-      "commitHash": "a209223bc3f4f1d72f3553be83b539b1078391c9",
-      "updatedAt": "2026-10-11T12:17:33.591Z",
-      "url": "https://railway.com/project/6394b364-57bc-4736-8ce1-10dcf382c1e5/service/1ff57ef9-b793-4130-ae60-ce8392172cf8?environmentId=c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6&id=1fe02e6e-7c7d-4ae8-9a22-d4eedc08cc9c"
+      "sha": "75c4ae6c2a2d519e372f95e79c160bc3157680b8",
+      "url": null,
+      "updated": "2026-10-11T13:30:07.550Z"
     },
     {
-      "id": "6a2d12b7-eb82-4378-826f-13cc9a8422d2",
-      "serviceId": "d8558eff-68f5-4c63-b744-a103ddd743f6",
+      "id": "3527059f-8db1-408b-b29e-8927d8e70a34",
+      "service_id": "18de6ea4-108a-4346-8474-c7b05b81943b",
       "status": "SUCCESS",
-      "commitHash": "a209223bc3f4f1d72f3553be83b539b1078391c9",
-      "updatedAt": "2026-10-11T12:16:25.851Z",
-      "url": "https://railway.com/project/6394b364-57bc-4736-8ce1-10dcf382c1e5/service/d8558eff-68f5-4c63-b744-a103ddd743f6?environmentId=c8224c72-2cb3-4c1b-bf4e-85fe5e5309c6&id=6a2d12b7-eb82-4378-826f-13cc9a8422d2"
+      "sha": "75c4ae6c2a2d519e372f95e79c160bc3157680b8",
+      "url": null,
+      "updated": "2026-10-11T13:29:25.996Z"
     }
   ],
-  "health_ref": "docs/data/a1-a2a-health-proof.json",
-  "logs_ref": "docs/data/a1-a2a-health-logs-proof.json",
-  "window_seconds": 665.74,
-  "smoke_ref": "docs/data/a1-a2a-production-smoke.json",
-  "protection_ref": "docs/data/a1-postdeploy-data-protection.json",
+  "health_ref": "docs/data/a1-language-release-proof.json",
+  "logs_ref": "docs/data/a1-language-release-proof.json",
+  "window_seconds": 724.685,
+  "smoke_ref": "docs/data/a1-language-release-proof.json",
+  "protection_ref": "docs/data/a1-language-release-proof.json",
   "catalog_v2": false,
   "staging_offline": true,
   "billing": {
-    "checked_at": "2026-10-11T12:29:44.5978112Z",
+    "checked_at": "2026-10-11T13:38:28.1652667Z",
     "before": 18.179866015894323,
-    "after": 18.20848470701068,
-    "delta": 0.028618691116356842,
-    "forecast": 22.19372923248259,
+    "after": 18.224976911014135,
+    "delta": 0.045110895119812255,
+    "forecast": 22.16564620462119,
     "hard_limit": 30,
     "soft_limit": 20,
-    "remaining": 11.79151529298932,
+    "remaining": 11.775023088985865,
     "attribution": "Workspace aggregate only; no isolated batch cost or savings claim"
   },
   "rollback_executed": false,
   "raw_logs_private": true,
+  "prior_release": {
+    "pr": 16,
+    "merge_sha": "a209223bc3f4f1d72f3553be83b539b1078391c9",
+    "window_seconds": 665.74
+  },
+  "touch_release_ref": "docs/data/a1-touch-release-proof.json",
   "post_closure": "Stop; no D5 execution or A2b"
 }
