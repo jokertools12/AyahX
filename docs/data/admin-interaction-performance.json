@@ -1,5 +1,5 @@
 {
-  "observed_at": "2026-10-11T11:42:03.488Z",
+  "observed_at": "2026-10-11T13:01:02.020Z",
   "scope": "local production build; lab interaction timing, not field INP",
   "measurements": [
     {
@@ -8,9 +8,9 @@
       "rendered_rows": 23,
       "rendered_cards": 10,
       "event_samples": 36,
-      "max_interaction_duration_ms": 32,
+      "max_interaction_duration_ms": 24,
       "interaction_count": 12,
-      "cls": 0.014743695290858725,
+      "cls": 0.01470040184672207,
       "profile_overflow": {
         "viewport": 1440,
         "body_width": 1425,
@@ -23,7 +23,7 @@
       "rendered_rows": 23,
       "rendered_cards": 10,
       "event_samples": 36,
-      "max_interaction_duration_ms": 48,
+      "max_interaction_duration_ms": 64,
       "interaction_count": 12,
       "cls": 0.015079861538461537,
       "profile_overflow": {

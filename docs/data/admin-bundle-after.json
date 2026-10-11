@@ -1,12 +1,12 @@
 {
-  "measured_at": "2026-10-11T12:01:50.728Z",
+  "measured_at": "2026-10-11T13:03:55.164Z",
   "method": "Gzip sum of initial entry + selected lazy root + route static imports + all CSS; route alternatives excluded",
   "public": {
     "files": [
       {
-        "name": "assets/App-BLD2gEmy.js",
+        "name": "assets/App-DHn4XRIJ.js",
         "bytes": 58615,
-        "gzip_bytes": 17131
+        "gzip_bytes": 17142
       },
       {
         "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -19,7 +19,7 @@
         "gzip_bytes": 17039
       },
       {
-        "name": "assets/index-DrDKrzyK.js",
+        "name": "assets/index-C3_o-pCU.js",
         "bytes": 2768,
         "gzip_bytes": 1447
       },
@@ -49,37 +49,37 @@
         "gzip_bytes": 59085
       }
     ],
-    "gzip_bytes": 218666
+    "gzip_bytes": 218677
   },
   "public_before_gzip": 322504,
-  "public_change_percent": -32.197430109393984,
+  "public_change_percent": -32.194019298985445,
   "admin": {
     "src/admin/AdminKit.tsx": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminInteractions-Blo4lqtQ.js",
+          "name": "assets/AdminInteractions-BeVprTLN.js",
           "bytes": 1990,
-          "gzip_bytes": 1075
+          "gzip_bytes": 1076
         },
         {
-          "name": "assets/AdminKit-6ph9BXfZ.js",
+          "name": "assets/AdminKit-F5iwWbHk.js",
           "bytes": 7353,
-          "gzip_bytes": 2845
+          "gzip_bytes": 2846
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -87,12 +87,12 @@
           "gzip_bytes": 12044
         },
         {
-          "name": "assets/ChapterMatrix-D7O1aSuc.js",
+          "name": "assets/ChapterMatrix-1EHr_0JB.js",
           "bytes": 1752,
           "gzip_bytes": 919
         },
         {
-          "name": "assets/DataTable-BmP9i8Lg.js",
+          "name": "assets/DataTable-Y7EMyRGc.js",
           "bytes": 7744,
           "gzip_bytes": 3187
         },
@@ -102,7 +102,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -152,29 +152,29 @@
           "gzip_bytes": 59085
         }
       ],
-      "gzip_bytes": 183801
+      "gzip_bytes": 183883
     },
     "src/admin/pages/AdminAudit.tsx": {
       "files": [
         {
-          "name": "assets/AdminAudit-ByJQJ1uk.js",
+          "name": "assets/AdminAudit-ciVIysD9.js",
           "bytes": 2474,
-          "gzip_bytes": 1329
+          "gzip_bytes": 1331
         },
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -182,7 +182,7 @@
           "gzip_bytes": 12044
         },
         {
-          "name": "assets/DataTable-BmP9i8Lg.js",
+          "name": "assets/DataTable-Y7EMyRGc.js",
           "bytes": 7744,
           "gzip_bytes": 3187
         },
@@ -192,7 +192,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -242,34 +242,34 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminList-cEQzSf_p.js",
+          "name": "assets/useAdminList-_VwpyEBY.js",
           "bytes": 773,
           "gzip_bytes": 480
         }
       ],
-      "gzip_bytes": 180771
+      "gzip_bytes": 180853
     },
     "src/admin/pages/AdminDashboard.tsx": {
       "files": [
         {
-          "name": "assets/AdminDashboard-DYaU1Nkq.js",
+          "name": "assets/AdminDashboard-qzbCwipF.js",
           "bytes": 3412,
-          "gzip_bytes": 1585
+          "gzip_bytes": 1584
         },
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -282,7 +282,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -332,34 +332,34 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminResource-BxLdK918.js",
+          "name": "assets/useAdminResource-dhV_R9FN.js",
           "bytes": 808,
           "gzip_bytes": 560
         }
       ],
-      "gzip_bytes": 177920
+      "gzip_bytes": 177999
     },
     "src/admin/pages/AdminRoles.tsx": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminRoles-CvTkihD1.js",
+          "name": "assets/AdminRoles-DBhs-A8y.js",
           "bytes": 4101,
-          "gzip_bytes": 2014
+          "gzip_bytes": 2012
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -372,7 +372,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -422,39 +422,39 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminResource-BxLdK918.js",
+          "name": "assets/useAdminResource-dhV_R9FN.js",
           "bytes": 808,
           "gzip_bytes": 560
         },
         {
-          "name": "assets/useDirtyGuard-MFXM42-5.js",
+          "name": "assets/useDirtyGuard-DyNYISXY.js",
           "bytes": 435,
-          "gzip_bytes": 298
+          "gzip_bytes": 299
         }
       ],
-      "gzip_bytes": 178647
+      "gzip_bytes": 178726
     },
     "src/admin/pages/AdminSecurity.tsx": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
-          "name": "assets/AdminSecurity-BO-XLKw4.js",
+          "name": "assets/AdminSecurity-CIc9K1b3.js",
           "bytes": 5911,
-          "gzip_bytes": 2432
+          "gzip_bytes": 2431
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -462,7 +462,7 @@
           "gzip_bytes": 12044
         },
         {
-          "name": "assets/DataTable-BmP9i8Lg.js",
+          "name": "assets/DataTable-Y7EMyRGc.js",
           "bytes": 7744,
           "gzip_bytes": 3187
         },
@@ -472,7 +472,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -522,34 +522,34 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminResource-BxLdK918.js",
+          "name": "assets/useAdminResource-dhV_R9FN.js",
           "bytes": 808,
           "gzip_bytes": 560
         }
       ],
-      "gzip_bytes": 181954
+      "gzip_bytes": 182033
     },
     "src/admin/pages/AdminSettings.tsx": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
-          "name": "assets/AdminSettings-CL_eEg9W.js",
+          "name": "assets/AdminSettings-CPUWuPG-.js",
           "bytes": 5295,
-          "gzip_bytes": 2422
+          "gzip_bytes": 2420
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -562,7 +562,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -612,39 +612,39 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminResource-BxLdK918.js",
+          "name": "assets/useAdminResource-dhV_R9FN.js",
           "bytes": 808,
           "gzip_bytes": 560
         },
         {
-          "name": "assets/useDirtyGuard-MFXM42-5.js",
+          "name": "assets/useDirtyGuard-DyNYISXY.js",
           "bytes": 435,
-          "gzip_bytes": 298
+          "gzip_bytes": 299
         }
       ],
-      "gzip_bytes": 179055
+      "gzip_bytes": 179134
     },
     "src/admin/pages/AdminUsers.tsx": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
-          "name": "assets/AdminUsers-BOI2FWhG.js",
+          "name": "assets/AdminUsers-WdoIFfpP.js",
           "bytes": 3152,
-          "gzip_bytes": 1599
+          "gzip_bytes": 1602
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -652,7 +652,7 @@
           "gzip_bytes": 12044
         },
         {
-          "name": "assets/DataTable-BmP9i8Lg.js",
+          "name": "assets/DataTable-Y7EMyRGc.js",
           "bytes": 7744,
           "gzip_bytes": 3187
         },
@@ -662,7 +662,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -712,49 +712,49 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminList-cEQzSf_p.js",
+          "name": "assets/useAdminList-_VwpyEBY.js",
           "bytes": 773,
           "gzip_bytes": 480
         },
         {
-          "name": "assets/useAdminResource-BxLdK918.js",
+          "name": "assets/useAdminResource-dhV_R9FN.js",
           "bytes": 808,
           "gzip_bytes": 560
         }
       ],
-      "gzip_bytes": 181601
+      "gzip_bytes": 181684
     },
     "src/admin/pages/catalog/AvailabilityPage.tsx": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminInteractions-Blo4lqtQ.js",
+          "name": "assets/AdminInteractions-BeVprTLN.js",
           "bytes": 1990,
-          "gzip_bytes": 1075
+          "gzip_bytes": 1076
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
-          "name": "assets/AvailabilityPage-mvY-vr2m.js",
+          "name": "assets/AvailabilityPage-DxbKJGYp.js",
           "bytes": 1793,
-          "gzip_bytes": 1071
+          "gzip_bytes": 1070
         },
         {
-          "name": "assets/AvailabilityPanel-Dx0BCE2V.js",
+          "name": "assets/AvailabilityPanel-CwRzYUWZ.js",
           "bytes": 3304,
-          "gzip_bytes": 1641
+          "gzip_bytes": 1642
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -762,19 +762,19 @@
           "gzip_bytes": 12044
         },
         {
-          "name": "assets/CatalogShared-CYKhahru.js",
+          "name": "assets/CatalogShared-B-UddYnU.js",
           "bytes": 1592,
           "gzip_bytes": 774
         },
         {
-          "name": "assets/ChapterMatrix-D7O1aSuc.js",
+          "name": "assets/ChapterMatrix-1EHr_0JB.js",
           "bytes": 1752,
           "gzip_bytes": 919
         },
         {
-          "name": "assets/catalog-B_kFxUI7.js",
+          "name": "assets/catalog-DxcKVOmT.js",
           "bytes": 1404,
-          "gzip_bytes": 765
+          "gzip_bytes": 766
         },
         {
           "name": "assets/catalog-dlPhGzeH.css",
@@ -792,7 +792,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -842,29 +842,29 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminResource-BxLdK918.js",
+          "name": "assets/useAdminResource-dhV_R9FN.js",
           "bytes": 808,
           "gzip_bytes": 560
         }
       ],
-      "gzip_bytes": 183830
+      "gzip_bytes": 183912
     },
     "src/admin/pages/catalog/ProvidersPage.tsx": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -872,24 +872,24 @@
           "gzip_bytes": 12044
         },
         {
-          "name": "assets/CatalogShared-CYKhahru.js",
+          "name": "assets/CatalogShared-B-UddYnU.js",
           "bytes": 1592,
           "gzip_bytes": 774
         },
         {
-          "name": "assets/DataTable-BmP9i8Lg.js",
+          "name": "assets/DataTable-Y7EMyRGc.js",
           "bytes": 7744,
           "gzip_bytes": 3187
         },
         {
-          "name": "assets/ProvidersPage-wroJc95Z.js",
+          "name": "assets/ProvidersPage-D5lfcT4A.js",
           "bytes": 6371,
-          "gzip_bytes": 2867
+          "gzip_bytes": 2866
         },
         {
-          "name": "assets/catalog-B_kFxUI7.js",
+          "name": "assets/catalog-DxcKVOmT.js",
           "bytes": 1404,
-          "gzip_bytes": 765
+          "gzip_bytes": 766
         },
         {
           "name": "assets/catalog-dlPhGzeH.css",
@@ -907,7 +907,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -957,34 +957,34 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminList-cEQzSf_p.js",
+          "name": "assets/useAdminList-_VwpyEBY.js",
           "bytes": 773,
           "gzip_bytes": 480
         },
         {
-          "name": "assets/useAdminResource-BxLdK918.js",
+          "name": "assets/useAdminResource-dhV_R9FN.js",
           "bytes": 808,
           "gzip_bytes": 560
         }
       ],
-      "gzip_bytes": 185318
+      "gzip_bytes": 185398
     },
     "src/admin/pages/catalog/QuranPage.tsx": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -992,19 +992,19 @@
           "gzip_bytes": 12044
         },
         {
-          "name": "assets/DataTable-BmP9i8Lg.js",
+          "name": "assets/DataTable-Y7EMyRGc.js",
           "bytes": 7744,
           "gzip_bytes": 3187
         },
         {
-          "name": "assets/QuranPage-C4mVIU1Y.js",
+          "name": "assets/QuranPage-DN-2w5yz.js",
           "bytes": 7872,
-          "gzip_bytes": 3398
+          "gzip_bytes": 3399
         },
         {
-          "name": "assets/catalog-B_kFxUI7.js",
+          "name": "assets/catalog-DxcKVOmT.js",
           "bytes": 1404,
-          "gzip_bytes": 765
+          "gzip_bytes": 766
         },
         {
           "name": "assets/catalog-dlPhGzeH.css",
@@ -1027,7 +1027,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -1077,39 +1077,39 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminList-cEQzSf_p.js",
+          "name": "assets/useAdminList-_VwpyEBY.js",
           "bytes": 773,
           "gzip_bytes": 480
         },
         {
-          "name": "assets/useAdminResource-BxLdK918.js",
+          "name": "assets/useAdminResource-dhV_R9FN.js",
           "bytes": 808,
           "gzip_bytes": 560
         }
       ],
-      "gzip_bytes": 185468
+      "gzip_bytes": 185550
     },
     "src/admin/pages/catalog/RecitationsPage.tsx": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminInteractions-Blo4lqtQ.js",
+          "name": "assets/AdminInteractions-BeVprTLN.js",
           "bytes": 1990,
-          "gzip_bytes": 1075
+          "gzip_bytes": 1076
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -1117,34 +1117,34 @@
           "gzip_bytes": 12044
         },
         {
-          "name": "assets/CatalogFilters-CkT2_7pw.js",
+          "name": "assets/CatalogFilters-DDg-gP-u.js",
           "bytes": 3304,
-          "gzip_bytes": 1481
+          "gzip_bytes": 1480
         },
         {
-          "name": "assets/CatalogShared-CYKhahru.js",
+          "name": "assets/CatalogShared-B-UddYnU.js",
           "bytes": 1592,
           "gzip_bytes": 774
         },
         {
-          "name": "assets/DataTable-BmP9i8Lg.js",
+          "name": "assets/DataTable-Y7EMyRGc.js",
           "bytes": 7744,
           "gzip_bytes": 3187
         },
         {
-          "name": "assets/RecitationDrawer-CtIjuijX.js",
+          "name": "assets/RecitationDrawer-CDObRfoB.js",
           "bytes": 11975,
-          "gzip_bytes": 4672
+          "gzip_bytes": 4670
         },
         {
-          "name": "assets/RecitationsPage-DRC5X_Nu.js",
+          "name": "assets/RecitationsPage-DjVLV2BS.js",
           "bytes": 2181,
-          "gzip_bytes": 1229
+          "gzip_bytes": 1225
         },
         {
-          "name": "assets/catalog-B_kFxUI7.js",
+          "name": "assets/catalog-DxcKVOmT.js",
           "bytes": 1404,
-          "gzip_bytes": 765
+          "gzip_bytes": 766
         },
         {
           "name": "assets/catalog-dlPhGzeH.css",
@@ -1162,7 +1162,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -1212,49 +1212,49 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminList-cEQzSf_p.js",
+          "name": "assets/useAdminList-_VwpyEBY.js",
           "bytes": 773,
           "gzip_bytes": 480
         },
         {
-          "name": "assets/useAdminResource-BxLdK918.js",
+          "name": "assets/useAdminResource-dhV_R9FN.js",
           "bytes": 808,
           "gzip_bytes": 560
         },
         {
-          "name": "assets/useDirtyGuard-MFXM42-5.js",
+          "name": "assets/useDirtyGuard-DyNYISXY.js",
           "bytes": 435,
-          "gzip_bytes": 298
+          "gzip_bytes": 299
         }
       ],
-      "gzip_bytes": 191206
+      "gzip_bytes": 191282
     },
     "src/admin/pages/catalog/ReciterDetailPage.tsx": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminInteractions-Blo4lqtQ.js",
+          "name": "assets/AdminInteractions-BeVprTLN.js",
           "bytes": 1990,
-          "gzip_bytes": 1075
+          "gzip_bytes": 1076
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
-          "name": "assets/AvailabilityPanel-Dx0BCE2V.js",
+          "name": "assets/AvailabilityPanel-CwRzYUWZ.js",
           "bytes": 3304,
-          "gzip_bytes": 1641
+          "gzip_bytes": 1642
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -1262,34 +1262,34 @@
           "gzip_bytes": 12044
         },
         {
-          "name": "assets/CatalogShared-CYKhahru.js",
+          "name": "assets/CatalogShared-B-UddYnU.js",
           "bytes": 1592,
           "gzip_bytes": 774
         },
         {
-          "name": "assets/ChapterMatrix-D7O1aSuc.js",
+          "name": "assets/ChapterMatrix-1EHr_0JB.js",
           "bytes": 1752,
           "gzip_bytes": 919
         },
         {
-          "name": "assets/DataTable-BmP9i8Lg.js",
+          "name": "assets/DataTable-Y7EMyRGc.js",
           "bytes": 7744,
           "gzip_bytes": 3187
         },
         {
-          "name": "assets/RecitationDrawer-CtIjuijX.js",
+          "name": "assets/RecitationDrawer-CDObRfoB.js",
           "bytes": 11975,
-          "gzip_bytes": 4672
+          "gzip_bytes": 4670
         },
         {
-          "name": "assets/ReciterDetailPage-DSM5PQfO.js",
+          "name": "assets/ReciterDetailPage-ljSoIh-1.js",
           "bytes": 12283,
-          "gzip_bytes": 5066
+          "gzip_bytes": 5064
         },
         {
-          "name": "assets/catalog-B_kFxUI7.js",
+          "name": "assets/catalog-DxcKVOmT.js",
           "bytes": 1404,
-          "gzip_bytes": 765
+          "gzip_bytes": 766
         },
         {
           "name": "assets/catalog-dlPhGzeH.css",
@@ -1312,7 +1312,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -1362,34 +1362,34 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminResource-BxLdK918.js",
+          "name": "assets/useAdminResource-dhV_R9FN.js",
           "bytes": 808,
           "gzip_bytes": 560
         },
         {
-          "name": "assets/useDirtyGuard-MFXM42-5.js",
+          "name": "assets/useDirtyGuard-DyNYISXY.js",
           "bytes": 435,
-          "gzip_bytes": 298
+          "gzip_bytes": 299
         }
       ],
-      "gzip_bytes": 196035
+      "gzip_bytes": 196115
     },
     "src/admin/pages/catalog/RecitersPage.tsx": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -1397,29 +1397,29 @@
           "gzip_bytes": 12044
         },
         {
-          "name": "assets/CatalogFilters-CkT2_7pw.js",
+          "name": "assets/CatalogFilters-DDg-gP-u.js",
           "bytes": 3304,
-          "gzip_bytes": 1481
+          "gzip_bytes": 1480
         },
         {
-          "name": "assets/CatalogShared-CYKhahru.js",
+          "name": "assets/CatalogShared-B-UddYnU.js",
           "bytes": 1592,
           "gzip_bytes": 774
         },
         {
-          "name": "assets/DataTable-BmP9i8Lg.js",
+          "name": "assets/DataTable-Y7EMyRGc.js",
           "bytes": 7744,
           "gzip_bytes": 3187
         },
         {
-          "name": "assets/RecitersPage-B8c7KaCY.js",
+          "name": "assets/RecitersPage-z4ktPHAh.js",
           "bytes": 5871,
-          "gzip_bytes": 2701
+          "gzip_bytes": 2698
         },
         {
-          "name": "assets/catalog-B_kFxUI7.js",
+          "name": "assets/catalog-DxcKVOmT.js",
           "bytes": 1404,
-          "gzip_bytes": 765
+          "gzip_bytes": 766
         },
         {
           "name": "assets/catalog-dlPhGzeH.css",
@@ -1437,7 +1437,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -1487,39 +1487,39 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminList-cEQzSf_p.js",
+          "name": "assets/useAdminList-_VwpyEBY.js",
           "bytes": 773,
           "gzip_bytes": 480
         },
         {
-          "name": "assets/useAdminResource-BxLdK918.js",
+          "name": "assets/useAdminResource-dhV_R9FN.js",
           "bytes": 808,
           "gzip_bytes": 560
         }
       ],
-      "gzip_bytes": 186633
+      "gzip_bytes": 186710
     },
     "src/admin/pages/catalog/TimingsPage.tsx": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminInteractions-Blo4lqtQ.js",
+          "name": "assets/AdminInteractions-BeVprTLN.js",
           "bytes": 1990,
-          "gzip_bytes": 1075
+          "gzip_bytes": 1076
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -1527,24 +1527,24 @@
           "gzip_bytes": 12044
         },
         {
-          "name": "assets/CatalogShared-CYKhahru.js",
+          "name": "assets/CatalogShared-B-UddYnU.js",
           "bytes": 1592,
           "gzip_bytes": 774
         },
         {
-          "name": "assets/DataTable-BmP9i8Lg.js",
+          "name": "assets/DataTable-Y7EMyRGc.js",
           "bytes": 7744,
           "gzip_bytes": 3187
         },
         {
-          "name": "assets/TimingsPage-B_zIa4Fj.js",
+          "name": "assets/TimingsPage-Dw3FA7Ef.js",
           "bytes": 7947,
-          "gzip_bytes": 3319
+          "gzip_bytes": 3316
         },
         {
-          "name": "assets/catalog-B_kFxUI7.js",
+          "name": "assets/catalog-DxcKVOmT.js",
           "bytes": 1404,
-          "gzip_bytes": 765
+          "gzip_bytes": 766
         },
         {
           "name": "assets/catalog-dlPhGzeH.css",
@@ -1562,7 +1562,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -1612,29 +1612,29 @@
           "gzip_bytes": 59085
         },
         {
-          "name": "assets/useAdminResource-BxLdK918.js",
+          "name": "assets/useAdminResource-dhV_R9FN.js",
           "bytes": 808,
           "gzip_bytes": 560
         }
       ],
-      "gzip_bytes": 186705
+      "gzip_bytes": 186784
     },
     "login": {
       "files": [
         {
-          "name": "assets/AdminEntry-DKYtka2Q.js",
+          "name": "assets/AdminEntry-CWxjB73x.js",
           "bytes": 815,
           "gzip_bytes": 493
         },
         {
-          "name": "assets/AdminRoot-CO70zie6.css",
-          "bytes": 7568,
-          "gzip_bytes": 2006
+          "name": "assets/AdminRoot-Bi1CosXs.css",
+          "bytes": 7977,
+          "gzip_bytes": 2091
         },
         {
-          "name": "assets/AdminRoot-cxGyzxCl.js",
+          "name": "assets/AdminRoot-CEPGXnau.js",
           "bytes": 28686,
-          "gzip_bytes": 9457
+          "gzip_bytes": 9452
         },
         {
           "name": "assets/BrandLogo-CdzrrWWM.js",
@@ -1647,7 +1647,7 @@
           "gzip_bytes": 17039
         },
         {
-          "name": "assets/index-DrDKrzyK.js",
+          "name": "assets/index-C3_o-pCU.js",
           "bytes": 2768,
           "gzip_bytes": 1447
         },
@@ -1697,7 +1697,7 @@
           "gzip_bytes": 59085
         }
       ],
-      "gzip_bytes": 175775
+      "gzip_bytes": 175855
     }
   },
   "public_increase_pass": true,

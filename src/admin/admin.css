@@ -1,6 +1,12 @@
 .admin-app{min-height:100vh;background:hsl(var(--background));color:hsl(var(--foreground));font-family:Cairo,sans-serif;line-height:1.6;overflow-x:clip}
 .admin-app *{box-sizing:border-box}.admin-app :is(button,input,select,textarea,a){scroll-margin-block:90px}.admin-app :is(button,a,input,select,textarea):focus-visible{outline:2px solid hsl(var(--ring));outline-offset:3px}
-.admin-app button{touch-action:manipulation;min-height:44px}.admin-app [dir=ltr],.admin-code{font-family:ui-monospace,monospace}.admin-main{max-width:1440px;margin-inline:auto;padding:24px;min-width:0}.admin-stack{display:grid;gap:20px}.admin-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:16px}
+.admin-app button{touch-action:manipulation;min-height:44px;min-width:44px}.admin-app [dir=ltr],.admin-code{font-family:ui-monospace,monospace}.admin-main{max-width:1440px;margin-inline:auto;padding:24px;min-width:0}.admin-stack{display:grid;gap:20px}.admin-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:16px}
+/* Radix and toast portals live outside .admin-app. Scope targets to an active admin
+   page so shared public components retain their existing styles. */
+body:has(.admin-app) button{min-width:44px;min-height:44px}
+.admin-app :is(input:not([type=checkbox]):not([type=radio]),select,textarea),body:has(.admin-app) :is([role=dialog],[role=alertdialog]) :is(input:not([type=checkbox]):not([type=radio]),select,textarea){min-height:44px}
+.admin-app a{display:inline-flex;align-items:center;min-width:44px;min-height:44px}
+.admin-check-label{min-width:44px}
 /* Radix's invisible form bridge uses a leftward transform that overflows RTL.
    Keep the bridge in the viewport; the visible switch retains its 44px target. */
 .admin-app input[aria-hidden=true][tabindex="-1"]{position:fixed!important;inset-inline-start:0!important;inset-block-start:0!important;transform:none!important;pointer-events:none!important}

@@ -1,6 +1,6 @@
 {
   "scope": "local-production-build",
-  "observedAt": "2026-10-11T12:03:58.278Z",
+  "observedAt": "2026-10-11T12:59:59.262Z",
   "lighthouseVersion": "13.5.0",
   "chromeVersion": "Chrome/149.0.7827.55",
   "settings": {
@@ -20,7 +20,7 @@
       "accessibility": 100,
       "bestPractices": 100,
       "cls": 0.011430797889556883,
-      "lcpMs": 461.75090000000006,
+      "lcpMs": 458.3415,
       "totalBlockingTimeMs": 0,
       "failedAudits": [
         {
@@ -62,9 +62,9 @@
       "path": "/admin/reciters",
       "accessibility": 100,
       "bestPractices": 100,
-      "cls": 0.027579463503067968,
-      "lcpMs": 455.45904999999993,
-      "totalBlockingTimeMs": 0,
+      "cls": 0.026178581420534648,
+      "lcpMs": 462.48774999999995,
+      "totalBlockingTimeMs": 0.5,
       "failedAudits": [
         {
           "id": "unminified-javascript",
@@ -106,7 +106,7 @@
       "accessibility": 100,
       "bestPractices": 100,
       "cls": 0.01142561445553184,
-      "lcpMs": 462.22049999999996,
+      "lcpMs": 480.41179999999997,
       "totalBlockingTimeMs": 0,
       "failedAudits": [
         {
