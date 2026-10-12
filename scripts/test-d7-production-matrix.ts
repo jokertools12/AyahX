@@ -2,16 +2,25 @@
 import assert from 'node:assert/strict';
 import { readFile,writeFile,mkdir } from 'node:fs/promises';
 import { build } from 'esbuild';
-import { setTimeout as delay } from 'node:timers/promises';
 import { d7ServiceCommand,d7RunBundle,D7OperatorError } from './lib/d7RailwayOperator';
 const at=process.argv.indexOf('--matrix');assert.ok(at>=0);
 const matrix=JSON.parse(await readFile(process.argv[at+1],'utf8'));
 const selection=process.argv.indexOf('--case');assert.ok(selection>=0,'EXPLICIT_CASES_REQUIRED');
 const ids=process.argv[selection+1].split(',');
+const resumeAt=process.argv.indexOf('--resume-job'),resumeId=resumeAt>=0?process.argv[resumeAt+1]:null;
+if(resumeId){assert.equal(ids.length,1,'RESUME_ONE_EXPLICIT_CASE_ONLY');assert.notEqual(ids[0],'owned-r2','OWNED_FIXTURE_RESUME_NOT_SUPPORTED');assert.match(resumeId,/^[a-f0-9-]{36}$/u);}
 const cases=ids.map(id=>id==='owned-r2'?{id,expected_result:'SUCCESS',request:null}:matrix.cases.find((row:{id:string})=>row.id===id));assert.ok(cases.every(Boolean));
 const quote=(value:string)=>"'"+value.replace(/'/gu,"'\\''")+"'";
 const parse=(raw:string)=>{const line=raw.split(/\r?\n/u).findLast(line=>line.startsWith('{'));assert.ok(line,'OPERATOR_JSON_REQUIRED');return JSON.parse(line);};
 const cli=async(mode:string,value?:string)=>parse(await d7ServiceCommand('app','node dist-server/operators/renderLabCli.cjs '+quote(mode)+(value?' '+quote(value):'')+' --root-operated 2>&1'));
+// Keep polling inside ONE remote session. Opening an SSH session per poll can
+// exhaust Railway's session limit even though every CLI/database call is serial.
+const waitForTerminal=async(id:string)=>{
+ assert.match(id,/^[a-f0-9-]{36}$/u);
+ const command='node dist-server/operators/renderLabCli.cjs status '+quote(id)+' --root-operated 2>&1';
+ const script='for attempt in $(seq 1 100); do result="$('+command+')" || { printf \'%s\\n\' "$result"; exit 1; }; printf \'%s\\n\' "$result"; case "$result" in *\'"status":"succeeded"\'*|*\'"status":"failed"\'*|*\'"status":"cancelled"\'*) exit 0;; esac; sleep 15; done; exit 1';
+ return parse(await d7ServiceCommand('app',script));
+};
 const bundle=await build({entryPoints:['scripts/d7-job-artifact.ts'],bundle:true,write:false,packages:'external',platform:'node',format:'cjs',target:'node22',logLevel:'silent'});
 const artifact=async(mode:string,id:string)=>parse(await d7RunBundle('skia',Buffer.from(bundle.outputFiles[0].contents),[mode,id,'--root-operated']));
 await mkdir('docs/data/render-qa',{recursive:true});
@@ -21,9 +30,10 @@ for(const item of cases){
  try{
   const request=JSON.stringify(item.request);
   if(item.id!=='owned-r2'){report.dry_run=await cli('dry-run',request);assert.equal(item.expected_result,'SUCCESS','EXPECTED_REFUSAL_WAS_ACCEPTED');}
-  const created=await cli(item.id==='owned-r2'?'owned-fixture':'create',item.id==='owned-r2'?undefined:request);report.job_id=created.id;
-  const deadline=Date.now()+25*60_000;let status;
-  do{status=await cli('status',created.id);console.log(JSON.stringify({id:item.id,job_id:created.id,status:status.status,progress:status.progress}));if(['succeeded','failed','cancelled'].includes(status.status))break;await delay(15_000);}while(Date.now()<deadline);
+  const created=resumeId?{id:resumeId}:await cli(item.id==='owned-r2'?'owned-fixture':'create',item.id==='owned-r2'?undefined:request);report.job_id=created.id;
+  if(resumeId){report.resumed_existing_job=true;const existing=await cli('status',resumeId);assert.equal(existing.audio_plan_hash,(report.dry_run as {audioPlanHash:string}).audioPlanHash,'RESUME_SOURCE_IDENTITY_MISMATCH');assert.equal(existing.timing_version_hash,(report.dry_run as {timingVersionHash:string}).timingVersionHash,'RESUME_TIMING_IDENTITY_MISMATCH');}
+  console.log(JSON.stringify({id:item.id,job_id:created.id,status:'waiting_in_single_ssh_session'}));
+  const status=await waitForTerminal(created.id);
   report.status=status.status;report.error_code=status.error_code;
   if(status.status!=='succeeded'){report.qa=status.qa_report_json;throw new Error('REAL_QUEUE_RENDER_FAILED');}
   const inspected=await artifact('inspect',created.id);const {png_base64,...safe}=inspected;
@@ -34,6 +44,8 @@ for(const item of cases){
   const remote=error instanceof D7OperatorError?error.stdout.split(/\r?\n/u).findLast(line=>line.startsWith('{')):null;
   const refusal=remote?JSON.parse(remote):null;
   report.failure=refusal?.error??(error instanceof Error&&/^[A-Z0-9_]+$/u.test(error.message)?error.message:'PRODUCTION_MATRIX_OPERATOR_FAILED');
+  if(refusal?.assertion)report.operator_assertion=refusal.assertion;
+  if(error instanceof D7OperatorError){report.operator_safe_diagnostic=error.safeDiagnostic;report.operator_diagnostic_sha256=error.diagnosticHash;}
   if(refusal?.details)report.refusal_details=refusal.details;
   report.passed=report.failure===item.expected_result;
   if(!report.passed)failed=true;
