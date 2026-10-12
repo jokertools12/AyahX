@@ -173,10 +173,12 @@ const handlers={
    const popup=page.locator('[data-radix-popper-content-wrapper]');await type(b,popup.locator('input'),t.nearComplete.labelAr);await click(b,popup.getByRole('button',{name:t.nearComplete.labelAr,exact:true}),'choose-near-complete-recording');
   }
   const chapter=page.locator('.admin-matrix button').filter({has:page.getByText(String(t.nearComplete.surah),{exact:true})});await click(b,chapter,'open-near-complete-chapter');
-  const dialog=page.getByRole('dialog');await dialog.getByText('الكلمات الناقصة',{exact:true}).waitFor();await dialog.getByText('دليل النقص',{exact:true}).waitFor();
+  const dialog=page.getByRole('dialog');await dialog.getByText('الكلمات الناقصة',{exact:true}).waitFor();
   const missing=await dialog.locator('dl>div').filter({has:dialog.getByText('الكلمات الناقصة',{exact:true})}).locator('dd').textContent();if(Number(missing)!==t.nearComplete.missingWords)throw new Error('MISSING_WORD_COUNT_MISMATCH');
-  const text=await dialog.locator('pre').textContent();if(!text||text==='null'||text==='[]')throw new Error('ACTUAL_MISSING_WORD_EVIDENCE_REQUIRED');
-  return{missingWordEvidenceVisible:true,expectedMissingWords:t.nearComplete.missingWords};
+  const section=dialog.locator('section').filter({has:dialog.getByRole('heading',{level:3,name:'الكلمات التي ينقصها توقيت',exact:true})});await section.waitFor();
+  const words=section.locator('ul>li');if(await words.count()!==t.nearComplete.missingWords)throw new Error('HUMAN_MISSING_WORD_LIST_COUNT_MISMATCH');
+  for(let index=0;index<await words.count();index++){const word=words.nth(index);await word.getByText(/الكلمة القانونية رقم\s+\d+/u).waitFor();if(!/[\u0600-\u06ff]/u.test(await word.locator('span').last().textContent()??''))throw new Error('HUMAN_MISSING_WORD_REASON_REQUIRED');}
+  return{missingWordEvidenceVisible:true,humanWordPositionsAndReasonsVisible:true,expectedMissingWords:t.nearComplete.missingWords};
  },
  async M12(b){await link(b,'/admin/launch','open-launch-preview');await heading('قائمة الإطلاق والمعاينة');await page.getByRole('table',{name:/^معاينة الظهور الافتراضية/u}).waitFor();const button=page.getByRole('button',{name:'افتح الكتالوج للزوار',exact:true});if(await button.isEnabled())throw new Error('PUBLIC_CATALOG_OPEN_CONTROL_MUST_STAY_DISABLED');await page.locator('#catalog-open-reason').waitFor();return{hypotheticalPreviewVisible:true,publicCatalogOpenDisabled:true,flagUnchanged:true};},
 };
