@@ -24,6 +24,7 @@ export const ADMIN_SETTINGS: readonly AdminSettingDefinition[] = [
  definition('default_attribution_text','string','quran_catalog','صيغة النسبة الافتراضية','',z.string().max(500),{maxLength:500},['server/services/recitationCatalogService.ts:presentationSettings']),
  definition('storage_adapter','enum','quran_catalog','محول التخزين التشغيلي','url_reference',z.enum(['url_reference','r2']),{options:['url_reference','r2']},catalog,{readOnly:true}),
  definition('quran_catalog_v2','boolean','features','إطلاق الكتالوج؛ يحتاج تأكيدًا مكتوبًا',false,boolean,{},catalog,{flag:true}),
+ definition('public_flow_v2_ready','boolean','features','الواجهة الجديدة (D8) لم تُبنَ بعد',false,z.literal(false),{},['server/admin/adminOwnerWorkspace.ts:launch','server/admin/adminSettingsRegistry.ts:update'],{flag:true,readOnly:true}),
  definition('admin_2fa_policy','enum','security','سياسة المصادقة الثنائية','optional',z.enum(['optional','required_for_super_admin','required_for_all']),{options:['optional','required_for_super_admin','required_for_all']},['server/admin/adminAccessService.ts:readAdminSecuritySettings']),
  definition('admin_idle_timeout_ms','number','security','مهلة خمول الجلسة بالمللي ثانية',1800000,z.number().int().min(60000).max(86400000),{min:60000,max:86400000},['server/admin/adminAccessService.ts:authenticate']),
  definition('admin_session_duration_ms','number','security','عمر الجلسة بالمللي ثانية',28800000,z.number().int().min(300000).max(604800000),{min:300000,max:604800000},['server/admin/adminAccessService.ts:login']),
@@ -55,6 +56,7 @@ export class AdminSettingsService {
   if(!def||def.readOnly||Boolean(def.flag)!==flags)throw new AdminError('ADMIN_SETTING_READ_ONLY',409);
   if(flags&&(!ctx.user.permissions.includes('launch.manage')||ctx.body.confirmation!==def.key))throw new AdminError(ctx.user.permissions.includes('launch.manage')?'ADMIN_CONFIRMATION_REQUIRED':'ADMIN_FORBIDDEN',ctx.user.permissions.includes('launch.manage')?422:403);
   const parsed=def.schema.safeParse(ctx.body.value);if(!parsed.success)throw new AdminError('ADMIN_INPUT_INVALID',422,{fields:[{path:'value',message:'قيمة لا تطابق تعريف الإعداد'}]});
+  if(def.key==='quran_catalog_v2'&&parsed.data===true)throw new AdminError('PUBLIC_FLOW_V2_NOT_READY',409,{reason:'الواجهة الجديدة (D8) لم تُبنَ بعد'});
   if(def.key==='admin_2fa_policy'&&parsed.data!=='optional'&&!isAdminEncryptionConfigured(this.env))throw new AdminError('ADMIN_2FA_KEY_UNAVAILABLE',503);
   if(def.isSecret&&!isSettingsSecretEncryptionConfigured())throw new AdminError('SETTINGS_ENCRYPTION_KEY_NOT_CONFIGURED',503);
   const plain=typeof parsed.data==='string'?parsed.data:String(parsed.data),stored=def.isSecret?encryptSettingSecret(plain):plain;

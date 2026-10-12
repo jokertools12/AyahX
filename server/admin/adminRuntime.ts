@@ -19,6 +19,8 @@ import { readCatalogSettings } from '../services/recitationCatalogService';
 import { catalogStorageFromEnvironment } from '../services/catalogStorageRuntime';
 import { CatalogLicensedSourceResolver } from '../services/licensedSourceResolver';
 import { enqueueRenderJob } from '../services/renderQueueBroker';
+import { AdminOwnerWorkspace } from './adminOwnerWorkspace';
+import { registerAdminA2bEndpoints } from '../routes/admin/adminA2bEndpoints';
 
 export interface AdminRuntimeOptions {
   db: CatalogDatabase;
@@ -56,7 +58,7 @@ export function createAdminRuntime(options: AdminRuntimeOptions) {
       read: new AdminCatalogReadService(options.db),
       tasks: new AdminCatalogTaskService(options.db),
       reviews: new HumanReviewService(options.db),
-    }); registerRenderLabEndpoints(register, lab); },
+    }); registerRenderLabEndpoints(register, lab); registerAdminA2bEndpoints(register, new AdminOwnerWorkspace(options.db)); },
   });
   let stopping: Promise<void> | undefined, closing: Promise<void> | undefined;
   const stopTasks = (): Promise<void> => stopping ??= worker.close();

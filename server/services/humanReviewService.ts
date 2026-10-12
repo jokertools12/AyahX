@@ -69,7 +69,8 @@ export class HumanReviewService {
       const [row]=await tx.read('SELECT * FROM human_review_items WHERE id=? FOR UPDATE',[id]);if(!row)throw new CatalogError('REVIEW_NOT_FOUND',404);
       if(row.status===input.status&&row.notes===input.notes&&row.decided_by===actor.id&&canonicalAuditJson(jsonReviewValue(row.decision)??{})===canonicalAuditJson(input.decision??{}))return {changed:false};
       if(row.status!=='pending'&&row.status!=='deferred')throw new CatalogError('REVIEW_ALREADY_DECIDED',409);
-      if(input.status!=='deferred')await this.applyDecision(tx,actor,row,input);
+      const target={...row,subject_type:row.target_subject_type??row.subject_type,subject_id:row.target_subject_id??row.subject_id};
+      if(input.status!=='deferred')await this.applyDecision(tx,actor,target,input);
       await tx.execute('UPDATE human_review_items SET status=?,decided_by=?,decided_at=CURRENT_TIMESTAMP(3),notes=?,decision=? WHERE id=?',[input.status,actor.id,input.notes,JSON.stringify(input.decision??{}),id]);
       await appendCatalogAudit(tx,actor,'review.decide','human_review_item',id,{status:row.status,decision:jsonReviewValue(row.decision)??null},{...input,decision:input.decision??{},decided_by:actor.id});return {changed:true};
     });

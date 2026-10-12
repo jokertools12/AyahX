@@ -1,0 +1,69 @@
+import { describe, expect, it, vi } from 'vitest';
+import { AdminReviewWorkspace, assertSafeBulkReviews } from '../../server/admin/adminReviewWorkspace';
+import { AdminOwnerWorkspace, digestProvider } from '../../server/admin/adminOwnerWorkspace';
+import { AdminSettingsService } from '../../server/admin/adminSettingsRegistry';
+import { adminReviewWorkspaceMigrationSql, downAdminReviewWorkspace } from '../../server/db/migrations/008_addAdminReviewWorkspace';
+import type { CatalogDatabase, CatalogRow } from '../../server/services/catalogContracts';
+import type { CatalogActor } from '../../server/services/catalogAudit';
+const actor: CatalogActor = { id: 'reviewer', kind: 'human', roleSlug: 'admin', permissions: new Set(['reviews.decide', 'recitations.voice.review', 'recitations.manage']) };
+function database(read: (sql: string, params?: unknown[]) => Promise<CatalogRow[]>): CatalogDatabase {
+  const db: CatalogDatabase = { read: vi.fn(read), execute: vi.fn(async () => {}), transaction: async work => work(db) }; return db;
+}
+describe('owner review safety', () => {
+  it('rejects bulk voice, license, rights and stale decisions before any write', () => {
+    for (const type of ['voice_confirmation', 'provider_license', 'youtube_rights', 'basmala_audio', 'offset_exception']) expect(() => assertSafeBulkReviews([{ id: 'a', type, status: 'pending' }], ['a'])).toThrow('REVIEW_BULK_UNSAFE');
+    expect(() => assertSafeBulkReviews([{ id: 'a', type: 'data_conflict', status: 'approved' }], ['a'])).toThrow('REVIEW_BULK_UNSAFE');
+    expect(() => assertSafeBulkReviews([{ id: 'a', type: 'data_conflict', status: 'pending' }], ['a', 'a'])).toThrow('REVIEW_BULK_INVALID');
+    expect(() => assertSafeBulkReviews([{ id: 'a', type: 'near_complete_chapters', status: 'pending' }], ['a'])).not.toThrow();
+  });
+  it('cannot approve a provider through generic review permission', async () => {
+    const db = database(async () => [{ type: 'provider_license', subject_id: 'provider' }]);
+    await expect(new AdminReviewWorkspace(db).decide(actor, 'review', { status: 'approved', notes: 'human note' })).rejects.toThrow('CATALOG_PERMISSION_DENIED');
+    expect(db.execute).not.toHaveBeenCalled();
+  });
+  it('requires typed provider confirmation before changing any state', async () => {
+    const db = database(async sql => sql.includes('SELECT code') ? [{ code: 'provider' }] : [{ type: 'provider_license', subject_id: 'provider' }]);
+    await expect(new AdminReviewWorkspace(db).decide({ ...actor, roleSlug: 'super_admin', permissions: new Set([...actor.permissions, 'providers.license.review']) }, 'review', { status: 'rejected', notes: 'note', confirmation: 'wrong' })).rejects.toThrow('CONFIRMATION_MISMATCH');
+    expect(db.execute).not.toHaveBeenCalled();
+  });
+  it('reopening retains original decision and conservatively revokes the live voice gate', async () => {
+    const db = database(async sql => sql.startsWith('SELECT * FROM human_review_items') ? [{ id: 'old', type: 'voice_confirmation', subject_type: 'recitation', subject_id: 'recitation', evidence: {}, decision: {}, status: 'approved', priority: 90 }] : []);
+    const result = await new AdminReviewWorkspace(db).undo(actor, 'old', 'recheck');
+    expect(result.id).toMatch(/^[a-f0-9-]{36}$/u);
+    const calls = vi.mocked(db.execute).mock.calls;
+    expect(calls.some(([sql]) => sql.includes('INSERT INTO human_review_items') && sql.includes('supersedes_id'))).toBe(true);
+    expect(calls.some(([sql]) => sql.includes("voice_identity_status='unverified'"))).toBe(true);
+    expect(calls.some(([sql]) => /DELETE|UPDATE human_review_items/u.test(sql))).toBe(false);
+    expect(calls.some(([sql]) => sql.includes('INSERT INTO audit_logs'))).toBe(true);
+  });
+  it('quotes search wildcards literally and prioritizes eligible recitations', async () => {
+    const db = database(async sql => sql.startsWith('SELECT COUNT(*) total') ? [{ total: 0 }] : []);
+    await new AdminReviewWorkspace(db).list({ page: 1, limit: 25, q: 'a%b_c!', status: 'pending' });
+    const calls = vi.mocked(db.read).mock.calls;
+    expect(calls.find(([sql]) => sql.startsWith('SELECT COUNT(*) total'))?.[1]).toContain('%a!%b!_c!!%');
+    expect(calls.some(([sql]) => sql.includes('ORDER BY IFNULL(') && sql.includes('h.priority DESC'))).toBe(true);
+  });
+  it('persists preferences per authenticated actor only and audits changes', async () => {
+    const db = database(async () => []), owner = new AdminOwnerWorkspace(db);
+    expect(await owner.preferences('reviewer')).toEqual({ density: 'comfortable', font_scale: 1 });
+    await owner.updatePreferences(actor, { density: 'compact', font_scale: 1.2 });
+    expect(db.execute).toHaveBeenCalledWith(expect.stringContaining('INSERT INTO admin_preferences'), ['reviewer', 'compact', 1.2]);
+    expect(vi.mocked(db.execute).mock.calls.some(([sql]) => sql.includes('INSERT INTO audit_logs'))).toBe(true);
+  });
+  it('blocks catalog opening even with obsolete readiness settings', async () => {
+    const db = database(async () => [{ key_name: 'public_flow_v2_ready', value_text: 'true', is_secret: 0 }]);
+    await expect(new AdminSettingsService(db).update({ actor, params: { key: 'quran_catalog_v2' }, body: { value: true, confirmation: 'quran_catalog_v2' }, user: { id: actor.id, permissions: ['launch.manage'] } } as never, true)).rejects.toThrow('PUBLIC_FLOW_V2_NOT_READY');
+    expect(db.execute).not.toHaveBeenCalled();
+  });
+  it('extracts provider terms without fabricating missing permission', () => {
+    const digest = digestProvider('| YouTube | [Policy](https://developers.google.com/youtube/terms/developer-policies) embed only | unknown | owner permission |', 'youtube');
+    expect(digest.terms_url).toBe('https://developers.google.com/youtube/terms/developer-policies');
+    expect(digestProvider('', 'unknown').commercial).toContain('لم يُتحقق');
+  });
+  it('migration is additive and rollback is local-only', async () => {
+    const sql = adminReviewWorkspaceMigrationSql().join('\n');
+    expect(sql).not.toMatch(/DROP|DELETE|UPDATE (?:recitations|quran_)/u);
+    await expect(downAdminReviewWorkspace({ query: vi.fn() }, 'production' as never)).rejects.toThrow('DESTRUCTIVE_REHEARSAL_ONLY');
+  });
+});
+
