@@ -9,6 +9,7 @@ import { expandChapterPattern, AdminReciterWizard } from '../../server/admin/adm
 import { parseVideoRange } from '../../server/admin/adminRenderMedia';
 import { AdminMediaTasks,mediaRedisConnection } from '../../server/admin/adminMediaTasks';
 import { createAdminRouter } from '../../server/routes/admin/adminRouter';
+import { RenderLabService } from '../../server/services/renderLabService';
 const actor: CatalogActor = { id: 'reviewer', kind: 'human', roleSlug: 'admin', permissions: new Set(['reviews.decide', 'recitations.voice.review', 'recitations.manage']) };
 function database(read: (sql: string, params?: unknown[]) => Promise<CatalogRow[]>): CatalogDatabase {
   const db: CatalogDatabase = { read: vi.fn(read), execute: vi.fn(async () => {}), transaction: async work => work(db) }; return db;
@@ -55,6 +56,26 @@ describe('owner review safety', () => {
     expect(calls.find(([sql]) => sql.startsWith('SELECT COUNT(*) total'))?.[1]).toContain('%a!%b!_c!!%');
     expect(calls.some(([sql]) => sql.includes('ORDER BY IFNULL(') && sql.includes('h.priority DESC'))).toBe(true);
   });
+  it('filters reviews by their effective recitation rather than a free-text approximation',async()=>{
+    const db=database(async sql=>sql.startsWith('SELECT COUNT(*) total')?[{total:0}]:[]);
+    await new AdminReviewWorkspace(db).list({page:1,limit:25,recitation_id:'00000000-0000-4000-8000-000000000000'});
+    const count=vi.mocked(db.read).mock.calls.find(([sql])=>sql.startsWith('SELECT COUNT(*) total'));
+    expect(count?.[0]).toContain('r.id=?');expect(count?.[1]).toEqual(['00000000-0000-4000-8000-000000000000']);
+  });
+  it('recent QA videos remain role-gated and expose only safe metadata',async()=>{
+    const db=database(async()=>[{id:'job',status:'succeeded',progress:100,stage:'جاهز',artifact_available:1,manifest:{private:'never returned'},output_path:'private/path'}]);
+    const lab=new RenderLabService(db,{} as never,vi.fn());
+    await expect(lab.list({...actor,roleSlug:'analyst',permissions:new Set(['render.test'])})).rejects.toThrow('CATALOG_PERMISSION_DENIED');expect(db.read).not.toHaveBeenCalled();
+    const result=await lab.list({...actor,roleSlug:'admin',permissions:new Set(['render.test'])});expect(result.items[0].artifact_available).toBe(true);expect(result.items[0]).not.toHaveProperty('manifest');expect(result.items[0]).not.toHaveProperty('output_path');
+    expect(vi.mocked(db.read).mock.calls[0][0]).toContain("JSON_UNQUOTE(JSON_EXTRACT(j.manifest,'$.schemaVersion'))='2.0.0'");expect(vi.mocked(db.read).mock.calls[0][0]).toContain('LIMIT 20');
+  });
+  it('identifies the listening reviewer with a safe display name without returning account email',async()=>{
+    const db=database(async sql=>sql.includes('FROM recitation_voice_reviews v')?[{id:'history',status:'confirmed',reviewer_id:'reviewer',reviewer_name:'اسم المراجع'}]:sql.startsWith('SELECT r.id,r.slug,r.reciter_id')?[{id:'recitation',reciter_id:'reader',host_allowlist:[]}]:[]);
+    const result=await new AdminOwnerWorkspace(db).listening('recitation');
+    expect(result.history[0]).toMatchObject({reviewer_id:'reviewer',reviewer_name:'اسم المراجع'});
+    const history=vi.mocked(db.read).mock.calls.find(([sql])=>sql.includes('FROM recitation_voice_reviews v'));
+    expect(history?.[0]).toContain('p.display_name reviewer_name');expect(history?.[0]).not.toContain('email');
+  });
   it('refuses reopening an obsolete decision after its replacement was decided',async()=>{
     const db=database(async sql=>sql.startsWith('SELECT * FROM human_review_items')?[{id:'old',type:'voice_confirmation',subject_type:'recitation',subject_id:'recitation',status:'approved'}]:sql.startsWith('SELECT id,status FROM human_review_items WHERE supersedes_id')?[{id:'new',status:'rejected'}]:[]);
     await expect(new AdminReviewWorkspace(db).undo(actor,'old','recheck')).rejects.toThrow('REVIEW_SUPERSEDED');
@@ -76,6 +97,12 @@ describe('owner review safety', () => {
     const digest = digestProvider('| YouTube | [Policy](https://developers.google.com/youtube/terms/developer-policies) embed only | unknown | owner permission |', 'youtube');
     expect(digest.terms_url).toBe('https://developers.google.com/youtube/terms/developer-policies');
     expect(digestProvider('', 'unknown').commercial).toContain('لم يُتحقق');
+  });
+  it('loads the provider digest from its actual repository filesystem location',async()=>{
+    const db=database(async()=>[{id:'provider',code:'mp3quran',terms_url:'https://www.mp3quran.net/ar/api'}]);
+    const result=await new AdminOwnerWorkspace(db).providers();
+    expect(result.digest_markdown).toContain('# ملخص شروط المزوّدين');
+    expect((result.providers as CatalogRow[])[0].digest).toMatchObject({terms_url:'https://www.mp3quran.net/ar/api'});
   });
   it('migration is additive and rollback is local-only', async () => {
     const sql = adminReviewWorkspaceMigrationSql().join('\n');

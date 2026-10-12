@@ -23,10 +23,11 @@ export class AdminReviewWorkspace {
     const rows = await this.db.read(`SELECT h.type,h.status,COUNT(*) count,SUM(IFNULL(${eligible},0)) eligible_count ${joins} GROUP BY h.type,h.status ORDER BY h.type,h.status`);
     return rows.map(row => ({ ...row, count: Number(row.count), eligible_count: Number(row.eligible_count) })) as unknown as ReviewCount[];
   }
-  async list(input: { page: number; limit: number; status?: string; type?: string; q?: string; eligible?: string }): Promise<{ data: ReviewItem[]; meta: CatalogRow }> {
+  async list(input: { page: number; limit: number; status?: string; type?: string; q?: string; eligible?: string; recitation_id?: string }): Promise<{ data: ReviewItem[]; meta: CatalogRow }> {
     const where: string[] = [], params: unknown[] = [];
     if (input.status) { where.push('h.status=?'); params.push(input.status); }
     if (input.type) { where.push('h.type=?'); params.push(input.type); }
+    if (input.recitation_id) { where.push('r.id=?'); params.push(input.recitation_id); }
     if (input.eligible === 'true') where.push(eligible);
     if (input.q) { where.push("(e.name_ar LIKE ? ESCAPE '!' OR r.display_label_ar LIKE ? ESCAPE '!' OR h.subject_id LIKE ? ESCAPE '!' OR p.name LIKE ? ESCAPE '!')"); params.push(...Array(4).fill(literalLike(input.q))); }
     const predicate = where.length ? ' WHERE ' + where.join(' AND ') : '';

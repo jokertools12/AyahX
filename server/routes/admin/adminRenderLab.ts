@@ -4,6 +4,7 @@ import {RenderManifestV2RequestSchema} from '../../models/renderManifestV2';
 import type {AdminRenderMedia} from '../../admin/adminRenderMedia';
 export function registerRenderLabEndpoints(register:AdminRegister,service:RenderLabService,media?:AdminRenderMedia):void{
   register({method:'post',path:'/render-lab/jobs',permission:'render.test',writes:true,responseStatus:202,body:RenderManifestV2RequestSchema,handler:async ctx=>({data:await service.create(ctx.actor,ctx.body)})});
+  register({method:'get',path:'/render-lab/jobs',permission:'render.test',handler:async ctx=>({data:await service.list(ctx.actor)})});
   register({method:'get',path:'/render-lab/jobs/:id',permission:'render.test',handler:async ctx=>({data:await service.get(ctx.actor,ctx.params.id)})});
   if(media){
     register({method:'get',path:'/render-lab/choices',permission:'render.test',handler:async ctx=>({data:await media.choices(ctx.actor)})});

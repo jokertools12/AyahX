@@ -88,7 +88,7 @@ export class AdminOwnerWorkspace {
     const rows = await this.db.read('SELECT a.sample_key,a.surah,a.start_ms,a.duration_ms,a.selection_details,c.audio_url,c.chapter_offset_ms FROM recitation_audition_samples a LEFT JOIN recitation_chapters c ON c.recitation_id=a.recitation_id AND c.surah=a.surah WHERE a.recitation_id=? ORDER BY a.sample_key', [id]);
     const samples = rows.map(row => auditionPreview(row, hosts));
     const same_reciter = await this.db.read('SELECT id,display_label_ar,voice_identity_status FROM recitations WHERE reciter_id=? AND id<>? ORDER BY sort_order,slug', [recitation.reciter_id, id]);
-    const history = await this.db.read('SELECT id,status,notes,created_at FROM recitation_voice_reviews WHERE recitation_id=? ORDER BY created_at DESC,id DESC', [id]);
+    const history = await this.db.read('SELECT v.id,v.status,v.notes,v.created_at,v.reviewer_id,p.display_name reviewer_name FROM recitation_voice_reviews v LEFT JOIN profiles p ON p.user_id=v.reviewer_id WHERE v.recitation_id=? ORDER BY v.created_at DESC,v.id DESC', [id]);
     const [review] = await this.db.read("SELECT id FROM human_review_items WHERE type='voice_confirmation' AND COALESCE(target_subject_id,subject_id)=? AND status IN ('pending','deferred') ORDER BY created_at DESC LIMIT 1", [id]);
     const [next] = await this.db.read("SELECT COALESCE(h.target_subject_id,h.subject_id) id FROM human_review_items h JOIN recitations r ON r.id=COALESCE(h.target_subject_id,h.subject_id) WHERE h.type='voice_confirmation' AND h.status='pending' AND r.id<>? ORDER BY (r.status='published') DESC,h.priority DESC,h.created_at LIMIT 1", [id]);
     const evidence = redactCatalogEvidence({ automatic_voice: parsedJson(recitation.voice_auto_evidence), offset: parsedJson(recitation.verification_details), offset_verified: Boolean(Number(recitation.offset_verified)) });
@@ -96,7 +96,7 @@ export class AdminOwnerWorkspace {
     return { recitation, samples, same_reciter, evidence, history, review_id: review ? String(review.id) : null, next_id: next ? String(next.id) : null } as unknown as ListeningRoom;
   }
   async providers(): Promise<CatalogRow> {
-    const digest_markdown = await readFile(resolve(this.root, 'docs/plan/provider-terms-digest.md'), 'utf8');
+    const digest_markdown = await readFile(resolve(this.root, 'docs/data/provider-terms-digest.md'), 'utf8');
     const providers = await this.db.read("SELECT p.id,p.code,p.name,p.license_status,p.terms_url,p.attribution_text,(SELECT h.id FROM human_review_items h WHERE h.type='provider_license' AND COALESCE(h.target_subject_id,h.subject_id)=p.id AND h.status IN ('pending','deferred') ORDER BY h.created_at DESC LIMIT 1) review_id FROM audio_providers p ORDER BY p.code");
     return { providers: providers.map(row => ({ ...row, terms_url: safeCatalogUrl(row.terms_url), digest: digestProvider(digest_markdown, String(row.code)) })), digest_markdown };
   }
