@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "platform": "linux",
+  "schema_version": "1.0.0",
+  "engine": "skia_canvas",
+  "sql_writes": 0,
+  "fixture": "OWNED_NOISE_QA_NOT_QURAN_TIMING",
+  "canonical_text_sha256": "ac1e6f8f64c2e83d0b5087625a5e1eb0067b99d4a8962d3ad30528709dcf3dd6",
+  "manifest_sha256": "ba3efe5d545f646a1b4b75aae72c6bd6250e9384ab6283b1144535fe432bcf97",
+  "audio_pcm_sha256": "3b65e6364aa05210c90cdaf5cf524f41e1df9a0b21d848ce4f96a2f9842408e4",
+  "duration_seconds": 2.4,
+  "frame_count": 72,
+  "renderer_total_frames": 72,
+  "frame_hashes": [
+    {
+      "frame": 0,
+      "rgb_sha256": "79e1d75649e1629e3c7b7851508b94e40b6dd356d54d429cbba5d2cbc48293f1"
+    },
+    {
+      "frame": 30,
+      "rgb_sha256": "4514833654af27d3db179a4c95ee88d70a13aff28d5645f2a67d738855c7aa82"
+    },
+    {
+      "frame": 60,
+      "rgb_sha256": "64ddebe07fae1dca6c37ae4c96136ac8410aafc6bd97d466525bbb7f3d7db171"
+    }
+  ],
+  "black_frames": 0,
+  "sync": {
+    "ncc": 0.9991011739245712,
+    "lag_ms": 0
+  },
+  "elapsed_ms": 1322,
+  "video_bytes": 72271,
+  "checked_at": "2026-10-11T21:14:34.126Z",
+  "source_revision": "df6f42416fd1dd4d552768cd9c43a1a8c03b14c5",
+  "baseline": false,
+  "source_overrides": 0,
+  "operator_bundle_sha256": "2114df4fbcc10be48085f65d577d3e7d63b77d00273407c46333e72f0a2dca43"
+}

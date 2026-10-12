@@ -126,9 +126,10 @@ export async function renderNativeSceneVideo(
       '-b:a', audioBitrate,
       '-ar', '44100',
       '-ac', '2',
-      ...((manifest as RenderManifest & { renderV2Timeline?: unknown }).renderV2Timeline
-        ? ['-frames:v', String(totalFrames)]
-        : ['-shortest']),
+      // V2 writes exactly totalFrames then closes rawvideo. Let both inputs
+      // reach EOF: -frames:v can truncate audio on Linux FFmpeg; -shortest
+      // can discard the final partial video frame. V1 keeps its old mux rule.
+      ...((manifest as RenderManifest & { renderV2Timeline?: unknown }).renderV2Timeline ? [] : ['-shortest']),
       '-movflags', '+faststart',
       outputPath,
     ];

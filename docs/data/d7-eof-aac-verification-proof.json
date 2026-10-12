@@ -1,0 +1,17 @@
+{
+  "checked_at": "2026-10-12T01:17:07.7301310Z",
+  "npm_test_passed": 1056,
+  "npm_test_skipped": 11,
+  "test_files_passed": 143,
+  "project_tsc": "PASS",
+  "changed_files_eslint": "PASS: zero messages",
+  "build": "PASS",
+  "native_actual_fps": [
+    30,
+    60
+  ],
+  "linux_actual_60fps": "PASS",
+  "independent_review": "no confirmed defect",
+  "strict_extra_operator_roots": "PASS",
+  "strict_diagnostic_root_including_v1": "pre-existing errors in v1 dependencies; not changed"
+}

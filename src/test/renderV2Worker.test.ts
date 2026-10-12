@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { NativeSceneRenderer } from '../../server/renderer/nativeSceneRenderer';
 import { RenderManifestV2Schema, toRenderManifestV1Internal, type RenderManifestV2 } from '../../server/models/renderManifestV2';
 import { auditRenderV2CorpusFonts, ttfGlyphIndex } from '../../server/services/renderV2Fonts';
-import { rawPcmCorrelation, buildGoldenTargets } from '../../server/services/renderV2Qa';
+import { rawPcmCorrelation, buildGoldenTargets, correlateRenderV2DecodedAudio } from '../../server/services/renderV2Qa';
 import { parseAudioByteRange, prepareRenderV2Audio } from '../../server/services/renderV2Audio';
 import { renderNativeSceneVideo } from '../../server/services/nativeSceneVideoRenderer';
 import { runRenderV2Process } from '../../server/services/renderV2Process';
@@ -70,23 +70,25 @@ describe('catalog v2 worker actual scene', () => {
     expect(ttfGlyphIndex(font, 0x0628)).toBeGreaterThan(0);
     expect(ttfGlyphIndex(font, 0x10ffff)).toBe(0);
   });
-  it('encodes a non-frame-aligned Skia duration with every frame and decoded audio intact', async () => {
+  it.each([30, 60] as const)('encodes a non-frame-aligned Skia duration at %i fps with every frame and decoded audio intact', async fps => {
     const scratch = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'ayahx-v2-native-unit-'));
     try {
       const audioPath = path.join(scratch, 'owned-noise.wav'), referencePcmPath = path.join(scratch, 'reference.s16le'), outputPath = path.join(scratch, 'actual.mp4');
       await runRenderV2Process(getFfmpegBinary(), ['-nostdin', '-y', '-v', 'error', '-f', 'lavfi', '-i', 'anoisesrc=color=pink:seed=73:sample_rate=44100:duration=2.415', '-c:a', 'pcm_s16le', audioPath]);
       await runRenderV2Process(getFfmpegBinary(), ['-nostdin', '-y', '-v', 'error', '-i', audioPath, '-ac', '1', '-ar', '16000', '-f', 's16le', referencePcmPath]);
       const fixture=renderV2WorkerFixture();fixture.timeline.durationMs=2415;fixture.timeline.sourceWindow.toMs=7415;fixture.timeline.ayahs[2].endMs=2415;fixture.audioPlan.parts[0].sliceToMs=7415;
+      fixture.options.fps = fps;
       const manifest = toRenderManifestV1Internal(fixture, audioPath);
       manifest.outputDimensions = { width: 360, height: 640 };
       const targets = buildGoldenTargets(fixture), measured: string[] = [];
       const result = await renderNativeSceneVideo({ manifest, audioFilePath: audioPath, outputPath }, { label: 'v2 owned fixture', scratchPrefix: 'render_v2_unit', preset: 'ultrafast', qualityCrf: '23',
         onFrame: (index, _time, scene) => { for (const target of targets.get(index) ?? []) { const state = scene.getFrameState()!; expect(state.paintedWordKeys).toEqual(target.key ? [target.key] : []); measured.push(state.occurrenceId ?? 'ayah'); } },
       });
-      expect(measured).toHaveLength(7); expect(Math.abs(result.probe.durationSeconds - 2.415)).toBeLessThanOrEqual(1/30);
-      expect(await countRenderV2BlackFrames(outputPath)).toEqual({ black: 0, frames: 73 });
-      const correlation = await measureRenderV2AudioSync(outputPath, { audioPath, referencePcmPath, durationMs: 2415,seekMethod:'bounded_full_download', audioBytesFetched: 0, referenceBytesFetched: 0, sourceSizeBytes: 0, rangeSupported: false, fullDownloadFallback: false, requests: [], warnings: [] }, 0);
+      expect(measured).toHaveLength(7); expect(Math.abs(result.probe.durationSeconds - 2.415)).toBeLessThanOrEqual(1/fps);
+      expect(await countRenderV2BlackFrames(outputPath)).toEqual({ black: 0, frames: Math.ceil(2.415 * fps) });
+      const correlation = await measureRenderV2AudioSync(outputPath, { audioPath, referencePcmPath, durationMs: 2415,seekMethod:'bounded_full_download', audioBytesFetched: 0, referenceBytesFetched: 0, sourceSizeBytes: 0, rangeSupported: false, fullDownloadFallback: false, requests: [], warnings: [] }, 0, undefined, 1000/fps);
       expect(correlation.score).toBeGreaterThanOrEqual(.95); expect(Math.abs(correlation.lag_ms)).toBeLessThanOrEqual(40);
+      expect(correlation.passed).toBe(true); expect(correlation.aac_padding_trimmed_ms).toBeGreaterThanOrEqual(0);
     } finally { await fs.promises.rm(scratch, { recursive: true, force: true }); }
   }, 30_000);
 });
@@ -109,6 +111,16 @@ describe('raw independently decoded PCM comparison', () => {
     const reference = noise(), result = rawPcmCorrelation(reference, reference.slice(0, 8000));
     expect(result.score).toBe(1); expect(result.lag_ms).toBe(0);
     expect(result.duration_difference_ms).toBe(500); expect(result.passed).toBe(false);
+  });
+  it('accounts only for a bounded AAC tail and still rejects declared truncation or excessive padding at 60 fps', () => {
+    const reference = noise(), padded = new Int16Array(16_361); padded.set(reference);
+    const stream = { codec: 'aac', sampleRate: 44100, channels: 1, durationSeconds: 1 };
+    const result = correlateRenderV2DecodedAudio(reference, padded, stream, 1000/60);
+    expect(result.passed).toBe(true); expect(result.aac_padding_trimmed_ms).toBe(22.5625);
+    expect(correlateRenderV2DecodedAudio(reference, reference, { ...stream, durationSeconds: .98 }, 1000/60).passed).toBe(false);
+    const excessive = new Int16Array(17_000); excessive.set(reference);
+    expect(correlateRenderV2DecodedAudio(reference, excessive, stream, 1000/60).passed).toBe(false);
+    expect(correlateRenderV2DecodedAudio(reference, padded, { ...stream, codec: 'pcm_s16le' }, 1000/60).passed).toBe(false);
   });
 });
 describe('full resolution encoded black-frame scan', () => {

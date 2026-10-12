@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "deployed_commit": "df6f42416fd1dd4d552768cd9c43a1a8c03b14c5",
+  "sql_sha256": "2131bd5a7c1e81410813e79282b7f6453582ca2ad679a91efe4ac2e0fed2f4ee",
+  "started_at": "2026-10-11T21:15:59.749Z",
+  "roles": [
+    "admin",
+    "super_admin"
+  ],
+  "protected_checksums_unchanged": true,
+  "serial": {
+    "ssh_exit_code": 0,
+    "ssh_signal": null,
+    "stderr_redacted": "[diagnostic content redacted]",
+    "compression": "gzip",
+    "mysql_close_acknowledged": true,
+    "commit_acknowledged": true,
+    "acknowledged_commands": 10,
+    "writes_halted": false,
+    "batches": [
+      {
+        "ordinal": 1,
+        "row_count": 1,
+        "sql_sha256": "2e60803b4eadc32adb1d772e9302ed744b4160f77a3a2d6768d5cd744728ac4a",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 229,
+        "sql_bytes": 324,
+        "wire_request_bytes": 326
+      },
+      {
+        "ordinal": 2,
+        "row_count": 1,
+        "sql_sha256": "32c33857161dfb87167cf3bdb058179acd25291539b17fc2cd62c3fc5eae1ed1",
+        "threads_connected": 2,
+        "max_connections": 60,
+        "elapsed_ms": 606,
+        "sql_bytes": 306,
+        "wire_request_bytes": 318
+      },
+      {
+        "ordinal": 3,
+        "row_count": 0,
+        "sql_sha256": "2db35aa37c4005aa96055e900adc9bfbbd70d106820fefcb83216b7cc3f95422",
+        "threads_connected": 3,
+        "max_connections": 60,
+        "elapsed_ms": 220,
+        "sql_bytes": 7,
+        "wire_request_bytes": 74
+      }
+    ],
+    "transport_request_bytes": 1881,
+    "transport_response_bytes": 1703
+  },
+  "finished_at": "2026-10-11T21:17:49.709Z"
+}

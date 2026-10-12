@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "source": "actual_encoded_mp4_full_resolution_scan_and_full_audio_decode",
+  "results": [
+    {
+      "id": "archive_org-long-last-ten",
+      "black_frames": 0,
+      "decoded_frames": 2633,
+      "decoded_audio_duration_ms": 87748.25,
+      "expected_duration_ms": 87740,
+      "difference_ms": 8.25,
+      "passed": true
+    },
+    {
+      "id": "archive_org-short-complete",
+      "black_frames": 0,
+      "decoded_frames": 405,
+      "decoded_audio_duration_ms": 13514,
+      "expected_duration_ms": 13496,
+      "difference_ms": 18,
+      "passed": true
+    },
+    {
+      "id": "mp3quran-long-last-ten",
+      "black_frames": 0,
+      "decoded_frames": 2120,
+      "decoded_audio_duration_ms": 70658.3125,
+      "expected_duration_ms": 70636,
+      "difference_ms": 22.3125,
+      "passed": true
+    },
+    {
+      "id": "mp3quran-short-complete",
+      "black_frames": 0,
+      "decoded_frames": 486,
+      "decoded_audio_duration_ms": 16207.5625,
+      "expected_duration_ms": 16185,
+      "difference_ms": 22.5625,
+      "passed": true
+    },
+    {
+      "id": "quranicaudio-long-last-ten",
+      "black_frames": 0,
+      "decoded_frames": 2230,
+      "decoded_audio_duration_ms": 74327.0625,
+      "expected_duration_ms": 74315,
+      "difference_ms": 12.0625,
+      "passed": true
+    },
+    {
+      "id": "quranicaudio-short-complete",
+      "black_frames": 0,
+      "decoded_frames": 511,
+      "decoded_audio_duration_ms": 17020.25,
+      "expected_duration_ms": 17015,
+      "difference_ms": 5.25,
+      "passed": true
+    },
+    {
+      "id": "real-needs-review-full-coverage",
+      "black_frames": 0,
+      "decoded_frames": 480,
+      "decoded_audio_duration_ms": 15998.5625,
+      "expected_duration_ms": 15990,
+      "difference_ms": 8.5625,
+      "passed": true
+    },
+    {
+      "id": "real-repetition",
+      "black_frames": 0,
+      "decoded_frames": 244,
+      "decoded_audio_duration_ms": 8127,
+      "expected_duration_ms": 8120,
+      "difference_ms": 7,
+      "passed": true
+    }
+  ],
+  "checked_at": "2026-10-11T21:10:51.953Z"
+}

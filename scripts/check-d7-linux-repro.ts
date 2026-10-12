@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import { build } from 'esbuild';
+import { writeFile } from 'node:fs/promises';
+import { d7RunBundle } from './lib/d7RailwayOperator';
+const bundle=await build({entryPoints:['scripts/d7-direct-render-repro.ts'],bundle:true,write:false,packages:'external',platform:'node',target:'node22',format:'cjs',logLevel:'silent'});
+const fps60=process.argv.includes('--fps60');
+const raw=await d7RunBundle('skia',Buffer.from(bundle.outputFiles[0].contents),['abcaa2eb-62a1-4e5c-8d39-6e4097291d17','--root-operated',...(fps60?['--fps60']:[])]);
+const line=raw.split(/\r?\n/u).findLast(line=>line.startsWith('{'));assert.ok(line);
+const proof=JSON.parse(line);await writeFile(`docs/data/d7-linux-audio-eof-repro${fps60?'-60fps':''}.json`,JSON.stringify(proof,null,2)+'\n');
+console.log(JSON.stringify({passed:proof.passed,sql_writes:proof.sql_writes,correlation:proof.qa.audio_correlation,video_duration_ms:proof.qa.video_duration_ms}));if(!proof.passed)process.exitCode=1;
