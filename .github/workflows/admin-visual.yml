@@ -1,0 +1,79 @@
+name: Admin visual strict
+on:
+  pull_request:
+    paths: ['src/**', 'server/**', 'shared/**', 'scripts/admin-visual-ci*', 'tooling/e2e/helpers/**', 'database/**', 'package*.json', 'tooling/e2e/package*.json', 'index.html', 'vite.config.ts', 'tailwind.config.ts', 'docs/roadmap.json', 'docs/admin-guide.ar.md', 'docs/plan/provider-terms-digest.md', '.github/workflows/admin-visual.yml']
+  push:
+    branches: [main]
+    paths: ['src/**', 'server/**', 'shared/**', 'scripts/admin-visual-ci*', 'tooling/e2e/helpers/**', 'database/**', 'package*.json', 'tooling/e2e/package*.json', 'index.html', 'vite.config.ts', 'tailwind.config.ts', 'docs/roadmap.json', 'docs/admin-guide.ar.md', 'docs/plan/provider-terms-digest.md', '.github/workflows/admin-visual.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: admin-visual-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  admin-visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    services:
+      mysql:
+        image: mysql:9.7.2
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        ports: ['127.0.0.1:33319:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-interval=10s --health-timeout=5s --health-retries=12
+      redis:
+        image: redis:7.2
+        ports: ['127.0.0.1:6380:6379']
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=5s --health-timeout=3s --health-retries=12
+    env:
+      AYAHX_ADMIN_VISUAL_CI: '1'
+      AYAHX_ADMIN_CI_PRIVATE_DIR: ${{ runner.temp }}/ayahx-admin-visual
+      E2E_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '24.18.0'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            tooling/e2e/package-lock.json
+      - run: npm ci
+      - run: npm --prefix tooling/e2e ci
+      - run: node tooling/e2e/node_modules/@e2e-dev/web/dist/bin.js install chromium --with-deps
+      - run: npm run build
+      - name: Seed public pinned sources and start real local routers
+        run: |
+          mkdir -p "$AYAHX_ADMIN_CI_PRIVATE_DIR"
+          chmod 700 "$AYAHX_ADMIN_CI_PRIVATE_DIR"
+          node --import tsx scripts/admin-visual-ci-server.ts > "$AYAHX_ADMIN_CI_PRIVATE_DIR/server.log" 2>&1 &
+          echo "$!" > "$AYAHX_ADMIN_CI_PRIVATE_DIR/server.pid"
+          for attempt in $(seq 1 180); do
+            if curl --fail --silent http://127.0.0.1:3005/api/health/ready > /dev/null; then exit 0; fi
+            if ! kill -0 "$(cat "$AYAHX_ADMIN_CI_PRIVATE_DIR/server.pid")" 2>/dev/null; then echo "EPHEMERAL_BOOTSTRAP_FAILED; inspect private local run"; exit 1; fi
+            sleep 2
+          done
+          echo "EPHEMERAL_BOOTSTRAP_TIMEOUT"; exit 1
+      - name: Every admin route, native zoom, theme, language and size; scanner plus axe
+        run: node scripts/admin-visual-ci.mjs
+      - name: Upload sanitized visual evidence only
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: admin-visual-strict
+          path: |
+            ${{ runner.temp }}/ayahx-admin-visual/evidence
+            ${{ runner.temp }}/ayahx-admin-visual/seed-evidence.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Stop disposable HTTP harness
+        if: ${{ always() }}
+        run: |
+          if [ -f "$AYAHX_ADMIN_CI_PRIVATE_DIR/server.pid" ]; then
+            kill "$(cat "$AYAHX_ADMIN_CI_PRIVATE_DIR/server.pid")" 2>/dev/null || true
+          fi
