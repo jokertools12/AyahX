@@ -7,7 +7,7 @@ import {randomBytes,randomUUID} from 'node:crypto';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {join,resolve,relative,isAbsolute} from 'node:path';
 import {catalogDatabaseFromPool} from '../server/services/catalogMysqlDatabase';
-import {createAdminRuntime} from '../server/admin/adminRuntime';
+import {pinAdminVisualCiEnvironment} from '../tooling/e2e/helpers/adminVisualCiEnvironment.mjs';
 import {CatalogAudioSource} from '../server/services/catalogAudioSource';
 import {RecitationCatalogService,readCatalogSettings} from '../server/services/recitationCatalogService';
 import {RecitationAudioResolver} from '../server/services/recitationAudioResolver';
@@ -23,8 +23,7 @@ import {upHumanReviewsAndLicensedSources} from '../server/db/migrations/005_addH
 import {upAdminFoundation} from '../server/db/migrations/006_addAdminFoundation';
 import {upRenderV2,activateRenderV2Access} from '../server/db/migrations/007_addRenderManifestV2';
 
-if(process.env.CI!=='true'||process.env.AYAHX_ADMIN_VISUAL_CI!=='1')throw new Error('EPHEMERAL_CI_ONLY');
-if(process.env.DATABASE_URL||process.env.MYSQL_URL||process.env.RAILWAY_ENVIRONMENT_ID)throw new Error('EXTERNAL_DATABASE_ENV_FORBIDDEN');
+const env:NodeJS.ProcessEnv=pinAdminVisualCiEnvironment(process.env);
 const directory=resolve(process.env.AYAHX_ADMIN_CI_PRIVATE_DIR??'');
 const location=relative(process.cwd(),directory);
 if(!process.env.AYAHX_ADMIN_CI_PRIVATE_DIR||!location.startsWith('..')&&!isAbsolute(location))throw new Error('PRIVATE_DIRECTORY_OUTSIDE_GIT_REQUIRED');
@@ -107,7 +106,9 @@ await db.end();
 await writeFile(join(directory,'fixture.json'),JSON.stringify({id:userId,email,password,reciterId,recitationId,reviewId,storageId,youtubeRecitationId}),{mode:0o600,flag:'wx'});
 await writeFile(join(directory,'seed-evidence.json'),JSON.stringify({mysql:String(versions[0].version),redis:'7.2',canonical_checksum:corpus.checksum,surahs:Object.keys(corpus.surahs).length,ayahs:corpus.ayahs.length,words:corpus.wordCount,recitations:dataset.recitations.length,reciters:dataset.reciters.length,fixture_tag:'CI_VISUAL_ONLY',timings:'not seeded; no timing approval invented',all_review_fixtures:'pending',migration008:true}),{mode:0o600});
 if(process.argv.includes('--seed-only')){if(redisFailed)throw new Error('EPHEMERAL_REDIS_UNAVAILABLE');await redis.quit();console.log('EPHEMERAL_ADMIN_CI_SEED_VERIFIED');process.exit(0);}
-const env:NodeJS.ProcessEnv={NODE_ENV:'test',JWT_SECRET:randomBytes(32).toString('base64'),ADMIN_2FA_ENC_KEY:randomBytes(32).toString('base64'),REDIS_URL:'redis://127.0.0.1:6380/15',STORAGE_VOLUME_BYTES:'5000000000'};
+// adminRuntime -> renderQueueBroker -> server/config reads process.env at import
+// time. Static import would load the checkout .env before our loopback pins.
+const {createAdminRuntime}=await import('../server/admin/adminRuntime');
 const pool=mysql.createPool({host:'127.0.0.1',port:33319,user:'root',password:'',database:schema,connectionLimit:4,timezone:'Z'});
 const applicationDb=catalogDatabaseFromPool(pool);
 const sourceAudio=new CatalogAudioSource(),settings=()=>readCatalogSettings(applicationDb);

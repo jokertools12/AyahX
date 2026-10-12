@@ -1,11 +1,11 @@
 /** Strict visual acceptance against ephemeral real services. Never targets Railway. */
-import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,readdir} from 'node:fs/promises';
 import {join,resolve,relative,isAbsolute} from 'node:path';
 import {createHash} from 'node:crypto';
 import Redis from 'ioredis';
 import {chromium} from '../tooling/e2e/node_modules/playwright-core/index.mjs';
 import {loadAdminVisualScanner} from '../tooling/e2e/helpers/loadAdminVisualScanner.mjs';
-import {buildAdminVisualRoutes} from '../tooling/e2e/helpers/adminVisualInventory.mjs';
+import {buildAdminVisualRoutes,buildAdminVisualDialogs,assertAdminVisualDialogCoverage} from '../tooling/e2e/helpers/adminVisualInventory.mjs';
 if(process.env.CI!=='true'||process.env.AYAHX_ADMIN_VISUAL_CI!=='1')throw new Error('EPHEMERAL_CI_ONLY');
 const base='http://127.0.0.1:3005',directory=resolve(process.env.AYAHX_ADMIN_CI_PRIVATE_DIR??'');
 const location=relative(process.cwd(),directory);
@@ -16,6 +16,8 @@ const source=await readFile('src/admin/AdminRoot.tsx','utf8');
 // Inventory follows the actual router, including future additions. An unknown
 // parameterized route fails instead of receiving a fabricated identifier.
 const routeInventory=buildAdminVisualRoutes(source,fixture),routes=routeInventory.map(route=>route.path);
+async function adminSources(path){const result=[];for(const entry of await readdir(path,{withFileTypes:true})){const child=join(path,entry.name);if(entry.isDirectory())result.push(...await adminSources(child));else if(entry.name.endsWith('.tsx'))result.push({path:child,source:await readFile(child,'utf8')});}return result;}
+const dialogInventory=buildAdminVisualDialogs(await adminSources('src/admin'));
 const scanner=await loadAdminVisualScanner();
 const axe=await readFile('tooling/e2e/node_modules/axe-core/axe.min.js','utf8');
 const extension=join(directory,'native-zoom-extension');await mkdir(extension,{recursive:true});
@@ -23,7 +25,7 @@ await writeFile(join(extension,'manifest.json'),JSON.stringify({manifest_version
 await writeFile(join(extension,'background.js'),'chrome.runtime.onInstalled.addListener(()=>{});');
 const context=await chromium.launchPersistentContext(join(directory,'chrome-profile'),{channel:'chromium',headless:true,viewport:{width:1366,height:768},args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`]});
 const redis=new Redis('redis://127.0.0.1:6380/15',{maxRetriesPerRequest:1,retryStrategy:null});
-const report={version:'admin-visual-ci-1',startedAt:new Date().toISOString(),mode:'strict',routeInventory,routes,matrix:[],dialogs:[],apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[],passed:false};
+const report={version:'admin-visual-ci-1',startedAt:new Date().toISOString(),mode:'strict',routeInventory,dialogInventory,routes,matrix:[],dialogs:[],apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[],passed:false};
 redis.on('error',()=>report.redisErrors.push({code:'EPHEMERAL_REDIS_UNAVAILABLE'}));
 // API responses are never mocked. This gate is read-only after real login.
 await context.route('**/*',async route=>{
@@ -68,8 +70,10 @@ async function scanDialogs(caseId,touch){
  const results=[];
  for(const slug of slugs){
   if(typeof slug!=='string'||!/^[a-z0-9-]+$/u.test(slug))throw new Error('INVALID_DIALOG_INVENTORY_ID');
-  const opener=page.locator(`[data-admin-visual-open="${slug}"]`).first();
-  if(!await opener.isVisible())continue;
+  const candidates=page.locator(`[data-admin-visual-open="${slug}"]`);let opener;
+  for(let index=0;index<await candidates.count();index++){const candidate=candidates.nth(index);if(await candidate.isVisible()&&await candidate.isEnabled()){opener=candidate;break;}}
+  if(!opener)continue;
+  if(!dialogInventory.some(item=>item.slug===slug))throw new Error('UNDECLARED_DIALOG_OPENER:'+slug);
   await opener.click();
   const dialog=page.locator(`[data-admin-visual-dialog="${slug}"]`);
   await dialog.waitFor({state:'visible',timeout:10000});
@@ -119,6 +123,7 @@ try{
   await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));console.log(JSON.stringify({route,matrixCases:report.matrix.length}));
  }
  const expected=routes.length*sizes.length*zoomFactors.length*2*2;
- report.expectedCases=expected;report.finishedAt=new Date().toISOString();report.passed=report.matrix.length===expected&&report.matrix.every(row=>row.passed)&&!report.apiErrors.length&&!report.browserErrors.length&&!report.blockedRequests.length&&!report.redisErrors.length;
+ try{assertAdminVisualDialogCoverage(dialogInventory,report.dialogs);report.dialogCoverage={passed:true};}catch(error){report.dialogCoverage={passed:false,code:error.message};}
+ report.expectedCases=expected;report.finishedAt=new Date().toISOString();report.passed=report.dialogCoverage.passed&&report.matrix.length===expected&&report.matrix.every(row=>row.passed)&&!report.apiErrors.length&&!report.browserErrors.length&&!report.blockedRequests.length&&!report.redisErrors.length;
  await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));if(!report.passed)process.exitCode=1;
 }finally{await context.close();await redis.quit();}

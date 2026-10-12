@@ -44,3 +44,42 @@ export function buildAdminVisualRoutes(source, fixture) {
     return {pattern, path: '/admin' + (pattern ? '/' + pattern : '')};
   });
 }
+
+/** All concrete modal declarations must have an explicit safe opener. */
+export function buildAdminVisualDialogs(sources) {
+  const declared=new Map(),openers=new Set();
+  const contents=new Set(['DialogContent','DrawerContent','SheetContent','AlertDialogContent','dialog']);
+  for(const {path,source} of sources){
+    const ast=ts.createSourceFile(path,source,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+    const slug=(node,name)=>{
+      const attr=node.attributes.properties.filter(ts.isJsxAttribute).find(a=>a.name.getText(ast)===name);
+      const expression=attr?.initializer&&ts.isJsxExpression(attr.initializer)?attr.initializer.expression:attr?.initializer;
+      if(!expression||!ts.isStringLiteral(expression)||!/^[a-z0-9-]+$/u.test(expression.text))throw new Error('LITERAL_DIALOG_MARKER_REQUIRED:'+path+':'+name);
+      return expression.text;
+    };
+    const visit=node=>{
+      if(ts.isJsxOpeningElement(node)||ts.isJsxSelfClosingElement(node)){
+        const tag=node.tagName.getText(ast),attributes=node.attributes.properties.filter(ts.isJsxAttribute);
+        if(attributes.some(a=>a.name.getText(ast)==='data-admin-visual-open'))openers.add(slug(node,'data-admin-visual-open'));
+        // ConfirmDialog forwards visualId; its single generic implementation is
+        // checked separately. Every concrete usage still needs a literal ID.
+        if((contents.has(tag)||tag==='ConfirmDialog')&&!path.replaceAll('\\','/').endsWith('/ui/AdminPrimitives.tsx')){
+          const id=slug(node,tag==='ConfirmDialog'?'visualId':'data-admin-visual-dialog');
+          if(declared.has(id))throw new Error('DUPLICATE_DIALOG_DECLARATION:'+id);
+          declared.set(id,{slug:id,file:path});
+        }
+      }
+      ts.forEachChild(node,visit);
+    };visit(ast);
+  }
+  for(const id of declared.keys())if(!openers.has(id))throw new Error('DIALOG_WITHOUT_SAFE_OPENER:'+id);
+  for(const id of openers)if(!declared.has(id))throw new Error('OPENER_WITHOUT_DIALOG:'+id);
+  if(!declared.size)throw new Error('EMPTY_ADMIN_DIALOG_INVENTORY');
+  return [...declared.values()].sort((a,b)=>a.slug.localeCompare(b.slug));
+}
+
+export function assertAdminVisualDialogCoverage(inventory,observed){
+  const passed=new Set(observed.filter(item=>item.passed).map(item=>item.slug));
+  const missing=inventory.map(item=>item.slug).filter(id=>!passed.has(id));
+  if(missing.length)throw new Error('UNTESTED_DECLARED_ADMIN_DIALOGS:'+missing.join(','));
+}
