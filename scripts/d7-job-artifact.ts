@@ -21,10 +21,10 @@ async function main(){
  const [mode,id]=process.argv.slice(2);assert.ok(['inspect','cleanup'].includes(mode));assert.match(id,/^[a-f0-9-]{36}$/u);
  const db=catalogDatabaseFromPool(pool);
  const [job]=await db.read('SELECT id,user_id,status,manifest,qa_report_json,output_path,output_filename,created_at FROM render_jobs WHERE id=?',[id]);
- assert.ok(job&&String(job.created_at)>='2026-10-11 21:00:00'&&job.status==='succeeded','NEW_FINISHED_LAB_JOB_REQUIRED');
+ assert.ok(job&&String(job.created_at)>='2026-10-11 21:00:00'&&(mode==='cleanup'?['succeeded','failed','cancelled'].includes(String(job.status)):job.status==='succeeded'),'NEW_FINISHED_LAB_JOB_REQUIRED');
  const manifest=RenderManifestV2Schema.parse(typeof job.manifest==='string'?JSON.parse(job.manifest):job.manifest);
  const filename=`quran_reel_${manifest.canonicalAyahRange.surahNumber}_${manifest.canonicalAyahRange.startAyah}-${manifest.canonicalAyahRange.endAyah}_${id.slice(0,8)}.mp4`;
- assert.equal(job.output_filename,filename);
+ if(job.output_filename!==null)assert.equal(job.output_filename,filename);
  const root=path.resolve(process.cwd(),process.env.RENDER_STORAGE_DIR||'uploads/renders');
  const local=path.join(root,String(job.user_id),filename);
  const storage=job.output_path===null?null:String(job.output_path);
@@ -53,7 +53,9 @@ async function main(){
    const decoded=await runRenderV2Process(getFfmpegBinary(),['-nostdin','-v','error','-threads','1','-i',file,'-vf',`select=eq(n\\,${frame.frame_index})`,'-frames:v','1','-f','image2pipe','-vcodec','png','pipe:1'],{outputLimitBytes:3_000_000});
    context.drawImage(await loadImage(decoded.stdout),index*270,32,270,480);context.fillStyle='#fff';context.font='13px "Amiri"';context.fillText(`${frame.time_ms.toFixed(1)}ms | ${frame.actual_word_keys.join(',')||'ayah only'}`,index*270+6,21);
   }
-  console.log(JSON.stringify({id,qa,source:'actual_queue_output_decoded_by_ffmpeg',png_base64:canvas.toBuffer('image/png').toString('base64')}));
+  const cgroup={limit_bytes:Number(await fs.promises.readFile('/sys/fs/cgroup/memory.max','utf8')),peak_bytes:Number(await fs.promises.readFile('/sys/fs/cgroup/memory.peak','utf8')),current_bytes:Number(await fs.promises.readFile('/sys/fs/cgroup/memory.current','utf8')),events:Object.fromEntries((await fs.promises.readFile('/sys/fs/cgroup/memory.events','utf8')).trim().split('\n').map(line=>{const [key,value]=line.split(' ');return[key,Number(value)];}))};
+  assert.ok(Number.isFinite(cgroup.limit_bytes)&&cgroup.peak_bytes<=cgroup.limit_bytes&&cgroup.events.oom_kill===0,'WORKER_CGROUP_MEMORY_LIMIT');
+  console.log(JSON.stringify({id,qa,worker_cgroup:cgroup,source:'actual_queue_output_decoded_by_ffmpeg',png_base64:canvas.toBuffer('image/png').toString('base64')}));
  }finally{await fs.promises.rm(scratch,{recursive:true,force:true});}
 }
 void main().catch(error=>{console.error(JSON.stringify({error:'D7_ARTIFACT_OPERATOR_FAILED',assertion:error instanceof assert.AssertionError?error.message.split('\n')[0]:null}));process.exitCode=1;}).finally(()=>pool.end());

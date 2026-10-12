@@ -44,7 +44,9 @@ logger: code/message/stack للخطأ الأصلي، JSON error fields للرد�
 
 MySQL9.7.2/Redis/HTTP: RBAC سبعة أدوار، وOrigin/rate/strict client input/concurrency/audit حقيقي.10,000 نطاق و259,437 فحص كلمة؛41 رفضًا إضافيًا لتداخل آيات المصدر بلا علاج D3. Linux/Skia:21,202 كلمة فريدة×6 خطوط، صفر missing/empty،43 دفعة. up/activation/down مرتان وإعادة التطبيق محليًا؛ down الإنتاجي مرفوض. migration007 الإنتاجية نجحت بعد نسخة مشفرّة جديدة واستعادة63 جدولًا؛ D1/D3/admin ثابتة، لا grant قبل نشر الكود الجديد.
 
-آخر npm test كامل:1052 PASS/11 SKIP، وtsc/build PASS؛ lint46 ملفًا/0 new/17 تحذيرًا سابقًا. إعادة القبول بعد آخر التعديلات وCI مطلوبان. PR/نشر D7 ومصفوفة Railway وv1 قبل وبعد وذاكرة الأبناء و10 دقائق لوج وsmoke والصرف الختامي **معلّقة**؛ لا تُستبدل بهذه النتائج. [التقرير](docs/data/render-verification-report.md). لا D5/D8/A2b.
+آخر npm test كامل:1054 PASS/11 SKIP،143 ملفًا ناجحًا/5 متخطاة، وtsc/admin TypeScript/build PASS؛ strict TypeScript لجذور الخادم/المشغّلات الجديدة PASS، وlint52 ملفًا/0 new. أُصلح قياس black frames إلىYMAX لكل إطار بدقته الكاملة،واشترط قياسPCM فرق مدة≤إطار لمنع مرور بادئة مطابقة مبتورة. pure black3إطارات مقابل نص قرآن على أسود0؛اختبار إزالة حارس المدة أفشل اختبارًا واحدًا ثم أُعيد الحارس. إعادة فحص MP4 الثمانية بالقياس الجديد نجحت.
+
+[PR21](https://github.com/jokertools12/AyahX/pull/21) مدموج وchecks/public-ui ناجحان؛ الخدمات الأربع تبني ولم تثبت SUCCESS بعد. خط أساس v1 فعلي على Railway بكود origin/main القديم:72إطارًا/2.4s وNCC0.999101/lag0؛ المقارنة بعد النشر معلّقة. smoke إنتاجي قراءة4/4 على الهاتف وسطح المكتب21:11UTC، قبل اكتمال نشر D7. مصفوفة Railway وذاكرة الأبناء و10دقائق لوج وsmoke بعد النشر والصرف الختامي **معلّقة**؛ لا يُستبدل قبول الإنتاج بهذه النتائج. [التقرير](docs/data/render-verification-report.md). لا D5/D8/A2b.
 
 ## 2026-10-10 — D3: قبول البيانات والكود مكتمل، توقف ولا D4
 

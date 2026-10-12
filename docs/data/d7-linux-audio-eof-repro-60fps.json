@@ -1,0 +1,603 @@
+{
+  "passed": true,
+  "qa": {
+    "schema_version": "d7-qa-1",
+    "passed": true,
+    "failures": [],
+    "expected_duration_ms": 16185,
+    "video_duration_ms": 16200,
+    "duration_difference_ms": 15,
+    "duration_tolerance_ms": 16.666666666666668,
+    "ffprobe": {
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "durationSeconds": 16.2,
+      "sizeBytes": 866438,
+      "bitrate": 427870,
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "pixelFormat": "yuv420p",
+        "width": 1080,
+        "height": 1920,
+        "fps": 60,
+        "durationSeconds": 16.2,
+        "bitrate": 221307
+      },
+      "audio": {
+        "codec": "aac",
+        "sampleRate": 44100,
+        "channels": 2,
+        "durationSeconds": 16.185011,
+        "bitrate": 192616
+      }
+    },
+    "black_frames": 0,
+    "black_scan_frames": 972,
+    "golden_frames": [
+      {
+        "frame_index": 41,
+        "time_ms": 683.3333333333334,
+        "ayah": 1,
+        "expected_word_key": "103:1:1",
+        "expected_occurrence_id": "103:1:1:0:0",
+        "actual_word_keys": [
+          "103:1:1"
+        ],
+        "actual_occurrence_id": "103:1:1:0:0",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:1:1",
+            "x": 481.1450004577637,
+            "y": 952.012,
+            "width": 117.70999908447266,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000041.png",
+        "png_sha256": "78744518667f10e53bf8be3ed07eeaf9eacb5ecd26a8809f2ce3f6a1c5147f1e"
+      },
+      {
+        "frame_index": 145,
+        "time_ms": 2416.6666666666665,
+        "ayah": 2,
+        "expected_word_key": "103:2:1",
+        "expected_occurrence_id": "103:2:1:0:0",
+        "actual_word_keys": [
+          "103:2:1"
+        ],
+        "actual_occurrence_id": "103:2:1:0:0",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:2:1",
+            "x": 670.8300037384033,
+            "y": 952.012,
+            "width": 41.81999969482422,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000145.png",
+        "png_sha256": "15d2a546711c686d389e7a4960115e2584a6bd68e162c5ecfe8f7cd4a1bbb551"
+      },
+      {
+        "frame_index": 253,
+        "time_ms": 4216.666666666667,
+        "ayah": 2,
+        "expected_word_key": "103:2:2",
+        "expected_occurrence_id": "103:2:2:1:1",
+        "actual_word_keys": [
+          "103:2:2"
+        ],
+        "actual_occurrence_id": "103:2:2:1:1",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:2:2",
+            "x": 539.5500011444092,
+            "y": 952.012,
+            "width": 115.80000305175781,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000253.png",
+        "png_sha256": "e44e3cc94fc0d77357440f7087226bdcb82b716077ac2c9f4cc1f29e8e3570ed"
+      },
+      {
+        "frame_index": 333,
+        "time_ms": 5550,
+        "ayah": 2,
+        "expected_word_key": "103:2:3",
+        "expected_occurrence_id": "103:2:3:2:2",
+        "actual_word_keys": [
+          "103:2:3"
+        ],
+        "actual_occurrence_id": "103:2:3:2:2",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:2:3",
+            "x": 466.98999977111816,
+            "y": 952.012,
+            "width": 57.08000183105469,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000333.png",
+        "png_sha256": "7425e5581e2d1d01ee6093e279fae29dc908436298e84583908645dfa663ef60"
+      },
+      {
+        "frame_index": 368,
+        "time_ms": 6133.333333333334,
+        "ayah": 2,
+        "expected_word_key": "103:2:4",
+        "expected_occurrence_id": "103:2:4:3:3",
+        "actual_word_keys": [
+          "103:2:4"
+        ],
+        "actual_occurrence_id": "103:2:4:3:3",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:2:4",
+            "x": 367.34999656677246,
+            "y": 952.012,
+            "width": 84.16000366210938,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000368.png",
+        "png_sha256": "3bc6fe6fa974d174f670c48e83f7e6aeedf15b7293919f8c3bcfc7c35cc7a4ed"
+      },
+      {
+        "frame_index": 437,
+        "time_ms": 7283.333333333333,
+        "ayah": 3,
+        "expected_word_key": "103:3:1",
+        "expected_occurrence_id": "103:3:1:0:0",
+        "actual_word_keys": [
+          "103:3:1"
+        ],
+        "actual_occurrence_id": "103:3:1:0:0",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:3:1",
+            "x": 888.5399932861328,
+            "y": 890.8319999999999,
+            "width": 45.529998779296875,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000437.png",
+        "png_sha256": "e69baf8a5fc8883fddedf36651702e28a8c5c35146f05a5d1547f87df25366fb"
+      },
+      {
+        "frame_index": 486,
+        "time_ms": 8100,
+        "ayah": 3,
+        "expected_word_key": "103:3:2",
+        "expected_occurrence_id": "103:3:2:1:1",
+        "actual_word_keys": [
+          "103:3:2"
+        ],
+        "actual_occurrence_id": "103:3:2:1:1",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:3:2",
+            "x": 790.7499961853027,
+            "y": 890.8319999999999,
+            "width": 82.30999755859375,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000486.png",
+        "png_sha256": "3099bf03a12f77a49d506b3b0b527b0882f4ad29dc2d0bb6edca1e3f567e880d"
+      },
+      {
+        "frame_index": 548,
+        "time_ms": 9133.333333333332,
+        "ayah": 3,
+        "expected_word_key": "103:3:3",
+        "expected_occurrence_id": "103:3:3:2:2",
+        "actual_word_keys": [
+          "103:3:3"
+        ],
+        "actual_occurrence_id": "103:3:3:2:2",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:3:3",
+            "x": 680.2399978637695,
+            "y": 890.8319999999999,
+            "width": 95.02999877929688,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000548.png",
+        "png_sha256": "12cc69acf284d98e2ebaf962eef4e320ba1ff77c154e09f9fbf6d89c6cb7b574"
+      },
+      {
+        "frame_index": 600,
+        "time_ms": 10000,
+        "ayah": 3,
+        "expected_word_key": "103:3:4",
+        "expected_occurrence_id": "103:3:4:3:3",
+        "actual_word_keys": [
+          "103:3:4"
+        ],
+        "actual_occurrence_id": "103:3:4:3:3",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:3:4",
+            "x": 564.2700004577637,
+            "y": 890.8319999999999,
+            "width": 100.48999786376953,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000600.png",
+        "png_sha256": "daa3a2fe6fef81ea4faa5e22e1d53007bb88877edde3e03e59dec60bc48f5bcf"
+      },
+      {
+        "frame_index": 662,
+        "time_ms": 11033.333333333334,
+        "ayah": 3,
+        "expected_word_key": "103:3:5",
+        "expected_occurrence_id": "103:3:5:4:4",
+        "actual_word_keys": [
+          "103:3:5"
+        ],
+        "actual_occurrence_id": "103:3:5:4:4",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:3:5",
+            "x": 400.1800003051758,
+            "y": 890.8319999999999,
+            "width": 148.61000061035156,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000662.png",
+        "png_sha256": "0a80c2555573e6d6419c8d19776a62c8ee1a2bff1952268179036d122712d79f"
+      },
+      {
+        "frame_index": 736,
+        "time_ms": 12266.666666666668,
+        "ayah": 3,
+        "expected_word_key": "103:3:6",
+        "expected_occurrence_id": "103:3:6:5:5",
+        "actual_word_keys": [
+          "103:3:6"
+        ],
+        "actual_occurrence_id": "103:3:6:5:5",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:3:6",
+            "x": 256.8600044250488,
+            "y": 890.8319999999999,
+            "width": 127.83999633789062,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000736.png",
+        "png_sha256": "eaf0d81028b72060277da703d25a59f35cd2df0d347d3597b7a3ede2ded876be"
+      },
+      {
+        "frame_index": 800,
+        "time_ms": 13333.333333333334,
+        "ayah": 3,
+        "expected_word_key": "103:3:7",
+        "expected_occurrence_id": "103:3:7:6:6",
+        "actual_word_keys": [
+          "103:3:7"
+        ],
+        "actual_occurrence_id": "103:3:7:6:6",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:3:7",
+            "x": 145.9300079345703,
+            "y": 890.8319999999999,
+            "width": 95.44999694824219,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000800.png",
+        "png_sha256": "e28d522ca05c9fd2aa00ff96fe90506a760f6eb9cf16f63d2283ab67ed80b0a7"
+      },
+      {
+        "frame_index": 870,
+        "time_ms": 14500,
+        "ayah": 3,
+        "expected_word_key": "103:3:8",
+        "expected_occurrence_id": "103:3:8:7:7",
+        "actual_word_keys": [
+          "103:3:8"
+        ],
+        "actual_occurrence_id": "103:3:8:7:7",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:3:8",
+            "x": 537.0600032806396,
+            "y": 1013.192,
+            "width": 127.83999633789062,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000870.png",
+        "png_sha256": "001f16c023e3701931007187fcadc13c101c470a4cac2f1e5805804c68671f67"
+      },
+      {
+        "frame_index": 941,
+        "time_ms": 15683.333333333334,
+        "ayah": 3,
+        "expected_word_key": "103:3:9",
+        "expected_occurrence_id": "103:3:9:8:8",
+        "actual_word_keys": [
+          "103:3:9"
+        ],
+        "actual_occurrence_id": "103:3:9:8:8",
+        "actual_mode": "word",
+        "held": false,
+        "passed": true,
+        "painted_words": [
+          {
+            "key": "103:3:9",
+            "x": 415.1000003814697,
+            "y": 1013.192,
+            "width": 106.4800033569336,
+            "height": 79.8
+          }
+        ],
+        "png": "frame-000941.png",
+        "png_sha256": "f6c81056c7664d2387149a00bbdf45e86e292afa8be2c445a366894cd4fbe4cc"
+      }
+    ],
+    "highlighting_transitions": [
+      {
+        "time_ms": 0,
+        "word_keys": [],
+        "occurrence_id": null,
+        "ayah": 1,
+        "mode": "word"
+      },
+      {
+        "time_ms": 150,
+        "word_keys": [
+          "103:1:1"
+        ],
+        "occurrence_id": "103:1:1:0:0",
+        "ayah": 1,
+        "mode": "word"
+      },
+      {
+        "time_ms": 1233.3333333333335,
+        "word_keys": [],
+        "occurrence_id": null,
+        "ayah": 1,
+        "mode": "word"
+      },
+      {
+        "time_ms": 1666.6666666666667,
+        "word_keys": [
+          "103:2:1"
+        ],
+        "occurrence_id": "103:2:1:0:0",
+        "ayah": 2,
+        "mode": "word"
+      },
+      {
+        "time_ms": 3183.333333333333,
+        "word_keys": [
+          "103:2:2"
+        ],
+        "occurrence_id": "103:2:2:1:1",
+        "ayah": 2,
+        "mode": "word"
+      },
+      {
+        "time_ms": 5266.666666666667,
+        "word_keys": [
+          "103:2:3"
+        ],
+        "occurrence_id": "103:2:3:2:2",
+        "ayah": 2,
+        "mode": "word"
+      },
+      {
+        "time_ms": 5850,
+        "word_keys": [
+          "103:2:4"
+        ],
+        "occurrence_id": "103:2:4:3:3",
+        "ayah": 2,
+        "mode": "word"
+      },
+      {
+        "time_ms": 6433.333333333334,
+        "word_keys": [],
+        "occurrence_id": null,
+        "ayah": 2,
+        "mode": "word"
+      },
+      {
+        "time_ms": 7016.666666666667,
+        "word_keys": [
+          "103:3:1"
+        ],
+        "occurrence_id": "103:3:1:0:0",
+        "ayah": 3,
+        "mode": "word"
+      },
+      {
+        "time_ms": 7566.666666666666,
+        "word_keys": [
+          "103:3:2"
+        ],
+        "occurrence_id": "103:3:2:1:1",
+        "ayah": 3,
+        "mode": "word"
+      },
+      {
+        "time_ms": 8666.666666666666,
+        "word_keys": [
+          "103:3:3"
+        ],
+        "occurrence_id": "103:3:3:2:2",
+        "ayah": 3,
+        "mode": "word"
+      },
+      {
+        "time_ms": 9633.333333333332,
+        "word_keys": [
+          "103:3:4"
+        ],
+        "occurrence_id": "103:3:4:3:3",
+        "ayah": 3,
+        "mode": "word"
+      },
+      {
+        "time_ms": 10383.333333333332,
+        "word_keys": [
+          "103:3:5"
+        ],
+        "occurrence_id": "103:3:5:4:4",
+        "ayah": 3,
+        "mode": "word"
+      },
+      {
+        "time_ms": 11700,
+        "word_keys": [
+          "103:3:6"
+        ],
+        "occurrence_id": "103:3:6:5:5",
+        "ayah": 3,
+        "mode": "word"
+      },
+      {
+        "time_ms": 12850,
+        "word_keys": [
+          "103:3:7"
+        ],
+        "occurrence_id": "103:3:7:6:6",
+        "ayah": 3,
+        "mode": "word"
+      },
+      {
+        "time_ms": 13816.666666666666,
+        "word_keys": [
+          "103:3:8"
+        ],
+        "occurrence_id": "103:3:8:7:7",
+        "ayah": 3,
+        "mode": "word"
+      },
+      {
+        "time_ms": 15200,
+        "word_keys": [
+          "103:3:9"
+        ],
+        "occurrence_id": "103:3:9:8:8",
+        "ayah": 3,
+        "mode": "word"
+      }
+    ],
+    "highlighting_transition_max_error_ms": 15,
+    "audio_correlation": {
+      "score": 0.9996492949691136,
+      "lag_ms": 0,
+      "sample_rate": 16000,
+      "compared_samples": 21180,
+      "duration_difference_ms": 0,
+      "duration_tolerance_ms": 16.666666666666668,
+      "method": "centered_raw_pcm_ncc_full_decode_independent_reference",
+      "passed": true,
+      "declared_audio_duration_ms": 16185.010999999999,
+      "untrimmed_decoded_duration_ms": 16207.5625,
+      "aac_padding_trimmed_ms": 22.5625
+    },
+    "audio_bytes_fetched": 270337,
+    "audio_reference_bytes_fetched": 296613,
+    "audio_total_qa_bytes_fetched": 566950,
+    "audio_source_size_bytes": 296613,
+    "audio_range_supported": true,
+    "audio_full_download_fallback": false,
+    "warnings": [
+      "QA_PACKET_INDEX_FROM_FULL_REFERENCE"
+    ],
+    "audio_seek_method": "qa_packet_index_remote_range",
+    "audio_fetch_to_source_size_ratio": 0.9114131882284323,
+    "audio_clip_to_source_duration_ratio": 0.9595126849385113,
+    "audio_range_efficiency_passed": null,
+    "audio_requests": [
+      {
+        "host": "cdn.mp3quran.net",
+        "method": "GET",
+        "range": "bytes=0-0",
+        "status": 206,
+        "bytes": 1,
+        "purpose": "render"
+      },
+      {
+        "host": "cdn.mp3quran.net",
+        "method": "GET",
+        "range": null,
+        "status": 200,
+        "bytes": 296613,
+        "purpose": "reference"
+      },
+      {
+        "host": "cdn.mp3quran.net",
+        "method": "GET",
+        "range": "bytes=26149-296484",
+        "status": 206,
+        "bytes": 270336,
+        "purpose": "render"
+      }
+    ],
+    "external_asset_requests": 0,
+    "render_time_ms": 42705.196199,
+    "peak_worker_rss_bytes": 415260672,
+    "peak_worker_and_children_rss_bytes": 713625600,
+    "memory_limit_bytes": 1999998976,
+    "memory_sample_interval_ms": 100,
+    "selected_font": "Amiri Quran",
+    "font_assets_local": true,
+    "memory_measurement_scope": "linux_worker_and_children_sampled_rss",
+    "tofu_glyphs": 0
+  },
+  "sql_writes": 0,
+  "platform": "linux"
+}

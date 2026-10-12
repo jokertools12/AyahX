@@ -11,7 +11,7 @@ const ids=process.argv[selection+1].split(',');
 const cases=ids.map(id=>id==='owned-r2'?{id,expected_result:'SUCCESS',request:null}:matrix.cases.find((row:{id:string})=>row.id===id));assert.ok(cases.every(Boolean));
 const quote=(value:string)=>"'"+value.replace(/'/gu,"'\\''")+"'";
 const parse=(raw:string)=>{const line=raw.split(/\r?\n/u).findLast(line=>line.startsWith('{'));assert.ok(line,'OPERATOR_JSON_REQUIRED');return JSON.parse(line);};
-const cli=async(mode:string,value?:string)=>parse(await d7ServiceCommand('app','node dist-server/operators/renderLabCli.cjs '+quote(mode)+(value?' '+quote(value):'')+' --root-operated'));
+const cli=async(mode:string,value?:string)=>parse(await d7ServiceCommand('app','node dist-server/operators/renderLabCli.cjs '+quote(mode)+(value?' '+quote(value):'')+' --root-operated 2>&1'));
 const bundle=await build({entryPoints:['scripts/d7-job-artifact.ts'],bundle:true,write:false,packages:'external',platform:'node',format:'cjs',target:'node22',logLevel:'silent'});
 const artifact=async(mode:string,id:string)=>parse(await d7RunBundle('skia',Buffer.from(bundle.outputFiles[0].contents),[mode,id,'--root-operated']));
 await mkdir('docs/data/render-qa',{recursive:true});

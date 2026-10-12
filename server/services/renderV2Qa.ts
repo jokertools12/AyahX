@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import type { ChildProcess } from 'node:child_process';
 import type { RenderManifestV2 } from '../models/renderManifestV2';
 import type { NativeFrameState } from '../renderer/nativeSceneRenderer';
-import type { MediaProbeResult } from './mediaProbeService';
+import { probeMediaFile, type AudioStreamInfo, type MediaProbeResult } from './mediaProbeService';
 import type { PreparedRenderV2Audio } from './renderV2Audio';
 import { CatalogError } from './catalogContracts';
 import { getFfmpegBinary } from './ffmpegBinary';
@@ -22,7 +22,7 @@ export interface RenderV2QaReport {
   ffprobe: Omit<MediaProbeResult, 'rawStreams'>; black_frames: number; black_scan_frames: number;
   golden_frames: GoldenFrameProof[]; highlighting_transitions: Array<{ time_ms: number; word_keys: string[]; occurrence_id: string | null; ayah: number; mode: string }>;
   highlighting_transition_max_error_ms: number;
-  audio_correlation: { score: number; lag_ms: number; sample_rate: number; compared_samples: number; duration_difference_ms: number; duration_tolerance_ms: number; method: string; passed: boolean };
+  audio_correlation: { score: number; lag_ms: number; sample_rate: number; compared_samples: number; duration_difference_ms: number; duration_tolerance_ms: number; method: string; passed: boolean; declared_audio_duration_ms?: number; untrimmed_decoded_duration_ms?: number; aac_padding_trimmed_ms?: number };
   audio_bytes_fetched: number; audio_reference_bytes_fetched: number; audio_total_qa_bytes_fetched: number;
   audio_source_size_bytes: number; audio_range_supported: boolean; audio_full_download_fallback: boolean; warnings: string[];
   audio_seek_method: PreparedRenderV2Audio['seekMethod'];
@@ -92,14 +92,31 @@ export function beginRenderV2MemoryMonitor(): { child: (child: ChildProcess) => 
     return { worker: peakWorker, total: peakTotal, limit };
   } };
 }
+/** MP4 declares the audible AAC duration; a decoder can emit its last padded block.
+ * Only remove a bounded final AAC block, and independently check declared duration.
+ * Truncation, other codecs and excessive tails retain the original duration guard.
+ */
+export function correlateRenderV2DecodedAudio(reference: Int16Array, decoded: Int16Array, stream: AudioStreamInfo | null, durationToleranceMs: number): RenderV2QaReport['audio_correlation'] {
+  if (!stream || !Number.isFinite(stream.durationSeconds) || stream.durationSeconds <= 0) throw new CatalogError('RENDER_V2_AUDIO_DURATION_UNAVAILABLE', 422);
+  const sampleRate = 16_000, declaredMs = stream.durationSeconds * 1000;
+  const declaredSamples = Math.round(stream.durationSeconds * sampleRate);
+  const paddingSamples = decoded.length - declaredSamples;
+  const boundedPadding = stream.codec === 'aac' && stream.sampleRate > 0 && paddingSamples >= 0 && paddingSamples <= Math.ceil(1024 * sampleRate / stream.sampleRate) + 1;
+  const actual = boundedPadding ? decoded.subarray(0, declaredSamples) : decoded;
+  const result = rawPcmCorrelation(reference, actual, sampleRate, durationToleranceMs);
+  return { ...result, declared_audio_duration_ms: declaredMs, untrimmed_decoded_duration_ms: decoded.length * 1000 / sampleRate,
+    aac_padding_trimmed_ms: boundedPadding ? paddingSamples * 1000 / sampleRate : 0,
+    passed: result.passed && Math.abs(reference.length * 1000 / sampleRate - declaredMs) <= durationToleranceMs + .001 };
+}
 export async function measureRenderV2AudioSync(outputPath: string, audio: PreparedRenderV2Audio, sourceFromMs: number, signal?: AbortSignal, durationToleranceMs = 1000 / 30): Promise<RenderV2QaReport['audio_correlation']> {
+  const probe = await probeMediaFile(outputPath);
   const { stdout } = await runRenderV2Process(getFfmpegBinary(), ['-nostdin', '-v', 'error', '-threads', '1', '-i', outputPath, '-map', '0:a:0', '-vn', '-ac', '1', '-ar', '16000', '-f', 's16le', 'pipe:1'], { signal, outputLimitBytes: 4_000_000 });
   const source = await fs.promises.open(audio.referencePcmPath, 'r');
   const wanted = Math.round(audio.durationMs * 16_000 / 1000) * 2, reference = Buffer.alloc(wanted);
   try { const { bytesRead } = await source.read(reference, 0, wanted, Math.round(sourceFromMs * 16_000 / 1000) * 2); if (bytesRead !== wanted) throw new CatalogError('RENDER_V2_AUDIO_REFERENCE_TRUNCATED', 422); }
   finally { await source.close(); }
   const int16 = (bytes: Buffer) => { const samples = new Int16Array(Math.floor(bytes.length / 2)); for (let i = 0; i < samples.length; i++) samples[i] = bytes.readInt16LE(i*2); return samples; };
-  return rawPcmCorrelation(int16(reference), int16(stdout), 16_000, durationToleranceMs);
+  return correlateRenderV2DecodedAudio(int16(reference), int16(stdout), probe.audio, durationToleranceMs);
 }
 /** Decode every full-resolution frame. Maximum luma preserves small text on black. */
 export async function countRenderV2BlackFrames(outputPath: string, signal?: AbortSignal): Promise<{ black: number; frames: number }> {
