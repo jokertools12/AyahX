@@ -115,6 +115,10 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
       if (h.length !== 6 && h.length !== 8) return null;
       return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16), h.length === 8 ? parseInt(h.slice(6, 8), 16) / 255 : 1];
     }
+    // Chromium resolves color-mix(in srgb,...) to color(srgb ...), not rgb().
+    // Its channels are already gamma-encoded sRGB; do not apply an extra gamma.
+    const srgb = /^color\(srgb\s+([+-]?[\d.e]+%?)\s+([+-]?[\d.e]+%?)\s+([+-]?[\d.e]+%?)(?:\s*\/\s*([\d.e]+%?))?\)$/i.exec(value);
+    if(srgb){const channels=srgb.slice(1,4).map(c=>Math.max(0,Math.min(1,parseFloat(c)/(c.endsWith('%')?100:1)))*255),alpha=srgb[4]===undefined?1:parseFloat(srgb[4])/(srgb[4].endsWith('%')?100:1);return [...channels,alpha].every(Number.isFinite)?[channels[0],channels[1],channels[2],alpha]:null;}
     const rgb = /^rgba?\((.+)\)$/i.exec(value);
     if (!rgb) return null;
     const values = rgb[1].split(/[\s,/]+/).filter(Boolean);
@@ -258,7 +262,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
       measureContrast(el, s.color, thresholds.textContrast, 'TEXT_CONTRAST');
     }
     if (iconOnly) measureContrast(el, s.color, thresholds.uiContrast, 'UI_ICON_CONTRAST');
-    const border = ['Top', 'Right', 'Bottom', 'Left'].filter(side => parseFloat(s.getPropertyValue(`border-${side.toLowerCase()}-width`)) > 0 && !['none', 'hidden'].includes(s.getPropertyValue(`border-${side.toLowerCase()}-style`)));
+    const border = ['Top', 'Right', 'Bottom', 'Left'].filter(side => parseFloat(s.getPropertyValue(`border-${side.toLowerCase()}-width`)) > 0 && !['none', 'hidden'].includes(s.getPropertyValue(`border-${side.toLowerCase()}-style`)) && color(s.getPropertyValue(`border-${side.toLowerCase()}-color`))?.[3]!==0);
     for (const side of border) measureContrast(el, s.getPropertyValue(`border-${side.toLowerCase()}-color`), thresholds.uiContrast, 'UI_BORDER_CONTRAST', el.parentElement);
     if (!border.length && s.backgroundColor !== 'transparent' && color(s.backgroundColor)?.[3]) measureContrast(el, s.backgroundColor, thresholds.uiContrast, 'UI_FILL_CONTRAST', el.parentElement);
     else if (!border.length && el.matches('input,select,textarea,[role="checkbox"],[role="switch"],[role="combobox"]')) record(el, 'UI_BOUNDARY_MISSING', 'Form control has no measurable border or contrasting fill.', r);

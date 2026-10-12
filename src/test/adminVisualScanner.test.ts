@@ -128,6 +128,16 @@ describe('admin visual document scanner', () => {
     expect(report.violations.find(x => x.code === 'TEXT_CONTRAST')?.actual).toBeCloseTo(3.97665, 3);
     expect(report.violations.some(x => x.code === 'UI_BORDER_CONTRAST')).toBe(true);
   });
+  it('measures resolved sRGB color-mix colors and leaves invisible borders unpainted', () => {
+    layout('<p id="modern">Modern color</p><a id="transparent" href="#" style="border:1px solid transparent">Navigation</a><input id="input" style="border:1px solid transparent;background:transparent"/>', { modern:[10,10,180,30],transparent:[10,60,140,44],input:[10,120,140,44] });
+    const previous=getComputedStyle;
+    vi.stubGlobal('getComputedStyle',(el:Element)=>new Proxy(previous(el),{get(target,key){return el.id==='modern'&&key==='color'?'color(srgb 0.5 0.5 0.5)':Reflect.get(target,key);}}));
+    const report=scanAdminVisualDocument({touch:false});
+    expect(report.indeterminate).toEqual([]);
+    expect(report.violations.find(x=>x.selector==='#modern'&&x.code==='TEXT_CONTRAST')?.actual).toBeCloseTo(3.97665,3);
+    expect(report.violations.some(x=>x.selector==='#transparent'&&x.code==='UI_BORDER_CONTRAST')).toBe(false);
+    expect(report.violations.some(x=>x.selector==='#input'&&x.code==='UI_BOUNDARY_MISSING')).toBe(true);
+  });
   it('checks gradient stop extremes rather than treating the background as white', () => {
     layout('<p id="gradient" style="color:rgb(255,255,255)">Gradient text</p>', { gradient: [10, 10, 180, 30] });
     // jsdom20 discards gradient declarations, so expose the browser computed value.

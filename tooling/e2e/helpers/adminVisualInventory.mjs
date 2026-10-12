@@ -60,10 +60,17 @@ export function buildAdminVisualDialogs(sources) {
     const visit=node=>{
       if(ts.isJsxOpeningElement(node)||ts.isJsxSelfClosingElement(node)){
         const tag=node.tagName.getText(ast),attributes=node.attributes.properties.filter(ts.isJsxAttribute);
-        if(attributes.some(a=>a.name.getText(ast)==='data-admin-visual-open'))openers.add(slug(node,'data-admin-visual-open'));
+        const normalized=path.replaceAll('\\','/');
+        if(attributes.some(a=>a.name.getText(ast)==='visualDialogId'))openers.add(slug(node,'visualDialogId'));
+        if(attributes.some(a=>a.name.getText(ast)==='data-admin-visual-open')){
+          const attr=attributes.find(a=>a.name.getText(ast)==='data-admin-visual-open');
+          const expression=attr.initializer&&ts.isJsxExpression(attr.initializer)?attr.initializer.expression:null;
+          const forwarding=['/ui/DataTable.tsx','/ui/ChapterMatrix.tsx','/ui/AdminPrimitives.tsx'].some(file=>normalized.endsWith(file))&&expression&&ts.isIdentifier(expression)&&expression.text==='visualDialogId';
+          if(!forwarding)openers.add(slug(node,'data-admin-visual-open'));
+        }
         // ConfirmDialog forwards visualId; its single generic implementation is
         // checked separately. Every concrete usage still needs a literal ID.
-        if((contents.has(tag)||tag==='ConfirmDialog')&&!path.replaceAll('\\','/').endsWith('/ui/AdminPrimitives.tsx')){
+        if((contents.has(tag)||tag==='ConfirmDialog')&&!normalized.endsWith('/ui/AdminPrimitives.tsx')){
           const id=slug(node,tag==='ConfirmDialog'?'visualId':'data-admin-visual-dialog');
           if(declared.has(id))throw new Error('DUPLICATE_DIALOG_DECLARATION:'+id);
           declared.set(id,{slug:id,file:path});

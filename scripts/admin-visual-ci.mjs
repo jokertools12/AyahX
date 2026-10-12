@@ -16,7 +16,7 @@ const source=await readFile('src/admin/AdminRoot.tsx','utf8');
 // Inventory follows the actual router, including future additions. An unknown
 // parameterized route fails instead of receiving a fabricated identifier.
 const routeInventory=buildAdminVisualRoutes(source,fixture),routes=routeInventory.map(route=>route.path);
-async function adminSources(path){const result=[];for(const entry of await readdir(path,{withFileTypes:true})){const child=join(path,entry.name);if(entry.isDirectory())result.push(...await adminSources(child));else if(entry.name.endsWith('.tsx'))result.push({path:child,source:await readFile(child,'utf8')});}return result;}
+async function adminSources(path){const result=[];for(const entry of await readdir(path,{withFileTypes:true})){const child=join(path,entry.name);if(entry.isDirectory())result.push(...await adminSources(child));else if(entry.name.endsWith('.tsx')&&!/\.(test|spec)\.tsx$/u.test(entry.name))result.push({path:child,source:await readFile(child,'utf8')});}return result;}
 const dialogInventory=buildAdminVisualDialogs(await adminSources('src/admin'));
 const scanner=await loadAdminVisualScanner();
 const axe=await readFile('tooling/e2e/node_modules/axe-core/axe.min.js','utf8');

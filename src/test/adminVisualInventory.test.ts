@@ -44,4 +44,9 @@ describe('declared admin dialog coverage',()=>{
   expect(()=>assertAdminVisualDialogCoverage(inventory,[{slug:'search',passed:true},{slug:'delete',passed:false}])).toThrow('UNTESTED_DECLARED_ADMIN_DIALOGS:delete');
   expect(()=>assertAdminVisualDialogCoverage(inventory,[{slug:'search',passed:true},{slug:'delete',passed:true}])).not.toThrow();
  });
+ it('resolves explicit literal opener props forwarded by shared row components',()=>{
+  const sources=[{path:'src/admin/ui/DataTable.tsx',source:'<Button data-admin-visual-open={visualDialogId}/>'},{path:'src/admin/Page.tsx',source:'<DataTable visualDialogId="row"/><DrawerContent data-admin-visual-dialog="row"/>'}];
+  expect(buildAdminVisualDialogs(sources).map(item=>item.slug)).toEqual(['row']);
+  expect(()=>buildAdminVisualDialogs([{path:'src/admin/Page.tsx',source:'<Button data-admin-visual-open={visualDialogId}/><DrawerContent data-admin-visual-dialog="row"/>'}])).toThrow('LITERAL_DIALOG_MARKER_REQUIRED');
+ });
 });
