@@ -5,8 +5,8 @@
 import assert from 'node:assert/strict';
 import {createHash,randomBytes,randomUUID} from 'node:crypto';
 import {spawn} from 'node:child_process';
-import {mkdir,unlink} from 'node:fs/promises';
-import {resolve} from 'node:path';
+import {mkdir,unlink,writeFile} from 'node:fs/promises';
+import {dirname,resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import type {Server} from 'node:http';
 import express from 'express';
@@ -19,6 +19,8 @@ import {canonicalAuditJson} from '../server/services/catalogAudit';
 import {createAdminRuntime} from '../server/admin/adminRuntime';
 import {AdminOwnerWorkspace} from '../server/admin/adminOwnerWorkspace';
 import {CatalogAudioSource} from '../server/services/catalogAudioSource';
+import {RecitationCatalogService,readCatalogSettings} from '../server/services/recitationCatalogService';
+import {RecitationAudioResolver} from '../server/services/recitationAudioResolver';
 import {getFfmpegBinary} from '../server/services/ffmpegBinary';
 import {upAdminReviewWorkspace,downAdminReviewWorkspace,adminReviewWorkspaceMigrationSql} from '../server/db/migrations/008_addAdminReviewWorkspace';
 
@@ -35,7 +37,7 @@ export async function runAdminOwnerLocalAcceptance(pool:Pool,redis:Redis,env:Nod
   assert.equal(await redis.ping(),'PONG');
   const pass=(name:string,detail?:CatalogRow)=>results.push({name,passed:true,detail});
   // CHECKSUM TABLE is computed by MySQL, including the full 422k-row timing table.
-  const protectedTables=['users','profiles','user_roles','subscriptions','payment_requests','saved_videos','render_jobs','system_settings','quran_surahs','quran_ayahs','quran_words','ayah_timings'];
+  const protectedTables=['users','profiles','user_roles','subscriptions','payment_requests','saved_videos','render_jobs','system_settings','notifications','plans','videos','quran_surahs','quran_ayahs','quran_words','ayah_timings'];
   async function snapshot(){const values:CatalogRow={};for(const table of protectedTables){const [count]=await db.read('SELECT COUNT(*) n FROM '+table),[checksum]=await db.read('CHECKSUM TABLE '+table);assert.notEqual(checksum.Checksum,null,'MYSQL_CHECKSUM_UNAVAILABLE:'+table);values[table]={count:Number(count.n),checksum:String(checksum.Checksum)};}return values;}
   const reviewsBefore=await db.read('SELECT id,type,subject_type,subject_id,evidence,priority,status,decided_by,decided_at,notes,decision,created_at,updated_at FROM human_review_items ORDER BY id');
   const originalReviewIds=reviewsBefore.map(row=>row.id),before=await snapshot();
@@ -53,7 +55,9 @@ export async function runAdminOwnerLocalAcceptance(pool:Pool,redis:Redis,env:Nod
   const prefix='a2b-local-'+randomUUID().slice(0,8),ids={user:randomUUID(),provider:randomUUID(),reader:randomUUID(),recitation:randomUUID(),voice:randomUUID(),license:randomUUID(),safe:randomUUID(),render:randomUUID(),draft:randomUUID(),linked:randomUUID()},password=randomBytes(24).toString('base64url');
   const created:Array<{table:string;id:string}>=[],fixtureReviewIds:string[]=[ids.voice,ids.license,ids.safe];
   const file=resolve(process.cwd(),'uploads',prefix+'.mp4');let server:Server|undefined;
-  const runtime=createAdminRuntime({db,source:new CatalogAudioSource(),catalog:{publicVisibilityReasons:async()=>[]},env,origins:['http://localhost']});
+  const sourceAudio=new CatalogAudioSource(),settings=()=>readCatalogSettings(db);
+  const catalog=new RecitationCatalogService(db,settings,new RecitationAudioResolver(db,sourceAudio,settings));
+  const runtime=createAdminRuntime({db,source:sourceAudio,catalog,env,origins:['http://localhost']});
   const owner=new AdminOwnerWorkspace(db);
   async function clone(table:string,source:string,id:string,overrides:CatalogRow){
     assert.ok(['audio_providers','reciters','recitations'].includes(table));
@@ -140,5 +144,11 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).hr
   const mysqlUrl=process.env.A2B_MYSQL_URL;assert.ok(mysqlUrl,'A2B_MYSQL_URL_REQUIRED');assert.ok(local(new URL(mysqlUrl).hostname),'LOCAL_MYSQL_REQUIRED');
   const redisUrl=process.env.A2B_REDIS_URL??'redis://127.0.0.1:6380/14';assert.ok(local(new URL(redisUrl).hostname),'LOCAL_REDIS_REQUIRED');
   const pool=mysql.createPool({uri:mysqlUrl,connectionLimit:3,multipleStatements:true,timezone:'Z'}),redis=new Redis(redisUrl);
-  try{const results=await runAdminOwnerLocalAcceptance(pool,redis,{...process.env,NODE_ENV:'test',REDIS_URL:redisUrl,JWT_SECRET:randomBytes(48).toString('hex')});console.log(JSON.stringify({local_only:true,production_writes:0,results},null,2));}finally{await redis.quit();await pool.end();}
+  try{
+    const results=await runAdminOwnerLocalAcceptance(pool,redis,{...process.env,NODE_ENV:'test',REDIS_URL:redisUrl,JWT_SECRET:randomBytes(48).toString('hex')});
+    const report=JSON.stringify({checked_at:new Date().toISOString(),local_only:true,production_writes:0,results},null,2)+'\n';
+    const outputIndex=process.argv.indexOf('--out');
+    if(outputIndex>=0){assert.ok(process.argv[outputIndex+1]&&!process.argv[outputIndex+1].startsWith('--'),'OUTPUT_PATH_REQUIRED');const output=resolve(process.argv[outputIndex+1]);await mkdir(dirname(output),{recursive:true});await writeFile(output,report,{encoding:'utf8',mode:0o600,flag:'wx'});}
+    console.log(report);
+  }finally{await redis.quit();await pool.end();}
 }
