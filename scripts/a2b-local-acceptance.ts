@@ -38,7 +38,10 @@ export async function runAdminOwnerLocalAcceptance(pool:Pool,redis:Redis,env:Nod
   const pass=(name:string,detail?:CatalogRow)=>results.push({name,passed:true,detail});
   // CHECKSUM TABLE is computed by MySQL, including the full 422k-row timing table.
   const protectedTables=['users','profiles','user_roles','subscriptions','payment_requests','saved_videos','render_jobs','system_settings','notifications','plans','videos','quran_surahs','quran_ayahs','quran_words','ayah_timings'];
-  async function snapshot(){const values:CatalogRow={};for(const table of protectedTables){const [count]=await db.read('SELECT COUNT(*) n FROM '+table),[checksum]=await db.read('CHECKSUM TABLE '+table);assert.notEqual(checksum.Checksum,null,'MYSQL_CHECKSUM_UNAVAILABLE:'+table);values[table]={count:Number(count.n),checksum:String(checksum.Checksum)};}return values;}
+  async function snapshot(){const values:CatalogRow={};for(const table of protectedTables){
+    if(['plans','videos'].includes(table)){const[present]=await db.read('SELECT COUNT(*) n FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=?',[table]);if(Number(present.n)===0){values[table]={available:false,reason:'TABLE_NOT_PRESENT'};continue;}}
+    const[count]=await db.read('SELECT COUNT(*) n FROM '+table),[checksum]=await db.read('CHECKSUM TABLE '+table);assert.notEqual(checksum.Checksum,null,'MYSQL_CHECKSUM_UNAVAILABLE:'+table);values[table]={available:true,count:Number(count.n),checksum:String(checksum.Checksum)};
+  }return values;}
   const reviewsBefore=await db.read('SELECT id,type,subject_type,subject_id,evidence,priority,status,decided_by,decided_at,notes,decision,created_at,updated_at FROM human_review_items ORDER BY id');
   const originalReviewIds=reviewsBefore.map(row=>row.id),before=await snapshot();
   const ddl=await pool.getConnection();
@@ -50,7 +53,7 @@ export async function runAdminOwnerLocalAcceptance(pool:Pool,redis:Redis,env:Nod
     await upAdminReviewWorkspace(ddl);assert.deepEqual(await snapshot(),before);
   }finally{ddl.release();}
   assert.equal(digest(await db.read('SELECT id,type,subject_type,subject_id,evidence,priority,status,decided_by,decided_at,notes,decision,created_at,updated_at FROM human_review_items ORDER BY id')),digest(reviewsBefore));
-  pass('migration008_up_twice_down_twice_reapply_preserves_protected_rows',{original_reviews:reviewsBefore.length,sql_sha256:createHash('sha256').update(adminReviewWorkspaceMigrationSql().join('\n')).digest('hex')});
+  pass('migration008_up_twice_down_twice_reapply_preserves_protected_rows',{original_reviews:reviewsBefore.length,unavailable_tables:protectedTables.filter(table=>(before[table] as CatalogRow).available===false),sql_sha256:createHash('sha256').update(adminReviewWorkspaceMigrationSql().join('\n')).digest('hex')});
 
   const prefix='a2b-local-'+randomUUID().slice(0,8),ids={user:randomUUID(),provider:randomUUID(),reader:randomUUID(),recitation:randomUUID(),voice:randomUUID(),license:randomUUID(),safe:randomUUID(),render:randomUUID(),draft:randomUUID(),linked:randomUUID()},password=randomBytes(24).toString('base64url');
   const created:Array<{table:string;id:string}>=[],fixtureReviewIds:string[]=[ids.voice,ids.license,ids.safe];
