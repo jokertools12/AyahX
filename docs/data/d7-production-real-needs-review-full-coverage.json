@@ -1,0 +1,170 @@
+{
+  "id": "real-needs-review-full-coverage",
+  "expected": "SUCCESS",
+  "scope": "RAILWAY_PRODUCTION_RENDER_LAB_REAL_QUEUE",
+  "started_at": "2026-10-12T01:47:26.806Z",
+  "passed": true,
+  "dry_run": {
+    "dry_run": true,
+    "schemaVersion": "2.0.0",
+    "durationMs": 15990,
+    "audioPlanHash": "8d9cf4624d885e02b8fdf1c305903e9fa456445d1b9afa0666e2dcec93ae0568",
+    "timingVersionHash": "6b13e1a859b8422d04f0a776c2239e5e70c65aa5e26ec31d01f00e21b195612c",
+    "warnings": [
+      {
+        "code": "NEEDS_REVIEW",
+        "ayah": 24
+      }
+    ],
+    "production_writes": 0
+  },
+  "job_id": "15705253-3e1d-40cf-99c0-6a19c7c2ac39",
+  "status": "succeeded",
+  "error_code": null,
+  "inspection": {
+    "id": "15705253-3e1d-40cf-99c0-6a19c7c2ac39",
+    "qa": {
+      "passed": true,
+      "ffprobe": {
+        "audio": {
+          "codec": "aac",
+          "bitrate": 192703,
+          "channels": 2,
+          "sampleRate": 44100,
+          "durationSeconds": 15.99
+        },
+        "video": {
+          "fps": 30,
+          "codec": "h264",
+          "width": 1080,
+          "height": 1920,
+          "bitrate": 96387,
+          "profile": "High",
+          "pixelFormat": "yuv420p",
+          "durationSeconds": 16
+        },
+        "bitrate": 298642,
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "sizeBytes": 597285,
+        "durationSeconds": 16
+      },
+      "failures": [],
+      "warnings": [
+        "QA_PACKET_INDEX_FROM_FULL_REFERENCE"
+      ],
+      "tofu_glyphs": 0,
+      "black_frames": 0,
+      "golden_frames": [
+        {
+          "png": "frame-000242.png",
+          "ayah": 24,
+          "held": false,
+          "passed": true,
+          "time_ms": 8066.666666666666,
+          "png_sha256": "34c2a45dc0bd58eb9ab78cf53c6a9c76dc3c6d7f34a390ee31eb5fcf6680bf49",
+          "actual_mode": "ayah",
+          "frame_index": 242,
+          "painted_words": [],
+          "actual_word_keys": [],
+          "expected_word_key": null,
+          "actual_occurrence_id": null,
+          "expected_occurrence_id": null
+        }
+      ],
+      "selected_font": "Amiri Quran",
+      "audio_requests": [
+        {
+          "host": "cdn.mp3quran.net",
+          "bytes": 1,
+          "range": "bytes=0-0",
+          "method": "GET",
+          "status": 206,
+          "purpose": "render"
+        },
+        {
+          "host": "cdn.mp3quran.net",
+          "bytes": 52321649,
+          "range": null,
+          "method": "GET",
+          "status": 200,
+          "purpose": "reference"
+        },
+        {
+          "host": "cdn.mp3quran.net",
+          "bytes": 781584,
+          "range": "bytes=21178337-21959920",
+          "method": "GET",
+          "status": 206,
+          "purpose": "render"
+        }
+      ],
+      "render_time_ms": 20382.235357999998,
+      "schema_version": "d7-qa-1",
+      "audio_correlation": {
+        "score": 0.9999677824209694,
+        "lag_ms": 0,
+        "method": "centered_raw_pcm_ncc_full_decode_independent_reference",
+        "passed": true,
+        "sample_rate": 16000,
+        "compared_samples": 20920,
+        "duration_tolerance_ms": 33.333333333333336,
+        "aac_padding_trimmed_ms": 8.5625,
+        "duration_difference_ms": 0,
+        "declared_audio_duration_ms": 15990,
+        "untrimmed_decoded_duration_ms": 15998.5625
+      },
+      "audio_seek_method": "qa_packet_index_remote_range",
+      "black_scan_frames": 480,
+      "font_assets_local": true,
+      "video_duration_ms": 16000,
+      "memory_limit_bytes": 1999998976,
+      "audio_bytes_fetched": 781585,
+      "expected_duration_ms": 15990,
+      "audio_range_supported": true,
+      "duration_tolerance_ms": 33.333333333333336,
+      "peak_worker_rss_bytes": 493600768,
+      "duration_difference_ms": 10,
+      "audio_source_size_bytes": 52321649,
+      "external_asset_requests": 0,
+      "highlighting_transitions": [
+        {
+          "ayah": 24,
+          "mode": "ayah",
+          "time_ms": 0,
+          "word_keys": [],
+          "occurrence_id": null
+        }
+      ],
+      "memory_measurement_scope": "linux_worker_and_children_sampled_rss",
+      "memory_sample_interval_ms": 100,
+      "audio_full_download_fallback": false,
+      "audio_total_qa_bytes_fetched": 53103234,
+      "audio_range_efficiency_passed": true,
+      "audio_reference_bytes_fetched": 52321649,
+      "audio_fetch_to_source_size_ratio": 0.014938080411035976,
+      "peak_worker_and_children_rss_bytes": 791777280,
+      "audio_clip_to_source_duration_ratio": 0.012233209616171095,
+      "highlighting_transition_max_error_ms": 0
+    },
+    "worker_cgroup": {
+      "limit_bytes": 1999998976,
+      "peak_bytes": 849743872,
+      "current_bytes": 286785536,
+      "events": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0
+      }
+    },
+    "source": "actual_queue_output_decoded_by_ffmpeg"
+  },
+  "cleanup": {
+    "id": "15705253-3e1d-40cf-99c0-6a19c7c2ac39",
+    "artifact_removed": true,
+    "qa_retained_in_database": true
+  },
+  "finished_at": "2026-10-12T01:48:04.212Z"
+}

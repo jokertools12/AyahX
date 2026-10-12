@@ -42,8 +42,11 @@ super_admin مطلوب بالإضافة إلى الصلاحية لقرارات �
 
 الرموز الحالية للواجهة العامة تحتفظ بتمثيل admin للحسابات super_admin؛ هوية جلسة الأدمن وصلاحياتها تبقى منفصلة وتُقرأ كاملة.
 
-## render.test — حالة D7 المرحلية
+## render.test — قبول D7 الإنتاجي
 
 الصلاحية وحدها لا تكفي: RenderLabService يشترط دورadmin أوsuper_admin صراحةً؛grant عرضية لأي من الأدوار الخمسة الأخرى لا تفتح الأداة. POST `/api/admin/render-lab/jobs` وGET `/:id` يطبقان المصادقة القائمة؛POST يطبقOrigin/rate/schema/audit،qa:true فقط،≤90ثانية وتزامن عالمي1. CLI الخادم مسارroot-operated صريح،يستخدم خدمة القبول نفسها وهويةsuper_admin القائمة دون إنشاء جلسة بشرية أو تعديل حساب.
 
-migration007 الإنتاجية أضافت التعريف العالمي فقط،**لا منح مفعّلة بعد**. علامتا✓ أعلاه سياسة المنح المقصودة والمختبرة محليًا؛تطبيقهما الإنتاجي خطوة منفصلة بعدSUCCESS لكل النسخ التي تعرفrender.test. قبلrollback للكود القديم تُسحبgrantIDs الخاصة بـ007 أولًا لأن النسخة القديمة ترفض صلاحية مجهولة. لاstartupseed ولاتغييرuser_roles. [قبولRBACالمحلي](data/d7-render-lab-rbac-proof.json)،[حالةD7](data/render-verification-report.md).
+migration007 الإنتاجية أضافت التعريف العالمي أولًا؛**فُعّلت المنحتان لـadmin وsuper_admin فقط** بعدSUCCESS للخدمات الأربع فيPR21،مع تطابق بصمات الحسابات وuser_roles وD1/D3. [دليل التفعيل](data/d7-render-lab-activation-proof.json). قبلrollback للكود القديم تُسحبgrantIDs الخاصة بـ007 أولًا لأن النسخة القديمة ترفض صلاحية مجهولة. لاstartupseed ولاتغييرuser_roles. [قبولRBACالمحلي](data/d7-render-lab-rbac-proof.json)،[حالةD7](data/render-verification-report.md).
+
+
+قبول 12 أكتوبر: تسعة فيديوهات فعلية عبر CLI بنفس RenderLabService وهوية الأدمن القائمة، ورفضان صحيحان؛ دون جلسة مصطنعة أو تغيير حسابات. GET غير المصادق عليه للـlab أعاد401/no-store على production، وRBAC لسبعة أدوار و13تحققًا مثبت محليًا. [المصفوفة الإنتاجية](data/d7-production-matrix-proof.json)، [فحص القراءة](data/d7-live-read-smoke-proof.json).

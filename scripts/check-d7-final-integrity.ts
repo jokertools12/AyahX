@@ -23,7 +23,7 @@ try{
  assert.equal(after.row_counts.render_jobs,before.row_counts.render_jobs+jobs.length,'ONLY_DOCUMENTED_LAB_ROWS_ALLOWED');
  assert.equal((await session.read("SELECT value_text FROM system_settings WHERE key_name='quran_catalog_v2';")).trim(),'false');
  const grants=(await session.read("SELECT role_slug FROM admin_permissions WHERE permission_key='render.test' ORDER BY role_slug;")).trim().split(/\r?\n/u);assert.deepEqual(grants,['admin','super_admin']);
- const auditCount=Number((await session.read("SELECT COUNT(*) FROM audit_log WHERE action='render_lab.job_created' AND created_at>='2026-10-11 21:00:00';")).trim());assert.equal(auditCount,jobs.length,'ONE_CREATION_AUDIT_PER_JOB');
+ const auditCount=Number((await session.read("SELECT COUNT(*) FROM audit_logs WHERE action='render_lab.job_created' AND created_at>='2026-10-11 21:00:00';")).trim());assert.equal(auditCount,jobs.length,'ONE_CREATION_AUDIT_PER_JOB');
  Object.assign(proof,{passed:true,d1:after.d1_counts,d3:after.row_counts.ayah_timings,canonical_checksum:after.canonical_checksum,critical_before:before.critical_counts,critical_after:after.critical_counts,immutable_tables:immutable,immutable_checksums_unchanged:true,original_render_jobs_sha256:originalHash,new_lab_job_count:jobs.length,creation_audit_count:auditCount,catalog_flag:false,roles:grants,disk:await session.storage()});
 }finally{proof.serial=await session.close();proof.finished_at=new Date().toISOString();await writeFile('docs/data/d7-final-integrity-proof.json',JSON.stringify(proof,null,2)+'\n');}
 console.log(JSON.stringify({passed:proof.passed,new_lab_job_count:proof.new_lab_job_count,d1:proof.d1,d3:proof.d3}));

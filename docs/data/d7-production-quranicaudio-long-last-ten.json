@@ -1,0 +1,2173 @@
+{
+  "id": "quranicaudio-long-last-ten",
+  "expected": "SUCCESS",
+  "scope": "RAILWAY_PRODUCTION_RENDER_LAB_REAL_QUEUE",
+  "started_at": "2026-10-12T01:39:52.113Z",
+  "passed": true,
+  "dry_run": {
+    "dry_run": true,
+    "schemaVersion": "2.0.0",
+    "durationMs": 74315,
+    "audioPlanHash": "1573f1c5c710220f520eebb6cfa8999b3f6c0e6a51064254415e589e4678e722",
+    "timingVersionHash": "6d6c379f9cec8fc06abc7da2a6b9816f41f1036a433e05f939d29cd0e7183ca0",
+    "warnings": [],
+    "production_writes": 0
+  },
+  "job_id": "ff0558c5-b3ad-4109-ab25-d266cbd838b0",
+  "status": "succeeded",
+  "error_code": null,
+  "inspection": {
+    "id": "ff0558c5-b3ad-4109-ab25-d266cbd838b0",
+    "qa": {
+      "passed": true,
+      "ffprobe": {
+        "audio": {
+          "codec": "aac",
+          "bitrate": 192876,
+          "channels": 2,
+          "sampleRate": 44100,
+          "durationSeconds": 74.315011
+        },
+        "video": {
+          "fps": 30,
+          "codec": "h264",
+          "width": 1080,
+          "height": 1920,
+          "bitrate": 149260,
+          "profile": "High",
+          "pixelFormat": "yuv420p",
+          "durationSeconds": 74.333333
+        },
+        "bitrate": 350979,
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "sizeBytes": 3261210,
+        "durationSeconds": 74.334
+      },
+      "failures": [],
+      "warnings": [
+        "QA_PACKET_INDEX_FROM_FULL_REFERENCE"
+      ],
+      "tofu_glyphs": 0,
+      "black_frames": 0,
+      "golden_frames": [
+        {
+          "png": "frame-000018.png",
+          "ayah": 218,
+          "held": false,
+          "passed": true,
+          "time_ms": 600,
+          "png_sha256": "a54225008952710713b3d2a996bb45360b5f980ddf146ecee54f14a618e22531",
+          "actual_mode": "word",
+          "frame_index": 18,
+          "painted_words": [
+            {
+              "x": 632.3299961090088,
+              "y": 952.012,
+              "key": "26:218:1",
+              "width": 85.33000183105469,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:218:1"
+          ],
+          "expected_word_key": "26:218:1",
+          "actual_occurrence_id": "26:218:1:0:0",
+          "expected_occurrence_id": "26:218:1:0:0"
+        },
+        {
+          "ayah": 218,
+          "held": false,
+          "passed": true,
+          "time_ms": 1500,
+          "actual_mode": "word",
+          "frame_index": 45,
+          "painted_words": [
+            {
+              "x": 538.0399990081787,
+              "y": 952.012,
+              "key": "26:218:2",
+              "width": 78.80999755859375,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:218:2"
+          ],
+          "expected_word_key": "26:218:2",
+          "actual_occurrence_id": "26:218:2:1:1",
+          "expected_occurrence_id": "26:218:2:1:1"
+        },
+        {
+          "ayah": 218,
+          "held": false,
+          "passed": true,
+          "time_ms": 2266.6666666666665,
+          "actual_mode": "word",
+          "frame_index": 68,
+          "painted_words": [
+            {
+              "x": 450.1599979400635,
+              "y": 952.012,
+              "key": "26:218:3",
+              "width": 72.4000015258789,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:218:3"
+          ],
+          "expected_word_key": "26:218:3",
+          "actual_occurrence_id": "26:218:3:2:2",
+          "expected_occurrence_id": "26:218:3:2:2"
+        },
+        {
+          "png": "frame-000107.png",
+          "ayah": 218,
+          "held": false,
+          "passed": true,
+          "time_ms": 3566.666666666667,
+          "png_sha256": "4d0a0f103d23803a18311826150b9e3ef0d4adeb280fd197f18eb7d75b265539",
+          "actual_mode": "word",
+          "frame_index": 107,
+          "painted_words": [
+            {
+              "x": 362.3400020599365,
+              "y": 952.012,
+              "key": "26:218:4",
+              "width": 72.33999633789062,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:218:4"
+          ],
+          "expected_word_key": "26:218:4",
+          "actual_occurrence_id": "26:218:4:3:3",
+          "expected_occurrence_id": "26:218:4:3:3"
+        },
+        {
+          "ayah": 219,
+          "held": false,
+          "passed": true,
+          "time_ms": 5500,
+          "actual_mode": "word",
+          "frame_index": 165,
+          "painted_words": [
+            {
+              "x": 586.064998626709,
+              "y": 952.012,
+              "key": "26:219:1",
+              "width": 118.23999786376953,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:219:1"
+          ],
+          "expected_word_key": "26:219:1",
+          "actual_occurrence_id": "26:219:1:0:0",
+          "expected_occurrence_id": "26:219:1:0:0"
+        },
+        {
+          "ayah": 219,
+          "held": false,
+          "passed": true,
+          "time_ms": 6300,
+          "actual_mode": "word",
+          "frame_index": 189,
+          "painted_words": [
+            {
+              "x": 532.7949981689453,
+              "y": 952.012,
+              "key": "26:219:2",
+              "width": 37.790000915527344,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:219:2"
+          ],
+          "expected_word_key": "26:219:2",
+          "actual_occurrence_id": "26:219:2:1:1",
+          "expected_occurrence_id": "26:219:2:1:1"
+        },
+        {
+          "png": "frame-000232.png",
+          "ayah": 219,
+          "held": false,
+          "passed": true,
+          "time_ms": 7733.333333333333,
+          "png_sha256": "741c5e58f6e2a7b4bd49d8bd9571f678b8307256fd1ba05504e178d9a96fe892",
+          "actual_mode": "word",
+          "frame_index": 232,
+          "painted_words": [
+            {
+              "x": 375.6950035095215,
+              "y": 952.012,
+              "key": "26:219:3",
+              "width": 141.6199951171875,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:219:3"
+          ],
+          "expected_word_key": "26:219:3",
+          "actual_occurrence_id": "26:219:3:2:2",
+          "expected_occurrence_id": "26:219:3:2:2"
+        },
+        {
+          "ayah": 220,
+          "held": false,
+          "passed": true,
+          "time_ms": 10466.666666666666,
+          "actual_mode": "word",
+          "frame_index": 314,
+          "painted_words": [
+            {
+              "x": 654.4300022125244,
+              "y": 952.012,
+              "key": "26:220:1",
+              "width": 54.59000015258789,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:220:1"
+          ],
+          "expected_word_key": "26:220:1",
+          "actual_occurrence_id": "26:220:1:0:0",
+          "expected_occurrence_id": "26:220:1:0:0"
+        },
+        {
+          "ayah": 220,
+          "held": false,
+          "passed": true,
+          "time_ms": 11666.666666666666,
+          "actual_mode": "word",
+          "frame_index": 350,
+          "painted_words": [
+            {
+              "x": 596.7100009918213,
+              "y": 952.012,
+              "key": "26:220:2",
+              "width": 42.2400016784668,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:220:2"
+          ],
+          "expected_word_key": "26:220:2",
+          "actual_occurrence_id": "26:220:2:1:1",
+          "expected_occurrence_id": "26:220:2:1:1"
+        },
+        {
+          "png": "frame-000368.png",
+          "ayah": 220,
+          "held": false,
+          "passed": true,
+          "time_ms": 12266.666666666668,
+          "png_sha256": "f66ff6794364693f728ef9bab537ab00e252697c73daa17909383ac98970dabd",
+          "actual_mode": "word",
+          "frame_index": 368,
+          "painted_words": [
+            {
+              "x": 466.74999809265137,
+              "y": 952.012,
+              "key": "26:220:3",
+              "width": 114.4800033569336,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:220:3"
+          ],
+          "expected_word_key": "26:220:3",
+          "actual_occurrence_id": "26:220:3:2:2",
+          "expected_occurrence_id": "26:220:3:2:2"
+        },
+        {
+          "ayah": 220,
+          "held": false,
+          "passed": true,
+          "time_ms": 13866.666666666668,
+          "actual_mode": "word",
+          "frame_index": 416,
+          "painted_words": [
+            {
+              "x": 370.9799976348877,
+              "y": 952.012,
+              "key": "26:220:4",
+              "width": 80.29000091552734,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:220:4"
+          ],
+          "expected_word_key": "26:220:4",
+          "actual_occurrence_id": "26:220:4:3:3",
+          "expected_occurrence_id": "26:220:4:3:3"
+        },
+        {
+          "ayah": 221,
+          "held": false,
+          "passed": true,
+          "time_ms": 15433.333333333334,
+          "actual_mode": "word",
+          "frame_index": 463,
+          "painted_words": [
+            {
+              "x": 755.6349945068359,
+              "y": 952.012,
+              "key": "26:221:1",
+              "width": 58.09000015258789,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:221:1"
+          ],
+          "expected_word_key": "26:221:1",
+          "actual_occurrence_id": "26:221:1:0:0",
+          "expected_occurrence_id": "26:221:1:0:0"
+        },
+        {
+          "png": "frame-000489.png",
+          "ayah": 221,
+          "held": false,
+          "passed": true,
+          "time_ms": 16300,
+          "png_sha256": "60dfd7af00d05e14355286f01bf61aa35a5ea4fe9726f2fb34a0ec5bd5d26e94",
+          "actual_mode": "word",
+          "frame_index": 489,
+          "painted_words": [
+            {
+              "x": 641.6849937438965,
+              "y": 952.012,
+              "key": "26:221:2",
+              "width": 98.47000122070312,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:221:2"
+          ],
+          "expected_word_key": "26:221:2",
+          "actual_occurrence_id": "26:221:2:1:1",
+          "expected_occurrence_id": "26:221:2:1:1"
+        },
+        {
+          "ayah": 221,
+          "held": false,
+          "passed": true,
+          "time_ms": 17300,
+          "actual_mode": "word",
+          "frame_index": 519,
+          "painted_words": [
+            {
+              "x": 570.3449935913086,
+              "y": 952.012,
+              "key": "26:221:3",
+              "width": 55.86000061035156,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:221:3"
+          ],
+          "expected_word_key": "26:221:3",
+          "actual_occurrence_id": "26:221:3:2:2",
+          "expected_occurrence_id": "26:221:3:2:2"
+        },
+        {
+          "ayah": 221,
+          "held": false,
+          "passed": true,
+          "time_ms": 18066.666666666668,
+          "actual_mode": "word",
+          "frame_index": 542,
+          "painted_words": [
+            {
+              "x": 501.6549949645996,
+              "y": 952.012,
+              "key": "26:221:4",
+              "width": 53.209999084472656,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:221:4"
+          ],
+          "expected_word_key": "26:221:4",
+          "actual_occurrence_id": "26:221:4:3:3",
+          "expected_occurrence_id": "26:221:4:3:3"
+        },
+        {
+          "png": "frame-000569.png",
+          "ayah": 221,
+          "held": false,
+          "passed": true,
+          "time_ms": 18966.666666666664,
+          "png_sha256": "bc7640408ef13d998fe77e9b5e2911881ff7ff88b8dc8bbb245e9ba2c1c47cd1",
+          "actual_mode": "word",
+          "frame_index": 569,
+          "painted_words": [
+            {
+              "x": 415.0449981689453,
+              "y": 952.012,
+              "key": "26:221:5",
+              "width": 71.12999725341797,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:221:5"
+          ],
+          "expected_word_key": "26:221:5",
+          "actual_occurrence_id": "26:221:5:4:4",
+          "expected_occurrence_id": "26:221:5:4:4"
+        },
+        {
+          "ayah": 221,
+          "held": false,
+          "passed": true,
+          "time_ms": 20566.666666666668,
+          "actual_mode": "word",
+          "frame_index": 617,
+          "painted_words": [
+            {
+              "x": 266.2750053405762,
+              "y": 952.012,
+              "key": "26:221:6",
+              "width": 133.2899932861328,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:221:6"
+          ],
+          "expected_word_key": "26:221:6",
+          "actual_occurrence_id": "26:221:6:5:5",
+          "expected_occurrence_id": "26:221:6:5:5"
+        },
+        {
+          "ayah": 222,
+          "held": false,
+          "passed": true,
+          "time_ms": 22233.333333333336,
+          "actual_mode": "word",
+          "frame_index": 667,
+          "painted_words": [
+            {
+              "x": 658.4050006866455,
+              "y": 952.012,
+              "key": "26:222:1",
+              "width": 71.12999725341797,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:222:1"
+          ],
+          "expected_word_key": "26:222:1",
+          "actual_occurrence_id": "26:222:1:0:0",
+          "expected_occurrence_id": "26:222:1:0:0"
+        },
+        {
+          "png": "frame-000688.png",
+          "ayah": 222,
+          "held": false,
+          "passed": true,
+          "time_ms": 22933.333333333332,
+          "png_sha256": "d12db827926f67c7dfcc82fcb3c21c3e9a88261c5a9e4a4a7f33aacc222b2d8c",
+          "actual_mode": "word",
+          "frame_index": 688,
+          "painted_words": [
+            {
+              "x": 587.0650005340576,
+              "y": 952.012,
+              "key": "26:222:2",
+              "width": 55.86000061035156,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:222:2"
+          ],
+          "expected_word_key": "26:222:2",
+          "actual_occurrence_id": "26:222:2:1:1",
+          "expected_occurrence_id": "26:222:2:1:1"
+        },
+        {
+          "ayah": 222,
+          "held": false,
+          "passed": true,
+          "time_ms": 23500,
+          "actual_mode": "word",
+          "frame_index": 705,
+          "painted_words": [
+            {
+              "x": 508.5650005340576,
+              "y": 952.012,
+              "key": "26:222:3",
+              "width": 63.02000045776367,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:222:3"
+          ],
+          "expected_word_key": "26:222:3",
+          "actual_occurrence_id": "26:222:3:2:2",
+          "expected_occurrence_id": "26:222:3:2:2"
+        },
+        {
+          "ayah": 222,
+          "held": false,
+          "passed": true,
+          "time_ms": 24300,
+          "actual_mode": "word",
+          "frame_index": 729,
+          "painted_words": [
+            {
+              "x": 418.09500312805176,
+              "y": 952.012,
+              "key": "26:222:4",
+              "width": 74.98999786376953,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:222:4"
+          ],
+          "expected_word_key": "26:222:4",
+          "actual_occurrence_id": "26:222:4:3:3",
+          "expected_occurrence_id": "26:222:4:3:3"
+        },
+        {
+          "png": "frame-000772.png",
+          "ayah": 222,
+          "held": false,
+          "passed": true,
+          "time_ms": 25733.333333333336,
+          "png_sha256": "206c067dc431248ae68dc75418053790e39b61c9da37ea4c930b1d1a7981f1f7",
+          "actual_mode": "word",
+          "frame_index": 772,
+          "painted_words": [
+            {
+              "x": 350.4650020599365,
+              "y": 952.012,
+              "key": "26:222:5",
+              "width": 52.150001525878906,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:222:5"
+          ],
+          "expected_word_key": "26:222:5",
+          "actual_occurrence_id": "26:222:5:4:4",
+          "expected_occurrence_id": "26:222:5:4:4"
+        },
+        {
+          "ayah": 223,
+          "held": false,
+          "passed": true,
+          "time_ms": 27433.333333333332,
+          "actual_mode": "word",
+          "frame_index": 823,
+          "painted_words": [
+            {
+              "x": 701.920000076294,
+              "y": 952.012,
+              "key": "26:223:1",
+              "width": 89.1500015258789,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:223:1"
+          ],
+          "expected_word_key": "26:223:1",
+          "actual_occurrence_id": "26:223:1:0:0",
+          "expected_occurrence_id": "26:223:1:0:0"
+        },
+        {
+          "ayah": 223,
+          "held": false,
+          "passed": true,
+          "time_ms": 28366.666666666668,
+          "actual_mode": "word",
+          "frame_index": 851,
+          "painted_words": [
+            {
+              "x": 584.8899974822998,
+              "y": 952.012,
+              "key": "26:223:2",
+              "width": 101.55000305175781,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:223:2"
+          ],
+          "expected_word_key": "26:223:2",
+          "actual_occurrence_id": "26:223:2:1:1",
+          "expected_occurrence_id": "26:223:2:1:1"
+        },
+        {
+          "png": "frame-000883.png",
+          "ayah": 223,
+          "held": false,
+          "passed": true,
+          "time_ms": 29433.333333333332,
+          "png_sha256": "8d01c9bba9b8a32b528138de54ef40c7e4144d25f264ceec2818b76b0710ed18",
+          "actual_mode": "word",
+          "frame_index": 883,
+          "painted_words": [
+            {
+              "x": 420.1599979400635,
+              "y": 952.012,
+              "key": "26:223:3",
+              "width": 149.25,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:223:3"
+          ],
+          "expected_word_key": "26:223:3",
+          "actual_occurrence_id": "26:223:3:2:2",
+          "expected_occurrence_id": "26:223:3:2:2"
+        },
+        {
+          "ayah": 223,
+          "held": false,
+          "passed": true,
+          "time_ms": 31133.333333333332,
+          "actual_mode": "word",
+          "frame_index": 934,
+          "painted_words": [
+            {
+              "x": 288.92999839782715,
+              "y": 952.012,
+              "key": "26:223:4",
+              "width": 115.75,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:223:4"
+          ],
+          "expected_word_key": "26:223:4",
+          "actual_occurrence_id": "26:223:4:3:3",
+          "expected_occurrence_id": "26:223:4:3:3"
+        },
+        {
+          "ayah": 224,
+          "held": false,
+          "passed": true,
+          "time_ms": 34433.33333333333,
+          "actual_mode": "word",
+          "frame_index": 1033,
+          "painted_words": [
+            {
+              "x": 600.6649971008301,
+              "y": 952.012,
+              "key": "26:224:1",
+              "width": 141.35000610351562,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:224:1"
+          ],
+          "expected_word_key": "26:224:1",
+          "actual_occurrence_id": "26:224:1:0:0",
+          "expected_occurrence_id": "26:224:1:0:0"
+        },
+        {
+          "png": "frame-001103.png",
+          "ayah": 224,
+          "held": false,
+          "passed": true,
+          "time_ms": 36766.666666666664,
+          "png_sha256": "cde21017cf8c375efd7c0e7d0b82a151d381a53f7c80d4f8003c62757e99a2ea",
+          "actual_mode": "word",
+          "frame_index": 1103,
+          "painted_words": [
+            {
+              "x": 474.9449996948242,
+              "y": 952.012,
+              "key": "26:224:2",
+              "width": 110.23999786376953,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:224:2"
+          ],
+          "expected_word_key": "26:224:2",
+          "actual_occurrence_id": "26:224:2:1:1",
+          "expected_occurrence_id": "26:224:2:1:1"
+        },
+        {
+          "ayah": 224,
+          "held": false,
+          "passed": true,
+          "time_ms": 38366.666666666664,
+          "actual_mode": "word",
+          "frame_index": 1151,
+          "painted_words": [
+            {
+              "x": 337.9849967956543,
+              "y": 952.012,
+              "key": "26:224:3",
+              "width": 121.4800033569336,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:224:3"
+          ],
+          "expected_word_key": "26:224:3",
+          "actual_occurrence_id": "26:224:3:2:2",
+          "expected_occurrence_id": "26:224:3:2:2"
+        },
+        {
+          "ayah": 225,
+          "held": false,
+          "passed": true,
+          "time_ms": 39933.33333333333,
+          "actual_mode": "word",
+          "frame_index": 1198,
+          "painted_words": [
+            {
+              "x": 747.1649971008301,
+              "y": 952.012,
+              "key": "26:225:1",
+              "width": 50.61000061035156,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:225:1"
+          ],
+          "expected_word_key": "26:225:1",
+          "actual_occurrence_id": "26:225:1:0:0",
+          "expected_occurrence_id": "26:225:1:0:0"
+        },
+        {
+          "png": "frame-001212.png",
+          "ayah": 225,
+          "held": false,
+          "passed": true,
+          "time_ms": 40400,
+          "png_sha256": "2f57057c73b8ee3f4df95126f556db3972db330d57d50fd1d4bf30ba0a22543d",
+          "actual_mode": "word",
+          "frame_index": 1212,
+          "painted_words": [
+            {
+              "x": 699.4049987792969,
+              "y": 952.012,
+              "key": "26:225:2",
+              "width": 32.279998779296875,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:225:2"
+          ],
+          "expected_word_key": "26:225:2",
+          "actual_occurrence_id": "26:225:2:1:1",
+          "expected_occurrence_id": "26:225:2:1:1"
+        },
+        {
+          "ayah": 225,
+          "held": false,
+          "passed": true,
+          "time_ms": 41366.666666666664,
+          "actual_mode": "word",
+          "frame_index": 1241,
+          "painted_words": [
+            {
+              "x": 615.7150001525879,
+              "y": 952.012,
+              "key": "26:225:3",
+              "width": 68.20999908447266,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:225:3"
+          ],
+          "expected_word_key": "26:225:3",
+          "actual_occurrence_id": "26:225:3:2:2",
+          "expected_occurrence_id": "26:225:3:2:2"
+        },
+        {
+          "ayah": 225,
+          "held": false,
+          "passed": true,
+          "time_ms": 42266.666666666664,
+          "actual_mode": "word",
+          "frame_index": 1268,
+          "painted_words": [
+            {
+              "x": 562.4449996948242,
+              "y": 952.012,
+              "key": "26:225:4",
+              "width": 37.790000915527344,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:225:4"
+          ],
+          "expected_word_key": "26:225:4",
+          "actual_occurrence_id": "26:225:4:3:3",
+          "expected_occurrence_id": "26:225:4:3:3"
+        },
+        {
+          "png": "frame-001283.png",
+          "ayah": 225,
+          "held": false,
+          "passed": true,
+          "time_ms": 42766.666666666664,
+          "png_sha256": "971c126aaf43b2e54c6ec35aa85d09cdb15f9556016c8b06868be851d6ba7aa6",
+          "actual_mode": "word",
+          "frame_index": 1283,
+          "painted_words": [
+            {
+              "x": 483.9449996948242,
+              "y": 952.012,
+              "key": "26:225:5",
+              "width": 63.02000045776367,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:225:5"
+          ],
+          "expected_word_key": "26:225:5",
+          "actual_occurrence_id": "26:225:5:4:4",
+          "expected_occurrence_id": "26:225:5:4:4"
+        },
+        {
+          "ayah": 225,
+          "held": false,
+          "passed": true,
+          "time_ms": 43666.666666666664,
+          "actual_mode": "word",
+          "frame_index": 1310,
+          "painted_words": [
+            {
+              "x": 411.91500091552734,
+              "y": 952.012,
+              "key": "26:225:6",
+              "width": 56.54999923706055,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:225:6"
+          ],
+          "expected_word_key": "26:225:6",
+          "actual_occurrence_id": "26:225:6:5:5",
+          "expected_occurrence_id": "26:225:6:5:5"
+        },
+        {
+          "ayah": 225,
+          "held": false,
+          "passed": true,
+          "time_ms": 45233.333333333336,
+          "actual_mode": "word",
+          "frame_index": 1357,
+          "painted_words": [
+            {
+              "x": 282.22500228881836,
+              "y": 952.012,
+              "key": "26:225:7",
+              "width": 114.20999908447266,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:225:7"
+          ],
+          "expected_word_key": "26:225:7",
+          "actual_occurrence_id": "26:225:7:6:6",
+          "expected_occurrence_id": "26:225:7:6:6"
+        },
+        {
+          "png": "frame-001418.png",
+          "ayah": 226,
+          "held": false,
+          "passed": true,
+          "time_ms": 47266.666666666664,
+          "png_sha256": "93900e3853920158b135dd331b1b96ec3340c82efc270276a9edac52cf324d0f",
+          "actual_mode": "word",
+          "frame_index": 1418,
+          "painted_words": [
+            {
+              "x": 667.8699989318848,
+              "y": 952.012,
+              "key": "26:226:1",
+              "width": 89.41000366210938,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:226:1"
+          ],
+          "expected_word_key": "26:226:1",
+          "actual_occurrence_id": "26:226:1:0:0",
+          "expected_occurrence_id": "26:226:1:0:0"
+        },
+        {
+          "ayah": 226,
+          "held": false,
+          "passed": true,
+          "time_ms": 48700,
+          "actual_mode": "word",
+          "frame_index": 1461,
+          "painted_words": [
+            {
+              "x": 546.129997253418,
+              "y": 952.012,
+              "key": "26:226:2",
+              "width": 106.26000213623047,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:226:2"
+          ],
+          "expected_word_key": "26:226:2",
+          "actual_occurrence_id": "26:226:2:1:1",
+          "expected_occurrence_id": "26:226:2:1:1"
+        },
+        {
+          "ayah": 226,
+          "held": false,
+          "passed": true,
+          "time_ms": 49533.33333333333,
+          "actual_mode": "word",
+          "frame_index": 1486,
+          "painted_words": [
+            {
+              "x": 497.89999771118164,
+              "y": 952.012,
+              "key": "26:226:3",
+              "width": 32.75,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:226:3"
+          ],
+          "expected_word_key": "26:226:3",
+          "actual_occurrence_id": "26:226:3:2:2",
+          "expected_occurrence_id": "26:226:3:2:2"
+        },
+        {
+          "png": "frame-001498.png",
+          "ayah": 226,
+          "held": false,
+          "passed": true,
+          "time_ms": 49933.33333333333,
+          "png_sha256": "faaee83c89ee1cdbb44f61578d21badee80b66abfe7720bce913cedf83270161",
+          "actual_mode": "word",
+          "frame_index": 1498,
+          "painted_words": [
+            {
+              "x": 448.38999938964844,
+              "y": 952.012,
+              "key": "26:226:4",
+              "width": 34.029998779296875,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:226:4"
+          ],
+          "expected_word_key": "26:226:4",
+          "actual_occurrence_id": "26:226:4:3:3",
+          "expected_occurrence_id": "26:226:4:3:3"
+        },
+        {
+          "ayah": 226,
+          "held": false,
+          "passed": true,
+          "time_ms": 51366.666666666664,
+          "actual_mode": "word",
+          "frame_index": 1541,
+          "painted_words": [
+            {
+              "x": 322.71999740600586,
+              "y": 952.012,
+              "key": "26:226:5",
+              "width": 110.19000244140625,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:226:5"
+          ],
+          "expected_word_key": "26:226:5",
+          "actual_occurrence_id": "26:226:5:4:4",
+          "expected_occurrence_id": "26:226:5:4:4"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 53133.333333333336,
+          "actual_mode": "word",
+          "frame_index": 1594,
+          "painted_words": [
+            {
+              "x": 907.5949974060059,
+              "y": 829.6519999999999,
+              "key": "26:227:1",
+              "width": 45.529998779296875,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:1"
+          ],
+          "expected_word_key": "26:227:1",
+          "actual_occurrence_id": "26:227:1:0:0",
+          "expected_occurrence_id": "26:227:1:0:0"
+        },
+        {
+          "png": "frame-001616.png",
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 53866.666666666664,
+          "png_sha256": "e5a50f05cf3f81950452ab00289489c5bf5cb5935bc9c94a0ebf818f869a09e7",
+          "actual_mode": "word",
+          "frame_index": 1616,
+          "painted_words": [
+            {
+              "x": 809.8050003051758,
+              "y": 829.6519999999999,
+              "key": "26:227:2",
+              "width": 82.30999755859375,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:2"
+          ],
+          "expected_word_key": "26:227:2",
+          "actual_occurrence_id": "26:227:2:1:1",
+          "expected_occurrence_id": "26:227:2:1:1"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 54733.333333333336,
+          "actual_mode": "word",
+          "frame_index": 1642,
+          "painted_words": [
+            {
+              "x": 699.2950019836426,
+              "y": 829.6519999999999,
+              "key": "26:227:3",
+              "width": 95.02999877929688,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:3"
+          ],
+          "expected_word_key": "26:227:3",
+          "actual_occurrence_id": "26:227:3:2:2",
+          "expected_occurrence_id": "26:227:3:2:2"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 55533.33333333333,
+          "actual_mode": "word",
+          "frame_index": 1666,
+          "painted_words": [
+            {
+              "x": 583.3250045776367,
+              "y": 829.6519999999999,
+              "key": "26:227:4",
+              "width": 100.48999786376953,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:4"
+          ],
+          "expected_word_key": "26:227:4",
+          "actual_occurrence_id": "26:227:4:3:3",
+          "expected_occurrence_id": "26:227:4:3:3"
+        },
+        {
+          "png": "frame-001698.png",
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 56600,
+          "png_sha256": "c23a6da1c5e1c7c62355023445294a90a65cc1e21343fd4cc017a644dd437a4c",
+          "actual_mode": "word",
+          "frame_index": 1698,
+          "painted_words": [
+            {
+              "x": 419.2350044250488,
+              "y": 829.6519999999999,
+              "key": "26:227:5",
+              "width": 148.61000061035156,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:5"
+          ],
+          "expected_word_key": "26:227:5",
+          "actual_occurrence_id": "26:227:5:4:4",
+          "expected_occurrence_id": "26:227:5:4:4"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 57700,
+          "actual_mode": "word",
+          "frame_index": 1731,
+          "painted_words": [
+            {
+              "x": 296.8550033569336,
+              "y": 829.6519999999999,
+              "key": "26:227:6",
+              "width": 106.9000015258789,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:6"
+          ],
+          "expected_word_key": "26:227:6",
+          "actual_occurrence_id": "26:227:6:5:5",
+          "expected_occurrence_id": "26:227:6:5:5"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 58500,
+          "actual_mode": "word",
+          "frame_index": 1755,
+          "painted_words": [
+            {
+              "x": 230.81500244140625,
+              "y": 829.6519999999999,
+              "key": "26:227:7",
+              "width": 50.560001373291016,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:7"
+          ],
+          "expected_word_key": "26:227:7",
+          "actual_occurrence_id": "26:227:7:6:6",
+          "expected_occurrence_id": "26:227:7:6:6"
+        },
+        {
+          "png": "frame-001788.png",
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 59600,
+          "png_sha256": "c44e86b7f66eba8dc9d219fb06772712b1f4d7b787f37f33fdbb26b140109331",
+          "actual_mode": "word",
+          "frame_index": 1788,
+          "painted_words": [
+            {
+              "x": 126.87500381469727,
+              "y": 829.6519999999999,
+              "key": "26:227:8",
+              "width": 88.45999908447266,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:8"
+          ],
+          "expected_word_key": "26:227:8",
+          "actual_occurrence_id": "26:227:8:7:7",
+          "expected_occurrence_id": "26:227:8:7:7"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 61100,
+          "actual_mode": "word",
+          "frame_index": 1833,
+          "painted_words": [
+            {
+              "x": 812.8250007629395,
+              "y": 952.012,
+              "key": "26:227:9",
+              "width": 145.1699981689453,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:9"
+          ],
+          "expected_word_key": "26:227:9",
+          "actual_occurrence_id": "26:227:9:8:8",
+          "expected_occurrence_id": "26:227:9:8:8"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 62233.333333333336,
+          "actual_mode": "word",
+          "frame_index": 1867,
+          "painted_words": [
+            {
+              "x": 744.1350021362305,
+              "y": 952.012,
+              "key": "26:227:10",
+              "width": 53.209999084472656,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:10"
+          ],
+          "expected_word_key": "26:227:10",
+          "actual_occurrence_id": "26:227:10:9:9",
+          "expected_occurrence_id": "26:227:10:9:9"
+        },
+        {
+          "png": "frame-001887.png",
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 62900,
+          "png_sha256": "344ed21379518c115912c84feec65cf9f244f99d46a4a8c9fc78191adb94f9c4",
+          "actual_mode": "word",
+          "frame_index": 1887,
+          "painted_words": [
+            {
+              "x": 674.2250022888184,
+              "y": 952.012,
+              "key": "26:227:11",
+              "width": 54.43000030517578,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:11"
+          ],
+          "expected_word_key": "26:227:11",
+          "actual_occurrence_id": "26:227:11:10:10",
+          "expected_occurrence_id": "26:227:11:10:10"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 63400,
+          "actual_mode": "word",
+          "frame_index": 1902,
+          "painted_words": [
+            {
+              "x": 625.995002746582,
+              "y": 952.012,
+              "key": "26:227:12",
+              "width": 32.75,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:12"
+          ],
+          "expected_word_key": "26:227:12",
+          "actual_occurrence_id": "26:227:12:11:11",
+          "expected_occurrence_id": "26:227:12:11:11"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 64400.00000000001,
+          "actual_mode": "word",
+          "frame_index": 1932,
+          "painted_words": [
+            {
+              "x": 525.8250007629395,
+              "y": 952.012,
+              "key": "26:227:13",
+              "width": 84.69000244140625,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:13"
+          ],
+          "expected_word_key": "26:227:13",
+          "actual_occurrence_id": "26:227:13:12:12",
+          "expected_occurrence_id": "26:227:13:12:12"
+        },
+        {
+          "png": "frame-001978.png",
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 65933.33333333334,
+          "png_sha256": "e8d80d4d760323f2b55de5222559b6c27d2db2079874b39f59fb66c9b919110f",
+          "actual_mode": "word",
+          "frame_index": 1978,
+          "painted_words": [
+            {
+              "x": 388.33499908447266,
+              "y": 952.012,
+              "key": "26:227:14",
+              "width": 122.01000213623047,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:14"
+          ],
+          "expected_word_key": "26:227:14",
+          "actual_occurrence_id": "26:227:14:13:13",
+          "expected_occurrence_id": "26:227:14:13:13"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 67066.66666666666,
+          "actual_mode": "word",
+          "frame_index": 2012,
+          "painted_words": [
+            {
+              "x": 290.5450019836426,
+              "y": 952.012,
+              "key": "26:227:15",
+              "width": 82.30999755859375,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:15"
+          ],
+          "expected_word_key": "26:227:15",
+          "actual_occurrence_id": "26:227:15:14:14",
+          "expected_occurrence_id": "26:227:15:14:14"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 68266.66666666667,
+          "actual_mode": "word",
+          "frame_index": 2048,
+          "painted_words": [
+            {
+              "x": 190.375,
+              "y": 952.012,
+              "key": "26:227:16",
+              "width": 84.69000244140625,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:16"
+          ],
+          "expected_word_key": "26:227:16",
+          "actual_occurrence_id": "26:227:16:15:15",
+          "expected_occurrence_id": "26:227:16:15:15"
+        },
+        {
+          "png": "frame-002078.png",
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 69266.66666666667,
+          "png_sha256": "93d89d3c8c0c5be81142135cdbfd4ec3451f5176feb37a09c1a9035aad1bef57",
+          "actual_mode": "word",
+          "frame_index": 2078,
+          "painted_words": [
+            {
+              "x": 122.00500106811523,
+              "y": 952.012,
+              "key": "26:227:17",
+              "width": 52.88999938964844,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:17"
+          ],
+          "expected_word_key": "26:227:17",
+          "actual_occurrence_id": "26:227:17:16:16",
+          "expected_occurrence_id": "26:227:17:16:16"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 70666.66666666667,
+          "actual_mode": "word",
+          "frame_index": 2120,
+          "painted_words": [
+            {
+              "x": 550.605001449585,
+              "y": 1074.372,
+              "key": "26:227:18",
+              "width": 110.81999969482422,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:18"
+          ],
+          "expected_word_key": "26:227:18",
+          "actual_occurrence_id": "26:227:18:17:17",
+          "expected_occurrence_id": "26:227:18:17:17"
+        },
+        {
+          "ayah": 227,
+          "held": false,
+          "passed": true,
+          "time_ms": 73033.33333333333,
+          "actual_mode": "word",
+          "frame_index": 2191,
+          "painted_words": [
+            {
+              "x": 418.5749988555908,
+              "y": 1074.372,
+              "key": "26:227:19",
+              "width": 116.55000305175781,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "26:227:19"
+          ],
+          "expected_word_key": "26:227:19",
+          "actual_occurrence_id": "26:227:19:18:18",
+          "expected_occurrence_id": "26:227:19:18:18"
+        }
+      ],
+      "selected_font": "Amiri Quran",
+      "audio_requests": [
+        {
+          "host": "download.quranicaudio.com",
+          "bytes": 1,
+          "range": "bytes=0-0",
+          "method": "GET",
+          "status": 206,
+          "purpose": "render"
+        },
+        {
+          "host": "download.quranicaudio.com",
+          "bytes": 26511862,
+          "range": null,
+          "method": "GET",
+          "status": 200,
+          "purpose": "reference"
+        },
+        {
+          "host": "download.quranicaudio.com",
+          "bytes": 1245100,
+          "range": "bytes=25266634-26511733",
+          "method": "GET",
+          "status": 206,
+          "purpose": "render"
+        }
+      ],
+      "render_time_ms": 87351.019455,
+      "schema_version": "d7-qa-1",
+      "audio_correlation": {
+        "score": 0.9979552165002114,
+        "lag_ms": 0,
+        "method": "centered_raw_pcm_ncc_full_decode_independent_reference",
+        "passed": true,
+        "sample_rate": 16000,
+        "compared_samples": 20072,
+        "duration_tolerance_ms": 33.333333333333336,
+        "aac_padding_trimmed_ms": 12.0625,
+        "duration_difference_ms": 0,
+        "declared_audio_duration_ms": 74315.011,
+        "untrimmed_decoded_duration_ms": 74327.0625
+      },
+      "audio_seek_method": "qa_packet_index_remote_range",
+      "black_scan_frames": 2230,
+      "font_assets_local": true,
+      "video_duration_ms": 74333.333,
+      "memory_limit_bytes": 1999998976,
+      "audio_bytes_fetched": 1245101,
+      "expected_duration_ms": 74315,
+      "audio_range_supported": true,
+      "duration_tolerance_ms": 33.333333333333336,
+      "peak_worker_rss_bytes": 494555136,
+      "duration_difference_ms": 18.33299999999872,
+      "audio_source_size_bytes": 26511862,
+      "external_asset_requests": 0,
+      "highlighting_transitions": [
+        {
+          "ayah": 218,
+          "mode": "word",
+          "time_ms": 0,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 218,
+          "mode": "word",
+          "time_ms": 166.66666666666666,
+          "word_keys": [
+            "26:218:1"
+          ],
+          "occurrence_id": "26:218:1:0:0"
+        },
+        {
+          "ayah": 218,
+          "mode": "word",
+          "time_ms": 1066.6666666666667,
+          "word_keys": [
+            "26:218:2"
+          ],
+          "occurrence_id": "26:218:2:1:1"
+        },
+        {
+          "ayah": 218,
+          "mode": "word",
+          "time_ms": 1966.6666666666665,
+          "word_keys": [
+            "26:218:3"
+          ],
+          "occurrence_id": "26:218:3:2:2"
+        },
+        {
+          "ayah": 218,
+          "mode": "word",
+          "time_ms": 2600,
+          "word_keys": [
+            "26:218:4"
+          ],
+          "occurrence_id": "26:218:4:3:3"
+        },
+        {
+          "ayah": 218,
+          "mode": "word",
+          "time_ms": 4600,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 219,
+          "mode": "word",
+          "time_ms": 4766.666666666667,
+          "word_keys": [
+            "26:219:1"
+          ],
+          "occurrence_id": "26:219:1:0:0"
+        },
+        {
+          "ayah": 219,
+          "mode": "word",
+          "time_ms": 6266.666666666667,
+          "word_keys": [
+            "26:219:2"
+          ],
+          "occurrence_id": "26:219:2:1:1"
+        },
+        {
+          "ayah": 219,
+          "mode": "word",
+          "time_ms": 6400,
+          "word_keys": [
+            "26:219:3"
+          ],
+          "occurrence_id": "26:219:3:2:2"
+        },
+        {
+          "ayah": 219,
+          "mode": "word",
+          "time_ms": 9100,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 220,
+          "mode": "word",
+          "time_ms": 9433.333333333334,
+          "word_keys": [
+            "26:220:1"
+          ],
+          "occurrence_id": "26:220:1:0:0"
+        },
+        {
+          "ayah": 220,
+          "mode": "word",
+          "time_ms": 11500,
+          "word_keys": [
+            "26:220:2"
+          ],
+          "occurrence_id": "26:220:2:1:1"
+        },
+        {
+          "ayah": 220,
+          "mode": "word",
+          "time_ms": 11833.333333333334,
+          "word_keys": [
+            "26:220:3"
+          ],
+          "occurrence_id": "26:220:3:2:2"
+        },
+        {
+          "ayah": 220,
+          "mode": "word",
+          "time_ms": 12733.333333333332,
+          "word_keys": [
+            "26:220:4"
+          ],
+          "occurrence_id": "26:220:4:3:3"
+        },
+        {
+          "ayah": 220,
+          "mode": "word",
+          "time_ms": 15066.666666666666,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 221,
+          "mode": "word",
+          "time_ms": 15200,
+          "word_keys": [
+            "26:221:1"
+          ],
+          "occurrence_id": "26:221:1:0:0"
+        },
+        {
+          "ayah": 221,
+          "mode": "word",
+          "time_ms": 15666.666666666666,
+          "word_keys": [
+            "26:221:2"
+          ],
+          "occurrence_id": "26:221:2:1:1"
+        },
+        {
+          "ayah": 221,
+          "mode": "word",
+          "time_ms": 16966.666666666664,
+          "word_keys": [
+            "26:221:3"
+          ],
+          "occurrence_id": "26:221:3:2:2"
+        },
+        {
+          "ayah": 221,
+          "mode": "word",
+          "time_ms": 17633.333333333332,
+          "word_keys": [
+            "26:221:4"
+          ],
+          "occurrence_id": "26:221:4:3:3"
+        },
+        {
+          "ayah": 221,
+          "mode": "word",
+          "time_ms": 18566.666666666668,
+          "word_keys": [
+            "26:221:5"
+          ],
+          "occurrence_id": "26:221:5:4:4"
+        },
+        {
+          "ayah": 221,
+          "mode": "word",
+          "time_ms": 19400,
+          "word_keys": [
+            "26:221:6"
+          ],
+          "occurrence_id": "26:221:6:5:5"
+        },
+        {
+          "ayah": 221,
+          "mode": "word",
+          "time_ms": 21733.333333333336,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 222,
+          "mode": "word",
+          "time_ms": 21866.666666666668,
+          "word_keys": [
+            "26:222:1"
+          ],
+          "occurrence_id": "26:222:1:0:0"
+        },
+        {
+          "ayah": 222,
+          "mode": "word",
+          "time_ms": 22633.333333333332,
+          "word_keys": [
+            "26:222:2"
+          ],
+          "occurrence_id": "26:222:2:1:1"
+        },
+        {
+          "ayah": 222,
+          "mode": "word",
+          "time_ms": 23233.333333333336,
+          "word_keys": [
+            "26:222:3"
+          ],
+          "occurrence_id": "26:222:3:2:2"
+        },
+        {
+          "ayah": 222,
+          "mode": "word",
+          "time_ms": 23766.666666666664,
+          "word_keys": [
+            "26:222:4"
+          ],
+          "occurrence_id": "26:222:4:3:3"
+        },
+        {
+          "ayah": 222,
+          "mode": "word",
+          "time_ms": 24866.666666666668,
+          "word_keys": [
+            "26:222:5"
+          ],
+          "occurrence_id": "26:222:5:4:4"
+        },
+        {
+          "ayah": 222,
+          "mode": "word",
+          "time_ms": 26633.333333333332,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 223,
+          "mode": "word",
+          "time_ms": 26966.666666666664,
+          "word_keys": [
+            "26:223:1"
+          ],
+          "occurrence_id": "26:223:1:0:0"
+        },
+        {
+          "ayah": 223,
+          "mode": "word",
+          "time_ms": 27966.666666666664,
+          "word_keys": [
+            "26:223:2"
+          ],
+          "occurrence_id": "26:223:2:1:1"
+        },
+        {
+          "ayah": 223,
+          "mode": "word",
+          "time_ms": 28800,
+          "word_keys": [
+            "26:223:3"
+          ],
+          "occurrence_id": "26:223:3:2:2"
+        },
+        {
+          "ayah": 223,
+          "mode": "word",
+          "time_ms": 30100,
+          "word_keys": [
+            "26:223:4"
+          ],
+          "occurrence_id": "26:223:4:3:3"
+        },
+        {
+          "ayah": 223,
+          "mode": "word",
+          "time_ms": 32200.000000000004,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 224,
+          "mode": "word",
+          "time_ms": 32833.333333333336,
+          "word_keys": [
+            "26:224:1"
+          ],
+          "occurrence_id": "26:224:1:0:0"
+        },
+        {
+          "ayah": 224,
+          "mode": "word",
+          "time_ms": 36066.66666666667,
+          "word_keys": [
+            "26:224:2"
+          ],
+          "occurrence_id": "26:224:2:1:1"
+        },
+        {
+          "ayah": 224,
+          "mode": "word",
+          "time_ms": 37500,
+          "word_keys": [
+            "26:224:3"
+          ],
+          "occurrence_id": "26:224:3:2:2"
+        },
+        {
+          "ayah": 224,
+          "mode": "word",
+          "time_ms": 39233.333333333336,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 225,
+          "mode": "word",
+          "time_ms": 39700,
+          "word_keys": [
+            "26:225:1"
+          ],
+          "occurrence_id": "26:225:1:0:0"
+        },
+        {
+          "ayah": 225,
+          "mode": "word",
+          "time_ms": 40200,
+          "word_keys": [
+            "26:225:2"
+          ],
+          "occurrence_id": "26:225:2:1:1"
+        },
+        {
+          "ayah": 225,
+          "mode": "word",
+          "time_ms": 40666.666666666664,
+          "word_keys": [
+            "26:225:3"
+          ],
+          "occurrence_id": "26:225:3:2:2"
+        },
+        {
+          "ayah": 225,
+          "mode": "word",
+          "time_ms": 42066.66666666667,
+          "word_keys": [
+            "26:225:4"
+          ],
+          "occurrence_id": "26:225:4:3:3"
+        },
+        {
+          "ayah": 225,
+          "mode": "word",
+          "time_ms": 42500,
+          "word_keys": [
+            "26:225:5"
+          ],
+          "occurrence_id": "26:225:5:4:4"
+        },
+        {
+          "ayah": 225,
+          "mode": "word",
+          "time_ms": 43033.33333333333,
+          "word_keys": [
+            "26:225:6"
+          ],
+          "occurrence_id": "26:225:6:5:5"
+        },
+        {
+          "ayah": 225,
+          "mode": "word",
+          "time_ms": 44333.333333333336,
+          "word_keys": [
+            "26:225:7"
+          ],
+          "occurrence_id": "26:225:7:6:6"
+        },
+        {
+          "ayah": 225,
+          "mode": "word",
+          "time_ms": 46200,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 226,
+          "mode": "word",
+          "time_ms": 46533.33333333333,
+          "word_keys": [
+            "26:226:1"
+          ],
+          "occurrence_id": "26:226:1:0:0"
+        },
+        {
+          "ayah": 226,
+          "mode": "word",
+          "time_ms": 48066.66666666667,
+          "word_keys": [
+            "26:226:2"
+          ],
+          "occurrence_id": "26:226:2:1:1"
+        },
+        {
+          "ayah": 226,
+          "mode": "word",
+          "time_ms": 49366.666666666664,
+          "word_keys": [
+            "26:226:3"
+          ],
+          "occurrence_id": "26:226:3:2:2"
+        },
+        {
+          "ayah": 226,
+          "mode": "word",
+          "time_ms": 49766.666666666664,
+          "word_keys": [
+            "26:226:4"
+          ],
+          "occurrence_id": "26:226:4:3:3"
+        },
+        {
+          "ayah": 226,
+          "mode": "word",
+          "time_ms": 50100,
+          "word_keys": [
+            "26:226:5"
+          ],
+          "occurrence_id": "26:226:5:4:4"
+        },
+        {
+          "ayah": 226,
+          "mode": "word",
+          "time_ms": 52633.333333333336,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 52866.666666666664,
+          "word_keys": [
+            "26:227:1"
+          ],
+          "occurrence_id": "26:227:1:0:0"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 53400,
+          "word_keys": [
+            "26:227:2"
+          ],
+          "occurrence_id": "26:227:2:1:1"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 54333.333333333336,
+          "word_keys": [
+            "26:227:3"
+          ],
+          "occurrence_id": "26:227:3:2:2"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 55200,
+          "word_keys": [
+            "26:227:4"
+          ],
+          "occurrence_id": "26:227:4:3:3"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 55900,
+          "word_keys": [
+            "26:227:5"
+          ],
+          "occurrence_id": "26:227:5:4:4"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 57300,
+          "word_keys": [
+            "26:227:6"
+          ],
+          "occurrence_id": "26:227:6:5:5"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 58166.666666666664,
+          "word_keys": [
+            "26:227:7"
+          ],
+          "occurrence_id": "26:227:7:6:6"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 58866.666666666664,
+          "word_keys": [
+            "26:227:8"
+          ],
+          "occurrence_id": "26:227:8:7:7"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 60366.666666666664,
+          "word_keys": [
+            "26:227:9"
+          ],
+          "occurrence_id": "26:227:9:8:8"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 61866.666666666664,
+          "word_keys": [
+            "26:227:10"
+          ],
+          "occurrence_id": "26:227:10:9:9"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 62633.333333333336,
+          "word_keys": [
+            "26:227:11"
+          ],
+          "occurrence_id": "26:227:11:10:10"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 63200,
+          "word_keys": [
+            "26:227:12"
+          ],
+          "occurrence_id": "26:227:12:11:11"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 63666.666666666664,
+          "word_keys": [
+            "26:227:13"
+          ],
+          "occurrence_id": "26:227:13:12:12"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 65333.33333333333,
+          "word_keys": [
+            "26:227:14"
+          ],
+          "occurrence_id": "26:227:14:13:13"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 66566.66666666666,
+          "word_keys": [
+            "26:227:15"
+          ],
+          "occurrence_id": "26:227:15:14:14"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 67600,
+          "word_keys": [
+            "26:227:16"
+          ],
+          "occurrence_id": "26:227:16:15:15"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 68966.66666666667,
+          "word_keys": [
+            "26:227:17"
+          ],
+          "occurrence_id": "26:227:17:16:16"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 69566.66666666666,
+          "word_keys": [
+            "26:227:18"
+          ],
+          "occurrence_id": "26:227:18:17:17"
+        },
+        {
+          "ayah": 227,
+          "mode": "word",
+          "time_ms": 71766.66666666667,
+          "word_keys": [
+            "26:227:19"
+          ],
+          "occurrence_id": "26:227:19:18:18"
+        }
+      ],
+      "memory_measurement_scope": "linux_worker_and_children_sampled_rss",
+      "memory_sample_interval_ms": 100,
+      "audio_full_download_fallback": false,
+      "audio_total_qa_bytes_fetched": 27756963,
+      "audio_range_efficiency_passed": true,
+      "audio_reference_bytes_fetched": 26511862,
+      "audio_fetch_to_source_size_ratio": 0.04696392128172665,
+      "peak_worker_and_children_rss_bytes": 825987072,
+      "audio_clip_to_source_duration_ratio": 0.0448661223345175,
+      "highlighting_transition_max_error_ms": 31.66666666666424
+    },
+    "worker_cgroup": {
+      "limit_bytes": 1999998976,
+      "peak_bytes": 849743872,
+      "current_bytes": 293888000,
+      "events": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0
+      }
+    },
+    "source": "actual_queue_output_decoded_by_ffmpeg"
+  },
+  "cleanup": {
+    "id": "ff0558c5-b3ad-4109-ab25-d266cbd838b0",
+    "artifact_removed": true,
+    "qa_retained_in_database": true
+  },
+  "finished_at": "2026-10-12T01:41:46.759Z"
+}

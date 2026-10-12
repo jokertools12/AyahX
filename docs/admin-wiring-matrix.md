@@ -45,16 +45,16 @@
 | الروايات | GET `/catalog/quran/riwayat`، `quran.read`؛ PATCH `/:code`، `quran.riwayah.write` | `riwayat.is_active`؛ `publicCatalogSql` | HTTP محلي ناجح؛ تأكيد code، تعطيل الرواية يخفي تلاواتها ولا يغير النص |
 | عارض التوقيت | GET `/catalog/timings?recitation_id&surah&from&to`، `timings.read` | `ayah_timings` و`quran_words` والمدققات الحالية | لا mutation. SVG/JSON يقرآن source ms، فهرس idx_timing_ready_range وزمن 0.383–0.484ms محليًا |
 
-## D7 — render lab، قيد النشر
+## D7 — render lab، متحقق إنتاجيًا
 
-| الإجراء | الطلب والصلاحية | التخزين والمستهلك | القبول المثبت والحدود |
+|الإجراء|العقد والصلاحية|المستهلك الفعلي|الدليل والحدود|
 |---|---|---|---|
-| إنشاء مهمة QA | POST `/render-lab/jobs`، `render.test` ودور admin/super_admin | RenderLabService→catalogRenderManifest→render_jobs→RenderQueueBroker→Skia v2 | HTTP/MySQL/Redis محلي حقيقي؛202، Origin/rate/strict schema/audit،90s وتزامن1. لا واجهة عامة أو زر وهمي؛ نشر Railway والقبول عبر الطابور معلّقان |
-| قراءة المهمة | GET `/render-lab/jobs/:id`،`render.test` ودورadmin/super_admin | render_jobs وqa_report_json،إسقاط آمن للحالة والتقرير والتنزيل | قبول محلي؛لا كشف روابط المزود أو أسرار. تنزيل artifact يتبع المصادقة العامة القائمة،والتحقق الإنتاجي معلّق |
-| مشغّل SSH خاص | `dist-server/operators/renderLabCli.cjs`، `--root-operated` | الخدمة الخادمة نفسها وهوية super_admin القائمة؛ لا جلسة مستخدم مصطنعة | dry-run/create/status، وقبول owned-fixture محدود بملف ضوضاء مملوك مؤقت، بلا كتابة نص/توقيت كتالوج أو اعتماد حقوق تلاوة |
-| تعريف ومنح الصلاحية | migration007 ثم activateRenderV2Access | permissions ثم admin_permissions للدورين فقط | DDL إنتاجية PASS، تعريف واحد/صفر grant؛ التفعيل معلّق حتى SUCCESS للكود الجديد. لا startup seed أو تعديل حسابات |
+|إنشاء QA|POST /render-lab/jobs،render.test ودورadmin/super_admin|RenderLabService→manifestv2→render_jobs→BullMQ→Skia|HTTP محلي حقيقي202 معOrigin/rate/schema/audit،و9فيديوهاتproductionعبرCLI؛90s وتزامن1|
+|قراءة الحالة|GET /render-lab/jobs/:id،نفسالصلاحية|render_jobs وqa_report_json|مقاييس حقيقية؛anonymousproduction401/no-store؛لا روابط مزود أوأسرار|
+|مشغّلSSH|renderLabCli.cjs --root-operated|الخدمة نفسها وهويةsuper_adminالقائمة|dry-run/create/status وownedfixtureمحدود؛لاجلسةمصطنعةأوكتابةكتالوج. انتظارداخلجلسةواحدةواستئناففحصببصمتين|
+|تعريف ومنح|007 ثمactivateRenderV2Access|permissions/admin_permissions|تعريف ثمgrantللدورينبعد4SUCCESS،بصماتالحساباتثابتة؛لاstartupseed أوتعديلuser_roles|
 
-مرجع القبول [RBAC المحلي](data/d7-render-lab-rbac-proof.json) و[تقرير D7 المرحلي](data/render-verification-report.md). quran_catalog_v2 باقٍ OFF؛ لا يعني تجاوز العلم داخل أداة QA تجاوز الحقوق أو صحة التوقيت. لا D5/D8/A2b.
+[RBACHTTP الحقيقي محليًا](data/d7-render-lab-rbac-proof.json)،[مصفوفةproduction](data/d7-production-matrix-proof.json)،[التفعيل](data/d7-render-lab-activation-proof.json)،[التقرير](data/render-verification-report.md). quran_catalog_v2=OFF. قصRangeفيQAيستخدمmetadataمنالمرجعالكامل؛ليس مسارًاعامًامستقلًا. لاواجهةجديدةأوD5/D8/A2b.
 
 ## الإعدادات ذات المستهلك العام
 

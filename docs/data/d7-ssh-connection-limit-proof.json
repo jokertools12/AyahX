@@ -1,0 +1,13 @@
+{
+  "scope": "ROOT_OPERATOR_TRANSPORT_DIAGNOSTIC",
+  "observed_code": "SSH_CONNECTION_LIMIT",
+  "observed_message": "Maximum SSH connections reached for this service.",
+  "diagnostic_sha256": "01c0d2e761ca42580f5c4da2c33f64f74cc0a18d8bc473417a181983fbc98518",
+  "affected_job_id": "b75a1da9-6481-4dc8-a1a9-3d0ece415957",
+  "job_status": "succeeded",
+  "fix": "Single SSH session carrying finite gzip/base64 stdin; SHA-256 verified before executing the operator.",
+  "service_restarted": false,
+  "resource_configuration_changed": false,
+  "recovery_proof": "d7-ssh-recovery-proof.json",
+  "same_job_inspected_and_cleaned": true
+}

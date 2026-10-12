@@ -1,0 +1,21 @@
+{
+  "id": "mp3quran-short-complete",
+  "expected": "SUCCESS",
+  "scope": "OPERATOR_DIAGNOSTIC_ONLY",
+  "started_at": "2026-10-12T01:22:34.597Z",
+  "passed": false,
+  "dry_run": {
+    "dry_run": true,
+    "schemaVersion": "2.0.0",
+    "durationMs": 16185,
+    "audioPlanHash": "bd933826823428727eccab8155c0e468f2ca25b1e0e34f51e8a085c1ecd2755a",
+    "timingVersionHash": "43a8d98f5db66159557553b934c2384416e4303f94f1fc67a2e5f4a5ce6e40ae",
+    "warnings": [],
+    "production_writes": 0
+  },
+  "job_id": "b75a1da9-6481-4dc8-a1a9-3d0ece415957",
+  "status": "succeeded",
+  "error_code": null,
+  "failure": "D7_OPERATOR_SSH_EXIT_1",
+  "finished_at": "2026-10-12T01:23:35.302Z"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "real-incomplete-range",
+  "scope": "OPERATOR_DIAGNOSTIC_ONLY",
+  "started_at": "2026-10-12T01:48:04.213Z",
+  "finished_at": "2026-10-12T01:48:06.613Z",
+  "job_created": false,
+  "production_writes": 0,
+  "passed": false,
+  "cause": "SSH_CONNECTION_LIMIT",
+  "diagnostic_sha256": "01c0d2e761ca42580f5c4da2c33f64f74cc0a18d8bc473417a181983fbc98518",
+  "change": "Poll statuses inside one SSH session instead of one SSH session per status request."
+}

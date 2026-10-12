@@ -58,4 +58,4 @@ async function main(){
   console.log(JSON.stringify({id,qa,worker_cgroup:cgroup,source:'actual_queue_output_decoded_by_ffmpeg',png_base64:canvas.toBuffer('image/png').toString('base64')}));
  }finally{await fs.promises.rm(scratch,{recursive:true,force:true});}
 }
-void main().catch(error=>{console.error(JSON.stringify({error:'D7_ARTIFACT_OPERATOR_FAILED',assertion:error instanceof assert.AssertionError?error.message.split('\n')[0]:null}));process.exitCode=1;}).finally(()=>pool.end());
+void main().catch(error=>{const code=error&&typeof error==='object'&&'code'in error?String(error.code):null;console.error(JSON.stringify({error:'D7_ARTIFACT_OPERATOR_FAILED',assertion:error instanceof assert.AssertionError?error.message.split('\n')[0]:null,cause_code:error instanceof Error&&/^[A-Z0-9_]+$/u.test(error.message)?error.message:code&&/^[A-Z0-9_]+$/u.test(code)?code:null}));process.exitCode=1;}).finally(()=>pool.end());
