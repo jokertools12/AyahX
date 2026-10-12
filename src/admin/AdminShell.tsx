@@ -46,7 +46,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     <Link to="/admin" className="admin-brand" aria-label={t('AyahX — ابدأ من هنا', 'AyahX — start here')}><BrandLogo variant={collapsed && !drawer ? 'symbol' : 'horizontal'} className={collapsed && !drawer ? 'w-10' : 'w-40'} decorative priority /></Link>
     {adminGroups.map(group => {
       const links = items.filter(item => item.group === group.id); if (!links.length) return null;
-      return <section key={group.id} className="admin-nav-group" aria-label={t(group.ar, group.en)}>{(!collapsed || drawer) && <h2>{t(group.ar, group.en)}</h2>}{links.map(item => <NavLink end={item.path === '/admin'} key={item.path} to={item.path} onClick={() => setMobile(false)} title={t(item.ar, item.en)} aria-label={t(item.ar, item.en)}><item.icon size={20} aria-hidden="true" />{(!collapsed || drawer) && <span>{t(item.ar, item.en)}</span>}</NavLink>)}</section>;
+      return <section key={group.id} className="admin-nav-group" aria-label={t(group.ar, group.en)}>{(!collapsed || drawer) && <p className="admin-nav-label admin-secondary">{t(group.ar, group.en)}</p>}{links.map(item => <NavLink end={item.path === '/admin'} key={item.path} to={item.path} onClick={() => setMobile(false)} title={t(item.ar, item.en)} aria-label={t(item.ar, item.en)}><item.icon size={20} aria-hidden="true" />{(!collapsed || drawer) && <span>{t(item.ar, item.en)}</span>}</NavLink>)}</section>;
     })}
     {user?.environment === 'local' && user.roles.includes('super_admin') && <NavLink to="/admin/_kit" title={t('مكتبة المكونات', 'UI kit')}>{collapsed && !drawer ? 'UI' : t('مكتبة المكونات', 'UI kit')}</NavLink>}
   </nav>;
