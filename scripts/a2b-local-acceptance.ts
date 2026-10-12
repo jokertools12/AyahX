@@ -104,8 +104,11 @@ export async function runAdminOwnerLocalAcceptance(pool:Pool,redis:Redis,env:Nod
     const noConfirm=await request('/reviews/'+ids.license+'/decision','POST',{status:'approved',notes:'local',decision:{license_status:'permitted',rights_evidence_ref:'local-only'}});assert.equal(noConfirm.status,422);
     await mutate('/reviews/'+ids.license+'/decision','POST',{status:'approved',notes:'LOCAL_FIXTURE_ONLY_NOT_LEGAL_APPROVAL',confirmation:prefix,decision:{license_status:'permitted',rights_evidence_ref:'local-fixture-only'}});
     pass('safe_bulk_excludes_voice_license_and_typed_license_confirmation');
-    for(const route of ['/flags/quran_catalog_v2','/settings/quran_catalog_v2']){
-      const response=await request(route,'PATCH',{value:true,confirmation:'quran_catalog_v2'});assert.equal(response.status,409);assert.ok(['PUBLIC_FLOW_V2_NOT_READY','ADMIN_SETTING_READ_ONLY'].includes(String(response.body?.code)));
+    for(const [route,body,expectedCode] of [
+      ['/flags/quran_catalog_v2',{value:true,confirmation:'quran_catalog_v2'},'PUBLIC_FLOW_V2_NOT_READY'],
+      ['/settings/quran_catalog_v2',{value:true},'ADMIN_SETTING_READ_ONLY'],
+    ] as const){
+      const response=await request(route,'PATCH',body);assert.equal(response.status,409,`${route}:${response.body?.code}`);assert.equal(response.body?.code,expectedCode,`${route}: hard public gate must reject`);
     }
     const launch=await request('/launch-readiness');assert.equal(launch.status,200);assert.equal(launch.data.public_flow_v2_ready,false);assert.equal(launch.data.can_open,false);pass('every_existing_settings_route_rejects_public_opening');
     await mutate('/preferences','PATCH',{density:'compact',font_scale:1.1});assert.deepEqual(await owner.preferences(ids.user),{density:'compact',font_scale:1.1});pass('preferences_real_per_user_persistence');
