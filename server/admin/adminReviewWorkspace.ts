@@ -54,6 +54,9 @@ export class AdminReviewWorkspace {
     requireCatalogPermission(actor, 'reviews.decide', true);
     const [row] = await this.db.read('SELECT type,COALESCE(target_subject_id,subject_id) subject_id FROM human_review_items WHERE id=?', [id]);
     if (!row) throw new CatalogError('REVIEW_NOT_FOUND', 404);
+    // The legacy visibility alias also grants recitations.manage. Changing
+    // a label requires the independent presentation-write permission.
+    if (row.type === 'label_review') requireCatalogPermission(actor, 'recitations.write', true);
     if (row.type === 'provider_license' && input.status !== 'deferred') {
       requireCatalogPermission(actor, 'providers.license.review', true);
       if (actor.roleSlug !== 'super_admin') throw new CatalogError('CATALOG_PERMISSION_DENIED', 403);
@@ -71,7 +74,7 @@ export class AdminReviewWorkspace {
       if (!['approved', 'rejected'].includes(String(row.status))) throw new CatalogError('REVIEW_UNDO_NOT_DECIDED', 409);
       if (row.type === 'provider_license') { requireCatalogPermission(actor, 'providers.license.review', true); if (actor.roleSlug !== 'super_admin') throw new CatalogError('CATALOG_PERMISSION_DENIED', 403); }
       if (row.type === 'voice_confirmation') requireCatalogPermission(actor, 'recitations.voice.review', true);
-      if (row.type === 'label_review') requireCatalogPermission(actor, 'recitations.manage', true);
+      if (row.type === 'label_review') requireCatalogPermission(actor, 'recitations.write', true);
       if (['youtube_rights','storage_rights'].includes(String(row.type))) requireCatalogPermission(actor,'recitations.sources.manage',true);
       const [existing] = await tx.read('SELECT id,status FROM human_review_items WHERE supersedes_id=? FOR UPDATE', [id]);
       if (existing) {

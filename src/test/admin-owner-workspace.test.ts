@@ -25,6 +25,14 @@ describe('owner review safety', () => {
     await expect(new AdminReviewWorkspace(db).decide(actor, 'review', { status: 'approved', notes: 'human note' })).rejects.toThrow('CATALOG_PERMISSION_DENIED');
     expect(db.execute).not.toHaveBeenCalled();
   });
+  it('cannot change or reopen a label through visibility permission and its broad legacy alias',async()=>{
+    const visibilityOnly={...actor,permissions:new Set(['reviews.decide','recitations.visibility','recitations.manage'])};
+    const db=database(async sql=>[{id:'label',type:'label_review',subject_id:'recitation',subject_type:'recitation',status:sql.startsWith('SELECT *')?'approved':'pending'}]);
+    const reviews=new AdminReviewWorkspace(db);
+    await expect(reviews.decide(visibilityOnly,'label',{status:'approved',notes:'rename',decision:{display_label_ar:'اسم جديد'}})).rejects.toThrow('CATALOG_PERMISSION_DENIED');
+    await expect(reviews.undo(visibilityOnly,'label','reconsider label')).rejects.toThrow('CATALOG_PERMISSION_DENIED');
+    expect(db.execute).not.toHaveBeenCalled();
+  });
   it('requires typed provider confirmation before changing any state', async () => {
     const db = database(async sql => sql.includes('SELECT code') ? [{ code: 'provider' }] : [{ type: 'provider_license', subject_id: 'provider' }]);
     await expect(new AdminReviewWorkspace(db).decide({ ...actor, roleSlug: 'super_admin', permissions: new Set([...actor.permissions, 'providers.license.review']) }, 'review', { status: 'rejected', notes: 'note', confirmation: 'wrong' })).rejects.toThrow('CONFIRMATION_MISMATCH');
