@@ -3,6 +3,7 @@ import { isIP } from 'node:net';
 import https from 'node:https';
 import type { TLSSocket } from 'node:tls';
 import type { IncomingMessage } from 'node:http';
+import type { Readable } from 'node:stream';
 import { createHash } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { pipeline } from 'node:stream/promises';
@@ -93,6 +94,9 @@ export class CatalogAudioSource implements AdminSourceValidator {
     const {response}=await this.request(raw,hosts,'GET');
     const type=String(response.headers['content-type']??'');
     if(response.statusCode!==200||!/^(?:audio\/|application\/octet-stream)/iu.test(type)){response.destroy();throw new CatalogError('AUDIO_UNAVAILABLE',502);}
+    return this.streamFingerprint(response);
+  }
+  private async streamFingerprint(response: Readable): Promise<string>{
     // The decoder receives only the validated stream; playlists cannot open network/local-file protocols.
     const child=spawn(getFfmpegBinary(),['-nostdin','-v','error','-threads','1','-protocol_whitelist','pipe','-i','pipe:0','-map','0:a:0','-vn','-ac','1','-ar','16000','-f','s16le','pipe:1'],{stdio:['pipe','pipe','pipe']});
     const diagnostic=createHash('sha256');let diagnosticBytes=0;child.stderr.on('data',(bytes:Buffer)=>{diagnosticBytes+=bytes.length;diagnostic.update(bytes);});const hash=createHash('sha256');let input=0,output=0;
@@ -108,6 +112,12 @@ export class CatalogAudioSource implements AdminSourceValidator {
     const primarySha256=await this.decodedFingerprint(primaryUrl,hosts);const alternateSha256=await this.decodedFingerprint(alternateUrl,hosts);
     if(primarySha256!==alternateSha256)throw new CatalogError('ALTERNATE_RECORDING_MISMATCH',422);
     return {primaryUrl,primarySha256,alternateSha256,verifiedAt:new Date().toISOString(),method:'decoded_audio_sha256'};
+  }
+  /** Reference is an authenticated verified R2 object, never a YouTube download or signed URL. */
+  async verifySameRecordingStream(reference:Readable,candidateUrl:string,hosts:string[]):Promise<{primarySha256:string;alternateSha256:string;verifiedAt:string;method:'decoded_audio_sha256'}>{
+    const primarySha256=await this.streamFingerprint(reference),alternateSha256=await this.decodedFingerprint(candidateUrl,hosts);
+    if(primarySha256!==alternateSha256)throw new CatalogError('ALTERNATE_RECORDING_MISMATCH',422);
+    return {primarySha256,alternateSha256,verifiedAt:new Date().toISOString(),method:'decoded_audio_sha256'};
   }
   async verifyRecordingFingerprint(url:string,hosts:string[],expectedSha256:string):Promise<void>{
     if(!/^[a-f0-9]{64}$/u.test(expectedSha256)||(await this.decodedFingerprint(url,hosts))!==expectedSha256)throw new CatalogError('ALTERNATE_RECORDING_MISMATCH',422);

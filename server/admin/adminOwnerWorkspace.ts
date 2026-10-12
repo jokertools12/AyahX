@@ -1,15 +1,18 @@
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import type { AdminPreferences, LaunchReadiness, ListeningRoom, ProviderDigest, WorkspaceSummary } from '../../shared/admin/batch5';
+import { z } from 'zod';
+import type { AdminPreferences, LaunchPreview,LaunchReadiness, ListeningRoom, ProviderDigest, WorkspaceSummary } from '../../shared/admin/batch5';
 import { appendCatalogAudit, type CatalogActor } from '../services/catalogAudit';
 import { CatalogError, isPubliclyVisible, publicVisibilityCodes, type CatalogDatabase, type CatalogRow, type PublicRecitation } from '../services/catalogContracts';
 import { readCatalogSettings } from '../services/recitationCatalogService';
 import { auditionPreview } from '../services/catalogAuditionSamples';
 import { parsedJson, redactCatalogEvidence, safeCatalogUrl } from '../services/adminCatalogUtilities';
 import { AdminReviewWorkspace } from './adminReviewWorkspace';
+import type { LicensedChapterGate } from '../services/catalogLicensedReadiness';
 
 export const PUBLIC_FLOW_V2_READY = false;
 export const PUBLIC_FLOW_BLOCKED_REASON = 'الواجهة الجديدة (D8) لم تُبنَ بعد؛ يبقى الكتالوج مغلقًا.';
+export const ProjectRoadmapSchema=z.object({stages:z.array(z.object({id:z.string().min(1),title_ar:z.string().min(1),title_en:z.string().optional(),status:z.enum(['done','in_progress','next','blocked']),summary_ar:z.string(),blockers_ar:z.array(z.string()),evidence:z.array(z.string()).optional()}).passthrough()).min(1),visitor_state:z.unknown(),owner_actions:z.unknown(),public_flow_v2_ready:z.literal(false)}).passthrough();
 export function digestProvider(markdown: string, code: string): ProviderDigest {
   const aliases: Record<string, string> = { mp3quran: 'MP3Quran', quranicaudio: 'QuranicAudio', tarteel: 'Tarteel/QUL', way2quran: 'Way2Quran', tvquran: 'TVQuran', archive: 'Internet Archive', google_drive: 'Google Drive', youtube: 'YouTube' };
   const name = aliases[code] ?? code;
@@ -22,7 +25,7 @@ export function digestProvider(markdown: string, code: string): ProviderDigest {
 }
 export class AdminOwnerWorkspace {
   readonly reviews: AdminReviewWorkspace;
-  constructor(private readonly db: CatalogDatabase, private readonly root = process.cwd()) { this.reviews = new AdminReviewWorkspace(db); }
+  constructor(private readonly db: CatalogDatabase, private readonly root = process.cwd(),private readonly licensed?:LicensedChapterGate) { this.reviews = new AdminReviewWorkspace(db); }
   async preferences(userId: string): Promise<AdminPreferences> {
     const [row] = await this.db.read('SELECT density,font_scale FROM admin_preferences WHERE user_id=?', [userId]);
     return { density: row?.density === 'compact' ? 'compact' : 'comfortable', font_scale: [1, 1.1, 1.2].includes(Number(row?.font_scale)) ? Number(row.font_scale) as AdminPreferences['font_scale'] : 1 };
@@ -48,13 +51,20 @@ export class AdminOwnerWorkspace {
       { code: 'licensed_files', title: 'توفير ملفات مرخّصة لتلاوات YouTube', count: rows.filter(row => row.channel === 'youtube' && Number(row.licensed_chapters) === 0).length, owner: 'أنت' },
       { code: 'public_flow', title: 'بناء واجهة الاختيار الجديدة (D8)', count: 1, owner: 'فريق التطوير' },
     ].map(check => ({ ...check, complete: check.count === 0 }));
-    const preview = rows.map(row => {
+    const preview:LaunchPreview[]=[];
+    for(const row of rows){
       const reasons = publicVisibilityCodes(row as unknown as PublicRecitation, true, settings.voiceGatePolicy);
-      if (!Number(row.complete_chapters)) reasons.push('NO_AVAILABLE_CHAPTERS');
-      if ((row.channel === 'youtube' || row.licensed_publication_details && !Number(row.offset_verified)) && !Number(row.licensed_chapters)) reasons.push('LICENSED_SOURCE_NOT_READY');
+      const chapterPredicate=settings.availabilityMode==='complete_only'?"c.availability_state='complete'":"c.run_count>0 AND c.availability_state IN ('complete','near_complete','partial')";
+      const chapters=await this.db.read(`SELECT c.surah FROM recitation_chapters c WHERE c.recitation_id=? AND COALESCE(c.is_enabled,1)=1 AND ${chapterPredicate}`,[row.id]);
+      if(!chapters.length)reasons.push('NO_AVAILABLE_CHAPTERS');
+      if(row.channel==='youtube'||row.licensed_publication_details&&!Number(row.offset_verified)){
+        let licensedReady=false;
+        if(this.licensed&&Number(row.licensed_chapters))for(const chapter of chapters)if(await this.licensed.isChapterReady(String(row.id),Number(chapter.surah),settings.availabilityMode==='complete_only')){licensedReady=true;break;}
+        if(!licensedReady)reasons.push('LICENSED_SOURCE_NOT_READY');
+      }
       const visible = isPubliclyVisible(row as unknown as PublicRecitation, true, settings.voiceGatePolicy) && reasons.length === 0;
-      return { id: String(row.id), slug: String(row.slug), reciter_name_ar: String(row.reciter_name_ar), display_label_ar: row.display_label_ar === null ? null : String(row.display_label_ar), is_visible: visible, reasons };
-    });
+      preview.push({ id: String(row.id), slug: String(row.slug), reciter_name_ar: String(row.reciter_name_ar), display_label_ar: row.display_label_ar === null ? null : String(row.display_label_ar), is_visible: visible, reasons });
+    }
     const completed = checks.filter(check => check.complete).length;
     return { completed, total: checks.length, percent: Math.round(completed / checks.length * 100), checks, catalog_enabled: settings.enabled, public_flow_v2_ready: false, can_open: false, blocked_reason: PUBLIC_FLOW_BLOCKED_REASON, preview };
   }
@@ -66,8 +76,9 @@ export class AdminOwnerWorkspace {
   async project(): Promise<CatalogRow> {
     const [roadmap, guide_markdown] = await Promise.all([readFile(resolve(this.root, 'docs/roadmap.json'), 'utf8'), readFile(resolve(this.root, 'docs/admin-guide.ar.md'), 'utf8')]);
     let parsed: unknown; try { parsed = JSON.parse(roadmap); } catch { throw new CatalogError('PROJECT_ROADMAP_INVALID', 503); }
-    if (!parsed || typeof parsed !== 'object') throw new CatalogError('PROJECT_ROADMAP_INVALID', 503);
-    return { roadmap: parsed, guide_markdown };
+    const valid=ProjectRoadmapSchema.safeParse(parsed);
+    if (!valid.success) throw new CatalogError('PROJECT_ROADMAP_INVALID', 503);
+    return { roadmap: valid.data, guide_markdown };
   }
   async listening(id: string): Promise<ListeningRoom> {
     const [recitation] = await this.db.read('SELECT r.id,r.slug,r.reciter_id,r.display_label_ar,r.display_label_en,r.style,r.voice_identity_status,r.voice_auto_evidence,r.verification_details,r.offset_verified,r.verification_status,e.name_ar reciter_name_ar,p.code provider,p.host_allowlist FROM recitations r JOIN reciters e ON e.id=r.reciter_id JOIN audio_providers p ON p.id=r.provider_id WHERE r.id=?', [id]);

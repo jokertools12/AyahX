@@ -22,7 +22,7 @@ export class CatalogStorageAdminService {
   }
   private spec(row: CatalogRow): AudioObjectSpec { return { objectKey: String(row.object_key), sha256: String(row.sha256), sizeBytes: Number(row.size_bytes), contentType: String(row.content_type) }; }
   private async rights(tx: CatalogTx, reference: string, recitationId: string): Promise<void> {
-    const [review] = await tx.read("SELECT status,decided_by,type,subject_type,subject_id FROM human_review_items WHERE id=?", [reference]);
+    const [review] = await tx.read("SELECT h.status,h.decided_by,h.type,COALESCE(h.target_subject_type,h.subject_type) subject_type,COALESCE(h.target_subject_id,h.subject_id) subject_id FROM human_review_items h WHERE h.id=? AND NOT EXISTS(SELECT 1 FROM human_review_items newer WHERE newer.supersedes_id=h.id)", [reference]);
     if (!review || review.status !== 'approved' || !review.decided_by || !['storage_rights', 'youtube_rights'].includes(String(review.type)) || review.subject_type !== 'recitation' || review.subject_id !== recitationId) throw new CatalogError('LICENSED_RIGHTS_NOT_APPROVED', 409);
   }
   async beginUpload(actor: CatalogActor, input: BeginLicensedUpload): Promise<LicensedUploadSession> {
@@ -78,6 +78,10 @@ export class CatalogStorageAdminService {
     try { result = await verifyLicensedAudio(this.storage, { spec: this.spec(row), recitationId: String(row.recitation_id), surah: Number(row.surah), timings, scratchRoot: this.scratchRoot }, this.offset); }
     catch (error) {
       if (!(error instanceof CatalogError)) throw error;
+      if(error.code==='LICENSED_OFFSET_REFERENCE_UNAVAILABLE'){
+        await this.db.transaction(async tx=>{const current=await this.object(tx,id,true);if(current.upload_status!=='uploaded')throw new CatalogError('STORAGE_UPLOAD_STATE_CHANGED',409);await tx.execute('UPDATE storage_objects SET rejection_reason=?,verification_evidence=? WHERE id=?',[error.code,JSON.stringify({sha256:'passed',ffprobe:'passed',offset:'needs_review',reason:error.code}),id]);await appendCatalogAudit(tx,actor,'storage.offset_review_required','storage_object',id,{upload_status:'uploaded'},{upload_status:'uploaded',reason:error.code});});
+        throw error;
+      }
       await this.db.transaction(async tx => { const current = await this.object(tx, id, true); if (current.upload_status !== 'uploaded') throw new CatalogError('STORAGE_UPLOAD_STATE_CHANGED', 409); await tx.execute("UPDATE storage_objects SET upload_status='rejected',rejection_reason=? WHERE id=?", [error.code, id]); await appendCatalogAudit(tx, actor, 'storage.verify_rejected', 'storage_object', id, { upload_status: 'uploaded' }, { upload_status: 'rejected', reason: error.code }); });
       throw error;
     }
@@ -85,7 +89,7 @@ export class CatalogStorageAdminService {
       const current = await this.object(tx, id, true); if (current.upload_status !== 'uploaded' || current.sha256 !== result.sha256 || current.recitation_id !== row.recitation_id || Number(current.surah) !== Number(row.surah)) throw new CatalogError('STORAGE_UPLOAD_STATE_CHANGED', 409);
       await this.rights(tx, String(row.rights_ref), String(row.recitation_id));
       if (result.offset.method === 'v2') {
-        const [review] = await tx.read("SELECT id FROM human_review_items WHERE id=? AND type='offset_exception' AND status='approved' AND decided_by IS NOT NULL AND subject_type='recitation' AND subject_id=? FOR UPDATE", [result.offset.v2Acceptance!.humanReviewId, row.recitation_id]);
+        const [review] = await tx.read("SELECT h.id FROM human_review_items h WHERE h.id=? AND h.type='offset_exception' AND h.status='approved' AND h.decided_by IS NOT NULL AND COALESCE(h.target_subject_type,h.subject_type)='recitation' AND COALESCE(h.target_subject_id,h.subject_id)=? AND NOT EXISTS(SELECT 1 FROM human_review_items newer WHERE newer.supersedes_id=h.id) FOR UPDATE", [result.offset.v2Acceptance!.humanReviewId, row.recitation_id]);
         if (!review) throw new CatalogError('LICENSED_V2_REQUIRES_HUMAN_ACCEPTANCE', 409);
       }
       await tx.execute("UPDATE storage_objects SET upload_status='verified',verified_at=UTC_TIMESTAMP(3),duration_ms=?,sample_rate=?,bitrate=?,channels=?,codec=?,content_type=?,verification_evidence=?,rejection_reason=NULL WHERE id=?", [Math.round(result.durationMs), result.sampleRate, result.bitrate, result.channels, result.codec, result.contentType, JSON.stringify({ offset: result.offset, warnings: result.warnings }), id]);

@@ -45,6 +45,7 @@ export class AdminSettingsService {
    const row=rows.find(value=>value.key_name===def.key),raw=row?String(row.value_text):this.env[def.key],secret=def.isSecret||Number(row?.is_secret)===1;
    let value:unknown=def.default, diagnostic:string|undefined;
    if(raw!==undefined&&!secret){try{value=parseSettingValue(def,raw);if(!def.schema.safeParse(value).success)diagnostic='STORED_VALUE_INVALID';}catch{value=raw;diagnostic='STORED_VALUE_INVALID';}}
+   if(def.key==='public_flow_v2_ready')value=false;
    const {schema:_,flag:__,...publicDef}=def;
    return {...publicDef,value:secret?null:value,isSecret:secret,isSet:Boolean(raw),masked:secret&&Boolean(raw)?'••••••••':null,readOnly:Boolean(def.readOnly),diagnostic,updatedAt:row?.updated_at??null};
   });

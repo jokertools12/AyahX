@@ -1,4 +1,5 @@
 import type { ZodType } from 'zod';
+import type { Request, Response } from 'express';
 import type { CatalogActor } from '../services/catalogAudit';
 import type { AdminPermission, AdminRole } from './adminPermissions';
 export interface AdminIdentity { id: string; email: string; displayName: string | null; roles: AdminRole[]; permissions: AdminPermission[] }
@@ -13,6 +14,8 @@ export interface AdminEndpointDefinition {
   responseStatus?: 202;
   body?: ZodType; query?: ZodType;
   handler(ctx: AdminRequestContext): Promise<{ data: unknown; meta?: Record<string, unknown> }>;
+  /** GET-only binary response; authentication, permission, Origin and rate checks run first. */
+  respond?: (ctx: AdminRequestContext, req: Request, res: Response) => Promise<void>;
 }
 export type AdminRegister = (definition: AdminEndpointDefinition) => void;
 export class AdminError extends Error {

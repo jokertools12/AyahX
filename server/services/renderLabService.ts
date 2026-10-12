@@ -34,8 +34,9 @@ export class RenderLabService{
   }
   async get(actor:CatalogActor,id:string):Promise<CatalogRow>{
     requireRenderTester(actor);if(!/^[a-f0-9-]{36}$/u.test(id))throw new CatalogError('RENDER_LAB_JOB_NOT_FOUND',404);
-    const [row]=await this.db.read("SELECT id,status,progress,stage,error_code,recitation_id,audio_plan_hash,timing_version_hash,audio_mode_used,fallback_used,audio_bytes_fetched,audio_provider_code,qa_report_json,duration_seconds,output_size_bytes,created_at,completed_at,(output_path IS NOT NULL) artifact_available FROM render_jobs WHERE id=? AND JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0'",[id]);
+    const [row]=await this.db.read("SELECT id,status,progress,stage,error_code,recitation_id,audio_plan_hash,timing_version_hash,audio_mode_used,fallback_used,audio_bytes_fetched,audio_provider_code,qa_report_json,duration_seconds,output_size_bytes,created_at,completed_at,expires_at,(output_path IS NOT NULL) artifact_available FROM render_jobs WHERE id=? AND JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0'",[id]);
     if(!row)throw new CatalogError('RENDER_LAB_JOB_NOT_FOUND',404);
-    return {...row,qa_report_json:redactAdminAudit(parsedJson(row.qa_report_json)),artifact:row.status==='succeeded'&&Number(row.artifact_available)===1?{downloadPath:`/api/render-jobs/${id}/download`,requiresUserAuthentication:true}:null};
+    const qa=redactAdminAudit(parsedJson(row.qa_report_json));
+    return {...row,qa_report_json:qa,quality_summary:{duration_ms:row.duration_seconds===null?null:Math.round(Number(row.duration_seconds)*1000),audio_sync:qa??null,highlight:qa??null,audio_bytes_fetched:row.audio_bytes_fetched},artifact:row.status==='succeeded'&&Number(row.artifact_available)===1&&row.expires_at&&new Date(String(row.expires_at)).getTime()>Date.now()?{playPath:`/api/admin/render-lab/jobs/${id}/media`,requiresAdminAuthentication:true}:null};
   }
 }

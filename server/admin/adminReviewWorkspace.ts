@@ -72,8 +72,12 @@ export class AdminReviewWorkspace {
       if (row.type === 'provider_license') { requireCatalogPermission(actor, 'providers.license.review', true); if (actor.roleSlug !== 'super_admin') throw new CatalogError('CATALOG_PERMISSION_DENIED', 403); }
       if (row.type === 'voice_confirmation') requireCatalogPermission(actor, 'recitations.voice.review', true);
       if (row.type === 'label_review') requireCatalogPermission(actor, 'recitations.manage', true);
-      const [existing] = await tx.read("SELECT id FROM human_review_items WHERE supersedes_id=? AND status IN ('pending','deferred') FOR UPDATE", [id]);
-      if (existing) return { id: String(existing.id) };
+      if (['youtube_rights','storage_rights'].includes(String(row.type))) requireCatalogPermission(actor,'recitations.sources.manage',true);
+      const [existing] = await tx.read('SELECT id,status FROM human_review_items WHERE supersedes_id=? FOR UPDATE', [id]);
+      if (existing) {
+        if (['pending','deferred'].includes(String(existing.status))) return { id: String(existing.id) };
+        throw new CatalogError('REVIEW_SUPERSEDED',409);
+      }
       const newId = randomUUID(), targetType = row.target_subject_type ?? row.subject_type, targetId = row.target_subject_id ?? row.subject_id;
       const evidence = { previous_review_id: id, previous_decision: parsedJson(row.decision) ?? null, previous_status: row.status, reason: notes, original_evidence: parsedJson(row.evidence) ?? null };
       validateReviewEvidence(evidence);
@@ -83,6 +87,9 @@ export class AdminReviewWorkspace {
         await tx.execute("UPDATE recitations SET voice_identity_status='unverified',voice_confirmed_by=NULL,voice_confirmed_at=NULL,is_public=0 WHERE id=?", [targetId]);
       } else if (row.type === 'provider_license') await tx.execute("UPDATE audio_providers SET license_status='unreviewed' WHERE id=?", [targetId]);
       else if (row.type === 'label_review') await tx.execute('UPDATE recitations SET needs_label_review=1 WHERE id=?', [targetId]);
+      else if (row.type === 'youtube_rights') {
+        await tx.execute("UPDATE recitation_youtube_sources SET rights_status='unknown' WHERE recitation_id=?",[targetId]);
+      }
       await appendCatalogAudit(tx, actor, 'review.reopened', 'human_review_item', newId, null, { supersedes_id: id, type: row.type, subject_type: targetType, subject_id: targetId, notes, status: 'pending' });
       return { id: newId };
     });

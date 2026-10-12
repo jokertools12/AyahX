@@ -103,6 +103,12 @@ export class HumanReviewService {
         const reference=input.decision?.rights_evidence_ref;
         if(!['owner_permission','cc_licensed','own_content'].includes(String(input.decision?.rights_status))||typeof reference!=='string'||!reference.trim()||reference.length>2000)throw new CatalogError('RIGHTS_EVIDENCE_REQUIRED',422);
       }
+      if(row.type==='youtube_rights'){
+        if(row.subject_type!=='recitation')throw new CatalogError('REVIEW_SUBJECT_INVALID',422);
+        const rights=input.status==='approved'?String(input.decision!.rights_status):'unknown',reference=String(input.decision?.rights_evidence_ref??'');
+        await tx.execute('UPDATE recitation_youtube_sources SET rights_status=?,rights_evidence_url=?,rights_evidence_note=? WHERE recitation_id=?',[rights,/^https:\/\//u.test(reference)?reference:null,input.notes,row.subject_id]);
+        await appendCatalogAudit(tx,actor,'recitation.youtube_rights','recitation',String(row.subject_id),null,{rights_status:rights,rights_evidence_ref:reference||null,notes:input.notes,review_item:row.id});
+      }
     }
     // All other approvals record a human decision only. No hidden timing, rights,
     // storage, basmala or catalog mutation occurs without the dedicated service.

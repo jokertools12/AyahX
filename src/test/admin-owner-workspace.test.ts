@@ -5,6 +5,10 @@ import { AdminSettingsService } from '../../server/admin/adminSettingsRegistry';
 import { adminReviewWorkspaceMigrationSql, downAdminReviewWorkspace } from '../../server/db/migrations/008_addAdminReviewWorkspace';
 import type { CatalogDatabase, CatalogRow } from '../../server/services/catalogContracts';
 import type { CatalogActor } from '../../server/services/catalogAudit';
+import { expandChapterPattern, AdminReciterWizard } from '../../server/admin/adminReciterWizard';
+import { parseVideoRange } from '../../server/admin/adminRenderMedia';
+import { AdminMediaTasks,mediaRedisConnection } from '../../server/admin/adminMediaTasks';
+import { createAdminRouter } from '../../server/routes/admin/adminRouter';
 const actor: CatalogActor = { id: 'reviewer', kind: 'human', roleSlug: 'admin', permissions: new Set(['reviews.decide', 'recitations.voice.review', 'recitations.manage']) };
 function database(read: (sql: string, params?: unknown[]) => Promise<CatalogRow[]>): CatalogDatabase {
   const db: CatalogDatabase = { read: vi.fn(read), execute: vi.fn(async () => {}), transaction: async work => work(db) }; return db;
@@ -43,6 +47,11 @@ describe('owner review safety', () => {
     expect(calls.find(([sql]) => sql.startsWith('SELECT COUNT(*) total'))?.[1]).toContain('%a!%b!_c!!%');
     expect(calls.some(([sql]) => sql.includes('ORDER BY IFNULL(') && sql.includes('h.priority DESC'))).toBe(true);
   });
+  it('refuses reopening an obsolete decision after its replacement was decided',async()=>{
+    const db=database(async sql=>sql.startsWith('SELECT * FROM human_review_items')?[{id:'old',type:'voice_confirmation',subject_type:'recitation',subject_id:'recitation',status:'approved'}]:sql.startsWith('SELECT id,status FROM human_review_items WHERE supersedes_id')?[{id:'new',status:'rejected'}]:[]);
+    await expect(new AdminReviewWorkspace(db).undo(actor,'old','recheck')).rejects.toThrow('REVIEW_SUPERSEDED');
+    expect(db.execute).not.toHaveBeenCalled();
+  });
   it('persists preferences per authenticated actor only and audits changes', async () => {
     const db = database(async () => []), owner = new AdminOwnerWorkspace(db);
     expect(await owner.preferences('reviewer')).toEqual({ density: 'comfortable', font_scale: 1 });
@@ -64,6 +73,36 @@ describe('owner review safety', () => {
     const sql = adminReviewWorkspaceMigrationSql().join('\n');
     expect(sql).not.toMatch(/DROP|DELETE|UPDATE (?:recitations|quran_)/u);
     await expect(downAdminReviewWorkspace({ query: vi.fn() }, 'production' as never)).rejects.toThrow('DESTRUCTIVE_REHEARSAL_ONLY');
+  });
+  it('URL patterns are explicit and cannot introduce an unknown placeholder',()=>{
+    expect(expandChapterPattern('https://audio.example/{surah:03d}.mp3',2)).toBe('https://audio.example/002.mp3');
+    expect(expandChapterPattern('https://audio.example/{surah}.mp3',2)).toBe('https://audio.example/2.mp3');
+    for(const value of ['https://audio.example/002.mp3','https://audio.example/{surah}/{surah}','https://audio.example/{surah}/{secret}'])expect(()=>expandChapterPattern(value,2)).toThrow('WIZARD_URL_PATTERN_INVALID');
+  });
+  it('new sources never inherit QUD timing references for another riwayah/provider',async()=>{
+    const db=database(async sql=>sql.includes('FROM audio_providers')?[{id:'provider',host_allowlist:['audio.example']}]:sql.includes('FROM riwayat')?[{id:'hafs',code:'hafs_an_asim'}]:[{id:'reference',provider_id:'other',riwayah_code:'hafs_an_asim',qud_version:'v3.2.0'}]);
+    await expect(new AdminReciterWizard(db,{} as never).validate({source:{kind:'qud',provider_id:'provider',qud_slug:'existing'},reciter:{name_ar:'قارئ',name_en:'Reader'},recitation:{slug:'draft',riwayah_code:'hafs_an_asim',style:'murattal',display_label_ar:'تلاوة'}} as never)).rejects.toThrow('WIZARD_QUD_REFERENCE_INVALID');
+    expect(db.execute).not.toHaveBeenCalled();
+  });
+  it('video ranges are bounded and reject multi-range or invalid suffixes',()=>{
+    expect(parseVideoRange(undefined,100)).toBe(null);
+    expect(parseVideoRange('bytes=5-12',100)).toEqual({start:5,end:12});
+    expect(parseVideoRange('bytes=-10',100)).toEqual({start:90,end:99});
+    expect(parseVideoRange('bytes=90-',100)).toEqual({start:90,end:99});
+    for(const value of ['bytes=-0','bytes=100-','bytes=2-1','bytes=1-2,4-5','bytes=-','wrong'])expect(()=>parseVideoRange(value,100)).toThrow('RENDER_MEDIA_RANGE_INVALID');
+  });
+  it('binary response hooks cannot bypass write auditing',()=>{
+    const db=database(async()=>[]);
+    expect(()=>createAdminRouter({db,register:register=>register({method:'post',path:'/bad',permission:'security.self',writes:true,handler:async()=>({data:null}),respond:async()=>{}})})).toThrow('ADMIN_BINARY_RESPONSE_GET_ONLY');
+  });
+  it('media queues validate connection protocol and preserve local test database isolation',()=>{
+    expect(mediaRedisConnection('redis://localhost:6380/14')).toMatchObject({host:'localhost',port:6380,db:14,maxRetriesPerRequest:null});
+    for(const value of [undefined,'http://localhost','redis://localhost/not-a-db'])expect(()=>mediaRedisConnection(value)).toThrow('ADMIN_MEDIA_QUEUE_UNAVAILABLE');
+  });
+  it('does not persist signed candidate URLs in database or task queue',async()=>{
+    const db=database(async()=>[]),tasks=new AdminMediaTasks(db,{} as never,vi.fn(),{});
+    await expect(tasks.enqueue({...actor,permissions:new Set(['recitations.sources.manage'])},'task',{type:'candidate',recitation_id:'r',surah:1,url:'https://audio.example/file.mp3?X-Amz-Signature=private'})).rejects.toThrow('REVIEW_EVIDENCE_SECRET');
+    expect(db.read).not.toHaveBeenCalled();expect(db.execute).not.toHaveBeenCalled();
   });
 });
 
