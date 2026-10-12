@@ -49,8 +49,9 @@ context.on('response',async response=>{
   try{const json=await response.json(),data=json.data;if(typeof data?.storageObjectId==='string'&&/^[a-zA-Z0-9_-]+$/u.test(data.storageObjectId))for(const action of ['finish','abort','parts','resume'])uploadLifecycles.add(`/api/admin/storage/uploads/${data.storageObjectId}/${action}`);}catch{report.browserErrors.push({code:'UPLOAD_PREPARE_RESPONSE_INVALID'});}
  }
 });
-async function visible(locator){for(let i=0;i<await locator.count();i++)if(await locator.nth(i).isVisible())return locator.nth(i);throw new Error('VISIBLE_TARGET_REQUIRED');}
-async function click(budget,locator,label){budget.activate(label);await (await visible(locator)).click();}
+async function visible(locator){const until=performance.now()+20000;do{for(let i=0;i<await locator.count();i++)if(await locator.nth(i).isVisible())return locator.nth(i);await new Promise(resolve=>setTimeout(resolve,50));}while(performance.now()<until);throw new Error('VISIBLE_TARGET_REQUIRED');}
+async function enabled(locator){const target=await visible(locator);const until=performance.now()+20000;while(!await target.isEnabled()&&performance.now()<until)await new Promise(resolve=>setTimeout(resolve,50));if(!await target.isEnabled())throw new Error('UI_TARGET_DISABLED');return target;}
+async function click(budget,locator,label){const target=await enabled(locator);budget.activate(label);await target.click();}
 async function heading(name){await page.getByRole('heading',{level:1,name,exact:true}).waitFor();await page.evaluate(()=>document.fonts.ready);}
 async function start(){await page.goto(base+'/admin');await heading('ابدأ من هنا');}
 async function focusByTab(budget,locator){
@@ -125,7 +126,7 @@ const handlers={
   if(production){await page.getByRole('heading',{name:'رفع ملفات صوت مرخّصة',exact:true}).waitFor();return{uploadUiVisible:true,upload:'not_attempted_read_only',rightsGateDisabled:!await file.isEnabled()};}
   await type(b,page.locator(`#decision-evidence-${t.youtube.rightsReviewId}`),t.youtube.rightsEvidenceRef);await localNote(b,t.youtube.rightsReviewId);
   await responseTo(`/api/admin/reviews/${t.youtube.rightsReviewId}/decision`,()=>click(b,page.getByRole('region',{name:'قرار المراجعة'}).getByRole('button',{name:'موافق',exact:true}),'approve-fixture-owned-audio-rights'));
-  await file.waitFor({state:'visible'});if(!await file.isEnabled())throw new Error('LICENSED_UPLOAD_STILL_DISABLED');
+  await enabled(file);
   const bytes=await readFile(t.youtube.audioFile);if(createHash('sha256').update(bytes).digest('hex')!==t.youtube.sha256)throw new Error('OWNED_AUDIO_FILE_SHA_MISMATCH');
   b.activate('choose-owned-audio-file');const chooser=page.waitForEvent('filechooser');await file.click();await (await chooser).setFiles(t.youtube.audioFile);
   const prepared=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/admin/storage/uploads'&&r.request().method()==='POST');
