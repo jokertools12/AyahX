@@ -1,8 +1,10 @@
-# مصفوفة ربط الأدمن — A1 وA2a
+# مصفوفة ربط الأدمن — A1 وA2a والدفعة 5
 
-المرجع الفعلي: `server/routes/admin/adminA1Endpoints.ts` و`server/routes/adminCatalog.ts` و`server/routes/catalog.ts` وخدماتها، مع `src/admin/pages` و`src/admin/pages/catalog`. المسارات في الجدول تبدأ بعد `/api/admin` إلا حين يُذكر خلاف ذلك. كل mutation مأذون يسجل `audit_logs` داخل معاملته؛ منع UPDATE/DELETE للسجل على مستوى MySQL. الأذونات الفعلية محفوظة في `admin_roles` و`admin_permissions` مع توسيع `user_roles`؛ لا يُفترض وجود جداول جديدة باسم `roles` أو `role_permissions`.
+المرجع الفعلي: `server/routes/admin/adminA1Endpoints.ts` و`adminA2bEndpoints.ts` و`adminMediaEndpoints.ts` و`adminRenderLab.ts` و`server/routes/adminCatalog.ts` و`server/routes/catalog.ts` وخدماتها، مع `src/admin/pages` و`src/admin/pages/catalog`. المسارات في الجدول تبدأ بعد `/api/admin` إلا حين يُذكر خلاف ذلك. كل mutation مأذون يسجل `audit_logs` داخل معاملته؛ منع UPDATE/DELETE للسجل على مستوى MySQL. الأذونات الفعلية محفوظة في `admin_roles` و`admin_permissions` مع توسيع `user_roles`؛ لا يُفترض وجود جداول جديدة باسم `roles` أو `role_permissions`.
 
 الحالات: **موصول ومتحقق HTTP محليًا** تعني تنفيذ الطلب الفعلي على القاعدة المحلية، وليست إثباتًا لنشر production. **واجهة موصولة؛ E2E معلّق** تعني أن المكون يستدعي العقد الفعلي وأن نتيجة تدفق المتصفح النهائي لم تُثبت بعد. نتائج اللقطات وaxe تخص عرض الصفحات، ولا تحوّل كل زر تلقائيًا إلى تدفق ناجح.
+
+أقسام A1 وA2a وD7 أدناه تحتفظ بأدلتها التاريخية. **منفذ في الكود؛ قبول الدفعة 5 معلّق** في القسم الجديد يصف الربط الحالي فقط؛ القبول المحلي الحقيقي ومهام المالك الإنتاجية والنشر لا تُستنتج من وجود المسار أو نجاح الوحدات.
 
 ## A1
 
@@ -15,7 +17,7 @@
 | سجل التدقيق | GET `/audit`، `audit.read` | `audit_logs` عبر `AdminAuditService` | قراءة فقط، diff وrequestId؛ مفاتيح التصفية `entityType/entityId/action` |
 | الإعدادات العادية | GET `/settings`، `settings.read`؛ PATCH `/settings/:key`، `settings.write` | `system_settings` و`AdminSettingsService` وسجل `ADMIN_SETTINGS` | يقبل النوع المحدد ويُبطل ذاكرة السجل؛ المجهول بلا مستهلك readOnly |
 | أسرار AI | PATCH `/settings/:key`، `settings.write` | `secretSettingsCrypto` ثم `aiService` أو `openRouterService` حسب التعريف | تشفير على الخادم؛ القراءة value=null وmasked؛ التدقيق isSet فقط. لا نموذج AI يُستدعى ضمن هذه البروفة |
-| علم الكتالوج | GET `/flags`، `flags.read`؛ PATCH `/flags/quran_catalog_v2`، `flags.write` و`launch.manage` | `system_settings` ثم `readCatalogSettings` و`RecitationCatalogService` | تأكيد مكتوب؛ فتح محلي للاختبارات فقط، يبقى production مغلقًا |
+| علم الكتالوج | GET `/flags`، `flags.read`؛ PATCH `/flags/quran_catalog_v2`، `flags.write` و`launch.manage` | `AdminSettingsService` ثم `readCatalogSettings` | في الدفعة 5 الفتح مرفوض حتى محليًا: `PUBLIC_FLOW_V2_NOT_READY`؛ `public_flow_v2_ready=false` ثابتة بالخادم حتى D8. `/settings/quran_catalog_v2` للقراءة فقط |
 | TOTP والاسترداد | GET `/security/totp` وPOST enroll/confirm/disable/recovery، `security.self` | `AdminSecurityService`,`admin_user_extensions` | AES-GCM ورموز مجزأة والتحقق ضد إعادة الاستخدام؛ قبول A1 محلي |
 | الجلسات | GET `/security/sessions`؛ DELETE `/security/sessions/:id`، `security.self`؛ all يتطلب `security.sessions.manage` وsuper_admin | `admin_sessions` | إنهاء الجلسة مع قيود الملكية؛ يسقط وصولها الحقيقي، مع audit |
 
@@ -54,7 +56,43 @@
 |مشغّلSSH|renderLabCli.cjs --root-operated|الخدمة نفسها وهويةsuper_adminالقائمة|dry-run/create/status وownedfixtureمحدود؛لاجلسةمصطنعةأوكتابةكتالوج. انتظارداخلجلسةواحدةواستئناففحصببصمتين|
 |تعريف ومنح|007 ثمactivateRenderV2Access|permissions/admin_permissions|تعريف ثمgrantللدورينبعد4SUCCESS،بصماتالحساباتثابتة؛لاstartupseed أوتعديلuser_roles|
 
-[RBACHTTP الحقيقي محليًا](data/d7-render-lab-rbac-proof.json)،[مصفوفةproduction](data/d7-production-matrix-proof.json)،[التفعيل](data/d7-render-lab-activation-proof.json)،[التقرير](data/render-verification-report.md). quran_catalog_v2=OFF. قصRangeفيQAيستخدمmetadataمنالمرجعالكامل؛ليس مسارًاعامًامستقلًا. لاواجهةجديدةأوD5/D8/A2b.
+[RBACHTTP الحقيقي محليًا](data/d7-render-lab-rbac-proof.json)،[مصفوفةproduction](data/d7-production-matrix-proof.json)،[التفعيل](data/d7-render-lab-activation-proof.json)،[التقرير](data/render-verification-report.md). quran_catalog_v2=OFF. قصRangeفيQAيستخدمmetadataمنالمرجعالكامل؛ليس مسارًاعامًامستقلًا. هذه أدلة D7 قبل إضافة واجهات A2b في الدفعة 5؛ لا تثبت قبول واجهاتها الجديدة ولا تنفّذ D5 أوD8.
+
+## الدفعة 5 — أدوات المالك وA2b
+
+الحالة لجميع صفوف هذا القسم: **منفذ في الكود؛ قبول الدفعة 5 معلّق**. العقود JSON تعيد `data` و`meta.requestId`؛ المشاهدة تعيد الفيديو عبر جلسة الأدمن نفسها. كل قراءة تمر بالمصادقة وRBAC وOrigin وحد المعدل، وكل كتابة تمر أيضًا بمخطط حقول صارم وتدقيق. عناوين URL الموقّعة وبيانات الدخول ممنوعة في الأدلة وبيانات المسودات والمهام المحفوظة.
+
+| الصفحة/الإجراء | الطلب والصلاحية | التخزين أو المستهلك الحقيقي | الأثر والحدود |
+|---|---|---|---|
+| ابدأ من هنا | GET `/workspace`، `dashboard.read` | `AdminOwnerWorkspace`؛ المراجعات والكتالوج وقائمة عوائق الإطلاق | أعداد حقيقية وأولويات وتنبيه تجديد R2 وماذا يرى الزوار؛ لا اعتماد تلقائي |
+| حالة المشروع والمساعدة | GET `/project-status`، `dashboard.read` | `docs/roadmap.json` بعد التحقق من مخططه و`docs/admin-guide.ar.md` | مراحل وأسباب حجب وخطوات للمالك؛ الوثيقة لا تُغلق مرحلة بمجرد عرضها |
+| تفضيلات القراءة | GET وPATCH `/preferences`، `security.self` | `admin_preferences` حسب هوية الجلسة، مع audit عند التغيير | مريح/مضغوط وحجم 1 أو1.1 أو1.2؛ GET لا ينشئ صفًا، ولا يُعدّل مستخدمًا آخر |
+| مركز المراجعة | GET `/reviews` و`/reviews/:id`، `review.read` | `human_review_items` وربط التلاوة/القارئ/المزوّد و`audit_logs` | بحث وفلاتر وعدّادات وتاريخ؛ تبدأ الأولوية بالتلاوات المنشورة التي اجتازت offset؛ الأدلة مقروءة بلا منح موافقة |
+| قرار بند | POST `/reviews/:id/decision`، `review.decide` | `AdminReviewWorkspace` و`HumanReviewService` | موافقة/رفض/تأجيل وملاحظة؛ الصوت يغيّر حالة هوية الصوت، والاسم يعدّل العرض. الترخيص يحتاج `providers.license.decide` ودور`super_admin` وتأكيد رمز المزوّد؛ الحقوق تحتاج `sources.write`. بقية البنود لا تصلح التوقيت أو البسملة تلقائيًا |
+| معاينة وقرار جماعي | POST `/reviews/bulk-preview` و`/reviews/bulk`، `review.decide` | الأنواع المعلوماتية الآمنة في `SAFE_BULK_REVIEW_TYPES` وسجل لكل قرار | حتى100 بند فريد، ومعاينة العدد وكتابته؛ ممنوع للصوت والترخيص والحقوق والبسملة والتوقيت. التعارض المتزامن يظهر خطأ بدل طمس قرار آخر |
+| إعادة فتح قرار | POST `/reviews/:id/undo`، `review.decide` وصلاحية النوع | `supersedes_id` و`target_subject_type/id` في `human_review_items`، مع audit | ينشئ بندًا معلّقًا ويحفظ التاريخ ويسحب أثر الاعتماد الحالي؛ يمنع إعادة فتح قرار تجاوزه قرار أحدث |
+| غرفة الاستماع | GET `/listening/:id`، `review.read` | `recitation_audition_samples` وروابط فصول المزوّد أوIFrame الرسمي، و`recitation_voice_reviews` | عينات فعلية ومقارنة تلاوات القارئ وسجل وربط البند والتلاوة التالية؛ قرار الصوت يستخدم endpoint المراجعة، لا زر نجاح محلي وهمي |
+| ترخيص المزوّدين | GET `/provider-licenses`، `providers.read` | `audio_providers` و`docs/plan/provider-terms-digest.md` | ملخص الوصول والاستخدام التجاري والإسناد والشروط؛ غياب الملخص يظهر غير متحقق. القرار يستخدم `/reviews/:id/decision`، ولا تمنح القراءة صلاحية اتخاذه |
+| الأسماء الوصفية | GET `/labels`، `recitations.read`؛ POST `/labels/:id/approve`، `review.decide` و`recitations.write` | التلاوات التي تحتاج مراجعة اسم وبندها الفعّال | تعديل الاسم المعتمد مباشرة وتسجيل القرار؛ لا تعديل للنص القرآني |
+| قائمة الإطلاق والمعاينة | GET `/launch-readiness`، `review.read` | بوابات `isPubliclyVisible` و`publicVisibilityCodes` وتغطية الفصول ومحلل جاهزية الملفات المرخّصة | تعرض من قد يظهر وسبب كل استبعاد بافتراض فتح الكتالوج؛ `can_open=false` ولا تكتب العلم أو تنشر تلاوة |
+| حالة التخزين وخطوات التجديد | GET `/storage`، `storage.manage` | إعدادات المحول و`storage_objects` و`R2_TOKEN_EXPIRES_AT` غير السري | تاريخ غير مسجل يُعلن غير متاح؛ الاستخدام من سجل القاعدة يحمل `database_manifest` ولا يدّعي قياس الحاوية |
+| اختبار اتصال التخزين | POST `/storage/test`، `storage.manage` | قراءة فعلية لـR2 عبر `listObjects` مع cache خمس دقائق وaudit | يعرض الحجم وعدد الكائنات بمصدر `r2_list`؛ هذا الاختبار قراءة قائمة، لا يدّعي تجربة رفع كائن |
+| التلاوات والملفات المرخّصة | GET `/licensed-audio` و`/:id`، `sources.read` | تلاوات YouTube ومسودات الملفات المرخّصة و`storage_objects` و`recitation_source_urls` | التوافر للريندر يحسب عبر محلل الحقوق وoffset والتغطية، ولا يساوي مجرد عدد الملفات المرفوعة |
+| حقوق ملفات التلاوة | POST `/licensed-audio/:id/rights`، `review.decide` و`sources.write` | بند `youtube_rights` أو`storage_rights` الفعّال؛ حقول حقوق YouTube عند انطباقه | موافقة بشرية ودليل وملاحظة. الاعتماد القديم الذي أعيد فتحه لا يجيز الرفع أو المصدر |
+| بدء رفع | POST `/storage/uploads`، `storage.manage` | `CatalogStorageAdminService` ثم`storage_objects` ورفع مباشر إلىR2 | recitationId/surah وSHA وحجم ونوع وrightsRef؛ حقوق معتمدة قبل البدء. حاوية ومفاتيح مقيدة بالخادم، لا تنزيل منYouTube |
+| الاستئناف وأجزاء الرفع | POST `/storage/uploads/:id/resume` و`/parts`، `storage.manage` | حالة multipart الفعلية وروابط presigned مع تدقيق وصف آمن | يرجع الأجزاء الموجودة ورابط الجزء؛ لا تُحفظ القدرات الموقّعة فيaudit |
+| إنهاء الرفع أو إلغاؤه | POST `/storage/uploads/:id/finish` أو`/abort`، `storage.manage` | إكمال أوإلغاء multipart فيR2 وتحديث حالة الملف | finish يعيد «مرفوع» ومعرّف مهمة تحقق، لا«متحقق». abort يرفض الرفع؛ الأخطاء الفعلية ظاهرة |
+| تشغيل ومتابعة التحقق | POST `/storage/uploads/:id/verify`، `storage.manage`؛ GET `/storage/tasks/:id`، `sources.read` | `admin_media_tasks` وBullMQ `ayahx-admin-media-v1` وFFmpeg/ffprobe في عملية خارجية | SHA وffprobe فعليان؛ lock120s وتجديد30s وتزامن1. غياب مرجع offset مستقل يبقي المهمة بحاجة مراجعة ويُفشل المهمة صراحةً، لا نجاح صامت |
+| مقارنة مصدر مرشح | POST `/licensed-audio/:id/candidate`، `sources.write` | مهمة BullMQ ومقارنة SHA للصوتPCM المفكوك مع التسجيل المرجعي | المضيف مسموح ولا fallback. YouTube يحتاج ملفًا مرجعيًا مرخّصًا ومتحققًا؛ غيابه يعلن `CANDIDATE_REFERENCE_FINGERPRINT_UNAVAILABLE` |
+| خيارات المعالج وفحصه | GET `/reciter-wizard/options` وPOST `/reciter-wizard/validate`، `recitations.write` | مزوّدون وروايات ومراجعQUD مستوردة، واختبار روابط البداية/الوسط/النهاية أوoEmbed الرسمي | فحص حي مسجل؛ URL الخاص أوالموقّع مرفوض. لا استعارة نص أوتوقيت ولا نجاح بديل حين يفشل المصدر |
+| إنشاء مسودة بالمعالج | POST `/reciter-wizard`، `recitations.write` و`reciters.write` | `reciters` و`recitations` والفصول عند نمط الروابط وبنود مراجعة معلّقة | intent قابل للإعادة دون تكرار؛ غير منشورة، offsetغيرمعتمد، المجهولNULL. QUD يربط `timing_reference_recitation_id` فقط، بلا نسخ توقيت أوإرث اعتماد |
+| خيارات تجربة الفيديو | GET `/render-lab/choices` و`/:id` و`/:id/:surah`، `render.test` ودورadmin/super_admin | أهليةD7 ونطاقات التغطية الفعلية عبر منشئmanifest | يعرض المتاح تقنيًا ومدى الآيات الصحيح؛ لا يفتح الكتالوج أويتجاوز سياسة المصدر |
+| الإنشاء والحالة والمشاهدة | POST `/render-lab/jobs`؛ GET `/render-lab/jobs/:id` و`/:id/media`، `render.test` ودورadmin/super_admin | `RenderLabService` والطابورالقائم وSkia و`qa_report_json` | 202 للإنشاء،≤90ثانية وتزامن1؛ مدة ومزامنة وتظليل وبايتات فعلية. المشاهدة مصادق عليها وتُرفض بعد انتهاء الصلاحية؛ Range للملف المحلي |
+| حذف تجربة الفيديو | DELETE `/render-lab/jobs/:id`، `render.test` ودورadmin/super_admin | حذف الناتج الفعلي ثم تفريغ مؤشره معaudit | لا حذف لمهمة نشطة أوتاريخها. نتائجv2 الجديدة وصولها23ساعة وجامع الملفات كل30دقيقة بهامش حتى24ساعة عند سلامة الخدمة؛ سياسةv1 القائمة لا تتغير |
+
+لا يفوّض هذا الربط الوكيل بتأكيد صوت أوترخيص أواسم أوحقوق أوالبسملة. كل بنود الإنتاج البشرية تبقى معلّقة أثناء تحقق هذه الدفعة. يمكن للمالك وحده اتخاذ القرارات لاحقًا من المسارات المأذونة. لا يوجد في هذه الدفعة محاذاةD5؛ الملفات الجديدة التي تفتقر إلى دليل offset مستقل مرتبط بالتلاوة والسورة وبصمة الملف تبقى بحاجة مراجعة (`LICENSED_OFFSET_REFERENCE_UNAVAILABLE`). الفحص الآلي لا يحل محل هذا الدليل أوالمراجعة البشرية.
+
+مرجع البروفة المجهزة: `scripts/a2b-local-acceptance.ts` على استعادة محليةMySQL9.7.2 وRedis فعليين؛ الوكيل الرئيسي وحده يشغّلها. لا تُسجل نتيجة قبول حية هنا قبل خروج تقريرها والتحقق الإنتاجي. حسابQA الإنتاجي المؤقت مخصص للقراءة فقط وتنظيفه مطلوب؛ لا يُستخدم لاتخاذ أي قرار من الصفوف أعلاه.
 
 ## الإعدادات ذات المستهلك العام
 
@@ -72,4 +110,4 @@
 
 خمسة تدفقات متصفح محلية ناجحة على الجهازين بحسب التشغيل الرئيسي؛ Back المرفوض والمقبول نجحا في إعادة فحص مكتبية محددة بعد تثبيت listener المبكر. إعادة المجموعة الكاملة على الجهازين تنتظر نتيجتها؛ راجع المراجعة للحدود الدقيقة.
 
-حدود التشغيل: production/CI/SUCCESS/health/لوج عشر دقائق وsmoke والفوترة معلّقة حتى يضيف الوكيل الرئيسي أدلتها. لا اعتماد صوت A2b، لا تنفيذ D5، لا استيراد جديد من زر الأدمن، ولا تغيير في الواجهة العامة أو الريندر. علامة الإطلاق لا تُفتح في production في هذه الدفعة.
+حدود الدفعة5: CI/SUCCESS/health/لوج عشر دقائق وsmoke والفوترة ومهام المالك معلّقة حتى يضيف الوكيل الرئيسي أدلتها. أدوات قرار A2b منفذة ولا تتخذ بها جهة التنفيذ أي اعتماد بشري علىproduction. لا تنفيذD5 أوD8، ولا استيراد جديد من زر الأدمن، ولا تغيير في الواجهة العامة أوطريقة الريندر. علامة الإطلاق مقفلة في الخادم؛ تعديل مدة احتفاظ تجربةv2 ومسارات مشاهدتها وحذفها خاص بالأدمن.
