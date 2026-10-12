@@ -52,3 +52,13 @@ export function officialYoutubeEmbed(value: unknown): string | null {
     return url.protocol === 'https:' && ['www.youtube.com', 'www.youtube-nocookie.com'].includes(url.hostname) && /^\/embed\/[a-zA-Z0-9_-]{11}$/u.test(url.pathname) ? url.href : null;
   } catch { return null; }
 }
+
+/** All pages are read from the server; navigation never depends on a fabricated total. */
+export function usePendingReviewNavigation() {
+  return useQuery({ queryKey: ['admin', 'pending-review-navigation'], retry: false, queryFn: async () => {
+    const items: ReviewItem[] = []; let page = 1;
+    for (;;) { const result = await adminApi<ReviewItem[]>('/reviews?status=pending&limit=100&page=' + page); items.push(...result.data);
+      if (!result.data.length || (result.meta.total !== undefined ? items.length >= result.meta.total : result.data.length < 100)) break; page++;
+    } return [...new Map(items.map(item => [item.id, item])).values()];
+  } });
+}

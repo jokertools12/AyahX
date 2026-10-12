@@ -1,3 +1,4 @@
+import {auditActionLabel} from '../../i18n/adminLabels';
 import { useRef, useState } from 'react';
 import { Play, Pause, CircleHelp } from 'lucide-react';
 import { useAdmin, useText } from '../../adminState';
@@ -21,5 +22,5 @@ export function ListeningSampleCard({ sample, index }: { sample: ListeningSample
 }
 export function ReviewHistory({ items }: { items: Array<Record<string, unknown>> }) {
   const t = useText(), { lang } = useAdmin();
-  return <section className="admin-card admin-stack"><h2>{t('سجل القرارات', 'Decision history')}</h2>{items.length ? <ol className="admin-timeline">{items.map((item, index) => <li key={String(item.id ?? index)}><p>{item.status ? termLabel(String(item.status), lang) : termLabel(String(item.action ?? ''), lang)}</p>{typeof item.notes === 'string' && <p>{item.notes}</p>}<time className="admin-muted">{String(item.created_at ?? item.decided_at ?? '')}</time></li>)}</ol> : <p>{t('لم يُسجّل قرار حتى الآن. القرار الأول وتاريخه سيظهران هنا.', 'No decision has been recorded yet. The first decision and its date will appear here.')}</p>}</section>;
+  return <section className="admin-card admin-stack"><h2>{t('سجل القرارات', 'Decision history')}</h2>{items.length ? <ol className="admin-timeline">{items.map((item, index) => {const after=item.new_values&&typeof item.new_values==='object'?item.new_values as Record<string,unknown>:item,status=typeof after.status==='string'?after.status:null,note=typeof after.notes==='string'?after.notes:null,actor=after.decided_by??item.reviewer_name??item.reviewer_id;return <li key={String(item.id ?? index)}><p title={String(item.action??status??'')}>{status?termLabel(status,lang):auditActionLabel(String(item.action??''),lang)}</p>{note&&<p>{note}</p>}{actor!=null&&<p className="admin-muted">{t('صاحب القرار','Reviewer')}: <span dir="auto">{String(actor)}</span></p>}<time className="admin-muted">{String(item.created_at ?? item.decided_at ?? '')}</time><details><summary>{t('دليل السجل الأصلي','Original history evidence')}</summary><CodeBlock value={item}/></details></li>;})}</ol> : <p>{t('لم يُسجّل قرار حتى الآن. القرار الأول وتاريخه سيظهران هنا.', 'No decision has been recorded yet. The first decision and its date will appear here.')}</p>}</section>;
 }

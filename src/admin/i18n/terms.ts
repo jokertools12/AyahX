@@ -12,6 +12,7 @@ export const terms: Record<string, AdminTerm> = {
   INVALID_WORD_INTERVAL: entry('مدى توقيت الكلمة غير صالح', 'Word timing interval is invalid'),
   SPOKEN_WORD_COUNT_MISMATCH: entry('عدد الكلمات المنطوقة لا يطابق التوقيتات', 'Spoken word count differs from timing count'),
   SOURCE_WORD_OVERLAP_OR_ORDER: entry('توقيتات المصدر متداخلة أو غير مرتبة', 'Source intervals overlap or are out of order'),
+  allow: entry('يسمح','Allow'), deny: entry('لا يسمح','Deny'), none: entry('معطّل','Disabled'), optional: entry('اختياري','Optional'), required_for_super_admin: entry('إلزامي للمدير الأعلى','Required for super administrators'), required_for_all: entry('إلزامي لكل الأدمن','Required for every admin'), complete_only: entry('السور المكتملة فقط','Complete chapters only'), ayah_ranges: entry('نطاقات الآيات المعتمدة','Verified verse ranges'), allow_auto_verified: entry('السماح بالفحص الآلي وفق السياسة','Automated checks allowed by policy'), require_confirmed: entry('يلزم تأكيد بشري للصوت','Human voice confirmation required'),
   complete: entry('مكتملة', 'Complete', 'تتوفر كل الآيات وتوقيت كل كلمة قانونية.', 'Every verse and canonical word has timing.', 'success'),
   near_complete: entry('شبه مكتملة', 'Almost complete', 'ينقصها توقيت كلمة إلى ثلاث كلمات؛ ليست مكتملة.', 'One to three words lack timing; this is not complete.', 'warning'),
   partial: entry('متاحة جزئيًا', 'Partly available', 'تتوفر نطاقات محددة فقط؛ راجع الآيات المتاحة.', 'Only specific verse ranges are available.', 'warning'),

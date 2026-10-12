@@ -1,3 +1,5 @@
+import {missingWordEvidence} from './catalogFormatting';
+import {termLabel} from '../../i18n/terms';
 import {type ReactNode} from 'react';
 import {useAdmin,useText} from '../../adminState';
 import {CodeBlock,StatusChip} from '../../ui/AdminPrimitives';
@@ -6,3 +8,5 @@ export function VisibilityReasons({reasons,visible}:{reasons:VisibilityReason[];
 export function CoverageSummary({row}:{row:CatalogRecitation}){const t=useText(),{lang}=useAdmin();return <div className="catalog-coverage">{(['complete','near_complete','partial','unavailable'] as const).map(s=><div key={s}><StatusChip status={s} lang={lang}/><span>{row.availability?.[s]??0}</span></div>)}<small className="admin-muted">{t('عدد السور حسب الإتاحة','Chapter counts by availability')}</small></div>;}
 export function CatalogDefinition({items}:{items:Array<{label:string;value:ReactNode}>}){return <dl className="catalog-definition">{items.map(item=><div key={item.label}><dt className="admin-muted">{item.label}</dt><dd>{item.value??'—'}</dd></div>)}</dl>;}
 export function CatalogEvidence({title,value}:{title:string;value:unknown}){return <details className="admin-card"><summary>{title}</summary><CodeBlock value={value}/></details>;}
+
+export function MissingWords({ value }: { value: unknown }) { const t=useText(),{lang}=useAdmin(),words=missingWordEvidence(value);return <section className="admin-stack"><h3>{t('الكلمات التي ينقصها توقيت','Words missing timing')}</h3>{words.length?<ul className="catalog-reasons">{words.map((word,index)=><li key={index}><span>{word.ayah!==null?t('الآية','Verse')+' '+word.ayah+' · ':''}{t('الكلمة القانونية رقم','Canonical word position')} {word.position}</span><span title={word.reason}>{termLabel(word.reason,lang)}</span></li>)}</ul>:<p>{t('لا تتضمن هذه البيانات كلمات ناقصة مرقّمة؛ راجع حالة التغطية والدليل الأصلي.','This evidence has no numbered missing words; inspect coverage and the original evidence.')}</p>}</section>;}
