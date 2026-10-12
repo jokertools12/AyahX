@@ -1,0 +1,12 @@
+{
+  "id": "youtube-without-licensed-file",
+  "expected": "YOUTUBE_RENDER_REQUIRES_LICENSED_FILE",
+  "scope": "RAILWAY_PRODUCTION_RENDER_LAB_REAL_QUEUE",
+  "started_at": "2026-10-12T01:49:25.685Z",
+  "passed": true,
+  "failure": "YOUTUBE_RENDER_REQUIRES_LICENSED_FILE",
+  "operator_safe_diagnostic": "{\"diagnostic_kinds\":[],\"diagnostic_lines\":5,\"diagnostic_characters\":214}",
+  "operator_diagnostic_sha256": "351b8b6d8dd3571d27f5af960d2f83cb4ed654094c28565f05cb156ab82398e5",
+  "refusal_details": {},
+  "finished_at": "2026-10-12T01:49:28.868Z"
+}

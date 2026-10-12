@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-10-12T01:50:11.802Z",
+  "results": [
+    {
+      "path": "/api/health",
+      "status": 200,
+      "cache_control": null
+    },
+    {
+      "path": "/api/health/ready",
+      "status": 200,
+      "cache_control": null
+    },
+    {
+      "path": "/api/admin/render-lab/jobs/00000000-0000-4000-8000-000000000000",
+      "status": 401,
+      "cache_control": "no-store"
+    }
+  ],
+  "passed": true
+}

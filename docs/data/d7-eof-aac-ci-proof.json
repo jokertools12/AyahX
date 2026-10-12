@@ -1,0 +1,20 @@
+{
+  "pull_request": "https://github.com/jokertools12/AyahX/pull/22",
+  "head": "8618169c111d8dc3f95d80ca90d303560dd8fde0",
+  "merge_commit": "3dac1442cfd09e905824820959817b8e48307823",
+  "checks": [
+    {
+      "name": "checks",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jokertools12/AyahX/actions/runs/38191319656/job/114624490383"
+    },
+    {
+      "name": "public-ui",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/jokertools12/AyahX/actions/runs/38191319643/job/114624490172"
+    }
+  ],
+  "checked_at": "2026-10-12T01:20:14.084Z"
+}

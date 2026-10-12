@@ -1,0 +1,504 @@
+{
+  "id": "archive_org-short-complete",
+  "expected": "SUCCESS",
+  "scope": "RAILWAY_PRODUCTION_RENDER_LAB_REAL_QUEUE",
+  "started_at": "2026-10-12T01:41:46.760Z",
+  "passed": true,
+  "dry_run": {
+    "dry_run": true,
+    "schemaVersion": "2.0.0",
+    "durationMs": 13496,
+    "audioPlanHash": "c57b193c00232935da89d0ec7b512712a87af046e98e825fa755b2fa0d47024b",
+    "timingVersionHash": "585642fd0e33c970f2c85db20ae091d601d6ef6aff31acff78cd9402d74fb3f1",
+    "warnings": [],
+    "production_writes": 0
+  },
+  "job_id": "f8138697-b00c-4638-8d89-8d966d790ca8",
+  "status": "succeeded",
+  "error_code": null,
+  "inspection": {
+    "id": "f8138697-b00c-4638-8d89-8d966d790ca8",
+    "qa": {
+      "passed": true,
+      "ffprobe": {
+        "audio": {
+          "codec": "aac",
+          "bitrate": 196878,
+          "channels": 2,
+          "sampleRate": 44100,
+          "durationSeconds": 13.496009
+        },
+        "video": {
+          "fps": 30,
+          "codec": "h264",
+          "width": 1080,
+          "height": 1920,
+          "bitrate": 155521,
+          "profile": "High",
+          "pixelFormat": "yuv420p",
+          "durationSeconds": 13.5
+        },
+        "bitrate": 362206,
+        "container": "mov,mp4,m4a,3gp,3g2,mj2",
+        "sizeBytes": 611224,
+        "durationSeconds": 13.5
+      },
+      "failures": [],
+      "warnings": [
+        "QA_PACKET_INDEX_FROM_FULL_REFERENCE"
+      ],
+      "tofu_glyphs": 0,
+      "black_frames": 0,
+      "golden_frames": [
+        {
+          "png": "frame-000040.png",
+          "ayah": 1,
+          "held": false,
+          "passed": true,
+          "time_ms": 1333.3333333333333,
+          "png_sha256": "59061c0cb605ccce288eabb872c6b77297623db08242c6644fb9a80bb2ee2fa4",
+          "actual_mode": "word",
+          "frame_index": 40,
+          "painted_words": [
+            {
+              "x": 657.7150020599365,
+              "y": 952.012,
+              "key": "108:1:1",
+              "width": 43.939998626708984,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "108:1:1"
+          ],
+          "expected_word_key": "108:1:1",
+          "actual_occurrence_id": "108:1:1:0:0",
+          "expected_occurrence_id": "108:1:1:0:0"
+        },
+        {
+          "png": "frame-000099.png",
+          "ayah": 1,
+          "held": false,
+          "passed": true,
+          "time_ms": 3300,
+          "png_sha256": "947a13ac497c448a258ba57ce531e36b0bd91e375186e3921f82235f2be8a63b",
+          "actual_mode": "word",
+          "frame_index": 99,
+          "painted_words": [
+            {
+              "x": 505.91499519348145,
+              "y": 952.012,
+              "key": "108:1:2",
+              "width": 136.32000732421875,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "108:1:2"
+          ],
+          "expected_word_key": "108:1:2",
+          "actual_occurrence_id": "108:1:2:1:1",
+          "expected_occurrence_id": "108:1:2:1:1"
+        },
+        {
+          "png": "frame-000145.png",
+          "ayah": 1,
+          "held": false,
+          "passed": true,
+          "time_ms": 4833.333333333333,
+          "png_sha256": "adb39b944c61f5e8b8bcb282a44b381167f5753a796489d02789e34f383f42fe",
+          "actual_mode": "word",
+          "frame_index": 145,
+          "painted_words": [
+            {
+              "x": 378.3449993133545,
+              "y": 952.012,
+              "key": "108:1:3",
+              "width": 112.08999633789062,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "108:1:3"
+          ],
+          "expected_word_key": "108:1:3",
+          "actual_occurrence_id": "108:1:3:2:2",
+          "expected_occurrence_id": "108:1:3:2:2"
+        },
+        {
+          "png": "frame-000185.png",
+          "ayah": 2,
+          "held": false,
+          "passed": true,
+          "time_ms": 6166.666666666667,
+          "png_sha256": "aa7946b641237c6854d7d6b44638c33a9d139843b53238a32da07f31326b3c7d",
+          "actual_mode": "word",
+          "frame_index": 185,
+          "painted_words": [
+            {
+              "x": 596.4000015258789,
+              "y": 952.012,
+              "key": "108:2:1",
+              "width": 88.02999877929688,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "108:2:1"
+          ],
+          "expected_word_key": "108:2:1",
+          "actual_occurrence_id": "108:2:1:0:0",
+          "expected_occurrence_id": "108:2:1:0:0"
+        },
+        {
+          "png": "frame-000215.png",
+          "ayah": 2,
+          "held": false,
+          "passed": true,
+          "time_ms": 7166.666666666667,
+          "png_sha256": "d3a7a191dff01baf5bdd4592c38b242314705cd5385d73d6b71d9f066e3c5afa",
+          "actual_mode": "word",
+          "frame_index": 215,
+          "painted_words": [
+            {
+              "x": 495.9600028991699,
+              "y": 952.012,
+              "key": "108:2:2",
+              "width": 84.95999908447266,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "108:2:2"
+          ],
+          "expected_word_key": "108:2:2",
+          "actual_occurrence_id": "108:2:2:1:1",
+          "expected_occurrence_id": "108:2:2:1:1"
+        },
+        {
+          "png": "frame-000249.png",
+          "ayah": 2,
+          "held": false,
+          "passed": true,
+          "time_ms": 8300,
+          "png_sha256": "5732809d81ac877a78ab678e10dbf80c7b4789ec9f581af253908c0e24480e34",
+          "actual_mode": "word",
+          "frame_index": 249,
+          "painted_words": [
+            {
+              "x": 395.5699996948242,
+              "y": 952.012,
+              "key": "108:2:3",
+              "width": 84.91000366210938,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "108:2:3"
+          ],
+          "expected_word_key": "108:2:3",
+          "actual_occurrence_id": "108:2:3:2:2",
+          "expected_occurrence_id": "108:2:3:2:2"
+        },
+        {
+          "png": "frame-000291.png",
+          "ayah": 3,
+          "held": false,
+          "passed": true,
+          "time_ms": 9700,
+          "png_sha256": "4023e67b4df9f7c7c4422835648c3bd003d990d64e24e13729a98ff89004f009",
+          "actual_mode": "word",
+          "frame_index": 291,
+          "painted_words": [
+            {
+              "x": 660.3900032043457,
+              "y": 952.012,
+              "key": "108:3:1",
+              "width": 41.81999969482422,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "108:3:1"
+          ],
+          "expected_word_key": "108:3:1",
+          "actual_occurrence_id": "108:3:1:0:0",
+          "expected_occurrence_id": "108:3:1:0:0"
+        },
+        {
+          "png": "frame-000329.png",
+          "ayah": 3,
+          "held": false,
+          "passed": true,
+          "time_ms": 10966.666666666666,
+          "png_sha256": "3a69ce228abb25c6b7af48380965b7a481388ee49c0811f2675f2a95d2b6340e",
+          "actual_mode": "word",
+          "frame_index": 329,
+          "painted_words": [
+            {
+              "x": 535.6800003051758,
+              "y": 952.012,
+              "key": "108:3:2",
+              "width": 109.2300033569336,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "108:3:2"
+          ],
+          "expected_word_key": "108:3:2",
+          "actual_occurrence_id": "108:3:2:1:1",
+          "expected_occurrence_id": "108:3:2:1:1"
+        },
+        {
+          "png": "frame-000357.png",
+          "ayah": 3,
+          "held": false,
+          "passed": true,
+          "time_ms": 11900,
+          "png_sha256": "c8dab7fe33fba9f132a44ea6d328ec52097946219254d70cd39a3367b9257647",
+          "actual_mode": "word",
+          "frame_index": 357,
+          "painted_words": [
+            {
+              "x": 477.95999908447266,
+              "y": 952.012,
+              "key": "108:3:3",
+              "width": 42.2400016784668,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "108:3:3"
+          ],
+          "expected_word_key": "108:3:3",
+          "actual_occurrence_id": "108:3:3:2:2",
+          "expected_occurrence_id": "108:3:3:2:2"
+        },
+        {
+          "png": "frame-000385.png",
+          "ayah": 3,
+          "held": false,
+          "passed": true,
+          "time_ms": 12833.333333333334,
+          "png_sha256": "bf720c35aadedeaf3939ad84f04f540f728953a33e760d85c872a315f0fbfaaf",
+          "actual_mode": "word",
+          "frame_index": 385,
+          "painted_words": [
+            {
+              "x": 377.7899971008301,
+              "y": 952.012,
+              "key": "108:3:4",
+              "width": 84.69000244140625,
+              "height": 79.8
+            }
+          ],
+          "actual_word_keys": [
+            "108:3:4"
+          ],
+          "expected_word_key": "108:3:4",
+          "actual_occurrence_id": "108:3:4:3:3",
+          "expected_occurrence_id": "108:3:4:3:3"
+        }
+      ],
+      "selected_font": "Amiri Quran",
+      "audio_requests": [
+        {
+          "host": "ia800701.us.archive.org",
+          "bytes": 1,
+          "range": "bytes=0-0",
+          "method": "GET",
+          "status": 206,
+          "purpose": "render"
+        },
+        {
+          "host": "ia800701.us.archive.org",
+          "bytes": 510403,
+          "range": null,
+          "method": "GET",
+          "status": 200,
+          "purpose": "reference"
+        },
+        {
+          "host": "ia800701.us.archive.org",
+          "bytes": 358560,
+          "range": "bytes=151350-509909",
+          "method": "GET",
+          "status": 206,
+          "purpose": "render"
+        }
+      ],
+      "render_time_ms": 29961.752513,
+      "schema_version": "d7-qa-1",
+      "audio_correlation": {
+        "score": 0.9997059158704549,
+        "lag_ms": 0,
+        "method": "centered_raw_pcm_ncc_full_decode_independent_reference",
+        "passed": true,
+        "sample_rate": 16000,
+        "compared_samples": 21114,
+        "duration_tolerance_ms": 33.333333333333336,
+        "aac_padding_trimmed_ms": 18,
+        "duration_difference_ms": 0,
+        "declared_audio_duration_ms": 13496.009,
+        "untrimmed_decoded_duration_ms": 13514
+      },
+      "audio_seek_method": "qa_packet_index_remote_range",
+      "black_scan_frames": 405,
+      "font_assets_local": true,
+      "video_duration_ms": 13500,
+      "memory_limit_bytes": 1999998976,
+      "audio_bytes_fetched": 358561,
+      "expected_duration_ms": 13496,
+      "audio_range_supported": true,
+      "duration_tolerance_ms": 33.333333333333336,
+      "peak_worker_rss_bytes": 407461888,
+      "duration_difference_ms": 4,
+      "audio_source_size_bytes": 510403,
+      "external_asset_requests": 0,
+      "highlighting_transitions": [
+        {
+          "ayah": 1,
+          "mode": "word",
+          "time_ms": 0,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 1,
+          "mode": "word",
+          "time_ms": 166.66666666666666,
+          "word_keys": [
+            "108:1:1"
+          ],
+          "occurrence_id": "108:1:1:0:0"
+        },
+        {
+          "ayah": 1,
+          "mode": "word",
+          "time_ms": 2500,
+          "word_keys": [
+            "108:1:2"
+          ],
+          "occurrence_id": "108:1:2:1:1"
+        },
+        {
+          "ayah": 1,
+          "mode": "word",
+          "time_ms": 4100,
+          "word_keys": [
+            "108:1:3"
+          ],
+          "occurrence_id": "108:1:3:2:2"
+        },
+        {
+          "ayah": 1,
+          "mode": "word",
+          "time_ms": 5600,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 2,
+          "mode": "word",
+          "time_ms": 5733.333333333333,
+          "word_keys": [
+            "108:2:1"
+          ],
+          "occurrence_id": "108:2:1:0:0"
+        },
+        {
+          "ayah": 2,
+          "mode": "word",
+          "time_ms": 6633.333333333334,
+          "word_keys": [
+            "108:2:2"
+          ],
+          "occurrence_id": "108:2:2:1:1"
+        },
+        {
+          "ayah": 2,
+          "mode": "word",
+          "time_ms": 7766.666666666667,
+          "word_keys": [
+            "108:2:3"
+          ],
+          "occurrence_id": "108:2:3:2:2"
+        },
+        {
+          "ayah": 2,
+          "mode": "word",
+          "time_ms": 8866.666666666668,
+          "word_keys": [],
+          "occurrence_id": null
+        },
+        {
+          "ayah": 3,
+          "mode": "word",
+          "time_ms": 9100,
+          "word_keys": [
+            "108:3:1"
+          ],
+          "occurrence_id": "108:3:1:0:0"
+        },
+        {
+          "ayah": 3,
+          "mode": "word",
+          "time_ms": 10333.333333333334,
+          "word_keys": [
+            "108:3:2"
+          ],
+          "occurrence_id": "108:3:2:1:1"
+        },
+        {
+          "ayah": 3,
+          "mode": "word",
+          "time_ms": 11666.666666666666,
+          "word_keys": [
+            "108:3:3"
+          ],
+          "occurrence_id": "108:3:3:2:2"
+        },
+        {
+          "ayah": 3,
+          "mode": "word",
+          "time_ms": 12166.666666666666,
+          "word_keys": [
+            "108:3:4"
+          ],
+          "occurrence_id": "108:3:4:3:3"
+        }
+      ],
+      "memory_measurement_scope": "linux_worker_and_children_sampled_rss",
+      "memory_sample_interval_ms": 100,
+      "audio_full_download_fallback": false,
+      "audio_total_qa_bytes_fetched": 868964,
+      "audio_range_efficiency_passed": null,
+      "audio_reference_bytes_fetched": 510403,
+      "audio_fetch_to_source_size_ratio": 0.7025056670905148,
+      "peak_worker_and_children_rss_bytes": 701378560,
+      "audio_clip_to_source_duration_ratio": 0.8061344104888265,
+      "highlighting_transition_max_error_ms": 30.66666666666606
+    },
+    "worker_cgroup": {
+      "limit_bytes": 1999998976,
+      "peak_bytes": 849743872,
+      "current_bytes": 300560384,
+      "events": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0
+      }
+    },
+    "source": "actual_queue_output_decoded_by_ffmpeg"
+  },
+  "cleanup": {
+    "id": "f8138697-b00c-4638-8d89-8d966d790ca8",
+    "artifact_removed": true,
+    "qa_retained_in_database": true
+  },
+  "finished_at": "2026-10-12T01:42:45.137Z"
+}

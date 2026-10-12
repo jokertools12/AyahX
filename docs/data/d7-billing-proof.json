@@ -1,0 +1,34 @@
+{
+  "checked_at": "2026-10-12T01:55:52.729Z",
+  "scope": "Railway workspace all services; not isolated D7 cost",
+  "before_usage_dollars": 18.26915141204648,
+  "after_usage_dollars": 18.4102181100179,
+  "delta_usage_dollars": 0.14106669797142146,
+  "estimated_bill_dollars": 21.934756977976313,
+  "hard_limit_dollars": 30,
+  "alert_dollars": 20,
+  "remaining_dollars": 11.589781889982099,
+  "line_items": [
+    {
+      "label": "CPU",
+      "current_usage_dollars": 0.919420608410494
+    },
+    {
+      "label": "Memory",
+      "current_usage_dollars": 17.260650012634073
+    },
+    {
+      "label": "Egress",
+      "current_usage_dollars": 0.09219410700000001
+    },
+    {
+      "label": "Volume",
+      "current_usage_dollars": 0.1255923605333333
+    },
+    {
+      "label": "Backup",
+      "current_usage_dollars": 0.01236102144
+    }
+  ],
+  "savings_proven": false
+}

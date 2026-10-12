@@ -1,0 +1,49 @@
+{
+  "run_id": "01a12dbd-b825-74cb-ad2d-529b77b59186",
+  "started_at": "2026-10-12T01:32:51.210Z",
+  "finished_at": "2026-10-12T01:33:15.662Z",
+  "status": "passed",
+  "exit_code": 0,
+  "summary": {
+    "discovered": 50,
+    "selected": 4,
+    "executed": 4,
+    "passed": 4,
+    "failed": 0,
+    "interrupted": 0,
+    "flaky": 0,
+    "skipped": 0
+  },
+  "selected_results": [
+    {
+      "title": [
+        "production admin rejects anonymous reads without disclosure"
+      ],
+      "target": "desktop",
+      "status": "passed"
+    },
+    {
+      "title": [
+        "production admin rejects anonymous reads without disclosure"
+      ],
+      "target": "mobile",
+      "status": "passed"
+    },
+    {
+      "title": [
+        "production public entry keeps admin lazy and admin route opens blank login"
+      ],
+      "target": "desktop",
+      "status": "passed"
+    },
+    {
+      "title": [
+        "production public entry keeps admin lazy and admin route opens blank login"
+      ],
+      "target": "mobile",
+      "status": "passed"
+    }
+  ],
+  "scope": "anonymous production read-only desktop/mobile; no model calls, credentials or API writes",
+  "passed": true
+}

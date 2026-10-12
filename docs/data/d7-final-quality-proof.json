@@ -1,0 +1,18 @@
+{
+  "checked_at": "2026-10-12T02:00:43.350Z",
+  "npm_test": {"passed": 1056, "skipped": 11, "failed": 0, "passed_files": 143, "skipped_files": 5, "duration_seconds": 68.31},
+  "project_tsc": "PASS",
+  "admin_types": "PASS: 52 roots, zero diagnostics",
+  "strict_operator_types": "PASS: six roots, ES2023, moduleResolution Bundler, Node types, ffprobe-static declaration",
+  "changed_operator_eslint": "PASS: six roots, zero messages",
+  "tracked_change_lint_guard": "PASS: four changed tracked roots against origin/main, zero new or existing messages",
+  "build": "PASS",
+  "independent_operator_review": "No confirmed blocker; owned-fixture resume rejected before SSH; source/timing hashes required before resumed inspection",
+  "real_operator_acceptance": "One stdin bundle session with gzip/SHA and bounded status polling in one session; owned R2 queue output inspected and cleaned",
+  "secret_scan": "PASS: 29 known credential values, 1508 eligible text files, zero new leaks; three unchanged pre-existing matches listed separately",
+  "diagnostic_limitations": [
+    "An extra strict diagnostic command using ES2022 without the ES2023 library rejected findLast; rerun using ES2023 passed without code changes.",
+    "A separate strict diagnostic entry importing legacy v1 had pre-existing diagnostics; the project, admin and new operator checks passed. No unrelated legacy fix was made.",
+    "The 11 opt-in skipped tests are not claimed as passes; real Railway, local MySQL/Redis and R2 acceptance is recorded separately."
+  ]
+}

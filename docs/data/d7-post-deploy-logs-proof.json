@@ -1,0 +1,51 @@
+{
+  "checked_at": "2026-10-12T01:47:34.737Z",
+  "startDate": "2026-10-12T01:22:30.000Z",
+  "endDate": "2026-10-12T01:47:33.436Z",
+  "duration_seconds": 1503.436,
+  "services": [
+    {
+      "name": "app",
+      "count": 140,
+      "truncated_possible": false,
+      "severity_errors": 0,
+      "error_messages": []
+    },
+    {
+      "name": "control",
+      "count": 0,
+      "truncated_possible": false,
+      "severity_errors": 0,
+      "error_messages": []
+    },
+    {
+      "name": "skia",
+      "count": 35,
+      "truncated_possible": false,
+      "severity_errors": 0,
+      "error_messages": []
+    },
+    {
+      "name": "alignment",
+      "count": 0,
+      "truncated_possible": false,
+      "severity_errors": 0,
+      "error_messages": []
+    },
+    {
+      "name": "mysql",
+      "count": 0,
+      "truncated_possible": false,
+      "severity_errors": 0,
+      "error_messages": []
+    },
+    {
+      "name": "redis",
+      "count": 125,
+      "truncated_possible": false,
+      "severity_errors": 0,
+      "error_messages": []
+    }
+  ],
+  "passed": true
+}

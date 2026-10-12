@@ -1,0 +1,654 @@
+{
+  "checked_at": "2026-10-12T01:55:52.732Z",
+  "passed": true,
+  "scope": "RAILWAY_PRODUCTION_RENDER_LAB_PRIVATE_QA",
+  "videos_passed": 9,
+  "expected_refusals_passed": 2,
+  "first_failed_queue_attempt_preserved": "d7-production-first-attempt-mp3quran-short-complete.json",
+  "new_job_count_including_first_failed": 10,
+  "results": [
+    {
+      "id": "mp3quran-short-complete",
+      "reciter": "عبد الله القرافي",
+      "recitation": "abdullah_al_qarafi_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "range": "103:1–3",
+      "passed": true,
+      "job_id": "b75a1da9-6481-4dc8-a1a9-3d0ece415957",
+      "expected_refusal": null,
+      "available_runs": null,
+      "expected_duration_ms": 16185,
+      "video_duration_difference_ms": 15,
+      "ncc": 0.9996492949691136,
+      "lag_ms": 0,
+      "highlight_transition_error_ms": 28.33333333333394,
+      "audio_render_bytes": 270337,
+      "audio_reference_bytes": 296613,
+      "audio_total_qa_bytes": 566950,
+      "audio_source_bytes": 296613,
+      "seek_method": "qa_packet_index_remote_range",
+      "render_time_ms": 33497.701736,
+      "peak_worker_and_children_rss_bytes": 743546880,
+      "cgroup_peak_bytes": 560803840,
+      "memory_limit_bytes": 1999998976,
+      "black_frames": 0,
+      "tofu_glyphs": 0,
+      "external_assets": 0,
+      "golden_frames": 14,
+      "artifact_removed": true,
+      "owned_source_removed": null,
+      "proof": "d7-production-mp3quran-short-complete.json",
+      "png": "render-qa/railway-mp3quran-short-complete.png"
+    },
+    {
+      "id": "mp3quran-long-last-ten",
+      "reciter": "عبد الله القرافي",
+      "recitation": "abdullah_al_qarafi_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "range": "26:218–227",
+      "passed": true,
+      "job_id": "a2bc84bf-df55-428c-8691-22a86c54d9b2",
+      "expected_refusal": null,
+      "available_runs": null,
+      "expected_duration_ms": 70636,
+      "video_duration_difference_ms": 30.66700000000128,
+      "ncc": 0.9996069041436616,
+      "lag_ms": 0,
+      "highlight_transition_error_ms": 33,
+      "audio_render_bytes": 1370193,
+      "audio_reference_bytes": 25057467,
+      "audio_total_qa_bytes": 26427660,
+      "audio_source_bytes": 25057467,
+      "seek_method": "qa_packet_index_remote_range",
+      "render_time_ms": 82649.11542900001,
+      "peak_worker_and_children_rss_bytes": 798781440,
+      "cgroup_peak_bytes": 789954560,
+      "memory_limit_bytes": 1999998976,
+      "black_frames": 0,
+      "tofu_glyphs": 0,
+      "external_assets": 0,
+      "golden_frames": 60,
+      "artifact_removed": true,
+      "owned_source_removed": null,
+      "proof": "d7-production-mp3quran-long-last-ten.json",
+      "png": "render-qa/railway-mp3quran-long-last-ten.png"
+    },
+    {
+      "id": "quranicaudio-short-complete",
+      "reciter": "أكرم العلاقمي",
+      "recitation": "akram_al_alaqmi_qdc",
+      "riwayah": "hafs_an_asim",
+      "range": "103:1–3",
+      "passed": true,
+      "job_id": "80dffed7-9ee9-4196-b0f1-9aa44e13d9ec",
+      "expected_refusal": null,
+      "available_runs": null,
+      "expected_duration_ms": 17015,
+      "video_duration_difference_ms": 18.33299999999872,
+      "ncc": 0.9969762699909862,
+      "lag_ms": 0,
+      "highlight_transition_error_ms": 31.66666666666606,
+      "audio_render_bytes": 328935,
+      "audio_reference_bytes": 378125,
+      "audio_total_qa_bytes": 707060,
+      "audio_source_bytes": 378125,
+      "seek_method": "qa_packet_index_remote_range",
+      "render_time_ms": 22125.687867999997,
+      "peak_worker_and_children_rss_bytes": 754249728,
+      "cgroup_peak_bytes": 789954560,
+      "memory_limit_bytes": 1999998976,
+      "black_frames": 0,
+      "tofu_glyphs": 0,
+      "external_assets": 0,
+      "golden_frames": 14,
+      "artifact_removed": true,
+      "owned_source_removed": null,
+      "proof": "d7-production-quranicaudio-short-complete.json",
+      "png": "render-qa/railway-quranicaudio-short-complete.png"
+    },
+    {
+      "id": "quranicaudio-long-last-ten",
+      "reciter": "أكرم العلاقمي",
+      "recitation": "akram_al_alaqmi_qdc",
+      "riwayah": "hafs_an_asim",
+      "range": "26:218–227",
+      "passed": true,
+      "job_id": "ff0558c5-b3ad-4109-ab25-d266cbd838b0",
+      "expected_refusal": null,
+      "available_runs": null,
+      "expected_duration_ms": 74315,
+      "video_duration_difference_ms": 18.33299999999872,
+      "ncc": 0.9979552165002114,
+      "lag_ms": 0,
+      "highlight_transition_error_ms": 31.66666666666424,
+      "audio_render_bytes": 1245101,
+      "audio_reference_bytes": 26511862,
+      "audio_total_qa_bytes": 27756963,
+      "audio_source_bytes": 26511862,
+      "seek_method": "qa_packet_index_remote_range",
+      "render_time_ms": 87351.019455,
+      "peak_worker_and_children_rss_bytes": 825987072,
+      "cgroup_peak_bytes": 849743872,
+      "memory_limit_bytes": 1999998976,
+      "black_frames": 0,
+      "tofu_glyphs": 0,
+      "external_assets": 0,
+      "golden_frames": 60,
+      "artifact_removed": true,
+      "owned_source_removed": null,
+      "proof": "d7-production-quranicaudio-long-last-ten.json",
+      "png": "render-qa/railway-quranicaudio-long-last-ten.png"
+    },
+    {
+      "id": "archive_org-short-complete",
+      "reciter": "محمد الغزالي",
+      "recitation": "mohammed_alghazali_archive",
+      "riwayah": "hafs_an_asim",
+      "range": "108:1–3",
+      "passed": true,
+      "job_id": "f8138697-b00c-4638-8d89-8d966d790ca8",
+      "expected_refusal": null,
+      "available_runs": null,
+      "expected_duration_ms": 13496,
+      "video_duration_difference_ms": 4,
+      "ncc": 0.9997059158704549,
+      "lag_ms": 0,
+      "highlight_transition_error_ms": 30.66666666666606,
+      "audio_render_bytes": 358561,
+      "audio_reference_bytes": 510403,
+      "audio_total_qa_bytes": 868964,
+      "audio_source_bytes": 510403,
+      "seek_method": "qa_packet_index_remote_range",
+      "render_time_ms": 29961.752513,
+      "peak_worker_and_children_rss_bytes": 701378560,
+      "cgroup_peak_bytes": 849743872,
+      "memory_limit_bytes": 1999998976,
+      "black_frames": 0,
+      "tofu_glyphs": 0,
+      "external_assets": 0,
+      "golden_frames": 10,
+      "artifact_removed": true,
+      "owned_source_removed": null,
+      "proof": "d7-production-archive_org-short-complete.json",
+      "png": "render-qa/railway-archive_org-short-complete.png"
+    },
+    {
+      "id": "archive_org-long-last-ten",
+      "reciter": "محمد الغزالي",
+      "recitation": "mohammed_alghazali_archive",
+      "riwayah": "hafs_an_asim",
+      "range": "56:87–96",
+      "passed": true,
+      "job_id": "aaf683d0-0c69-44dd-acf7-9bf0e2f5a6bd",
+      "expected_refusal": null,
+      "available_runs": null,
+      "expected_duration_ms": 87740,
+      "video_duration_difference_ms": 26.66700000000128,
+      "ncc": 0.9936143427703424,
+      "lag_ms": 0,
+      "highlight_transition_error_ms": 31.33333333333576,
+      "audio_render_bytes": 1735459,
+      "audio_reference_bytes": 13695722,
+      "audio_total_qa_bytes": 15431181,
+      "audio_source_bytes": 13695722,
+      "seek_method": "qa_packet_index_remote_range",
+      "render_time_ms": 188478.714493,
+      "peak_worker_and_children_rss_bytes": 777670656,
+      "cgroup_peak_bytes": 849743872,
+      "memory_limit_bytes": 1999998976,
+      "black_frames": 0,
+      "tofu_glyphs": 0,
+      "external_assets": 0,
+      "golden_frames": 44,
+      "artifact_removed": true,
+      "owned_source_removed": null,
+      "proof": "d7-production-archive_org-long-last-ten.json",
+      "png": "render-qa/railway-archive_org-long-last-ten.png"
+    },
+    {
+      "id": "real-repetition",
+      "reciter": "محمد الغزالي",
+      "recitation": "mohammed_alghazali_archive",
+      "riwayah": "hafs_an_asim",
+      "range": "81:26–26",
+      "passed": true,
+      "job_id": "b6a981ed-02df-4ace-8d2c-e68cdb571ee6",
+      "expected_refusal": null,
+      "available_runs": null,
+      "expected_duration_ms": 8120,
+      "video_duration_difference_ms": 13.333000000000538,
+      "ncc": 0.9995499978711603,
+      "lag_ms": 0,
+      "highlight_transition_error_ms": 20,
+      "audio_render_bytes": 236602,
+      "audio_reference_bytes": 3485804,
+      "audio_total_qa_bytes": 3722406,
+      "audio_source_bytes": 3485804,
+      "seek_method": "qa_packet_index_remote_range",
+      "render_time_ms": 32470.534184,
+      "peak_worker_and_children_rss_bytes": 753324032,
+      "cgroup_peak_bytes": 849743872,
+      "memory_limit_bytes": 1999998976,
+      "black_frames": 0,
+      "tofu_glyphs": 0,
+      "external_assets": 0,
+      "golden_frames": 4,
+      "artifact_removed": true,
+      "owned_source_removed": null,
+      "proof": "d7-production-real-repetition.json",
+      "png": "render-qa/railway-real-repetition.png"
+    },
+    {
+      "id": "real-needs-review-full-coverage",
+      "reciter": "عبد الله القرافي",
+      "recitation": "abdullah_al_qarafi_mp3quran",
+      "riwayah": "hafs_an_asim",
+      "range": "39:24–24",
+      "passed": true,
+      "job_id": "15705253-3e1d-40cf-99c0-6a19c7c2ac39",
+      "expected_refusal": null,
+      "available_runs": null,
+      "expected_duration_ms": 15990,
+      "video_duration_difference_ms": 10,
+      "ncc": 0.9999677824209694,
+      "lag_ms": 0,
+      "highlight_transition_error_ms": 0,
+      "audio_render_bytes": 781585,
+      "audio_reference_bytes": 52321649,
+      "audio_total_qa_bytes": 53103234,
+      "audio_source_bytes": 52321649,
+      "seek_method": "qa_packet_index_remote_range",
+      "render_time_ms": 20382.235357999998,
+      "peak_worker_and_children_rss_bytes": 791777280,
+      "cgroup_peak_bytes": 849743872,
+      "memory_limit_bytes": 1999998976,
+      "black_frames": 0,
+      "tofu_glyphs": 0,
+      "external_assets": 0,
+      "golden_frames": 1,
+      "artifact_removed": true,
+      "owned_source_removed": null,
+      "proof": "d7-production-real-needs-review-full-coverage.json",
+      "png": "render-qa/railway-real-needs-review-full-coverage.png"
+    },
+    {
+      "id": "owned-r2",
+      "reciter": "ملف ضوضاء مملوك",
+      "recitation": "owned-noise-qa-fixture",
+      "riwayah": null,
+      "range": "fixture 2950ms",
+      "passed": true,
+      "job_id": "0b36a6b9-95c9-40f2-b85d-aee15779d918",
+      "expected_refusal": null,
+      "available_runs": null,
+      "expected_duration_ms": 2950,
+      "video_duration_difference_ms": 16.66700000000037,
+      "ncc": 0.9987766460077533,
+      "lag_ms": 0,
+      "highlight_transition_error_ms": 0,
+      "audio_render_bytes": 104699,
+      "audio_reference_bytes": 193768,
+      "audio_total_qa_bytes": 298467,
+      "audio_source_bytes": 193768,
+      "seek_method": "qa_packet_index_remote_range",
+      "render_time_ms": 5391.315637000001,
+      "peak_worker_and_children_rss_bytes": 734765056,
+      "cgroup_peak_bytes": 849743872,
+      "memory_limit_bytes": 1999998976,
+      "black_frames": 0,
+      "tofu_glyphs": 0,
+      "external_assets": 0,
+      "golden_frames": 1,
+      "artifact_removed": true,
+      "owned_source_removed": true,
+      "proof": "d7-production-owned-r2.json",
+      "png": "render-qa/railway-owned-r2.png"
+    },
+    {
+      "id": "real-incomplete-range",
+      "reciter": "غير مطلوب للرفض",
+      "recitation": "mohammed_alghazali_archive",
+      "riwayah": null,
+      "range": "2:3–5",
+      "passed": true,
+      "job_id": null,
+      "expected_refusal": "RANGE_NOT_AVAILABLE",
+      "available_runs": [
+        [
+          1,
+          3
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          10,
+          12
+        ],
+        [
+          14,
+          15
+        ],
+        [
+          18,
+          18
+        ],
+        [
+          20,
+          20
+        ],
+        [
+          26,
+          26
+        ],
+        [
+          28,
+          28
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          36,
+          37
+        ],
+        [
+          42,
+          46
+        ],
+        [
+          52,
+          53
+        ],
+        [
+          56,
+          57
+        ],
+        [
+          64,
+          65
+        ],
+        [
+          67,
+          69
+        ],
+        [
+          72,
+          74
+        ],
+        [
+          77,
+          77
+        ],
+        [
+          80,
+          80
+        ],
+        [
+          82,
+          82
+        ],
+        [
+          86,
+          86
+        ],
+        [
+          88,
+          88
+        ],
+        [
+          93,
+          93
+        ],
+        [
+          95,
+          96
+        ],
+        [
+          99,
+          100
+        ],
+        [
+          103,
+          104
+        ],
+        [
+          106,
+          108
+        ],
+        [
+          110,
+          111
+        ],
+        [
+          113,
+          113
+        ],
+        [
+          115,
+          119
+        ],
+        [
+          122,
+          122
+        ],
+        [
+          124,
+          124
+        ],
+        [
+          127,
+          127
+        ],
+        [
+          130,
+          131
+        ],
+        [
+          134,
+          135
+        ],
+        [
+          137,
+          138
+        ],
+        [
+          140,
+          142
+        ],
+        [
+          144,
+          149
+        ],
+        [
+          152,
+          154
+        ],
+        [
+          157,
+          158
+        ],
+        [
+          160,
+          160
+        ],
+        [
+          163,
+          163
+        ],
+        [
+          166,
+          167
+        ],
+        [
+          171,
+          171
+        ],
+        [
+          175,
+          176
+        ],
+        [
+          179,
+          182
+        ],
+        [
+          184,
+          184
+        ],
+        [
+          186,
+          187
+        ],
+        [
+          189,
+          195
+        ],
+        [
+          197,
+          199
+        ],
+        [
+          202,
+          203
+        ],
+        [
+          205,
+          208
+        ],
+        [
+          212,
+          212
+        ],
+        [
+          216,
+          216
+        ],
+        [
+          220,
+          223
+        ],
+        [
+          226,
+          228
+        ],
+        [
+          234,
+          234
+        ],
+        [
+          238,
+          239
+        ],
+        [
+          241,
+          242
+        ],
+        [
+          244,
+          245
+        ],
+        [
+          252,
+          252
+        ],
+        [
+          255,
+          255
+        ],
+        [
+          258,
+          258
+        ],
+        [
+          263,
+          263
+        ],
+        [
+          268,
+          272
+        ],
+        [
+          276,
+          276
+        ],
+        [
+          279,
+          281
+        ],
+        [
+          283,
+          285
+        ]
+      ],
+      "expected_duration_ms": null,
+      "video_duration_difference_ms": null,
+      "ncc": null,
+      "lag_ms": null,
+      "highlight_transition_error_ms": null,
+      "audio_render_bytes": null,
+      "audio_reference_bytes": null,
+      "audio_total_qa_bytes": null,
+      "audio_source_bytes": null,
+      "seek_method": null,
+      "render_time_ms": null,
+      "peak_worker_and_children_rss_bytes": null,
+      "cgroup_peak_bytes": null,
+      "memory_limit_bytes": null,
+      "black_frames": null,
+      "tofu_glyphs": null,
+      "external_assets": null,
+      "golden_frames": 0,
+      "artifact_removed": null,
+      "owned_source_removed": null,
+      "proof": "d7-production-real-incomplete-range.json",
+      "png": null
+    },
+    {
+      "id": "youtube-without-licensed-file",
+      "reciter": "غير مطلوب للرفض",
+      "recitation": "abdul_hamid_ghraio_2025_yt",
+      "riwayah": null,
+      "range": "1:1–1",
+      "passed": true,
+      "job_id": null,
+      "expected_refusal": "YOUTUBE_RENDER_REQUIRES_LICENSED_FILE",
+      "available_runs": null,
+      "expected_duration_ms": null,
+      "video_duration_difference_ms": null,
+      "ncc": null,
+      "lag_ms": null,
+      "highlight_transition_error_ms": null,
+      "audio_render_bytes": null,
+      "audio_reference_bytes": null,
+      "audio_total_qa_bytes": null,
+      "audio_source_bytes": null,
+      "seek_method": null,
+      "render_time_ms": null,
+      "peak_worker_and_children_rss_bytes": null,
+      "cgroup_peak_bytes": null,
+      "memory_limit_bytes": null,
+      "black_frames": null,
+      "tofu_glyphs": null,
+      "external_assets": null,
+      "golden_frames": 0,
+      "artifact_removed": null,
+      "owned_source_removed": null,
+      "proof": "d7-production-youtube-without-licensed-file.json",
+      "png": null
+    }
+  ],
+  "png_count": 19,
+  "png_total_bytes": 1258987,
+  "limitations": [
+    "QA_PACKET_INDEX_FROM_FULL_REFERENCE: render input is fresh remote Range; packet metadata uses complete independent QA reference. Total QA transfer is not reduced.",
+    "RSS includes sampled worker and descendants; cgroup peak is service-lifetime observation, not attributable per job.",
+    "Private QA technical success does not approve Quran recording identity, license, basmala or public launch."
+  ]
+}
