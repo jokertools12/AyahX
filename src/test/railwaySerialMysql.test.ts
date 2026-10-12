@@ -151,6 +151,19 @@ describe('single-session Railway mysql transport', () => {
     expect(mock.received).toEqual(['SHOW CREATE TABLE `recitations`;']);
     await session.close();
   });
+  it('keeps locking reads behind write authorization without weakening read()', async () => {
+    const readonly = await sessionFor();
+    await expect(readonly.session.readForUpdate('SELECT id FROM users FOR UPDATE;')).rejects.toMatchObject({ code: 'RAILWAY_SERIAL_WRITES_NOT_AUTHORIZED' });
+    await readonly.session.close();
+    const { mock, session } = await sessionFor(undefined, { allowWrites: true });
+    await expect(session.read('SELECT id FROM users FOR UPDATE;')).rejects.toMatchObject({ code: 'READ_ONLY_SQL_REQUIRED' });
+    for (const sql of ['SELECT 1;', 'SELECT 1; SELECT id FROM users FOR UPDATE;', 'SELECT 1; DELETE FROM users; SELECT id FROM users FOR UPDATE;', 'UPDATE users SET id=1 FOR UPDATE;']) {
+      await expect(session.readForUpdate(sql)).rejects.toMatchObject({ code: 'LOCKING_SELECT_REQUIRED' });
+    }
+    expect(await session.readForUpdate('SELECT id FROM users FOR UPDATE;')).toBe('اختبار\t6\n');
+    expect(mock.received).toEqual(['SELECT id FROM users FOR UPDATE;']);
+    await session.close();
+  });
   it('retains real COMMIT acknowledgement but rejects a later SSH exit 1', async () => {
     const { mock, session } = await sessionFor(undefined, { allowWrites: true });
     await session.commit();

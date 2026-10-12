@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "local_only": true,
+  "automatic_expiry": true,
+  "account_disabled": true,
+  "sessions_removed": true,
+  "identity_rejected": true,
+  "ttl_ms": 15000,
+  "deletion": {
+    "deleted": true,
+    "sessions": 0,
+    "auditRetained": 2
+  },
+  "original_accounts_unchanged": true,
+  "checked_at": "2026-10-12T07:46:55.923Z"
+}
