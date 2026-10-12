@@ -14,6 +14,8 @@ describe('owner workflow boundaries', () => {
   it('never offers bulk voice or provider license decisions', () => {
     expect(allowsBulkDecision([{ type: 'voice_confirmation', status: 'pending' } as ReviewItem])).toBe(false);
     expect(allowsBulkDecision([{ type: 'provider_license', status: 'pending' } as ReviewItem])).toBe(false);
+    expect(allowsBulkDecision([{ type: 'label_review', status: 'pending' } as ReviewItem])).toBe(false);
+    expect(allowsBulkDecision([{ type: 'data_conflict', status: 'pending' } as ReviewItem])).toBe(true);
     expect(allowsBulkDecision([])).toBe(false);
   });
   it('rejects a range crossing missing verses and accepts endpoints within one verified run', () => {

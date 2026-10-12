@@ -11,7 +11,7 @@ export function reviewShortcut(event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'm
   return ({ j: 'next', k: 'previous', a: 'approved', r: 'rejected', d: 'deferred' } as const)[event.key.toLowerCase()] ?? null;
 }
 
-const bulkSafeTypes = new Set(['label_review', 'near_complete_chapters', 'youtube_audio_missing']);
+const bulkSafeTypes = new Set(['data_conflict', 'near_complete_chapters', 'youtube_audio_missing']);
 export const allowsBulkDecision = (items: ReviewItem[]) => items.length > 0 && items.every(item => item.status === 'pending' && bulkSafeTypes.has(item.type));
 
 /** Both endpoints must belong to one verified run; filling a gap by interpolation is forbidden. */
