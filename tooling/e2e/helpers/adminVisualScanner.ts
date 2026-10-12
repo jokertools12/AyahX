@@ -127,6 +127,41 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     const alpha = front[3] + back[3] * (1 - front[3]);
     return [0, 1, 2].map(i => alpha ? (front[i] * front[3] + back[i] * back[3] * (1 - front[3])) / alpha : 0).concat(alpha) as Color;
   };
+  // A sticky header may cover a whole Range rectangle after scrolling. Only
+  // discard it when hit testing proves a separate, fully opaque covering layer.
+  // Partial coverage remains measurable; transparency must never hide failures.
+  const fullyOccluded = (el: Element, rect: DOMRect): boolean => {
+    if (typeof document.elementsFromPoint !== 'function') return false;
+    // Pointer-events:none elements are absent from hit testing. Their paint
+    // order cannot be proven by this API, so retain them conservatively.
+    for (let p: Element | null = el; p; p = p.parentElement) if (style(p).pointerEvents === 'none') return false;
+    const left = Math.max(0, rect.left), right = Math.min(width, rect.right);
+    const topEdge = Math.max(0, rect.top), bottom = Math.min(height, rect.bottom);
+    if (right <= left || bottom <= topEdge) return false;
+    const inset = Math.min(0.25, (right - left) / 4, (bottom - topEdge) / 4);
+    const points = [[(left + right) / 2, (topEdge + bottom) / 2], [left + inset, topEdge + inset],
+      [right - inset, topEdge + inset], [left + inset, bottom - inset], [right - inset, bottom - inset]];
+    return points.every(([x, y]) => {
+      for (const top of document.elementsFromPoint(x, y)) {
+        if (top === el || el.contains(top) || top.contains(el)) return false;
+        for (let cover: Element | null = top; cover; cover = cover.parentElement) {
+          if (cover.contains(el) || el.contains(cover)) continue;
+          const r = cover.getBoundingClientRect(), s = style(cover);
+          if (r.left > left || r.right < right || r.top > topEdge || r.bottom < bottom) continue;
+          if (color(s.backgroundColor)?.[3] !== 1 || s.filter && s.filter !== 'none' || s.mixBlendMode && s.mixBlendMode !== 'normal') continue;
+          let opaque = true, positionedLayer = false;
+          for (let p: Element | null = cover; p; p = p.parentElement) {
+            const ancestor = style(p);
+            if (Number(ancestor.opacity) !== 1 || ancestor.filter && ancestor.filter !== 'none' || ancestor.mixBlendMode && ancestor.mixBlendMode !== 'normal') opaque = false;
+            if (ancestor.position === 'fixed' || ancestor.position === 'sticky') positionedLayer = true;
+          }
+          // Ordinary overlapping controls remain a defect even when opaque.
+          if (opaque && positionedLayer) return true;
+        }
+      }
+      return false;
+    });
+  };
   const backgrounds = (el: Element | null): Color[] | null => {
     const layers: Element[] = [];
     for (let p = el; p; p = p.parentElement) layers.unshift(p);
@@ -174,7 +209,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     const el = node.parentElement;
     if (!el || !node.textContent?.trim() || !visible(el) || el.closest('script,style,noscript,template')) continue;
     const range = document.createRange(); range.selectNodeContents(node);
-    const rects = [...range.getClientRects()].filter(r => r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < height);
+    const rects = [...range.getClientRects()].filter(r => r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < height && !fullyOccluded(el, r));
     if (!rects.length) continue;
     scanned.textNodes++;
     const s = style(el), font = parseFloat(s.fontSize);
@@ -193,7 +228,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     measureContrast(el, s.color, thresholds.textContrast, 'TEXT_CONTRAST');
     for (const rect of rects) { geometry(el, rect); painted.push({ el, rect, kind: 'text' }); }
   }
-  const controls = [...scope.querySelectorAll('button,input:not([type="hidden"]),select,textarea,a[href],[role="button"],[role="checkbox"],[role="switch"],[role="combobox"]')].filter(visible);
+  const controls = [...scope.querySelectorAll('button,input:not([type="hidden"]),select,textarea,a[href],[role="button"],[role="checkbox"],[role="switch"],[role="combobox"]')].filter(el => visible(el) && !fullyOccluded(el, el.getBoundingClientRect()));
   const controlRects = new Map<Element, DOMRect>();
   for (const el of controls) {
     scanned.controls++;
@@ -210,6 +245,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     const ids = el.getAttribute('aria-labelledby')?.split(/\s+/) ?? [];
     const name = el.getAttribute('aria-label')?.trim() || ids.map(id => document.getElementById(id)?.textContent ?? '').join(' ').trim() || el.getAttribute('title')?.trim() || el.textContent?.trim() || el.querySelector('img')?.getAttribute('alt')?.trim();
     if (iconOnly && (!name || !hasTooltip(el) && !el.getAttribute('aria-label')?.trim() && !ids.length)) record(el, 'ICON_NAME', 'Icon control has no accessible explanatory name.', r);
+    if (iconOnly && !hasTooltip(el)) record(el, 'ICON_TOOLTIP', 'Icon control has no explanatory tooltip.', r);
     if (iconOnly && Math.min(r.width, r.height) < thresholds.iconSize) record(el, 'ICON_TARGET_SIZE', 'Icon hit target must be at least 40 by 40.', r, Math.min(r.width, r.height), thresholds.iconSize);
     geometry(el, r); painted.push({ el, rect: r, kind: 'control' });
     const s = style(el);
@@ -250,7 +286,11 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     if (a.el === b.el || a.el.contains(b.el) || b.el.contains(a.el)) continue;
     const overlapWidth = Math.min(a.rect.right, b.rect.right) - Math.max(a.rect.left, b.rect.left);
     const overlapHeight = Math.min(a.rect.bottom, b.rect.bottom) - Math.max(a.rect.top, b.rect.top);
-    if (overlapWidth > 0.01 && overlapHeight > 0.01) record(a.el, 'CONTENT_OVERLAP', 'Unrelated visible text or interactive targets overlap.', a.rect, undefined, undefined, b.el);
+    if (overlapWidth > 0.01 && overlapHeight > 0.01) {
+      const left = Math.max(a.rect.left, b.rect.left), top = Math.max(a.rect.top, b.rect.top);
+      const intersection = { x: left, y: top, left, top, right: left + overlapWidth, bottom: top + overlapHeight, width: overlapWidth, height: overlapHeight } as DOMRect;
+      if (!fullyOccluded(a.el, intersection) && !fullyOccluded(b.el, intersection)) record(a.el, 'CONTENT_OVERLAP', 'Unrelated visible text or interactive targets overlap.', a.rect, undefined, undefined, b.el);
+    }
   }
   const bodyWidth = Math.max(document.body.scrollWidth, document.documentElement.scrollWidth);
   if (bodyWidth > width + 0.01) record(document.body, 'BODY_HORIZONTAL_OVERFLOW', 'The document itself scrolls horizontally.', undefined, bodyWidth, width);

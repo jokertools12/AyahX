@@ -74,6 +74,30 @@ describe('admin visual document scanner', () => {
     const report = scanAdminVisualDocument({ touch: false });
     expect(report.scanned.textNodes).toBe(1); expect(report.violations).toEqual([]);
   });
+  it('does not inspect text fully occluded by an opaque sticky header', () => {
+    layout('<p id="row" style="font-size:8px">Covered</p><header id="cover" style="position:sticky;background-color:rgb(255,255,255)">Header</header>', { row: [10, 10, 100, 20], cover: [0, 0, 800, 60] });
+    Object.defineProperty(document, 'elementsFromPoint', { configurable: true, value: () => [document.getElementById('cover')!, document.getElementById('row')!, document.body] });
+    expect(scanAdminVisualDocument({ touch: false }).violations.some(x => x.selector === '#row')).toBe(false);
+    document.getElementById('cover')!.style.backgroundColor = 'rgba(255,255,255,0.5)';
+    expect(scanAdminVisualDocument({ touch: false }).violations.some(x => x.selector === '#row' && x.code === 'FONT_TOO_SMALL')).toBe(true);
+    document.getElementById('cover')!.style.backgroundColor = 'rgb(255,255,255)';
+    document.getElementById('cover')!.setAttribute('data-box', '0,0,40,60');
+    expect(scanAdminVisualDocument({ touch: false }).violations.some(x => x.selector === '#row' && x.code === 'FONT_TOO_SMALL')).toBe(true);
+    Reflect.deleteProperty(document, 'elementsFromPoint');
+  });
+  it('retains actual opaque control overlap rather than mistaking it for a sticky cover', () => {
+    layout('<button id="a">First</button><button id="b" style="background-color:rgb(255,255,255)">Second</button>', { a: [10, 10, 100, 44], b: [10, 10, 100, 44] });
+    Object.defineProperty(document, 'elementsFromPoint', { configurable: true, value: () => [document.getElementById('b')!, document.getElementById('a')!, document.body] });
+    expect(codes()).toContain('CONTENT_OVERLAP');
+    Reflect.deleteProperty(document, 'elementsFromPoint');
+  });
+  it('keeps a partially covered text run measurable but ignores only its sticky covered intersection', () => {
+    layout('<p id="row" style="font-size:8px">Partly covered</p><header id="cover" style="position:sticky;background-color:rgb(255,255,255)">Header</header>', { row: [10, 50, 100, 30], cover: [0, 0, 800, 60] });
+    document.getElementById('cover')!.setAttribute('data-text-box', '10,50,80,10');
+    Object.defineProperty(document, 'elementsFromPoint', { configurable: true, value: (_x: number, y: number) => y < 60 ? [document.getElementById('cover')!, document.getElementById('row')!, document.body] : [document.getElementById('row')!, document.body] });
+    expect(codes()).toContain('FONT_TOO_SMALL'); expect(codes()).not.toContain('CONTENT_OVERLAP');
+    Reflect.deleteProperty(document, 'elementsFromPoint');
+  });
   it('enforces real desktop/touch control heights and 8px adjacent gaps', () => {
     layout('<div><button id="a">First</button><button id="b">Second</button></div>', { a: [10, 10, 100, 40], b: [114, 10, 100, 40] });
     expect(codes()).toContain('CONTROL_GAP'); expect(codes()).not.toContain('CONTROL_HEIGHT');
@@ -92,6 +116,9 @@ describe('admin visual document scanner', () => {
     expect(codes()).toEqual(expect.arrayContaining(['ICON_NAME', 'ICON_TARGET_SIZE']));
     document.getElementById('icon')!.setAttribute('aria-label', 'Open navigation');
     expect(codes()).not.toContain('ICON_NAME');
+    expect(codes()).toContain('ICON_TOOLTIP');
+    document.getElementById('icon')!.setAttribute('title', 'Open navigation');
+    expect(codes()).not.toContain('ICON_TOOLTIP');
   });
   it('finds translucent text contrast and UI border contrast failures', () => {
     layout('<p id="alpha" style="color:rgba(0,0,0,0.5)">Low contrast</p><button id="border" style="border:1px solid rgb(220,220,220)">Save</button>', { alpha: [10, 10, 150, 30], border: [10, 60, 100, 44] });
