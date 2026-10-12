@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { appendCatalogAudit, canonicalAuditJson, requireCatalogPermission, type CatalogActor } from '../services/catalogAudit';
 import { CatalogError, type CatalogDatabase, type CatalogRow } from '../services/catalogContracts';
 import { assertCatalogAudioUrl, type CatalogAudioSource } from '../services/catalogAudioSource';
-import { humanReviewId } from '../services/humanReviewService';
+import { humanReviewId, validateReviewEvidence } from '../services/humanReviewService';
 import { parsedJson } from '../services/adminCatalogUtilities';
 import { checkYoutubeOembed, youtubeReference } from '../services/catalogYoutubeMetadata';
 import { AdminCatalogImageValidator } from '../services/adminCatalogImageValidator';
@@ -27,6 +27,9 @@ export class AdminReciterWizard {
     return { providers: await this.db.read('SELECT id,code,name,is_active,host_allowlist FROM audio_providers ORDER BY name'), riwayat: await this.db.read('SELECT code,name_ar,name_en FROM riwayat ORDER BY code'), imported_qud: await this.db.read("SELECT id,slug,reciter_id,display_label_ar,qud_version FROM recitations WHERE qud_version IS NOT NULL AND status<>'draft' ORDER BY slug") };
   }
   async validate(input: ReciterWizardInput): Promise<CatalogRow> {
+    // All source metadata is retained with a draft, including optional fields.
+    // Reject credentials and expiring capabilities before any read or write.
+    validateReviewEvidence(input);
     const [provider] = await this.db.read('SELECT id,code,host_allowlist FROM audio_providers WHERE id=?', [input.source.provider_id]);
     if (!provider) throw new CatalogError('PROVIDER_NOT_FOUND', 404);
     const hosts = parsedJson<string[]>(provider.host_allowlist);
@@ -66,6 +69,7 @@ export class AdminReciterWizard {
   async create(actor: CatalogActor, input: ReciterWizardInput): Promise<CatalogRow> {
     requireCatalogPermission(actor, 'recitations.manage', true);
     requireCatalogPermission(actor, 'reciters.write', true);
+    validateReviewEvidence(input);
     const intentHash = createHash('sha256').update(canonicalAuditJson(input)).digest('hex');
     const [existing] = await this.db.read('SELECT id,reciter_id,audit_json FROM recitations WHERE id=?', [input.intent_id]);
     if (existing) { if (parsedJson<CatalogRow>(existing.audit_json)?.wizard_intent_sha256 !== intentHash) throw new CatalogError('WIZARD_INTENT_CONFLICT', 409); return { id: existing.id, reciter_id: existing.reciter_id, status: 'draft', replay: true }; }

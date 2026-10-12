@@ -104,5 +104,12 @@ describe('owner review safety', () => {
     await expect(tasks.enqueue({...actor,permissions:new Set(['recitations.sources.manage'])},'task',{type:'candidate',recitation_id:'r',surah:1,url:'https://audio.example/file.mp3?X-Amz-Signature=private'})).rejects.toThrow('REVIEW_EVIDENCE_SECRET');
     expect(db.read).not.toHaveBeenCalled();expect(db.execute).not.toHaveBeenCalled();
   });
+  it('rejects secret source metadata even when the selected wizard source does not use the URL',async()=>{
+    const db=database(async()=>[]),wizard=new AdminReciterWizard(db,{} as never);
+    const input={intent_id:'00000000-0000-4000-8000-000000000000',source:{kind:'licensed_file',provider_id:'provider',url_pattern:'https://audio.example/file.mp3?X-Amz-Signature=private'},reciter:{name_ar:'قارئ',name_en:'Reader'},recitation:{slug:'draft',riwayah_code:'hafs_an_asim',style:'murattal',display_label_ar:'تلاوة'}};
+    await expect(wizard.validate(input as never)).rejects.toThrow('REVIEW_EVIDENCE_SECRET');
+    await expect(wizard.create({...actor,permissions:new Set([...actor.permissions,'reciters.write'])},input as never)).rejects.toThrow('REVIEW_EVIDENCE_SECRET');
+    expect(db.read).not.toHaveBeenCalled();expect(db.execute).not.toHaveBeenCalled();
+  });
 });
 
