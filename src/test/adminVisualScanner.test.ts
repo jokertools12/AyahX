@@ -108,8 +108,10 @@ describe('admin visual document scanner', () => {
     expect(codes()).toContain('CONTROL_GAP');
   });
   it('counts an associated label as a checkbox hit target', () => {
-    layout('<label id="label"><input id="checkbox" type="checkbox"/> Remember</label>', { label: [10, 10, 160, 44], checkbox: [15, 20, 16, 16] });
-    expect(scanAdminVisualDocument({ touch: true }).violations.map(x => x.code)).not.toContain('CONTROL_HEIGHT');
+    layout('<label id="label"><input id="checkbox" type="checkbox"/><span id="label-text">Remember</span></label>', { label: [10, 10, 160, 44], checkbox: [15, 20, 16, 16], 'label-text': [40, 19, 100, 26] });
+    const report = scanAdminVisualDocument({ touch: true });
+    expect(report.violations.map(x => x.code)).not.toContain('CONTROL_HEIGHT');
+    expect(report.violations.map(x => x.code)).not.toContain('CONTENT_OVERLAP');
   });
   it('reports unnamed and narrow icon controls separately', () => {
     layout('<button id="icon"><svg aria-hidden="true"></svg></button>', { icon: [10, 10, 32, 44] });

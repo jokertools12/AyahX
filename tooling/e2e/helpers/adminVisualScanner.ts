@@ -202,7 +202,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     }
     if (ratio < minimum) record(el, code, 'Measured contrast is below the mandatory minimum.', undefined, ratio, minimum);
   };
-  type Painted = { el: Element; rect: DOMRect; kind: 'text' | 'control' };
+  type Painted = { el: Element; rect: DOMRect; kind: 'text' | 'control'; hitTarget?: Element };
   const painted: Painted[] = [];
   const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT);
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
@@ -230,6 +230,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   }
   const controls = [...scope.querySelectorAll('button,input:not([type="hidden"]),select,textarea,a[href],[role="button"],[role="checkbox"],[role="switch"],[role="combobox"]')].filter(el => visible(el) && !fullyOccluded(el, el.getBoundingClientRect()));
   const controlRects = new Map<Element, DOMRect>();
+  const controlTargets = new Map<Element, Element>();
   for (const el of controls) {
     scanned.controls++;
     let hit: Element = el;
@@ -237,7 +238,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
       const labels = [...(el.labels ?? [])].filter(visible).sort((a, b) => b.getBoundingClientRect().height - a.getBoundingClientRect().height);
       if (labels[0]) hit = labels[0];
     }
-    const r = hit.getBoundingClientRect(); controlRects.set(el, r);
+    const r = hit.getBoundingClientRect(); controlRects.set(el, r); controlTargets.set(el, hit);
     const minimum = touch ? thresholds.touchControl : thresholds.desktopControl;
     if (r.height < minimum) record(el, 'CONTROL_HEIGHT', 'Interactive hit target is too short.', r, r.height, minimum);
     const hasVisibleLabel = [...el.childNodes].some(n => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()) || [...el.querySelectorAll('*')].some(c => !c.closest('[aria-hidden="true"]') && visible(c) && c.textContent?.trim());
@@ -247,7 +248,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     if (iconOnly && (!name || !hasTooltip(el) && !el.getAttribute('aria-label')?.trim() && !ids.length)) record(el, 'ICON_NAME', 'Icon control has no accessible explanatory name.', r);
     if (iconOnly && !hasTooltip(el)) record(el, 'ICON_TOOLTIP', 'Icon control has no explanatory tooltip.', r);
     if (iconOnly && Math.min(r.width, r.height) < thresholds.iconSize) record(el, 'ICON_TARGET_SIZE', 'Icon hit target must be at least 40 by 40.', r, Math.min(r.width, r.height), thresholds.iconSize);
-    geometry(el, r); painted.push({ el, rect: r, kind: 'control' });
+    geometry(el, r); painted.push({ el, rect: r, kind: 'control', hitTarget: hit });
     const s = style(el);
     if (el.matches('input,select,textarea')) {
       const font = parseFloat(s.fontSize);
@@ -263,7 +264,8 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     else if (!border.length && el.matches('input,select,textarea,[role="checkbox"],[role="switch"],[role="combobox"]')) record(el, 'UI_BOUNDARY_MISSING', 'Form control has no measurable border or contrasting fill.', r);
   }
   for (let i = 0; i < controls.length; i++) for (let j = i + 1; j < controls.length; j++) {
-      if (controls[i].contains(controls[j]) || controls[j].contains(controls[i])) continue;
+      const firstTarget = controlTargets.get(controls[i])!, secondTarget = controlTargets.get(controls[j])!;
+      if (firstTarget.contains(secondTarget) || secondTarget.contains(firstTarget)) continue;
       const a = controlRects.get(controls[i])!, b = controlRects.get(controls[j])!;
       const verticalIntersection = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
       const horizontalIntersection = Math.min(a.right, b.right) - Math.max(a.left, b.left);
@@ -283,7 +285,8 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   }
   for (let i = 0; i < painted.length; i++) for (let j = i + 1; j < painted.length; j++) {
     const a = painted[i], b = painted[j];
-    if (a.el === b.el || a.el.contains(b.el) || b.el.contains(a.el)) continue;
+    const aOwner = a.hitTarget ?? a.el, bOwner = b.hitTarget ?? b.el;
+    if (aOwner === bOwner || aOwner.contains(bOwner) || bOwner.contains(aOwner)) continue;
     const overlapWidth = Math.min(a.rect.right, b.rect.right) - Math.max(a.rect.left, b.rect.left);
     const overlapHeight = Math.min(a.rect.bottom, b.rect.bottom) - Math.max(a.rect.top, b.rect.top);
     if (overlapWidth > 0.01 && overlapHeight > 0.01) {
