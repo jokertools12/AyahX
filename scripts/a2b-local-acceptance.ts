@@ -85,7 +85,7 @@ export async function runAdminOwnerLocalAcceptance(pool:Pool,redis:Redis,env:Nod
     await clone('reciters',String(source.reciter_id),ids.reader,{slug:prefix,name_ar:'قارئ محلي للاختبار',source_reciter_id:null});
     await clone('recitations',String(source.id),ids.recitation,{slug:prefix,provider_id:ids.provider,reciter_id:ids.reader,voice_identity_status:'unverified',voice_confirmed_by:null,voice_confirmed_at:null,is_public:0});
     for(const [id,type,subjectType,subjectId]of [[ids.voice,'voice_confirmation','recitation',ids.recitation],[ids.license,'provider_license','audio_provider',ids.provider],[ids.safe,'data_conflict','recitation',ids.recitation]])await db.execute("INSERT INTO human_review_items(id,type,subject_type,subject_id,evidence,priority,status,notes) VALUES(?,?,?,?,?,100,'pending','')",[id,type,subjectType,subjectId,JSON.stringify({local_fixture_only:true,prefix})]);
-    const app=express();app.use(express.json());app.use('/api/admin',runtime.router);
+    const app=express();app.use('/api/admin',runtime.router);
     server=await new Promise<Server>(accept=>{const listener=app.listen(0,'127.0.0.1',()=>accept(listener));});const address=server.address();assert.ok(address&&typeof address!=='string');base=`http://127.0.0.1:${address.port}/api/admin`;
     await clearRates();const login=await request('/auth/login','POST',{email:prefix+'@example.test',password},false);assert.equal(login.status,200,`LOGIN:${login.body?.code}`);assert.ok(login.cookie);cookie=login.cookie;
     assert.equal((await request('/workspace',undefined,undefined,false)).status,401);
@@ -111,6 +111,7 @@ export async function runAdminOwnerLocalAcceptance(pool:Pool,redis:Redis,env:Nod
     await mutate('/preferences','PATCH',{density:'compact',font_scale:1.1});assert.deepEqual(await owner.preferences(ids.user),{density:'compact',font_scale:1.1});pass('preferences_real_per_user_persistence');
     const draft={intent_id:ids.draft,reciter:{id:ids.reader,name_ar:'قارئ',name_en:'Local'},recitation:{slug:prefix+'-draft',riwayah_code:String(source.riwayah_code),style:'murattal',display_label_ar:'مسودة محلية'},source:{kind:'licensed_file',provider_id:ids.provider}};
     const createdDraft=await mutate('/reciter-wizard','POST',draft);assert.equal(createdDraft.status,'draft');created.push({table:'recitations',id:ids.draft});fixtureReviewIds.push(...createdDraft.review_ids as string[]);
+    const [draftRights]=await db.read("SELECT id,status FROM human_review_items WHERE type='storage_rights' AND subject_id=?",[ids.draft]);assert.equal(draftRights.status,'pending');
     const replay=await request('/reciter-wizard','POST',draft);assert.equal(replay.status,200);assert.equal(replay.data.replay,true);
     const [storedDraft]=await db.read('SELECT status,is_public,basmala_mode,basmala_reason,source_url,qud_version,catalog_sha256,offset_verified,timing_reference_recitation_id FROM recitations WHERE id=?',[ids.draft]);assert.equal(storedDraft.basmala_mode,null);assert.equal(storedDraft.qud_version,null);assert.equal(Number(storedDraft.offset_verified),0);
     const bad=await request('/reciter-wizard/validate','POST',{...draft,source:{kind:'url_pattern',provider_id:ids.provider,url_pattern:'https://127.0.0.1/{surah:03d}.mp3'}});assert.equal(bad.status,422);

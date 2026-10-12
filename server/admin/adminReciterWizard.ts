@@ -92,7 +92,7 @@ export class AdminReciterWizard {
         const ref=youtubeReference(input.source.youtube_url!)!,metadata=checked.youtube_metadata as CatalogRow;
         await tx.execute("INSERT INTO recitation_youtube_sources(id,recitation_id,surah,video_id,playlist_id,channel_title,oembed_status,rights_status,rights_evidence_note) VALUES(?,?,NULL,?,?,?,?,'unknown','')",[randomUUID(),input.intent_id,ref.videoId,ref.playlistId,metadata.channel_title??'',metadata.status]);
       }
-      const types = ['voice_confirmation', 'label_review', ...(checked.timing === 'pending' ? ['offset_exception'] : []), ...(input.source.kind === 'youtube' ? ['youtube_rights', 'youtube_audio_missing', 'storage_rights'] : [])] as const;
+      const types = ['voice_confirmation', 'label_review', ...(checked.timing === 'pending' ? ['offset_exception'] : []), ...(input.source.kind === 'licensed_file' ? ['storage_rights'] : []), ...(input.source.kind === 'youtube' ? ['youtube_rights', 'youtube_audio_missing', 'storage_rights'] : [])] as const;
       const reviewIds: string[] = [];
       for (const type of types) {
         const review = { type: type as 'voice_confirmation', subject_type: 'recitation', subject_id: input.intent_id }, id = humanReviewId(review);
