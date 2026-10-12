@@ -5,6 +5,13 @@ const entry = (ar: string, en: string, help_ar = ar, help_en = en, tone: TermTon
 
 /** The owner-facing vocabulary. Stored values remain unchanged in requests and exports. */
 export const terms: Record<string, AdminTerm> = {
+  NO_VALID_MAPPED_SOURCE_INTERVAL: entry('لا يوجد توقيت صالح مربوط بهذه الكلمة', 'No valid source interval maps to this word'),
+  WORD_DIFF_UNMAPPED: entry('تعذر ربط كلمة منطوقة بالنص القانوني', 'Spoken word could not be mapped to canonical text'),
+  CANONICAL_WORD_COVERAGE_INCOMPLETE: entry('بعض كلمات المصحف بلا توقيت', 'Some canonical words have no timing'),
+  CANONICAL_TEXT_UNAVAILABLE: entry('النص القانوني لهذه الرواية غير متاح', 'Canonical text for this riwayah is unavailable'),
+  INVALID_WORD_INTERVAL: entry('مدى توقيت الكلمة غير صالح', 'Word timing interval is invalid'),
+  SPOKEN_WORD_COUNT_MISMATCH: entry('عدد الكلمات المنطوقة لا يطابق التوقيتات', 'Spoken word count differs from timing count'),
+  SOURCE_WORD_OVERLAP_OR_ORDER: entry('توقيتات المصدر متداخلة أو غير مرتبة', 'Source intervals overlap or are out of order'),
   complete: entry('مكتملة', 'Complete', 'تتوفر كل الآيات وتوقيت كل كلمة قانونية.', 'Every verse and canonical word has timing.', 'success'),
   near_complete: entry('شبه مكتملة', 'Almost complete', 'ينقصها توقيت كلمة إلى ثلاث كلمات؛ ليست مكتملة.', 'One to three words lack timing; this is not complete.', 'warning'),
   partial: entry('متاحة جزئيًا', 'Partly available', 'تتوفر نطاقات محددة فقط؛ راجع الآيات المتاحة.', 'Only specific verse ranges are available.', 'warning'),

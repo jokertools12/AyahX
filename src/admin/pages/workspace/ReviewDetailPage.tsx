@@ -16,7 +16,7 @@ export function ReviewDecisionPanel({ item, subject, onDone, listening = false }
   const license = item.type === 'provider_license', rightsReview = ['youtube_rights', 'storage_rights'].includes(item.type), editable = ['pending', 'deferred'].includes(item.status), canDecide = !!user?.permissions.includes('review.decide'), licenseAllowed = !license || !!user?.roles.includes('super_admin');
   const code = String(subject?.code ?? ''), commonReady = editable && canDecide && notes.trim().length > 0 && !mutation.pending;
   const decide = async (status: ReviewDecisionInput['status']) => {
-    if (!commonReady || (status !== 'deferred' && !licenseAllowed)) return;
+    if (!commonReady || (status !== 'deferred' && !licenseAllowed) || (status === 'approved' && !approvalReady) || (status === 'rejected' && license && confirmation !== code)) return;
     const decision: Record<string, unknown> = {};
     if (license) { decision.license_status = status === 'rejected' ? 'restricted' : 'permitted'; if (reference.trim()) decision.rights_evidence_ref = reference.trim(); }
     if (item.type === 'label_review') decision.display_label_ar = label.trim();
