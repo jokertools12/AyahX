@@ -7,6 +7,7 @@ import {chromium} from '../tooling/e2e/node_modules/playwright-core/index.mjs';
 import {loadAdminVisualScanner} from '../tooling/e2e/helpers/loadAdminVisualScanner.mjs';
 import {buildAdminVisualRoutes,buildAdminVisualDialogs,assertAdminVisualDialogCoverage} from '../tooling/e2e/helpers/adminVisualInventory.mjs';
 import {allowedAdminVisualWrite,prepareAdminVisualDialogContext} from '../tooling/e2e/helpers/adminVisualDialogPreparation.mjs';
+import {measureAdminVisualAccessibility} from '../tooling/e2e/helpers/adminVisualAccessibility.mjs';
 if(process.env.CI!=='true'||process.env.AYAHX_ADMIN_VISUAL_CI!=='1')throw new Error('EPHEMERAL_CI_ONLY');
 const base='http://127.0.0.1:3005',directory=resolve(process.env.AYAHX_ADMIN_CI_PRIVATE_DIR??'');
 const location=relative(process.cwd(),directory);
@@ -64,11 +65,7 @@ async function scanAll(touch){
 }
 async function scanAccessibility(){
  await page.addScriptTag({content:axe});
- return page.evaluate(async()=>{
-  const dialogs=[...document.querySelectorAll('[role="dialog"][aria-modal="true"],dialog[open]')].filter(el=>{const rect=el.getBoundingClientRect();return rect.width>0&&rect.height>0&&getComputedStyle(el).visibility!=='hidden';});
-  const result=await axe.run(dialogs.at(-1)??document.querySelector('.admin-app'),{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']}});
-  return{violations:result.violations.map(v=>({id:v.id,impact:v.impact,help:v.help,helpUrl:v.helpUrl,nodes:v.nodes.map(n=>({target:n.target}))})),incomplete:result.incomplete.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target}))}))};
- });
+ return page.evaluate(measureAdminVisualAccessibility);
 }
 async function scanDialogs(caseId,touch){
  // Only explicitly marked non-submitting openers. Clicking arbitrary action
