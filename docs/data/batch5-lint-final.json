@@ -1,0 +1,121 @@
+{
+  "checked_at": "2026-10-13T06:40:14.601Z",
+  "base": "origin/main",
+  "files": 132,
+  "new_messages": [],
+  "existing_messages": [
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 25,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 25,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 54,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 329,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 405,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 439,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 531,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 620,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 660,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 700,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 787,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 848,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 906,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 956,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 997,
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "server/services/renderJobQueue.ts",
+      "rule": "@typescript-eslint/no-explicit-any",
+      "severity": 1,
+      "line": 1090,
+      "message": "Unexpected any. Specify a different type."
+    }
+  ],
+  "passed": true
+}
