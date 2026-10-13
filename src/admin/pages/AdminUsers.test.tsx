@@ -11,7 +11,7 @@ const owner={id:'unit-owner',email:'unit@example.test',displayName:'Unit owner',
 afterEach(cleanup);
 describe('user role drawer checkbox names',()=>{
  it.each(['ar','en'] as const)('exposes each role name/title in %s and keeps grant toggles functional',lang=>{
-  render(<MemoryRouter><AdminContext.Provider value={{user:owner,lang,setLang:()=>{},refreshUser:()=>{}}}><AdminUsers/></AdminContext.Provider></MemoryRouter>);fireEvent.click(screen.getByRole('button',{name:'Open fixture user'}));
+  render(<MemoryRouter future={{v7_startTransition:true,v7_relativeSplatPath:true}}><AdminContext.Provider value={{user:owner,lang,setLang:()=>{},refreshUser:()=>{}}}><AdminUsers/></AdminContext.Provider></MemoryRouter>);fireEvent.click(screen.getByRole('button',{name:'Open fixture user'}));
   for(const role of ['super_admin','admin','content_manager','moderator','support','finance','analyst','user']){const name=termLabel(role,lang),checkbox=screen.getByRole('checkbox',{name});expect(checkbox).toHaveAttribute('aria-label',name);expect(checkbox).toHaveAttribute('title',name);}
   const admin=screen.getByRole('checkbox',{name:termLabel('admin',lang)});expect(admin).toHaveAttribute('aria-checked','true');fireEvent.click(admin);expect(admin).toHaveAttribute('aria-checked','false');expect(screen.getByRole('dialog')).toHaveClass('admin-drawer');
  });
