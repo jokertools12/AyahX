@@ -5,6 +5,27 @@ export function allowedAdminVisualWrite(method,path,body,fixture){
  return path==='/api/admin/reviews/bulk-preview'&&typeof fixture.safeReviewId==='string'&&/^[a-zA-Z0-9_-]+$/u.test(fixture.safeReviewId)&&body?.status==='approved'&&Array.isArray(body.ids)&&body.ids.length===1&&body.ids[0]===fixture.safeReviewId;
 }
 
+const previewProofs=new WeakMap(),observedPages=new WeakSet();
+export function isOwnedAdminVisualPreview(proof,fixture){
+ return typeof fixture.safeReviewId==='string'&&/^[a-zA-Z0-9_-]+$/u.test(fixture.safeReviewId)&&proof?.count===1&&Array.isArray(proof.ids)&&proof.ids.length===1&&proof.ids[0]===fixture.safeReviewId&&Array.isArray(proof.types)&&proof.types.length===1&&proof.types[0]==='data_conflict';
+}
+export function canReuseAdminVisualPreview(proof,fixture,ui){
+ return isOwnedAdminVisualPreview(proof,fixture)&&ui.previewPresent===true&&ui.previewCount===1&&ui.selectedCount===1&&Array.isArray(ui.selectedIds)&&ui.selectedIds.length===1&&ui.selectedIds[0]===fixture.safeReviewId;
+}
+function observePreviewDocument(page){
+ if(observedPages.has(page))return;
+ observedPages.add(page);
+ // A response proof can describe only the document that actually rendered it.
+ // Reloads and even same-document navigation invalidate it conservatively.
+ page.on('framenavigated',frame=>{if(frame===page.mainFrame())previewProofs.delete(page);});
+}
+async function previewUi(scope){
+ const note=scope.locator('#bulk-note'),previewPresent=await note.isVisible();
+ const count=text=>Number(/:\s*(\d+)\s*$/u.exec(text??'')?.[1]??NaN);
+ const selectedIds=await scope.locator('.admin-table-desktop tbody input[type=checkbox]:checked,.admin-mobile-cards input[type=checkbox]:checked').evaluateAll(elements=>[...new Set(elements.map(el=>(el.getAttribute('aria-label')??'').replace(/^(?:تحديد|Select)\s+/u,'')))]);
+ return{previewPresent,selectedIds,selectedCount:count(await scope.locator('.admin-fixed-actions p').first().textContent()),previewCount:previewPresent?count(await scope.locator('section:has(#bulk-note) > p').first().textContent()):NaN};
+}
+
 async function firstVisible(locator){const until=performance.now()+20000;do{for(let i=0;i<await locator.count();i++)if(await locator.nth(i).isVisible())return locator.nth(i);await new Promise(resolve=>setTimeout(resolve,50));}while(performance.now()<until);throw new Error('VISUAL_PREVIEW_TARGET_REQUIRED');}
 async function pickAnotherReader(page,scope){
  await (await firstVisible(scope.getByRole('combobox',{name:/القارئ الهدف|Target reader/u}))).click();
@@ -33,11 +54,19 @@ export async function prepareAdminVisualDialogContext(page,scope,fixture){
   await pickAnotherReader(page,scope);
   await scope.locator('#merge-reason').fill('CI_VISUAL_ONLY: preview, no reader merge');
  }else if(!slug&&path==='/admin/reviews'){
+  observePreviewDocument(page);
   const checkbox=scope.locator(`input[aria-label="تحديد ${fixture.safeReviewId}"],input[aria-label="Select ${fixture.safeReviewId}"]`);
   const target=await firstVisible(checkbox);if(!await target.isChecked())await target.check();
-  const preview=scope.getByRole('button',{name:/معاينة موافقة المجموعة الآمنة|Preview safe group approval/u});
-  const[response]=await Promise.all([page.waitForResponse(response=>new URL(response.url()).pathname==='/api/admin/reviews/bulk-preview'),(await firstVisible(preview)).click()]);
-  if(!response.ok())throw new Error('REAL_SAFE_BULK_PREVIEW_FAILED');
+  if(!canReuseAdminVisualPreview(previewProofs.get(page),fixture,await previewUi(scope))){
+   const preview=scope.getByRole('button',{name:/معاينة موافقة المجموعة الآمنة|Preview safe group approval/u});
+   const[response]=await Promise.all([page.waitForResponse(response=>new URL(response.url()).pathname==='/api/admin/reviews/bulk-preview'),(await firstVisible(preview)).click()]);
+   if(!response.ok())throw new Error('REAL_SAFE_BULK_PREVIEW_FAILED');
+   const data=(await response.json()).data;
+   if(!isOwnedAdminVisualPreview(data,fixture))throw new Error('REAL_SAFE_BULK_PREVIEW_SHAPE_MISMATCH');
+   await scope.locator('#bulk-note').waitFor({state:'visible'});
+   if(!canReuseAdminVisualPreview(data,fixture,await previewUi(scope)))throw new Error('REAL_SAFE_BULK_PREVIEW_UI_MISMATCH');
+   previewProofs.set(page,data);
+  }
   await scope.locator('#bulk-note').waitFor({state:'visible'});await scope.locator('#bulk-note').fill('CI_VISUAL_ONLY: preview, no approval');
   return async()=>{await scope.locator('#bulk-note').fill('');if(await target.isChecked())await target.uncheck();};
  }
