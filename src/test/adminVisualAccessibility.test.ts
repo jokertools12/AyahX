@@ -50,6 +50,12 @@ describe('real contrast remeasurement acceptance',()=>{
   run.mockResolvedValue(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}],passes:[{id:'color-contrast',nodes:[node(target)]}]}));
   const measured=await measureAdminVisualAccessibility();expect(measured.incomplete).toHaveLength(1);expect(run).toHaveBeenCalledTimes(1);expect(measured.remeasurements[0].fullyVisibleBeforeRun).toBe(false);
  });
+ it.each([0.0000038,0.001])('accepts only floating shared-edge noise, never actual clipping (%s px)',async(difference)=>{
+  const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(el:Element)=>({...style(el),overflowX:el.id==='panel'?'auto':'visible'}));
+  vi.spyOn(document.getElementById('panel')!,'getBoundingClientRect').mockImplementation(()=>({...rect(),right:120-difference,width:100-difference}) as DOMRect);
+  run.mockResolvedValueOnce(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}]})).mockResolvedValueOnce(result({passes:[{id:'color-contrast',nodes:[node(target)]}]}));
+  const measured=await measureAdminVisualAccessibility();expect(measured.remeasurements[0].resolved).toBe(difference<0.0001);expect(measured.incomplete).toHaveLength(difference<0.0001?0:1);
+ });
  it('does not grant a pass to a geometrically visible node hidden behind an overlay',async()=>{
   Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:()=>[other,target]});
   run.mockResolvedValue(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}],passes:[{id:'color-contrast',nodes:[node(target)]}]}));

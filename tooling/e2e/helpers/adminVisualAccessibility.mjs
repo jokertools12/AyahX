@@ -8,12 +8,15 @@ export async function measureAdminVisualAccessibility(){
  const paint=async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(resolve));await Promise.allSettled(document.getAnimations().filter(animation=>animation.effect?.getTiming().iterations!==Infinity).map(animation=>animation.finished));await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));};
  const fullyVisible=el=>{
   if(!el.isConnected||!scope.contains(el))return false;
-  const r=el.getBoundingClientRect();if(r.width<=0||r.height<=0||r.left<0||r.top<0||r.right>innerWidth||r.bottom>innerHeight)return false;
+  // DPR geometry can represent a shared CSS edge a few millionths of a pixel
+  // differently. This bounded tolerance cannot hide a 0.001px clipping defect.
+  const tolerance=0.0001;
+  const r=el.getBoundingClientRect();if(r.width<=0||r.height<=0||r.left < -tolerance||r.top < -tolerance||r.right>innerWidth+tolerance||r.bottom>innerHeight+tolerance)return false;
   for(let p=el;p;p=p.parentElement){
    const s=getComputedStyle(p),b=p.getBoundingClientRect();
    if(s.display==='none'||s.visibility!=='visible'||Number(s.opacity)!==1||p.hasAttribute('hidden'))return false;
-   if(/hidden|clip|auto|scroll/.test(s.overflowX)&&(r.left<b.left+(parseFloat(s.borderLeftWidth)||0)||r.right>b.right-(parseFloat(s.borderRightWidth)||0)))return false;
-   if(/hidden|clip|auto|scroll/.test(s.overflowY)&&(r.top<b.top+(parseFloat(s.borderTopWidth)||0)||r.bottom>b.bottom-(parseFloat(s.borderBottomWidth)||0)))return false;
+   if(/hidden|clip|auto|scroll/.test(s.overflowX)&&(r.left<b.left+(parseFloat(s.borderLeftWidth)||0)-tolerance||r.right>b.right-(parseFloat(s.borderRightWidth)||0)+tolerance))return false;
+   if(/hidden|clip|auto|scroll/.test(s.overflowY)&&(r.top<b.top+(parseFloat(s.borderTopWidth)||0)-tolerance||r.bottom>b.bottom-(parseFloat(s.borderBottomWidth)||0)+tolerance))return false;
   }
   // A rectangular viewport inclusion alone cannot prove paint through an
   // independent overlay. Require the reported target to own every hit point.
