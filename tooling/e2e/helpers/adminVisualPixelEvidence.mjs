@@ -65,7 +65,33 @@ export async function measureAdminVisualEvidenceTarget({selector,action='measure
    const range=document.createRange();range.setStart(text,line.index+start);range.setEnd(text,line.index+line[0].trimEnd().length);
    // A newline/caret can have zero area; a nonempty source line still needs
    // at least one positive, fully visible rectangle, never a fabricated crop.
-   const lines=[...range.getClientRects()].filter(rect=>rect.width!==0&&rect.height!==0);if(!lines.length){reject('TEXT_RANGE_MISSING',null,parent);return failure('TEXT_NOT_FULLY_VISIBLE');}if(lines.some(rect=>!rectVisible(rect,parent)))return failure('TEXT_NOT_FULLY_VISIBLE');
+   let lines=[...range.getClientRects()].filter(rect=>rect.width!==0&&rect.height!==0);if(!lines.length){reject('TEXT_RANGE_MISSING',null,parent);return failure('TEXT_NOT_FULLY_VISIBLE');}
+   const invalid=lines.find(rect=>![rect.width,rect.height,rect.left,rect.top,rect.right,rect.bottom].every(Number.isFinite)||rect.width<=0||rect.height<=0);
+   if(invalid){reject('EMPTY_RECT',invalid,parent);return failure('TEXT_NOT_FULLY_VISIBLE');}
+   if(lines.length>1){
+    // A wrapped internal space can have its own positive rectangle. Prove
+    // membership using source codepoint offsets, never PNG color or guessed
+    // glyph widths. Character rectangles are evidence only, not new crops.
+    const intersects=(a,b)=>Math.min(a.right,b.right)>Math.max(a.left,b.left)&&Math.min(a.bottom,b.bottom)>Math.max(a.top,b.top);
+    const contains=(a,b)=>b.left>=a.left-.0001&&b.right<=a.right+.0001&&b.top>=a.top-.0001&&b.bottom<=a.bottom+.0001;
+    const members=[];let offset=range.startOffset;
+    for(const codepoint of text.textContent.slice(range.startOffset,range.endOffset)){
+     const end=offset+codepoint.length;
+     if(/\S/u.test(codepoint)){
+      const character=document.createRange();character.setStart(text,offset);character.setEnd(text,end);
+      const boxes=[...character.getClientRects()].filter(rect=>rect.width!==0&&rect.height!==0);
+      if(!boxes.length){reject('TEXT_CHARACTER_RANGE_MISSING',null,parent,{sourceStart:offset,sourceEnd:end});return failure('TEXT_NOT_FULLY_VISIBLE');}
+      for(const box of boxes){
+       if(!rectVisible(box,parent))return failure('TEXT_NOT_FULLY_VISIBLE');
+       if(!lines.some(line=>contains(line,box))){reject('TEXT_CHARACTER_RANGE_UNCOVERED',box,parent,{sourceStart:offset,sourceEnd:end});return failure('TEXT_NOT_FULLY_VISIBLE');}
+       members.push(box);
+      }
+     }
+     offset=end;
+    }
+    lines=lines.filter(line=>members.some(box=>intersects(line,box)));
+   }
+   if(lines.some(rect=>!rectVisible(rect,parent)))return failure('TEXT_NOT_FULLY_VISIBLE');
    rects.push(...lines.map(rect=>({x:rect.x,y:rect.y,width:rect.width,height:rect.height})));
   }
   texts.push(text.textContent);

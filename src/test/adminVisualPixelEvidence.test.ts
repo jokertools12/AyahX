@@ -208,13 +208,42 @@ describe('serialized real browser text-range guard (synthetic DOM unit geometry)
   Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){captured.push(this.toString());return[bounds(20,12,20,12),bounds(40,12,30,12),bounds(70,12,20,12),bounds(20,27,35,12),bounds(55,27,0,12)];}});
   const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)(),proof=await standalone({selector:'#target'});
   expect(proof).toMatchObject({ready:true,visibleText:source,rects:[{x:20,y:12,width:20,height:12},{x:40,y:12,width:30,height:12},{x:70,y:12,width:20,height:12},{x:20,y:27,width:35,height:12}]});
-  expect(captured).toEqual(['اكتب abc123 للتأكيد']);
+  expect(captured[0]).toBe('اكتب abc123 للتأكيد');expect(captured.slice(1)).toEqual([...source.trim()].filter(codepoint=>/\S/u.test(codepoint)));
  });
  it('never discards a nonempty brace whose source-line range has missing paint geometry',async()=>{
   const pre=document.createElement('pre');pre.id='target';pre.textContent='{\n  "demo": true\n}\n';element.replaceWith(pre);element=pre;
   Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){return this.toString()==='}'?[bounds(20,35,0,7)]:[bounds(20,this.toString()==='{'?12:23,80,7)];}});
   const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)();
   expect(await standalone({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'TEXT_RANGE_MISSING'}});
+ });
+ it('omits a wrapped internal-space rectangle only through exact nonwhitespace codepoint membership',async()=>{
+  const source='ab 😀 عَ cd',text=element.querySelector('span')!.firstChild!;text.textContent=source;
+  const parts=[bounds(20,12,20,8),bounds(40,12,10.203125,8),bounds(20,24,30,8),bounds(50,24,10,8),bounds(60,24,20,8)],offsets:Array<[number,number]>=[];
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){
+   if(this.startOffset===0&&this.endOffset===source.length)return parts;
+   offsets.push([this.startOffset,this.endOffset]);
+   if(this.startOffset<2)return[bounds(20+this.startOffset*10,12,10,8)];
+   if(this.startOffset===3)return[bounds(20,24,10,8)];
+   if(this.startOffset===6||this.startOffset===7)return[bounds(40,24,10,8)];
+   return[bounds(60+(this.startOffset-9)*10,24,10,8)];
+  }});
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)(),proof=await standalone({selector:'#target'});
+  expect(proof).toMatchObject({ready:true,visibleText:source,rects:[{x:20,y:12,width:20,height:8},{x:20,y:24,width:30,height:8},{x:60,y:24,width:20,height:8}]});
+  expect(offsets).toEqual([[0,1],[1,2],[3,5],[6,7],[7,8],[9,10],[10,11]]);
+ });
+ it.each(['missing','outside','invalid'])('fails closed for %s nonwhitespace membership geometry rather than dropping its crop',async(mode)=>{
+  const text=element.querySelector('span')!.firstChild!;text.textContent='a b';
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){
+   if(this.endOffset-this.startOffset===3)return[bounds(20,12,10,8),bounds(30,12,10,8),bounds(20,24,10,8)];
+   if(this.startOffset===0)return[bounds(20,12,10,8)];
+   return mode==='missing'?[]:mode==='outside'?[bounds(70,24,10,8)]:[bounds(20,24,NaN,8)];
+  }});
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)();expect(await standalone({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE'});
+ });
+ it('keeps a nonwhitespace brace-only fragment even beside a wrapped-space fragment',async()=>{
+  const text=element.querySelector('span')!.firstChild!;text.textContent='a }';
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){return this.endOffset-this.startOffset===3?[bounds(20,12,10,8),bounds(30,12,10,8),bounds(20,24,9,8)]:[bounds(20,this.startOffset===0?12:24,this.startOffset===0?10:9,8)];}});
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)();expect(await standalone({selector:'#target'})).toMatchObject({ready:true,rects:[{x:20,y:12,width:10,height:8},{x:20,y:24,width:9,height:8}]});
  });
  it('fails closed when borders leave no interior ownership rectangle',async()=>{
   const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element)=>({...style(node),...(node===element?{borderLeftWidth:'60px',borderRightWidth:'60px'}:{})}));
