@@ -46,8 +46,20 @@ export function inspectAdminVisualPixels({data,width,height},{kind='text'}={}){
  // A rare farthest pixel never grants a pass. Competing paint/gradient/noise
  // must be investigated instead of selecting whichever color looks best.
  if(unexplained>Math.max(1,total*.005))return unknown('AMBIGUOUS_MULTICOLOR_PAINT');
+ // Collinearity alone cannot distinguish antialias from another grayscale
+ // glyph/gradient core. Antialias must border the actually supported solid
+ // foreground. Independently supported intermediate paint remains UNKNOWN.
+ const core=Uint8Array.from(pixels,color=>distance(color,foreground.color)<=7?1:0);
+ let intermediatePixelsWithoutCore=0;
+ for(let index=0;index<pixels.length;index++){
+  if(core[index]||distance(pixels[index],background.color)<=7)continue;
+  const x=index%width,y=Math.floor(index/width);let adjacent=false;
+  for(let dy=-1;dy<=1&&!adjacent;dy++)for(let dx=-1;dx<=1;dx++){const nx=x+dx,ny=y+dy;if(nx>=0&&nx<width&&ny>=0&&ny<height&&core[ny*width+nx]){adjacent=true;break;}}
+  if(!adjacent)intermediatePixelsWithoutCore++;
+ }
+ if(intermediatePixelsWithoutCore>=support)return{...unknown('AMBIGUOUS_INTERMEDIATE_CORE'),intermediatePixelsWithoutCore};
  const ratio=adminVisualContrastRatio(foreground.color,background.color),passed=ratio>=minimum;
- return{...base,status:passed?'pass':'fail',passed,reason:passed?'PIXEL_CONTRAST_PASS':'PIXEL_CONTRAST_BELOW_MINIMUM',ratio,background:background.color,foreground:foreground.color,backgroundPixels:background.count,foregroundPixels:foreground.count,unexplainedPixels:unexplained,perimeterPixels,backgroundPerimeterPixels};
+ return{...base,status:passed?'pass':'fail',passed,reason:passed?'PIXEL_CONTRAST_PASS':'PIXEL_CONTRAST_BELOW_MINIMUM',ratio,background:background.color,foreground:foreground.color,backgroundPixels:background.count,foregroundPixels:foreground.count,unexplainedPixels:unexplained,perimeterPixels,backgroundPerimeterPixels,antialiasSupportMethod:'ADJACENT_SOLID_FOREGROUND_PIXEL',intermediatePixelsWithoutCore};
 }
 
 export async function inspectAdminVisualPng(png,options){

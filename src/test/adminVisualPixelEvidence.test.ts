@@ -35,6 +35,16 @@ describe('dominant background / supported farthest foreground PNG proof',()=>{
   expect(proof).toMatchObject({passed:true,status:'pass',ratio:21,minimum:4.5,width:100,height:20});expect(proof.sha256).toBe(createHash('sha256').update(png).digest('hex'));
  });
  it('retains a repeated glyph core while tolerating antialias mixtures',()=>{expect(inspectAdminVisualPixels(image('#000','#fff',true).pixels)).toMatchObject({passed:true,ratio:21,unexplainedPixels:0});});
+ it('does not hide independently supported low-contrast solid grayscale glyphs as antialias',()=>{
+  const canvas=createCanvas(100,20),context=canvas.getContext('2d');context.fillStyle='#fff';context.fillRect(0,0,100,20);context.fillStyle='#000';context.fillRect(10,4,5,12);context.fillStyle='#aaa';for(const x of [20,30,40,50,60,70,80])context.fillRect(x,4,5,12);
+  expect(adminVisualContrastRatio([170,170,170],[255,255,255])).toBeLessThan(4.5);
+  expect(inspectAdminVisualPixels(context.getImageData(0,0,100,20))).toMatchObject({passed:false,status:'ambiguous',reason:'AMBIGUOUS_INTERMEDIATE_CORE'});
+ });
+ it('distinguishes adjacent one-pixel antialias edges from attached solid intermediate cores',()=>{
+  expect(inspectAdminVisualPixels(image('#fff','#000',true).pixels)).toMatchObject({passed:true,ratio:21});
+  const canvas=createCanvas(100,20),context=canvas.getContext('2d');context.fillStyle='#fff';context.fillRect(0,0,100,20);context.fillStyle='#000';context.fillRect(10,4,5,12);context.fillStyle='#aaa';context.fillRect(15,4,5,12);
+  expect(inspectAdminVisualPixels(context.getImageData(0,0,100,20))).toMatchObject({passed:false,status:'ambiguous',reason:'AMBIGUOUS_INTERMEDIATE_CORE'});
+ });
  it('fails low contrast and never rounds 4.499 up to 4.5',()=>{
   expect(inspectAdminVisualPixels(image('#aaa').pixels)).toMatchObject({passed:false,status:'fail'});
   expect(adminVisualContrastRatio([119,119,119],[255,255,255])).toBeLessThan(4.5);expect(inspectAdminVisualPixels(image('#777').pixels).passed).toBe(false);
@@ -188,7 +198,7 @@ describe('aggregate evidence cannot silently suppress unresolved findings',()=>{
  });
  it('rejects missing hash, inflated ratio, crop mismatch, and lowered thresholds',async()=>{
   const result=await collectAdminVisualEvidence(fakePage(),{evidenceDir:await directory(),caseId:'synthetic',accessibility:accessibility()}),proof=result.evidence[0];
-  for(const change of [{sha256:''},{ratio:22},{minimum:3},{width:999}])expect(()=>assertAdminVisualPixelProof({...proof,images:[{...proof.images[0],...change}]})).toThrow();
+  for(const change of [{sha256:''},{ratio:22},{minimum:3},{width:999},{antialiasSupportMethod:'COLLINEAR_ONLY'},{intermediatePixelsWithoutCore:Math.max(3,Math.ceil(proof.images[0].totalPixels*.002))}])expect(()=>assertAdminVisualPixelProof({...proof,images:[{...proof.images[0],...change}]})).toThrow();
  });
  it('requires proof for every original scanner unknown and other axe rules remain blockers',()=>{
   const result={...scanner(),compliant:true,shouldFail:false,indeterminate:[],originalIndeterminate:scanner().indeterminate,pixelEvidence:[]};expect(()=>assertAdminVisualScanEvidence(result)).toThrow();
