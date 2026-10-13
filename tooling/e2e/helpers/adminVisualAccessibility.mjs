@@ -23,6 +23,9 @@ export async function measureAdminVisualAccessibility(){
    const s=getComputedStyle(p),b=p.getBoundingClientRect();
    const ancestor={ancestorTag:p.tagName,ancestorRect:pack(b),overflowX:s.overflowX,overflowY:s.overflowY,borders:{left:parseFloat(s.borderLeftWidth)||0,right:parseFloat(s.borderRightWidth)||0,top:parseFloat(s.borderTopWidth)||0,bottom:parseFloat(s.borderBottomWidth)||0},scroll:{left:p.scrollLeft,top:p.scrollTop}};
    if(s.display==='none'||s.visibility!=='visible'||Number(s.opacity)!==1||p.hasAttribute('hidden'))return reject('ANCESTOR_NOT_VISIBLE',r,{...ancestor,display:s.display,visibility:s.visibility,opacity:s.opacity,hidden:p.hasAttribute('hidden')});
+   // A painted target border box cannot clip itself at its inner border edge.
+   // Ancestors still clip this box; exact axe then checks the actual content.
+   if(p===el)continue;
    if(/hidden|clip|auto|scroll/.test(s.overflowX)&&(r.left<b.left+(parseFloat(s.borderLeftWidth)||0)-tolerance||r.right>b.right-(parseFloat(s.borderRightWidth)||0)+tolerance))return reject('ANCESTOR_CLIPPING_X',r,ancestor);
    if(/hidden|clip|auto|scroll/.test(s.overflowY)&&(r.top<b.top+(parseFloat(s.borderTopWidth)||0)-tolerance||r.bottom>b.bottom-(parseFloat(s.borderBottomWidth)||0)+tolerance))return reject('ANCESTOR_CLIPPING_Y',r,ancestor);
   }

@@ -52,6 +52,11 @@ describe('real contrast remeasurement acceptance',()=>{
   const measured=await measureAdminVisualAccessibility();expect(measured.incomplete).toHaveLength(1);expect(run).toHaveBeenCalledTimes(1);expect(measured.remeasurements[0].fullyVisibleBeforeRun).toBe(false);
   expect(measured.remeasurements[0].visibilityDiagnostic).toMatchObject({code:'ANCESTOR_CLIPPING_Y',ancestorTag:'DIV',overflowY:'auto',rect:{height:30},ancestorRect:{height:10}});
  });
+ it('does not classify a visible own border box as clipped by its own one-pixel border',async()=>{
+  const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(el:Element)=>({...style(el),...(el===target?{overflowX:'auto',overflowY:'auto',borderLeftWidth:'1px',borderRightWidth:'1px',borderTopWidth:'1px',borderBottomWidth:'1px'}:{})}));
+  run.mockResolvedValueOnce(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}]})).mockResolvedValueOnce(result({passes:[{id:'color-contrast',nodes:[node(target)]}]}));
+  const measured=await measureAdminVisualAccessibility();expect(measured.incomplete).toEqual([]);expect(measured.remeasurements[0].resolved).toBe(true);expect(run).toHaveBeenCalledTimes(2);
+ });
  it.each([0.0000038,0.001])('accepts only floating shared-edge noise, never actual clipping (%s px)',async(difference)=>{
   const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(el:Element)=>({...style(el),overflowX:el.id==='panel'?'auto':'visible'}));
   vi.spyOn(document.getElementById('panel')!,'getBoundingClientRect').mockImplementation(()=>({...rect(),right:120-difference,width:100-difference}) as DOMRect);

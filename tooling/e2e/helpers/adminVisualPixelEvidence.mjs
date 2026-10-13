@@ -31,12 +31,15 @@ export async function measureAdminVisualEvidenceTarget({selector,action='measure
   for(let p=node;p;p=p.parentElement){const s=getComputedStyle(p);if(s.display==='none'||s.visibility!=='visible'||Number(s.opacity)<=0||p.hasAttribute('hidden')||p.hasAttribute('inert')||s.clip==='rect(0px, 0px, 0px, 0px)'||/inset\(50%\)/.test(s.clipPath))return false;}
   return true;
  };
- const rectVisible=(rect,node)=>{
+ const rectVisible=(rect,node,targetBorderBox=false)=>{
   const tolerance=.0001;
   if(rect.width<=0||rect.height<=0)return reject('EMPTY_RECT',rect,node);
   if(rect.left<-tolerance||rect.top<-tolerance||rect.right>innerWidth+tolerance||rect.bottom>innerHeight+tolerance)return reject('VIEWPORT_CLIPPING',rect,node);
   if(!visible(node))return reject('ANCESTOR_NOT_VISIBLE',rect,node);
   for(let p=node;p;p=p.parentElement){const s=getComputedStyle(p),r=p.getBoundingClientRect();
+   // The target's border box includes its own painted border. Only text Range
+   // rectangles must fit within its own overflow clipping/content boundary.
+   if(targetBorderBox&&p===el)continue;
    const clipping={ancestorTag:p.tagName,ancestorRect:pack(r),overflowX:s.overflowX,overflowY:s.overflowY,borders:{left:parseFloat(s.borderLeftWidth)||0,right:parseFloat(s.borderRightWidth)||0,top:parseFloat(s.borderTopWidth)||0,bottom:parseFloat(s.borderBottomWidth)||0},scroll:{left:p.scrollLeft,top:p.scrollTop}};
    if(/hidden|clip|auto|scroll/.test(s.overflowX)&&(rect.left<r.left+(parseFloat(s.borderLeftWidth)||0)-tolerance||rect.right>r.right-(parseFloat(s.borderRightWidth)||0)+tolerance))return reject('ANCESTOR_CLIPPING_X',rect,node,clipping);
    if(/hidden|clip|auto|scroll/.test(s.overflowY)&&(rect.top<r.top+(parseFloat(s.borderTopWidth)||0)-tolerance||rect.bottom>r.bottom-(parseFloat(s.borderBottomWidth)||0)+tolerance))return reject('ANCESTOR_CLIPPING_Y',rect,node,clipping);
@@ -45,7 +48,7 @@ export async function measureAdminVisualEvidenceTarget({selector,action='measure
   const cx=(rect.left+rect.right)/2,cy=(rect.top+rect.bottom)/2;
   return[[cx,cy],[cx,rect.top+.1],[rect.right-.1,cy],[cx,rect.bottom-.1],[rect.left+.1,cy]].every(([x,y])=>{const top=document.elementsFromPoint(x,y)[0];return top&&(top===el||el.contains(top))||reject('HIT_TARGET_NOT_OWNED',rect,node,{point:{x,y},hitTopTag:top?.tagName??null,hitTopRect:pack(top?.getBoundingClientRect())});});
  };
- if(!rectVisible(el.getBoundingClientRect(),el))return failure('TARGET_NOT_FULLY_VISIBLE');
+ if(!rectVisible(el.getBoundingClientRect(),el,true))return failure('TARGET_NOT_FULLY_VISIBLE');
  const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),rects=[],texts=[];
  while(walker.nextNode()){
   const text=walker.currentNode,parent=text.parentElement;if(!text.textContent.trim()||!parent||!visible(parent))continue;

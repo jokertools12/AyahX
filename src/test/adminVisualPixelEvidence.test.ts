@@ -143,6 +143,12 @@ describe('serialized real browser text-range guard (synthetic DOM unit geometry)
   expect(measured).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'ANCESTOR_CLIPPING_Y',targetTag:'BUTTON',nodeTag:'SPAN',ancestorTag:'DIV',rect:{x:20,y:9,width:100,height:25.5},ancestorRect:{x:10,y:10,width:120,height:40}}});
   expect(JSON.stringify(measured.visibilityDiagnostic)).not.toContain('Hidden accessible text');expect(JSON.stringify(measured.visibilityDiagnostic)).not.toContain('#target');
  });
+ it('accepts a visible bordered own box but still rejects text clipped by that same box',async()=>{
+  const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element)=>({...style(node),...(node===element?{overflowX:'auto',overflowY:'auto',borderLeftWidth:'1px',borderRightWidth:'1px',borderTopWidth:'1px',borderBottomWidth:'1px'}:{})}));
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:true,rects:[{x:20,y:20,width:100,height:20}]});
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,10,100,25.5)]});
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'ANCESTOR_CLIPPING_Y',ancestorTag:'BUTTON',borders:{top:1,bottom:1},rect:{y:10,height:25.5}}});
+ });
  it('cannot crop generated or overlapping text as if it were ordinary glyph paint',async()=>{
   const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element,pseudo?:string)=>({...style(node),content:pseudo?'"Badge"':'none'}));expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'GENERATED_VISIBLE_CONTENT'});
  });
