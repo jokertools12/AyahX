@@ -20,10 +20,13 @@ export function parseVideoRange(raw: string | undefined, size: number): { start:
   return { start, end };
 }
 export class AdminRenderMedia {
-  constructor(private readonly db: CatalogDatabase, private readonly builder: RenderLabBuilder, private readonly storageRoot = resolve(process.cwd(), 'uploads')) {}
+  constructor(private readonly db: CatalogDatabase, private readonly builder: RenderLabBuilder, private readonly storageRoot = resolve(process.cwd(), process.env.RENDER_STORAGE_DIR || 'uploads/renders')) {}
   async choices(actor: CatalogActor): Promise<CatalogRow> {
     requireRenderTester(actor);
-    const rows = await this.db.read("SELECT r.id,r.reciter_id,e.name_ar reciter_name_ar,r.display_label_ar,r.slug,p.code provider FROM recitations r JOIN reciters e ON e.id=r.reciter_id JOIN audio_providers p ON p.id=r.provider_id WHERE r.status='published' AND r.published_by='rule-v1' AND r.offset_verified=1 AND r.audio_mode='surah_slice' AND r.riwayah_code='hafs_an_asim' AND r.canonical_text_available=1 AND r.timing_quality='verified' AND r.timing_level IN ('word','letter') AND p.code<>'youtube' ORDER BY e.name_ar,r.slug");
+    // The builder performs the authoritative per-range readiness check. This
+    // preliminary list only requires one complete chapter with a verified,
+    // active licensed source, so R2 and approved hosted records are selectable.
+    const rows = await this.db.read("SELECT r.id,r.reciter_id,e.name_ar reciter_name_ar,r.display_label_ar,r.slug,p.code provider FROM recitations r JOIN reciters e ON e.id=r.reciter_id JOIN audio_providers p ON p.id=r.provider_id WHERE r.riwayah_code='hafs_an_asim' AND r.canonical_text_available=1 AND EXISTS(SELECT 1 FROM recitation_chapters c JOIN recitation_source_urls u ON u.recitation_id=c.recitation_id AND u.surah=c.surah JOIN human_review_items h ON h.id=u.rights_ref AND h.status='approved' AND h.decided_by IS NOT NULL AND COALESCE(h.target_subject_type,h.subject_type)='recitation' AND COALESCE(h.target_subject_id,h.subject_id)=u.recitation_id WHERE c.recitation_id=r.id AND COALESCE(c.is_enabled,1)=1 AND c.availability_state='complete' AND c.coverage_mismatch=0 AND u.kind='licensed_file' AND u.is_active=1 AND u.verification_status='verified' AND NOT EXISTS(SELECT 1 FROM human_review_items newer WHERE newer.supersedes_id=h.id)) ORDER BY e.name_ar,r.slug");
     return { recitations: rows, max_duration_ms: 90000, concurrency: 1 };
   }
   async chapters(actor: CatalogActor, id: string): Promise<CatalogRow> {
@@ -45,7 +48,7 @@ export class AdminRenderMedia {
   }
   private async output(actor: CatalogActor, id: string): Promise<CatalogRow> {
     requireRenderTester(actor);
-    const [row] = await this.db.read("SELECT id,status,output_path,output_size_bytes,expires_at,recitation_id,manifest FROM render_jobs WHERE id=? AND JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0'", [id]);
+    const [row] = await this.db.read("SELECT id,status,output_path,output_size_bytes,expires_at,recitation_id,manifest FROM render_jobs WHERE id=? AND user_id=? AND JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0'", [id, actor.id]);
     if (!row) throw new CatalogError('RENDER_LAB_JOB_NOT_FOUND', 404);
     const expiry = new Date(String(row.expires_at)).getTime();
     if (row.status !== 'succeeded' || !row.output_path || !row.expires_at || !Number.isFinite(expiry) || expiry <= Date.now()) throw new CatalogError('RENDER_LAB_ARTIFACT_EXPIRED', 410);
@@ -97,16 +100,16 @@ export class AdminRenderMedia {
   }
   async remove(actor: CatalogActor, id: string): Promise<CatalogRow> {
     requireRenderTester(actor);
-    const [row] = await this.db.read("SELECT id,status,output_path FROM render_jobs WHERE id=? AND JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0'", [id]);
+    const [row] = await this.db.read("SELECT id,status,output_path FROM render_jobs WHERE id=? AND user_id=? AND JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0'", [id, actor.id]);
     if (!row) throw new CatalogError('RENDER_LAB_JOB_NOT_FOUND', 404);
     if (['running', 'queued'].includes(String(row.status))) throw new CatalogError('RENDER_LAB_JOB_ACTIVE', 409);
     if (!row.output_path) return { id, deleted: true, changed: false };
     if (isObjectStoragePath(String(row.output_path))) await deleteStoredRender(String(row.output_path));
     else { try { await unlink(await this.localPath(String(row.output_path))); } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; } }
     await this.db.transaction(async tx => {
-      const [current] = await tx.read('SELECT output_path FROM render_jobs WHERE id=? FOR UPDATE', [id]);
+      const [current] = await tx.read('SELECT output_path FROM render_jobs WHERE id=? AND user_id=? FOR UPDATE', [id, actor.id]);
       if (current?.output_path !== row.output_path) throw new CatalogError('RENDER_LAB_ARTIFACT_CHANGED', 409);
-      await tx.execute("UPDATE render_jobs SET output_path=NULL,output_filename=NULL,output_size_bytes=NULL,stage='حُذف الفيديو التجريبي' WHERE id=?", [id]);
+      await tx.execute("UPDATE render_jobs SET output_path=NULL,output_filename=NULL,output_size_bytes=NULL,stage='حُذف الفيديو التجريبي' WHERE id=? AND user_id=?", [id, actor.id]);
       await appendCatalogAudit(tx, actor, 'render_lab.artifact_deleted', 'render_job', id, { artifact_available: true }, { artifact_available: false });
     });
     return { id, deleted: true, changed: true };

@@ -59,8 +59,16 @@ export class AdminOwnerWorkspace {
       if(!chapters.length)reasons.push('NO_AVAILABLE_CHAPTERS');
       if(row.channel==='youtube'||row.licensed_publication_details&&!Number(row.offset_verified)){
         let licensedReady=false;
-        if(this.licensed&&Number(row.licensed_chapters))for(const chapter of chapters)if(await this.licensed.isChapterReady(String(row.id),Number(chapter.surah),settings.availabilityMode==='complete_only')){licensedReady=true;break;}
-        if(!licensedReady)reasons.push('LICENSED_SOURCE_NOT_READY');
+        if(this.licensed&&Number(row.licensed_chapters)){
+          try {
+            for(const chapter of chapters)if(await this.licensed.isChapterReady(String(row.id),Number(chapter.surah),settings.availabilityMode==='complete_only')){licensedReady=true;break;}
+          } catch {
+            // A storage/readiness failure is explicitly fail-closed in the
+            // launch preview; it is never treated as a ready licensed source.
+            reasons.push('LICENSED_SOURCE_NOT_READY');
+          }
+        }
+        if(!licensedReady&&!reasons.includes('LICENSED_SOURCE_NOT_READY'))reasons.push('LICENSED_SOURCE_NOT_READY');
       }
       const visible = isPubliclyVisible(row as unknown as PublicRecitation, true, settings.voiceGatePolicy) && reasons.length === 0;
       preview.push({ id: String(row.id), slug: String(row.slug), reciter_name_ar: String(row.reciter_name_ar), display_label_ar: row.display_label_ar === null ? null : String(row.display_label_ar), is_visible: visible, reasons });

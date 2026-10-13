@@ -24,7 +24,7 @@ function fixture(clocks=[600000000,600000000,600000000],eventStatus='ENABLED'){
 describe('temporary QA provisioning uses the exact event and MySQL UTC deadline',()=>{
  it('accepts a sufficient window and validates before inserts and immediately before commit',async()=>{
   const f=fixture(),password=f.account.password,expires=f.account.expiresAt;await createQaAccount(f.db,f.account);
-  expect(f.account.state).toBe('active');expect(f.clockReads).toHaveLength(3);expect(f.state().committed).toBe(true);expect(f.persisted.some(sql=>sql.startsWith('INSERT INTO users'))).toBe(true);expect(f.account.password).toBe(password);expect(f.account.expiresAt).toBe(expires);
+  expect(f.account.state).toBe('active');expect(f.clockReads).toHaveLength(3);expect(f.state().committed).toBe(true);expect(f.persisted.some(sql=>sql.startsWith('INSERT INTO users'))).toBe(true);expect(f.persisted).toContainEqual(expect.stringContaining("VALUES(?,?,'analyst')"));expect(f.persisted).not.toContainEqual(expect.stringContaining("VALUES(?,?,'admin')"));expect(f.account.password).toBe(password);expect(f.account.expiresAt).toBe(expires);
  });
  it.each([0,119999999])('rejects %s microseconds of provisioning time before installing an event or user',async(remaining)=>{
   const f=fixture([remaining]);await expect(createQaAccount(f.db,f.account)).rejects.toThrow('QA_PROVISIONING_WINDOW_REQUIRED');expect(f.account.state).toBe('prepared');expect(f.persisted).toEqual([]);expect(f.staged).toEqual([]);expect(f.state().body).toBe('');

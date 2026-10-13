@@ -98,6 +98,23 @@ describe('authenticated canonical render captions', () => {
     const f = fixture(); f.row.manifest = JSON.stringify(f.manifest); const result = await f.service.get(actor, id);
     expect(result.artifact).toHaveProperty('captionsPath', `/api/admin/render-lab/jobs/${id}/captions.vtt`); expect(result).not.toHaveProperty('manifest'); expect(result).not.toHaveProperty('output_path');
   });
+  it('scopes list, metadata, and artifact access to the creating administrator', async () => {
+    const f = fixture(), other = { ...actor, id: 'other-admin' };
+    const originalRead = f.db.read;
+    f.db.read = vi.fn(async (sql, params) => sql.includes('FROM render_jobs') && Array.isArray(params) && params[1] !== actor.id ? [] : originalRead(sql, params));
+    await f.service.list(actor);
+    expect(f.db.read).toHaveBeenLastCalledWith(expect.stringContaining('j.user_id=?'), [actor.id]);
+    await f.service.get(actor, id);
+    expect(f.db.read).toHaveBeenLastCalledWith(expect.stringContaining('id=? AND user_id=?'), [id, actor.id]);
+    await expect(f.media.captions(other, id, f.response as unknown as Response)).rejects.toMatchObject({ code: 'RENDER_LAB_JOB_NOT_FOUND', status: 404 });
+    expect(f.db.read.mock.calls).toContainEqual([expect.stringContaining('id=? AND user_id=?'), [id, other.id]]);
+  });
+  it('lists verified licensed sources for the render chooser without the retired publication rule', async () => {
+    const db: CatalogDatabase = { read: vi.fn(async () => []), execute: vi.fn(), transaction: async work => work(db) };
+    await new AdminRenderMedia(db, {} as never).choices(actor);
+    const [sql] = (db.read as ReturnType<typeof vi.fn>).mock.calls[0] as [string];
+    expect(sql).toContain("u.kind='licensed_file'"); expect(sql).toContain("u.verification_status='verified'"); expect(sql).toContain("h.status='approved'"); expect(sql).not.toContain("r.published_by='rule-v1'"); expect(sql).not.toContain("p.code<>'youtube'");
+  });
   it('registers captions as a read-only authenticated render.test response and retains service RBAC', async () => {
     const f = fixture(), definitions: AdminEndpointDefinition[] = []; registerRenderLabEndpoints(definition => definitions.push(definition), f.service, f.media);
     const endpoint = definitions.find(row => row.path === '/render-lab/jobs/:id/captions.vtt')!; expect(endpoint).toMatchObject({ method: 'get', permission: 'render.test' }); expect(endpoint.writes).toBeUndefined(); expect(endpoint.respond).toBeTypeOf('function');

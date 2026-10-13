@@ -26,6 +26,16 @@ describe('owner review safety', () => {
       expect(alert.message).not.toContain('9 نوفمبر');
     }
   });
+  it('fails closed when licensed source readiness is unavailable',async()=>{
+    const db=database(async sql=>{
+      if(sql.includes('FROM recitations r JOIN audio_providers'))return [{id:'licensed-recitation',slug:'licensed',status:'published',is_public:1,voice_identity_status:'confirmed',display_label_ar:'تلاوة',needs_label_review:0,surah_start_basmala_audio_status:'verified',channel:'youtube',licensed_publication_details:null,offset_verified:0,license_status:'permitted',provider:'youtube',reciter_name_ar:'قارئ',reciter_is_visible:1,riwayah_is_active:1,complete_chapters:1,licensed_chapters:1}];
+      if(sql.includes('FROM recitation_chapters c WHERE c.recitation_id=?'))return [{surah:1}];
+      return [];
+    });
+    const owner=new AdminOwnerWorkspace(db,process.cwd(),{isChapterReady:vi.fn(async()=>{throw new Error('R2_UNAVAILABLE');})});
+    const readiness=await owner.launch();
+    expect(readiness.preview).toHaveLength(1);expect(readiness.preview[0].reasons).toContain('LICENSED_SOURCE_NOT_READY');expect(readiness.preview[0].is_visible).toBe(false);
+  });
   it('rejects bulk voice, license, rights and stale decisions before any write', () => {
     for (const type of ['voice_confirmation', 'provider_license', 'youtube_rights', 'basmala_audio', 'offset_exception']) expect(() => assertSafeBulkReviews([{ id: 'a', type, status: 'pending' }], ['a'])).toThrow('REVIEW_BULK_UNSAFE');
     expect(() => assertSafeBulkReviews([{ id: 'a', type: 'data_conflict', status: 'approved' }], ['a'])).toThrow('REVIEW_BULK_UNSAFE');

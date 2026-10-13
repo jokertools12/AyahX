@@ -45,13 +45,13 @@ export class RenderLabService{
   }
   async list(actor:CatalogActor):Promise<{items:CatalogRow[]}>{
     requireRenderTester(actor);
-    const rows=await this.db.read("SELECT j.id,j.status,j.progress,j.stage,j.error_code,j.recitation_id,j.duration_seconds,j.created_at,j.completed_at,j.expires_at,r.display_label_ar,e.name_ar reciter_name_ar,(j.status='succeeded' AND j.output_path IS NOT NULL AND j.expires_at>CURRENT_TIMESTAMP) artifact_available FROM render_jobs j LEFT JOIN recitations r ON r.id=j.recitation_id LEFT JOIN reciters e ON e.id=r.reciter_id WHERE JSON_UNQUOTE(JSON_EXTRACT(j.manifest,'$.schemaVersion'))='2.0.0' ORDER BY j.created_at DESC,j.id DESC LIMIT 20");
+    const rows=await this.db.read("SELECT j.id,j.status,j.progress,j.stage,j.error_code,j.recitation_id,j.duration_seconds,j.created_at,j.completed_at,j.expires_at,r.display_label_ar,e.name_ar reciter_name_ar,(j.status='succeeded' AND j.output_path IS NOT NULL AND j.expires_at>CURRENT_TIMESTAMP) artifact_available FROM render_jobs j LEFT JOIN recitations r ON r.id=j.recitation_id LEFT JOIN reciters e ON e.id=r.reciter_id WHERE j.user_id=? AND JSON_UNQUOTE(JSON_EXTRACT(j.manifest,'$.schemaVersion'))='2.0.0' ORDER BY j.created_at DESC,j.id DESC LIMIT 20",[actor.id]);
     // Project safe metadata explicitly: never expose a manifest, storage path or capability URL.
     return {items:rows.map(row=>({id:row.id,status:row.status,progress:row.progress,stage:row.stage,error_code:row.error_code,recitation_id:row.recitation_id,duration_seconds:row.duration_seconds,created_at:row.created_at,completed_at:row.completed_at,expires_at:row.expires_at,display_label_ar:row.display_label_ar,reciter_name_ar:row.reciter_name_ar,artifact_available:Number(row.artifact_available)===1}))};
   }
   async get(actor:CatalogActor,id:string):Promise<CatalogRow>{
     requireRenderTester(actor);if(!/^[a-f0-9-]{36}$/u.test(id))throw new CatalogError('RENDER_LAB_JOB_NOT_FOUND',404);
-    const [row]=await this.db.read("SELECT id,status,progress,stage,error_code,recitation_id,audio_plan_hash,timing_version_hash,audio_mode_used,fallback_used,audio_bytes_fetched,audio_provider_code,qa_report_json,duration_seconds,output_size_bytes,created_at,completed_at,expires_at,manifest,(output_path IS NOT NULL) artifact_available FROM render_jobs WHERE id=? AND JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0'",[id]);
+    const [row]=await this.db.read("SELECT id,status,progress,stage,error_code,recitation_id,audio_plan_hash,timing_version_hash,audio_mode_used,fallback_used,audio_bytes_fetched,audio_provider_code,qa_report_json,duration_seconds,output_size_bytes,created_at,completed_at,expires_at,manifest,(output_path IS NOT NULL) artifact_available FROM render_jobs WHERE id=? AND user_id=? AND JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0'",[id,actor.id]);
     if(!row)throw new CatalogError('RENDER_LAB_JOB_NOT_FOUND',404);
     const qa=redactAdminAudit(parsedJson(row.qa_report_json));
     const {manifest:rawManifest,output_path:privatePath,...safeRow}=row,source=renderLabCaptionSource(rawManifest);

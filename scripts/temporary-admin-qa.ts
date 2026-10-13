@@ -57,7 +57,9 @@ export async function createQaAccount(db:CatalogDatabase,account:QaAccount):Prom
   await guard();
   await tx.execute('INSERT INTO users(id,email,password_hash) VALUES(?,?,?)',[account.id,account.email,hash]);
   await tx.execute('INSERT INTO profiles(id,user_id,display_name) VALUES(?,?,?)',[randomUUID(),account.id,'حساب تحقق مؤقت — قراءة فقط']);
-  await tx.execute("INSERT INTO user_roles(id,user_id,role) VALUES(?,?,'admin')",[randomUUID(),account.id]);
+  // `analyst` carries only the registered read permissions. Browser request
+  // interception is a test guard, never the authorization boundary.
+  await tx.execute("INSERT INTO user_roles(id,user_id,role) VALUES(?,?,'analyst')",[randomUUID(),account.id]);
   await appendCatalogAudit(tx,actor(),'admin.qa_created','temporary_admin_qa',account.id,null,{expires_at:account.expiresAt,event_name:account.eventName,scope:'read_only_browser_qa',original_admins_unchanged:true});
   await guard();
  });account.state='active';
