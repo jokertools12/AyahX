@@ -5,7 +5,7 @@ export async function measureAdminVisualAccessibility(){
  const summarize=rule=>({id:rule.id,...(rule.impact?{impact:rule.impact}:{}),...(rule.help?{help:rule.help,helpUrl:rule.helpUrl}:{}),nodes:rule.nodes.map(node=>({target:node.target}))});
  const result=await axe.run(scope,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']},elementRef:true});
  const violations=result.violations.map(summarize),originalIncomplete=result.incomplete.map(summarize),incomplete=[],remeasurements=[];
- const paint=async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(resolve));await Promise.allSettled(document.getAnimations().filter(animation=>animation.effect?.getTiming().iterations!==Infinity).map(animation=>animation.finished));await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));};
+ const paint=async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(resolve));while(document.getAnimations().some(animation=>animation.effect?.getTiming().iterations!==Infinity&&(animation.pending||!['finished','idle'].includes(animation.playState))))await new Promise(resolve=>requestAnimationFrame(resolve));await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));};
  const fullyVisible=el=>{
   if(!el.isConnected||!scope.contains(el))return false;
   // DPR geometry can represent a shared CSS edge a few millionths of a pixel

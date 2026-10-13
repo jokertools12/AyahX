@@ -50,6 +50,16 @@ async function pickAnotherReader(page,scope){
  await (await firstVisible(scope.getByRole('combobox',{name:/القارئ الهدف|Target reader/u}))).click();
  await (await firstVisible(page.locator('[data-radix-popper-content-wrapper] .admin-stack button'))).click();
 }
+export async function prepareAdminVisualToggle(scope,reasonSelector,buttonName,prepare){
+ const reason=scope.locator(reasonSelector),button=scope.getByRole('button',{name:buttonName});
+ const openedByUs=!await reason.isVisible();
+ const cleanup=async()=>{if(openedByUs&&await reason.isVisible())await button.click();};
+ try{
+  if(openedByUs)await button.click();
+  await reason.waitFor({state:'visible'});await prepare(reason);
+  return cleanup;
+ }catch(error){await cleanup();throw error;}
+}
 export async function prepareAdminVisualDialogContext(page,scope,fixture){
  const slug=await scope.getAttribute('data-admin-visual-dialog');
  const path=new URL(page.url()).pathname;
@@ -58,10 +68,9 @@ export async function prepareAdminVisualDialogContext(page,scope,fixture){
   await scope.locator('#license-notes').waitFor({state:'visible'});
   await scope.locator('#license-notes').fill('CI_VISUAL_ONLY: preview, no license decision');
  }else if(slug==='recitation-detail'){
-  await scope.getByRole('button',{name:/نقل لقارئ آخر|Move to another reader/u}).click();
-  await scope.locator('#move-reason').waitFor({state:'visible'});
-  await pickAnotherReader(page,scope);
-  await scope.locator('#move-reason').fill('CI_VISUAL_ONLY: preview, no recording move');
+  return prepareAdminVisualToggle(scope,'#move-reason',/نقل لقارئ آخر|Move to another reader/u,async reason=>{
+   await pickAnotherReader(page,scope);await reason.fill('CI_VISUAL_ONLY: preview, no recording move');
+  });
  }else if(!slug&&path==='/admin/roles'){
   const select=scope.locator('#selected-role'),before=await select.inputValue();
   assertAdminVisualRoleFixture(fixture.fixtureRoleSlug,await select.locator('option').evaluateAll(options=>options.map(option=>option.value)));
@@ -69,10 +78,9 @@ export async function prepareAdminVisualDialogContext(page,scope,fixture){
   await (await firstVisible(scope.getByRole('checkbox'))).click();
   return async()=>{await scope.getByRole('button',{name:/إلغاء التغييرات|Discard changes/u}).click();await select.selectOption(before);};
  }else if(!slug&&/^\/admin\/reciters\/[^/]+$/u.test(path)&&!new URL(page.url()).searchParams.get('tab')){
-  await scope.getByRole('button',{name:/تحضير الدمج|Prepare merge/u}).click();
-  await scope.locator('#merge-reason').waitFor({state:'visible'});
-  await pickAnotherReader(page,scope);
-  await scope.locator('#merge-reason').fill('CI_VISUAL_ONLY: preview, no reader merge');
+  return prepareAdminVisualToggle(scope,'#merge-reason',/تحضير الدمج|Prepare merge/u,async reason=>{
+   await pickAnotherReader(page,scope);await reason.fill('CI_VISUAL_ONLY: preview, no reader merge');
+  });
  }else if(!slug&&path==='/admin/reviews'){
   observePreviewDocument(page);
   const checkbox=scope.locator(`input[aria-label="تحديد ${fixture.safeReviewId}"],input[aria-label="Select ${fixture.safeReviewId}"]`);

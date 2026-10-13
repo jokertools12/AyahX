@@ -9,7 +9,7 @@ export {assertAdminVisualDirectEvidence,assertAdminVisualScanEvidence} from './a
 
 /** Self contained browser preparation; no PNG logic, synthetic AX or aria-label reads. */
 export async function measureAdminVisualEvidenceTarget({selector,action='measure',scrollState}){
- const paint=async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(resolve));await Promise.allSettled(document.getAnimations().filter(animation=>animation.effect?.getTiming().iterations!==Infinity).map(animation=>animation.finished));await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));};
+ const paint=async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(resolve));while(document.getAnimations().some(animation=>animation.effect?.getTiming().iterations!==Infinity&&(animation.pending||!['finished','idle'].includes(animation.playState))))await new Promise(resolve=>requestAnimationFrame(resolve));await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));};
  let matches=[];try{matches=[...document.querySelectorAll(selector)];}catch{return{ready:false,reason:'INVALID_TARGET_SELECTOR'};}
  if(matches.length!==1)return{ready:false,reason:'EXACT_TARGET_REQUIRED'};
  const el=matches[0],parents=[];for(let p=el.parentElement;p;p=p.parentElement)parents.push(p);

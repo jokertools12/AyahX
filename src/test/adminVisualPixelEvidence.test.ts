@@ -114,7 +114,7 @@ describe('serialized real browser text-range guard (synthetic DOM unit geometry)
   vi.stubGlobal('requestAnimationFrame',(callback:FrameRequestCallback)=>{frames++;callback(0);return frames;});
   vi.stubGlobal('getComputedStyle',(node:Element)=>({display:'block',visibility:'visible',opacity:'1',overflowX:'visible',overflowY:'visible',borderLeftWidth:'0',borderRightWidth:'0',borderTopWidth:'0',borderBottomWidth:'0',clip:node.classList.contains('sr-only')?'rect(0px, 0px, 0px, 0px)':'auto',clipPath:'none',content:'none'}));
   Object.defineProperty(document,'fonts',{configurable:true,value:{ready:Promise.resolve()}});
-  Object.defineProperty(document,'getAnimations',{configurable:true,value:()=>[{effect:{getTiming:()=>({iterations:1})},get finished(){return finished();}},{effect:{getTiming:()=>({iterations:Infinity})},get finished(){throw new Error('Infinite animation must not be awaited');}}]});
+  Object.defineProperty(document,'getAnimations',{configurable:true,value:()=>[{playState:'finished',pending:false,effect:{getTiming:()=>({iterations:1})},get finished(){return finished();}},{effect:{getTiming:()=>({iterations:Infinity})},get finished(){throw new Error('Infinite animation must not be awaited');}}]});
   Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:()=>[element]});
   Object.defineProperty(window,'scrollTo',{configurable:true,value:vi.fn()});
   vi.spyOn(Element.prototype,'getBoundingClientRect').mockImplementation(()=>bounds() as DOMRect);
@@ -124,7 +124,7 @@ describe('serialized real browser text-range guard (synthetic DOM unit geometry)
  it('serializes without module closures, centers, waits fonts/finite motion/two frames and reports only painted text',async()=>{
   const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)(),proof=await standalone({selector:'#target',action:'prepare'});
   expect(proof).toMatchObject({ready:true,visibleText:'EN',rects:[{x:20,y:20,width:100,height:20}],dpr:1.5,paint:{fontsReady:true,finiteAnimationsSettled:true,framesAfter:2}});
-  expect(element.scrollIntoView).toHaveBeenCalledWith({block:'center',inline:'center',behavior:'instant'});expect(finished).toHaveBeenCalledOnce();expect(frames).toBe(3);
+  expect(element.scrollIntoView).toHaveBeenCalledWith({block:'center',inline:'center',behavior:'instant'});expect(finished).not.toHaveBeenCalled();expect(frames).toBe(3);
  });
  it('retains actual text clipping, overlays, ambiguous selectors and targets outside active scope',async()=>{
   const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element)=>({...style(node),overflowY:node.id==='panel'?'hidden':'visible'}));

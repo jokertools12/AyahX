@@ -2,7 +2,7 @@
 import {describe,it,expect,vi} from 'vitest';
 import {readFileSync} from 'node:fs';
 import {ADMIN_ROLES} from '../../server/admin/adminPermissions';
-import {allowedAdminVisualWrite,isOwnedAdminVisualPreview,canReuseAdminVisualPreview,assertAdminVisualRoleFixture,adminVisualPreviewRoles,openAdminVisualResponsiveDialog} from '../../tooling/e2e/helpers/adminVisualDialogPreparation.mjs';
+import {allowedAdminVisualWrite,isOwnedAdminVisualPreview,canReuseAdminVisualPreview,assertAdminVisualRoleFixture,adminVisualPreviewRoles,openAdminVisualResponsiveDialog,prepareAdminVisualToggle} from '../../tooling/e2e/helpers/adminVisualDialogPreparation.mjs';
 describe('disposable visual preview network admission',()=>{
  const fixture={safeReviewId:'ci-informational-review'};
  it('allows only login and the informational preview for exactly one owned review',()=>{
@@ -31,6 +31,17 @@ describe('disposable visual preview network admission',()=>{
   const scope={locator:()=>({count:async()=>1,nth:()=>candidate})};
   expect(await openAdminVisualResponsiveDialog(page,scope,slug,requested,zoom)).toBe(true);expect(click).toHaveBeenCalledOnce();expect(click).toHaveBeenCalledWith();
   expect(state).toEqual(requested);expect(zoom.mock.calls.map(([factor])=>factor)).toEqual([1,1.5]);expect(page.evaluate).toHaveBeenCalledOnce();
+ });
+ it.each(['#merge-reason','#move-reason'])('opens %s only when closed and restores its initial closed state across both measured cases',async selector=>{
+  let visible=false;const click=vi.fn(async()=>{visible=!visible;}),prepare=vi.fn(async()=>{});
+  const reason={isVisible:async()=>visible,waitFor:vi.fn(async()=>{if(!visible)throw Error('FIELD_HIDDEN');})},scope={locator:()=>reason,getByRole:()=>({click})};
+  for(let run=0;run<2;run++){const cleanup=await prepareAdminVisualToggle(scope,selector,/Prepare/u,prepare);expect(visible).toBe(true);await cleanup();expect(visible).toBe(false);}
+  expect(click).toHaveBeenCalledTimes(4);expect(prepare).toHaveBeenCalledTimes(2);
+ });
+ it('does not toggle an already open context closed and cleans up an owned context on preparation failure',async()=>{
+  let visible=true;const click=vi.fn(async()=>{visible=!visible;}),reason={isVisible:async()=>visible,waitFor:async()=>{}},scope={locator:()=>reason,getByRole:()=>({click})};
+  const cleanup=await prepareAdminVisualToggle(scope,'#merge-reason',/Prepare/u,async()=>{});await cleanup();expect(visible).toBe(true);expect(click).not.toHaveBeenCalled();
+  visible=false;await expect(prepareAdminVisualToggle(scope,'#merge-reason',/Prepare/u,async()=>{throw Error('REAL_PREPARATION_FAILURE');})).rejects.toThrow('REAL_PREPARATION_FAILURE');expect(visible).toBe(false);expect(click).toHaveBeenCalledTimes(2);
  });
  it('can reuse only the real one-item informational response and the same visible selected state',()=>{
   const proof={count:1,ids:[fixture.safeReviewId],types:['data_conflict']},ui={previewPresent:true,previewCount:1,selectedCount:1,selectedIds:[fixture.safeReviewId]};
