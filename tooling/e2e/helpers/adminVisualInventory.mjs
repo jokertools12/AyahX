@@ -7,7 +7,7 @@ export const requiredAdminRoutePatterns = Object.freeze([
   'recitations', 'availability', 'providers', 'quran', 'timings', '_kit',
   'reviews', 'reviews/:id', 'listening', 'listening/:id', 'provider-licenses',
   'labels', 'storage', 'licensed-audio', 'licensed-audio/:id', 'reciter-wizard',
-  'render-lab', 'launch', 'project', 'help',
+  'render-lab', 'launch', 'project', 'help', 'feedback', 'diagnostics',
 ]);
 
 export function buildAdminVisualRoutes(source, fixture, options = {}) {

@@ -19,10 +19,10 @@ function api(retained=false){
  return{responses,read:vi.fn(async(path:string)=>{if(!(path in responses))throw new Error('UNEXPECTED_READ');return responses[path];})};
 }
 describe('production visual capture inventory and complete coverage',()=>{
- it('preserves before13×48 and expands after all34 AST views×48 even without a saved video',()=>{
+ it('preserves before13×48 and expands after all36 AST views×48 including owner-feedback tools',()=>{
   const before=buildAdminCaptureInventory(source,{reciterId:'reader'},'before'),after=buildAdminCaptureInventory(source,fixture,'after');
   expect(before).toHaveLength(13);expect(expectedAdminCaptureCases(before,'before')).toHaveLength(624);
-  expect(after).toHaveLength(34);expect(expectedAdminCaptureCases(after,'after')).toHaveLength(1632);
+  expect(after).toHaveLength(36);expect(expectedAdminCaptureCases(after,'after')).toHaveLength(1728);
   expect(after.find(row=>row.pattern==='render-lab')?.path).toBe('/admin/render-lab');
   expect(after.filter(row=>row.pattern==='quran')).toHaveLength(3);expect(after.filter(row=>row.pattern==='reciters/:id')).toHaveLength(5);
  });
@@ -106,7 +106,7 @@ describe('production visual capture inventory and complete coverage',()=>{
  });
  it('fails closed on newly declared unseeded dynamic routes instead of using invented IDs',()=>{
   expect(()=>buildAdminCaptureInventory(source+'\nconst extra=<Route path="new/:id"/>;',fixture,'after')).toThrow('UNSEEDED_ADMIN_ROUTE_PARAMETER');
-  const expanded=buildAdminCaptureInventory(source+'\nconst s5=<Route path="diagnostics"/>;',fixture,'after');expect(expanded).toHaveLength(35);expect(expanded.some(row=>row.path==='/admin/diagnostics')).toBe(true);
+  const expanded=buildAdminCaptureInventory(source+'\nconst s5=<Route path="new-static"/>;',fixture,'after');expect(expanded).toHaveLength(37);expect(expanded.some(row=>row.path==='/admin/new-static')).toBe(true);
  });
  it('requires actual file identity and strict scanner contents, not a green resume summary',()=>{
   const row={route:'/admin',size:{width:1366,height:768},zoom:1,theme:'light',lang:'ar',viewport:{dpr:1},scanner_pass:true,scanner_violations:0,scanner_indeterminate:0};

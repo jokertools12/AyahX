@@ -31,26 +31,26 @@ function child(index:number){
  return{exitCode:0,caseEvidence,report:{version:'admin-visual-ci-shard-2',mode:'strict',tier:'tier1',acceptanceScope:'partial-route-shard',passed:false,shardComplete:true,phase:'finished',shard:{index,count:2},fullRouteInventory:inventories[index],routeInventory,routes:routeInventory.map((route)=>route.path),dialogInventory,matrix,dialogs,expectedCases:cases.length,reviewsStayedPending:true,reviewInvariant:proveAdminVisualReviewInvariant(snapshotAdminVisualReviews([]),snapshotAdminVisualReviews([])),apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[]}};
 }
 describe('Batch 5b strict visual tiers',()=>{
- it('covers every one of the 34 source views at exactly the five requested launch combinations, plus five core views at 200%',()=>{
+ it('covers every one of the 36 source views at exactly the five requested launch combinations, plus five core views at 200%',()=>{
   const cases=expectedAdminVisualCases(inventories[0],'tier1') as VisualCase[];
-  expect(inventories[0]).toHaveLength(34);expect(cases).toHaveLength(195);
+  expect(inventories[0]).toHaveLength(36);expect(cases).toHaveLength(205);
   expect(adminVisualLaunchCombinations.map(adminVisualCombinationKey)).toEqual([
    '[1366,768,1,"light","ar"]','[1366,768,1.5,"dark","ar"]','[390,844,1,"light","ar"]','[390,844,1.5,"dark","ar"]','[1920,1080,1.25,"light","en"]',
   ]);
   for(const route of inventories[0])expect(cases.filter((row)=>row.route===route.path&&row.zoom!==2).map(adminVisualCombinationKey)).toEqual(adminVisualLaunchCombinations.map(adminVisualCombinationKey));
   for(const pattern of adminVisualLaunchCorePatterns){const route=inventories[0].find((item)=>item.pattern===pattern&&!item.view);expect(cases.filter((row)=>row.route===route.path&&row.zoom===2)).toHaveLength(5);}
   expect(new Set(cases.map(adminVisualCaseKey)).size).toBe(cases.length);
-  expect(inventories.map((inventory,index:number)=>expectedAdminVisualCases(selectAdminVisualShard(inventory,index),'tier1')).flat()).toHaveLength(195);
-  expect(expectedAdminVisualCases(inventories[0],'tier2')).toHaveLength(2176);
+  expect(inventories.map((inventory,index:number)=>expectedAdminVisualCases(selectAdminVisualShard(inventory,index),'tier1')).flat()).toHaveLength(205);
+  expect(expectedAdminVisualCases(inventories[0],'tier2')).toHaveLength(2304);
  });
  it('includes added static views rather than freezing the old source snapshot',()=>{
   const added=[...inventories[0],{pattern:'diagnostics',path:'/admin/diagnostics'}];
-  expect(expectedAdminVisualCases(added,'tier1')).toHaveLength(200);
-  expect(expectedAdminVisualCases(added,'tier2')).toHaveLength(2240);
+  expect(expectedAdminVisualCases(added,'tier1')).toHaveLength(210);
+  expect(expectedAdminVisualCases(added,'tier2')).toHaveLength(2368);
  });
  it('requires every declared dialog ID in both desktop Arabic light 100% and mobile Arabic dark 150% aggregate proof',()=>{
   const children=[child(0),child(1)],aggregate=()=>aggregateAdminVisualShards(children,inventories,dialogInventory,'tier1');
-  expect(aggregate()).toMatchObject({passed:true,tier:'tier1',acceptanceScope:'complete-launch-matrix',expectedCases:195});
+  expect(aggregate()).toMatchObject({passed:true,tier:'tier1',acceptanceScope:'complete-launch-matrix',expectedCases:205});
   const first=children[0];const mobile=[...first.caseEvidence.values()].find(row=>row.applicableDialogs.length&&row.size.width===390),slug=mobile.applicableDialogs[0];
   mobile.applicableDialogs=mobile.applicableDialogs.filter((id:string)=>id!==slug);mobile.dialogs=mobile.dialogs.filter((item)=>item.slug!==slug);
   first.report.dialogs=first.report.dialogs.filter(row=>!(row.slug===slug&&row.size.width===390));
