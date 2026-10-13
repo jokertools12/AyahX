@@ -31,7 +31,7 @@ describe('ten-page authenticated Lighthouse proof',()=>{
   const summary=summarizeAdminLighthouse(input,'/admin');expect(JSON.stringify(summary)).not.toContain(secret);expect(summary.warningCount).toBe(1);expect(summary.failedAudits).toEqual([{id:'color-contrast',score:0,scoreDisplayMode:'binary'}]);
  });
  it('requires every requested route once and independently verifies score gates despite green flags',()=>{
-  const routes=buildAdminLighthouseRoutes(source,fixture),pages=routes.map(path=>summarizeAdminLighthouse(lhr(),path));
+  const routes=buildAdminLighthouseRoutes(source,fixture),pages=routes.map((path:string)=>summarizeAdminLighthouse(lhr(),path));
   expect(assertAdminLighthouseCoverage(routes,pages)).toBe(true);
   expect(()=>assertAdminLighthouseCoverage(routes,pages.slice(1))).toThrow('LIGHTHOUSE_ROUTE_COVERAGE_INCOMPLETE');
   expect(()=>assertAdminLighthouseCoverage(routes,[...pages.slice(0,-1),pages[0]])).toThrow('LIGHTHOUSE_ROUTE_COVERAGE_DUPLICATE');
@@ -40,6 +40,8 @@ describe('ten-page authenticated Lighthouse proof',()=>{
  it('loads --routes only from a private file and retains no raw Lighthouse result in reports',()=>{
   const script=readFileSync('scripts/measure-admin-lighthouse.mjs','utf8');
   expect(script).toContain("argument('--routes')");expect(script).toContain('await privateInput(routesPath)');expect(script).toContain('rawArtifactsPersisted:false');
-  expect(script).not.toContain('JSON.stringify(result.lhr');expect(script).toContain('assertAdminLighthouseCoverage(routes,pages)');
+  const progress=readFileSync('tooling/e2e/helpers/adminLighthouseProgress.mjs','utf8');
+  expect(script).not.toContain('JSON.stringify(result.lhr');expect(script).toContain('progress.finish()');
+  expect(progress).toContain('assertAdminLighthouseCoverage(report.expectedRoutes,report.pages)');
  });
 });

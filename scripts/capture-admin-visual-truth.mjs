@@ -6,6 +6,7 @@ import {transform} from 'esbuild';
 import {chromium} from '../tooling/e2e/node_modules/playwright-core/index.mjs';
 import {discoverAdminCaptureTargets,buildAdminCaptureInventory,filterAdminCaptureInventory,expectedAdminCaptureCases,assertAdminCaptureCoverage,assertAdminCaptureReadGates,assertAdminCaptureObservation,captureCaseKey,captureZooms} from '../tooling/e2e/helpers/adminVisualCapture.mjs';
 import {adminVisualSizes,adminVisualLanguages,adminVisualThemes} from '../tooling/e2e/helpers/adminVisualSharding.mjs';
+import {acquireAdminVisualNativeWorker,guardAdminVisualEvaluate} from '../tooling/e2e/helpers/adminVisualRuntimeGuards.mjs';
 
 const local=process.argv.includes('--local'),phase=process.argv.includes('--after')?'after':'before';
 const scanOnly=process.argv.includes('--scan-only');
@@ -33,7 +34,7 @@ const sessionDir=await mkdtemp(join(privateDir,`batch5-capture-${phase}-${local?
 const ext=join(sessionDir,'native-zoom-extension');
 await mkdir(ext,{recursive:true});
 await writeFile(join(ext,'manifest.json'),JSON.stringify({manifest_version:3,name:'AyahX private native zoom verification',version:'1.0',permissions:['tabs'],background:{service_worker:'background.js'}}));
-await writeFile(join(ext,'background.js'),'chrome.runtime.onInstalled.addListener(()=>{});');
+await writeFile(join(ext,'background.js'),'chrome.runtime.onInstalled.addListener(()=>{});chrome.tabs.onUpdated.addListener(()=>{});setInterval(()=>{void chrome.runtime.getPlatformInfo();},20000);');
 const context=await chromium.launchPersistentContext(join(sessionDir,'chrome-profile'),{channel:'chromium',headless:true,reducedMotion:'reduce',viewport:{width:1366,height:768},args:[`--disable-extensions-except=${ext}`,`--load-extension=${ext}`]});
 const report=process.argv.includes('--resume')?JSON.parse(await readFile(join(output,'report.json'),'utf8')):{version:'admin-visual-capture-2',phase,environment:local?'local':'production',started_at:new Date().toISOString(),account_id:account.id,base,matrix:[],blocked_writes:[],network_errors:[],browser_errors:[],assets:{},public_references:[],complete:false,visual_capture_only:true};
 if(report.phase!==phase||report.environment!==(local?'local':'production')||report.account_id!==account.id||report.base!==base)throw new Error('EVIDENCE_RESUME_CONTEXT_MISMATCH');
@@ -56,14 +57,16 @@ context.on('response',response=>{
  })();tasks.push(task);
 });
 const page=await context.newPage();
+guardAdminVisualEvaluate(page,{code:'ADMIN_VISUAL_CAPTURE_EVALUATE_TIMEOUT'});
 page.on('pageerror',()=>report.browser_errors.push({kind:'pageerror',code:'UNCAUGHT_PAGE_ERROR'}));
 page.on('console',message=>{if(message.type()==='error')report.browser_errors.push({kind:'console',code:'BROWSER_CONSOLE_ERROR',path:pathOnly(message.location()?.url??''),...( /Failed to load resource.*\b401\b/u.test(message.text())?{http_status:401}:{})});});
-const worker=context.serviceWorkers()[0]??await context.waitForEvent('serviceworker',{timeout:30000});
+let nativeWorkerUrl;
 const setZoom=async factor=>{
+ const worker=await acquireAdminVisualNativeWorker(context,{expectedUrl:nativeWorkerUrl});nativeWorkerUrl??=worker.url();
  const actual=await worker.evaluate(async({origin,factor})=>{const tabs=await chrome.tabs.query({url:origin+'/*'});if(tabs.length!==1)throw new Error('ZOOM_TARGET_NOT_UNIQUE');await chrome.tabs.setZoom(tabs[0].id,factor);return chrome.tabs.getZoom(tabs[0].id);},{origin:new URL(base).origin,factor});
  if(Math.abs(actual-factor)>0.001)throw new Error('NATIVE_ZOOM_NOT_APPLIED');
  // setZoom acknowledges the browser setting before its renderer may resize.
- await page.waitForFunction(factor=>Math.abs(devicePixelRatio-factor)<0.02,factor);
+ await page.waitForFunction(factor=>Math.abs(devicePixelRatio-factor)<0.02,factor,{timeout:30000});
  return actual;
 };
 const settle=async()=>{
