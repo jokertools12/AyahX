@@ -52,3 +52,6 @@ body:has(.admin-app) [data-sonner-toast] button{min-width:44px;min-height:44px;f
 .admin-command-results button:hover{outline:1px solid var(--admin-outline);outline-offset:-1px}
 .admin-app a{white-space:normal}.admin-nav .admin-brand>span{max-width:100%;min-width:0}
 .admin-app li+li,body:has(.admin-app) :is([role=dialog],[role=alertdialog]) li+li{margin-block-start:8px}.admin-app .catalog-definition,body:has(.admin-app) [role=dialog] .catalog-definition{display:grid;gap:16px}.admin-app .catalog-definition>div,body:has(.admin-app) [role=dialog] .catalog-definition>div{display:grid;grid-template-columns:minmax(120px,1fr) 2fr;column-gap:16px;row-gap:12px}.admin-app .catalog-definition :is(dt,dd),body:has(.admin-app) [role=dialog] .catalog-definition :is(dt,dd){padding-block:4px;margin:0;min-width:0;overflow-wrap:anywhere}@media(max-width:767px){.admin-app .catalog-definition>div,body:has(.admin-app) [role=dialog] .catalog-definition>div{grid-template-columns:minmax(0,1fr)}}
+/* A native select's intrinsic option width must not enlarge a field's grid
+   track after its wrapping toolbar has shrunk at phone/browser zoom sizes. */
+.admin-field{grid-template-columns:minmax(0,1fr);max-width:100%}.admin-select{min-width:0}
