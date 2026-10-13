@@ -46,10 +46,15 @@ export function inspectAdminVisualPixels({data,width,height},{kind='text'}={}){
  // A rare farthest pixel never grants a pass. Competing paint/gradient/noise
  // must be investigated instead of selecting whichever color looks best.
  if(unexplained>Math.max(1,total*.005))return unknown('AMBIGUOUS_MULTICOLOR_PAINT');
+ const ratio=adminVisualContrastRatio(foreground.color,background.color);
+ const measured={...base,ratio,background:background.color,foreground:foreground.color,backgroundPixels:background.count,foregroundPixels:foreground.count,unexplainedPixels:unexplained,perimeterPixels,backgroundPerimeterPixels};
+ if(ratio<minimum)return{...measured,status:'fail',passed:false,reason:'PIXEL_CONTRAST_BELOW_MINIMUM'};
  // Collinearity alone cannot distinguish antialias from another grayscale
  // glyph/gradient core. Antialias must border the actually supported solid
- // foreground. Independently supported intermediate paint remains UNKNOWN.
- const core=Uint8Array.from(pixels,color=>distance(color,foreground.color)<=7?1:0);
+ // foreground meeting this exact rule's contrast minimum. Fine strokes may
+ // have readable solid paint without matching the farthest color cluster.
+ // Independently supported low-contrast intermediate paint remains UNKNOWN.
+ const core=Uint8Array.from(pixels,color=>adminVisualContrastRatio(color,background.color)>=minimum?1:0);
  let intermediatePixelsWithoutCore=0;
  for(let index=0;index<pixels.length;index++){
   if(core[index]||distance(pixels[index],background.color)<=7)continue;
@@ -58,8 +63,7 @@ export function inspectAdminVisualPixels({data,width,height},{kind='text'}={}){
   if(!adjacent)intermediatePixelsWithoutCore++;
  }
  if(intermediatePixelsWithoutCore>=support)return{...unknown('AMBIGUOUS_INTERMEDIATE_CORE'),intermediatePixelsWithoutCore};
- const ratio=adminVisualContrastRatio(foreground.color,background.color),passed=ratio>=minimum;
- return{...base,status:passed?'pass':'fail',passed,reason:passed?'PIXEL_CONTRAST_PASS':'PIXEL_CONTRAST_BELOW_MINIMUM',ratio,background:background.color,foreground:foreground.color,backgroundPixels:background.count,foregroundPixels:foreground.count,unexplainedPixels:unexplained,perimeterPixels,backgroundPerimeterPixels,antialiasSupportMethod:'ADJACENT_SOLID_FOREGROUND_PIXEL',intermediatePixelsWithoutCore};
+ return{...measured,status:'pass',passed:true,reason:'PIXEL_CONTRAST_PASS',antialiasSupportMethod:'ADJACENT_READABLE_FOREGROUND_PIXEL',intermediatePixelsWithoutCore};
 }
 
 export async function inspectAdminVisualPng(png,options){

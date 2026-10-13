@@ -1,6 +1,7 @@
 import {isDeepStrictEqual} from 'node:util';
 import {adminVisualContrastRatio} from './adminVisualPixelContrast.mjs';
 import {assertAdminVisualNoAudioProof} from './adminVisualNoAudioProof.mjs';
+import {adminVisualNativePixelClip} from './adminVisualNativePixelCapture.mjs';
 
 const requireProof=(condition,code)=>{if(!condition)throw new Error(code);};
 const empty=(value,code)=>requireProof(Array.isArray(value)&&!value.length,code);
@@ -9,18 +10,20 @@ const validRect=rect=>rect&&['x','y','width','height'].every(key=>Number.isFinit
 export function assertAdminVisualPixelProof(proof,kind='text'){
  const minimum=kind==='text'?4.5:3;
  requireProof(proof?.resolved===true&&proof.reason==='PIXEL_VISIBLE_CONTRAST_PASS'&&proof.fullyVisibleBeforeRun===true&&proof.fullyVisibleAfterRun===true,'ADMIN_VISUAL_PIXEL_VISIBLE_PROOF_REQUIRED');
- requireProof(proof.captureMethod==='PLAYWRIGHT_TEXT_RANGE_PNG'&&kind==='text'&&proof.paint?.fontsReady===true&&proof.paint?.finiteAnimationsSettled===true&&proof.paint?.framesAfter===2,'ADMIN_VISUAL_PIXEL_CAPTURE_REQUIRED');
+ requireProof(proof.captureMethod==='CDP_DIP_TEXT_RANGE_PNG'&&kind==='text'&&proof.paint?.fontsReady===true&&proof.paint?.finiteAnimationsSettled===true&&proof.paint?.framesAfter===2,'ADMIN_VISUAL_PIXEL_CAPTURE_REQUIRED');
  requireProof(Array.isArray(proof.images)&&proof.images.length>0,'ADMIN_VISUAL_PIXEL_IMAGES_REQUIRED');
  for(const image of proof.images){
   requireProof(validRect(image.rect)&&image.version==='admin-pixel-1'&&image.kind===kind&&image.minimum===minimum&&image.status==='pass'&&image.passed===true&&/^[a-f0-9]{64}$/u.test(image.sha256??''),'ADMIN_VISUAL_PIXEL_IMAGE_INVALID');
   requireProof(Number.isFinite(image.dpr)&&image.dpr>0&&Math.abs(image.width-image.rect.width*image.dpr)<=2&&Math.abs(image.height-image.rect.height*image.dpr)<=2,'ADMIN_VISUAL_PIXEL_RECT_DIMENSIONS_REQUIRED');
+  const geometry=image.captureGeometry;
+  requireProof(geometry?.method==='CDP_DIP_TEXT_RANGE_PNG'&&isDeepStrictEqual(geometry.rect,image.rect)&&geometry.dpr===image.dpr&&geometry.zoom===geometry.cssVisualViewport?.zoom&&geometry.width===image.width&&geometry.height===image.height&&isDeepStrictEqual(geometry.clip,adminVisualNativePixelClip(image.rect,{cssVisualViewport:geometry.cssVisualViewport},image.dpr)),'ADMIN_VISUAL_PIXEL_DIP_GEOMETRY_REQUIRED');
   const validColor=color=>Array.isArray(color)&&color.length===3&&color.every(value=>Number.isFinite(value)&&value>=0&&value<=255);
   requireProof(validColor(image.foreground)&&validColor(image.background),'ADMIN_VISUAL_PIXEL_COLORS_REQUIRED');
   const ratio=adminVisualContrastRatio(image.foreground,image.background);
   requireProof(Number.isFinite(image.ratio)&&Math.abs(ratio-image.ratio)<1e-10&&ratio>=minimum,'ADMIN_VISUAL_PIXEL_CONTRAST_FAILED');
   requireProof(Number.isInteger(image.width)&&Number.isInteger(image.height)&&image.width>0&&image.height>0&&image.totalPixels===image.width*image.height&&image.backgroundPixels>=image.totalPixels*.5&&image.foregroundPixels>=Math.max(3,Math.ceil(image.totalPixels*.002))&&image.unexplainedPixels<=Math.max(1,image.totalPixels*.005)&&image.antialiasTolerance===16&&image.colorTolerance===4,'ADMIN_VISUAL_PIXEL_SUPPORT_REQUIRED');
   requireProof(Number.isInteger(image.perimeterPixels)&&image.perimeterPixels>0&&image.backgroundPerimeterPixels/image.perimeterPixels>=.85,'ADMIN_VISUAL_PIXEL_BACKGROUND_AMBIGUOUS');
-  requireProof(image.antialiasSupportMethod==='ADJACENT_SOLID_FOREGROUND_PIXEL'&&Number.isInteger(image.intermediatePixelsWithoutCore)&&image.intermediatePixelsWithoutCore>=0&&image.intermediatePixelsWithoutCore<Math.max(3,Math.ceil(image.totalPixels*.002)),'ADMIN_VISUAL_PIXEL_INTERMEDIATE_CORE_AMBIGUOUS');
+  requireProof(image.antialiasSupportMethod==='ADJACENT_READABLE_FOREGROUND_PIXEL'&&Number.isInteger(image.intermediatePixelsWithoutCore)&&image.intermediatePixelsWithoutCore>=0&&image.intermediatePixelsWithoutCore<Math.max(3,Math.ceil(image.totalPixels*.002)),'ADMIN_VISUAL_PIXEL_INTERMEDIATE_CORE_AMBIGUOUS');
  }
 }
 export function assertAdminVisualAxNameProof(proof){

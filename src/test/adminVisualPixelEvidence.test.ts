@@ -21,7 +21,7 @@ const accessibility=(id='color-contrast')=>({violations:[],incomplete:[unknown(i
 const scanner=(code='CONTRAST_UNRESOLVED')=>({version:'admin-visual-1',mode:'strict',violations:[],indeterminate:[{code,selector:'#target',reason:'Unsupported paint',rect,minimum:4.5,contrastKind:'text'}],compliant:false,shouldFail:true});
 const prepared={ready:true,reason:'VISIBLE_TEXT_RANGES',rects:[rect],visibleText:'EN',dpr:1,paint:{fontsReady:true,finiteAnimationsSettled:true,framesAfter:2},scrollState:{window:{left:0,top:0},parents:[]}};
 const fakePage=(png=image().png,name='EN — Change language')=>{
- const send=vi.fn(async(method:string)=>method==='DOM.getDocument'?{root:{nodeId:1}}:method==='DOM.querySelector'?{nodeId:2}:method==='DOM.describeNode'?{node:{backendNodeId:3}}:method==='Accessibility.getPartialAXTree'?{nodes:[{backendDOMNodeId:3,ignored:false,name:{value:name}}]}:{});
+ const send=vi.fn(async(method:string)=>method==='Page.getLayoutMetrics'?{cssVisualViewport:{pageX:0,pageY:0,clientWidth:800,clientHeight:600,zoom:1,scale:1}}:method==='Page.captureScreenshot'?{data:png.toString('base64')}:method==='DOM.getDocument'?{root:{nodeId:1}}:method==='DOM.querySelector'?{nodeId:2}:method==='DOM.describeNode'?{node:{backendNodeId:3}}:method==='Accessibility.getPartialAXTree'?{nodes:[{backendDOMNodeId:3,ignored:false,name:{value:name}}]}:{});
  const detach=vi.fn(async()=>{}),evaluate=vi.fn(async(_fn:unknown,args:{action?:string})=>args.action==='restore'?{restored:true}:structuredClone(prepared));
  return{evaluate,screenshot:vi.fn(async()=>png),context:()=>({newCDPSession:vi.fn(async()=>({send,detach}))}),send,detach};
 };
@@ -44,6 +44,11 @@ describe('dominant background / supported farthest foreground PNG proof',()=>{
   expect(inspectAdminVisualPixels(image('#fff','#000',true).pixels)).toMatchObject({passed:true,ratio:21});
   const canvas=createCanvas(100,20),context=canvas.getContext('2d');context.fillStyle='#fff';context.fillRect(0,0,100,20);context.fillStyle='#000';context.fillRect(10,4,5,12);context.fillStyle='#aaa';context.fillRect(15,4,5,12);
   expect(inspectAdminVisualPixels(context.getImageData(0,0,100,20))).toMatchObject({passed:false,status:'ambiguous',reason:'AMBIGUOUS_INTERMEDIATE_CORE'});
+ });
+ it('preserves fine-stroke edge antialias anchored to actual readable paint rather than only the farthest RGB cluster',()=>{
+  const canvas=createCanvas(100,20),context=canvas.getContext('2d');context.fillStyle='#101c23';context.fillRect(0,0,100,20);
+  for(const x of [10,25,40,55,70]){context.fillStyle='#e5edef';context.fillRect(x,4,5,12);context.fillStyle='#a0a8ae';context.fillRect(x+5,4,1,12);context.fillStyle='#465056';context.fillRect(x+6,4,1,12);}
+  expect(inspectAdminVisualPixels(context.getImageData(0,0,100,20))).toMatchObject({passed:true,intermediatePixelsWithoutCore:0,antialiasSupportMethod:'ADJACENT_READABLE_FOREGROUND_PIXEL'});
  });
  it('fails low contrast and never rounds 4.499 up to 4.5',()=>{
   expect(inspectAdminVisualPixels(image('#aaa').pixels)).toMatchObject({passed:false,status:'fail'});
@@ -73,9 +78,18 @@ describe('Node adapter retains the original unknown and only accepts direct evid
  it('captures only measured text rectangles after preparation and restores the scroll',async()=>{
   const page=fakePage(),evidenceDir=await directory(),raw=accessibility(),result=await collectAdminVisualEvidence(page,{evidenceDir,caseId:'synthetic',accessibility:raw});
   expect(result.accessibility.incomplete).toEqual([]);expect(result.accessibility.originalIncomplete).toEqual(raw.originalIncomplete);expect(raw.incomplete).toHaveLength(1);
-  expect(page.screenshot).toHaveBeenCalledWith({type:'png',clip:rect,scale:'device',animations:'allow'});expect(page.evaluate.mock.calls.at(-1)?.[1]).toMatchObject({action:'restore'});
+  expect(page.send).toHaveBeenCalledWith('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false,clip:{...rect,scale:1}});expect(page.screenshot).not.toHaveBeenCalled();expect(page.evaluate.mock.calls.at(-1)?.[1]).toMatchObject({action:'restore'});
   const proof=result.accessibility.remeasurements[0];expect(()=>assertAdminVisualDirectEvidence(result.accessibility)).not.toThrow();
   expect(createHash('sha256').update(await readFile(join(evidenceDir,proof.images[0].file))).digest('hex')).toBe(proof.images[0].sha256);
+ });
+ it('captures document DIP geometry at native150% with actual PNG dimensions and immutable Range proof',async()=>{
+  const canvas=createCanvas(150,30),context=canvas.getContext('2d');context.fillStyle='#fff';context.fillRect(0,0,150,30);context.fillStyle='#000';context.fillRect(15,6,8,18);const png=canvas.toBuffer('image/png'),page=fakePage(png);
+  page.evaluate.mockImplementation(async(_fn:unknown,args:{action?:string})=>args.action==='restore'?{restored:true}:structuredClone({...prepared,dpr:1.5}));
+  page.send.mockImplementation(async(method:string)=>method==='Page.getLayoutMetrics'?{cssVisualViewport:{pageX:0,pageY:862,clientWidth:260,clientHeight:562,zoom:1.5,scale:1}}:method==='Page.captureScreenshot'?{data:png.toString('base64')}:{});
+  const result=await collectAdminVisualEvidence(page,{evidenceDir:await directory(),caseId:'native-unit',accessibility:accessibility()}),proof=result.accessibility.remeasurements[0];
+  expect(proof).toMatchObject({resolved:true,captureMethod:'CDP_DIP_TEXT_RANGE_PNG',fullyVisibleBeforeRun:true,fullyVisibleAfterRun:true,images:[{width:150,height:30,dpr:1.5,captureGeometry:{clip:{x:15,y:1308,width:150,height:30,scale:1},cssVisualViewport:{pageY:862,zoom:1.5}}}]});
+  expect(()=>assertAdminVisualDirectEvidence(result.accessibility)).not.toThrow();expect(page.screenshot).not.toHaveBeenCalled();
+  const original=proof.images[0].captureGeometry;proof.images[0].captureGeometry={...original,clip:{...original.clip,y:15}};expect(()=>assertAdminVisualDirectEvidence(result.accessibility)).toThrow('DIP_GEOMETRY_REQUIRED');
  });
  it('fails a low contrast crop without converting an unknown to a pass',async()=>{
   const result=await collectAdminVisualEvidence(fakePage(image('#aaa').png),{evidenceDir:await directory(),caseId:'synthetic',accessibility:accessibility()});

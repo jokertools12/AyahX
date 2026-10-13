@@ -4,6 +4,7 @@ import {isDeepStrictEqual} from 'node:util';
 import {isAbsolute,join,relative,resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {inspectAdminVisualPng} from './adminVisualPixelContrast.mjs';
+import {captureAdminVisualNativeZoomTextPng} from './adminVisualNativePixelCapture.mjs';
 import {assertAdminVisualPixelProof,assertAdminVisualAxNameProof,normalizeAdminVisualLabel} from './adminVisualEvidenceValidation.mjs';
 export {assertAdminVisualDirectEvidence,assertAdminVisualScanEvidence} from './adminVisualEvidenceValidation.mjs';
 
@@ -92,11 +93,11 @@ async function collectTarget(page,{selector,target,ruleId,evidenceDir,caseId,axO
     proof.normalizedVisibleText=normalizeAdminVisualLabel(prepared.visibleText);proof.normalizedAccessibleName=normalizeAdminVisualLabel(proof.ax.accessibleName);
    }finally{await session.detach();}
   }else{
-   proof.captureMethod='PLAYWRIGHT_TEXT_RANGE_PNG';proof.images=[];
+   proof.captureMethod='CDP_DIP_TEXT_RANGE_PNG';proof.images=[];
    for(const [index,rect] of prepared.rects.entries()){
-    const png=await page.screenshot({type:'png',clip:rect,scale:'device',animations:'allow'}),measurement=await inspectAdminVisualPng(png,{kind:'text'});
+    const {png,geometry}=await captureAdminVisualNativeZoomTextPng(page,rect,{dpr:prepared.dpr}),measurement=await inspectAdminVisualPng(png,{kind:'text'});
     const name=createHash('sha256').update(JSON.stringify([caseId,selector,index,measurement.sha256])).digest('hex')+'.png';
-    await writeFile(join(evidenceDir,name),png,{mode:0o600});proof.images.push({...measurement,rect,dpr:prepared.dpr,file:name});
+    await writeFile(join(evidenceDir,name),png,{mode:0o600});proof.images.push({...measurement,rect,dpr:prepared.dpr,file:name,captureGeometry:geometry});
    }
   }
   const after=await page.evaluate(measureAdminVisualEvidenceTarget,{selector});
