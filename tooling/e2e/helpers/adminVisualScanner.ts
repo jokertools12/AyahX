@@ -329,7 +329,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   const controlRects = new Map<Element, DOMRect>();
   const controlTargets = new Map<Element, Element>();
   const stickyHeader = (el:Element):Element|null=>{
-    for(let p:Element|null=el;p;p=p.parentElement){const s=style(p);if((p.tagName==='HEADER'||p.getAttribute('role')==='banner')&&['fixed','sticky'].includes(s.position)&&color(s.backgroundColor)?.[3]===1){let opaque=true;for(let ancestor:Element|null=p;ancestor;ancestor=ancestor.parentElement){const a=style(ancestor);if(Number(a.opacity)!==1||!identityFilter(a.filter)||a.mixBlendMode&&a.mixBlendMode!=='normal')opaque=false;}if(opaque)return p;}}
+    for(let p:Element|null=el;p;p=p.parentElement){const s=style(p);if((p.tagName==='HEADER'||p.tagName==='TH'||['banner','columnheader'].includes(p.getAttribute('role')??''))&&['fixed','sticky'].includes(s.position)&&color(s.backgroundColor)?.[3]===1){let opaque=true;for(let ancestor:Element|null=p;ancestor;ancestor=ancestor.parentElement){const a=style(ancestor);if(Number(a.opacity)!==1||!identityFilter(a.filter)||a.mixBlendMode&&a.mixBlendMode!=='normal')opaque=false;}if(opaque)return p;}}
     return null;
   };
   for (const el of controls) {
@@ -388,7 +388,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
       if(!firstTarget||!secondTarget)continue;
       if (firstTarget.contains(secondTarget) || secondTarget.contains(firstTarget)) continue;
       // Scrolling can place any flow control 0-7px below an independent sticky
-      // banner. These controls are not adjacent in layout. Gaps within a banner
+      // header. These controls are not adjacent in layout. Gaps within a header
       // or within normal flow are still measured at the original 8px threshold.
       const firstHeader=stickyHeader(controls[i]),secondHeader=stickyHeader(controls[j]);
       if(firstHeader!==secondHeader&&(firstHeader&&!secondHeader||secondHeader&&!firstHeader))continue;

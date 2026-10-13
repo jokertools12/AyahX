@@ -173,6 +173,23 @@ describe('admin visual document scanner', () => {
     const report=scanAdminVisualDocument({touch:false});expect(report.violations.filter(issue=>issue.code==='CONTROL_GAP')).toHaveLength(1);expect(report.violations.find(issue=>issue.code==='CONTROL_GAP')?.relatedSelector).toBe('#b');
     document.getElementById('header')!.style.backgroundColor='rgba(255,255,255,.5)';expect(scanAdminVisualDocument({touch:false}).violations.filter(issue=>issue.code==='CONTROL_GAP').length).toBeGreaterThan(1);
   });
+  it.each([['TH','sticky'],['TH','fixed'],['columnheader','sticky'],['columnheader','fixed']])('recognizes actual opaque pinned %s %s without exempting gaps between header controls', (kind,position)=>{
+    const controls='<button id="a">A</button><button id="b">B</button>',style=`position:${position};background-color:rgb(255,255,255)`;
+    layout(kind==='TH'?`<table><thead><tr><th id="header" style="${style}">${controls}</th></tr></thead><tbody><tr><td><button id="flow">Flow</button></td></tr></tbody></table>`:`<div id="header" role="columnheader" style="${style}">${controls}</div><main><button id="flow">Flow</button></main>`,{header:[0,0,800,50],a:[10,0,100,44],b:[114,0,100,44],flow:[10,44,100,44]});
+    const gaps=scanAdminVisualDocument({touch:false}).violations.filter(issue=>issue.code==='CONTROL_GAP');
+    expect(gaps.map(issue=>({selector:issue.selector,relatedSelector:issue.relatedSelector,actual:issue.actual,minimum:issue.minimum}))).toEqual([{selector:'#a',relatedSelector:'#b',actual:4,minimum:8}]);
+    document.getElementById('header')!.style.filter='blur(0px) brightness(1)';expect(scanAdminVisualDocument({touch:false}).violations.filter(issue=>issue.code==='CONTROL_GAP')).toHaveLength(1);
+  });
+  it.each(['position:static;background-color:rgb(255,255,255)','position:sticky;background-color:rgba(255,255,255,.5)','position:sticky;background-color:rgb(255,255,255);filter:brightness(.99)','position:sticky;background-color:rgb(255,255,255);opacity:.99'])('retains the same8px gap for unpinned/translucent/effectful TH: %s',style=>{
+    layout(`<table><thead><tr><th id="header" style="${style}"><button id="a">A</button></th></tr></thead><tbody><tr><td><button id="flow">Flow</button></td></tr></tbody></table>`,{header:[0,0,800,50],a:[10,0,100,44],flow:[10,44,100,44]});
+    expect(scanAdminVisualDocument({touch:false}).violations.find(issue=>issue.code==='CONTROL_GAP')).toMatchObject({selector:'#a',relatedSelector:'#flow',actual:0,minimum:8});
+  });
+  it('retains gaps between controls in separate pinned TH cells and never classifies a pinned footer as a header',()=>{
+    layout('<table><thead><tr><th id="first" style="position:sticky;background-color:rgb(255,255,255)"><button id="a">A</button></th><th id="second" style="position:sticky;background-color:rgb(255,255,255)"><button id="b">B</button></th></tr></thead></table>',{first:[0,0,112,50],second:[112,0,112,50],a:[10,0,100,44],b:[114,0,100,44]});
+    expect(scanAdminVisualDocument({touch:false}).violations.find(issue=>issue.code==='CONTROL_GAP')).toMatchObject({selector:'#a',relatedSelector:'#b',actual:4,minimum:8});
+    layout('<footer id="footer" style="position:sticky;background-color:rgb(255,255,255)"><button id="a">A</button></footer><main><button id="flow">Flow</button></main>',{footer:[0,0,800,50],a:[10,0,100,44],flow:[10,44,100,44]});
+    expect(scanAdminVisualDocument({touch:false}).violations.find(issue=>issue.code==='CONTROL_GAP')).toMatchObject({selector:'#a',relatedSelector:'#flow',actual:0,minimum:8});
+  });
   it('counts an associated label as a checkbox hit target', () => {
     layout('<label id="label"><input id="checkbox" type="checkbox"/><span id="label-text">Remember</span></label>', { label: [10, 10, 160, 44], checkbox: [15, 20, 16, 16], 'label-text': [40, 19, 100, 26] });
     const report = scanAdminVisualDocument({ touch: true });
