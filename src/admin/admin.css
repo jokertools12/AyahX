@@ -74,4 +74,4 @@ body:has(.admin-app) .admin-drawer{display:grid;grid-template-columns:minmax(0,1
 
 /* Font ink at 15px exceeds a 25.5px Arabic line box; keep every wrapped line
    inside its own hit/paint box in portalled descriptions and field labels. */
-body:has(.admin-app) :is(.admin-dialog,.admin-drawer) :is(p,label){line-height:2}
+body:has(.admin-app) :is(.admin-dialog,.admin-drawer) :is(p,label,h2,h3){line-height:2}
