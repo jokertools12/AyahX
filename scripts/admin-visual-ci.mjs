@@ -11,6 +11,7 @@ import {requireAdminVisualTier,shouldScanAdminVisualDialogs,adminVisualCombinati
 import {allowedAdminVisualWrite,prepareAdminVisualDialogContext,openAdminVisualResponsiveDialog} from '../tooling/e2e/helpers/adminVisualDialogPreparation.mjs';
 import {measureAdminVisualAccessibility} from '../tooling/e2e/helpers/adminVisualAccessibility.mjs';
 import {collectAdminVisualEvidence} from '../tooling/e2e/helpers/adminVisualPixelEvidence.mjs';
+import {collectAdminVisualNoAudioEvidence} from '../tooling/e2e/helpers/adminVisualNoAudioEvidence.mjs';
 import {readAdminVisualReviewSnapshot,proveAdminVisualReviewInvariant} from '../tooling/e2e/helpers/adminVisualReviewProof.mjs';
 import {guardAdminVisualEvaluate,withAdminVisualDeadline,startAdminVisualProgressCheckpoint,acquireAdminVisualNativeWorker} from '../tooling/e2e/helpers/adminVisualRuntimeGuards.mjs';
 import {setAdminVisualScanPhase,collectAdminVisualFailureDiagnostic} from '../tooling/e2e/helpers/adminVisualScanProgress.mjs';
@@ -116,7 +117,8 @@ async function scanAccessibility(){
  await page.addScriptTag({content:axe});
  const raw=await page.evaluate(measureAdminVisualAccessibility);
  if(!raw.incomplete.length)return raw;
- return(await collectAdminVisualEvidence(page,{evidenceDir:output,caseId:directEvidenceCaseId(),accessibility:raw})).accessibility;
+ const measured=(await collectAdminVisualEvidence(page,{evidenceDir:output,caseId:directEvidenceCaseId(),accessibility:raw})).accessibility;
+ return collectAdminVisualNoAudioEvidence(page,{accessibility:measured,fixture,base});
 }
 const measuredLaunchDialogs=new Map();
 async function scanDialogs(caseId,touch){

@@ -1,5 +1,6 @@
 import {isDeepStrictEqual} from 'node:util';
 import {adminVisualContrastRatio} from './adminVisualPixelContrast.mjs';
+import {assertAdminVisualNoAudioProof} from './adminVisualNoAudioProof.mjs';
 
 const requireProof=(condition,code)=>{if(!condition)throw new Error(code);};
 const empty=(value,code)=>requireProof(Array.isArray(value)&&!value.length,code);
@@ -29,15 +30,16 @@ export function assertAdminVisualAxNameProof(proof){
  requireProof(!!visible&&proof.normalizedVisibleText===visible&&proof.normalizedAccessibleName===name&&name.startsWith(visible),'ADMIN_VISUAL_AX_VISIBLE_PREFIX_REQUIRED');
 }
 
-/** Aggregate reports may close only these two exact original UNKNOWN rules. */
+/** Aggregate reports may close only exact original rules with typed proof. */
 export function assertAdminVisualDirectEvidence(accessibility){
  requireProof(accessibility&&Array.isArray(accessibility.originalIncomplete)&&Array.isArray(accessibility.remeasurements),'ADMIN_VISUAL_AXE_EVIDENCE_REQUIRED');
  empty(accessibility.violations,'ADMIN_VISUAL_AXE_VIOLATIONS');empty(accessibility.incomplete,'ADMIN_VISUAL_AXE_INCOMPLETE');
  for(const rule of accessibility.originalIncomplete){
-  requireProof(['color-contrast','label-content-name-mismatch'].includes(rule.id)&&Array.isArray(rule.nodes),'ADMIN_VISUAL_AXE_UNRESOLVED_RULE');
+  requireProof(['color-contrast','label-content-name-mismatch','video-caption'].includes(rule.id)&&Array.isArray(rule.nodes),'ADMIN_VISUAL_AXE_UNRESOLVED_RULE');
   for(const node of rule.nodes){
    const proofs=accessibility.remeasurements.filter(proof=>isDeepStrictEqual(proof.target,node.target)&&(proof.ruleId??'color-contrast')===rule.id);
    requireProof(proofs.length===1,'ADMIN_VISUAL_AXE_REMEASUREMENT_REQUIRED');const proof=proofs[0];
+   if(rule.id==='video-caption'){assertAdminVisualNoAudioProof(proof);continue;}
    if(rule.id==='label-content-name-mismatch'){assertAdminVisualAxNameProof(proof);continue;}
    if(proof.reason==='PIXEL_VISIBLE_CONTRAST_PASS'){assertAdminVisualPixelProof(proof);continue;}
    requireProof(proof.resolved===true&&proof.reason==='EXACT_VISIBLE_CONTRAST_PASS'&&proof.fullyVisibleBeforeRun===true&&proof.fullyVisibleAfterRun===true,'ADMIN_VISUAL_AXE_EXACT_PASS_REQUIRED');

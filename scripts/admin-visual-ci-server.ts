@@ -3,7 +3,7 @@ import express from 'express';
 import mysql,{type RowDataPacket} from 'mysql2/promise';
 import Redis from 'ioredis';
 import bcrypt from 'bcryptjs';
-import {randomBytes,randomUUID} from 'node:crypto';
+import {randomBytes,randomUUID,createHash} from 'node:crypto';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {join,resolve,relative,isAbsolute} from 'node:path';
 import {catalogDatabaseFromPool} from '../server/services/catalogMysqlDatabase';
@@ -156,9 +156,10 @@ const applicationDb=catalogDatabaseFromPool(pool);
 // quality evidence. Keep it in ignored local uploads, under the real media
 // router's path boundary, with real ffprobe duration/size and authenticated GET.
 const renderJobId=randomUUID(),secondRenderJobId=randomUUID();
-const shardActors=[{id:userId,email,password,renderJobId},{id:secondShardId,email:secondShardEmail,password:secondShardPassword,renderJobId:secondRenderJobId}];
+type CiVisualMedia={fixtureTag:'CI_VISUAL_ONLY_SYNTHETIC_BLACK';jobId:string;localPath:string;sha256:string;actual_quran_render:false;human_acceptance:false};
+const shardActors:Array<{id:string;email:string;password:string;renderJobId:string;visualMedia?:CiVisualMedia}>=[{id:userId,email,password,renderJobId},{id:secondShardId,email:secondShardEmail,password:secondShardPassword,renderJobId:secondRenderJobId}];
 const syntheticManifest={schemaVersion:'2.0.0',fixture:'CI_VISUAL_ONLY_SYNTHETIC_BLACK',actual_quran_render:false,acceptance_evidence:false};
-const visualMediaEvidence:Array<{synthetic_black:true;no_audio:true;duration_seconds:number;bytes:number;actual_quran_render:false;human_acceptance:false}>=[];
+const visualMediaEvidence:Array<{synthetic_black:true;no_audio:true;duration_seconds:number;bytes:number;sha256:string;probe_source:'REAL_FFPROBE_LOCAL_ENCODED_ARTIFACT';fixture_tag:'CI_VISUAL_ONLY_SYNTHETIC_BLACK';actual_quran_render:false;human_acceptance:false}>=[];
 for(const actor of shardActors){
  const clipDirectory=join(process.cwd(),'uploads',actor.id,'admin-visual-ci');await mkdir(clipDirectory,{recursive:true,mode:0o700});
  const clipPath=join(clipDirectory,actor.renderJobId+'.mp4');
@@ -166,7 +167,9 @@ for(const actor of shardActors){
  const mediaProbe=await runRenderV2Process(getFfprobeBinary(),['-v','error','-show_format','-show_streams','-of','json',clipPath]);
  const media=JSON.parse(mediaProbe.stdout.toString('utf8')) as {format:{duration:string;size:string};streams:Array<{codec_type:string}>};
  if(!media.streams.some(stream=>stream.codec_type==='video')||media.streams.some(stream=>stream.codec_type==='audio')||!Number.isFinite(Number(media.format.duration))||Number(media.format.duration)<=0)throw new Error('CI_SYNTHETIC_BLACK_MEDIA_PROBE_INVALID');
- visualMediaEvidence.push({synthetic_black:true,no_audio:true,duration_seconds:Number(media.format.duration),bytes:Number(media.format.size),actual_quran_render:false,human_acceptance:false});
+ const mediaSha256=createHash('sha256').update(await readFile(clipPath)).digest('hex');
+ actor.visualMedia={fixtureTag:'CI_VISUAL_ONLY_SYNTHETIC_BLACK',jobId:actor.renderJobId,localPath:resolve(clipPath),sha256:mediaSha256,actual_quran_render:false,human_acceptance:false};
+ visualMediaEvidence.push({synthetic_black:true,no_audio:true,duration_seconds:Number(media.format.duration),bytes:Number(media.format.size),sha256:mediaSha256,probe_source:'REAL_FFPROBE_LOCAL_ENCODED_ARTIFACT',fixture_tag:'CI_VISUAL_ONLY_SYNTHETIC_BLACK',actual_quran_render:false,human_acceptance:false});
  await applicationDb.transaction(async tx=>{
   await tx.execute("INSERT INTO render_jobs(id,user_id,engine,enqueue_state,status,progress,stage,manifest,max_retries,output_path,output_filename,output_size_bytes,duration_seconds,audio_bytes_fetched,qa_report_json,completed_at,expires_at) VALUES(?,?,'skia_canvas','enqueued','succeeded',100,?,?,0,?,'ci-synthetic-black.mp4',?,?,0,?,CURRENT_TIMESTAMP,DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 24 HOUR))",[actor.renderJobId,actor.id,'CI: فيديو أسود مصنوع للاختبار البصري فقط؛ ليس تلاوة أو قبول ريندر',JSON.stringify(syntheticManifest),clipPath,Number(media.format.size),Number(media.format.duration),JSON.stringify(syntheticManifest)]);
   await appendCatalogAudit(tx,{id:'ci_visual_fixture_preparer',kind:'system',permissions:new Set(),requestId:'ci-visual-seed'},'admin.ci_visual_fixture.prepared','render_job',actor.renderJobId,null,{fixture_tag:'CI_VISUAL_ONLY',synthetic_black_video:true,actual_quran_render:false,human_acceptance:false,timing_source:timingPin.zip_url,timing_source_sha256:timingPin.sha256,timing_rows:timingResult.rows,canonical_checksum:corpus.checksum,all_human_reviews:'pending'});
