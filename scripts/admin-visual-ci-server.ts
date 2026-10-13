@@ -22,6 +22,11 @@ import {upRecitationCatalogServices} from '../server/db/migrations/004_addRecita
 import {upHumanReviewsAndLicensedSources} from '../server/db/migrations/005_addHumanReviewsAndLicensedSources';
 import {upAdminFoundation} from '../server/db/migrations/006_addAdminFoundation';
 import {upRenderV2,activateRenderV2Access} from '../server/db/migrations/007_addRenderManifestV2';
+import {readTimingPackage,prepareTimingRows,timingHash} from '../server/services/qudTimingPackage';
+import {importTimingRecitation} from '../server/services/qudTimingImport';
+import {appendCatalogAudit} from '../server/services/catalogAudit';
+import {getFfmpegBinary,getFfprobeBinary} from '../server/services/ffmpegBinary';
+import {runRenderV2Process} from '../server/services/renderV2Process';
 
 const env:NodeJS.ProcessEnv=pinAdminVisualCiEnvironment(process.env);
 const directory=resolve(process.env.AYAHX_ADMIN_CI_PRIVATE_DIR??'');
@@ -80,11 +85,44 @@ const adapter=new QudReleaseAdapter(catalog,source.sha256);
 const dataset=await buildCatalogDataset(adapter,{version:'v3.2.0',catalogSha:source.sha256,sourceUrl:source.url,legalCounts:Object.fromEntries(Object.entries(corpus.surahs).map(([key,value])=>[key,value.num_verses])),annotations:annotation.configs,openings:followup.opening_audits,reviews:followup.reviews_by_config,offsets:{}});
 // Seed actual pinned catalogue metadata, but no invented offset/audio approval.
 for(const statement of generateCatalogSql(dataset).statements)await db.query(statement);
+// A small real Release package makes canonical/timing inspection nonempty.
+// Its publication/offset/human gates remain unchanged and all reviews pending.
+const timingSlug='ahmed_saud_mp3quran';
+const timingManifestSha='bde8378c423c5e6b30fbc73c42663cce299f2ca4e8bd9f2f4b258ed9467645cf';
+const timingManifestText=await asset('manifest.json',timingManifestSha);
+const timingManifest=JSON.parse(timingManifestText) as {release_version:string;recitations:Record<string,{sha256:string;zip_url:string;bytes:number;tiers:string[]}>};
+const timingPin=timingManifest.recitations[timingSlug];
+if(timingManifest.release_version!=='v3.2.0'||timingPin?.sha256!=='2cc895c18521ab21bd86605acb6da612487da10c405f1503fc92c6cb37b661ed'||timingPin.zip_url!==release+timingSlug+'.zip')throw new Error('CI_TIMING_RELEASE_IDENTITY_MISMATCH');
+const packageResponse=await fetch(timingPin.zip_url,{signal:AbortSignal.timeout(120000)});
+if(!packageResponse.ok)throw new Error('CI_TIMING_RELEASE_FETCH_FAILED_'+packageResponse.status);
+const timingBytes=Buffer.from(await packageResponse.arrayBuffer());
+if(timingBytes.length!==timingPin.bytes||timingHash(timingBytes)!==timingPin.sha256)throw new Error('CI_TIMING_RELEASE_PIN_MISMATCH');
+const timingSource=adapter.recitations.find(row=>row.slug===timingSlug);
+if(!timingSource)throw new Error('CI_TIMING_RELEASE_CATALOG_MISSING');
+const timingPackage=readTimingPackage(timingBytes,timingPin.sha256,timingSlug,timingPin.tiers);
+const preparedTimings=prepareTimingRows({rows:timingPackage.rows,slug:timingSlug,sourceSha:timingPin.sha256,version:timingManifest.release_version,corpus,canonicalAvailable:timingSource.riwayah==='hafs_an_asim',chapters:Object.keys(timingSource.audio.chapter_urls).map(Number)});
+const timingLines=preparedTimings.map(row=>JSON.stringify(row)).join('\n')+'\n';
+const [packet]=await db.query<RowDataPacket[]>('SELECT @@max_allowed_packet max_packet');
+const timingResult=await importTimingRecitation({
+ read:async sql=>{const[rows]=await db.query<RowDataPacket[]>(sql);return rows.map(row=>typeof row.record==='string'?JSON.parse(row.record):row.record);},
+ execute:async sql=>{await db.query(sql);},
+},{rows:preparedTimings,slug:timingSlug,manifest:{manifest_sha256:timingManifestSha,canonical_checksum:corpus.checksum,results:[{slug:timingSlug,rows:preparedTimings.length,prepared_sha256:timingHash(timingLines)}]},corpus,maxPacket:Number(packet[0].max_packet)});
+const firstReadyTiming=preparedTimings.find(row=>row.review_status==='ready'&&row.words.length>0);
+if(!firstReadyTiming)throw new Error('CI_REAL_CANONICAL_TIMING_ROW_REQUIRED');
+const selectedRecording=dataset.recitations.find(row=>row.id===firstReadyTiming.recitation_id);
+if(!selectedRecording)throw new Error('CI_TIMING_CATALOG_IDENTITY_MISMATCH');
+const [timingGates]=await db.execute<RowDataPacket[]>('SELECT status,offset_verified,voice_identity_status FROM recitations WHERE id=?',[selectedRecording.id]);
+if(timingGates.length!==1||timingGates[0].status==='published'||Number(timingGates[0].offset_verified)!==0||timingGates[0].voice_identity_status==='confirmed')throw new Error('CI_TIMING_APPROVAL_MUST_NOT_BE_INVENTED');
 const userId=randomUUID(),password=randomBytes(32).toString('base64url'),email='ci-admin-visual@example.test';
 await db.execute('INSERT INTO users(id,email,password_hash) VALUES(?,?,?)',[userId,email,await bcrypt.hash(password,10)]);
 await db.execute('INSERT INTO profiles(id,user_id,display_name) VALUES(?,?,?)',[randomUUID(),userId,'CI visual fixture']);
 await db.execute('INSERT INTO user_roles(id,user_id,role) VALUES(?,?,?)',[randomUUID(),userId,'super_admin']);
-const reviewId=randomUUID(),storageId=randomUUID(),recitationId=String(dataset.recitations[0].id),reciterId=String(dataset.recitations[0].reciter_id);
+const secondaryUserId=randomUUID();
+await db.execute('INSERT INTO users(id,email,password_hash) VALUES(?,?,?)',[secondaryUserId,'ci-admin-visual-target@example.test',await bcrypt.hash(randomBytes(32).toString('base64url'),10)]);
+await db.execute('INSERT INTO profiles(id,user_id,display_name) VALUES(?,?,?)',[randomUUID(),secondaryUserId,'CI_VISUAL_ONLY secondary role target']);
+await db.execute('INSERT INTO user_roles(id,user_id,role) VALUES(?,?,?)',[randomUUID(),secondaryUserId,'user']);
+await db.execute("INSERT INTO admin_roles(slug,name_ar,name_en,is_system,seeded_at) VALUES('ci_visual_reviewer','دور اختبار بصري محلي','Local visual fixture role',0,CURRENT_TIMESTAMP)");
+const reviewId=randomUUID(),storageId=randomUUID(),recitationId=String(selectedRecording.id),reciterId=String(selectedRecording.reciter_id);
 const youtubeRecitation=dataset.recitations.find(row=>row.channel==='youtube');
 if(!youtubeRecitation)throw new Error('PINNED_YOUTUBE_METADATA_REQUIRED');
 const youtubeRecitationId=String(youtubeRecitation.id);
@@ -92,6 +130,8 @@ await db.execute("INSERT INTO human_review_items(id,type,subject_type,subject_id
 for(const provider of dataset.providers)await db.execute("INSERT INTO human_review_items(id,type,subject_type,subject_id,evidence,priority,status) VALUES(?,'provider_license','audio_provider',?,?,20,'pending')",[randomUUID(),provider.id,JSON.stringify({fixture:'CI_VISUAL_ONLY',source:source.url,approved:false})]);
 await db.execute("INSERT INTO human_review_items(id,type,subject_type,subject_id,evidence,priority,status) VALUES(?,'label_review','recitation',?,?,30,'pending')",[randomUUID(),recitationId,JSON.stringify({fixture:'CI_VISUAL_ONLY',approved:false})]);
 await db.execute('UPDATE recitations SET needs_label_review=1 WHERE id=?',[recitationId]);
+const safeReviewId=randomUUID();
+await db.execute("INSERT INTO human_review_items(id,type,subject_type,subject_id,evidence,priority,status) VALUES(?,'data_conflict','recitation',?,?,10000,'pending')",[safeReviewId,recitationId,JSON.stringify({fixture:'CI_VISUAL_ONLY',informational:true,approved:false,source:source.url})]);
 await db.execute("INSERT INTO storage_objects(id,adapter,upload_status,recitation_id,surah,notes) VALUES(?,'url_reference','pending',?,103,'CI_VISUAL_ONLY: no audio uploaded or approved')",[storageId,youtubeRecitationId]);
 // Real public Release video IDs only; no YouTube download, extraction or API.
 for(const row of dataset.recitations.filter(item=>item.channel==='youtube')){
@@ -102,15 +142,33 @@ for(const row of dataset.recitations.filter(item=>item.channel==='youtube')){
   await db.execute("INSERT INTO recitation_youtube_sources(id,recitation_id,surah,video_id,playlist_id,rights_status) VALUES(?,?,?,?,?,'unknown')",[randomUUID(),row.id,Number(surah),reference.videoId,reference.playlistId]);
  }
 }
+const [reviewStates]=await db.query<RowDataPacket[]>("SELECT COUNT(*) decided FROM human_review_items WHERE status<>'pending'");
+if(Number(reviewStates[0].decided)!==0)throw new Error('CI_HUMAN_REVIEWS_MUST_STAY_PENDING');
 await db.end();
-await writeFile(join(directory,'fixture.json'),JSON.stringify({id:userId,email,password,reciterId,recitationId,reviewId,storageId,youtubeRecitationId}),{mode:0o600,flag:'wx'});
-await writeFile(join(directory,'seed-evidence.json'),JSON.stringify({mysql:String(versions[0].version),redis:'7.2',canonical_checksum:corpus.checksum,surahs:Object.keys(corpus.surahs).length,ayahs:corpus.ayahs.length,words:corpus.wordCount,recitations:dataset.recitations.length,reciters:dataset.reciters.length,fixture_tag:'CI_VISUAL_ONLY',timings:'not seeded; no timing approval invented',all_review_fixtures:'pending',migration008:true}),{mode:0o600});
-if(process.argv.includes('--seed-only')){if(redisFailed)throw new Error('EPHEMERAL_REDIS_UNAVAILABLE');await redis.quit();console.log('EPHEMERAL_ADMIN_CI_SEED_VERIFIED');process.exit(0);}
+const pool=mysql.createPool({host:'127.0.0.1',port:33319,user:'root',password:'',database:schema,connectionLimit:4,timezone:'Z'});
+const applicationDb=catalogDatabaseFromPool(pool);
+// Generated black/silent media is ONLY a marked visual fixture, never D7/M8
+// quality evidence. Keep it in ignored local uploads, under the real media
+// router's path boundary, with real ffprobe duration/size and authenticated GET.
+const renderJobId=randomUUID(),clipDirectory=join(process.cwd(),'uploads','admin-visual-ci');
+await mkdir(clipDirectory,{recursive:true,mode:0o700});
+const clipPath=join(clipDirectory,renderJobId+'.mp4');
+await runRenderV2Process(getFfmpegBinary(),['-nostdin','-y','-v','error','-f','lavfi','-i','color=c=black:s=320x180:r=24:d=1','-an','-c:v','libx264','-pix_fmt','yuv420p','-movflags','+faststart',clipPath]);
+const mediaProbe=await runRenderV2Process(getFfprobeBinary(),['-v','error','-show_format','-show_streams','-of','json',clipPath]);
+const media=JSON.parse(mediaProbe.stdout.toString('utf8')) as {format:{duration:string;size:string};streams:Array<{codec_type:string}>};
+if(!media.streams.some(stream=>stream.codec_type==='video')||media.streams.some(stream=>stream.codec_type==='audio')||!Number.isFinite(Number(media.format.duration))||Number(media.format.duration)<=0)throw new Error('CI_SYNTHETIC_BLACK_MEDIA_PROBE_INVALID');
+const syntheticManifest={schemaVersion:'2.0.0',fixture:'CI_VISUAL_ONLY_SYNTHETIC_BLACK',actual_quran_render:false,acceptance_evidence:false};
+await applicationDb.transaction(async tx=>{
+ await tx.execute("INSERT INTO render_jobs(id,user_id,engine,enqueue_state,status,progress,stage,manifest,max_retries,output_path,output_filename,output_size_bytes,duration_seconds,audio_bytes_fetched,qa_report_json,completed_at,expires_at) VALUES(?,?,'skia_canvas','enqueued','succeeded',100,?,?,0,?,'ci-synthetic-black.mp4',?,?,0,?,CURRENT_TIMESTAMP,DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 24 HOUR))",[renderJobId,userId,'CI: فيديو أسود مصنوع للاختبار البصري فقط؛ ليس تلاوة أو قبول ريندر',JSON.stringify(syntheticManifest),clipPath,Number(media.format.size),Number(media.format.duration),JSON.stringify(syntheticManifest)]);
+ await appendCatalogAudit(tx,{id:'ci_visual_fixture_preparer',kind:'system',permissions:new Set(),requestId:'ci-visual-seed'},'admin.ci_visual_fixture.prepared','render_job',renderJobId,null,{fixture_tag:'CI_VISUAL_ONLY',synthetic_black_video:true,actual_quran_render:false,human_acceptance:false,timing_source:timingPin.zip_url,timing_source_sha256:timingPin.sha256,timing_rows:timingResult.rows,canonical_checksum:corpus.checksum,all_human_reviews:'pending'});
+ await appendCatalogAudit(tx,{id:'ci_visual_fixture_preparer',kind:'system',permissions:new Set(),requestId:'ci-visual-seed-reciter'},'admin.ci_visual_fixture.prepared','reciter',reciterId,null,{fixture_tag:'CI_VISUAL_ONLY',source_recording:timingSlug,all_human_reviews:'pending',approval_invented:false});
+});
+await writeFile(join(directory,'fixture.json'),JSON.stringify({id:userId,email,password,secondaryUserId,fixtureRoleSlug:'ci_visual_reviewer',safeReviewId,reciterId,recitationId,reviewId,storageId,youtubeRecitationId,renderJobId,timingsRecitationId:recitationId,timingsSurah:firstReadyTiming.surah,timingsAyah:firstReadyTiming.ayah}),{mode:0o600,flag:'wx'});
+await writeFile(join(directory,'seed-evidence.json'),JSON.stringify({mysql:String(versions[0].version),redis:'7.2',canonical_checksum:corpus.checksum,surahs:Object.keys(corpus.surahs).length,ayahs:corpus.ayahs.length,words:corpus.wordCount,recitations:dataset.recitations.length,reciters:dataset.reciters.length,fixture_tag:'CI_VISUAL_ONLY',timings:{slug:timingSlug,source_sha256:timingPin.sha256,manifest_sha256:timingManifestSha,script_sha256:timingPackage.scriptSha,rows:timingResult.rows,stored_fingerprint:timingResult.sha256,ready:preparedTimings.filter(row=>row.review_status==='ready').length,needs_review:preparedTimings.filter(row=>row.review_status==='needs_review').length,covered_words:preparedTimings.reduce((n,row)=>n+row.coverage_words,0),published:false,offset_approval_invented:false},visual_media:{synthetic_black:true,no_audio:true,duration_seconds:Number(media.format.duration),bytes:Number(media.format.size),actual_quran_render:false,human_acceptance:false},all_review_fixtures:'pending',migration008:true}),{mode:0o600});
+if(process.argv.includes('--seed-only')){if(redisFailed)throw new Error('EPHEMERAL_REDIS_UNAVAILABLE');await pool.end();await redis.quit();console.log('EPHEMERAL_ADMIN_CI_SEED_VERIFIED');process.exit(0);}
 // adminRuntime -> renderQueueBroker -> server/config reads process.env at import
 // time. Static import would load the checkout .env before our loopback pins.
 const {createAdminRuntime}=await import('../server/admin/adminRuntime');
-const pool=mysql.createPool({host:'127.0.0.1',port:33319,user:'root',password:'',database:schema,connectionLimit:4,timezone:'Z'});
-const applicationDb=catalogDatabaseFromPool(pool);
 const sourceAudio=new CatalogAudioSource(),settings=()=>readCatalogSettings(applicationDb);
 const catalogService=new RecitationCatalogService(applicationDb,settings,new RecitationAudioResolver(applicationDb,sourceAudio,settings));
 const runtime=createAdminRuntime({db:applicationDb,source:sourceAudio,env,origins:['http://127.0.0.1:3005'],catalog:catalogService});

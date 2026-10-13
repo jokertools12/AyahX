@@ -22,6 +22,12 @@ describe('admin visual route coverage inventory', () => {
     const source = router().replace('path="project"', 'path={"project"}') + '/* <Route path="private/:id"/> */';
     expect(buildAdminVisualRoutes(source, fixture)).toHaveLength(requiredAdminRoutePatterns.length);
   });
+  it('opens the actual pinned timing row and explicitly tagged recent video via real query state',()=>{
+    const routes=buildAdminVisualRoutes(router(),{...fixture,timingsRecitationId:'pinned-recording',timingsSurah:103,timingsAyah:1,renderJobId:'owned-synthetic-job'});
+    expect(routes.find(route=>route.pattern==='timings')?.path).toBe('/admin/timings?recitation_id=pinned-recording&surah=103&ayah=1&from=1');
+    expect(routes.find(route=>route.pattern==='render-lab')?.path).toBe('/admin/render-lab?job_id=owned-synthetic-job');
+    expect(()=>buildAdminVisualRoutes(router(),{...fixture,timingsRecitationId:'pinned-recording',timingsSurah:0,timingsAyah:1})).toThrow('REAL_TIMING_VISUAL_FIXTURE_REQUIRED');
+  });
 });
 
 describe('declared admin dialog coverage',()=>{

@@ -35,6 +35,14 @@ export function buildAdminVisualRoutes(source, fixture) {
     'licensed-audio/:id': fixture.youtubeRecitationId,
   };
   return [...patterns].map(pattern => {
+    if(pattern==='timings'&&fixture.timingsRecitationId){
+      if(!/^[a-zA-Z0-9_-]+$/u.test(fixture.timingsRecitationId)||!Number.isSafeInteger(fixture.timingsSurah)||!Number.isSafeInteger(fixture.timingsAyah)||fixture.timingsSurah<1||fixture.timingsAyah<1)throw new Error('REAL_TIMING_VISUAL_FIXTURE_REQUIRED');
+      return{pattern,path:`/admin/timings?recitation_id=${fixture.timingsRecitationId}&surah=${fixture.timingsSurah}&ayah=${fixture.timingsAyah}&from=${fixture.timingsAyah}`};
+    }
+    if(pattern==='render-lab'&&fixture.renderJobId){
+      if(!/^[a-zA-Z0-9_-]+$/u.test(fixture.renderJobId))throw new Error('OWNED_RENDER_VISUAL_FIXTURE_REQUIRED');
+      return{pattern,path:'/admin/render-lab?job_id='+fixture.renderJobId};
+    }
     if (pattern.includes(':')) {
       const id = identifiers[pattern];
       if (typeof id !== 'string' || !/^[a-zA-Z0-9_-]+$/u.test(id)) throw new Error('UNSEEDED_ADMIN_ROUTE_PARAMETER:' + pattern);
