@@ -78,4 +78,4 @@ body:has(.admin-app) :is(.admin-dialog,.admin-drawer) :is(p,label,h2,h3){line-he
 /* Stronger actual glyph cores keep confirmation text and raw data readable at
    native 100% zoom; pixel contrast thresholds remain unchanged. */
 body:has(.admin-app) label[for="typed-confirm"]{font-weight:700}
-.admin-app .admin-json,body:has(.admin-app) :is(.admin-dialog,.admin-drawer) .admin-json{font-size:calc(16px * var(--admin-font-scale,1))!important;font-weight:600;line-height:2}
+.admin-app .admin-json,body:has(.admin-app) :is(.admin-dialog,.admin-drawer) .admin-json{font-size:calc(17px * var(--admin-font-scale,1))!important;font-weight:600;line-height:2}
