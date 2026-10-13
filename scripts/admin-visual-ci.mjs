@@ -6,11 +6,13 @@ import Redis from 'ioredis';
 import {chromium} from '../tooling/e2e/node_modules/playwright-core/index.mjs';
 import {loadAdminVisualScanner} from '../tooling/e2e/helpers/loadAdminVisualScanner.mjs';
 import {buildAdminVisualRoutes,buildAdminVisualDialogs,assertAdminVisualDialogCoverage} from '../tooling/e2e/helpers/adminVisualInventory.mjs';
+import {allowedAdminVisualWrite,prepareAdminVisualDialogContext} from '../tooling/e2e/helpers/adminVisualDialogPreparation.mjs';
 if(process.env.CI!=='true'||process.env.AYAHX_ADMIN_VISUAL_CI!=='1')throw new Error('EPHEMERAL_CI_ONLY');
 const base='http://127.0.0.1:3005',directory=resolve(process.env.AYAHX_ADMIN_CI_PRIVATE_DIR??'');
 const location=relative(process.cwd(),directory);
 if(!process.env.AYAHX_ADMIN_CI_PRIVATE_DIR||!location.startsWith('..')&&!isAbsolute(location))throw new Error('PRIVATE_DIRECTORY_OUTSIDE_GIT_REQUIRED');
 const fixture=JSON.parse(await readFile(join(directory,'fixture.json'),'utf8'));
+if(!fixture.safeReviewId||!fixture.fixtureRoleSlug||!fixture.timingsRecitationId||!fixture.renderJobId)throw new Error('COMPLETE_ADMIN_VISUAL_FIXTURE_REQUIRED');
 const output=join(directory,'evidence');await mkdir(output,{recursive:true,mode:0o700});
 const source=await readFile('src/admin/AdminRoot.tsx','utf8');
 // Inventory follows the actual router, including future additions. An unknown
@@ -32,7 +34,8 @@ await context.route('**/*',async route=>{
  const request=route.request(),url=new URL(request.url());
  const publicFont=url.protocol==='https:'&&['fonts.googleapis.com','fonts.gstatic.com'].includes(url.hostname)&&request.method()==='GET';
  if(url.origin!==base&&!publicFont&&!['data:','blob:'].includes(url.protocol)){report.blockedRequests.push({kind:'external',path:url.origin+url.pathname});await route.abort();return;}
- if(!['GET','HEAD','OPTIONS'].includes(request.method())&&!(request.method()==='POST'&&url.pathname==='/api/admin/auth/login')){report.blockedRequests.push({kind:'write',path:url.pathname});await route.abort();return;}
+ let body;try{body=request.postDataJSON();}catch{/* Non-JSON cannot authorize the sole informational preview. */}
+ if(!['GET','HEAD','OPTIONS'].includes(request.method())&&!allowedAdminVisualWrite(request.method(),url.pathname,body,fixture)){report.blockedRequests.push({kind:'write',path:url.pathname});await route.abort();return;}
  await route.continue();
 });
 context.on('response',response=>{const url=new URL(response.url());if(url.origin===base&&url.pathname.startsWith('/api/')&&response.status()>=400)report.apiErrors.push({path:url.pathname,status:response.status()});});
@@ -53,9 +56,9 @@ async function settle(){
 }
 async function scanAll(touch){
  const scans=[];
- const bounds=await page.evaluate(()=>({total:document.documentElement.scrollHeight,step:Math.max(1,Math.floor(innerHeight*.8))}));
+ const bounds=await page.evaluate(()=>{const active=[...document.querySelectorAll('[role=dialog][aria-modal=true],dialog[open]')].filter(el=>el.getBoundingClientRect().height>0&&getComputedStyle(el).visibility!=='hidden').at(-1);return active?{total:innerHeight,step:innerHeight}:{total:document.documentElement.scrollHeight,step:Math.max(1,Math.floor(innerHeight*.8))};});
  for(let top=0;top<bounds.total;top+=bounds.step){await page.evaluate(y=>scrollTo({top:y,behavior:'instant'}),top);await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(resolve)));scans.push({scrollY:await page.evaluate(()=>scrollY),report:await page.evaluate(scanner,{mode:'strict',touch})});}
- const panels=await page.evaluate(()=>[...document.querySelectorAll('.admin-app *')].filter(e=>e.clientHeight>0&&e.scrollHeight>e.clientHeight+1&&/auto|scroll/.test(getComputedStyle(e).overflowY)).map((e,id)=>{e.setAttribute('data-ci-scroll',String(id));return{id,total:e.scrollHeight,step:Math.max(1,Math.floor(e.clientHeight*.8))};}));
+ const panels=await page.evaluate(()=>{const active=[...document.querySelectorAll('[role=dialog][aria-modal=true],dialog[open]')].filter(el=>el.getBoundingClientRect().height>0&&getComputedStyle(el).visibility!=='hidden').at(-1),root=active??document.querySelector('.admin-app');return [root,...root.querySelectorAll('*')].filter(e=>e.clientHeight>0&&e.scrollHeight>e.clientHeight+1&&/auto|scroll/.test(getComputedStyle(e).overflowY)).map((e,id)=>{e.setAttribute('data-ci-scroll',String(id));return{id,total:e.scrollHeight,step:Math.max(1,Math.floor(e.clientHeight*.8))};});});
  for(const panel of panels){for(let top=0;top<panel.total;top+=panel.step){await page.evaluate(({id,top})=>{const e=document.querySelector(`[data-ci-scroll="${id}"]`);e.scrollIntoView({block:'center',behavior:'instant'});e.scrollTop=top;}, {id:panel.id,top});await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(resolve)));scans.push({panel:panel.id,scrollTop:top,report:await page.evaluate(scanner,{mode:'strict',touch})});}await page.evaluate(id=>{document.querySelector(`[data-ci-scroll="${id}"]`).scrollTop=0;},panel.id);}
  await page.evaluate(()=>{scrollTo({top:0,behavior:'instant'});document.querySelectorAll('[data-ci-scroll]').forEach(e=>e.removeAttribute('data-ci-scroll'));});return scans;
 }
@@ -70,25 +73,35 @@ async function scanAccessibility(){
 async function scanDialogs(caseId,touch){
  // Only explicitly marked non-submitting openers. Clicking arbitrary action
  // buttons would violate the read-only gate. No mocked routes or responses.
- const slugs=await page.locator('[data-admin-visual-open]').evaluateAll(elements=>[...new Set(elements.filter(el=>!el.matches(':disabled,[aria-disabled="true"]')).map(el=>el.getAttribute('data-admin-visual-open')))]);
- const results=[];
- for(const slug of slugs){
+ const results=[],visited=new Set();
+ async function explore(scope){
+  const cleanup=await prepareAdminVisualDialogContext(page,scope,fixture);
+  try{
+   const slugs=await scope.locator('[data-admin-visual-open]').evaluateAll(elements=>[...new Set(elements.filter(el=>!el.matches(':disabled,[aria-disabled="true"]')).map(el=>el.getAttribute('data-admin-visual-open')))]);
+   for(const slug of slugs){
+    if(visited.has(slug))continue;
   if(typeof slug!=='string'||!/^[a-z0-9-]+$/u.test(slug))throw new Error('INVALID_DIALOG_INVENTORY_ID');
-  const candidates=page.locator(`[data-admin-visual-open="${slug}"]`);let opener;
+  const candidates=scope.locator(`[data-admin-visual-open="${slug}"]`);let opener;
   for(let index=0;index<await candidates.count();index++){const candidate=candidates.nth(index);if(await candidate.isVisible()&&await candidate.isEnabled()){opener=candidate;break;}}
   if(!opener)continue;
   if(!dialogInventory.some(item=>item.slug===slug))throw new Error('UNDECLARED_DIALOG_OPENER:'+slug);
   await opener.click();
+  visited.add(slug);
   const dialog=page.locator(`[data-admin-visual-dialog="${slug}"]`);
   await dialog.waitFor({state:'visible',timeout:10000});
+  await dialog.locator('[role=status][aria-label="جار التحميل"],[role=status][aria-label="Loading"]').first().waitFor({state:'hidden',timeout:30000});
   await page.evaluate(async()=>{await document.fonts.ready;await Promise.allSettled(document.getAnimations().filter(animation=>animation.effect?.getTiming().iterations!==Infinity).map(animation=>animation.finished));await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
   const scans=await scanAll(touch),accessibility=await scanAccessibility();
   const passed=scans.every(scan=>!scan.report.shouldFail)&&!accessibility.violations.length&&!accessibility.incomplete.length;
   const result={slug,scans,accessibility,passed};results.push(result);report.dialogs.push({caseId,slug,passed});
   if(!passed)await page.screenshot({path:join(output,caseId+'-dialog-'+slug+'.png'),fullPage:true,animations:'disabled'});
+  await explore(dialog);
   await page.keyboard.press('Escape');
   await dialog.waitFor({state:'hidden',timeout:10000});
+   }
+  }finally{await cleanup();}
  }
+ await explore(page.locator('.admin-app'));
  return results;
 }
 async function resetFixtureReadWindow(){
@@ -112,7 +125,7 @@ try{
    if(await page.locator('.admin-app').getAttribute('lang')!==lang)await page.getByRole('button',{name:/تغيير اللغة|Change language/u}).click();
    await page.waitForFunction(lang=>document.querySelector('.admin-app')?.getAttribute('lang')===lang,lang);
    for(const size of sizes){await page.setViewportSize(size);for(const factor of zoomFactors){await zoom(factor);for(const theme of ['light','dark']){
-    await page.evaluate(t=>{document.documentElement.classList.toggle('dark',t==='dark');localStorage.setItem('theme',t);},theme);await settle();
+    await resetFixtureReadWindow();await page.evaluate(t=>{document.documentElement.classList.toggle('dark',t==='dark');localStorage.setItem('theme',t);},theme);await settle();
     const dpr=await page.evaluate(()=>devicePixelRatio);if(Math.abs(dpr-factor)>.02)throw new Error('NATIVE_ZOOM_DPR_MISMATCH');
     const scans=await scanAll(size.width<768),accessibility=await scanAccessibility();
     const name=route.replace(/[^a-zA-Z0-9_-]/gu,'_')+`-${size.width}-${factor*100}-${theme}-${lang}`;
@@ -128,6 +141,8 @@ try{
  }
  const expected=routes.length*sizes.length*zoomFactors.length*2*2;
  try{assertAdminVisualDialogCoverage(dialogInventory,report.dialogs);report.dialogCoverage={passed:true};}catch(error){report.dialogCoverage={passed:false,code:error.message};}
- report.expectedCases=expected;report.finishedAt=new Date().toISOString();report.passed=report.dialogCoverage.passed&&report.matrix.length===expected&&report.matrix.every(row=>row.passed)&&!report.apiErrors.length&&!report.browserErrors.length&&!report.blockedRequests.length&&!report.redisErrors.length;
+ await resetFixtureReadWindow();report.reviewsStayedPending=true;
+ for(const status of ['approved','rejected','deferred']){const response=await page.request.get(base+'/api/admin/reviews?status='+status+'&limit=1');if(!response.ok()){report.reviewsStayedPending=false;break;}const json=await response.json();if(Number(json.meta?.total)!==0)report.reviewsStayedPending=false;}
+ report.expectedCases=expected;report.finishedAt=new Date().toISOString();report.passed=report.reviewsStayedPending&&report.dialogCoverage.passed&&report.matrix.length===expected&&report.matrix.every(row=>row.passed)&&!report.apiErrors.length&&!report.browserErrors.length&&!report.blockedRequests.length&&!report.redisErrors.length;
  await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));if(!report.passed)process.exitCode=1;
-}finally{await context.close();await redis.quit();}
+}catch{report.failure={code:'ADMIN_VISUAL_BROWSER_FAILURE'};await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));process.exitCode=1;}finally{await context.close();await redis.quit();}

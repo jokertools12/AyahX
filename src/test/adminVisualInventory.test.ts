@@ -26,6 +26,8 @@ describe('admin visual route coverage inventory', () => {
     const routes=buildAdminVisualRoutes(router(),{...fixture,timingsRecitationId:'pinned-recording',timingsSurah:103,timingsAyah:1,renderJobId:'owned-synthetic-job'});
     expect(routes.find(route=>route.pattern==='timings')?.path).toBe('/admin/timings?recitation_id=pinned-recording&surah=103&ayah=1&from=1');
     expect(routes.find(route=>route.pattern==='render-lab')?.path).toBe('/admin/render-lab?job_id=owned-synthetic-job');
+    expect(routes.filter(route=>route.pattern==='quran').map(route=>route.path)).toEqual(['/admin/quran','/admin/quran?tab=integrity','/admin/quran?tab=riwayat']);
+    expect(routes.filter(route=>route.pattern==='reciters/:id').map(route=>route.path)).toEqual(['/admin/reciters/reader-1','/admin/reciters/reader-1?tab=recitations','/admin/reciters/reader-1?tab=availability','/admin/reciters/reader-1?tab=sources','/admin/reciters/reader-1?tab=audit']);
     expect(()=>buildAdminVisualRoutes(router(),{...fixture,timingsRecitationId:'pinned-recording',timingsSurah:0,timingsAyah:1})).toThrow('REAL_TIMING_VISUAL_FIXTURE_REQUIRED');
   });
 });

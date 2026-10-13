@@ -34,7 +34,7 @@ export function buildAdminVisualRoutes(source, fixture) {
     'listening/:id': fixture.recitationId,
     'licensed-audio/:id': fixture.youtubeRecitationId,
   };
-  return [...patterns].map(pattern => {
+  const routes=[...patterns].map(pattern => {
     if(pattern==='timings'&&fixture.timingsRecitationId){
       if(!/^[a-zA-Z0-9_-]+$/u.test(fixture.timingsRecitationId)||!Number.isSafeInteger(fixture.timingsSurah)||!Number.isSafeInteger(fixture.timingsAyah)||fixture.timingsSurah<1||fixture.timingsAyah<1)throw new Error('REAL_TIMING_VISUAL_FIXTURE_REQUIRED');
       return{pattern,path:`/admin/timings?recitation_id=${fixture.timingsRecitationId}&surah=${fixture.timingsSurah}&ayah=${fixture.timingsAyah}&from=${fixture.timingsAyah}`};
@@ -51,6 +51,9 @@ export function buildAdminVisualRoutes(source, fixture) {
     if (pattern && !/^[a-zA-Z0-9/_-]+$/u.test(pattern)) throw new Error('INVALID_ADMIN_ROUTE_PATH');
     return {pattern, path: '/admin' + (pattern ? '/' + pattern : '')};
   });
+  // Full CI fixtures cover tabbed pages too, using the application's existing
+  // query state. No DOM injection or mocked content replaces these subviews.
+  return fixture.timingsRecitationId&&fixture.renderJobId?routes.flatMap(route=>route.pattern==='quran'?[route,...['integrity','riwayat'].map(tab=>({...route,path:route.path+'?tab='+tab,view:tab}))]:route.pattern==='reciters/:id'?[route,...['recitations','availability','sources','audit'].map(tab=>({...route,path:route.path+'?tab='+tab,view:tab}))]:[route]):routes;
 }
 
 /** All concrete modal declarations must have an explicit safe opener. */
