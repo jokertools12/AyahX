@@ -4,7 +4,7 @@ import {randomBytes} from 'node:crypto';
 export function pinAdminVisualCiEnvironment(env) {
   if(env.CI!=='true'||env.AYAHX_ADMIN_VISUAL_CI!=='1')throw new Error('EPHEMERAL_CI_ONLY');
   if(env.DATABASE_URL||env.MYSQL_URL||env.RAILWAY_ENVIRONMENT_ID)throw new Error('EXTERNAL_DATABASE_ENV_FORBIDDEN');
-  Object.assign(env,{
+  const pins={
     NODE_ENV:'test',PORT:'3005',CORS_ORIGIN:'http://127.0.0.1:3005',
     MYSQL_HOST:'127.0.0.1',MYSQL_PORT:'33319',MYSQL_USER:'root',MYSQL_PASSWORD:'',
     MYSQL_DATABASE:'ayahx_ci_admin_visual',MYSQL_POOL_SIZE:'4',
@@ -14,6 +14,12 @@ export function pinAdminVisualCiEnvironment(env) {
     // dotenv does not replace existing keys. External storage cannot be inherited.
     OBJECT_STORAGE_DRIVER:'local',OBJECT_STORAGE_BUCKET:'',OBJECT_STORAGE_ENDPOINT:'',
     OBJECT_STORAGE_ACCESS_KEY_ID:'',OBJECT_STORAGE_SECRET_ACCESS_KEY:'',OBJECT_STORAGE_PUBLIC_BASE_URL:'',
-  });
-  return env;
+    DATABASE_URL:'',MYSQL_URL:'',RAILWAY_ENVIRONMENT_ID:'',
+    R2_ACCOUNT_ID:'',R2_BUCKET:'',R2_ENDPOINT:'',R2_ACCESS_KEY_ID:'',R2_SECRET_ACCESS_KEY:'',
+    R2_READ_ACCESS_KEY_ID:'',R2_READ_SECRET_ACCESS_KEY:'',R2_TOKEN_EXPIRES_AT:'',
+  };
+  Object.assign(env,pins);
+  // Explicit runtime environment also excludes unrelated secrets/cookie domain
+  // settings which dotenv may load later from the developer's local checkout.
+  return {...pins};
 }

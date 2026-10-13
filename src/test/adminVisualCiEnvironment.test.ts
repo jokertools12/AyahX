@@ -16,6 +16,13 @@ describe('disposable admin visual global environment',()=>{
   for(const name of ['DATABASE_URL','MYSQL_URL','RAILWAY_ENVIRONMENT_ID'])expect(()=>pinAdminVisualCiEnvironment({CI:'true',AYAHX_ADMIN_VISUAL_CI:'1',[name]:'external'})).toThrow('EXTERNAL_DATABASE_ENV_FORBIDDEN');
   expect(()=>pinAdminVisualCiEnvironment({CI:'true'})).toThrow('EPHEMERAL_CI_ONLY');
  });
+ it('keeps inherited service secrets out of the runtime and prevents late dotenv R2 inheritance',()=>{
+  const env:NodeJS.ProcessEnv={CI:'true',AYAHX_ADMIN_VISUAL_CI:'1',OPENAI_API_KEY:'external',COOKIE_DOMAIN:'production.invalid',R2_READ_ACCESS_KEY_ID:'external',R2_ENDPOINT:'https://external.invalid'};
+  const runtime=pinAdminVisualCiEnvironment(env);
+  expect(runtime.OPENAI_API_KEY).toBeUndefined();expect(runtime.COOKIE_DOMAIN).toBeUndefined();
+  expect(env.R2_READ_ACCESS_KEY_ID).toBe('');expect(env.R2_ENDPOINT).toBe('');expect(env.DATABASE_URL).toBe('');
+  expect(runtime.REDIS_URL).toBe('redis://127.0.0.1:6380/15');
+ });
  it('defers the production runtime until after the global pins',()=>{
   const source=readFileSync('scripts/admin-visual-ci-server.ts','utf8');
   expect(source).not.toMatch(/import\s*\{createAdminRuntime\}\s*from/u);
