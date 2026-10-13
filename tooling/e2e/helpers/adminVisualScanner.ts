@@ -69,6 +69,9 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     for (let parent: Element | null = el; parent; parent = parent.parentElement) {
       const s = style(parent);
       if (parent.hasAttribute('hidden') || parent.hasAttribute('inert') || s.display === 'none' || s.visibility === 'hidden' || s.visibility === 'collapse' || Number(s.opacity) === 0) return true;
+      // Closed details contents can retain DOM/Range boxes in Chromium. Only
+      // its first summary is painted and interactive until the owner opens it.
+      if(parent.tagName==='DETAILS'&&!parent.hasAttribute('open')){const summary=[...parent.children].find(child=>child.tagName==='SUMMARY');if(!summary?.contains(el))return true;}
       // Screen-reader-only labels are named content, not visible painted text.
       if (s.position === 'absolute' && (s.clip === 'rect(0px, 0px, 0px, 0px)' || /inset\(50%\)/.test(s.clipPath))) return true;
     }
@@ -208,12 +211,26 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   };
   type Painted = { el: Element; rect: DOMRect; kind: 'text' | 'control'; hitTarget?: Element };
   const painted: Painted[] = [];
+  const fontContext=typeof OffscreenCanvas==='function'?new OffscreenCanvas(1,1).getContext('2d'):null;
+  const inkRect=(el:Element,text:string,r:DOMRect,singleLine:boolean):DOMRect=>{
+    const s=style(el);
+    // Range boxes contain full font ascent/descent, not actual glyph ink. Only
+    // use a browser-matched single line; wrapped/shaped runs stay conservative.
+    if(!fontContext||!singleLine||s.textShadow&&s.textShadow!=='none'||s.textDecorationLine&&s.textDecorationLine!=='none'||s.fontFeatureSettings&&s.fontFeatureSettings!=='normal'||s.fontVariationSettings&&s.fontVariationSettings!=='normal')return r;
+    fontContext.font=`${s.fontStyle||'normal'} ${s.fontWeight||'400'} ${s.fontSize} ${s.fontFamily||'sans-serif'}`;
+    fontContext.direction=s.direction==='rtl'?'rtl':'ltr';
+    const metrics=fontContext.measureText(text),ascent=metrics.fontBoundingBoxAscent,descent=metrics.fontBoundingBoxDescent,inkAscent=metrics.actualBoundingBoxAscent,inkDescent=metrics.actualBoundingBoxDescent;
+    if(![ascent,descent,inkAscent,inkDescent].every(Number.isFinite)||Math.abs(ascent+descent-r.height)>.25||inkAscent+inkDescent<=0)return r;
+    const top=r.top+ascent-inkAscent,bottom=r.top+ascent+inkDescent;
+    return {x:r.x,y:top,left:r.left,right:r.right,top,bottom,width:r.width,height:bottom-top} as DOMRect;
+  };
   const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT);
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
     const el = node.parentElement;
     if (!el || !node.textContent?.trim() || !visible(el) || el.closest('script,style,noscript,template')) continue;
     const range = document.createRange(); range.selectNodeContents(node);
-    const rects = [...range.getClientRects()].filter(r => r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < height && !fullyOccluded(el, r));
+    const ranges=[...range.getClientRects()];
+    const rects = ranges.map(r=>inkRect(el,node.textContent!,r,ranges.length===1)).filter(r => r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < height && !fullyOccluded(el, r));
     if (!rects.length) continue;
     scanned.textNodes++;
     const s = style(el), font = parseFloat(s.fontSize);
@@ -235,6 +252,10 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   const controls = [...scope.querySelectorAll('button,input:not([type="hidden"]),select,textarea,a[href],[role="button"],[role="checkbox"],[role="switch"],[role="combobox"]')].filter(el => visible(el) && !fullyOccluded(el, el.getBoundingClientRect()));
   const controlRects = new Map<Element, DOMRect>();
   const controlTargets = new Map<Element, Element>();
+  const stickyHeader = (el:Element):Element|null=>{
+    for(let p:Element|null=el;p;p=p.parentElement){const s=style(p);if((p.tagName==='HEADER'||p.getAttribute('role')==='banner')&&['fixed','sticky'].includes(s.position)&&color(s.backgroundColor)?.[3]===1){let opaque=true;for(let ancestor:Element|null=p;ancestor;ancestor=ancestor.parentElement){const a=style(ancestor);if(Number(a.opacity)!==1||a.filter&&a.filter!=='none'||a.mixBlendMode&&a.mixBlendMode!=='normal')opaque=false;}if(opaque)return p;}}
+    return null;
+  };
   for (const el of controls) {
     scanned.controls++;
     let hit: Element = el;
@@ -264,12 +285,21 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     if (iconOnly) measureContrast(el, s.color, thresholds.uiContrast, 'UI_ICON_CONTRAST');
     const border = ['Top', 'Right', 'Bottom', 'Left'].filter(side => parseFloat(s.getPropertyValue(`border-${side.toLowerCase()}-width`)) > 0 && !['none', 'hidden'].includes(s.getPropertyValue(`border-${side.toLowerCase()}-style`)) && color(s.getPropertyValue(`border-${side.toLowerCase()}-color`))?.[3]!==0);
     for (const side of border) measureContrast(el, s.getPropertyValue(`border-${side.toLowerCase()}-color`), thresholds.uiContrast, 'UI_BORDER_CONTRAST', el.parentElement);
-    if (!border.length && s.backgroundColor !== 'transparent' && color(s.backgroundColor)?.[3]) measureContrast(el, s.backgroundColor, thresholds.uiContrast, 'UI_FILL_CONTRAST', el.parentElement);
-    else if (!border.length && el.matches('input,select,textarea,[role="checkbox"],[role="switch"],[role="combobox"]')) record(el, 'UI_BOUNDARY_MISSING', 'Form control has no measurable border or contrasting fill.', r);
+    const outline=parseFloat(s.outlineWidth)>0&&!['none','hidden'].includes(s.outlineStyle)&&color(s.outlineColor)?.[3]!==0;
+    if(outline)measureContrast(el,s.outlineColor,thresholds.uiContrast,'UI_OUTLINE_CONTRAST',el.parentElement);
+    // A measured visible border/outline identifies the component. A decorative
+    // low-contrast interior need not provide a second component boundary.
+    if (!border.length&&!outline && s.backgroundColor !== 'transparent' && color(s.backgroundColor)?.[3]) measureContrast(el, s.backgroundColor, thresholds.uiContrast, 'UI_FILL_CONTRAST', el.parentElement);
+    else if (!border.length&&!outline && el.matches('input,select,textarea,[role="checkbox"],[role="switch"],[role="combobox"]')) record(el, 'UI_BOUNDARY_MISSING', 'Form control has no measurable border, outline or contrasting fill.', r);
   }
   for (let i = 0; i < controls.length; i++) for (let j = i + 1; j < controls.length; j++) {
       const firstTarget = controlTargets.get(controls[i])!, secondTarget = controlTargets.get(controls[j])!;
       if (firstTarget.contains(secondTarget) || secondTarget.contains(firstTarget)) continue;
+      // Scrolling can place any flow control 0-7px below an independent sticky
+      // banner. These controls are not adjacent in layout. Gaps within a banner
+      // or within normal flow are still measured at the original 8px threshold.
+      const firstHeader=stickyHeader(controls[i]),secondHeader=stickyHeader(controls[j]);
+      if(firstHeader!==secondHeader&&(firstHeader&&!secondHeader||secondHeader&&!firstHeader))continue;
       const a = controlRects.get(controls[i])!, b = controlRects.get(controls[j])!;
       const verticalIntersection = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
       const horizontalIntersection = Math.min(a.right, b.right) - Math.max(a.left, b.left);
@@ -305,7 +335,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   return { version: 'admin-visual-1', mode, viewport: { width, height, devicePixelRatio, touch }, thresholds, scanned, violations, indeterminate,
     compliant, shouldFail: mode === 'strict' && !compliant,
     limitations: ['Viewport-only: scroll each document/container to inspect below-fold content.',
-      'DOM rectangles cannot certify actual glyph pixels, pseudo-elements (including placeholders), canvas, closed shadow roots or cross-origin frames.',
+      'Single-line ink uses matching browser font metrics; other DOM rectangles cannot certify glyph pixels, pseudo-elements, canvas, closed shadow roots or cross-origin frames.',
       'Images, unsupported colors, opacity, filters and blends produce indeterminate contrast; strict mode fails until investigated.',
       'Gradient stop contrast is conservative; bounding-box overlap needs screenshot review for intentional overlays.',
       'Icon accessible-name checks are not a complete accessible-name algorithm; retain axe alongside this scanner.'] };

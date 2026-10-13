@@ -74,6 +74,11 @@ describe('admin visual document scanner', () => {
     const report = scanAdminVisualDocument({ touch: false });
     expect(report.scanned.textNodes).toBe(1); expect(report.violations).toEqual([]);
   });
+  it('does not inspect retained Range boxes inside closed details except its first summary',()=>{
+    layout('<details id="details"><summary id="summary">Visible summary</summary><p id="closed" style="font-size:8px">Not painted</p><button id="closed-button">Hidden control</button></details>',{summary:[10,10,180,44],closed:[10,30,180,30],'closed-button':[10,60,100,10]});
+    const closed=scanAdminVisualDocument({touch:false});expect(closed.scanned.textNodes).toBe(1);expect(closed.scanned.controls).toBe(0);expect(closed.violations).toEqual([]);
+    document.getElementById('details')!.setAttribute('open','');expect(codes()).toEqual(expect.arrayContaining(['FONT_TOO_SMALL','CONTROL_HEIGHT']));
+  });
   it('does not inspect text fully occluded by an opaque sticky header', () => {
     layout('<p id="row" style="font-size:8px">Covered</p><header id="cover" style="position:sticky;background-color:rgb(255,255,255)">Header</header>', { row: [10, 10, 100, 20], cover: [0, 0, 800, 60] });
     Object.defineProperty(document, 'elementsFromPoint', { configurable: true, value: () => [document.getElementById('cover')!, document.getElementById('row')!, document.body] });
@@ -107,6 +112,11 @@ describe('admin visual document scanner', () => {
     layout('<div><div><button id="a">First</button></div><div><button id="b">Second</button></div></div>', { a: [10, 10, 100, 44], b: [114, 10, 100, 44] });
     expect(codes()).toContain('CONTROL_GAP');
   });
+  it('does not mistake scrolling under an independent opaque sticky banner for a layout gap',()=>{
+    layout('<header id="header" style="position:sticky;background-color:rgb(255,255,255)"><button id="a">A</button><button id="b">B</button></header><main><button id="flow">Flow</button></main>',{header:[0,0,800,50],a:[10,0,100,44],b:[114,0,100,44],flow:[10,49,100,44]});
+    const report=scanAdminVisualDocument({touch:false});expect(report.violations.filter(issue=>issue.code==='CONTROL_GAP')).toHaveLength(1);expect(report.violations.find(issue=>issue.code==='CONTROL_GAP')?.relatedSelector).toBe('#b');
+    document.getElementById('header')!.style.backgroundColor='rgba(255,255,255,.5)';expect(scanAdminVisualDocument({touch:false}).violations.filter(issue=>issue.code==='CONTROL_GAP').length).toBeGreaterThan(1);
+  });
   it('counts an associated label as a checkbox hit target', () => {
     layout('<label id="label"><input id="checkbox" type="checkbox"/><span id="label-text">Remember</span></label>', { label: [10, 10, 160, 44], checkbox: [15, 20, 16, 16], 'label-text': [40, 19, 100, 26] });
     const report = scanAdminVisualDocument({ touch: true });
@@ -127,6 +137,21 @@ describe('admin visual document scanner', () => {
     const report = scanAdminVisualDocument({ touch: false });
     expect(report.violations.find(x => x.code === 'TEXT_CONTRAST')?.actual).toBeCloseTo(3.97665, 3);
     expect(report.violations.some(x => x.code === 'UI_BORDER_CONTRAST')).toBe(true);
+  });
+  it('accepts a real contrasting outline as the UI boundary while keeping the same 3:1 threshold',()=>{
+    layout('<button id="outlined" style="background-color:rgb(240,240,240);outline-width:1px;outline-style:solid;outline-color:rgb(0,0,0)">Selected nav</button>',{outlined:[10,10,180,44]});
+    expect(codes()).not.toContain('UI_FILL_CONTRAST');expect(codes()).not.toContain('UI_OUTLINE_CONTRAST');
+    document.getElementById('outlined')!.style.outlineColor='rgb(240,240,240)';expect(codes()).toContain('UI_OUTLINE_CONTRAST');
+    document.getElementById('outlined')!.style.outlineColor='transparent';expect(codes()).toContain('UI_FILL_CONTRAST');
+  });
+  it('uses exact matched browser ink metrics rather than overlapping font-leading boxes',()=>{
+    layout('<p id="first">First</p><p id="second">Second</p>',{first:[10,20,100,29],second:[10,45.5,100,29]});
+    for(const id of ['first','second']){const el=document.getElementById(id)!;const r=el.getBoundingClientRect();el.setAttribute('data-text-box',[r.x,r.y,r.width,29].join(','));}
+    let fontHeight=29;
+    vi.stubGlobal('OffscreenCanvas',class{getContext(){return{font:'',direction:'ltr',measureText:()=>({fontBoundingBoxAscent:20,fontBoundingBoxDescent:fontHeight-20,actualBoundingBoxAscent:11,actualBoundingBoxDescent:0})};}});
+    expect(codes()).not.toContain('CONTENT_OVERLAP');
+    document.getElementById('second')!.setAttribute('data-text-box','10,25,100,29');expect(codes()).toContain('CONTENT_OVERLAP');
+    document.getElementById('second')!.setAttribute('data-text-box','10,45.5,100,29');fontHeight=28;expect(codes()).toContain('CONTENT_OVERLAP');
   });
   it('measures resolved sRGB color-mix colors and leaves invisible borders unpainted', () => {
     layout('<p id="modern">Modern color</p><a id="transparent" href="#" style="border:1px solid transparent">Navigation</a><input id="input" style="border:1px solid transparent;background:transparent"/>', { modern:[10,10,180,30],transparent:[10,60,140,44],input:[10,120,140,44] });
