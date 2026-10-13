@@ -216,7 +216,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     const s=style(el);
     // Range boxes contain full font ascent/descent, not actual glyph ink. Only
     // use a browser-matched single line; wrapped/shaped runs stay conservative.
-    if(!fontContext||!singleLine||s.textShadow&&s.textShadow!=='none'||s.textDecorationLine&&s.textDecorationLine!=='none'||s.fontFeatureSettings&&s.fontFeatureSettings!=='normal'||s.fontVariationSettings&&s.fontVariationSettings!=='normal')return r;
+    if(!fontContext||!singleLine||s.textShadow&&s.textShadow!=='none'||s.textDecorationLine&&s.textDecorationLine!=='none'||s.textTransform&&s.textTransform!=='none'||s.fontVariantCaps&&s.fontVariantCaps!=='normal'||s.fontFeatureSettings&&s.fontFeatureSettings!=='normal'||s.fontVariationSettings&&s.fontVariationSettings!=='normal')return r;
     fontContext.font=`${s.fontStyle||'normal'} ${s.fontWeight||'400'} ${s.fontSize} ${s.fontFamily||'sans-serif'}`;
     fontContext.direction=s.direction==='rtl'?'rtl':'ltr';
     const metrics=fontContext.measureText(text),ascent=metrics.fontBoundingBoxAscent,descent=metrics.fontBoundingBoxDescent,inkAscent=metrics.actualBoundingBoxAscent,inkDescent=metrics.actualBoundingBoxDescent;
@@ -230,7 +230,11 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     if (!el || !node.textContent?.trim() || !visible(el) || el.closest('script,style,noscript,template')) continue;
     const range = document.createRange(); range.selectNodeContents(node);
     const ranges=[...range.getClientRects()];
-    const rects = ranges.map(r=>inkRect(el,node.textContent!,r,ranges.length===1)).filter(r => r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < height && !fullyOccluded(el, r));
+    // Bidi text may have several fragments on a single baseline. Full-text ink
+    // metrics overestimate each fragment safely; distinct wrapped lines retain
+    // the original conservative Range boxes.
+    const singleLine=!!ranges.length&&ranges.every(r=>Math.abs(r.top-ranges[0].top)<=.25&&Math.abs(r.bottom-ranges[0].bottom)<=.25);
+    const rects = ranges.map(r=>inkRect(el,node.textContent!,r,singleLine)).filter(r => r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < height && !fullyOccluded(el, r));
     if (!rects.length) continue;
     scanned.textNodes++;
     const s = style(el), font = parseFloat(s.fontSize);

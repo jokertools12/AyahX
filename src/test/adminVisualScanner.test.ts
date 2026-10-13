@@ -153,6 +153,23 @@ describe('admin visual document scanner', () => {
     document.getElementById('second')!.setAttribute('data-text-box','10,25,100,29');expect(codes()).toContain('CONTENT_OVERLAP');
     document.getElementById('second')!.setAttribute('data-text-box','10,45.5,100,29');fontHeight=28;expect(codes()).toContain('CONTENT_OVERLAP');
   });
+  it('measures bidi fragments on the same baseline without treating actual wrapped lines as a single line',()=>{
+    layout('<p id="first">12 نص عربي</p><p id="second">Second</p>',{first:[10,20,150,29],second:[10,45.5,150,29]});
+    document.getElementById('second')!.setAttribute('data-text-box','10,45.5,150,29');
+    let secondFragmentY=20;
+    vi.spyOn(document,'createRange').mockImplementation(()=>{let selected:Node|null=null;return {selectNodeContents:(node:Node)=>{selected=node;},getClientRects:()=>selected!.parentElement!.id==='first'?[box(10,20,60,29),box(70,secondFragmentY,60,29)]:[box(10,45.5,60,29),box(70,45.5,60,29)]} as unknown as Range;});
+    vi.stubGlobal('OffscreenCanvas',class{getContext(){return{font:'',direction:'ltr',measureText:()=>({fontBoundingBoxAscent:20,fontBoundingBoxDescent:9,actualBoundingBoxAscent:11,actualBoundingBoxDescent:0})};}});
+    expect(codes()).not.toContain('CONTENT_OVERLAP');
+    secondFragmentY=45.5;expect(codes()).toContain('CONTENT_OVERLAP');
+  });
+  it('keeps explicit Arabic OpenType features and text transformations conservative',()=>{
+    layout('<p id="first">First</p><p id="second">Second</p>',{first:[10,20,150,29],second:[10,45.5,150,29]});
+    for(const id of ['first','second']){const el=document.getElementById(id)!;const r=el.getBoundingClientRect();el.setAttribute('data-text-box',[r.x,r.y,r.width,29].join(','));}
+    vi.stubGlobal('OffscreenCanvas',class{getContext(){return{font:'',direction:'ltr',measureText:()=>({fontBoundingBoxAscent:20,fontBoundingBoxDescent:9,actualBoundingBoxAscent:11,actualBoundingBoxDescent:0})};}});
+    expect(codes()).not.toContain('CONTENT_OVERLAP');
+    for(const id of ['first','second'])document.getElementById(id)!.style.fontFeatureSettings='"calt", "rlig"';expect(codes()).toContain('CONTENT_OVERLAP');
+    for(const id of ['first','second']){const el=document.getElementById(id)!;el.style.fontFeatureSettings='normal';el.style.textTransform='uppercase';}expect(codes()).toContain('CONTENT_OVERLAP');
+  });
   it('measures resolved sRGB color-mix colors and leaves invisible borders unpainted', () => {
     layout('<p id="modern">Modern color</p><a id="transparent" href="#" style="border:1px solid transparent">Navigation</a><input id="input" style="border:1px solid transparent;background:transparent"/>', { modern:[10,10,180,30],transparent:[10,60,140,44],input:[10,120,140,44] });
     const previous=getComputedStyle;
