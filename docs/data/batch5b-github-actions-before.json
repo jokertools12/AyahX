@@ -1,0 +1,22 @@
+{
+  "actions_linux_price_per_minute": 0.006,
+  "observed_at": "2026-10-13T09:13:42.0775688Z",
+  "paid_or_larger_runner_authorized": false,
+  "visibility": "public",
+  "dashboard": "https://github.com/settings/billing/usage?group=2&period=3&query=product%3Aactions",
+  "repository": "jokertools12/AyahX",
+  "actions_storage_gb_hours": 0.02,
+  "actions_linux_minutes": 165,
+  "plan": "GitHub Free",
+  "scope": "Account product:actions totals; not isolated Batch5 cost",
+  "rest_plan_available": false,
+  "long_job_limit_minutes": 60,
+  "source": "Authenticated GitHub billing UI, same jokertools12 account",
+  "rest_billing_http": 404,
+  "public_standard_runner_policy": "https://docs.github.com/en/billing/concepts/product-billing/github-actions",
+  "tier1_job_budget_minutes": 40,
+  "actions_linux_billed_dollars": 0,
+  "period": "2026-10-01 through 2026-10-31",
+  "actions_linux_gross_dollars": 0.99,
+  "before_new_visual_jobs": true
+}

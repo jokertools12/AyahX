@@ -1,0 +1,71 @@
+{
+  "scope": "three-local-display-regressions",
+  "startedAt": "2026-10-13T09:07:36.99Z",
+  "production": false,
+  "applicationWrites": 0,
+  "blockedWrites": [],
+  "cases": [
+    {
+      "name": "wrapped-launch-action",
+      "dpr": 1.5,
+      "height": 44,
+      "top": 259.3333435058594,
+      "bottom": 303.3333435058594,
+      "textRects": [
+        {
+          "top": 254.5,
+          "bottom": 282.5,
+          "height": 28
+        },
+        {
+          "top": 280,
+          "bottom": 308,
+          "height": 28
+        }
+      ],
+      "heightStyle": "44px",
+      "lineHeight": "25.5px",
+      "passed": false
+    },
+    {
+      "name": "language-name-prefix",
+      "lang": "ar",
+      "visible": "EN",
+      "accessibleName": "تغيير اللغة EN",
+      "source": "Chromium Accessibility.getPartialAXTree",
+      "passed": false
+    },
+    {
+      "name": "language-name-prefix",
+      "lang": "en",
+      "visible": "ع",
+      "accessibleName": "Change language ع",
+      "source": "Chromium Accessibility.getPartialAXTree",
+      "passed": false
+    },
+    {
+      "name": "admin-toast",
+      "theme": "light",
+      "font": 15,
+      "lineRatio": 1.7,
+      "filter": "blur(0px)",
+      "backdropFilter": "none",
+      "contrast": 14.326400882349622,
+      "opacity": "1",
+      "passed": false
+    },
+    {
+      "name": "admin-toast",
+      "theme": "dark",
+      "font": 15,
+      "lineRatio": 1.7,
+      "filter": "blur(0px)",
+      "backdropFilter": "none",
+      "contrast": 13.097074871779508,
+      "opacity": "1",
+      "passed": false
+    }
+  ],
+  "passed": false,
+  "finishedAt": "2026-10-13T09:07:40.031Z"
+}
