@@ -1,5 +1,12 @@
 import assert from 'node:assert/strict';
-import type {SerialSessionEvidence} from './railwayMysqlSession';
+import type {SerialSessionEvidence,RailwayMysqlSession} from './railwayMysqlSession';
+import {assertFreshQaBackup,type QaBackupProof} from './temporaryAdminQaBackup';
+
+/** The caller finishes its read-only preflight before entering this write boundary. */
+export async function executeAdminWorkspaceMigration(session:Pick<RailwayMysqlSession,'executeStatements'|'commit'>,sql:readonly string[],backup:QaBackupProof,now:()=>number=Date.now):Promise<void>{
+ assertFreshQaBackup(backup,now());
+ await session.executeStatements(sql.map(statement=>({sql:statement+';',rowCount:0})));await session.commit();
+}
 
 export function assertAdminWorkspaceSerialProof(value:unknown,applied:boolean):asserts value is SerialSessionEvidence {
  assert.ok(value&&typeof value==='object','ADMIN_WORKSPACE_SERIAL_PROOF_REQUIRED');

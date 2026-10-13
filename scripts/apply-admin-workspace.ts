@@ -1,13 +1,13 @@
 /** Root only. Read-only default; explicit fresh backup and rehearsal for DDL. */
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {createReadStream} from 'node:fs';
 import {readFile,writeFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {adminReviewWorkspaceMigrationSql,adminReviewColumns,draftNullableColumns} from '../server/db/migrations/008_addAdminReviewWorkspace';
 import {openRailwayMysqlSession} from './lib/railwayMysqlSession';
 import {captureInventory,ENVIRONMENTS,identifier,type Inventory} from './lib/railwayQuranOps';
-import {assertAdminWorkspaceDryRun,closeAdminWorkspaceReport} from './lib/adminWorkspaceMigrationProof';
+import {assertAdminWorkspaceDryRun,closeAdminWorkspaceReport,executeAdminWorkspaceMigration} from './lib/adminWorkspaceMigrationProof';
+import {readFreshQaBackup} from './lib/temporaryAdminQaBackup';
 
 const args=process.argv.slice(2),apply=args.includes('--apply');
 const option=(name:string)=>{const i=args.indexOf(name);assert.ok(i>=0&&args[i+1]&&!args[i+1].startsWith('--'),'OPTION_REQUIRED:'+name);return resolve(args[i+1]);};
@@ -21,12 +21,9 @@ assert.equal(rehearsal.results.length,9);assert.ok(rehearsal.results.every((r:{p
 assert.equal(rehearsal.results[0].detail.sql_sha256,sqlSha,'REHEARSAL_SQL_MISMATCH');
 const baseline=await json(option('--baseline')) as Inventory;
 assert.equal(baseline.environment_id,ENVIRONMENTS.production,'PRODUCTION_BASELINE_REQUIRED');
-const backup=await json(option('--backup'));
-assert.equal(backup.restored_and_verified,true,'RESTORED_BACKUP_REQUIRED');assert.equal(backup.mysql_version,'9.7.2');
-const backupAge=Date.now()-Date.parse(backup.checked_at);
-assert.ok(Number.isFinite(backupAge)&&backupAge>=0&&backupAge<3600000,'FRESH_BACKUP_REQUIRED');
-const archiveHash=createHash('sha256');for await(const bytes of createReadStream(backup.encrypted_path))archiveHash.update(bytes);
-assert.equal(archiveHash.digest('hex'),backup.encrypted_sha256,'BACKUP_ARCHIVE_SHA_MISMATCH');
+// Shared proof verification binds the encrypted bytes and rechecks freshness
+// after the archive stream; the write boundary below checks it again.
+const backup=await readFreshQaBackup(option('--backup'));
 assert.deepEqual(backup.row_counts,baseline.row_counts,'BACKUP_INVENTORY_MISMATCH');
 assert.deepEqual(backup.checksums,baseline.checksums,'BACKUP_CHECKSUM_INVENTORY_MISMATCH');
 const dryRun=apply?await json(option('--dry-run')):null;
@@ -50,7 +47,7 @@ try{
  Object.assign(report,{planned,d1:before.d1_counts,d3:before.row_counts.ayah_timings,canonical_checksum:before.canonical_checksum,critical_before:before.critical_counts,original_projections:projections,disk_before:await session.storage()});
  if(apply){
   assert.deepEqual(dryRun.critical_before,before.critical_counts,'DRY_RUN_CRITICAL_CHANGED');assert.deepEqual(dryRun.original_projections,projections,'DRY_RUN_CATALOG_CHANGED');
-  await session.executeStatements(sql.map(statement=>({sql:statement+';',rowCount:0})));await session.commit();
+  await executeAdminWorkspaceMigration(session,sql,backup);
   const after=await captureInventory(ENVIRONMENTS.production,s=>session.read(s));
   assert.deepEqual(after.d1_counts,before.d1_counts);assert.equal(after.canonical_checksum,before.canonical_checksum);
   for(const table of protectedTables){assert.equal(after.row_counts[table],before.row_counts[table],'POST_COUNT_CHANGED:'+table);assert.equal(after.checksums[table],before.checksums[table],'POST_CHECKSUM_CHANGED:'+table);}
