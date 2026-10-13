@@ -17,6 +17,7 @@ beforeEach(()=>{
  Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:()=>[target]});
  Object.defineProperty(window,'scrollTo',{configurable:true,value:vi.fn()});
  vi.spyOn(Element.prototype,'getBoundingClientRect').mockImplementation(()=>rect() as DOMRect);
+ vi.spyOn(Element.prototype,'getClientRects').mockImplementation(function(this:Element){return [this.getBoundingClientRect()] as unknown as DOMRectList;});
  Object.defineProperty(target,'scrollIntoView',{configurable:true,value:vi.fn()});
  run=vi.fn();vi.stubGlobal('axe',{run});
 });
@@ -82,6 +83,13 @@ describe('real contrast remeasurement acceptance',()=>{
   Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:(x:number,y:number)=>((x<22||x>118)&&(y<32||y>58))?[target.parentElement!]:[target]});
   run.mockResolvedValueOnce(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}]})).mockResolvedValueOnce(result({passes:[{id:'color-contrast',nodes:[node(target)]}]}));
   const measured=await measureAdminVisualAccessibility();expect(measured.incomplete).toEqual([]);expect(measured.remeasurements[0].resolved).toBe(true);expect(run).toHaveBeenCalledTimes(2);
+ });
+ it('checks every wrapped inline line box without treating the unpainted inter-line gap as an overlay',async()=>{
+  vi.spyOn(target,'getBoundingClientRect').mockImplementation(()=>({...rect(30),height:90,bottom:120}) as DOMRect);
+  vi.spyOn(target,'getClientRects').mockImplementation(()=>[rect(30),rect(90)] as unknown as DOMRectList);
+  Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:(_x:number,y:number)=>y>60&&y<90?[target.parentElement!]:[target]});
+  run.mockResolvedValueOnce(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}]})).mockResolvedValueOnce(result({passes:[{id:'color-contrast',nodes:[node(target)]}]}));
+  const measured=await measureAdminVisualAccessibility();expect(measured.incomplete).toEqual([]);expect(measured.remeasurements[0].resolved).toBe(true);
  });
  it('preserves original and newly measured violations even alongside exact passes',async()=>{
   const initial={id:'button-name',nodes:[node(other,['#other'])]},actual={id:'color-contrast',nodes:[node(target)]};
