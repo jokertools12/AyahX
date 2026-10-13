@@ -29,8 +29,10 @@ describe('stored timing accessibility', () => {
   });
   it.each(['ar', 'en'] as const)('names each native verse button with verse and stored status, keeping exact URL selection and pressed state (%s)', lang => {
     rows.push(fixture(), { ...fixture(), id: 'unit-timing-5', ayah: 5, review_status: 'needs_review' }); render(view(<MemoryRouter initialEntries={['/admin/timings?recitation_id=unit-recording&surah=103&ayah=4']} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><TimingsPage /><Location /></MemoryRouter>, lang));
-    const readyName = lang === 'ar' ? 'الآية 4: جاهزة' : 'Ayah 4: Ready', reviewName = lang === 'ar' ? 'الآية 5: تحتاج مراجعة' : 'Ayah 5: Needs your review';
-    const selected = screen.getByRole('button', { name: readyName }), next = screen.getByRole('button', { name: reviewName }); expect(selected).toHaveAttribute('aria-pressed', 'true'); expect(next).toHaveAttribute('title', reviewName); expect(next.tagName).toBe('BUTTON'); next.focus(); expect(next).toHaveFocus(); fireEvent.click(next);
+    const readyName = lang === 'ar' ? 'الآية 4 جاهزة' : 'Ayah 4 Ready', reviewName = lang === 'ar' ? 'الآية 5 تحتاج مراجعة' : 'Ayah 5 Needs your review';
+    const selected = screen.getByRole('button', { name: readyName }), next = screen.getByRole('button', { name: reviewName });
+    for (const button of [selected, next]) expect(button.getAttribute('aria-label')!.startsWith(button.textContent!.replace(/\s+/gu, ' ').trim())).toBe(true);
+    expect(selected).toHaveAttribute('aria-pressed', 'true'); expect(next).toHaveAttribute('title', reviewName); expect(next.tagName).toBe('BUTTON'); next.focus(); expect(next).toHaveFocus(); fireEvent.click(next);
     expect(screen.getByRole('button', { name: readyName })).toHaveAttribute('aria-pressed', 'false'); expect(screen.getByRole('button', { name: reviewName })).toHaveAttribute('aria-pressed', 'true'); expect(screen.getByLabelText('Selected stored verse')).toHaveTextContent('5'); expect(screen.getByLabelText('Unit route selection')).toHaveTextContent('ayah=5'); expect(screen.getByLabelText('Unit route selection')).toHaveTextContent('recitation_id=unit-recording'); expect(paths.filter(path => path.startsWith('/timings?')).every(path => path.includes('recitation_id=unit-recording&surah=103&from=1&to=50'))).toBe(true);
   });
 });
