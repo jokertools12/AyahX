@@ -75,3 +75,7 @@ body:has(.admin-app) .admin-drawer{display:grid;grid-template-columns:minmax(0,1
 /* Font ink at 15px exceeds a 25.5px Arabic line box; keep every wrapped line
    inside its own hit/paint box in portalled descriptions and field labels. */
 body:has(.admin-app) :is(.admin-dialog,.admin-drawer) :is(p,label,h2,h3){line-height:2}
+/* Stronger actual glyph cores keep confirmation text and raw data readable at
+   native 100% zoom; pixel contrast thresholds remain unchanged. */
+body:has(.admin-app) label[for="typed-confirm"]{font-weight:700}
+.admin-app .admin-json,body:has(.admin-app) :is(.admin-dialog,.admin-drawer) .admin-json{font-weight:600}
