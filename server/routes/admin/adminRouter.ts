@@ -89,6 +89,7 @@ export function createAdminRouter(options: AdminRouterOptions): Router {
   const register: AdminRegister = definition => {
     if (!isAdminPermission(definition.permission)) throw new Error('ADMIN_PERMISSION_UNDEFINED');
     if (definition.method !== 'get' && definition.writes !== true) throw new Error('ADMIN_WRITE_AUDIT_CONTRACT_REQUIRED');
+    if (definition.respond && (definition.method !== 'get' || definition.writes)) throw new Error('ADMIN_BINARY_RESPONSE_GET_ONLY');
     if (definitions.some(row => row.method === definition.method && row.path === definition.path)) throw new Error('ADMIN_ENDPOINT_DUPLICATE');
     definitions.push(definition);
     router[definition.method](definition.path, async (req, res) => {
@@ -104,6 +105,7 @@ export function createAdminRouter(options: AdminRouterOptions): Router {
         const invalid = body && !body.success ? body.error : query && !query.success ? query.error : null;
         if (invalid) throw new AdminError('ADMIN_INPUT_INVALID', 422, { fields: invalid.issues.map(issue => ({ path: issue.path.join('.'), message: 'قيمة غير صالحة' })) });
         const ctx: AdminRequestContext = { ...authenticated, actor: actorWithContext(authenticated.actor, requestId, ip), params: Object.fromEntries(Object.entries(req.params).map(([key, value]) => [key, String(value)])), body: (body?.success ? body.data : {}) as Record<string, unknown>, query: (query?.success ? query.data : {}) as Record<string, unknown>, requestId, ip };
+        if (definition.respond) { await definition.respond(ctx, req, res); return; }
         const result = await definition.handler(ctx);
         if (definition.path === '/auth/logout' || definition.path === '/security/sessions/:id' && ctx.params.id === ctx.sessionId) res.clearCookie(ADMIN_COOKIE, { httpOnly: true, secure: env.NODE_ENV === 'production', sameSite: 'strict', path: '/api/admin' });
         res.status(definition.responseStatus??200).json({ data: result.data, meta: { ...result.meta, requestId } });

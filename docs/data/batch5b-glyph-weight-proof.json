@@ -1,0 +1,298 @@
+{
+  "scope": "Read-only local restored MySQL; actual browser glyph measurements, not launch-matrix acceptance",
+  "production": false,
+  "measured_at": "2026-10-13T11:44:11Z",
+  "thresholds_changed": false,
+  "cases": [
+    {
+      "target": "typed-label",
+      "weight": 600,
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "target": [
+                "label[for=\"typed-confirm\"]"
+              ]
+            }
+          ]
+        }
+      ],
+      "proofs": [
+        {
+          "resolved": false,
+          "reason": "PIXEL_CONTRAST_NOT_PROVEN",
+          "images": [
+            {
+              "status": "ambiguous",
+              "reason": "AMBIGUOUS_INTERMEDIATE_CORE",
+              "sha256": "a4e34324a832cb97a0035630a2ff2188b0709c6a37646b8996689e661aef98f4",
+              "intermediate": 17,
+              "file": "f33e39429de982c8f456fc22721e1bb6bf09b1c560f2c0df0e25b3522e1d1a52.png"
+            },
+            {
+              "status": "ambiguous",
+              "reason": "AMBIGUOUS_INTERMEDIATE_CORE",
+              "sha256": "f31d584ff381a1cf063dd34545537ec74234a0078ce733fd69039dd4870cb799",
+              "intermediate": 42,
+              "file": "e23f5ec2d4af8126f7c41e1f3037b0a08af94db6071453186464ca7f8584f095.png"
+            },
+            {
+              "status": "ambiguous",
+              "reason": "AMBIGUOUS_INTERMEDIATE_CORE",
+              "sha256": "5f58fce661427d1535d630a0242a0dfa999f07deaa87a650b64857b10039464c",
+              "intermediate": 10,
+              "file": "b9943b189738d45d2ae5e3f9f296cda4347c854d4c7d993cbcb5a10b3d39f51a.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "target": "typed-label",
+      "weight": 700,
+      "violations": [],
+      "incomplete": [],
+      "proofs": [
+        {
+          "resolved": true,
+          "reason": "PIXEL_VISIBLE_CONTRAST_PASS",
+          "images": [
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 13.50393490748625,
+              "sha256": "2541bbc39b93a0ff75858a52e59d4d46b01e1d9d845152deb03ceeb1c0090d0c",
+              "intermediate": 0,
+              "file": "937250851822d8731ef0dfec868ae33c7c08383cc7e5329add5d593e3e448147.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 13.331150887398017,
+              "sha256": "cb9ba4291b9b0625c938cc9c20c73366f3805ccae06db3096d4002beb13e78d2",
+              "intermediate": 0,
+              "file": "f2011a1cd50aea95399f470894b3b0208e853b98ca74e1fc0f7f460735df6eb3.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 13.331647222004584,
+              "sha256": "8a49947b737908e68c84700f4cadfd39f597b385f17c104a66ff75b1d1f0ee10",
+              "intermediate": 0,
+              "file": "6624002ab641aa70c45a4ed6413a25eb11c049c206b9f00c7a17f0dcb5881ffc.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "target": "typed-label",
+      "weight": 800,
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "target": [
+                "label[for=\"typed-confirm\"]"
+              ]
+            }
+          ]
+        }
+      ],
+      "proofs": [
+        {
+          "resolved": false,
+          "reason": "PIXEL_CONTRAST_NOT_PROVEN",
+          "images": [
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 13.503727824892605,
+              "sha256": "8a23946e0b43324f58b13ab2aa1e021864e5707017d7403535e53c10315c495a",
+              "intermediate": 0,
+              "file": "05ff7854407b9f20c74fd11480453130f8e89e702596a8a1daff359d1f80e746.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 13.330977589624267,
+              "sha256": "673abc3fabfee289dbb022724d0266407e31d81d3ee506b12255d36e2bd5579e",
+              "intermediate": 1,
+              "file": "fd444d30b562b70d32d5693eb04e3c587bc02a8ca9cf19e7631a0dbd31f6b32c.png"
+            },
+            {
+              "status": "ambiguous",
+              "reason": "AMBIGUOUS_INTERMEDIATE_CORE",
+              "sha256": "a72ffb4e2ff7a78c53c3891685a8f1d9ad6e1dc9f229bf62fa88d3863d7b8898",
+              "intermediate": 3,
+              "file": "31057a9a568a5e2780cd640b8f6a5f71343c60510b1341c81bbdbd350e7069b2.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "target": "json",
+      "weight": 400,
+      "violations": [],
+      "incomplete": [],
+      "proofs": []
+    },
+    {
+      "target": "json",
+      "weight": 600,
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "target": [
+                "#radix-\\:rq\\: > div:nth-child(2) > pre"
+              ]
+            }
+          ]
+        }
+      ],
+      "proofs": [
+        {
+          "resolved": false,
+          "reason": "PIXEL_CONTRAST_NOT_PROVEN",
+          "images": [
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "b6c63ceb168a40badeea5a494f898c5d730220c552e4d0fcc0cb2a7798ed4fae",
+              "intermediate": 0,
+              "file": "b08b432081acae2ae24eaf3374ec7338fb491420cad39bee90ceb17ff89e41a2.png"
+            },
+            {
+              "status": "ambiguous",
+              "reason": "NO_SUPPORTED_FOREGROUND",
+              "sha256": "893c759f2bb08ee8f23e5e470f197261e8c8ba912f743545389e4a8855de521b",
+              "file": "0f03beea972153441d3ab4f2ad087c0226e0317cecca74f6c3a3223f472aba8b.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "1849267e09cc6fa85fdcbf2f23f145515d50b6d13cd38a3b0baabf6bfb476221",
+              "intermediate": 0,
+              "file": "4dc68b78830b8806bc9f6210968d30dbd8990feabaf16c2a1fd18cc3e1b0981a.png"
+            },
+            {
+              "status": "ambiguous",
+              "reason": "NO_SUPPORTED_FOREGROUND",
+              "sha256": "893c759f2bb08ee8f23e5e470f197261e8c8ba912f743545389e4a8855de521b",
+              "file": "02adc0d62fd6c871b6b7395535dfc61c93499dbf15843af6c34dbadb3504a53a.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "235ce12eb8f385816d76eec9681580e8152ceb524b9d1287882958ed0ecee3db",
+              "intermediate": 0,
+              "file": "d4f99f470248351b2f2166a0d06d12a8409155347f0fe52570eed44163af51a9.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "e93994741b0a277c53f97130bc4dd7d76082072d46fb573926b5bef0ef01892b",
+              "intermediate": 0,
+              "file": "cdadc2fa2497e0bd7dcaf90dd07559eb7260b525fecccfa9f9a6e64675a5ddf7.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "target": "json",
+      "weight": 700,
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "target": [
+                "#radix-\\:rq\\: > div:nth-child(2) > pre"
+              ]
+            }
+          ]
+        }
+      ],
+      "proofs": [
+        {
+          "resolved": false,
+          "reason": "PIXEL_CONTRAST_NOT_PROVEN",
+          "images": [
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "b6c63ceb168a40badeea5a494f898c5d730220c552e4d0fcc0cb2a7798ed4fae",
+              "intermediate": 0,
+              "file": "bbc3c5187d56f18d1b7aded30a2cfc179b6b2ff1030a9730c54764b23d55e2c1.png"
+            },
+            {
+              "status": "ambiguous",
+              "reason": "NO_SUPPORTED_FOREGROUND",
+              "sha256": "893c759f2bb08ee8f23e5e470f197261e8c8ba912f743545389e4a8855de521b",
+              "file": "4dcc3ec12539879c7975691422cab86941cfcec40d657f0aaed6a00324176174.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "1849267e09cc6fa85fdcbf2f23f145515d50b6d13cd38a3b0baabf6bfb476221",
+              "intermediate": 0,
+              "file": "467d0221de4519443ca6732de7612822fc24f3f22bddd5330b32bf984c4aaece.png"
+            },
+            {
+              "status": "ambiguous",
+              "reason": "NO_SUPPORTED_FOREGROUND",
+              "sha256": "893c759f2bb08ee8f23e5e470f197261e8c8ba912f743545389e4a8855de521b",
+              "file": "32dbf3d12b4979114ebb73b7fc05cc8fe3c9172cf1ade7ae5fb690008dcf2d5c.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "235ce12eb8f385816d76eec9681580e8152ceb524b9d1287882958ed0ecee3db",
+              "intermediate": 0,
+              "file": "cd429bbd9eba676ff63340be83578f98f73a3e8b5ad413bbf41f6b768271147d.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "e93994741b0a277c53f97130bc4dd7d76082072d46fb573926b5bef0ef01892b",
+              "intermediate": 0,
+              "file": "4c22c903406475dabfc1f6afa5977b0bf5448bc3bd4cd2dfdedbb5a4e7914041.png"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "decision": "Confirmation label weight 700; JSON weight 600. Whitespace-only crops are not contrast proof. Full release matrix must run again."
+}

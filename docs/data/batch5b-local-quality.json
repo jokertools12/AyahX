@@ -1,0 +1,51 @@
+{
+  "checked_at": "2026-10-13T12:56:22.6249448Z",
+  "build": {
+    "revision": "bdc5797",
+    "passed": true,
+    "private_log": "batch5b-ui-ninth-build-20261013.log"
+  },
+  "units": {
+    "passed": 1474,
+    "skipped": 11,
+    "failed": 0,
+    "files_passed": 188,
+    "files_skipped": 5,
+    "duration_seconds": 67.95,
+    "private_log": "batch5b-npm-test-quiet-final-20261013.log",
+    "prior_loaded_run": "One 5-second bash framing test timeout during simultaneous native browsers and parallel test workers; standalone18tests passed and complete quiet rerun1474passed. No timeout or skip changed."
+  },
+  "typescript": {
+    "solution_command": "npx tsc --noEmit",
+    "exit_code": 0,
+    "actual_admin_program_report": "batch5b-admin-types.json",
+    "admin_diagnostics": 0
+  },
+  "lint": {
+    "files": 181,
+    "new_messages": 0,
+    "unchanged_baseline_warnings": 16,
+    "passed": true
+  },
+  "secrets": {
+    "report": "a1-secret-scan.json",
+    "new_leaks": 0,
+    "known_values": 42,
+    "unchanged_baseline_match_files": 3
+  },
+  "bundle": {
+    "report": "batch5b-admin-bundle-s1.json",
+    "public_before": 218680,
+    "public_after": 220242,
+    "change_percent": 0.7142857142857117,
+    "largest_admin_gzip": 217410
+  },
+  "visual": {
+    "status": "complete-launch-matrix PASS:34 views,195 page cases,120 dialog measurements,21 declared dialogs,0 violations/unknown,587.332seconds",
+    "prior_seventh": "194/195; JSON quote pixels unresolved",
+    "prior_eighth": "194/195; JSON opening brace unresolved",
+    "thresholds_relaxed": false,
+    "report": "batch5b-admin-visual-tier1.json"
+  },
+  "production_writes": 0
+}

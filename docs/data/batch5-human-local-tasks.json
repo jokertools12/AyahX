@@ -1,0 +1,538 @@
+{
+  "version": "batch5-human-local-2",
+  "observed_at": "2026-10-13T06:23:04.229Z",
+  "local_only": true,
+  "production_acceptance": false,
+  "single_uninterrupted_run": true,
+  "scope_complete": true,
+  "passed": true,
+  "real_mysql": "9.7.2",
+  "real_redis": "7.2.14",
+  "real_multipart_r2": true,
+  "real_skia_ui_playback": true,
+  "synthetic_video": false,
+  "tasks": [
+    {
+      "id": "M1",
+      "title": "تأكيد صوت قارئ",
+      "mode": "local-mutations",
+      "budget": 4,
+      "unit": "clicks",
+      "clicks": 4,
+      "pointerClicks": 4,
+      "keyboardActivations": 0,
+      "tabPresses": 19,
+      "fieldsTyped": 1,
+      "selections": 0,
+      "steps": 0,
+      "elapsedMs": 1756,
+      "actions": [
+        {
+          "label": "open-listening-queue",
+          "kind": "pointer"
+        },
+        {
+          "label": "open-voice-target",
+          "kind": "pointer"
+        },
+        {
+          "label": "play-sample",
+          "kind": "pointer"
+        },
+        {
+          "label": "confirm-fixture-voice",
+          "kind": "pointer"
+        }
+      ],
+      "passed": true,
+      "completion": "local_actual_ui",
+      "evidence": {
+        "realAudioPlayed": true,
+        "samplesAvailable": 3,
+        "decision": "local_fixture_ui_completed"
+      }
+    },
+    {
+      "id": "M2",
+      "title": "قرار ترخيص مزوّد",
+      "mode": "local-mutations",
+      "budget": 4,
+      "unit": "clicks",
+      "clicks": 2,
+      "pointerClicks": 2,
+      "keyboardActivations": 0,
+      "tabPresses": 37,
+      "fieldsTyped": 3,
+      "selections": 0,
+      "steps": 0,
+      "elapsedMs": 487,
+      "actions": [
+        {
+          "label": "open-provider-licenses",
+          "kind": "pointer"
+        },
+        {
+          "label": "permit-fixture-provider",
+          "kind": "pointer"
+        }
+      ],
+      "passed": true,
+      "completion": "local_actual_ui",
+      "evidence": {
+        "termsAndEvidenceVisible": true,
+        "decision": "local_fixture_ui_completed"
+      }
+    },
+    {
+      "id": "M3",
+      "title": "تعديل اسم تلاوة",
+      "mode": "local-mutations",
+      "budget": 3,
+      "unit": "clicks",
+      "clicks": 2,
+      "pointerClicks": 2,
+      "keyboardActivations": 0,
+      "tabPresses": 30,
+      "fieldsTyped": 1,
+      "selections": 0,
+      "steps": 0,
+      "elapsedMs": 391,
+      "actions": [
+        {
+          "label": "open-labels",
+          "kind": "pointer"
+        },
+        {
+          "label": "save-fixture-label",
+          "kind": "pointer"
+        }
+      ],
+      "passed": true,
+      "completion": "local_actual_ui",
+      "evidence": {
+        "labelFieldVisible": true,
+        "decision": "local_fixture_ui_completed"
+      }
+    },
+    {
+      "id": "M4",
+      "title": "إخفاء وإظهار قارئ",
+      "mode": "local-mutations",
+      "budget": 3,
+      "unit": "clicks",
+      "clicks": 3,
+      "pointerClicks": 3,
+      "keyboardActivations": 0,
+      "tabPresses": 0,
+      "fieldsTyped": 0,
+      "selections": 0,
+      "steps": 0,
+      "elapsedMs": 1099,
+      "actions": [
+        {
+          "label": "open-readers",
+          "kind": "pointer"
+        },
+        {
+          "label": "toggle-fixture-reader",
+          "kind": "pointer"
+        },
+        {
+          "label": "restore-fixture-reader",
+          "kind": "pointer"
+        }
+      ],
+      "passed": true,
+      "completion": "local_actual_ui",
+      "evidence": {
+        "controlVisible": true,
+        "restored": true
+      }
+    },
+    {
+      "id": "M5",
+      "title": "سبب عدم ظهور تلاوة",
+      "mode": "local-mutations",
+      "budget": 2,
+      "unit": "clicks",
+      "clicks": 2,
+      "pointerClicks": 2,
+      "keyboardActivations": 0,
+      "tabPresses": 0,
+      "fieldsTyped": 0,
+      "selections": 0,
+      "steps": 0,
+      "elapsedMs": 696,
+      "actions": [
+        {
+          "label": "open-recordings",
+          "kind": "pointer"
+        },
+        {
+          "label": "open-hidden-reasons",
+          "kind": "pointer"
+        }
+      ],
+      "passed": true,
+      "completion": "local_actual_ui",
+      "evidence": {
+        "actualStoredVisibilityReasonVisible": true
+      }
+    },
+    {
+      "id": "M6",
+      "title": "بدء رفع ملف مرخّص",
+      "mode": "local-mutations",
+      "budget": 5,
+      "unit": "clicks",
+      "clicks": 5,
+      "pointerClicks": 5,
+      "keyboardActivations": 0,
+      "tabPresses": 119,
+      "fieldsTyped": 2,
+      "selections": 0,
+      "steps": 0,
+      "elapsedMs": 3436,
+      "actions": [
+        {
+          "label": "open-licensed-recordings",
+          "kind": "pointer"
+        },
+        {
+          "label": "open-upload-target",
+          "kind": "pointer"
+        },
+        {
+          "label": "approve-fixture-owned-audio-rights",
+          "kind": "pointer"
+        },
+        {
+          "label": "choose-owned-audio-file",
+          "kind": "pointer"
+        },
+        {
+          "label": "start-fixture-upload",
+          "kind": "pointer"
+        }
+      ],
+      "passed": true,
+      "completion": "local_actual_ui",
+      "evidence": {
+        "upload": "actual_owned_fixture_upload_completed",
+        "source": "user_owned_test_audio",
+        "youtubeAudioExtracted": false
+      }
+    },
+    {
+      "id": "M7",
+      "title": "إضافة قارئ وتلاوة بنمط روابط",
+      "mode": "local-mutations",
+      "budget": 10,
+      "unit": "steps",
+      "clicks": 9,
+      "pointerClicks": 7,
+      "keyboardActivations": 2,
+      "tabPresses": 106,
+      "fieldsTyped": 6,
+      "selections": 2,
+      "steps": 6,
+      "elapsedMs": 6583,
+      "actions": [
+        {
+          "label": "open-wizard",
+          "kind": "wizard-step"
+        },
+        {
+          "label": "open-reader-wizard",
+          "kind": "pointer"
+        },
+        {
+          "label": "reader-details",
+          "kind": "wizard-step"
+        },
+        {
+          "label": "wizard-next-reader",
+          "kind": "pointer"
+        },
+        {
+          "label": "recording-details",
+          "kind": "wizard-step"
+        },
+        {
+          "label": "choose-riwayah",
+          "kind": "keyboard"
+        },
+        {
+          "label": "wizard-next-recording",
+          "kind": "pointer"
+        },
+        {
+          "label": "source-details",
+          "kind": "wizard-step"
+        },
+        {
+          "label": "choose-provider",
+          "kind": "keyboard"
+        },
+        {
+          "label": "wizard-next-source",
+          "kind": "pointer"
+        },
+        {
+          "label": "live-source-check",
+          "kind": "wizard-step"
+        },
+        {
+          "label": "check-real-source",
+          "kind": "pointer"
+        },
+        {
+          "label": "wizard-next-review",
+          "kind": "pointer"
+        },
+        {
+          "label": "review-unpublished-draft",
+          "kind": "wizard-step"
+        },
+        {
+          "label": "create-fixture-draft",
+          "kind": "pointer"
+        }
+      ],
+      "passed": true,
+      "completion": "local_actual_ui",
+      "evidence": {
+        "creation": "local_fixture_ui_completed",
+        "createdReciterId": "ac98b1b8-1c2e-44a4-acc1-b0d2dae2e23e",
+        "createdRecitationId": "0dcac0b0-8321-4cc0-82e8-f7733270469b",
+        "liveChecks": [
+          {
+            "surah": 1,
+            "status": "available",
+            "httpStatus": 200
+          },
+          {
+            "surah": 58,
+            "status": "available",
+            "httpStatus": 200
+          },
+          {
+            "surah": 114,
+            "status": "available",
+            "httpStatus": 200
+          }
+        ],
+        "published": false
+      }
+    },
+    {
+      "id": "M8",
+      "title": "إنشاء فيديو تجريبي ومشاهدته",
+      "mode": "local-mutations",
+      "budget": 6,
+      "unit": "clicks",
+      "clicks": 6,
+      "pointerClicks": 2,
+      "keyboardActivations": 4,
+      "tabPresses": 35,
+      "fieldsTyped": 2,
+      "selections": 3,
+      "steps": 0,
+      "elapsedMs": 27828,
+      "actions": [
+        {
+          "label": "open-render-lab",
+          "kind": "pointer"
+        },
+        {
+          "label": "choose-render-reader",
+          "kind": "keyboard"
+        },
+        {
+          "label": "choose-render-recording",
+          "kind": "keyboard"
+        },
+        {
+          "label": "choose-render-chapter",
+          "kind": "keyboard"
+        },
+        {
+          "label": "create-real-render",
+          "kind": "pointer"
+        },
+        {
+          "label": "play-native-video-keyboard",
+          "kind": "keyboard"
+        }
+      ],
+      "passed": true,
+      "completion": "local_actual_ui",
+      "evidence": {
+        "jobId": "60302db7-359e-447c-94c4-7a3281bbd6c0",
+        "realVideoPlayed": true,
+        "qualitySummaryVisible": true,
+        "created": true
+      }
+    },
+    {
+      "id": "M9",
+      "title": "معرفة ما تبقّى",
+      "mode": "local-mutations",
+      "budget": 2,
+      "unit": "clicks",
+      "clicks": 1,
+      "pointerClicks": 1,
+      "keyboardActivations": 0,
+      "tabPresses": 0,
+      "fieldsTyped": 0,
+      "selections": 0,
+      "steps": 0,
+      "elapsedMs": 140,
+      "actions": [
+        {
+          "label": "open-project-status",
+          "kind": "pointer"
+        }
+      ],
+      "passed": true,
+      "completion": "local_actual_ui",
+      "evidence": {
+        "blockedStagesAndOwnerTasksVisible": true
+      }
+    },
+    {
+      "id": "M10",
+      "title": "قراءة خطوات تجديد R2",
+      "mode": "local-mutations",
+      "budget": 3,
+      "unit": "clicks",
+      "clicks": 1,
+      "pointerClicks": 1,
+      "keyboardActivations": 0,
+      "tabPresses": 0,
+      "fieldsTyped": 0,
+      "selections": 0,
+      "steps": 0,
+      "elapsedMs": 106,
+      "actions": [
+        {
+          "label": "open-storage-renewal",
+          "kind": "pointer"
+        }
+      ],
+      "passed": true,
+      "completion": "local_actual_ui",
+      "evidence": {
+        "renewal": "read_steps_only_no_credential_change",
+        "numberedSteps": 5
+      }
+    },
+    {
+      "id": "M11",
+      "title": "رؤية الكلمات الناقصة",
+      "mode": "local-mutations",
+      "budget": 4,
+      "unit": "clicks",
+      "clicks": 4,
+      "pointerClicks": 4,
+      "keyboardActivations": 0,
+      "tabPresses": 0,
+      "fieldsTyped": 1,
+      "selections": 0,
+      "steps": 0,
+      "elapsedMs": 639,
+      "actions": [
+        {
+          "label": "open-availability",
+          "kind": "pointer"
+        },
+        {
+          "label": "open-recitation-picker",
+          "kind": "pointer"
+        },
+        {
+          "label": "choose-near-complete-recording",
+          "kind": "pointer"
+        },
+        {
+          "label": "open-near-complete-chapter",
+          "kind": "pointer"
+        }
+      ],
+      "passed": true,
+      "completion": "local_actual_ui",
+      "evidence": {
+        "missingWordEvidenceVisible": true,
+        "humanWordPositionsAndReasonsVisible": true,
+        "expectedMissingWords": 1
+      }
+    },
+    {
+      "id": "M12",
+      "title": "فهم معاينة الظهور العام",
+      "mode": "local-mutations",
+      "budget": 2,
+      "unit": "clicks",
+      "clicks": 1,
+      "pointerClicks": 1,
+      "keyboardActivations": 0,
+      "tabPresses": 0,
+      "fieldsTyped": 0,
+      "selections": 0,
+      "steps": 0,
+      "elapsedMs": 244,
+      "actions": [
+        {
+          "label": "open-launch-preview",
+          "kind": "pointer"
+        }
+      ],
+      "passed": true,
+      "completion": "local_actual_ui",
+      "evidence": {
+        "hypotheticalPreviewVisible": true,
+        "publicCatalogOpenDisabled": true,
+        "flagUnchanged": true
+      }
+    }
+  ],
+  "setup_rate_window_waits": [
+    {
+      "beforeTask": true,
+      "observedReadRequests": 21,
+      "waitMs": 43088,
+      "rateLimitUnchanged": true
+    },
+    {
+      "beforeTask": true,
+      "observedReadRequests": 23,
+      "waitMs": 57335,
+      "rateLimitUnchanged": true
+    },
+    {
+      "beforeTask": true,
+      "observedReadRequests": 26,
+      "waitMs": 46016,
+      "rateLimitUnchanged": true
+    },
+    {
+      "beforeTask": true,
+      "observedReadRequests": 26,
+      "waitMs": 31441,
+      "rateLimitUnchanged": true
+    }
+  ],
+  "api_errors": [],
+  "blocked_requests": [],
+  "browser_errors": [],
+  "cleanup": {
+    "checked_at": "2026-10-13T06:25:16.256Z",
+    "protected_counts_checksums_unchanged": true,
+    "original_reviews_unchanged": true,
+    "owned_render_count": 1,
+    "owned_storage_count": 1,
+    "audit_retained": true
+  },
+  "earlier_evidence_preserved": true,
+  "method": "Each independent task starts at the actual Start page. Between tasks the harness waits for the next real 60-request/minute read window when needed; waits are listed separately and no bucket is deleted or limit raised. All mutations target only disposable tagged clones, originals remain unchanged."
+}

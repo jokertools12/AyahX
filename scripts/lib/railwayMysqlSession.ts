@@ -212,6 +212,20 @@ export class RailwayMysqlSession {
     return this.command(sql, 'read');
   }
 
+  /** Locking reads belong to an explicitly authorized write transaction.
+   * Keep read() strictly read-only; accept one SELECT with a terminal lock only.
+   */
+  async readForUpdate(sql: string): Promise<string> {
+    if (!this.options.allowWrites) throw new SerialMysqlError('RAILWAY_SERIAL_WRITES_NOT_AUTHORIZED', this.evidence);
+    if (this.writesHalted) throw new SerialMysqlError('RAILWAY_SERIAL_WRITES_HALTED', this.evidence);
+    const unlocked = sql.replace(/\s+FOR\s+UPDATE\s*;\s*$/iu, ';');
+    if (unlocked === sql || !/^\s*SELECT\b/iu.test(unlocked) ||
+      unlocked.slice(0, -1).includes(';') || /\b(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE|RENAME|TRUNCATE|INTO\s+OUTFILE)\b/iu.test(unlocked)) {
+      throw new SerialMysqlError('LOCKING_SELECT_REQUIRED', this.evidence);
+    }
+    return this.command(sql, 'write');
+  }
+
   /** Actual MySQL filesystem observation inside this same SSH session. No additional connection. */
   async storage(): Promise<{ total_bytes: number; used_bytes: number; available_bytes: number }> {
     const value = JSON.parse((await this.command('', 'storage')).trim()) as { total_bytes: number; used_bytes: number; available_bytes: number };

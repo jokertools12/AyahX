@@ -33,7 +33,7 @@ describe('scoped licensed publication (unit fixtures, not live R2)',()=>{
   it('resolves a human-licensed hosted reference with exact blob SHA and no storage operation or YouTube request',async()=>{
     const source={checkLink:vi.fn(async()=>({status:'available',httpStatus:200,checkedAt:new Date(now).toISOString()})),verifyLicensedBlob:vi.fn(async()=>{})};
     const row={source_id:'source-1',recitation_id:'rec-1',surah:1,url,rights_ref:'human-rights-1',source_sha256:sha,source_duration_ms:3000,verification_status:'verified',verification_details:{...offset,hosted_source:{allowed_hosts:['owned.example'],url_sha256:createHash('sha256').update(url).digest('hex')}},storage_id:null};
-    const db=dbRead(vi.fn(async sql=>{expect(sql).toContain("h.status='approved'");expect(sql).toContain('h.subject_id=u.recitation_id');return [row];}));
+    const db=dbRead(vi.fn(async sql=>{expect(sql).toContain("h.status='approved'");expect(sql).toContain('COALESCE(h.target_subject_id,h.subject_id)=u.recitation_id');expect(sql).toContain('NOT EXISTS(SELECT 1 FROM human_review_items newer WHERE newer.supersedes_id=h.id)');return [row];}));
     const resolved=await new CatalogLicensedSourceResolver(db,null,source).resolveLicensedSource('rec-1',1);expect(resolved).toMatchObject({adapter:'url_reference',url,sha256:sha,sourceChapterOffsetMs:1000});expect(source.verifyLicensedBlob).toHaveBeenCalledWith(url,['owned.example'],sha);
   });
   it('propagates a changed hosted blob error without provider fallback',async()=>{

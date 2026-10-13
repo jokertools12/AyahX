@@ -16,7 +16,8 @@ describe('D3 pinned release input', () => {
   });
   it('creates documented missing ayah data without inventing timing', () => {
     const corpus = { version: 'fixture', checksum: 'checksum', ayahs: [{ surah: 1, ayah: 1, words: ['قال'], text: 'قال' }, { surah: 1, ayah: 2, words: ['الحق'], text: 'الحق' }] } as QuranTextCorpus;
-    const args = { rows: readTimingPackage(make(), timingHash(make()), 'actual').rows, slug: 'actual', sourceSha: 'hash', version: 'fixture', corpus, canonicalAvailable: true, chapters: [1] };
+    const bytes = make();
+    const args = { rows: readTimingPackage(bytes, timingHash(bytes), 'actual').rows, slug: 'actual', sourceSha: 'hash', version: 'fixture', corpus, canonicalAvailable: true, chapters: [1] };
     const first = prepareTimingRows(args); expect(prepareTimingRows(args)).toEqual(first);
     expect(first[1]).toMatchObject({ words: [], missing_words: [[1, 'NO_VALID_MAPPED_SOURCE_INTERVAL']], review_status: 'needs_review', start_ms: null });
     expect(prepareTimingRows({ ...args, canonicalAvailable: false })[0].ayah_id).toBeNull();

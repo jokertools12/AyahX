@@ -1,0 +1,71 @@
+{
+  "scope": "three-local-display-regressions",
+  "startedAt": "2026-10-13T09:09:43.2Z",
+  "production": false,
+  "applicationWrites": 0,
+  "blockedWrites": [],
+  "cases": [
+    {
+      "name": "wrapped-launch-action",
+      "dpr": 1.5,
+      "height": 68.33333587646484,
+      "top": 247.33334350585938,
+      "bottom": 315.6666793823242,
+      "textRects": [
+        {
+          "top": 254.6666717529297,
+          "bottom": 282.66668701171875,
+          "height": 28.000015258789062
+        },
+        {
+          "top": 280.16668701171875,
+          "bottom": 308.16668701171875,
+          "height": 28
+        }
+      ],
+      "heightStyle": "68.3333px",
+      "lineHeight": "25.5px",
+      "passed": true
+    },
+    {
+      "name": "language-name-prefix",
+      "lang": "ar",
+      "visible": "EN",
+      "accessibleName": "EN — تغيير اللغة",
+      "source": "Chromium Accessibility.getPartialAXTree",
+      "passed": true
+    },
+    {
+      "name": "language-name-prefix",
+      "lang": "en",
+      "visible": "ع",
+      "accessibleName": "ع — Change language",
+      "source": "Chromium Accessibility.getPartialAXTree",
+      "passed": true
+    },
+    {
+      "name": "admin-toast",
+      "theme": "light",
+      "font": 15,
+      "lineRatio": 1.7,
+      "filter": "none",
+      "backdropFilter": "none",
+      "contrast": 14.326400882349622,
+      "opacity": "1",
+      "passed": true
+    },
+    {
+      "name": "admin-toast",
+      "theme": "dark",
+      "font": 15,
+      "lineRatio": 1.7,
+      "filter": "none",
+      "backdropFilter": "none",
+      "contrast": 13.097074871779508,
+      "opacity": "1",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "finishedAt": "2026-10-13T09:09:45.663Z"
+}

@@ -1,0 +1,278 @@
+import {afterEach,beforeEach,describe,expect,it,vi} from 'vitest';
+import {createCanvas} from '@napi-rs/canvas';
+import {mkdtemp,readFile,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {createHash} from 'node:crypto';
+import {inspectAdminVisualPixels,inspectAdminVisualPng,adminVisualContrastRatio} from '../../tooling/e2e/helpers/adminVisualPixelContrast.mjs';
+import {collectAdminVisualEvidence,collectAdminVisualAxLabelEvidence,measureAdminVisualEvidenceTarget} from '../../tooling/e2e/helpers/adminVisualPixelEvidence.mjs';
+import {assertAdminVisualDirectEvidence,assertAdminVisualScanEvidence,assertAdminVisualPixelProof,assertAdminVisualAxNameProof,normalizeAdminVisualLabel} from '../../tooling/e2e/helpers/adminVisualEvidenceValidation.mjs';
+
+// These are synthetic images and synthetic protocol/page doubles. Only root's
+// real browser acceptance can prove production paint and Accessibility names.
+const image=(foreground='#000',background='#fff',antialias=false)=>{
+ const canvas=createCanvas(100,20),context=canvas.getContext('2d');context.fillStyle=background;context.fillRect(0,0,100,20);
+ context.fillStyle=foreground;for(let x=10;x<85;x+=15)context.fillRect(x,4,5,12);
+ if(antialias){context.fillStyle='#808080';for(let x=10;x<85;x+=15)context.fillRect(x+5,4,1,12);}
+ return{png:canvas.toBuffer('image/png'),pixels:context.getImageData(0,0,100,20)};
+};
+const target=['#target'],unknown=(id='color-contrast')=>({id,nodes:[{target}]}),rect={x:10,y:10,width:100,height:20};
+const accessibility=(id='color-contrast')=>({violations:[],incomplete:[unknown(id)],originalIncomplete:[unknown(id)],remeasurements:[]});
+const scanner=(code='CONTRAST_UNRESOLVED')=>({version:'admin-visual-1',mode:'strict',violations:[],indeterminate:[{code,selector:'#target',reason:'Unsupported paint',rect,minimum:4.5,contrastKind:'text'}],compliant:false,shouldFail:true});
+const prepared={ready:true,reason:'VISIBLE_TEXT_RANGES',rects:[rect],visibleText:'EN',dpr:1,paint:{fontsReady:true,finiteAnimationsSettled:true,framesAfter:2},scrollState:{window:{left:0,top:0},parents:[]}};
+const fakePage=(png=image().png,name='EN — Change language')=>{
+ const send=vi.fn(async(method:string)=>method==='Page.getLayoutMetrics'?{cssVisualViewport:{pageX:0,pageY:0,clientWidth:800,clientHeight:600,zoom:1,scale:1}}:method==='Page.captureScreenshot'?{data:png.toString('base64')}:method==='DOM.getDocument'?{root:{nodeId:1}}:method==='DOM.querySelector'?{nodeId:2}:method==='DOM.describeNode'?{node:{backendNodeId:3}}:method==='Accessibility.getPartialAXTree'?{nodes:[{backendDOMNodeId:3,ignored:false,name:{value:name}}]}:{});
+ const detach=vi.fn(async()=>{}),evaluate=vi.fn(async(_fn:unknown,args:{action?:string})=>args.action==='restore'?{restored:true}:structuredClone(prepared));
+ return{evaluate,screenshot:vi.fn(async()=>png),context:()=>({newCDPSession:vi.fn(async()=>({send,detach}))}),send,detach};
+};
+const privateDirectories:string[]=[];
+const directory=async()=>{const path=await mkdtemp(join(tmpdir(),'ayahx-pixel-unit-'));privateDirectories.push(path);return path;};
+afterEach(async()=>{for(const path of privateDirectories.splice(0))await rm(path,{recursive:true,force:true});vi.restoreAllMocks();vi.unstubAllGlobals();document.body.innerHTML='';});
+
+describe('dominant background / supported farthest foreground PNG proof',()=>{
+ it.each([['#000','#fff'],['#fff','#000']])('passes actual synthetic %s on %s with SHA-256',async(fg,bg)=>{
+  const {png}=image(fg,bg),proof=await inspectAdminVisualPng(png,{kind:'text'});
+  expect(proof).toMatchObject({passed:true,status:'pass',ratio:21,minimum:4.5,width:100,height:20});expect(proof.sha256).toBe(createHash('sha256').update(png).digest('hex'));
+ });
+ it('retains a repeated glyph core while tolerating antialias mixtures',()=>{expect(inspectAdminVisualPixels(image('#000','#fff',true).pixels)).toMatchObject({passed:true,ratio:21,unexplainedPixels:0});});
+ it('does not hide independently supported low-contrast solid grayscale glyphs as antialias',()=>{
+  const canvas=createCanvas(100,20),context=canvas.getContext('2d');context.fillStyle='#fff';context.fillRect(0,0,100,20);context.fillStyle='#000';context.fillRect(10,4,5,12);context.fillStyle='#aaa';for(const x of [20,30,40,50,60,70,80])context.fillRect(x,4,5,12);
+  expect(adminVisualContrastRatio([170,170,170],[255,255,255])).toBeLessThan(4.5);
+  expect(inspectAdminVisualPixels(context.getImageData(0,0,100,20))).toMatchObject({passed:false,status:'ambiguous',reason:'AMBIGUOUS_INTERMEDIATE_CORE'});
+ });
+ it('distinguishes adjacent one-pixel antialias edges from attached solid intermediate cores',()=>{
+  expect(inspectAdminVisualPixels(image('#fff','#000',true).pixels)).toMatchObject({passed:true,ratio:21});
+  const canvas=createCanvas(100,20),context=canvas.getContext('2d');context.fillStyle='#fff';context.fillRect(0,0,100,20);context.fillStyle='#000';context.fillRect(10,4,5,12);context.fillStyle='#aaa';context.fillRect(15,4,5,12);
+  expect(inspectAdminVisualPixels(context.getImageData(0,0,100,20))).toMatchObject({passed:false,status:'ambiguous',reason:'AMBIGUOUS_INTERMEDIATE_CORE'});
+ });
+ it('preserves fine-stroke edge antialias anchored to actual readable paint rather than only the farthest RGB cluster',()=>{
+  const canvas=createCanvas(100,20),context=canvas.getContext('2d');context.fillStyle='#101c23';context.fillRect(0,0,100,20);
+  for(const x of [10,25,40,55,70]){context.fillStyle='#e5edef';context.fillRect(x,4,5,12);context.fillStyle='#a0a8ae';context.fillRect(x+5,4,1,12);context.fillStyle='#465056';context.fillRect(x+6,4,1,12);}
+  expect(inspectAdminVisualPixels(context.getImageData(0,0,100,20))).toMatchObject({passed:true,intermediatePixelsWithoutCore:0,antialiasSupportMethod:'ADJACENT_READABLE_FOREGROUND_PIXEL'});
+ });
+ it('fails low contrast and never rounds 4.499 up to 4.5',()=>{
+  expect(inspectAdminVisualPixels(image('#aaa').pixels)).toMatchObject({passed:false,status:'fail'});
+  expect(adminVisualContrastRatio([119,119,119],[255,255,255])).toBeLessThan(4.5);expect(inspectAdminVisualPixels(image('#777').pixels).passed).toBe(false);
+ });
+ it('uses 3 only for explicit nontext evidence; same gray text fails 4.5',()=>{
+  const {pixels}=image('#888');expect(inspectAdminVisualPixels(pixels,{kind:'nontext'})).toMatchObject({passed:true,minimum:3});expect(inspectAdminVisualPixels(pixels,{kind:'text'})).toMatchObject({passed:false,minimum:4.5});
+ });
+ it('rejects a blank crop, transparent pixels, rare farthest noise and mixed color paint',()=>{
+  const {pixels}=image('#fff');expect(inspectAdminVisualPixels(pixels).reason).toBe('NO_SUPPORTED_FOREGROUND');
+  pixels.data[3]=0;expect(inspectAdminVisualPixels(pixels).reason).toBe('TRANSPARENT_PIXEL');
+  const sparse=image('#fff').pixels;sparse.data.set([0,0,0,255],0);expect(inspectAdminVisualPixels(sparse).passed).toBe(false);
+  const mixed=image().pixels;for(let offset=0;offset<80;offset+=4)mixed.data.set([255,0,0,255],offset);expect(inspectAdminVisualPixels(mixed).reason).toBe('AMBIGUOUS_MULTICOLOR_PAINT');
+ });
+ it('rejects distributed image noise instead of granting a pass to the extreme pixel',()=>{
+  const {pixels}=image();for(let offset=0;offset<pixels.data.length;offset+=4)pixels.data.set([(offset*7)%256,(offset*13)%256,(offset*23)%256,255],offset);
+  expect(inspectAdminVisualPixels(pixels)).toMatchObject({status:'ambiguous',passed:false,reason:'NO_DOMINANT_BACKGROUND'});
+ });
+ it('rejects a dark background stop that resembles an antialias shade instead of certifying only the dominant white stop',()=>{
+  const canvas=createCanvas(100,20),context=canvas.getContext('2d');context.fillStyle='#fff';context.fillRect(0,0,100,20);context.fillStyle='#555';context.fillRect(70,0,30,20);context.fillStyle='#000';context.fillRect(10,4,8,12);context.fillRect(80,4,8,12);
+  expect(inspectAdminVisualPixels(context.getImageData(0,0,100,20))).toMatchObject({passed:false,status:'ambiguous',reason:'AMBIGUOUS_BACKGROUND_PERIMETER'});
+ });
+ it('reports undecodable PNG as ambiguous with its original byte hash',async()=>{expect(await inspectAdminVisualPng(Buffer.from('invalid'))).toMatchObject({passed:false,reason:'PNG_DECODE_FAILED',sha256:createHash('sha256').update('invalid').digest('hex')});});
+});
+
+describe('Node adapter retains the original unknown and only accepts direct evidence',()=>{
+ it('captures only measured text rectangles after preparation and restores the scroll',async()=>{
+  const page=fakePage(),evidenceDir=await directory(),raw=accessibility(),result=await collectAdminVisualEvidence(page,{evidenceDir,caseId:'synthetic',accessibility:raw});
+  expect(result.accessibility.incomplete).toEqual([]);expect(result.accessibility.originalIncomplete).toEqual(raw.originalIncomplete);expect(raw.incomplete).toHaveLength(1);
+  expect(page.send).toHaveBeenCalledWith('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false,clip:{...rect,scale:1}});expect(page.screenshot).not.toHaveBeenCalled();expect(page.evaluate.mock.calls.at(-1)?.[1]).toMatchObject({action:'restore'});
+  const proof=result.accessibility.remeasurements[0];expect(()=>assertAdminVisualDirectEvidence(result.accessibility)).not.toThrow();
+  expect(createHash('sha256').update(await readFile(join(evidenceDir,proof.images[0].file))).digest('hex')).toBe(proof.images[0].sha256);
+ });
+ it('captures document DIP geometry at native150% with actual PNG dimensions and immutable Range proof',async()=>{
+  const canvas=createCanvas(150,30),context=canvas.getContext('2d');context.fillStyle='#fff';context.fillRect(0,0,150,30);context.fillStyle='#000';context.fillRect(15,6,8,18);const png=canvas.toBuffer('image/png'),page=fakePage(png);
+  page.evaluate.mockImplementation(async(_fn:unknown,args:{action?:string})=>args.action==='restore'?{restored:true}:structuredClone({...prepared,dpr:1.5}));
+  page.send.mockImplementation(async(method:string)=>method==='Page.getLayoutMetrics'?{cssVisualViewport:{pageX:0,pageY:862,clientWidth:260,clientHeight:562,zoom:1.5,scale:1}}:method==='Page.captureScreenshot'?{data:png.toString('base64')}:{});
+  const result=await collectAdminVisualEvidence(page,{evidenceDir:await directory(),caseId:'native-unit',accessibility:accessibility()}),proof=result.accessibility.remeasurements[0];
+  expect(proof).toMatchObject({resolved:true,captureMethod:'CDP_DIP_TEXT_RANGE_PNG',fullyVisibleBeforeRun:true,fullyVisibleAfterRun:true,images:[{width:150,height:30,dpr:1.5,captureGeometry:{clip:{x:15,y:1308,width:150,height:30,scale:1},cssVisualViewport:{pageY:862,zoom:1.5}}}]});
+  expect(()=>assertAdminVisualDirectEvidence(result.accessibility)).not.toThrow();expect(page.screenshot).not.toHaveBeenCalled();
+  const original=proof.images[0].captureGeometry;proof.images[0].captureGeometry={...original,clip:{...original.clip,y:15}};expect(()=>assertAdminVisualDirectEvidence(result.accessibility)).toThrow('DIP_GEOMETRY_REQUIRED');
+ });
+ it('fails a low contrast crop without converting an unknown to a pass',async()=>{
+  const result=await collectAdminVisualEvidence(fakePage(image('#aaa').png),{evidenceDir:await directory(),caseId:'synthetic',accessibility:accessibility()});
+  expect(result.accessibility.incomplete).toHaveLength(1);expect(result.evidence[0]).toMatchObject({resolved:false,reason:'PIXEL_CONTRAST_NOT_PROVEN'});expect(()=>assertAdminVisualDirectEvidence(result.accessibility)).toThrow();
+ });
+ it.each(['target-clipped','moved-after-capture'])('does not accept %s geometry',async(kind)=>{
+  const page=fakePage();if(kind==='target-clipped')page.evaluate.mockResolvedValueOnce({...prepared,ready:false,reason:'TEXT_NOT_FULLY_VISIBLE'});else page.evaluate.mockResolvedValueOnce(prepared).mockResolvedValueOnce({...prepared,rects:[{...rect,x:11}]});
+  const result=await collectAdminVisualEvidence(page,{evidenceDir:await directory(),caseId:'synthetic',accessibility:accessibility()});expect(result.accessibility.incomplete).toHaveLength(1);expect(result.evidence[0].resolved).toBe(false);
+ });
+ it('reads the exact live AX node name via CDP without deriving it from DOM labels',async()=>{
+  const page=fakePage(),raw=accessibility('label-content-name-mismatch'),result=await collectAdminVisualEvidence(page,{evidenceDir:await directory(),caseId:'synthetic',accessibility:raw});
+  expect(result.accessibility.incomplete).toEqual([]);expect(page.send).toHaveBeenCalledWith('Accessibility.getPartialAXTree',{nodeId:2,fetchRelatives:false});expect(page.detach).toHaveBeenCalled();expect(page.screenshot).not.toHaveBeenCalled();expect(()=>assertAdminVisualDirectEvidence(result.accessibility)).not.toThrow();
+ });
+ it('offers a direct AX regression probe without manufacturing an axe result',async()=>{
+  const proof=await collectAdminVisualAxLabelEvidence(fakePage(),{selector:'#target',caseId:'synthetic'});expect(()=>assertAdminVisualAxNameProof(proof)).not.toThrow();
+ });
+ it('keeps a name containing the visible label later in the name unresolved',async()=>{
+  const result=await collectAdminVisualEvidence(fakePage(undefined,'Change language EN'),{evidenceDir:await directory(),caseId:'synthetic',accessibility:accessibility('label-content-name-mismatch')});expect(result.accessibility.incomplete).toHaveLength(1);
+ });
+ it('cannot use an ancestor or ignored AX node as the target name',async()=>{
+  const page=fakePage();page.send.mockImplementation(async(method:string)=>method==='DOM.getDocument'?{root:{nodeId:1}}:method==='DOM.querySelector'?{nodeId:2}:method==='DOM.describeNode'?{node:{backendNodeId:3}}:{nodes:[{backendDOMNodeId:4,ignored:false,name:{value:'EN — Change language'}}]});
+  const result=await collectAdminVisualEvidence(page,{evidenceDir:await directory(),caseId:'synthetic',accessibility:accessibility('label-content-name-mismatch')});expect(result.accessibility.incomplete).toHaveLength(1);
+ });
+ it('never processes other axe unknowns, frame targets or actual violations',async()=>{
+  const raw=accessibility();raw.incomplete.push(unknown('scrollable-region-focusable'));raw.originalIncomplete.push(unknown('scrollable-region-focusable'));raw.violations.push(unknown() as never);
+  const page=fakePage(),result=await collectAdminVisualEvidence(page,{evidenceDir:await directory(),caseId:'synthetic',accessibility:raw});expect(result.accessibility.violations).toEqual(raw.violations);expect(result.accessibility.incomplete).toEqual(raw.incomplete);expect(page.screenshot).not.toHaveBeenCalled();
+  const frame=accessibility();frame.incomplete[0].nodes[0].target=['iframe','#target'];const framed=await collectAdminVisualEvidence(page,{evidenceDir:await directory(),caseId:'synthetic',accessibility:frame});expect(framed.accessibility.incomplete).toEqual(frame.incomplete);
+ });
+ it('bridges only scanner color text unknowns and preserves their original issue',async()=>{
+  const raw=scanner(),result=await collectAdminVisualEvidence(fakePage(),{evidenceDir:await directory(),caseId:'synthetic',scanner:raw});expect(result.scanner).toMatchObject({indeterminate:[],originalIndeterminate:raw.indeterminate,compliant:true,shouldFail:false});expect(()=>assertAdminVisualScanEvidence(result.scanner)).not.toThrow();expect(raw.indeterminate).toHaveLength(1);
+  const unsupported=await collectAdminVisualEvidence(fakePage(),{evidenceDir:await directory(),caseId:'synthetic',scanner:scanner('TEXT_OVERLAP')});expect(unsupported.scanner.indeterminate).toHaveLength(1);
+ });
+ it('does not use text pixels for unknown nontext boundaries or missing issue kind',async()=>{
+  const raw=scanner();raw.indeterminate[0].contrastKind='nontext';raw.indeterminate[0].minimum=3;
+  const page=fakePage(),result=await collectAdminVisualEvidence(page,{evidenceDir:await directory(),caseId:'synthetic',scanner:raw});expect(result.scanner.indeterminate).toHaveLength(1);expect(page.screenshot).not.toHaveBeenCalled();
+ });
+});
+
+describe('serialized real browser text-range guard (synthetic DOM unit geometry)',()=>{
+ let element:HTMLElement,frames:number,finished:ReturnType<typeof vi.fn>;
+ const bounds=(x=10,y=10,width=120,height=40)=>({x,y,width,height,left:x,top:y,right:x+width,bottom:y+height});
+ beforeEach(()=>{
+  document.body.innerHTML='<main class="admin-app"><div id="panel"><button id="target"><span>EN</span><span class="sr-only">Hidden accessible text</span></button></div></main>';
+  element=document.getElementById('target')!;frames=0;finished=vi.fn(async()=>{});
+  vi.stubGlobal('innerWidth',800);vi.stubGlobal('innerHeight',600);vi.stubGlobal('devicePixelRatio',1.5);
+  vi.stubGlobal('requestAnimationFrame',(callback:FrameRequestCallback)=>{frames++;callback(0);return frames;});
+  vi.stubGlobal('getComputedStyle',(node:Element)=>({display:'block',visibility:'visible',opacity:'1',overflowX:'visible',overflowY:'visible',borderLeftWidth:'0',borderRightWidth:'0',borderTopWidth:'0',borderBottomWidth:'0',clip:node.classList.contains('sr-only')?'rect(0px, 0px, 0px, 0px)':'auto',clipPath:'none',content:'none'}));
+  Object.defineProperty(document,'fonts',{configurable:true,value:{ready:Promise.resolve()}});
+  Object.defineProperty(document,'getAnimations',{configurable:true,value:()=>[{playState:'finished',pending:false,effect:{getTiming:()=>({iterations:1})},get finished(){return finished();}},{effect:{getTiming:()=>({iterations:Infinity})},get finished(){throw new Error('Infinite animation must not be awaited');}}]});
+  Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:()=>[element]});
+  Object.defineProperty(window,'scrollTo',{configurable:true,value:vi.fn()});
+  vi.spyOn(Element.prototype,'getBoundingClientRect').mockImplementation(()=>bounds() as DOMRect);
+  Object.defineProperty(element,'scrollIntoView',{configurable:true,value:vi.fn()});
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,20,100,20)]});
+ });
+ it('serializes without module closures, centers, waits fonts/finite motion/two frames and reports only painted text',async()=>{
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)(),proof=await standalone({selector:'#target',action:'prepare'});
+  expect(proof).toMatchObject({ready:true,visibleText:'EN',rects:[{x:20,y:20,width:100,height:20}],dpr:1.5,paint:{fontsReady:true,finiteAnimationsSettled:true,framesAfter:2}});
+  expect(element.scrollIntoView).toHaveBeenCalledWith({block:'center',inline:'center',behavior:'instant'});expect(finished).not.toHaveBeenCalled();expect(frames).toBe(3);
+ });
+ it('retains actual text clipping, overlays, ambiguous selectors and targets outside active scope',async()=>{
+  const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element)=>({...style(node),overflowY:node.id==='panel'?'hidden':'visible'}));
+  vi.spyOn(document.getElementById('panel')!,'getBoundingClientRect').mockReturnValue(bounds(10,10,120,10) as DOMRect);
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TARGET_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'ANCESTOR_CLIPPING_Y',ancestorTag:'DIV',overflowY:'hidden',ancestorRect:{height:10},rect:{height:40}}});
+  expect(await measureAdminVisualEvidenceTarget({selector:'span'})).toMatchObject({ready:false,reason:'EXACT_TARGET_REQUIRED'});
+  expect(await measureAdminVisualEvidenceTarget({selector:'body'})).toMatchObject({ready:false,reason:'TARGET_OUTSIDE_ACTIVE_SCOPE'});
+ });
+ it('rejects an independent overlay even if the text rectangle fits in the viewport',async()=>{
+  Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:()=>[document.body,element]});expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TARGET_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'HIT_TARGET_NOT_OWNED',targetTag:'BUTTON',hitTopTag:'BODY',point:{x:70,y:30}}});
+ });
+ it('reports the exact failed text Range rather than the still-visible control box',async()=>{
+  const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element)=>({...style(node),overflowY:node.id==='panel'?'auto':'visible'}));
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,9,100,25.5)]});
+  const measured=await measureAdminVisualEvidenceTarget({selector:'#target'});
+  expect(measured).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'ANCESTOR_CLIPPING_Y',targetTag:'BUTTON',nodeTag:'SPAN',ancestorTag:'DIV',rect:{x:20,y:9,width:100,height:25.5},ancestorRect:{x:10,y:10,width:120,height:40}}});
+  expect(JSON.stringify(measured.visibilityDiagnostic)).not.toContain('Hidden accessible text');expect(JSON.stringify(measured.visibilityDiagnostic)).not.toContain('#target');
+ });
+ it('accepts a visible bordered own box but still rejects text clipped by that same box',async()=>{
+  const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element)=>({...style(node),...(node===element?{overflowX:'auto',overflowY:'auto',borderLeftWidth:'1px',borderRightWidth:'1px',borderTopWidth:'1px',borderBottomWidth:'1px'}:{})}));
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:true,rects:[{x:20,y:20,width:100,height:20}]});
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,10,100,25.5)]});
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'ANCESTOR_CLIPPING_Y',ancestorTag:'BUTTON',borders:{top:1,bottom:1},rect:{y:10,height:25.5}}});
+ });
+ it('checks border-box owner inside actual borders while keeping every text Range hit strict',async()=>{
+  const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element)=>({...style(node),...(node===element?{borderLeftWidth:'1px',borderRightWidth:'1px',borderTopWidth:'1px',borderBottomWidth:'1px'}:{})}));
+  Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:(x:number,y:number)=>x<11||x>129||y<11||y>49?[element.parentElement!]:[element]});
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:true});
+  Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:(x:number,y:number)=>x===70&&y===20.1?[element.parentElement!]:[element]});
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'HIT_TARGET_NOT_OWNED',point:{x:70,y:20.1},hitTopTag:'DIV'}});
+ });
+ it('captures painted multiline PRE text while ignoring only zero-area newline fragments',async()=>{
+  const pre=document.createElement('pre');pre.id='target';pre.textContent='{"key":\n"value"}\n';element.replaceWith(pre);element=pre;Object.defineProperty(pre,'scrollIntoView',{configurable:true,value:vi.fn()});
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){return this.startOffset===0?[bounds(20,15,60,14),bounds(80,15,0,14)]:[bounds(20,30,80,14),bounds(100,30,0,14),bounds(20,44,10,0)];}});
+  const measured=await measureAdminVisualEvidenceTarget({selector:'#target'});expect(measured).toMatchObject({ready:true,visibleText:'{"key":\n"value"}\n',rects:[{x:20,y:15,width:60,height:14},{x:20,y:30,width:80,height:14}]});
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,15,0,14)]});
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'TEXT_RANGE_MISSING'}});
+  for(const width of [-1,NaN]){Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,15,60,14),bounds(20,30,width,14)]});expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'EMPTY_RECT'}});}
+ });
+ it('uses exact nonempty PRE source-line offsets, excluding positive-width indentation crops',async()=>{
+  const source='{\r\n  "component": "Drawer",  \r\n \t \r\n  "demo": true \n}\n',pre=document.createElement('pre');pre.id='target';pre.textContent=source;element.replaceWith(pre);element=pre;
+  const captured:Array<{start:number;end:number;text:string}>=[];
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){
+   const text=this.toString();captured.push({start:this.startOffset,end:this.endOffset,text});
+   if(text===source)return [bounds(20,12,9,7),bounds(20,20,18,7),bounds(38,20,90,7),bounds(20,28,18,7),bounds(38,28,60,7),bounds(20,36,9,7)];
+   const index=['{','"component": "Drawer",','"demo": true','}'].indexOf(text);return index<0?[bounds(20,20,18,7)]:[bounds(20,index*8+12,index===0||index===3?9:80,7)];
+  }});
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)(),proof=await standalone({selector:'#target'});
+  expect(proof).toMatchObject({ready:true,visibleText:source,rects:[{x:20,y:12,width:9,height:7},{x:20,y:20,width:80,height:7},{x:20,y:28,width:80,height:7},{x:20,y:36,width:9,height:7}]});
+  expect(captured.map(row=>row.text)).toEqual(['{','"component": "Drawer",','"demo": true','}']);
+  for(const match of source.matchAll(/\S/gu))expect(captured.some(row=>row.start<=match.index!&&row.end>match.index!)).toBe(true);
+  for(const row of captured){expect(source.slice(row.start,row.end)).toBe(row.text);expect(row.text).toBe(row.text.trim());}
+ });
+ it('preserves internal spaces and every wrapped bidi rectangle after trimming only source-line edges',async()=>{
+  const source='  اكتب abc123 للتأكيد  ',text=element.querySelector('span')!.firstChild!;text.textContent=source;
+  const captured:string[]=[];
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){captured.push(this.toString());return[bounds(20,12,20,12),bounds(40,12,30,12),bounds(70,12,20,12),bounds(20,27,35,12),bounds(55,27,0,12)];}});
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)(),proof=await standalone({selector:'#target'});
+  expect(proof).toMatchObject({ready:true,visibleText:source,rects:[{x:20,y:12,width:20,height:12},{x:40,y:12,width:30,height:12},{x:70,y:12,width:20,height:12},{x:20,y:27,width:35,height:12}]});
+  expect(captured[0]).toBe('اكتب abc123 للتأكيد');expect(captured.slice(1)).toEqual([...source.trim()].filter(codepoint=>/\S/u.test(codepoint)));
+ });
+ it('never discards a nonempty brace whose source-line range has missing paint geometry',async()=>{
+  const pre=document.createElement('pre');pre.id='target';pre.textContent='{\n  "demo": true\n}\n';element.replaceWith(pre);element=pre;
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){return this.toString()==='}'?[bounds(20,35,0,7)]:[bounds(20,this.toString()==='{'?12:23,80,7)];}});
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)();
+  expect(await standalone({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'TEXT_RANGE_MISSING'}});
+ });
+ it('omits a wrapped internal-space rectangle only through exact nonwhitespace codepoint membership',async()=>{
+  const source='ab 😀 عَ cd',text=element.querySelector('span')!.firstChild!;text.textContent=source;
+  const parts=[bounds(20,12,20,8),bounds(40,12,10.203125,8),bounds(20,24,30,8),bounds(50,24,10,8),bounds(60,24,20,8)],offsets:Array<[number,number]>=[];
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){
+   if(this.startOffset===0&&this.endOffset===source.length)return parts;
+   offsets.push([this.startOffset,this.endOffset]);
+   if(this.startOffset<2)return[bounds(20+this.startOffset*10,12,10,8)];
+   if(this.startOffset===3)return[bounds(20,24,10,8)];
+   if(this.startOffset===6||this.startOffset===7)return[bounds(40,24,10,8)];
+   return[bounds(60+(this.startOffset-9)*10,24,10,8)];
+  }});
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)(),proof=await standalone({selector:'#target'});
+  expect(proof).toMatchObject({ready:true,visibleText:source,rects:[{x:20,y:12,width:20,height:8},{x:20,y:24,width:30,height:8},{x:60,y:24,width:20,height:8}]});
+  expect(offsets).toEqual([[0,1],[1,2],[3,5],[6,7],[7,8],[9,10],[10,11]]);
+ });
+ it.each(['missing','outside','invalid'])('fails closed for %s nonwhitespace membership geometry rather than dropping its crop',async(mode)=>{
+  const text=element.querySelector('span')!.firstChild!;text.textContent='a b';
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){
+   if(this.endOffset-this.startOffset===3)return[bounds(20,12,10,8),bounds(30,12,10,8),bounds(20,24,10,8)];
+   if(this.startOffset===0)return[bounds(20,12,10,8)];
+   return mode==='missing'?[]:mode==='outside'?[bounds(70,24,10,8)]:[bounds(20,24,NaN,8)];
+  }});
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)();expect(await standalone({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE'});
+ });
+ it('keeps a nonwhitespace brace-only fragment even beside a wrapped-space fragment',async()=>{
+  const text=element.querySelector('span')!.firstChild!;text.textContent='a }';
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){return this.endOffset-this.startOffset===3?[bounds(20,12,10,8),bounds(30,12,10,8),bounds(20,24,9,8)]:[bounds(20,this.startOffset===0?12:24,this.startOffset===0?10:9,8)];}});
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)();expect(await standalone({selector:'#target'})).toMatchObject({ready:true,rects:[{x:20,y:12,width:10,height:8},{x:20,y:24,width:9,height:8}]});
+ });
+ it('fails closed when borders leave no interior ownership rectangle',async()=>{
+  const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element)=>({...style(node),...(node===element?{borderLeftWidth:'60px',borderRightWidth:'60px'}:{})}));
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TARGET_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'HIT_CONTENT_RECT_EMPTY'}});
+ });
+ it('cannot crop generated or overlapping text as if it were ordinary glyph paint',async()=>{
+  const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element,pseudo?:string)=>({...style(node),content:pseudo?'"Badge"':'none'}));expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'GENERATED_VISIBLE_CONTENT'});
+ });
+ it('restores both window and ancestor scrolling from the recorded positions',async()=>{
+  await measureAdminVisualEvidenceTarget({selector:'#target',action:'restore',scrollState:{window:{left:5,top:6},parents:[{left:7,top:8}]}});expect(document.getElementById('panel')!.scrollTop).toBe(8);expect(window.scrollTo).toHaveBeenCalledWith({left:5,top:6,behavior:'instant'});
+ });
+});
+
+describe('aggregate evidence cannot silently suppress unresolved findings',()=>{
+ it('normalizes NFC and Arabic harakat and requires the full visible prefix',()=>{
+  expect(normalizeAdminVisualLabel(' عَ   — تبديلُ اللغة ')).toBe('ع — تبديل اللغة');
+  const proof={resolved:true,reason:'DIRECT_AX_VISIBLE_LABEL_PREFIX',fullyVisibleBeforeRun:true,fullyVisibleAfterRun:true,visibleText:'عَ',normalizedVisibleText:'ع',normalizedAccessibleName:'ع — تبديل اللغة',ax:{method:'CDP.Accessibility.getPartialAXTree',nodeId:2,backendDOMNodeId:3,ignored:false,accessibleName:'عَ — تبديلُ اللغة'}};
+  expect(()=>assertAdminVisualAxNameProof(proof)).not.toThrow();expect(()=>assertAdminVisualAxNameProof({...proof,ax:{...proof.ax,method:'DOM.ariaLabel'}})).toThrow();
+ });
+ it('accepts the original strict exact-node axe pass without changing its threshold',()=>{
+  const result={...accessibility(),incomplete:[],remeasurements:[{target,resolved:true,reason:'EXACT_VISIBLE_CONTRAST_PASS',fullyVisibleBeforeRun:true,fullyVisibleAfterRun:true,violations:[],incomplete:[],passTargets:[target]}]};expect(()=>assertAdminVisualDirectEvidence(result)).not.toThrow();
+  result.remeasurements[0].passTargets=[['#descendant']];expect(()=>assertAdminVisualDirectEvidence(result)).toThrow();
+ });
+ it('rejects missing hash, inflated ratio, crop mismatch, and lowered thresholds',async()=>{
+  const result=await collectAdminVisualEvidence(fakePage(),{evidenceDir:await directory(),caseId:'synthetic',accessibility:accessibility()}),proof=result.evidence[0];
+  for(const change of [{sha256:''},{ratio:22},{minimum:3},{width:999},{antialiasSupportMethod:'COLLINEAR_ONLY'},{intermediatePixelsWithoutCore:Math.max(3,Math.ceil(proof.images[0].totalPixels*.002))}])expect(()=>assertAdminVisualPixelProof({...proof,images:[{...proof.images[0],...change}]})).toThrow();
+ });
+ it('requires proof for every original scanner unknown and other axe rules remain blockers',()=>{
+  const result={...scanner(),compliant:true,shouldFail:false,indeterminate:[],originalIndeterminate:scanner().indeterminate,pixelEvidence:[]};expect(()=>assertAdminVisualScanEvidence(result)).toThrow();
+  const axe={...accessibility('button-name'),incomplete:[]};expect(()=>assertAdminVisualDirectEvidence(axe)).toThrow('ADMIN_VISUAL_AXE_UNRESOLVED_RULE');
+ });
+});

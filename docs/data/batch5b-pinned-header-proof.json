@@ -1,0 +1,27 @@
+{
+  "measured_at": "2026-10-13T11:41:12.0715215Z",
+  "scope": "Actual read-only native Chromium at 1366x768 / 150 percent zoom",
+  "production": false,
+  "scrollY": 1636,
+  "banner_rect": {
+    "y": 0,
+    "height": 72
+  },
+  "app_button": {
+    "bottom": 57.666666984558105
+  },
+  "table_button": {
+    "bottom": 97.44791793823242,
+    "top": 53.44791793823242
+  },
+  "hit_test": {
+    "bottom": "Table sort button",
+    "top": "Opaque app HEADER, not table button",
+    "center": "Table sort button"
+  },
+  "visible_vertical_separation": 14.333333015441895,
+  "reported_false_layout_gap": 4.000038146972656,
+  "minimum_gap": 8,
+  "decision": "Independent app-banner/table-header regions only. Same header, same table and normal-flow controls remain at 8px.",
+  "timestamp_source": "Native probe artifact write time in UTC"
+}

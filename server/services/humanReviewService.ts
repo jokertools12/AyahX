@@ -69,7 +69,8 @@ export class HumanReviewService {
       const [row]=await tx.read('SELECT * FROM human_review_items WHERE id=? FOR UPDATE',[id]);if(!row)throw new CatalogError('REVIEW_NOT_FOUND',404);
       if(row.status===input.status&&row.notes===input.notes&&row.decided_by===actor.id&&canonicalAuditJson(jsonReviewValue(row.decision)??{})===canonicalAuditJson(input.decision??{}))return {changed:false};
       if(row.status!=='pending'&&row.status!=='deferred')throw new CatalogError('REVIEW_ALREADY_DECIDED',409);
-      if(input.status!=='deferred')await this.applyDecision(tx,actor,row,input);
+      const target={...row,subject_type:row.target_subject_type??row.subject_type,subject_id:row.target_subject_id??row.subject_id};
+      if(input.status!=='deferred')await this.applyDecision(tx,actor,target,input);
       await tx.execute('UPDATE human_review_items SET status=?,decided_by=?,decided_at=CURRENT_TIMESTAMP(3),notes=?,decision=? WHERE id=?',[input.status,actor.id,input.notes,JSON.stringify(input.decision??{}),id]);
       await appendCatalogAudit(tx,actor,'review.decide','human_review_item',id,{status:row.status,decision:jsonReviewValue(row.decision)??null},{...input,decision:input.decision??{},decided_by:actor.id});return {changed:true};
     });
@@ -101,6 +102,12 @@ export class HumanReviewService {
       if(input.status==='approved'){
         const reference=input.decision?.rights_evidence_ref;
         if(!['owner_permission','cc_licensed','own_content'].includes(String(input.decision?.rights_status))||typeof reference!=='string'||!reference.trim()||reference.length>2000)throw new CatalogError('RIGHTS_EVIDENCE_REQUIRED',422);
+      }
+      if(row.type==='youtube_rights'){
+        if(row.subject_type!=='recitation')throw new CatalogError('REVIEW_SUBJECT_INVALID',422);
+        const rights=input.status==='approved'?String(input.decision!.rights_status):'unknown',reference=String(input.decision?.rights_evidence_ref??'');
+        await tx.execute('UPDATE recitation_youtube_sources SET rights_status=?,rights_evidence_url=?,rights_evidence_note=? WHERE recitation_id=?',[rights,/^https:\/\//u.test(reference)?reference:null,input.notes,row.subject_id]);
+        await appendCatalogAudit(tx,actor,'recitation.youtube_rights','recitation',String(row.subject_id),null,{rights_status:rights,rights_evidence_ref:reference||null,notes:input.notes,review_item:row.id});
       }
     }
     // All other approvals record a human decision only. No hidden timing, rights,

@@ -1,0 +1,83 @@
+{
+  "observedAt": "2026-10-13T09:31:19.868Z",
+  "scope": "focused-first-viewport-not-matrix-acceptance",
+  "metrics": {
+    "viewport": 260,
+    "bodyWidth": 260,
+    "left": 32.66666793823242,
+    "right": 227.3333396911621,
+    "width": 194.6666717529297,
+    "minWidth": "0px",
+    "fieldGrid": "194.667px",
+    "dpr": 1.5
+  },
+  "scanner": {
+    "version": "admin-visual-1",
+    "mode": "strict",
+    "viewport": {
+      "width": 260,
+      "height": 563,
+      "devicePixelRatio": 1.5,
+      "touch": true
+    },
+    "thresholds": {
+      "baseFont": 15,
+      "tableFont": 14.5,
+      "secondaryFont": 13,
+      "absoluteFont": 12,
+      "arabicLineHeight": 1.7,
+      "desktopControl": 40,
+      "touchControl": 44,
+      "iconSize": 40,
+      "gap": 8,
+      "textContrast": 4.5,
+      "uiContrast": 3,
+      "comfortableRow": 52,
+      "compactRow": 44
+    },
+    "scanned": {
+      "textNodes": 8,
+      "controls": 8,
+      "tables": 0
+    },
+    "violations": [],
+    "indeterminate": [],
+    "compliant": true,
+    "shouldFail": false,
+    "limitations": [
+      "Viewport-only: scroll each document/container to inspect below-fold content.",
+      "Single-line ink uses matching browser font metrics; other DOM rectangles cannot certify glyph pixels, pseudo-elements, canvas, closed shadow roots or cross-origin frames.",
+      "Images, unsupported colors, opacity, filters and blends produce indeterminate contrast; strict mode fails until investigated.",
+      "Gradient stop contrast is conservative; bounding-box overlap needs screenshot review for intentional overlays.",
+      "Icon accessible-name checks are not a complete accessible-name algorithm; retain axe alongside this scanner."
+    ]
+  },
+  "ax": {
+    "selector": ".admin-topbar button[title=\"تغيير اللغة\"]",
+    "target": [
+      ".admin-topbar button[title=\"تغيير اللغة\"]"
+    ],
+    "ruleId": "label-content-name-mismatch",
+    "resolved": true,
+    "fullyVisibleBeforeRun": true,
+    "fullyVisibleAfterRun": true,
+    "reason": "DIRECT_AX_VISIBLE_LABEL_PREFIX",
+    "paint": {
+      "fontsReady": true,
+      "finiteAnimationsSettled": true,
+      "framesAfter": 2
+    },
+    "visibleText": "EN",
+    "ax": {
+      "method": "CDP.Accessibility.getPartialAXTree",
+      "nodeId": 23,
+      "backendDOMNodeId": 160,
+      "ignored": false,
+      "accessibleName": "EN — تغيير اللغة"
+    },
+    "normalizedVisibleText": "EN",
+    "normalizedAccessibleName": "EN — تغيير اللغة"
+  },
+  "blockedWrites": 0,
+  "passed": true
+}

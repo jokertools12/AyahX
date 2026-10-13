@@ -1,0 +1,295 @@
+{
+  "diagnostic": true,
+  "production": false,
+  "cases": [
+    {
+      "variant": {
+        "font": 15,
+        "line": 1.7,
+        "weight": 600
+      },
+      "computed": {
+        "font": "15px",
+        "line": "25.5px",
+        "weight": "600",
+        "rect": {
+          "x": 24,
+          "y": 170,
+          "width": 975.5,
+          "height": 136,
+          "top": 170,
+          "right": 999.5,
+          "bottom": 306,
+          "left": 24
+        }
+      },
+      "violations": [],
+      "incomplete": [],
+      "proofs": []
+    },
+    {
+      "variant": {
+        "font": 16,
+        "line": 2,
+        "weight": 600
+      },
+      "computed": {
+        "font": "16px",
+        "line": "32px",
+        "weight": "600",
+        "rect": {
+          "x": 24,
+          "y": 170,
+          "width": 975.5,
+          "height": 162,
+          "top": 170,
+          "right": 999.5,
+          "bottom": 332,
+          "left": 24
+        }
+      },
+      "violations": [],
+      "incomplete": [],
+      "proofs": [
+        {
+          "resolved": true,
+          "reason": "PIXEL_VISIBLE_CONTRAST_PASS",
+          "images": [
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "f9a8b4434d3b5f50d19028b7f9011cbf9a418a21d4cb40524f1bce84323f49f9",
+              "intermediate": 0,
+              "rect": {
+                "x": 41,
+                "y": 193,
+                "width": 8.796875,
+                "height": 19
+              },
+              "file": "9c428d905b473dbba9165998034463ee67f3cdfc9eb788ed100fd0f6b57eb76c.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "3edcddaeec84923268058590b28eb1bb068e5e8b733754dbce521e6cbedf8d2b",
+              "intermediate": 0,
+              "rect": {
+                "x": 58.59375,
+                "y": 225,
+                "width": 193.53125,
+                "height": 19
+              },
+              "file": "a1f02cdaba0f2a027b1d68662b0ee5236d56b674564d74be26f8be60c9d43129.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "87aed1a3ac037f2ef4aa3f90821307c0a3299ac57e72e47d847676de2a622259",
+              "intermediate": 0,
+              "rect": {
+                "x": 58.59375,
+                "y": 257,
+                "width": 105.5625,
+                "height": 19
+              },
+              "file": "29dac291ff24d0ce217395483aab4ee1f32b537a85a76f25fd077355d8964210.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "fedce0c60e1908aa0ed98d17efa255344518f5f8824fd057f960a65d1cd69270",
+              "intermediate": 0,
+              "rect": {
+                "x": 41,
+                "y": 289,
+                "width": 8.796875,
+                "height": 19
+              },
+              "file": "5a1442c3ec0d2f84bc822b163fdb0ad12e168cd7d833002298a7d89c71051ddd.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": {
+        "font": 16,
+        "line": 2,
+        "weight": 700
+      },
+      "computed": {
+        "font": "16px",
+        "line": "32px",
+        "weight": "700",
+        "rect": {
+          "x": 24,
+          "y": 170,
+          "width": 975.5,
+          "height": 162,
+          "top": 170,
+          "right": 999.5,
+          "bottom": 332,
+          "left": 24
+        }
+      },
+      "violations": [],
+      "incomplete": [],
+      "proofs": [
+        {
+          "resolved": true,
+          "reason": "PIXEL_VISIBLE_CONTRAST_PASS",
+          "images": [
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "f9a8b4434d3b5f50d19028b7f9011cbf9a418a21d4cb40524f1bce84323f49f9",
+              "intermediate": 0,
+              "rect": {
+                "x": 41,
+                "y": 193,
+                "width": 8.796875,
+                "height": 19
+              },
+              "file": "63da4e12c5d41a85e71356135623175b5ccf6507cb8ea29e7c68843ca8801d27.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "3edcddaeec84923268058590b28eb1bb068e5e8b733754dbce521e6cbedf8d2b",
+              "intermediate": 0,
+              "rect": {
+                "x": 58.59375,
+                "y": 225,
+                "width": 193.53125,
+                "height": 19
+              },
+              "file": "76e6d8b2fb1490dc75d4f0ef5cad76db1510c4e4155c9f0fd7d786bd481c5d9f.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "87aed1a3ac037f2ef4aa3f90821307c0a3299ac57e72e47d847676de2a622259",
+              "intermediate": 0,
+              "rect": {
+                "x": 58.59375,
+                "y": 257,
+                "width": 105.5625,
+                "height": 19
+              },
+              "file": "3e297506ff99983a4b05cbcb4ad7d7196815a7cdf9b11f14f28a18ce4f75b965.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "fedce0c60e1908aa0ed98d17efa255344518f5f8824fd057f960a65d1cd69270",
+              "intermediate": 0,
+              "rect": {
+                "x": 41,
+                "y": 289,
+                "width": 8.796875,
+                "height": 19
+              },
+              "file": "8770c55825c0b6678538b78a2c34082e197bc9e84d6fd3861c97e4ff0bd31dcc.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "variant": {
+        "font": 17,
+        "line": 2,
+        "weight": 600
+      },
+      "computed": {
+        "font": "17px",
+        "line": "34px",
+        "weight": "600",
+        "rect": {
+          "x": 24,
+          "y": 170,
+          "width": 975.5,
+          "height": 170,
+          "top": 170,
+          "right": 999.5,
+          "bottom": 340,
+          "left": 24
+        }
+      },
+      "violations": [],
+      "incomplete": [],
+      "proofs": [
+        {
+          "resolved": true,
+          "reason": "PIXEL_VISIBLE_CONTRAST_PASS",
+          "images": [
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "8986bb1c24a61c680373ddd30761de3b38e1a1f51d92064a2346c27a4be5b0df",
+              "intermediate": 0,
+              "rect": {
+                "x": 41,
+                "y": 194,
+                "width": 9.359375,
+                "height": 20
+              },
+              "file": "7b1c67e360c7cdde231785bd7760ab1e3ea3390937219752fdb40cf65b337417.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "29d214b5057a12ee14f2ab72aeae3dac0a374794c6cc1ff264f3a92854a9b25c",
+              "intermediate": 0,
+              "rect": {
+                "x": 59.703125,
+                "y": 228,
+                "width": 205.640625,
+                "height": 20
+              },
+              "file": "0850c5e439ffa11c8f023938c254804ac843b9776bc9d4f01a3bbc93a8ccbfb9.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "bb5aca983345297802a7b7aa1eeaaf594f64abb8b110968da138bbf7a21afd68",
+              "intermediate": 0,
+              "rect": {
+                "x": 59.703125,
+                "y": 262,
+                "width": 112.171875,
+                "height": 20
+              },
+              "file": "2350d40e763e0a3d1f687159516455ef8fbce2d549940b649fed4b8924838786.png"
+            },
+            {
+              "status": "pass",
+              "reason": "PIXEL_CONTRAST_PASS",
+              "ratio": 12.00510726788608,
+              "sha256": "931bbbf642522a09089044a48f21bf36e542e199d0bda7f89f7bdce8a3c13e18",
+              "intermediate": 0,
+              "rect": {
+                "x": 41,
+                "y": 296,
+                "width": 9.359375,
+                "height": 20
+              },
+              "file": "c3a0fd4f2bd1fb1883496365440008929112f7d2aeef4aa2b2b262f231b3c900.png"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

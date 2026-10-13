@@ -1,3 +1,11 @@
+# Batch5 visual acceptance stop — 2026-10-13
+
+The2176-case strict visual gate remains failed/incomplete after more than3 diagnoses; user stop protocol applied. Partial sharded runs49/62/80 cases with17/7/25 failures are preserved privately. No production008,merge,deploy,D5 orD8. PR24 stays draft. Local single-runM1–M12 and actualR2 lost-completion-response acceptance passed with cleanup; they do not substitute for production read-only acceptance or full visual proof. Last local full suite1215pass/11skip; current published source headefbdd974 has Catalog quality andAyahX E2E SUCCESS. No hostedAdmin visual strict result observed. Scoped137-filelint0new/16old,admin84roots/projecttypes/build PASS; gzip public+0.622%,adminmax216680B. Exact39-known-secret scan0new leaks;3unchanged historicalmatches. [Arabic stop report](docs/data/batch5-visual-stop-report.ar.md),[proof](docs/data/batch5-visual-stop-proof.json).
+
+# الدفعة 5 — قبول محلي جارٍ، 2026-10-13
+
+مهام م1–م12 فعلية محليًا ضمن الميزانيات؛ full-runثم إعادةم11 المحددة، والفشل الأصلي محفوظ. بروفة008:9/9 علىMySQL9.7.2+Redisفعليين، وثبات640مراجعة والجداول بعد التنظيف. ريندرUIحقيقيSkia16.2s/779844B،رفعR2multipartمملوك،وCORSمستعادة. آخرsuite1157pass/11skip/0fail؛tsc/admin83جذر/lint/buildناجحة. Lighthouseللصفحات الثلاث100accessibility/100bestPractices،وأقصىCLS0.023272. الحزمةالعامة+0.626% وأكبرadmin216337B. المصفوفة1792حالةوالنوافذ والقبول الإنتاجي والشحن قيدالعمل؛لا إغلاق أو نشرمدّعى. [الدليل](docs/data/batch5-local-status.ar.md).
+
 # الدفعة 3 — A1 + A2a، 2026-10-11
 
 مكتمل مع بوابات النشر المثبتة. [التقرير الحالي](docs/data/a1-a2a-report.ar.md)، [migration006 الإنتاجية](docs/data/a1-production-migration-proof.json)، [مراجعة الواجهة والصور](docs/admin-ui-review.md). 1009اختبار ناجح/11متخطى،20E2Eوظيفي،56axeحالة؛D1/D3ثابتان،صلاحيتا الأدمنترقّتا دون مس بياناتهما؛catalogOFF،stagingمتوقفة.

@@ -1,0 +1,164 @@
+{
+  "scope": "local-production-build",
+  "observedAt": "2026-10-13T05:40:44.290Z",
+  "lighthouseVersion": "13.5.0",
+  "chromeVersion": "Chrome/149.0.7827.55",
+  "settings": {
+    "formFactor": "desktop",
+    "disableStorageReset": true,
+    "authentication": "HttpOnly SameSiteStrict cookie scoped to local hostname /api/admin",
+    "rawArtifactsPersisted": false
+  },
+  "thresholds": {
+    "accessibility": 95,
+    "bestPractices": 95,
+    "cls": 0.1
+  },
+  "pages": [
+    {
+      "path": "/admin",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.01141509640398936,
+      "lcpMs": 532.872575,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "label-content-name-mismatch",
+          "score": 0,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true
+    },
+    {
+      "path": "/admin/reciters",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.02327164373724081,
+      "lcpMs": 481.45535000000007,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "label-content-name-mismatch",
+          "score": 0,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true
+    },
+    {
+      "path": "/admin/settings",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.011415633426433397,
+      "lcpMs": 482.4048,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "label-content-name-mismatch",
+          "score": 0,
+          "scoreDisplayMode": "binary"
+        },
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

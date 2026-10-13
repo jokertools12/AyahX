@@ -1,0 +1,5139 @@
+{
+  "version": "admin-visual-ci-all-2",
+  "acceptanceScope": "complete-launch-matrix",
+  "mode": "strict",
+  "tier": "tier1",
+  "startedAt": "2026-10-13T12:42:50.255Z",
+  "passed": true,
+  "shards": [
+    {
+      "index": 0,
+      "exitCode": 0,
+      "shardComplete": true,
+      "cases": 100
+    },
+    {
+      "index": 1,
+      "exitCode": 0,
+      "shardComplete": true,
+      "cases": 95
+    }
+  ],
+  "partialReports": [
+    {
+      "index": 0,
+      "expectedCases": 100,
+      "measuredCases": 100,
+      "failedCases": 0,
+      "phase": "finished",
+      "shardComplete": true,
+      "failure": null
+    },
+    {
+      "index": 1,
+      "expectedCases": 95,
+      "measuredCases": 95,
+      "failedCases": 0,
+      "phase": "finished",
+      "shardComplete": true,
+      "failure": null
+    }
+  ],
+  "routeInventory": [
+    {
+      "pattern": "",
+      "path": "/admin"
+    },
+    {
+      "pattern": "reviews",
+      "path": "/admin/reviews"
+    },
+    {
+      "pattern": "reviews/:id",
+      "path": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49"
+    },
+    {
+      "pattern": "listening",
+      "path": "/admin/listening"
+    },
+    {
+      "pattern": "listening/:id",
+      "path": "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793"
+    },
+    {
+      "pattern": "provider-licenses",
+      "path": "/admin/provider-licenses"
+    },
+    {
+      "pattern": "labels",
+      "path": "/admin/labels"
+    },
+    {
+      "pattern": "launch",
+      "path": "/admin/launch"
+    },
+    {
+      "pattern": "project",
+      "path": "/admin/project"
+    },
+    {
+      "pattern": "help",
+      "path": "/admin/help"
+    },
+    {
+      "pattern": "storage",
+      "path": "/admin/storage"
+    },
+    {
+      "pattern": "licensed-audio",
+      "path": "/admin/licensed-audio"
+    },
+    {
+      "pattern": "licensed-audio/:id",
+      "path": "/admin/licensed-audio/8292803a-aacc-4d3e-8767-261fd42b2b7a"
+    },
+    {
+      "pattern": "reciter-wizard",
+      "path": "/admin/reciter-wizard"
+    },
+    {
+      "pattern": "render-lab",
+      "path": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e"
+    },
+    {
+      "pattern": "roles",
+      "path": "/admin/roles"
+    },
+    {
+      "pattern": "users",
+      "path": "/admin/users"
+    },
+    {
+      "pattern": "audit",
+      "path": "/admin/audit"
+    },
+    {
+      "pattern": "settings",
+      "path": "/admin/settings"
+    },
+    {
+      "pattern": "security",
+      "path": "/admin/security"
+    },
+    {
+      "pattern": "reciters",
+      "path": "/admin/reciters"
+    },
+    {
+      "pattern": "reciters/:id",
+      "path": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823"
+    },
+    {
+      "pattern": "reciters/:id",
+      "path": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=recitations",
+      "view": "recitations"
+    },
+    {
+      "pattern": "reciters/:id",
+      "path": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=availability",
+      "view": "availability"
+    },
+    {
+      "pattern": "reciters/:id",
+      "path": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=sources",
+      "view": "sources"
+    },
+    {
+      "pattern": "reciters/:id",
+      "path": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=audit",
+      "view": "audit"
+    },
+    {
+      "pattern": "recitations",
+      "path": "/admin/recitations"
+    },
+    {
+      "pattern": "availability",
+      "path": "/admin/availability"
+    },
+    {
+      "pattern": "providers",
+      "path": "/admin/providers"
+    },
+    {
+      "pattern": "quran",
+      "path": "/admin/quran"
+    },
+    {
+      "pattern": "quran",
+      "path": "/admin/quran?tab=integrity",
+      "view": "integrity"
+    },
+    {
+      "pattern": "quran",
+      "path": "/admin/quran?tab=riwayat",
+      "view": "riwayat"
+    },
+    {
+      "pattern": "timings",
+      "path": "/admin/timings?recitation_id=1be4803e-aa12-eb2b-3cee-ffde092273d3&surah=1&ayah=1&from=1"
+    },
+    {
+      "pattern": "_kit",
+      "path": "/admin/_kit"
+    }
+  ],
+  "routes": [
+    "/admin",
+    "/admin/reviews",
+    "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+    "/admin/listening",
+    "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+    "/admin/provider-licenses",
+    "/admin/labels",
+    "/admin/launch",
+    "/admin/project",
+    "/admin/help",
+    "/admin/storage",
+    "/admin/licensed-audio",
+    "/admin/licensed-audio/8292803a-aacc-4d3e-8767-261fd42b2b7a",
+    "/admin/reciter-wizard",
+    "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+    "/admin/roles",
+    "/admin/users",
+    "/admin/audit",
+    "/admin/settings",
+    "/admin/security",
+    "/admin/reciters",
+    "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823",
+    "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=recitations",
+    "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=availability",
+    "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=sources",
+    "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=audit",
+    "/admin/recitations",
+    "/admin/availability",
+    "/admin/providers",
+    "/admin/quran",
+    "/admin/quran?tab=integrity",
+    "/admin/quran?tab=riwayat",
+    "/admin/timings?recitation_id=1be4803e-aa12-eb2b-3cee-ffde092273d3&surah=1&ayah=1&from=1",
+    "/admin/_kit"
+  ],
+  "dialogInventory": [
+    {
+      "slug": "audit-detail",
+      "file": "src\\admin\\pages\\AdminAudit.tsx"
+    },
+    {
+      "slug": "availability-chapter",
+      "file": "src\\admin\\pages\\catalog\\AvailabilityPanel.tsx"
+    },
+    {
+      "slug": "keyboard-help",
+      "file": "src\\admin\\AdminShell.tsx"
+    },
+    {
+      "slug": "kit-confirm",
+      "file": "src\\admin\\AdminKit.tsx"
+    },
+    {
+      "slug": "kit-drawer",
+      "file": "src\\admin\\AdminKit.tsx"
+    },
+    {
+      "slug": "mobile-nav",
+      "file": "src\\admin\\AdminShell.tsx"
+    },
+    {
+      "slug": "provider-detail",
+      "file": "src\\admin\\pages\\catalog\\ProvidersPage.tsx"
+    },
+    {
+      "slug": "provider-license-confirm",
+      "file": "src\\admin\\pages\\catalog\\ProvidersPage.tsx"
+    },
+    {
+      "slug": "quick-search",
+      "file": "src\\admin\\AdminShell.tsx"
+    },
+    {
+      "slug": "reading-preferences",
+      "file": "src\\admin\\AdminShell.tsx"
+    },
+    {
+      "slug": "recitation-detail",
+      "file": "src\\admin\\pages\\catalog\\RecitationDrawer.tsx"
+    },
+    {
+      "slug": "recitation-move-confirm",
+      "file": "src\\admin\\pages\\catalog\\RecitationActions.tsx"
+    },
+    {
+      "slug": "reciter-audit-detail",
+      "file": "src\\admin\\pages\\catalog\\ReciterAudit.tsx"
+    },
+    {
+      "slug": "reciter-merge-confirm",
+      "file": "src\\admin\\pages\\catalog\\ReciterMerge.tsx"
+    },
+    {
+      "slug": "reciter-preview",
+      "file": "src\\admin\\pages\\catalog\\RecitersPage.tsx"
+    },
+    {
+      "slug": "render-delete-confirm",
+      "file": "src\\admin\\pages\\workspace\\RenderLabPage.tsx"
+    },
+    {
+      "slug": "review-bulk-confirm",
+      "file": "src\\admin\\pages\\workspace\\ReviewsPage.tsx"
+    },
+    {
+      "slug": "riwayah-change-confirm",
+      "file": "src\\admin\\pages\\catalog\\QuranRiwayat.tsx"
+    },
+    {
+      "slug": "role-permission-confirm",
+      "file": "src\\admin\\pages\\AdminRoles.tsx"
+    },
+    {
+      "slug": "user-role-confirm",
+      "file": "src\\admin\\pages\\AdminUsers.tsx"
+    },
+    {
+      "slug": "user-roles",
+      "file": "src\\admin\\pages\\AdminUsers.tsx"
+    }
+  ],
+  "matrix": [
+    {
+      "caseId": "_admin-1366-100-light-ar",
+      "route": "/admin",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin-1366-150-dark-ar",
+      "route": "/admin",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin-390-100-light-ar",
+      "route": "/admin",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin-390-150-dark-ar",
+      "route": "/admin",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin-1920-125-light-en",
+      "route": "/admin",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin-1366-200-light-ar",
+      "route": "/admin",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin-1366-200-dark-ar",
+      "route": "/admin",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 2,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin-390-200-light-ar",
+      "route": "/admin",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin-390-200-dark-ar",
+      "route": "/admin",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 2,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin-1920-200-light-en",
+      "route": "/admin",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews_3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49-1366-100-light-ar",
+      "route": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews_3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49-1366-150-dark-ar",
+      "route": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews_3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49-390-100-light-ar",
+      "route": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews_3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49-390-150-dark-ar",
+      "route": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews_3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49-1920-125-light-en",
+      "route": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews_3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49-1366-200-light-ar",
+      "route": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews_3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49-1366-200-dark-ar",
+      "route": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 2,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews_3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49-390-200-light-ar",
+      "route": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews_3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49-390-200-dark-ar",
+      "route": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 2,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews_3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49-1920-200-light-en",
+      "route": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening_88b72b8b-44f4-41fb-b21c-2b4960354793-1366-100-light-ar",
+      "route": "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening_88b72b8b-44f4-41fb-b21c-2b4960354793-1366-150-dark-ar",
+      "route": "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening_88b72b8b-44f4-41fb-b21c-2b4960354793-390-100-light-ar",
+      "route": "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening_88b72b8b-44f4-41fb-b21c-2b4960354793-390-150-dark-ar",
+      "route": "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening_88b72b8b-44f4-41fb-b21c-2b4960354793-1920-125-light-en",
+      "route": "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_labels-1366-100-light-ar",
+      "route": "/admin/labels",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_labels-1366-150-dark-ar",
+      "route": "/admin/labels",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_labels-390-100-light-ar",
+      "route": "/admin/labels",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_labels-390-150-dark-ar",
+      "route": "/admin/labels",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_labels-1920-125-light-en",
+      "route": "/admin/labels",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_project-1366-100-light-ar",
+      "route": "/admin/project",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_project-1366-150-dark-ar",
+      "route": "/admin/project",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_project-390-100-light-ar",
+      "route": "/admin/project",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_project-390-150-dark-ar",
+      "route": "/admin/project",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_project-1920-125-light-en",
+      "route": "/admin/project",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_storage-1366-100-light-ar",
+      "route": "/admin/storage",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_storage-1366-150-dark-ar",
+      "route": "/admin/storage",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_storage-390-100-light-ar",
+      "route": "/admin/storage",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_storage-390-150-dark-ar",
+      "route": "/admin/storage",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_storage-1920-125-light-en",
+      "route": "/admin/storage",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_licensed-audio_8292803a-aacc-4d3e-8767-261fd42b2b7a-1366-100-light-ar",
+      "route": "/admin/licensed-audio/8292803a-aacc-4d3e-8767-261fd42b2b7a",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_licensed-audio_8292803a-aacc-4d3e-8767-261fd42b2b7a-1366-150-dark-ar",
+      "route": "/admin/licensed-audio/8292803a-aacc-4d3e-8767-261fd42b2b7a",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_licensed-audio_8292803a-aacc-4d3e-8767-261fd42b2b7a-390-100-light-ar",
+      "route": "/admin/licensed-audio/8292803a-aacc-4d3e-8767-261fd42b2b7a",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_licensed-audio_8292803a-aacc-4d3e-8767-261fd42b2b7a-390-150-dark-ar",
+      "route": "/admin/licensed-audio/8292803a-aacc-4d3e-8767-261fd42b2b7a",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_licensed-audio_8292803a-aacc-4d3e-8767-261fd42b2b7a-1920-125-light-en",
+      "route": "/admin/licensed-audio/8292803a-aacc-4d3e-8767-261fd42b2b7a",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_render-lab_job_id_03e7580b-acbf-4e9d-bf2f-f9d299403a2e-1366-100-light-ar",
+      "route": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_render-lab_job_id_03e7580b-acbf-4e9d-bf2f-f9d299403a2e-1366-150-dark-ar",
+      "route": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_render-lab_job_id_03e7580b-acbf-4e9d-bf2f-f9d299403a2e-390-100-light-ar",
+      "route": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_render-lab_job_id_03e7580b-acbf-4e9d-bf2f-f9d299403a2e-390-150-dark-ar",
+      "route": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_render-lab_job_id_03e7580b-acbf-4e9d-bf2f-f9d299403a2e-1920-125-light-en",
+      "route": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_users-1366-100-light-ar",
+      "route": "/admin/users",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_users-1366-150-dark-ar",
+      "route": "/admin/users",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_users-390-100-light-ar",
+      "route": "/admin/users",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_users-390-150-dark-ar",
+      "route": "/admin/users",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_users-1920-125-light-en",
+      "route": "/admin/users",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_settings-1366-100-light-ar",
+      "route": "/admin/settings",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_settings-1366-150-dark-ar",
+      "route": "/admin/settings",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_settings-390-100-light-ar",
+      "route": "/admin/settings",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_settings-390-150-dark-ar",
+      "route": "/admin/settings",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_settings-1920-125-light-en",
+      "route": "/admin/settings",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters-1366-100-light-ar",
+      "route": "/admin/reciters",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters-1366-150-dark-ar",
+      "route": "/admin/reciters",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters-390-100-light-ar",
+      "route": "/admin/reciters",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters-390-150-dark-ar",
+      "route": "/admin/reciters",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters-1920-125-light-en",
+      "route": "/admin/reciters",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters-1366-200-light-ar",
+      "route": "/admin/reciters",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters-1366-200-dark-ar",
+      "route": "/admin/reciters",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 2,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters-390-200-light-ar",
+      "route": "/admin/reciters",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters-390-200-dark-ar",
+      "route": "/admin/reciters",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 2,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters-1920-200-light-en",
+      "route": "/admin/reciters",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_recitations-1366-100-light-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=recitations",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_recitations-1366-150-dark-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=recitations",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_recitations-390-100-light-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=recitations",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_recitations-390-150-dark-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=recitations",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_recitations-1920-125-light-en",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=recitations",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_sources-1366-100-light-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=sources",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_sources-1366-150-dark-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=sources",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_sources-390-100-light-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=sources",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_sources-390-150-dark-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=sources",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_sources-1920-125-light-en",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=sources",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_recitations-1366-100-light-ar",
+      "route": "/admin/recitations",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_recitations-1366-150-dark-ar",
+      "route": "/admin/recitations",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_recitations-390-100-light-ar",
+      "route": "/admin/recitations",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_recitations-390-150-dark-ar",
+      "route": "/admin/recitations",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_recitations-1920-125-light-en",
+      "route": "/admin/recitations",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_providers-1366-100-light-ar",
+      "route": "/admin/providers",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_providers-1366-150-dark-ar",
+      "route": "/admin/providers",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_providers-390-100-light-ar",
+      "route": "/admin/providers",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_providers-390-150-dark-ar",
+      "route": "/admin/providers",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_providers-1920-125-light-en",
+      "route": "/admin/providers",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran_tab_integrity-1366-100-light-ar",
+      "route": "/admin/quran?tab=integrity",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran_tab_integrity-1366-150-dark-ar",
+      "route": "/admin/quran?tab=integrity",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran_tab_integrity-390-100-light-ar",
+      "route": "/admin/quran?tab=integrity",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran_tab_integrity-390-150-dark-ar",
+      "route": "/admin/quran?tab=integrity",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran_tab_integrity-1920-125-light-en",
+      "route": "/admin/quran?tab=integrity",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_timings_recitation_id_1be4803e-aa12-eb2b-3cee-ffde092273d3_surah_1_ayah_1_from_1-1366-100-light-ar",
+      "route": "/admin/timings?recitation_id=1be4803e-aa12-eb2b-3cee-ffde092273d3&surah=1&ayah=1&from=1",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_timings_recitation_id_1be4803e-aa12-eb2b-3cee-ffde092273d3_surah_1_ayah_1_from_1-1366-150-dark-ar",
+      "route": "/admin/timings?recitation_id=1be4803e-aa12-eb2b-3cee-ffde092273d3&surah=1&ayah=1&from=1",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_timings_recitation_id_1be4803e-aa12-eb2b-3cee-ffde092273d3_surah_1_ayah_1_from_1-390-100-light-ar",
+      "route": "/admin/timings?recitation_id=1be4803e-aa12-eb2b-3cee-ffde092273d3&surah=1&ayah=1&from=1",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_timings_recitation_id_1be4803e-aa12-eb2b-3cee-ffde092273d3_surah_1_ayah_1_from_1-390-150-dark-ar",
+      "route": "/admin/timings?recitation_id=1be4803e-aa12-eb2b-3cee-ffde092273d3&surah=1&ayah=1&from=1",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_timings_recitation_id_1be4803e-aa12-eb2b-3cee-ffde092273d3_surah_1_ayah_1_from_1-1920-125-light-en",
+      "route": "/admin/timings?recitation_id=1be4803e-aa12-eb2b-3cee-ffde092273d3&surah=1&ayah=1&from=1",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews-1366-100-light-ar",
+      "route": "/admin/reviews",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews-1366-150-dark-ar",
+      "route": "/admin/reviews",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews-390-100-light-ar",
+      "route": "/admin/reviews",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews-390-150-dark-ar",
+      "route": "/admin/reviews",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reviews-1920-125-light-en",
+      "route": "/admin/reviews",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening-1366-100-light-ar",
+      "route": "/admin/listening",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening-1366-150-dark-ar",
+      "route": "/admin/listening",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening-390-100-light-ar",
+      "route": "/admin/listening",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening-390-150-dark-ar",
+      "route": "/admin/listening",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening-1920-125-light-en",
+      "route": "/admin/listening",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening-1366-200-light-ar",
+      "route": "/admin/listening",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening-1366-200-dark-ar",
+      "route": "/admin/listening",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 2,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening-390-200-light-ar",
+      "route": "/admin/listening",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening-390-200-dark-ar",
+      "route": "/admin/listening",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 2,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_listening-1920-200-light-en",
+      "route": "/admin/listening",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_provider-licenses-1366-100-light-ar",
+      "route": "/admin/provider-licenses",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_provider-licenses-1366-150-dark-ar",
+      "route": "/admin/provider-licenses",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_provider-licenses-390-100-light-ar",
+      "route": "/admin/provider-licenses",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_provider-licenses-390-150-dark-ar",
+      "route": "/admin/provider-licenses",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_provider-licenses-1920-125-light-en",
+      "route": "/admin/provider-licenses",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_launch-1366-100-light-ar",
+      "route": "/admin/launch",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_launch-1366-150-dark-ar",
+      "route": "/admin/launch",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_launch-390-100-light-ar",
+      "route": "/admin/launch",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_launch-390-150-dark-ar",
+      "route": "/admin/launch",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_launch-1920-125-light-en",
+      "route": "/admin/launch",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_help-1366-100-light-ar",
+      "route": "/admin/help",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_help-1366-150-dark-ar",
+      "route": "/admin/help",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_help-390-100-light-ar",
+      "route": "/admin/help",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_help-390-150-dark-ar",
+      "route": "/admin/help",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_help-1920-125-light-en",
+      "route": "/admin/help",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_licensed-audio-1366-100-light-ar",
+      "route": "/admin/licensed-audio",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_licensed-audio-1366-150-dark-ar",
+      "route": "/admin/licensed-audio",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_licensed-audio-390-100-light-ar",
+      "route": "/admin/licensed-audio",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_licensed-audio-390-150-dark-ar",
+      "route": "/admin/licensed-audio",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_licensed-audio-1920-125-light-en",
+      "route": "/admin/licensed-audio",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciter-wizard-1366-100-light-ar",
+      "route": "/admin/reciter-wizard",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciter-wizard-1366-150-dark-ar",
+      "route": "/admin/reciter-wizard",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciter-wizard-390-100-light-ar",
+      "route": "/admin/reciter-wizard",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciter-wizard-390-150-dark-ar",
+      "route": "/admin/reciter-wizard",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciter-wizard-1920-125-light-en",
+      "route": "/admin/reciter-wizard",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_roles-1366-100-light-ar",
+      "route": "/admin/roles",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_roles-1366-150-dark-ar",
+      "route": "/admin/roles",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_roles-390-100-light-ar",
+      "route": "/admin/roles",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_roles-390-150-dark-ar",
+      "route": "/admin/roles",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_roles-1920-125-light-en",
+      "route": "/admin/roles",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_audit-1366-100-light-ar",
+      "route": "/admin/audit",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_audit-1366-150-dark-ar",
+      "route": "/admin/audit",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_audit-390-100-light-ar",
+      "route": "/admin/audit",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_audit-390-150-dark-ar",
+      "route": "/admin/audit",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_audit-1920-125-light-en",
+      "route": "/admin/audit",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_security-1366-100-light-ar",
+      "route": "/admin/security",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_security-1366-150-dark-ar",
+      "route": "/admin/security",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_security-390-100-light-ar",
+      "route": "/admin/security",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_security-390-150-dark-ar",
+      "route": "/admin/security",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_security-1920-125-light-en",
+      "route": "/admin/security",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823-1366-100-light-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823-1366-150-dark-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823-390-100-light-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823-390-150-dark-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823-1920-125-light-en",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_availability-1366-100-light-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=availability",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_availability-1366-150-dark-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=availability",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_availability-390-100-light-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=availability",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_availability-390-150-dark-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=availability",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_availability-1920-125-light-en",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=availability",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_audit-1366-100-light-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=audit",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_audit-1366-150-dark-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=audit",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_audit-390-100-light-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=audit",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_audit-390-150-dark-ar",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=audit",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_audit-1920-125-light-en",
+      "route": "/admin/reciters/78052450-ae3b-4f6b-837a-84344aa7c823?tab=audit",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_availability-1366-100-light-ar",
+      "route": "/admin/availability",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_availability-1366-150-dark-ar",
+      "route": "/admin/availability",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_availability-390-100-light-ar",
+      "route": "/admin/availability",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_availability-390-150-dark-ar",
+      "route": "/admin/availability",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_availability-1920-125-light-en",
+      "route": "/admin/availability",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_availability-1366-200-light-ar",
+      "route": "/admin/availability",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_availability-1366-200-dark-ar",
+      "route": "/admin/availability",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 2,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_availability-390-200-light-ar",
+      "route": "/admin/availability",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_availability-390-200-dark-ar",
+      "route": "/admin/availability",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 2,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_availability-1920-200-light-en",
+      "route": "/admin/availability",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 2,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 2,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran-1366-100-light-ar",
+      "route": "/admin/quran",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran-1366-150-dark-ar",
+      "route": "/admin/quran",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran-390-100-light-ar",
+      "route": "/admin/quran",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran-390-150-dark-ar",
+      "route": "/admin/quran",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran-1920-125-light-en",
+      "route": "/admin/quran",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran_tab_riwayat-1366-100-light-ar",
+      "route": "/admin/quran?tab=riwayat",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran_tab_riwayat-1366-150-dark-ar",
+      "route": "/admin/quran?tab=riwayat",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran_tab_riwayat-390-100-light-ar",
+      "route": "/admin/quran?tab=riwayat",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran_tab_riwayat-390-150-dark-ar",
+      "route": "/admin/quran?tab=riwayat",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin_quran_tab_riwayat-1920-125-light-en",
+      "route": "/admin/quran?tab=riwayat",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin__kit-1366-100-light-ar",
+      "route": "/admin/_kit",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin__kit-1366-150-dark-ar",
+      "route": "/admin/_kit",
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin__kit-390-100-light-ar",
+      "route": "/admin/_kit",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar",
+      "dpr": 1,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin__kit-390-150-dark-ar",
+      "route": "/admin/_kit",
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar",
+      "dpr": 1.5,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    },
+    {
+      "caseId": "_admin__kit-1920-125-light-en",
+      "route": "/admin/_kit",
+      "size": {
+        "width": 1920,
+        "height": 1080
+      },
+      "zoom": 1.25,
+      "theme": "light",
+      "lang": "en",
+      "dpr": 1.25,
+      "passed": true,
+      "violations": 0,
+      "indeterminate": 0,
+      "axeViolations": 0,
+      "axeIncomplete": 0
+    }
+  ],
+  "dialogs": [
+    {
+      "caseId": "_admin-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin-1366-100-light-ar",
+      "slug": "quick-search",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin-1366-100-light-ar",
+      "slug": "reading-preferences",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin-1366-100-light-ar",
+      "slug": "keyboard-help",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin-390-150-dark-ar",
+      "slug": "quick-search",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin-390-150-dark-ar",
+      "slug": "reading-preferences",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin-390-150-dark-ar",
+      "slug": "keyboard-help",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reviews_3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reviews_3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_listening_88b72b8b-44f4-41fb-b21c-2b4960354793-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_listening_88b72b8b-44f4-41fb-b21c-2b4960354793-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_labels-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_labels-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_project-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_project-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_storage-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_storage-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_licensed-audio_8292803a-aacc-4d3e-8767-261fd42b2b7a-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_licensed-audio_8292803a-aacc-4d3e-8767-261fd42b2b7a-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_render-lab_job_id_03e7580b-acbf-4e9d-bf2f-f9d299403a2e-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_render-lab_job_id_03e7580b-acbf-4e9d-bf2f-f9d299403a2e-1366-100-light-ar",
+      "slug": "render-delete-confirm",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_render-lab_job_id_03e7580b-acbf-4e9d-bf2f-f9d299403a2e-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_render-lab_job_id_03e7580b-acbf-4e9d-bf2f-f9d299403a2e-390-150-dark-ar",
+      "slug": "render-delete-confirm",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_users-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_users-1366-100-light-ar",
+      "slug": "user-roles",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_users-1366-100-light-ar",
+      "slug": "user-role-confirm",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_users-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_users-390-150-dark-ar",
+      "slug": "user-roles",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_users-390-150-dark-ar",
+      "slug": "user-role-confirm",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_settings-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_settings-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters-1366-100-light-ar",
+      "slug": "reciter-preview",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters-390-150-dark-ar",
+      "slug": "reciter-preview",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_recitations-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_recitations-1366-100-light-ar",
+      "slug": "recitation-detail",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_recitations-1366-100-light-ar",
+      "slug": "recitation-move-confirm",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_recitations-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_recitations-390-150-dark-ar",
+      "slug": "recitation-detail",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_recitations-390-150-dark-ar",
+      "slug": "recitation-move-confirm",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_sources-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_sources-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_recitations-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_recitations-1366-100-light-ar",
+      "slug": "recitation-detail",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_recitations-1366-100-light-ar",
+      "slug": "recitation-move-confirm",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_recitations-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_recitations-390-150-dark-ar",
+      "slug": "recitation-detail",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_recitations-390-150-dark-ar",
+      "slug": "recitation-move-confirm",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_providers-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_providers-1366-100-light-ar",
+      "slug": "provider-detail",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_providers-1366-100-light-ar",
+      "slug": "provider-license-confirm",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_providers-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_providers-390-150-dark-ar",
+      "slug": "provider-detail",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_providers-390-150-dark-ar",
+      "slug": "provider-license-confirm",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_quran_tab_integrity-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_quran_tab_integrity-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_timings_recitation_id_1be4803e-aa12-eb2b-3cee-ffde092273d3_surah_1_ayah_1_from_1-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_timings_recitation_id_1be4803e-aa12-eb2b-3cee-ffde092273d3_surah_1_ayah_1_from_1-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reviews-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reviews-1366-100-light-ar",
+      "slug": "quick-search",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reviews-1366-100-light-ar",
+      "slug": "reading-preferences",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reviews-1366-100-light-ar",
+      "slug": "keyboard-help",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reviews-1366-100-light-ar",
+      "slug": "review-bulk-confirm",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reviews-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reviews-390-150-dark-ar",
+      "slug": "quick-search",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reviews-390-150-dark-ar",
+      "slug": "reading-preferences",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reviews-390-150-dark-ar",
+      "slug": "keyboard-help",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reviews-390-150-dark-ar",
+      "slug": "review-bulk-confirm",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_listening-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_listening-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_provider-licenses-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_provider-licenses-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_launch-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_launch-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_help-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_help-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_licensed-audio-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_licensed-audio-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciter-wizard-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciter-wizard-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_roles-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_roles-1366-100-light-ar",
+      "slug": "role-permission-confirm",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_roles-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_roles-390-150-dark-ar",
+      "slug": "role-permission-confirm",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_audit-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_audit-1366-100-light-ar",
+      "slug": "audit-detail",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_audit-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_audit-390-150-dark-ar",
+      "slug": "audit-detail",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_security-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_security-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823-1366-100-light-ar",
+      "slug": "reciter-merge-confirm",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823-390-150-dark-ar",
+      "slug": "reciter-merge-confirm",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_availability-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_availability-1366-100-light-ar",
+      "slug": "availability-chapter",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_availability-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_availability-390-150-dark-ar",
+      "slug": "availability-chapter",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_audit-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_audit-1366-100-light-ar",
+      "slug": "reciter-audit-detail",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_audit-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_reciters_78052450-ae3b-4f6b-837a-84344aa7c823_tab_audit-390-150-dark-ar",
+      "slug": "reciter-audit-detail",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_availability-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_availability-1366-100-light-ar",
+      "slug": "availability-chapter",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_availability-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_availability-390-150-dark-ar",
+      "slug": "availability-chapter",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_quran-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_quran-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_quran_tab_riwayat-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_quran_tab_riwayat-1366-100-light-ar",
+      "slug": "riwayah-change-confirm",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_quran_tab_riwayat-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin_quran_tab_riwayat-390-150-dark-ar",
+      "slug": "riwayah-change-confirm",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin__kit-1366-100-light-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin__kit-1366-100-light-ar",
+      "slug": "kit-drawer",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin__kit-1366-100-light-ar",
+      "slug": "kit-confirm",
+      "passed": true,
+      "size": {
+        "width": 1366,
+        "height": 768
+      },
+      "zoom": 1,
+      "theme": "light",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin__kit-390-150-dark-ar",
+      "slug": "mobile-nav",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin__kit-390-150-dark-ar",
+      "slug": "kit-drawer",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    },
+    {
+      "caseId": "_admin__kit-390-150-dark-ar",
+      "slug": "kit-confirm",
+      "passed": true,
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "zoom": 1.5,
+      "theme": "dark",
+      "lang": "ar"
+    }
+  ],
+  "expectedCases": 195,
+  "dialogCoverage": {
+    "passed": true
+  },
+  "reviewInvariants": [
+    {
+      "version": "admin-visual-review-invariant-1",
+      "before": {
+        "version": "admin-visual-reviews-1",
+        "source": "authenticated-review-api",
+        "total": 645,
+        "counts": {
+          "pending": 645,
+          "approved": 0,
+          "rejected": 0,
+          "deferred": 0
+        },
+        "pendingIdsSha256": "b25b436b88fef28f46d0d21f49b7546690115e7d7846199a27bfc61760147102",
+        "stateSha256": "cd7b24f9c4c15befe29e830a75a8b988588c8a698e52d50437137ed869007dc1"
+      },
+      "after": {
+        "version": "admin-visual-reviews-1",
+        "source": "authenticated-review-api",
+        "total": 645,
+        "counts": {
+          "pending": 645,
+          "approved": 0,
+          "rejected": 0,
+          "deferred": 0
+        },
+        "pendingIdsSha256": "b25b436b88fef28f46d0d21f49b7546690115e7d7846199a27bfc61760147102",
+        "stateSha256": "cd7b24f9c4c15befe29e830a75a8b988588c8a698e52d50437137ed869007dc1"
+      },
+      "unchanged": true
+    },
+    {
+      "version": "admin-visual-review-invariant-1",
+      "before": {
+        "version": "admin-visual-reviews-1",
+        "source": "authenticated-review-api",
+        "total": 645,
+        "counts": {
+          "pending": 645,
+          "approved": 0,
+          "rejected": 0,
+          "deferred": 0
+        },
+        "pendingIdsSha256": "b25b436b88fef28f46d0d21f49b7546690115e7d7846199a27bfc61760147102",
+        "stateSha256": "cd7b24f9c4c15befe29e830a75a8b988588c8a698e52d50437137ed869007dc1"
+      },
+      "after": {
+        "version": "admin-visual-reviews-1",
+        "source": "authenticated-review-api",
+        "total": 645,
+        "counts": {
+          "pending": 645,
+          "approved": 0,
+          "rejected": 0,
+          "deferred": 0
+        },
+        "pendingIdsSha256": "b25b436b88fef28f46d0d21f49b7546690115e7d7846199a27bfc61760147102",
+        "stateSha256": "cd7b24f9c4c15befe29e830a75a8b988588c8a698e52d50437137ed869007dc1"
+      },
+      "unchanged": true
+    }
+  ],
+  "reviewsStayedPending": true,
+  "apiErrors": [],
+  "browserErrors": [],
+  "blockedRequests": [],
+  "redisErrors": [],
+  "finishedAt": "2026-10-13T12:52:37.587Z"
+}

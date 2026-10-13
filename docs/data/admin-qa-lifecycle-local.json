@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "local_only": true,
+  "near_expiry_rejected": true,
+  "near_expiry_user_roles_sessions_events_zero": true,
+  "minimum_provisioning_ms": 120000,
+  "automatic_expiry": true,
+  "account_disabled": true,
+  "sessions_removed": true,
+  "identity_rejected": true,
+  "ttl_ms": 125000,
+  "deletion": {
+    "deleted": true,
+    "sessions": 0,
+    "auditRetained": 2
+  },
+  "original_accounts_unchanged": true,
+  "checked_at": "2026-10-13T09:50:19.000Z"
+}

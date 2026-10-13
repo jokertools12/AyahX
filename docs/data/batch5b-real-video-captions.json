@@ -1,0 +1,33 @@
+{
+  "scope": "real-admin-video-captions",
+  "observedAt": "2026-10-13T10:56:31.596Z",
+  "production": false,
+  "passed": true,
+  "canonicalChecksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "manifestSha256": "c704d7200b6a81a02476b9dbaff4cc743962a5f7f9ac9ea27230c0dd04a5f977",
+  "loaded": true,
+  "language": "ar",
+  "mode": "showing",
+  "duration": 16.2,
+  "cues": [
+    {
+      "id": "103:1",
+      "startMs": 150,
+      "endMs": 1230,
+      "canonicalTextSha256": "78869f0afaa443cf820dc6957322f700d4afb4fe46eba58f6ded73935a0cd51e"
+    },
+    {
+      "id": "103:2",
+      "startMs": 1662,
+      "endMs": 6432,
+      "canonicalTextSha256": "4435cecf648e5516b3ed4c13247ca44a288083aae9774cf8b3e037f6688ed14e"
+    },
+    {
+      "id": "103:3",
+      "startMs": 7015,
+      "endMs": 16185,
+      "canonicalTextSha256": "47ba261a84c7281ffdbc96f04bd5582be07eb308d9385ec73002d93c7bc5841b"
+    }
+  ],
+  "apiErrors": []
+}

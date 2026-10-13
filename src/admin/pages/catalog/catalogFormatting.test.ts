@@ -1,3 +1,4 @@
+import {missingWordEvidence} from './catalogFormatting';
 import {describe,it,expect} from 'vitest';
 import {isApprovedFontUrl,missingWordCount,timingBounds} from './catalogFormatting';
 import {reorderedIds} from './catalogHooks';
@@ -12,4 +13,9 @@ describe('Catalog reader display safeguards',()=>{
  it.each(['https://evil.test/font.ttf','//evil.test/font.ttf','/fonts/../private.ttf','/fonts/a.ttf?signature=secret','/fonts/a.ttf#fragment','/fonts/a.svg'])('rejects non-font or unsafe font location %s',url=>{expect(isApprovedFontUrl(url)).toBe(false);});
  it('reorders only displayed IDs without deleting any item',()=>{expect(reorderedIds(['a','b','c'],'a','c')).toEqual(['b','c','a']);});
  it('unknown drag IDs leave the list unchanged',()=>{const ids=['a','b'];expect(reorderedIds(ids,'unknown','b')).toEqual(ids);expect(ids).toEqual(['a','b']);});
+});
+
+describe('missing word evidence projection',()=>{
+ it('retains actual chapter verse, word position and reason',()=>{expect(missingWordEvidence([{ayah:3,words:[[2,'NO_VALID_MAPPED_SOURCE_INTERVAL']],review_reasons:[]}])).toEqual([{ayah:3,position:2,reason:'NO_VALID_MAPPED_SOURCE_INTERVAL'}]);});
+ it('projects verse evidence without inventing a verse or word text',()=>{expect(missingWordEvidence([[7,'SPOKEN_TEXT_UNAVAILABLE']])).toEqual([{ayah:null,position:7,reason:'SPOKEN_TEXT_UNAVAILABLE'}]);expect(missingWordEvidence([{ayah:'3',words:[[2,'reason']]}])).toEqual([]);});
 });

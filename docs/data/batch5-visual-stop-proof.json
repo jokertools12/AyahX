@@ -1,0 +1,118 @@
+{
+  "protected_production_baseline_observed_at": "2026-10-13T05:26:34.653Z",
+  "merged": false,
+  "tested_head": "efbdd974d6a4dbc3b4ab7ddff712e0eddbb56db2",
+  "qa_original_audit_retained": 2,
+  "hosted_checks": [
+    {
+      "name": "Catalog quality",
+      "run": 38362983994,
+      "conclusion": "success"
+    },
+    {
+      "name": "AyahX E2E",
+      "run": 38362983965,
+      "conclusion": "success"
+    }
+  ],
+  "d1": [
+    114,
+    6236,
+    77433
+  ],
+  "previous_production_qa_deleted": true,
+  "pr": "https://github.com/jokertools12/AyahX/pull/24",
+  "deployed": false,
+  "public_catalog_enabled": false,
+  "partial_runs": [
+    {
+      "acceptance": false,
+      "interrupted": true,
+      "shards": [
+        {
+          "index": 0,
+          "measured_cases": 28,
+          "passed_cases": 28,
+          "failed_cases": 0
+        },
+        {
+          "index": 1,
+          "measured_cases": 21,
+          "passed_cases": 4,
+          "failed_cases": 17
+        }
+      ],
+      "private_evidence_folder": "batch5-ci-sharded-20261013"
+    },
+    {
+      "acceptance": false,
+      "interrupted": true,
+      "shards": [
+        {
+          "index": 0,
+          "measured_cases": 34,
+          "passed_cases": 28,
+          "failed_cases": 6
+        },
+        {
+          "index": 1,
+          "measured_cases": 28,
+          "passed_cases": 27,
+          "failed_cases": 1
+        }
+      ],
+      "private_evidence_folder": "batch5-ci-sharded-v2-20261013"
+    },
+    {
+      "acceptance": false,
+      "interrupted": true,
+      "shards": [
+        {
+          "index": 0,
+          "measured_cases": 45,
+          "passed_cases": 28,
+          "failed_cases": 17
+        },
+        {
+          "index": 1,
+          "measured_cases": 35,
+          "passed_cases": 27,
+          "failed_cases": 8
+        }
+      ],
+      "private_evidence_folder": "batch5-ci-sharded-v3-20261013"
+    }
+  ],
+  "new_human_approvals": 0,
+  "local_harnesses_stopped": true,
+  "d8_started": false,
+  "observed_at": "2026-10-13T07:38:17.4872329Z",
+  "health_http": 200,
+  "production_008_applied": false,
+  "required_visual_cases": 2176,
+  "hosted_admin_visual_result": "NOT_OBSERVED",
+  "billing": {
+    "stop": 18.824773812354636,
+    "forecast": 21.446756160063003,
+    "attribution": "whole workspace; not isolated Batch5 cost or measured saving",
+    "hard_limit": 30,
+    "remaining": 11.175226187645364,
+    "delta_from_start": 0.39177024505679725,
+    "start": 18.43300356729784,
+    "delta_from_resume": 0.03296494384321491,
+    "soft_limit": 20,
+    "resume": 18.79180886851142
+  },
+  "health_observed_at": "2026-10-13T07:37:18Z",
+  "d5_started": false,
+  "status": "STOPPED_AT_REPEATED_VISUAL_GATE_FAILURE",
+  "local_human_tasks_single_run_passed": 12,
+  "production_human_tasks_completed": false,
+  "production_qa_active": false,
+  "complete": false,
+  "d3": 422463,
+  "scope": "batch5-only",
+  "ready_http": 200,
+  "canonical_checksum": "eca6ed31262dff3f8013160766e185c5331ef12efff3bc8989448383d40e4fe4",
+  "pr_draft": true
+}

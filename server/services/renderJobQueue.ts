@@ -916,7 +916,9 @@ export class RenderJobQueue {
           duration_seconds = ?,
           metadata = ?,
           completed_at = NOW(), heartbeat_at = NOW(),
-          expires_at = DATE_ADD(NOW(), INTERVAL 48 HOUR)
+          -- Leave one hour for the existing 30-minute collector and jitter;
+          -- access stops at 23h and healthy-service cleanup stays below 24h.
+          expires_at = CASE WHEN JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0' THEN DATE_ADD(NOW(), INTERVAL 23 HOUR) ELSE DATE_ADD(NOW(), INTERVAL 48 HOUR) END
         WHERE id = ? AND status = 'running'`,
         [
           storedOutputPath,
