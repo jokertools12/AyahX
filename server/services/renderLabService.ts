@@ -2,13 +2,24 @@ import {randomUUID} from 'node:crypto';
 import type {CatalogDatabase,CatalogRow} from './catalogContracts';
 import {CatalogError} from './catalogContracts';
 import {appendCatalogAudit,type CatalogActor} from './catalogAudit';
-import {RenderManifestV2RequestSchema,type RenderManifestV2} from '../models/renderManifestV2';
+import {RenderManifestV2RequestSchema,RenderManifestV2Schema,type RenderManifestV2} from '../models/renderManifestV2';
 import {redactAdminAudit} from '../admin/adminAuditService';
 export interface RenderLabBuilder{build(request:unknown):Promise<RenderManifestV2>}
 export function requireRenderTester(actor:CatalogActor):void{
   if(actor.kind!=='human'||!actor.permissions.has('render.test')||!['super_admin','admin'].includes(actor.roleSlug??''))throw new CatalogError('CATALOG_PERMISSION_DENIED',403);
 }
 const parsedJson=(value:unknown):unknown=>typeof value==='string'?JSON.parse(value):value;
+/** Captions never manufacture speech/timing for a synthetic visual fixture. */
+export function renderLabCaptionSource(raw:unknown):{manifest:RenderManifestV2;reason?:never}|{manifest?:never;reason:string}{
+  let value:unknown;
+  try{value=parsedJson(raw);}catch{return {reason:'RENDER_CAPTIONS_MANIFEST_INVALID'};}
+  if(value&&typeof value==='object'&&('fixture' in value||'actual_quran_render' in value&&value.actual_quran_render===false))return {reason:'RENDER_CAPTIONS_SOURCE_UNVERIFIED'};
+  const parsed=RenderManifestV2Schema.safeParse(value);
+  if(!parsed.success)return {reason:'RENDER_CAPTIONS_MANIFEST_INVALID'};
+  const manifest=parsed.data;
+  if(manifest.warnings.some(warning=>/ESTIMAT|NOISE|SYNTHETIC|CI_VISUAL_ONLY/iu.test(warning.code))||manifest.timeline.ayahs.some(ayah=>/ESTIMAT|NOISE|SYNTHETIC/iu.test(ayah.highlightReason??'')))return {reason:'RENDER_CAPTIONS_SOURCE_UNVERIFIED'};
+  return {manifest};
+}
 /** Private QA admission. Never called from a public route and never changes the catalog flag. */
 export class RenderLabService{
   constructor(private readonly db:CatalogDatabase,private readonly builder:RenderLabBuilder,private readonly enqueue:(id:string)=>Promise<unknown>){}
@@ -40,9 +51,10 @@ export class RenderLabService{
   }
   async get(actor:CatalogActor,id:string):Promise<CatalogRow>{
     requireRenderTester(actor);if(!/^[a-f0-9-]{36}$/u.test(id))throw new CatalogError('RENDER_LAB_JOB_NOT_FOUND',404);
-    const [row]=await this.db.read("SELECT id,status,progress,stage,error_code,recitation_id,audio_plan_hash,timing_version_hash,audio_mode_used,fallback_used,audio_bytes_fetched,audio_provider_code,qa_report_json,duration_seconds,output_size_bytes,created_at,completed_at,expires_at,(output_path IS NOT NULL) artifact_available FROM render_jobs WHERE id=? AND JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0'",[id]);
+    const [row]=await this.db.read("SELECT id,status,progress,stage,error_code,recitation_id,audio_plan_hash,timing_version_hash,audio_mode_used,fallback_used,audio_bytes_fetched,audio_provider_code,qa_report_json,duration_seconds,output_size_bytes,created_at,completed_at,expires_at,manifest,(output_path IS NOT NULL) artifact_available FROM render_jobs WHERE id=? AND JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0'",[id]);
     if(!row)throw new CatalogError('RENDER_LAB_JOB_NOT_FOUND',404);
     const qa=redactAdminAudit(parsedJson(row.qa_report_json));
-    return {...row,qa_report_json:qa,quality_summary:{duration_ms:row.duration_seconds===null?null:Math.round(Number(row.duration_seconds)*1000),audio_sync:qa??null,highlight:qa??null,audio_bytes_fetched:row.audio_bytes_fetched},artifact:row.status==='succeeded'&&Number(row.artifact_available)===1&&row.expires_at&&new Date(String(row.expires_at)).getTime()>Date.now()?{playPath:`/api/admin/render-lab/jobs/${id}/media`,requiresAdminAuthentication:true}:null};
+    const {manifest:rawManifest,output_path:privatePath,...safeRow}=row,source=renderLabCaptionSource(rawManifest);
+    return {...safeRow,qa_report_json:qa,quality_summary:{duration_ms:row.duration_seconds===null?null:Math.round(Number(row.duration_seconds)*1000),audio_sync:qa??null,highlight:qa??null,audio_bytes_fetched:row.audio_bytes_fetched},artifact:row.status==='succeeded'&&Number(row.artifact_available)===1&&row.expires_at&&new Date(String(row.expires_at)).getTime()>Date.now()?{playPath:`/api/admin/render-lab/jobs/${id}/media`,requiresAdminAuthentication:true,...(source.manifest?{captionsPath:`/api/admin/render-lab/jobs/${id}/captions.vtt`}:{captionsUnavailableReason:source.reason})}:null};
   }
 }

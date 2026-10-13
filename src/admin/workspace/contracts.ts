@@ -17,7 +17,7 @@ export interface WizardCreated { id: string; reciter_id: string; status: 'draft'
 export interface RenderRecording { id: string; reciter_id: string; reciter_name_ar: string; display_label_ar: string; slug: string; provider: string }
 export interface RenderChoices { recitations: RenderRecording[]; max_duration_ms: number; concurrency: number }
 export interface RenderChapter { surah: number; name_ar: string; ayah_count: number; available_runs: Array<[number, number]>; availability_state: string }
-export interface RenderJob { id: string; status: string; progress?: number; stage?: string | null; error?: string | null; error_code?: string | null; artifact?: { playPath: string } | null; quality_summary?: { duration_ms: number; audio_sync: unknown; highlight: unknown; audio_bytes_fetched: number } | null; expires_at?: string | null }
+export interface RenderJob { id: string; status: string; progress?: number; stage?: string | null; error?: string | null; error_code?: string | null; artifact?: { playPath: string; captionsPath?: string; captionsUnavailableReason?: string } | null; quality_summary?: { duration_ms: number; audio_sync: unknown; highlight: unknown; audio_bytes_fetched: number } | null; expires_at?: string | null }
 export interface ListeningQueueItem { item: ReviewItem; samples: ListeningSample[] }
 
 export interface RenderRecentJob { id: string; status: string; progress: number | null; stage: string | null; error_code: string | null; recitation_id: string; created_at: string; completed_at: string | null; expires_at: string | null; display_label_ar: string | null; reciter_name_ar: string | null; artifact_available: boolean }

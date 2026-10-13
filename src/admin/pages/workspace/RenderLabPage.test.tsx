@@ -16,7 +16,7 @@ vi.mock('../../useAdminResource',()=>({useAdminMutation:()=>({run,pending:false,
 const context={user:null,lang:'en' as const,setLang:()=>{},refreshUser:()=>{}};
 const originalScroll=Object.getOwnPropertyDescriptor(HTMLElement.prototype,'scrollIntoView');
 afterEach(()=>{cleanup();vi.useRealTimers();vi.restoreAllMocks();vi.clearAllMocks();if(originalScroll)Object.defineProperty(HTMLElement.prototype,'scrollIntoView',originalScroll);else Reflect.deleteProperty(HTMLElement.prototype,'scrollIntoView');enabledCalls.length=0;resourceStates.clear();resourceRefetch.clear();});
-const selectedPath='/render-lab/jobs/actual-job',selectedJob={id:'actual-job',status:'succeeded',progress:100,artifact:{playPath:'/api/admin/render-lab/jobs/actual-job/media'}};
+const selectedPath='/render-lab/jobs/actual-job',selectedJob={id:'actual-job',status:'succeeded',progress:100,artifact:{playPath:'/api/admin/render-lab/jobs/actual-job/media',captionsPath:'/api/admin/render-lab/jobs/actual-job/captions.vtt'}};
 function Location(){return <output aria-label="Unit router location">{useLocation().search}</output>;}
 const view=(job=true)=><AdminContext.Provider value={context}><MemoryRouter initialEntries={['/admin/render-lab'+(job?'?job_id=actual-job':'')]} future={{v7_startTransition:true,v7_relativeSplatPath:true}}><RenderLabPage/><Location/></MemoryRouter></AdminContext.Provider>;
 describe('Render lab exact source admission',()=>{
@@ -50,5 +50,9 @@ describe('Render lab exact source admission',()=>{
  it('does not request a missing job and still opens an actual listed job through the existing UI action',()=>{
   resourceStates.set('/render-lab/jobs',{data:{items:[{id:'actual-job',status:'succeeded',reciter_name_ar:'Unit reader',display_label_ar:'Unit job',created_at:'2026-10-13',artifact_available:true}]}});resourceStates.set(selectedPath,{data:selectedJob});render(view(false));expect(enabledCalls).not.toContain('/render-lab/jobs/');
   fireEvent.click(screen.getByRole('button',{name:'Open test'}));expect(screen.getByLabelText('Unit router location')).toHaveTextContent('?job_id=actual-job');expect(enabledCalls).toContain(selectedPath);expect(screen.getByLabelText('Generated test video')).toHaveAttribute('src',selectedJob.artifact.playPath);expect(run).not.toHaveBeenCalled();
+  const track=screen.getByLabelText('Generated test video').querySelector('track');expect(track).toHaveAttribute('src',selectedJob.artifact.captionsPath);expect(track).toHaveAttribute('kind','captions');expect(track).toHaveAttribute('srclang','ar');expect(track).toHaveAttribute('default');
+ });
+ it.each([undefined,'https://outside.example/fake.vtt','/api/admin/render-lab/jobs/other-job/captions.vtt'])('preserves playback without requesting absent or unrelated captions %s',captionsPath=>{
+  resourceStates.set(selectedPath,{data:{...selectedJob,artifact:{playPath:selectedJob.artifact.playPath,captionsPath,captionsUnavailableReason:'RENDER_CAPTIONS_SOURCE_UNVERIFIED'}}});render(view());expect(screen.getByLabelText('Generated test video')).toHaveAttribute('src',selectedJob.artifact.playPath);expect(screen.getByLabelText('Generated test video').querySelector('track')).toBeNull();expect(run).not.toHaveBeenCalled();
  });
 });

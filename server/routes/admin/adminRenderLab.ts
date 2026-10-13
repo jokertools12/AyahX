@@ -11,6 +11,7 @@ export function registerRenderLabEndpoints(register:AdminRegister,service:Render
     register({method:'get',path:'/render-lab/choices/:id',permission:'render.test',handler:async ctx=>({data:await media.chapters(ctx.actor,ctx.params.id)})});
     register({method:'get',path:'/render-lab/choices/:id/:surah',permission:'render.test',handler:async ctx=>({data:await media.ranges(ctx.actor,ctx.params.id,Number(ctx.params.surah))})});
     register({method:'get',path:'/render-lab/jobs/:id/media',permission:'render.test',handler:async()=>({data:null}),respond:(ctx,req,res)=>media.stream(ctx.actor,ctx.params.id,req,res)});
+    register({method:'get',path:'/render-lab/jobs/:id/captions.vtt',permission:'render.test',handler:async()=>({data:null}),respond:(ctx,_req,res)=>media.captions(ctx.actor,ctx.params.id,res)});
     register({method:'delete',path:'/render-lab/jobs/:id',permission:'render.test',writes:true,handler:async ctx=>({data:await media.remove(ctx.actor,ctx.params.id)})});
   }
 }

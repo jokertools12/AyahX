@@ -6,9 +6,10 @@ import type { Request, Response } from 'express';
 import type { CatalogDatabase, CatalogRow } from '../services/catalogContracts';
 import { CatalogError } from '../services/catalogContracts';
 import { appendCatalogAudit, type CatalogActor } from '../services/catalogAudit';
-import { requireRenderTester, type RenderLabBuilder } from '../services/renderLabService';
+import { requireRenderTester, renderLabCaptionSource, type RenderLabBuilder } from '../services/renderLabService';
 import { deleteStoredRender, isObjectStoragePath, streamStoredRender } from '../services/objectStorage';
 import { parseRuns } from '../services/catalogContracts';
+import { checksumText } from '../services/quranTextImport';
 
 export function parseVideoRange(raw: string | undefined, size: number): { start: number; end: number } | null {
   if (!raw) return null;
@@ -44,10 +45,35 @@ export class AdminRenderMedia {
   }
   private async output(actor: CatalogActor, id: string): Promise<CatalogRow> {
     requireRenderTester(actor);
-    const [row] = await this.db.read("SELECT id,status,output_path,output_size_bytes,expires_at FROM render_jobs WHERE id=? AND JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0'", [id]);
+    const [row] = await this.db.read("SELECT id,status,output_path,output_size_bytes,expires_at,recitation_id,manifest FROM render_jobs WHERE id=? AND JSON_UNQUOTE(JSON_EXTRACT(manifest,'$.schemaVersion'))='2.0.0'", [id]);
     if (!row) throw new CatalogError('RENDER_LAB_JOB_NOT_FOUND', 404);
-    if (row.status !== 'succeeded' || !row.output_path || !row.expires_at || new Date(String(row.expires_at)).getTime() <= Date.now()) throw new CatalogError('RENDER_LAB_ARTIFACT_EXPIRED', 410);
+    const expiry = new Date(String(row.expires_at)).getTime();
+    if (row.status !== 'succeeded' || !row.output_path || !row.expires_at || !Number.isFinite(expiry) || expiry <= Date.now()) throw new CatalogError('RENDER_LAB_ARTIFACT_EXPIRED', 410);
     return row;
+  }
+  async captions(actor: CatalogActor, id: string, res: Response): Promise<void> {
+    const row = await this.output(actor, id), source = renderLabCaptionSource(row.manifest);
+    if (!source.manifest) throw new CatalogError(source.reason, 409);
+    const manifest = source.manifest, range = manifest.canonicalAyahRange;
+    if (row.recitation_id !== manifest.recitation.id) throw new CatalogError('RENDER_CAPTIONS_CANONICAL_MISMATCH', 409);
+    const versions = await this.db.read('SELECT v.id,v.checksum,r.code riwayah_code FROM quran_text_versions v JOIN riwayat r ON r.id=v.riwayah_id WHERE v.id=?', [manifest.canonicalTextVersion.id]);
+    const version = versions[0];
+    if (versions.length !== 1 || version.id !== manifest.canonicalTextVersion.id || version.riwayah_code !== 'hafs_an_asim' || version.checksum !== manifest.canonicalTextVersion.checksum) throw new CatalogError('RENDER_CAPTIONS_CANONICAL_MISMATCH', 409);
+    const corpus = await this.db.read('SELECT surah,ayah,text_uthmani FROM quran_ayahs WHERE text_version_id=? ORDER BY surah,ayah', [version.id]);
+    const checksum = checksumText(corpus.map(ayah => `${ayah.surah}:${ayah.ayah}\t${ayah.text_uthmani}`).join('\n'));
+    if (!corpus.length || checksum !== version.checksum) throw new CatalogError('RENDER_CAPTIONS_CANONICAL_MISMATCH', 409);
+    const canonical = corpus.filter(ayah => Number(ayah.surah) === range.surahNumber && Number(ayah.ayah) >= range.startAyah && Number(ayah.ayah) <= range.endAyah);
+    if (canonical.length !== range.ayahs.length || canonical.some((ayah, index) => Number(ayah.ayah) !== range.ayahs[index].numberInSurah || ayah.text_uthmani !== range.ayahs[index].text)) throw new CatalogError('RENDER_CAPTIONS_CANONICAL_MISMATCH', 409);
+    // Format the existing render_ms coordinates. Never subtract offsets, infer
+    // timings, extend intervals, normalize Quran text or synthesize gap cues.
+    const timestamp = (ms: number): string => `${String(Math.floor(ms / 3600000)).padStart(2, '0')}:${String(Math.floor(ms / 60000) % 60).padStart(2, '0')}:${String(Math.floor(ms / 1000) % 60).padStart(2, '0')}.${String(ms % 1000).padStart(3, '0')}`;
+    const cues = manifest.timeline.ayahs.map((cue, index) => {
+      const text = range.ayahs[index].text;
+      if (Array.from(text).some(char => { const code = char.codePointAt(0)!; return code < 32 || code === 127 || code === 0x2028 || code === 0x2029; })) throw new CatalogError('RENDER_CAPTIONS_TEXT_INVALID', 409);
+      const payload = text.replace(/&/gu, '&amp;').replace(/</gu, '&lt;').replace(/>/gu, '&gt;');
+      return `${range.surahNumber}:${cue.ayah}\n${timestamp(cue.startMs)} --> ${timestamp(cue.endMs)}\n${payload}\n\n`;
+    });
+    res.set('Content-Type', 'text/vtt; charset=utf-8').set('Cache-Control', 'private, no-store').set('X-Content-Type-Options', 'nosniff').set('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'").send(`WEBVTT\n\n${cues.join('')}`);
   }
   private async localPath(raw: string): Promise<string> {
     const root = await realpath(this.storageRoot), file = await realpath(raw), location = relative(root, file);
