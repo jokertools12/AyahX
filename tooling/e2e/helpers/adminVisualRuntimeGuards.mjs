@@ -33,7 +33,7 @@ export function startAdminVisualProgressCheckpoint(report,directory,{intervalMs=
  let pending=Promise.resolve(),stopped=false;
  const checkpoint=()=>{
   const current=report.currentCase;
-  const snapshot={version:'admin-visual-progress-1',tier:report.tier,shard:{index:report.shard.index,count:report.shard.count},phase:report.phase,currentCase:current?{route:current.route,size:current.size,zoom:current.zoom,theme:current.theme,lang:current.lang}:null,activeDialog:report.activeDialog,measuredCases:report.matrix.length,expectedCases:report.expectedCases??null,at:new Date().toISOString(),acceptance:false};
+  const snapshot={version:'admin-visual-progress-1',tier:report.tier,shard:{index:report.shard.index,count:report.shard.count},phase:report.phase,currentCase:current?{route:current.route,size:current.size,zoom:current.zoom,theme:current.theme,lang:current.lang}:null,activeDialog:report.activeDialog,measurement:report.currentMeasurement??null,measuredCases:report.matrix.length,expectedCases:report.expectedCases??null,at:new Date().toISOString(),acceptance:false};
   pending=pending.then(async()=>{await writeFile(join(directory,'progress.pending.json'),JSON.stringify(snapshot),{mode:0o600});await rename(join(directory,'progress.pending.json'),join(directory,'progress.json'));}).catch(()=>onError());
   return pending;
  };

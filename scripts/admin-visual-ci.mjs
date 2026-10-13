@@ -13,6 +13,7 @@ import {measureAdminVisualAccessibility} from '../tooling/e2e/helpers/adminVisua
 import {collectAdminVisualEvidence} from '../tooling/e2e/helpers/adminVisualPixelEvidence.mjs';
 import {readAdminVisualReviewSnapshot,proveAdminVisualReviewInvariant} from '../tooling/e2e/helpers/adminVisualReviewProof.mjs';
 import {guardAdminVisualEvaluate,withAdminVisualDeadline,startAdminVisualProgressCheckpoint,acquireAdminVisualNativeWorker} from '../tooling/e2e/helpers/adminVisualRuntimeGuards.mjs';
+import {setAdminVisualScanPhase,collectAdminVisualFailureDiagnostic} from '../tooling/e2e/helpers/adminVisualScanProgress.mjs';
 import {waitForAdminVisualPaint} from '../tooling/e2e/helpers/adminVisualPaint.mjs';
 if(process.env.CI!=='true'||process.env.AYAHX_ADMIN_VISUAL_CI!=='1')throw new Error('EPHEMERAL_CI_ONLY');
 const base=process.env.AYAHX_ADMIN_VISUAL_BASE??'http://127.0.0.1:3005',baseUrl=new URL(base);
@@ -81,17 +82,35 @@ async function settle(){
 let evidenceSequence=0;
 function directEvidenceCaseId(){return adminVisualCaseName(report.currentCase)+(report.activeDialog?'-dialog-'+report.activeDialog:'')+'-measure-'+(++evidenceSequence);}
 async function directScan(touch){
+ setAdminVisualScanPhase(report,'raw-evaluate',report.currentMeasurement);
  const raw=await page.evaluate(scanner,{mode:'strict',touch});
  if(!raw.indeterminate.length)return raw;
+ setAdminVisualScanPhase(report,'pixel-evidence',report.currentMeasurement);
  return(await collectAdminVisualEvidence(page,{evidenceDir:output,caseId:directEvidenceCaseId(),scanner:raw})).scanner;
 }
 async function scanAll(touch){
- const scans=[];
+ const scans=[];setAdminVisualScanPhase(report,'bounds');
  const bounds=await page.evaluate(()=>{const active=[...document.querySelectorAll('[role=dialog][aria-modal=true],dialog[open]')].filter(el=>el.getBoundingClientRect().height>0&&getComputedStyle(el).visibility!=='hidden').at(-1);return active?{total:innerHeight,step:innerHeight}:{total:document.documentElement.scrollHeight,step:Math.max(1,Math.floor(innerHeight*.8))};});
- for(let top=0;top<bounds.total;top+=bounds.step){checkDeadline();await page.evaluate(y=>scrollTo({top:y,behavior:'instant'}),top);await page.evaluate(waitForAdminVisualPaint);scans.push({scrollY:await page.evaluate(()=>scrollY),report:await directScan(touch)});}
+ for(let top=0;top<bounds.total;top+=bounds.step){
+  checkDeadline();const position={documentTop:top,total:bounds.total,step:bounds.step};
+  setAdminVisualScanPhase(report,'document-scroll',position);await page.evaluate(y=>scrollTo({top:y,behavior:'instant'}),top);
+  setAdminVisualScanPhase(report,'document-paint',position);await page.evaluate(waitForAdminVisualPaint);
+  setAdminVisualScanPhase(report,'document-position',position);const scrollY=await page.evaluate(()=>scrollY);
+  scans.push({scrollY,report:await directScan(touch)});
+ }
+ setAdminVisualScanPhase(report,'panel-inventory');
  const panels=await page.evaluate(()=>{const active=[...document.querySelectorAll('[role=dialog][aria-modal=true],dialog[open]')].filter(el=>el.getBoundingClientRect().height>0&&getComputedStyle(el).visibility!=='hidden').at(-1),root=active??document.querySelector('.admin-app');return [root,...root.querySelectorAll('*')].filter(e=>e.clientHeight>0&&e.scrollHeight>e.clientHeight+1&&/auto|scroll/.test(getComputedStyle(e).overflowY)).map((e,id)=>{e.setAttribute('data-ci-scroll',String(id));return{id,total:e.scrollHeight,step:Math.max(1,Math.floor(e.clientHeight*.8))};});});
- for(const panel of panels){for(let top=0;top<panel.total;top+=panel.step){checkDeadline();await page.evaluate(({id,top})=>{const e=document.querySelector(`[data-ci-scroll="${id}"]`);e.scrollIntoView({block:'center',behavior:'instant'});e.scrollTop=top;}, {id:panel.id,top});await page.evaluate(waitForAdminVisualPaint);scans.push({panel:panel.id,scrollTop:top,report:await directScan(touch)});}await page.evaluate(id=>{document.querySelector(`[data-ci-scroll="${id}"]`).scrollTop=0;},panel.id);}
- await page.evaluate(()=>{scrollTo({top:0,behavior:'instant'});document.querySelectorAll('[data-ci-scroll]').forEach(e=>e.removeAttribute('data-ci-scroll'));});await page.evaluate(waitForAdminVisualPaint);return scans;
+ for(const panel of panels){
+  for(let top=0;top<panel.total;top+=panel.step){
+   checkDeadline();const position={panelId:panel.id,panelTop:top,total:panel.total,step:panel.step};
+   setAdminVisualScanPhase(report,'panel-scroll',position);await page.evaluate(({id,top})=>{const e=document.querySelector(`[data-ci-scroll="${id}"]`);e.scrollIntoView({block:'center',behavior:'instant'});e.scrollTop=top;},{id:panel.id,top});
+   setAdminVisualScanPhase(report,'panel-paint',position);await page.evaluate(waitForAdminVisualPaint);
+   scans.push({panel:panel.id,scrollTop:top,report:await directScan(touch)});
+  }
+  setAdminVisualScanPhase(report,'panel-reset',{panelId:panel.id});await page.evaluate(id=>{document.querySelector(`[data-ci-scroll="${id}"]`).scrollTop=0;},panel.id);
+ }
+ setAdminVisualScanPhase(report,'document-reset');await page.evaluate(()=>{scrollTo({top:0,behavior:'instant'});document.querySelectorAll('[data-ci-scroll]').forEach(e=>e.removeAttribute('data-ci-scroll'));});
+ setAdminVisualScanPhase(report,'reset-paint');await page.evaluate(waitForAdminVisualPaint);return scans;
 }
 async function scanAccessibility(){
  await page.addScriptTag({content:axe});
@@ -202,4 +221,4 @@ try{
  report.reviewsStayedPending=report.reviewInvariant.unchanged;
  report.expectedCases=expected;report.finishedAt=new Date().toISOString();report.phase='finished';report.shardComplete=report.reviewsStayedPending&&report.dialogCoverage.passed&&report.matrix.length===expected&&report.matrix.every(row=>row.passed)&&!report.apiErrors.length&&!report.browserErrors.length&&!report.blockedRequests.length&&!report.redisErrors.length;
  await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));if(!report.shardComplete)process.exitCode=1;
-}catch(error){report.finishedAt=new Date().toISOString();report.failure={code:/^ADMIN_VISUAL_(?:REVIEW_[A-Z_]+|HUMAN_REVIEWS_CHANGED|ROLE_FIXTURE_NOT_AVAILABLE|RESPONSIVE_OPENER_MISSING|EVALUATE_TIMEOUT|NATIVE_ZOOM_TIMEOUT|NATIVE_WORKER_UNAVAILABLE|NATIVE_WORKER_AMBIGUOUS|BUDGET_EXHAUSTED)$/u.test(error?.message??'')?error.message:report.activeDialog?'ADMIN_VISUAL_DIALOG_FAILURE':'ADMIN_VISUAL_BROWSER_FAILURE',phase:report.phase,case:report.currentCase,dialog:report.activeDialog};await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));process.exitCode=1;}finally{await stopProgress();await withAdminVisualDeadline(()=>context.close(),{code:'ADMIN_VISUAL_BROWSER_CLOSE_TIMEOUT',timeoutMs:15000});await redis.quit();}
+}catch(error){report.finishedAt=new Date().toISOString();report.failureDiagnostic=await collectAdminVisualFailureDiagnostic(page);report.failure={code:/^ADMIN_VISUAL_(?:REVIEW_[A-Z_]+|HUMAN_REVIEWS_CHANGED|ROLE_FIXTURE_NOT_AVAILABLE|RESPONSIVE_OPENER_MISSING|EVALUATE_TIMEOUT|NATIVE_ZOOM_TIMEOUT|NATIVE_WORKER_UNAVAILABLE|NATIVE_WORKER_AMBIGUOUS|BUDGET_EXHAUSTED)$/u.test(error?.message??'')?error.message:report.activeDialog?'ADMIN_VISUAL_DIALOG_FAILURE':'ADMIN_VISUAL_BROWSER_FAILURE',phase:report.phase,measurement:report.currentMeasurement??null,case:report.currentCase,dialog:report.activeDialog};await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));process.exitCode=1;}finally{await stopProgress();await withAdminVisualDeadline(()=>context.close(),{code:'ADMIN_VISUAL_BROWSER_CLOSE_TIMEOUT',timeoutMs:15000});await redis.quit();}
