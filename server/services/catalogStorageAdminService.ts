@@ -48,6 +48,12 @@ export class CatalogStorageAdminService {
   }
   async resumeUpload(actor: CatalogActor, id: string): Promise<{ parts: Array<{ partNumber: number; etag: string; sizeBytes: number }>; put: StorageSignedCapability | null; completedObject: boolean }> {
     await this.authorize(actor, 'upload.resume'); const row = await this.object(this.db, id);
+    if (row.upload_status === 'uploaded' || row.upload_status === 'verified') {
+      // Completion can outlive its HTTP response or the Redis enqueue. Recover
+      // the durable object without issuing another upload capability.
+      await this.rights(this.db, String(row.rights_ref), String(row.recitation_id));
+      return { parts: [], put: null, completedObject: true };
+    }
     if (row.upload_status !== 'pending' || !row.upload_expires_at || new Date(String(row.upload_expires_at)).getTime() <= Date.now()) throw new CatalogError('STORAGE_UPLOAD_EXPIRED_OR_FINISHED', 409);
     const head = await this.storage.head(String(row.object_key));
     if (head) { if (head.sizeBytes !== Number(row.size_bytes)) throw new CatalogError('AUDIO_UPLOAD_TRUNCATED', 422); return { parts: [], put: null, completedObject: true }; }
@@ -61,6 +67,10 @@ export class CatalogStorageAdminService {
   }
   async finishUpload(actor: CatalogActor, id: string): Promise<void> {
     await this.authorize(actor, 'upload.finish'); const row = await this.object(this.db, id);
+    if (row.upload_status === 'uploaded' || row.upload_status === 'verified') {
+      await this.rights(this.db, String(row.rights_ref), String(row.recitation_id));
+      return;
+    }
     if (row.upload_status !== 'pending') throw new CatalogError('STORAGE_UPLOAD_STATE_CHANGED', 409);
     // A crash after S3 completion but before DB commit is resumed from HEAD.
     const completed = await this.storage.head(String(row.object_key));
@@ -70,6 +80,10 @@ export class CatalogStorageAdminService {
   }
   async verifyUploaded(actor: CatalogActor, id: string): Promise<void> {
     requireCatalogPermission(actor, 'storage.verify'); const row = await this.object(this.db, id);
+    if (row.upload_status === 'verified') {
+      await this.rights(this.db, String(row.rights_ref), String(row.recitation_id));
+      return;
+    }
     if (row.upload_status !== 'uploaded') throw new CatalogError('STORAGE_UPLOAD_STATE_CHANGED', 409);
     await this.rights(this.db, String(row.rights_ref), String(row.recitation_id));
     const rawTimings = await this.db.read('SELECT ayah,coordinate,source,source_offset_ms,words FROM ayah_timings WHERE recitation_id=? AND surah=? ORDER BY ayah', [row.recitation_id, row.surah]);
