@@ -1,0 +1,1196 @@
+{
+  "scope": "local-production-build",
+  "startedAt": "2026-10-13T12:35:59.578Z",
+  "observedAt": "2026-10-13T12:41:07.396Z",
+  "status": "complete",
+  "complete": true,
+  "passed": true,
+  "expectedRoutes": [
+    "/admin",
+    "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+    "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+    "/admin/reciters",
+    "/admin/recitations",
+    "/admin/availability",
+    "/admin/provider-licenses",
+    "/admin/storage",
+    "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+    "/admin/launch",
+    "/admin/project",
+    "/admin/settings"
+  ],
+  "pages": [
+    {
+      "path": "/admin",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.01141432822840637,
+      "lcpMs": 507.2477999999999,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true,
+      "setupWaitMs": 0
+    },
+    {
+      "path": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.011415488663861526,
+      "lcpMs": 442.95529999999997,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true,
+      "setupWaitMs": 48146
+    },
+    {
+      "path": "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.014337241124198048,
+      "lcpMs": 468.648,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true,
+      "setupWaitMs": 0
+    },
+    {
+      "path": "/admin/reciters",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.02327164373724081,
+      "lcpMs": 457.51285000000007,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true,
+      "setupWaitMs": 45455
+    },
+    {
+      "path": "/admin/recitations",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.023272435261625715,
+      "lcpMs": 456.20035000000007,
+      "totalBlockingTimeMs": 13,
+      "failedAudits": [
+        {
+          "id": "total-byte-weight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true,
+      "setupWaitMs": 0
+    },
+    {
+      "path": "/admin/availability",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.011418115404076919,
+      "lcpMs": 431.18629999999996,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true,
+      "setupWaitMs": 40738
+    },
+    {
+      "path": "/admin/provider-licenses",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.011416579052910937,
+      "lcpMs": 468.55769999999995,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true,
+      "setupWaitMs": 0
+    },
+    {
+      "path": "/admin/storage",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.011415472319700186,
+      "lcpMs": 435.21619999999996,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true,
+      "setupWaitMs": 0
+    },
+    {
+      "path": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.00030706212318171004,
+      "lcpMs": 520.2717,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true,
+      "setupWaitMs": 38920
+    },
+    {
+      "path": "/admin/launch",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.011418435282663147,
+      "lcpMs": 505.80940000000004,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "forced-reflow-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true,
+      "setupWaitMs": 0
+    },
+    {
+      "path": "/admin/project",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.011416621080754384,
+      "lcpMs": 467.76099999999997,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true,
+      "setupWaitMs": 0
+    },
+    {
+      "path": "/admin/settings",
+      "accessibility": 100,
+      "bestPractices": 100,
+      "cls": 0.011415633426433397,
+      "lcpMs": 469.4823,
+      "totalBlockingTimeMs": 0,
+      "failedAudits": [
+        {
+          "id": "unminified-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-css-rules",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "unused-javascript",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "document-latency-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        },
+        {
+          "id": "network-dependency-tree-insight",
+          "score": 0,
+          "scoreDisplayMode": "numeric"
+        },
+        {
+          "id": "render-blocking-insight",
+          "score": 0.5,
+          "scoreDisplayMode": "metricSavings"
+        }
+      ],
+      "warningCount": 0,
+      "runtimeError": null,
+      "passed": true,
+      "setupWaitMs": 39459
+    }
+  ],
+  "apiErrors": [],
+  "blockedWrites": [],
+  "phase": {
+    "name": "finalize",
+    "path": null,
+    "startedAt": "2026-10-13T12:41:07.394Z"
+  },
+  "phases": [
+    {
+      "name": "preflight",
+      "path": null,
+      "startedAt": "2026-10-13T12:35:59.579Z",
+      "elapsedMs": 4
+    },
+    {
+      "name": "modules",
+      "path": null,
+      "startedAt": "2026-10-13T12:35:59.583Z",
+      "elapsedMs": 1412
+    },
+    {
+      "name": "chrome_launch",
+      "path": null,
+      "startedAt": "2026-10-13T12:36:00.995Z",
+      "elapsedMs": 535
+    },
+    {
+      "name": "connect",
+      "path": null,
+      "startedAt": "2026-10-13T12:36:01.53Z",
+      "elapsedMs": 92
+    },
+    {
+      "name": "authenticate",
+      "path": null,
+      "startedAt": "2026-10-13T12:36:01.622Z",
+      "elapsedMs": 6
+    },
+    {
+      "name": "navigate",
+      "path": "/admin",
+      "startedAt": "2026-10-13T12:36:01.628Z",
+      "elapsedMs": 1350
+    },
+    {
+      "name": "settle",
+      "path": "/admin",
+      "startedAt": "2026-10-13T12:36:02.978Z",
+      "elapsedMs": 14
+    },
+    {
+      "name": "discover",
+      "path": null,
+      "startedAt": "2026-10-13T12:36:02.992Z",
+      "elapsedMs": 1
+    },
+    {
+      "name": "discover",
+      "path": null,
+      "startedAt": "2026-10-13T12:36:02.993Z",
+      "elapsedMs": 13
+    },
+    {
+      "name": "discover",
+      "path": null,
+      "startedAt": "2026-10-13T12:36:03.006Z",
+      "elapsedMs": 22
+    },
+    {
+      "name": "discover",
+      "path": null,
+      "startedAt": "2026-10-13T12:36:03.028Z",
+      "elapsedMs": 16
+    },
+    {
+      "name": "discover",
+      "path": null,
+      "startedAt": "2026-10-13T12:36:03.044Z",
+      "elapsedMs": 25
+    },
+    {
+      "name": "discover",
+      "path": null,
+      "startedAt": "2026-10-13T12:36:03.069Z",
+      "elapsedMs": 9
+    },
+    {
+      "name": "discover",
+      "path": null,
+      "startedAt": "2026-10-13T12:36:03.078Z",
+      "elapsedMs": 8
+    },
+    {
+      "name": "discover",
+      "path": null,
+      "startedAt": "2026-10-13T12:36:03.086Z",
+      "elapsedMs": 33
+    },
+    {
+      "name": "navigate",
+      "path": "/admin",
+      "startedAt": "2026-10-13T12:36:03.119Z",
+      "elapsedMs": 928
+    },
+    {
+      "name": "settle",
+      "path": "/admin",
+      "startedAt": "2026-10-13T12:36:04.047Z",
+      "elapsedMs": 7
+    },
+    {
+      "name": "lighthouse",
+      "path": "/admin",
+      "startedAt": "2026-10-13T12:36:04.054Z",
+      "elapsedMs": 6684
+    },
+    {
+      "name": "settle",
+      "path": "/admin",
+      "startedAt": "2026-10-13T12:36:10.738Z",
+      "elapsedMs": 10
+    },
+    {
+      "name": "summarize",
+      "path": "/admin",
+      "startedAt": "2026-10-13T12:36:10.748Z",
+      "elapsedMs": 3
+    },
+    {
+      "name": "navigate",
+      "path": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "startedAt": "2026-10-13T12:36:10.751Z",
+      "elapsedMs": 1210
+    },
+    {
+      "name": "settle",
+      "path": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "startedAt": "2026-10-13T12:36:11.961Z",
+      "elapsedMs": 7
+    },
+    {
+      "name": "rate_window_wait",
+      "path": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "startedAt": "2026-10-13T12:36:11.968Z",
+      "elapsedMs": 48149
+    },
+    {
+      "name": "lighthouse",
+      "path": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "startedAt": "2026-10-13T12:37:00.117Z",
+      "elapsedMs": 6536
+    },
+    {
+      "name": "settle",
+      "path": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "startedAt": "2026-10-13T12:37:06.653Z",
+      "elapsedMs": 8
+    },
+    {
+      "name": "summarize",
+      "path": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "startedAt": "2026-10-13T12:37:06.661Z",
+      "elapsedMs": 3
+    },
+    {
+      "name": "navigate",
+      "path": "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+      "startedAt": "2026-10-13T12:37:06.664Z",
+      "elapsedMs": 1088
+    },
+    {
+      "name": "settle",
+      "path": "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+      "startedAt": "2026-10-13T12:37:07.752Z",
+      "elapsedMs": 11
+    },
+    {
+      "name": "lighthouse",
+      "path": "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+      "startedAt": "2026-10-13T12:37:07.763Z",
+      "elapsedMs": 5786
+    },
+    {
+      "name": "settle",
+      "path": "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+      "startedAt": "2026-10-13T12:37:13.549Z",
+      "elapsedMs": 9
+    },
+    {
+      "name": "summarize",
+      "path": "/admin/listening/88b72b8b-44f4-41fb-b21c-2b4960354793",
+      "startedAt": "2026-10-13T12:37:13.558Z",
+      "elapsedMs": 2
+    },
+    {
+      "name": "navigate",
+      "path": "/admin/reciters",
+      "startedAt": "2026-10-13T12:37:13.56Z",
+      "elapsedMs": 1076
+    },
+    {
+      "name": "settle",
+      "path": "/admin/reciters",
+      "startedAt": "2026-10-13T12:37:14.636Z",
+      "elapsedMs": 11
+    },
+    {
+      "name": "rate_window_wait",
+      "path": "/admin/reciters",
+      "startedAt": "2026-10-13T12:37:14.647Z",
+      "elapsedMs": 45457
+    },
+    {
+      "name": "lighthouse",
+      "path": "/admin/reciters",
+      "startedAt": "2026-10-13T12:38:00.104Z",
+      "elapsedMs": 7557
+    },
+    {
+      "name": "settle",
+      "path": "/admin/reciters",
+      "startedAt": "2026-10-13T12:38:07.661Z",
+      "elapsedMs": 9
+    },
+    {
+      "name": "summarize",
+      "path": "/admin/reciters",
+      "startedAt": "2026-10-13T12:38:07.67Z",
+      "elapsedMs": 2
+    },
+    {
+      "name": "navigate",
+      "path": "/admin/recitations",
+      "startedAt": "2026-10-13T12:38:07.672Z",
+      "elapsedMs": 1141
+    },
+    {
+      "name": "settle",
+      "path": "/admin/recitations",
+      "startedAt": "2026-10-13T12:38:08.813Z",
+      "elapsedMs": 8
+    },
+    {
+      "name": "lighthouse",
+      "path": "/admin/recitations",
+      "startedAt": "2026-10-13T12:38:08.821Z",
+      "elapsedMs": 9423
+    },
+    {
+      "name": "settle",
+      "path": "/admin/recitations",
+      "startedAt": "2026-10-13T12:38:18.244Z",
+      "elapsedMs": 11
+    },
+    {
+      "name": "summarize",
+      "path": "/admin/recitations",
+      "startedAt": "2026-10-13T12:38:18.255Z",
+      "elapsedMs": 3
+    },
+    {
+      "name": "navigate",
+      "path": "/admin/availability",
+      "startedAt": "2026-10-13T12:38:18.258Z",
+      "elapsedMs": 1101
+    },
+    {
+      "name": "settle",
+      "path": "/admin/availability",
+      "startedAt": "2026-10-13T12:38:19.359Z",
+      "elapsedMs": 12
+    },
+    {
+      "name": "rate_window_wait",
+      "path": "/admin/availability",
+      "startedAt": "2026-10-13T12:38:19.371Z",
+      "elapsedMs": 40740
+    },
+    {
+      "name": "lighthouse",
+      "path": "/admin/availability",
+      "startedAt": "2026-10-13T12:39:00.111Z",
+      "elapsedMs": 6323
+    },
+    {
+      "name": "settle",
+      "path": "/admin/availability",
+      "startedAt": "2026-10-13T12:39:06.434Z",
+      "elapsedMs": 10
+    },
+    {
+      "name": "summarize",
+      "path": "/admin/availability",
+      "startedAt": "2026-10-13T12:39:06.444Z",
+      "elapsedMs": 4
+    },
+    {
+      "name": "navigate",
+      "path": "/admin/provider-licenses",
+      "startedAt": "2026-10-13T12:39:06.448Z",
+      "elapsedMs": 1076
+    },
+    {
+      "name": "settle",
+      "path": "/admin/provider-licenses",
+      "startedAt": "2026-10-13T12:39:07.524Z",
+      "elapsedMs": 13
+    },
+    {
+      "name": "lighthouse",
+      "path": "/admin/provider-licenses",
+      "startedAt": "2026-10-13T12:39:07.537Z",
+      "elapsedMs": 6164
+    },
+    {
+      "name": "settle",
+      "path": "/admin/provider-licenses",
+      "startedAt": "2026-10-13T12:39:13.701Z",
+      "elapsedMs": 8
+    },
+    {
+      "name": "summarize",
+      "path": "/admin/provider-licenses",
+      "startedAt": "2026-10-13T12:39:13.709Z",
+      "elapsedMs": 3
+    },
+    {
+      "name": "navigate",
+      "path": "/admin/storage",
+      "startedAt": "2026-10-13T12:39:13.712Z",
+      "elapsedMs": 1071
+    },
+    {
+      "name": "settle",
+      "path": "/admin/storage",
+      "startedAt": "2026-10-13T12:39:14.783Z",
+      "elapsedMs": 13
+    },
+    {
+      "name": "lighthouse",
+      "path": "/admin/storage",
+      "startedAt": "2026-10-13T12:39:14.796Z",
+      "elapsedMs": 5562
+    },
+    {
+      "name": "settle",
+      "path": "/admin/storage",
+      "startedAt": "2026-10-13T12:39:20.358Z",
+      "elapsedMs": 10
+    },
+    {
+      "name": "summarize",
+      "path": "/admin/storage",
+      "startedAt": "2026-10-13T12:39:20.368Z",
+      "elapsedMs": 2
+    },
+    {
+      "name": "navigate",
+      "path": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "startedAt": "2026-10-13T12:39:20.37Z",
+      "elapsedMs": 806
+    },
+    {
+      "name": "settle",
+      "path": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "startedAt": "2026-10-13T12:39:21.176Z",
+      "elapsedMs": 8
+    },
+    {
+      "name": "rate_window_wait",
+      "path": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "startedAt": "2026-10-13T12:39:21.184Z",
+      "elapsedMs": 38921
+    },
+    {
+      "name": "lighthouse",
+      "path": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "startedAt": "2026-10-13T12:40:00.105Z",
+      "elapsedMs": 6154
+    },
+    {
+      "name": "settle",
+      "path": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "startedAt": "2026-10-13T12:40:06.259Z",
+      "elapsedMs": 17
+    },
+    {
+      "name": "summarize",
+      "path": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "startedAt": "2026-10-13T12:40:06.276Z",
+      "elapsedMs": 2
+    },
+    {
+      "name": "navigate",
+      "path": "/admin/launch",
+      "startedAt": "2026-10-13T12:40:06.278Z",
+      "elapsedMs": 1083
+    },
+    {
+      "name": "settle",
+      "path": "/admin/launch",
+      "startedAt": "2026-10-13T12:40:07.361Z",
+      "elapsedMs": 11
+    },
+    {
+      "name": "lighthouse",
+      "path": "/admin/launch",
+      "startedAt": "2026-10-13T12:40:07.372Z",
+      "elapsedMs": 6410
+    },
+    {
+      "name": "settle",
+      "path": "/admin/launch",
+      "startedAt": "2026-10-13T12:40:13.782Z",
+      "elapsedMs": 9
+    },
+    {
+      "name": "summarize",
+      "path": "/admin/launch",
+      "startedAt": "2026-10-13T12:40:13.791Z",
+      "elapsedMs": 2
+    },
+    {
+      "name": "navigate",
+      "path": "/admin/project",
+      "startedAt": "2026-10-13T12:40:13.793Z",
+      "elapsedMs": 1075
+    },
+    {
+      "name": "settle",
+      "path": "/admin/project",
+      "startedAt": "2026-10-13T12:40:14.868Z",
+      "elapsedMs": 10
+    },
+    {
+      "name": "lighthouse",
+      "path": "/admin/project",
+      "startedAt": "2026-10-13T12:40:14.878Z",
+      "elapsedMs": 5753
+    },
+    {
+      "name": "settle",
+      "path": "/admin/project",
+      "startedAt": "2026-10-13T12:40:20.631Z",
+      "elapsedMs": 11
+    },
+    {
+      "name": "summarize",
+      "path": "/admin/project",
+      "startedAt": "2026-10-13T12:40:20.642Z",
+      "elapsedMs": 2
+    },
+    {
+      "name": "rate_window_wait",
+      "path": "/admin/settings",
+      "startedAt": "2026-10-13T12:40:20.644Z",
+      "elapsedMs": 39461
+    },
+    {
+      "name": "navigate",
+      "path": "/admin/settings",
+      "startedAt": "2026-10-13T12:41:00.105Z",
+      "elapsedMs": 1091
+    },
+    {
+      "name": "settle",
+      "path": "/admin/settings",
+      "startedAt": "2026-10-13T12:41:01.196Z",
+      "elapsedMs": 10
+    },
+    {
+      "name": "lighthouse",
+      "path": "/admin/settings",
+      "startedAt": "2026-10-13T12:41:01.206Z",
+      "elapsedMs": 5978
+    },
+    {
+      "name": "settle",
+      "path": "/admin/settings",
+      "startedAt": "2026-10-13T12:41:07.184Z",
+      "elapsedMs": 9
+    },
+    {
+      "name": "summarize",
+      "path": "/admin/settings",
+      "startedAt": "2026-10-13T12:41:07.193Z",
+      "elapsedMs": 2
+    },
+    {
+      "name": "cleanup",
+      "path": null,
+      "startedAt": "2026-10-13T12:41:07.195Z",
+      "elapsedMs": 199
+    },
+    {
+      "name": "finalize",
+      "path": null,
+      "startedAt": "2026-10-13T12:41:07.394Z",
+      "elapsedMs": null
+    }
+  ],
+  "failure": null,
+  "setupRateWindowWaits": [
+    {
+      "beforePhase": "lighthouse",
+      "path": "/admin/reviews/3ea9e0a8-535d-49c8-b1ae-87d19b7e0d49",
+      "windowStartMs": 1791894960000,
+      "observedReadRequests": 26,
+      "scheduledUntilMs": 1791895020100,
+      "startedAt": "2026-10-13T12:36:11.968Z",
+      "waitMs": 48146,
+      "complete": true,
+      "rateLimitUnchanged": true
+    },
+    {
+      "beforePhase": "lighthouse",
+      "path": "/admin/reciters",
+      "windowStartMs": 1791895020000,
+      "observedReadRequests": 21,
+      "scheduledUntilMs": 1791895080100,
+      "startedAt": "2026-10-13T12:37:14.647Z",
+      "waitMs": 45455,
+      "complete": true,
+      "rateLimitUnchanged": true
+    },
+    {
+      "beforePhase": "lighthouse",
+      "path": "/admin/availability",
+      "windowStartMs": 1791895080000,
+      "observedReadRequests": 19,
+      "scheduledUntilMs": 1791895140100,
+      "startedAt": "2026-10-13T12:38:19.371Z",
+      "waitMs": 40738,
+      "complete": true,
+      "rateLimitUnchanged": true
+    },
+    {
+      "beforePhase": "lighthouse",
+      "path": "/admin/render-lab?job_id=03e7580b-acbf-4e9d-bf2f-f9d299403a2e",
+      "windowStartMs": 1791895140000,
+      "observedReadRequests": 23,
+      "scheduledUntilMs": 1791895200100,
+      "startedAt": "2026-10-13T12:39:21.184Z",
+      "waitMs": 38920,
+      "complete": true,
+      "rateLimitUnchanged": true
+    },
+    {
+      "beforePhase": "page",
+      "path": "/admin/settings",
+      "windowStartMs": 1791895200000,
+      "observedReadRequests": 19,
+      "scheduledUntilMs": 1791895260100,
+      "startedAt": "2026-10-13T12:40:20.644Z",
+      "waitMs": 39459,
+      "complete": true,
+      "rateLimitUnchanged": true
+    }
+  ],
+  "setupWaitMs": 212718,
+  "lighthouseVersion": "13.5.0",
+  "settings": {
+    "formFactor": "desktop",
+    "disableStorageReset": true,
+    "authentication": "HttpOnly SameSiteStrict cookie scoped to local hostname /api/admin",
+    "rawArtifactsPersisted": false,
+    "runtimeBudgetsMs": {
+      "job": 2700000,
+      "navigate": 60000,
+      "settle": 45000,
+      "lighthouse": 120000,
+      "evaluate": 30000,
+      "cleanup": 15000
+    },
+    "readWindowSetup": {
+      "observedGetThreshold": 18,
+      "windowMs": 60000,
+      "boundaryMarginMs": 100,
+      "maxTimerChunkMs": 30000,
+      "serverRateLimitUnchanged": true,
+      "measurementThrottled": false
+    }
+  },
+  "thresholds": {
+    "accessibility": 95,
+    "bestPractices": 95,
+    "cls": 0.1
+  },
+  "chromeVersion": "Chrome/149.0.7827.55",
+  "readWindows": [
+    {
+      "windowStartMs": 1791894960000,
+      "observedReadRequests": 26
+    },
+    {
+      "windowStartMs": 1791895020000,
+      "observedReadRequests": 21
+    },
+    {
+      "windowStartMs": 1791895080000,
+      "observedReadRequests": 19
+    },
+    {
+      "windowStartMs": 1791895140000,
+      "observedReadRequests": 23
+    },
+    {
+      "windowStartMs": 1791895200000,
+      "observedReadRequests": 19
+    },
+    {
+      "windowStartMs": 1791895260000,
+      "observedReadRequests": 8
+    }
+  ],
+  "readWindowScope": "this_browser_responses_only",
+  "targetEvidence": {
+    "source": "authenticated_get",
+    "timing_sample": "stored_row",
+    "timing_selection": "root_supplied_get_verified",
+    "timing_empty_chapters": [],
+    "retained_video": "available",
+    "render_selection": "root_supplied_get_verified",
+    "synthetic_targets": false
+  },
+  "limitations": [
+    {
+      "code": "LOCAL_ONLY_UI_KIT",
+      "message": "مكتبة المكونات محلية للمدير الأعلى؛ يُلتقط الرفض الفعلي في جلسة التحقق دون توسيع صلاحياتها."
+    }
+  ],
+  "cleanupOperation": "chrome_kill",
+  "finishedAt": "2026-10-13T12:41:07.396Z",
+  "measurementFailures": []
+}

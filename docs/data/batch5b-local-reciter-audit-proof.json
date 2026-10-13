@@ -1,0 +1,12 @@
+{
+  "local_only": true,
+  "production_writes": 0,
+  "owned_reader": true,
+  "profile_changed_and_restored": true,
+  "scoped_audit_count": 2,
+  "actions": [
+    "reciter.profile",
+    "reciter.profile"
+  ],
+  "real_reader_audit_dialog_available": true
+}

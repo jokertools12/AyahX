@@ -1,0 +1,69 @@
+{
+  "violations": [],
+  "incomplete": [
+    {
+      "id": "aria-valid-attr-value",
+      "nodes": [
+        {
+          "target": [
+            "button[role=\"combobox\"]"
+          ],
+          "checks": [
+            {
+              "id": "aria-valid-attr-value",
+              "message": "Unable to determine if aria-controls referenced ID exists on the page while using aria-haspopup: aria-controls=\"radix-:ro:\"",
+              "data": {
+                "messageKey": "controlsWithinPopup",
+                "needsReview": "aria-controls=\"radix-:ro:\""
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "tag": "BUTTON",
+      "role": "tab",
+      "controls": "radix-:rc:-content-profile",
+      "expanded": null,
+      "referencedExists": true
+    },
+    {
+      "tag": "BUTTON",
+      "role": "tab",
+      "controls": "radix-:rc:-content-recitations",
+      "expanded": null,
+      "referencedExists": true
+    },
+    {
+      "tag": "BUTTON",
+      "role": "tab",
+      "controls": "radix-:rc:-content-availability",
+      "expanded": null,
+      "referencedExists": true
+    },
+    {
+      "tag": "BUTTON",
+      "role": "tab",
+      "controls": "radix-:rc:-content-sources",
+      "expanded": null,
+      "referencedExists": true
+    },
+    {
+      "tag": "BUTTON",
+      "role": "tab",
+      "controls": "radix-:rc:-content-audit",
+      "expanded": null,
+      "referencedExists": true
+    },
+    {
+      "tag": "BUTTON",
+      "role": "combobox",
+      "controls": "radix-:ro:",
+      "expanded": "false",
+      "referencedExists": true
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "observed_at": "2026-10-13T12:41:53.0039173Z",
+  "local_only": true,
+  "production_writes": 0,
+  "method": "Actual DOM source codepoint offsets and original Range rectangles after fonts, finite animations and two frames; pixels alone never classify a fragment as whitespace",
+  "source_ranges": [
+    {
+      "rect": {
+        "x": 383.5,
+        "y": 239.5,
+        "width": 10.203125,
+        "height": 19
+      },
+      "non_whitespace_codepoints": 1,
+      "whitespace_codepoints": 0
+    },
+    {
+      "rect": {
+        "x": 403.90625,
+        "y": 273.5,
+        "width": 367.265625,
+        "height": 19
+      },
+      "non_whitespace_codepoints": 33,
+      "whitespace_codepoints": 3
+    },
+    {
+      "rect": {
+        "x": 771.171875,
+        "y": 273.5,
+        "width": 10.203125,
+        "height": 19
+      },
+      "non_whitespace_codepoints": 0,
+      "whitespace_codepoints": 1
+    },
+    {
+      "rect": {
+        "x": 383.5,
+        "y": 307.5,
+        "width": 224.4375,
+        "height": 19
+      },
+      "non_whitespace_codepoints": 20,
+      "whitespace_codepoints": 2
+    },
+    {
+      "rect": {
+        "x": 383.5,
+        "y": 341.5,
+        "width": 10.203125,
+        "height": 19
+      },
+      "non_whitespace_codepoints": 1,
+      "whitespace_codepoints": 0
+    }
+  ],
+  "actual_direct": {
+    "violations": 0,
+    "incomplete": 0,
+    "remeasurements": [
+      {
+        "resolved": true,
+        "reason": "PIXEL_VISIBLE_CONTRAST_PASS",
+        "images": [
+          {
+            "status": "pass",
+            "ratio": 12.00510726788608,
+            "sha256": "8fef479fb33f126dc8386de0a525684c4f2c2b1869e2d77b58557412eaaaf377",
+            "width": 10,
+            "height": 19,
+            "rect": {
+              "x": 879.25,
+              "y": 239.5,
+              "width": 10.203125,
+              "height": 19
+            },
+            "intermediatePixelsWithoutCore": 0
+          },
+          {
+            "status": "pass",
+            "ratio": 12.00510726788608,
+            "sha256": "d2e798dba982418d8f2dc92707809f844cf236e82862791c7349c253ba4cedf7",
+            "width": 153,
+            "height": 19,
+            "rect": {
+              "x": 899.65625,
+              "y": 273.5,
+              "width": 153.03125,
+              "height": 19
+            },
+            "intermediatePixelsWithoutCore": 0
+          },
+          {
+            "status": "pass",
+            "ratio": 12.00510726788608,
+            "sha256": "f8b5f64b09f7a898d602fc6c6e55444cbbf22a2c632487b7e4d525d6433d0c66",
+            "width": 10,
+            "height": 19,
+            "rect": {
+              "x": 879.25,
+              "y": 307.5,
+              "width": 10.203125,
+              "height": 19
+            },
+            "intermediatePixelsWithoutCore": 0
+          }
+        ]
+      },
+      {
+        "resolved": true,
+        "reason": "PIXEL_VISIBLE_CONTRAST_PASS",
+        "images": [
+          {
+            "status": "pass",
+            "ratio": 12.00510726788608,
+            "sha256": "9a4a01fdbac2d7225c844463eee41e6da831360f9c5362461ae694ca976ff289",
+            "width": 10,
+            "height": 19,
+            "rect": {
+              "x": 383.5,
+              "y": 239.5,
+              "width": 10.203125,
+              "height": 19
+            },
+            "intermediatePixelsWithoutCore": 0
+          },
+          {
+            "status": "pass",
+            "ratio": 12.00510726788608,
+            "sha256": "963f3909bba332a321f5656736679abf8959b52ef2f468c67c2965b330a7eced",
+            "width": 367,
+            "height": 19,
+            "rect": {
+              "x": 403.90625,
+              "y": 273.5,
+              "width": 367.265625,
+              "height": 19
+            },
+            "intermediatePixelsWithoutCore": 4
+          },
+          {
+            "status": "pass",
+            "ratio": 12.00510726788608,
+            "sha256": "ad0d3fecc31cf46e64d875f60867052bf81036d71872ff03e85379bfb6730c54",
+            "width": 224,
+            "height": 19,
+            "rect": {
+              "x": 383.5,
+              "y": 307.5,
+              "width": 224.4375,
+              "height": 19
+            },
+            "intermediatePixelsWithoutCore": 0
+          },
+          {
+            "status": "pass",
+            "ratio": 12.00510726788608,
+            "sha256": "b2a3f1ece56ad02d03d7377f069ade9a336b0d83b804ccf67ac5039883d6fbbf",
+            "width": 10,
+            "height": 19,
+            "rect": {
+              "x": 383.5,
+              "y": 341.5,
+              "width": 10.203125,
+              "height": 19
+            },
+            "intermediatePixelsWithoutCore": 0
+          }
+        ]
+      }
+    ]
+  },
+  "glyphs_discarded": 0,
+  "pixel_thresholds_changed": false
+}

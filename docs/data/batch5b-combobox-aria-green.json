@@ -1,0 +1,41 @@
+{
+  "violations": [],
+  "incomplete": [],
+  "references": [
+    {
+      "tag": "BUTTON",
+      "role": "tab",
+      "controls": "radix-:rc:-content-profile",
+      "expanded": null,
+      "referencedExists": true
+    },
+    {
+      "tag": "BUTTON",
+      "role": "tab",
+      "controls": "radix-:rc:-content-recitations",
+      "expanded": null,
+      "referencedExists": true
+    },
+    {
+      "tag": "BUTTON",
+      "role": "tab",
+      "controls": "radix-:rc:-content-availability",
+      "expanded": null,
+      "referencedExists": true
+    },
+    {
+      "tag": "BUTTON",
+      "role": "tab",
+      "controls": "radix-:rc:-content-sources",
+      "expanded": null,
+      "referencedExists": true
+    },
+    {
+      "tag": "BUTTON",
+      "role": "tab",
+      "controls": "radix-:rc:-content-audit",
+      "expanded": null,
+      "referencedExists": true
+    }
+  ]
+}
