@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback, forwardRef, type ComponentPropsWithou
 import { CheckCircle2, AlertTriangle, CircleHelp, XCircle, Copy, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent as BaseDialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent as BaseDialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter as BaseDialogFooter } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { copy } from '../adminClipboard';
 import { useAdmin, useText } from '../adminState';
@@ -18,7 +18,8 @@ export { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip
 export { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {SheetContent as BaseDrawerContent} from '@/components/ui/sheet';
 export { Sheet as Drawer, SheetHeader as DrawerHeader, SheetTitle as DrawerTitle, SheetDescription as DrawerDescription } from '@/components/ui/sheet';
-export { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogFooter };
+export { Dialog, DialogHeader, DialogTitle, DialogDescription };
+export function DialogFooter({className='',...props}:ComponentPropsWithoutRef<typeof BaseDialogFooter>){return <BaseDialogFooter {...props} className={'admin-dialog-footer '+className}/>;}
 /** Scope translated close names/tooltips to admin, without changing shared public primitives. */
 function labelClose(element:HTMLElement|null,label:string){const close=element?[...element.children].find((child):child is HTMLButtonElement=>child instanceof HTMLButtonElement&&child.classList.contains('absolute')):undefined;if(close){close.setAttribute('title',label);close.setAttribute('aria-label',label);}}
 export const DialogContent=forwardRef<ElementRef<typeof BaseDialogContent>,ComponentPropsWithoutRef<typeof BaseDialogContent>>((props,ref)=>{const {lang}=useAdmin(),t=useText(),label=t('إغلاق النافذة','Close dialog'),[node,setNode]=useState<HTMLDivElement|null>(null);const attach=useCallback((element:HTMLDivElement|null)=>{setNode(element);if(typeof ref==='function')ref(element);else if(ref)ref.current=element;},[ref]);useEffect(()=>labelClose(node,label),[node,label]);return <BaseDialogContent {...props} dir={props.dir??(lang==='ar'?'rtl':'ltr')} lang={props.lang??lang} aria-modal={props['aria-modal']??true} ref={attach}/>;});

@@ -358,14 +358,16 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   }
   for (const table of [...scope.querySelectorAll('table,[role="table"],[role="grid"]')].filter(visible)) {
     scanned.tables++;
-    const rows = [...table.querySelectorAll('tbody tr,[role="row"]')].filter(visible);
+    // Emptiness describes the table's rendered data, not this scroll position.
+    // Row geometry is still measured only when painted during the full scan.
+    const rows = [...table.querySelectorAll('tbody tr,[role="row"]')].filter(row => !hidden(row) && row.getBoundingClientRect().height > 0);
     const dataRows = rows.filter(row => row.querySelector('td:not([colspan]),[role="cell"]'));
     const emptyRows = rows.filter(row => !dataRows.includes(row) && row.textContent?.trim());
     const help = table.parentElement?.querySelector('[role="status"],[data-empty-state]');
     if (!dataRows.length && !emptyRows.length && !(help && visible(help) && help.textContent?.trim())) record(table, 'EMPTY_TABLE_NO_HELP', 'Empty table has no visible explanation or next step.');
     const compact = Boolean(table.closest('[data-density="compact"]'));
     const minimum = compact ? thresholds.compactRow : thresholds.comfortableRow;
-    for (const row of dataRows) if (row.getBoundingClientRect().height < minimum) record(row, 'TABLE_ROW_HEIGHT', 'Data row is shorter than the selected density minimum.', undefined, row.getBoundingClientRect().height, minimum);
+    for (const row of dataRows.filter(visible)) if (row.getBoundingClientRect().height < minimum) record(row, 'TABLE_ROW_HEIGHT', 'Data row is shorter than the selected density minimum.', undefined, row.getBoundingClientRect().height, minimum);
   }
   for (let i = 0; i < painted.length; i++) for (let j = i + 1; j < painted.length; j++) {
     const a = painted[i], b = painted[j];

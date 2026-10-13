@@ -41,6 +41,12 @@ beforeEach(() => {
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); document.body.innerHTML = ''; });
 
 describe('admin visual document scanner', () => {
+  it('does not call a populated table empty while its rows are below the viewport', () => {
+    layout('<table id="table"><thead><tr><th>Heading</th></tr></thead><tbody><tr id="row"><td>Existing data</td></tr></tbody></table>', {table:[10,570,500,300],row:[10,640,500,52]});
+    expect(codes()).not.toContain('EMPTY_TABLE_NO_HELP');
+    document.getElementById('row')!.style.display='none';
+    expect(codes()).toContain('EMPTY_TABLE_NO_HELP');
+  });
   it('can be serialized for browser evaluate without module closures and never mutates DOM', () => {
     layout('<p id="safe">Readable text</p>', { safe: [10, 20, 200, 30] });
     const before = document.body.outerHTML;

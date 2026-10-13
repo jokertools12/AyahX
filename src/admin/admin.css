@@ -43,6 +43,10 @@ body:has(.admin-app) :is([role=dialog],[role=alertdialog]){max-height:calc(100dv
 .admin-app fieldset>legend+*,body:has(.admin-app) [role=dialog] fieldset>legend+*{margin-block-start:12px}
 .admin-shortcuts-list{display:grid;gap:12px}.admin-shortcuts-list p{padding-block:4px}
 body:has(.admin-app) .admin-dialog{grid-template-columns:minmax(0,1fr);max-width:min(42rem,calc(100vw - 32px));overflow-wrap:anywhere}body:has(.admin-app) .admin-dialog>div{min-width:0}
+body:has(.admin-app) .admin-dialog-footer{gap:12px;flex-wrap:wrap}body:has(.admin-app) .admin-dialog-footer>*{margin-inline:0!important}
+body:has(.admin-app) [data-sonner-toast]{font-family:Cairo,sans-serif;font-size:15px;line-height:1.7;background:hsl(var(--card))!important;color:hsl(var(--foreground))!important;border:1px solid var(--admin-outline,color-mix(in srgb,hsl(var(--foreground)) 62%,hsl(var(--card))))!important;opacity:1!important;transition:none!important;animation:none!important}
+body:has(.admin-app) [data-sonner-toast] :is([data-title],[data-description]){font-size:15px!important;line-height:1.7!important;color:hsl(var(--foreground))!important}
+body:has(.admin-app) [data-sonner-toast] button{min-width:44px;min-height:44px;font-size:15px;line-height:1.7}
 .admin-navigation-drawer>.admin-nav{margin-block-start:20px}.admin-nav a:hover{outline:1px solid var(--admin-outline);outline-offset:-1px}
 .admin-command-results{max-height:none;overflow:visible}
 .admin-command-results button:hover{outline:1px solid var(--admin-outline);outline-offset:-1px}

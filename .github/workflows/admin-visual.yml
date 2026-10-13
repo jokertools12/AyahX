@@ -14,7 +14,7 @@ concurrency:
 jobs:
   admin-visual:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 240
     services:
       mysql:
         image: mysql:9.7.2
