@@ -1,7 +1,7 @@
 // @vitest-environment node
 import {afterEach,describe,it,expect,vi} from 'vitest';
 import {setAdminVisualScanPhase,diagnoseAdminVisualPaintDocument,collectAdminVisualFailureDiagnostic} from '../../tooling/e2e/helpers/adminVisualScanProgress.mjs';
-afterEach(()=>{vi.useRealTimers();vi.unstubAllGlobals();});
+afterEach(()=>{vi.useRealTimers();vi.unstubAllGlobals();delete (globalThis as unknown as Record<string,{stage:string;[key:string]:unknown}>).__AYAHX_ADMIN_VISUAL_AXE_PROGRESS__;});
 describe('exact visual scan phase diagnostics',()=>{
  it('distinguishes paint from synchronous scanner work with only numeric scroll metadata',()=>{
   const report={activeDialog:null,phase:'page-scanner',currentMeasurement:null};
@@ -23,5 +23,11 @@ describe('exact visual scan phase diagnostics',()=>{
  it('bounds the failure diagnostic itself if the browser thread is blocked',async()=>{
   vi.useFakeTimers();const page={evaluate:vi.fn(()=>new Promise(()=>{}))},result=collectAdminVisualFailureDiagnostic(page);
   await vi.advanceTimersByTimeAsync(3000);expect(await result).toMatchObject({acceptance:false,code:'ADMIN_VISUAL_FAILURE_DIAGNOSTIC_UNAVAILABLE'});
+ });
+ it('includes only allowed numeric node timing, stage and tag diagnostics',()=>{
+  vi.stubGlobal('document',{getAnimations:()=>[],fonts:Object.assign([],{status:'loaded'})});vi.stubGlobal('innerWidth',800);vi.stubGlobal('innerHeight',600);vi.stubGlobal('devicePixelRatio',1);
+  (globalThis as unknown as Record<string,{stage:string;[key:string]:unknown}>).__AYAHX_ADMIN_VISUAL_AXE_PROGRESS__={acceptance:true,stage:'node-axe',nodeIndex:4,nodesTotal:112,startedAtMs:200,targetTag:'BUTTON',ruleId:'color-contrast',password:'PRIVATE',selector:'#private',durationMs:Infinity};
+  const result=diagnoseAdminVisualPaintDocument();expect(result.axeProgress).toEqual({acceptance:false,stage:'node-axe',nodeIndex:4,nodesTotal:112,startedAtMs:200,targetTag:'BUTTON',ruleId:'color-contrast'});expect(JSON.stringify(result)).not.toMatch(/PRIVATE|private/);
+  (globalThis as unknown as Record<string,{stage:string;[key:string]:unknown}>).__AYAHX_ADMIN_VISUAL_AXE_PROGRESS__.stage='private text';expect(diagnoseAdminVisualPaintDocument().axeProgress).toBeNull();
  });
 });

@@ -43,12 +43,14 @@ describe('real contrast remeasurement acceptance',()=>{
   vi.spyOn(target,'getBoundingClientRect').mockImplementation(()=>rect(-100) as DOMRect);
   run.mockResolvedValue(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}],passes:[{id:'color-contrast',nodes:[node(target)]}]}));
   const measured=await measureAdminVisualAccessibility();expect(measured.incomplete).toHaveLength(1);expect(run).toHaveBeenCalledTimes(1);expect(measured.remeasurements[0].reason).toBe('TARGET_NOT_FULLY_VISIBLE');
+  expect(measured.remeasurements[0].visibilityDiagnostic).toMatchObject({code:'VIEWPORT_CLIPPING',targetTag:'P',rect:{y:-100},viewport:{width:800,height:600}});
  });
  it('cannot resolve a node still clipped by an overflow ancestor',async()=>{
   const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(el:Element)=>({...style(el),overflowY:el.id==='panel'?'auto':'visible'}));
   vi.spyOn(document.getElementById('panel')!,'getBoundingClientRect').mockImplementation(()=>({...rect(),height:10,bottom:40}) as DOMRect);
   run.mockResolvedValue(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}],passes:[{id:'color-contrast',nodes:[node(target)]}]}));
   const measured=await measureAdminVisualAccessibility();expect(measured.incomplete).toHaveLength(1);expect(run).toHaveBeenCalledTimes(1);expect(measured.remeasurements[0].fullyVisibleBeforeRun).toBe(false);
+  expect(measured.remeasurements[0].visibilityDiagnostic).toMatchObject({code:'ANCESTOR_CLIPPING_Y',ancestorTag:'DIV',overflowY:'auto',rect:{height:30},ancestorRect:{height:10}});
  });
  it.each([0.0000038,0.001])('accepts only floating shared-edge noise, never actual clipping (%s px)',async(difference)=>{
   const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(el:Element)=>({...style(el),overflowX:el.id==='panel'?'auto':'visible'}));
@@ -60,6 +62,7 @@ describe('real contrast remeasurement acceptance',()=>{
   Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:()=>[other,target]});
   run.mockResolvedValue(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}],passes:[{id:'color-contrast',nodes:[node(target)]}]}));
   const measured=await measureAdminVisualAccessibility();expect(measured.incomplete).toHaveLength(1);expect(run).toHaveBeenCalledTimes(1);
+  expect(measured.remeasurements[0].visibilityDiagnostic).toMatchObject({code:'HIT_TARGET_NOT_OWNED',targetTag:'P',hitTopTag:'P',point:{x:70,y:45}});
  });
  it('requires real contrast proof at painted points of a rounded target, whose empty corners hit its parent',async()=>{
   Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:(x:number,y:number)=>((x<22||x>118)&&(y<32||y>58))?[target.parentElement!]:[target]});
@@ -81,5 +84,11 @@ describe('real contrast remeasurement acceptance',()=>{
   run.mockResolvedValueOnce(result({incomplete:[{id:'color-contrast',nodes:[node(target),node(other,['#other'])]}]})).mockResolvedValueOnce(result({passes:[{id:'color-contrast',nodes:[node(target)]}]})).mockResolvedValueOnce(result());
   Object.defineProperty(other,'scrollIntoView',{configurable:true,value:vi.fn()});
   const measured=await measureAdminVisualAccessibility();expect(measured.remeasurements).toHaveLength(2);expect(measured.incomplete).toEqual([{id:'color-contrast',nodes:[{target:['#other']}]}]);
+ });
+ it('exposes per-node real axe phase without text, selectors or private attributes',async()=>{
+  let observed:unknown;target.dataset.private='PRIVATE';
+  run.mockResolvedValueOnce(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}]})).mockImplementationOnce(async()=>{observed=(globalThis as unknown as Record<string,{stage:string;[key:string]:unknown}>).__AYAHX_ADMIN_VISUAL_AXE_PROGRESS__;return result({passes:[{id:'color-contrast',nodes:[node(target)]}]});});
+  const measured=await measureAdminVisualAccessibility();expect(observed).toMatchObject({acceptance:false,stage:'node-axe',ruleId:'color-contrast',nodeIndex:0,nodesTotal:1,targetTag:'P'});expect(measured.remeasurements[0].durationMs).toBeGreaterThanOrEqual(0);
+  expect(JSON.stringify(observed)).not.toMatch(/Readable|PRIVATE|#target/);expect((globalThis as unknown as Record<string,{stage:string;[key:string]:unknown}>).__AYAHX_ADMIN_VISUAL_AXE_PROGRESS__.stage).toBe('complete');
  });
 });

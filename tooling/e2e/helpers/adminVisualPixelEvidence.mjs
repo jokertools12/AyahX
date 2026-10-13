@@ -20,7 +20,10 @@ export async function measureAdminVisualEvidenceTarget({selector,action='measure
  const saved={window:{left:scrollX,top:scrollY},parents:parents.map(parent=>({left:parent.scrollLeft,top:parent.scrollTop}))};
  if(action==='prepare')el.scrollIntoView({block:'center',inline:'center',behavior:'instant'});
  await paint();
- const failure=reason=>({ready:false,reason,scrollState:saved});
+ let visibilityDiagnostic=null;
+ const pack=rect=>rect?{x:rect.x??rect.left,y:rect.y??rect.top,width:rect.width,height:rect.height}:null;
+ const reject=(code,rect,node,extra={})=>{visibilityDiagnostic={code,rect:pack(rect),targetTag:el.tagName,nodeTag:node?.tagName??null,viewport:{width:innerWidth,height:innerHeight},...extra};return false;};
+ const failure=reason=>({ready:false,reason,scrollState:saved,...(visibilityDiagnostic?{visibilityDiagnostic}:{})});
  const active=[...document.querySelectorAll('[role="dialog"][aria-modal="true"],dialog[open]')].filter(dialog=>{const r=dialog.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(dialog).visibility==='visible';}).at(-1);
  const scope=active??document.querySelector('.admin-app');
  if(!scope?.contains(el)||!el.isConnected)return failure('TARGET_OUTSIDE_ACTIVE_SCOPE');
@@ -30,21 +33,24 @@ export async function measureAdminVisualEvidenceTarget({selector,action='measure
  };
  const rectVisible=(rect,node)=>{
   const tolerance=.0001;
-  if(rect.width<=0||rect.height<=0||rect.left<-tolerance||rect.top<-tolerance||rect.right>innerWidth+tolerance||rect.bottom>innerHeight+tolerance||!visible(node))return false;
+  if(rect.width<=0||rect.height<=0)return reject('EMPTY_RECT',rect,node);
+  if(rect.left<-tolerance||rect.top<-tolerance||rect.right>innerWidth+tolerance||rect.bottom>innerHeight+tolerance)return reject('VIEWPORT_CLIPPING',rect,node);
+  if(!visible(node))return reject('ANCESTOR_NOT_VISIBLE',rect,node);
   for(let p=node;p;p=p.parentElement){const s=getComputedStyle(p),r=p.getBoundingClientRect();
-   if(/hidden|clip|auto|scroll/.test(s.overflowX)&&(rect.left<r.left+(parseFloat(s.borderLeftWidth)||0)-tolerance||rect.right>r.right-(parseFloat(s.borderRightWidth)||0)+tolerance))return false;
-   if(/hidden|clip|auto|scroll/.test(s.overflowY)&&(rect.top<r.top+(parseFloat(s.borderTopWidth)||0)-tolerance||rect.bottom>r.bottom-(parseFloat(s.borderBottomWidth)||0)+tolerance))return false;
+   const clipping={ancestorTag:p.tagName,ancestorRect:pack(r),overflowX:s.overflowX,overflowY:s.overflowY,borders:{left:parseFloat(s.borderLeftWidth)||0,right:parseFloat(s.borderRightWidth)||0,top:parseFloat(s.borderTopWidth)||0,bottom:parseFloat(s.borderBottomWidth)||0},scroll:{left:p.scrollLeft,top:p.scrollTop}};
+   if(/hidden|clip|auto|scroll/.test(s.overflowX)&&(rect.left<r.left+(parseFloat(s.borderLeftWidth)||0)-tolerance||rect.right>r.right-(parseFloat(s.borderRightWidth)||0)+tolerance))return reject('ANCESTOR_CLIPPING_X',rect,node,clipping);
+   if(/hidden|clip|auto|scroll/.test(s.overflowY)&&(rect.top<r.top+(parseFloat(s.borderTopWidth)||0)-tolerance||rect.bottom>r.bottom-(parseFloat(s.borderBottomWidth)||0)+tolerance))return reject('ANCESTOR_CLIPPING_Y',rect,node,clipping);
   }
-  if(typeof document.elementsFromPoint!=='function')return false;
+  if(typeof document.elementsFromPoint!=='function')return reject('HIT_TEST_UNAVAILABLE',rect,node);
   const cx=(rect.left+rect.right)/2,cy=(rect.top+rect.bottom)/2;
-  return[[cx,cy],[cx,rect.top+.1],[rect.right-.1,cy],[cx,rect.bottom-.1],[rect.left+.1,cy]].every(([x,y])=>{const top=document.elementsFromPoint(x,y)[0];return top&&(top===el||el.contains(top));});
+  return[[cx,cy],[cx,rect.top+.1],[rect.right-.1,cy],[cx,rect.bottom-.1],[rect.left+.1,cy]].every(([x,y])=>{const top=document.elementsFromPoint(x,y)[0];return top&&(top===el||el.contains(top))||reject('HIT_TARGET_NOT_OWNED',rect,node,{point:{x,y},hitTopTag:top?.tagName??null,hitTopRect:pack(top?.getBoundingClientRect())});});
  };
  if(!rectVisible(el.getBoundingClientRect(),el))return failure('TARGET_NOT_FULLY_VISIBLE');
  const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),rects=[],texts=[];
  while(walker.nextNode()){
   const text=walker.currentNode,parent=text.parentElement;if(!text.textContent.trim()||!parent||!visible(parent))continue;
   const range=document.createRange();range.selectNodeContents(text);
-  const lines=[...range.getClientRects()];if(!lines.length||lines.some(rect=>!rectVisible(rect,parent)))return failure('TEXT_NOT_FULLY_VISIBLE');
+  const lines=[...range.getClientRects()];if(!lines.length){reject('TEXT_RANGE_MISSING',null,parent);return failure('TEXT_NOT_FULLY_VISIBLE');}if(lines.some(rect=>!rectVisible(rect,parent)))return failure('TEXT_NOT_FULLY_VISIBLE');
   rects.push(...lines.map(rect=>({x:rect.x,y:rect.y,width:rect.width,height:rect.height})));texts.push(text.textContent);
  }
  // Generated labels and overlapping Range fragments cannot be distinguished
@@ -64,7 +70,7 @@ async function collectTarget(page,{selector,target,ruleId,evidenceDir,caseId,axO
  let prepared;
  try{
   prepared=await page.evaluate(measureAdminVisualEvidenceTarget,{selector,action:'prepare'});
-  proof.fullyVisibleBeforeRun=prepared.ready===true;if(!prepared.ready){proof.reason=prepared.reason;return proof;}
+  proof.fullyVisibleBeforeRun=prepared.ready===true;if(!prepared.ready){proof.reason=prepared.reason;if(prepared.visibilityDiagnostic)proof.visibilityDiagnostic=prepared.visibilityDiagnostic;return proof;}
   proof.paint=prepared.paint;proof.visibleText=prepared.visibleText;
   if(axOnly){
    const session=await page.context().newCDPSession(page);
@@ -87,6 +93,7 @@ async function collectTarget(page,{selector,target,ruleId,evidenceDir,caseId,axO
   }
   const after=await page.evaluate(measureAdminVisualEvidenceTarget,{selector});
   proof.fullyVisibleAfterRun=after.ready===true&&after.visibleText===prepared.visibleText&&isDeepStrictEqual(after.rects,prepared.rects)&&after.dpr===prepared.dpr;
+  if(after.visibilityDiagnostic)proof.afterVisibilityDiagnostic=after.visibilityDiagnostic;
   proof.reason=axOnly?'DIRECT_AX_VISIBLE_LABEL_PREFIX':'PIXEL_VISIBLE_CONTRAST_PASS';proof.resolved=true;
   if(!valid(axOnly?assertAdminVisualAxNameProof:assertAdminVisualPixelProof)(proof)){proof.resolved=false;proof.reason=axOnly?'DIRECT_AX_VISIBLE_PREFIX_NOT_PROVEN':'PIXEL_CONTRAST_NOT_PROVEN';}
  }catch{proof.resolved=false;proof.reason=axOnly?'DIRECT_AX_UNAVAILABLE':'PIXEL_CAPTURE_UNAVAILABLE';}

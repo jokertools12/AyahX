@@ -11,10 +11,13 @@ export function setAdminVisualScanPhase(report,operation,position={}){
  * pretends that paused finite motion has settled. No text or DOM IDs returned. */
 export function diagnoseAdminVisualPaintDocument(){
  const all=document.getAnimations(),fonts=[...document.fonts];
+ const ax=globalThis.__AYAHX_ADMIN_VISUAL_AXE_PROGRESS__;
+ const axeProgress=ax&&/^initial-axe(?:-complete)?$|^node-(?:identify|prepare-paint|axe|restore-paint|complete)$|^complete$/u.test(ax.stage)?{acceptance:false,stage:ax.stage,...Object.fromEntries(['startedAtMs','nodeIndex','nodesTotal','durationMs'].filter(key=>Number.isFinite(ax[key])).map(key=>[key,ax[key]])),...(ax.ruleId==='color-contrast'?{ruleId:ax.ruleId}:{}),...(/^[A-Z]{1,20}$/u.test(ax.targetTag??'')?{targetTag:ax.targetTag}:{})}:null;
  return{version:'admin-visual-paint-diagnostic-1',acceptance:false,
   visibility:document.visibilityState??null,focused:typeof document.hasFocus==='function'?document.hasFocus():null,
   fonts:{status:document.fonts.status,total:fonts.length,loading:fonts.filter(font=>font.status==='loading').length,error:fonts.filter(font=>font.status==='error').length},
   viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},
+  axeProgress,
   animationCount:all.length,animations:all.slice(0,64).map(animation=>{
    const timing=animation.effect?.getTiming();
    return{playState:animation.playState,pending:animation.pending===true,currentTime:typeof animation.currentTime==='number'?animation.currentTime:null,
