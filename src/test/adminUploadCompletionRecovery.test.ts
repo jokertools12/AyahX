@@ -49,7 +49,7 @@ function recoveryFixture() {
   registerAdminMediaEndpoints(definition => routes.push(definition), media, tasks, {} as AdminReciterWizard);
   const finish = routes.find(route => route.path === '/storage/uploads/:id/finish')!;
   const context = { actor, params: { id: objectId }, body: {} } as unknown as AdminRequestContext;
-  return { object, intents, audits, storage, jobs, add, service, finish: () => finish.handler(context), revokeRights: () => { rightsApproved = false; } };
+  return { object, intents, audits, storage, jobs, add, service, finish: (who = actor) => finish.handler({ ...context, actor: who }), revokeRights: () => { rightsApproved = false; } };
 }
 
 describe('licensed upload completion recovery', () => {
@@ -90,6 +90,15 @@ describe('licensed upload completion recovery', () => {
     expect(fixture.storage.head).not.toHaveBeenCalled();
     expect(fixture.storage.read).not.toHaveBeenCalled();
     expect(fixture.object.upload_status).toBe('verified');
+  });
+
+  it('does not let another actor claim or overwrite the persisted verification intent', async () => {
+    const fixture = recoveryFixture();
+    await fixture.finish();
+    await expect(fixture.finish({ ...actor, id: 'other-owner' })).rejects.toThrow('TASK_INTENT_CONFLICT');
+    expect(fixture.intents.size).toBe(1);
+    expect(fixture.jobs.size).toBe(1);
+    expect([...fixture.intents.values()][0].actor_id).toBe(actor.id);
   });
 
   it('does not recover completed uploads whose rights were revoked or superseded', async () => {

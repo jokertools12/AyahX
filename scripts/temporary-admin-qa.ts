@@ -1,4 +1,5 @@
-/** Root-operated QA lifecycle. Credentials never enter output or audit payloads. */
+/** Root-operated QA lifecycle. Production create accepts --backup <verified-proof.json>.
+ * Credentials never enter output or audit payloads. */
 import assert from 'node:assert/strict';
 import {randomBytes,randomUUID} from 'node:crypto';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
@@ -11,6 +12,7 @@ import {appendCatalogAudit} from '../server/services/catalogAudit';
 import {catalogDatabaseFromPool} from '../server/services/catalogMysqlDatabase';
 import {openRailwayMysqlSession} from './lib/railwayMysqlSession';
 import {ENVIRONMENTS} from './lib/railwayQuranOps';
+import {qaBackupProofPath,readFreshQaBackup} from './lib/temporaryAdminQaBackup';
 
 export interface QaAccount {id:string;email:string;password:string;eventName:string;createdAt:string;expiresAt:string;environment:'production'|'local';state:'prepared'|'active'|'deleted'}
 export function prepareQaAccount(environment:QaAccount['environment'],ttlMs=11*3600000,now=Date.now()):QaAccount {
@@ -68,6 +70,7 @@ async function main(){
  const args=process.argv.slice(2),operation=args[0];assert.ok(['create','delete','verify'].includes(operation),'QA_OPERATION_REQUIRED');
  const production=args.includes('--confirm-production');assert.ok(args.includes('--apply')||operation==='verify','QA_APPLY_REQUIRED');
  const directory=join(process.env.LOCALAPPDATA!,'AyahX','private-backups');await mkdir(directory,{recursive:true});
+ if(production&&operation==='create')await readFreshQaBackup(qaBackupProofPath(args,directory));
  const file=join(directory,production?'batch5-production-qa.json':'batch5-local-qa.json');
  let account:QaAccount;
  if(operation==='create'){
@@ -76,9 +79,6 @@ async function main(){
   account=old?.state==='prepared'?old:prepareQaAccount(production?'production':'local');await writeFile(file,JSON.stringify(account),{mode:0o600});
  }else account=JSON.parse(await readFile(file,'utf8'));
  assert.equal(account.environment,production?'production':'local','QA_ENVIRONMENT_MISMATCH');
- if(production&&operation==='create'){
-  const backup=JSON.parse(await readFile(join(directory,'batch5-preqa-backup-verified.json'),'utf8'));assert.equal(backup.restored_and_verified,true,'QA_VERIFIED_BACKUP_REQUIRED');assert.ok(Date.now()-Date.parse(backup.checked_at)<3600000,'QA_FRESH_BACKUP_REQUIRED');
- }
  const session=production?await openRailwayMysqlSession(ENVIRONMENTS.production,{allowWrites:operation!=='verify'}):null;
  const pool=!production?mysql.createPool({host:'127.0.0.1',port:33319,user:'root',database:'ayahx_d2_batch5_qa_restored_v2_20261012',timezone:'Z',connectionLimit:1}):null;
  const format=(sql:string,params:unknown[])=>{const formatted=mysql.format(sql,params as Parameters<typeof mysql.format>[1]).trimEnd().replace(/;?$/u,';');return /^CREATE EVENT /u.test(formatted)?'DELIMITER $$\n'+formatted.slice(0,-1)+'$$\nDELIMITER ;':formatted;};

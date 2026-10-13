@@ -24,6 +24,14 @@ describe('licensed multipart resume', () => {
     expect(result).toEqual({ storageObjectId: 'upload-id', verificationTaskId: 'task-id' });
   });
 
+  it('recovers an already committed object without issuing any part capability or PUT', async () => {
+    request.mockResolvedValueOnce({ data: { parts: [], completedObject: true, put: null }, meta: { requestId: 'test' } });
+    request.mockResolvedValueOnce({ data: { status: 'uploaded', verification_task_id: checkpoint.storageObjectId }, meta: { requestId: 'test' } });
+    const result = await uploadLicensedAudio(input());
+    expect(request.mock.calls.map(call => call[0])).toEqual(['/storage/uploads/upload-id/resume', '/storage/uploads/upload-id/finish']);
+    expect(result).toEqual({ storageObjectId: checkpoint.storageObjectId, verificationTaskId: checkpoint.storageObjectId });
+  });
+
   it('refuses inconsistent completed part sizes without overwriting them', async () => {
     request.mockResolvedValueOnce({ data: { parts: [{ partNumber: 1, etag: 'one', sizeBytes: 4 }], completedObject: false, put: null }, meta: { requestId: 'test' } });
     await expect(uploadLicensedAudio(input())).rejects.toThrow('AUDIO_RESUME_PART_SIZE_MISMATCH');
