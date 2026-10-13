@@ -10,7 +10,7 @@ export const requiredAdminRoutePatterns = Object.freeze([
   'render-lab', 'launch', 'project', 'help',
 ]);
 
-export function buildAdminVisualRoutes(source, fixture) {
+export function buildAdminVisualRoutes(source, fixture, options = {}) {
   const ast = ts.createSourceFile('AdminRoot.tsx', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   const patterns = new Set();
   const visit = node => {
@@ -53,7 +53,7 @@ export function buildAdminVisualRoutes(source, fixture) {
   });
   // Full CI fixtures cover tabbed pages too, using the application's existing
   // query state. No DOM injection or mocked content replaces these subviews.
-  return fixture.timingsRecitationId&&fixture.renderJobId?routes.flatMap(route=>route.pattern==='quran'?[route,...['integrity','riwayat'].map(tab=>({...route,path:route.path+'?tab='+tab,view:tab}))]:route.pattern==='reciters/:id'?[route,...['recitations','availability','sources','audit'].map(tab=>({...route,path:route.path+'?tab='+tab,view:tab}))]:[route]):routes;
+  return (options.includeAllViews??Boolean(fixture.timingsRecitationId&&fixture.renderJobId))?routes.flatMap(route=>route.pattern==='quran'?[route,...['integrity','riwayat'].map(tab=>({...route,path:route.path+'?tab='+tab,view:tab}))]:route.pattern==='reciters/:id'?[route,...['recitations','availability','sources','audit'].map(tab=>({...route,path:route.path+'?tab='+tab,view:tab}))]:[route]):routes;
 }
 
 /** All concrete modal declarations must have an explicit safe opener. */
