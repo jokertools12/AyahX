@@ -2,6 +2,7 @@
 import {readFile,writeFile,mkdir,realpath} from 'node:fs/promises';
 import {join,resolve,relative,isAbsolute} from 'node:path';
 import {chromium} from '../tooling/e2e/node_modules/playwright-core/index.mjs';
+import {waitForAdminVisualPaint} from '../tooling/e2e/helpers/adminVisualPaint.mjs';
 const option=name=>{const at=process.argv.indexOf(name);if(at<0||!process.argv[at+1])throw new Error('PRIVATE_ARGUMENT_REQUIRED');return process.argv[at+1];};
 const root=await realpath(process.cwd()),output=resolve(option('--output')),manifest=JSON.parse(await readFile(option('--manifest'),'utf8'));
 const location=relative(root,output),base=new URL(manifest.baseUrl);
@@ -13,7 +14,7 @@ const context=await chromium.launchPersistentContext(join(output,'profile'),{cha
 const report={scope:'three-local-display-regressions',startedAt:new Date().toISOString(),production:false,applicationWrites:0,blockedWrites:[],cases:[],passed:false};
 await context.route('**/*',async route=>{const request=route.request(),url=new URL(request.url());if(!['GET','HEAD','OPTIONS'].includes(request.method())&&!(url.origin===base.origin&&url.pathname==='/api/admin/auth/login'&&request.method()==='POST')){report.blockedWrites.push({path:url.pathname,method:request.method()});await route.abort();return;}await route.continue();});
 const page=await context.newPage();
-const paint=async()=>page.evaluate(async()=>{await document.fonts.ready;await Promise.allSettled(document.getAnimations().filter(a=>a.effect?.getTiming().iterations!==Infinity).map(a=>a.finished));await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
+const paint=async()=>page.evaluate(waitForAdminVisualPaint);
 const normalize=text=>text.normalize('NFC').replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/gu,'').replace(/\s+/gu,' ').trim();
 try{
  await page.goto(base.origin+'/admin');await page.locator('#admin-email').fill(auth.email);await page.locator('#admin-password').fill(auth.password);await page.locator('form button[type=submit]').click();await page.locator('.admin-task').first().waitFor();await paint();

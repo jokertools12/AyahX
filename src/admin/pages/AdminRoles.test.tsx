@@ -9,7 +9,7 @@ vi.mock('../useAdminResource',()=>({
  useAdminMutation:()=>({pending:false,error:null,run:vi.fn()})
 }));
 const user={id:'unit-owner',email:'unit@example.test',displayName:'Unit owner',roles:['super_admin'],permissions:['roles.manage'],sessionId:'unit-session',environment:'test',totp:{enabled:false,required:false,encryptionConfigured:false}};
-const view=(lang:'ar'|'en')=>render(<MemoryRouter><AdminContext.Provider value={{user,lang,setLang:()=>{},refreshUser:()=>{}}}><AdminRoles/></AdminContext.Provider></MemoryRouter>);
+const view=(lang:'ar'|'en')=>render(<MemoryRouter future={{v7_startTransition:true,v7_relativeSplatPath:true}}><AdminContext.Provider value={{user,lang,setLang:()=>{},refreshUser:()=>{}}}><AdminRoles/></AdminContext.Provider></MemoryRouter>);
 afterEach(cleanup);
 describe('permission controls expose the same localized name and tooltip',()=>{
  it.each(['ar','en'] as const)('names each checked/unchecked control in %s without relying on its check icon',lang=>{

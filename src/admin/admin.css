@@ -65,6 +65,13 @@ body:has(.admin-app) [data-sonner-toast] button{min-width:44px;min-height:44px;f
 .admin-app [role=tab][data-state=active],body:has(.admin-app) :is([role=dialog],[role=alertdialog]) [role=tab][data-state=active]{background:hsl(var(--muted));color:hsl(var(--foreground));font-weight:700;box-shadow:none}
 /* Arabic permission names and their descriptions need separate ink rows. */
 .admin-permission-grid>label>span{display:grid;gap:8px}
+/* Keep saved-grant actions in flow: a pinned footer obscures permission controls
+   at arbitrary scroll positions and prevents their measured 8px separation. */
+.admin-app .admin-fixed-actions{position:relative;inset-block-end:auto}
 .admin-app button.bg-secondary,body:has(.admin-app) :is([role=dialog],[role=alertdialog]) button.bg-secondary{border:1px solid var(--admin-outline)}
 /* Sheet's generic gap needs a layout context; keep admin header/body ink apart. */
 body:has(.admin-app) .admin-drawer{display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:20px}body:has(.admin-app) .admin-drawer>div{min-width:0}
+
+/* Font ink at 15px exceeds a 25.5px Arabic line box; keep every wrapped line
+   inside its own hit/paint box in portalled descriptions and field labels. */
+body:has(.admin-app) :is(.admin-dialog,.admin-drawer) :is(p,label){line-height:2}
