@@ -117,6 +117,12 @@ const userId=randomUUID(),password=randomBytes(32).toString('base64url'),email='
 await db.execute('INSERT INTO users(id,email,password_hash) VALUES(?,?,?)',[userId,email,await bcrypt.hash(password,10)]);
 await db.execute('INSERT INTO profiles(id,user_id,display_name) VALUES(?,?,?)',[randomUUID(),userId,'CI visual fixture']);
 await db.execute('INSERT INTO user_roles(id,user_id,role) VALUES(?,?,?)',[randomUUID(),userId,'super_admin']);
+// Each browser shard authenticates independently: no shared sessions, profiles
+// or Redis actor read buckets. Both accounts exist only in this disposable DB.
+const secondShardId=randomUUID(),secondShardPassword=randomBytes(32).toString('base64url'),secondShardEmail='ci-admin-visual-shard-2@example.test';
+await db.execute('INSERT INTO users(id,email,password_hash) VALUES(?,?,?)',[secondShardId,secondShardEmail,await bcrypt.hash(secondShardPassword,10)]);
+await db.execute('INSERT INTO profiles(id,user_id,display_name) VALUES(?,?,?)',[randomUUID(),secondShardId,'CI_VISUAL_ONLY second browser shard']);
+await db.execute('INSERT INTO user_roles(id,user_id,role) VALUES(?,?,?)',[randomUUID(),secondShardId,'super_admin']);
 const secondaryUserId=randomUUID();
 await db.execute('INSERT INTO users(id,email,password_hash) VALUES(?,?,?)',[secondaryUserId,'ci-admin-visual-target@example.test',await bcrypt.hash(randomBytes(32).toString('base64url'),10)]);
 await db.execute('INSERT INTO profiles(id,user_id,display_name) VALUES(?,?,?)',[randomUUID(),secondaryUserId,'CI_VISUAL_ONLY secondary role target']);
@@ -150,21 +156,28 @@ const applicationDb=catalogDatabaseFromPool(pool);
 // Generated black/silent media is ONLY a marked visual fixture, never D7/M8
 // quality evidence. Keep it in ignored local uploads, under the real media
 // router's path boundary, with real ffprobe duration/size and authenticated GET.
-const renderJobId=randomUUID(),clipDirectory=join(process.cwd(),'uploads','admin-visual-ci');
-await mkdir(clipDirectory,{recursive:true,mode:0o700});
-const clipPath=join(clipDirectory,renderJobId+'.mp4');
-await runRenderV2Process(getFfmpegBinary(),['-nostdin','-y','-v','error','-f','lavfi','-i','color=c=black:s=320x180:r=24:d=1','-an','-c:v','libx264','-pix_fmt','yuv420p','-movflags','+faststart',clipPath]);
-const mediaProbe=await runRenderV2Process(getFfprobeBinary(),['-v','error','-show_format','-show_streams','-of','json',clipPath]);
-const media=JSON.parse(mediaProbe.stdout.toString('utf8')) as {format:{duration:string;size:string};streams:Array<{codec_type:string}>};
-if(!media.streams.some(stream=>stream.codec_type==='video')||media.streams.some(stream=>stream.codec_type==='audio')||!Number.isFinite(Number(media.format.duration))||Number(media.format.duration)<=0)throw new Error('CI_SYNTHETIC_BLACK_MEDIA_PROBE_INVALID');
+const renderJobId=randomUUID(),secondRenderJobId=randomUUID();
+const shardActors=[{id:userId,email,password,renderJobId},{id:secondShardId,email:secondShardEmail,password:secondShardPassword,renderJobId:secondRenderJobId}];
 const syntheticManifest={schemaVersion:'2.0.0',fixture:'CI_VISUAL_ONLY_SYNTHETIC_BLACK',actual_quran_render:false,acceptance_evidence:false};
+const visualMediaEvidence:Array<{synthetic_black:true;no_audio:true;duration_seconds:number;bytes:number;actual_quran_render:false;human_acceptance:false}>=[];
+for(const actor of shardActors){
+ const clipDirectory=join(process.cwd(),'uploads',actor.id,'admin-visual-ci');await mkdir(clipDirectory,{recursive:true,mode:0o700});
+ const clipPath=join(clipDirectory,actor.renderJobId+'.mp4');
+ await runRenderV2Process(getFfmpegBinary(),['-nostdin','-y','-v','error','-f','lavfi','-i','color=c=black:s=320x180:r=24:d=1','-an','-c:v','libx264','-pix_fmt','yuv420p','-movflags','+faststart',clipPath]);
+ const mediaProbe=await runRenderV2Process(getFfprobeBinary(),['-v','error','-show_format','-show_streams','-of','json',clipPath]);
+ const media=JSON.parse(mediaProbe.stdout.toString('utf8')) as {format:{duration:string;size:string};streams:Array<{codec_type:string}>};
+ if(!media.streams.some(stream=>stream.codec_type==='video')||media.streams.some(stream=>stream.codec_type==='audio')||!Number.isFinite(Number(media.format.duration))||Number(media.format.duration)<=0)throw new Error('CI_SYNTHETIC_BLACK_MEDIA_PROBE_INVALID');
+ visualMediaEvidence.push({synthetic_black:true,no_audio:true,duration_seconds:Number(media.format.duration),bytes:Number(media.format.size),actual_quran_render:false,human_acceptance:false});
+ await applicationDb.transaction(async tx=>{
+  await tx.execute("INSERT INTO render_jobs(id,user_id,engine,enqueue_state,status,progress,stage,manifest,max_retries,output_path,output_filename,output_size_bytes,duration_seconds,audio_bytes_fetched,qa_report_json,completed_at,expires_at) VALUES(?,?,'skia_canvas','enqueued','succeeded',100,?,?,0,?,'ci-synthetic-black.mp4',?,?,0,?,CURRENT_TIMESTAMP,DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 24 HOUR))",[actor.renderJobId,actor.id,'CI: فيديو أسود مصنوع للاختبار البصري فقط؛ ليس تلاوة أو قبول ريندر',JSON.stringify(syntheticManifest),clipPath,Number(media.format.size),Number(media.format.duration),JSON.stringify(syntheticManifest)]);
+  await appendCatalogAudit(tx,{id:'ci_visual_fixture_preparer',kind:'system',permissions:new Set(),requestId:'ci-visual-seed'},'admin.ci_visual_fixture.prepared','render_job',actor.renderJobId,null,{fixture_tag:'CI_VISUAL_ONLY',synthetic_black_video:true,actual_quran_render:false,human_acceptance:false,timing_source:timingPin.zip_url,timing_source_sha256:timingPin.sha256,timing_rows:timingResult.rows,canonical_checksum:corpus.checksum,all_human_reviews:'pending'});
+ });
+}
 await applicationDb.transaction(async tx=>{
- await tx.execute("INSERT INTO render_jobs(id,user_id,engine,enqueue_state,status,progress,stage,manifest,max_retries,output_path,output_filename,output_size_bytes,duration_seconds,audio_bytes_fetched,qa_report_json,completed_at,expires_at) VALUES(?,?,'skia_canvas','enqueued','succeeded',100,?,?,0,?,'ci-synthetic-black.mp4',?,?,0,?,CURRENT_TIMESTAMP,DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 24 HOUR))",[renderJobId,userId,'CI: فيديو أسود مصنوع للاختبار البصري فقط؛ ليس تلاوة أو قبول ريندر',JSON.stringify(syntheticManifest),clipPath,Number(media.format.size),Number(media.format.duration),JSON.stringify(syntheticManifest)]);
- await appendCatalogAudit(tx,{id:'ci_visual_fixture_preparer',kind:'system',permissions:new Set(),requestId:'ci-visual-seed'},'admin.ci_visual_fixture.prepared','render_job',renderJobId,null,{fixture_tag:'CI_VISUAL_ONLY',synthetic_black_video:true,actual_quran_render:false,human_acceptance:false,timing_source:timingPin.zip_url,timing_source_sha256:timingPin.sha256,timing_rows:timingResult.rows,canonical_checksum:corpus.checksum,all_human_reviews:'pending'});
  await appendCatalogAudit(tx,{id:'ci_visual_fixture_preparer',kind:'system',permissions:new Set(),requestId:'ci-visual-seed-reciter'},'admin.ci_visual_fixture.prepared','reciter',reciterId,null,{fixture_tag:'CI_VISUAL_ONLY',source_recording:timingSlug,all_human_reviews:'pending',approval_invented:false});
 });
-await writeFile(join(directory,'fixture.json'),JSON.stringify({id:userId,email,password,secondaryUserId,fixtureRoleSlug:'ci_visual_reviewer',safeReviewId,reciterId,recitationId,reviewId,storageId,youtubeRecitationId,renderJobId,timingsRecitationId:recitationId,timingsSurah:firstReadyTiming.surah,timingsAyah:firstReadyTiming.ayah}),{mode:0o600,flag:'wx'});
-await writeFile(join(directory,'seed-evidence.json'),JSON.stringify({mysql:String(versions[0].version),redis:'7.2',canonical_checksum:corpus.checksum,surahs:Object.keys(corpus.surahs).length,ayahs:corpus.ayahs.length,words:corpus.wordCount,recitations:dataset.recitations.length,reciters:dataset.reciters.length,fixture_tag:'CI_VISUAL_ONLY',timings:{slug:timingSlug,source_sha256:timingPin.sha256,manifest_sha256:timingManifestSha,script_sha256:timingPackage.scriptSha,rows:timingResult.rows,stored_fingerprint:timingResult.sha256,ready:preparedTimings.filter(row=>row.review_status==='ready').length,needs_review:preparedTimings.filter(row=>row.review_status==='needs_review').length,covered_words:preparedTimings.reduce((n,row)=>n+row.coverage_words,0),published:false,offset_approval_invented:false},visual_media:{synthetic_black:true,no_audio:true,duration_seconds:Number(media.format.duration),bytes:Number(media.format.size),actual_quran_render:false,human_acceptance:false},all_review_fixtures:'pending',migration008:true}),{mode:0o600});
+await writeFile(join(directory,'fixture.json'),JSON.stringify({id:userId,email,password,shardActors,secondaryUserId,fixtureRoleSlug:'ci_visual_reviewer',safeReviewId,reciterId,recitationId,reviewId,storageId,youtubeRecitationId,renderJobId,timingsRecitationId:recitationId,timingsSurah:firstReadyTiming.surah,timingsAyah:firstReadyTiming.ayah}),{mode:0o600,flag:'wx'});
+await writeFile(join(directory,'seed-evidence.json'),JSON.stringify({mysql:String(versions[0].version),redis:'7.2',canonical_checksum:corpus.checksum,surahs:Object.keys(corpus.surahs).length,ayahs:corpus.ayahs.length,words:corpus.wordCount,recitations:dataset.recitations.length,reciters:dataset.reciters.length,fixture_tag:'CI_VISUAL_ONLY',browser_shards:shardActors.length,independent_actor_sessions:true,timings:{slug:timingSlug,source_sha256:timingPin.sha256,manifest_sha256:timingManifestSha,script_sha256:timingPackage.scriptSha,rows:timingResult.rows,stored_fingerprint:timingResult.sha256,ready:preparedTimings.filter(row=>row.review_status==='ready').length,needs_review:preparedTimings.filter(row=>row.review_status==='needs_review').length,covered_words:preparedTimings.reduce((n,row)=>n+row.coverage_words,0),published:false,offset_approval_invented:false},visual_media:visualMediaEvidence,all_review_fixtures:'pending',migration008:true}),{mode:0o600});
 if(process.argv.includes('--seed-only')){if(redisFailed)throw new Error('EPHEMERAL_REDIS_UNAVAILABLE');await pool.end();await redis.quit();console.log('EPHEMERAL_ADMIN_CI_SEED_VERIFIED');process.exit(0);}
 // adminRuntime -> renderQueueBroker -> server/config reads process.env at import
 // time. Static import would load the checkout .env before our loopback pins.

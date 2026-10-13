@@ -5,7 +5,8 @@ import {createHash} from 'node:crypto';
 import Redis from 'ioredis';
 import {chromium} from '../tooling/e2e/node_modules/playwright-core/index.mjs';
 import {loadAdminVisualScanner} from '../tooling/e2e/helpers/loadAdminVisualScanner.mjs';
-import {buildAdminVisualRoutes,buildAdminVisualDialogs,assertAdminVisualDialogCoverage} from '../tooling/e2e/helpers/adminVisualInventory.mjs';
+import {buildAdminVisualRoutes,buildAdminVisualDialogs} from '../tooling/e2e/helpers/adminVisualInventory.mjs';
+import {selectAdminVisualShard,adminVisualSizes,adminVisualZooms,adminVisualLanguages,adminVisualThemes,adminVisualCaseName,ADMIN_VISUAL_SHARD_COUNT} from '../tooling/e2e/helpers/adminVisualSharding.mjs';
 import {allowedAdminVisualWrite,prepareAdminVisualDialogContext} from '../tooling/e2e/helpers/adminVisualDialogPreparation.mjs';
 import {measureAdminVisualAccessibility} from '../tooling/e2e/helpers/adminVisualAccessibility.mjs';
 import {waitForAdminVisualPaint} from '../tooling/e2e/helpers/adminVisualPaint.mjs';
@@ -13,13 +14,15 @@ if(process.env.CI!=='true'||process.env.AYAHX_ADMIN_VISUAL_CI!=='1')throw new Er
 const base='http://127.0.0.1:3005',directory=resolve(process.env.AYAHX_ADMIN_CI_PRIVATE_DIR??'');
 const location=relative(process.cwd(),directory);
 if(!process.env.AYAHX_ADMIN_CI_PRIVATE_DIR||!location.startsWith('..')&&!isAbsolute(location))throw new Error('PRIVATE_DIRECTORY_OUTSIDE_GIT_REQUIRED');
+if(!/^[01]$/u.test(process.env.AYAHX_ADMIN_VISUAL_SHARD_INDEX??'')||process.env.AYAHX_ADMIN_VISUAL_SHARD_COUNT!==String(ADMIN_VISUAL_SHARD_COUNT))throw new Error('ADMIN_VISUAL_SHARD_CONFIG_REQUIRED');
+const shardIndex=Number(process.env.AYAHX_ADMIN_VISUAL_SHARD_INDEX);
 const fixture=JSON.parse(await readFile(join(directory,'fixture.json'),'utf8'));
 if(!fixture.safeReviewId||!fixture.fixtureRoleSlug||!fixture.timingsRecitationId||!fixture.renderJobId)throw new Error('COMPLETE_ADMIN_VISUAL_FIXTURE_REQUIRED');
 const output=join(directory,'evidence');await mkdir(output,{recursive:true,mode:0o700});
 const source=await readFile('src/admin/AdminRoot.tsx','utf8');
 // Inventory follows the actual router, including future additions. An unknown
 // parameterized route fails instead of receiving a fabricated identifier.
-const routeInventory=buildAdminVisualRoutes(source,fixture),routes=routeInventory.map(route=>route.path);
+const fullRouteInventory=buildAdminVisualRoutes(source,fixture),routeInventory=selectAdminVisualShard(fullRouteInventory,shardIndex),routes=routeInventory.map(route=>route.path);
 async function adminSources(path){const result=[];for(const entry of await readdir(path,{withFileTypes:true})){const child=join(path,entry.name);if(entry.isDirectory())result.push(...await adminSources(child));else if(entry.name.endsWith('.tsx')&&!/\.(test|spec)\.tsx$/u.test(entry.name))result.push({path:child,source:await readFile(child,'utf8')});}return result;}
 const dialogInventory=buildAdminVisualDialogs(await adminSources('src/admin'));
 const scanner=await loadAdminVisualScanner();
@@ -29,7 +32,7 @@ await writeFile(join(extension,'manifest.json'),JSON.stringify({manifest_version
 await writeFile(join(extension,'background.js'),'chrome.runtime.onInstalled.addListener(()=>{});');
 const context=await chromium.launchPersistentContext(join(directory,'chrome-profile'),{channel:'chromium',headless:true,viewport:{width:1366,height:768},args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`]});
 const redis=new Redis('redis://127.0.0.1:6380/15',{maxRetriesPerRequest:1,retryStrategy:null});
-const report={version:'admin-visual-ci-1',startedAt:new Date().toISOString(),mode:'strict',routeInventory,dialogInventory,routes,matrix:[],dialogs:[],apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[],phase:'initialization',currentCase:null,activeDialog:null,passed:false};
+const report={version:'admin-visual-ci-shard-2',startedAt:new Date().toISOString(),mode:'strict',acceptanceScope:'partial-route-shard',shard:{index:shardIndex,count:ADMIN_VISUAL_SHARD_COUNT},fullRouteInventory,routeInventory,dialogInventory,routes,matrix:[],dialogs:[],apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[],phase:'initialization',currentCase:null,activeDialog:null,passed:false,shardComplete:false};
 redis.on('error',()=>report.redisErrors.push({code:'EPHEMERAL_REDIS_UNAVAILABLE'}));
 // API responses are never mocked. This gate is read-only after real login.
 await context.route('**/*',async route=>{
@@ -71,7 +74,7 @@ async function scanAccessibility(){
 async function scanDialogs(caseId,touch){
  // Only explicitly marked non-submitting openers. Clicking arbitrary action
  // buttons would violate the read-only gate. No mocked routes or responses.
- const results=[],visited=new Set();
+ const results=[],visited=new Set(),applicable=new Set();
  async function explore(scope){
   const parentDialog=report.activeDialog;report.phase='dialog-context-preparation';
   const cleanup=await prepareAdminVisualDialogContext(page,scope,fixture);
@@ -84,6 +87,7 @@ async function scanDialogs(caseId,touch){
   for(let index=0;index<await candidates.count();index++){const candidate=candidates.nth(index);if(await candidate.isVisible()&&await candidate.isEnabled()){opener=candidate;break;}}
   if(!opener)continue;
   if(!dialogInventory.some(item=>item.slug===slug))throw new Error('UNDECLARED_DIALOG_OPENER:'+slug);
+  applicable.add(slug);
   report.activeDialog=slug;report.phase='dialog-open';
   await opener.click();
   visited.add(slug);
@@ -106,7 +110,7 @@ async function scanDialogs(caseId,touch){
   }finally{await cleanup();}
  }
  await explore(page.locator('.admin-app'));
- return results;
+ return{dialogs:results,applicableDialogs:[...applicable]};
 }
 async function resetFixtureReadWindow(){
  // Reset ONLY this disposable fixture's read buckets between independently
@@ -115,8 +119,7 @@ async function resetFixtureReadWindow(){
  const hash=createHash('sha256').update(fixture.id).digest('hex'),bucket=Math.floor(Date.now()/60000);
  await redis.del(...[bucket-1,bucket,bucket+1].map(b=>`ayahx:admin-rate:read:${b}:${hash}`));
 }
-const sizes=[{width:1366,height:768},{width:1536,height:864},{width:1920,height:1080},{width:390,height:844}];
-const zoomFactors=[1,1.25,1.5,2];
+const sizes=adminVisualSizes,zoomFactors=adminVisualZooms;
 try{
  report.phase='login';
  await page.goto(base+'/admin');
@@ -126,33 +129,33 @@ try{
  for(const route of routes){
   report.phase='route-navigation';report.currentCase={route};report.activeDialog=null;
   await resetFixtureReadWindow();await page.goto(base+route);await settle();
-  for(const lang of ['ar','en']){
+  for(const lang of adminVisualLanguages){
    report.currentCase={route,lang};report.phase='case-language';
    await page.setViewportSize(sizes[0]);await zoom(1);
    if(await page.locator('.admin-app').getAttribute('lang')!==lang)await page.getByRole('button',{name:/تغيير اللغة|Change language/u}).click();
    await page.waitForFunction(lang=>document.querySelector('.admin-app')?.getAttribute('lang')===lang,lang);
-   for(const size of sizes){await page.setViewportSize(size);for(const factor of zoomFactors){report.currentCase={route,size,zoom:factor,lang};report.phase='case-zoom';await zoom(factor);for(const theme of ['light','dark']){
+   for(const size of sizes){await page.setViewportSize(size);for(const factor of zoomFactors){report.currentCase={route,size,zoom:factor,lang};report.phase='case-zoom';await zoom(factor);for(const theme of adminVisualThemes){
     report.currentCase={route,size,zoom:factor,theme,lang};report.phase='case-settle';report.activeDialog=null;
     await resetFixtureReadWindow();await page.evaluate(t=>{document.documentElement.classList.toggle('dark',t==='dark');localStorage.setItem('theme',t);},theme);await settle();
     const dpr=await page.evaluate(()=>devicePixelRatio);if(Math.abs(dpr-factor)>.02)throw new Error('NATIVE_ZOOM_DPR_MISMATCH');
     report.phase='page-scanner';const scans=await scanAll(size.width<768);report.phase='page-axe';const accessibility=await scanAccessibility();
-    const name=route.replace(/[^a-zA-Z0-9_-]/gu,'_')+`-${size.width}-${factor*100}-${theme}-${lang}`;
+    const name=adminVisualCaseName({route,size,zoom:factor,theme,lang});
     report.pendingCase={route,size,zoom:factor,theme,lang,dpr,scans,accessibility,dialogs:[]};
-    const dialogs=await scanDialogs(name,size.width<768);report.phase='case-evidence';report.activeDialog=null;
+    const {dialogs,applicableDialogs}=await scanDialogs(name,size.width<768);report.phase='case-evidence';report.activeDialog=null;
     const passed=scans.every(s=>!s.report.shouldFail)&&!accessibility.violations.length&&!accessibility.incomplete.length&&dialogs.every(dialog=>dialog.passed);
-    await writeFile(join(output,name+'.json'),JSON.stringify({route,size,zoom:factor,theme,lang,dpr,scans,accessibility,dialogs,passed}));
+    await writeFile(join(output,name+'.json'),JSON.stringify({route,size,zoom:factor,theme,lang,dpr,scans,accessibility,applicableDialogs,dialogs,passed}));
     // Only failing visual evidence is uploaded; no cookies, traces or profile.
     if(!passed)await page.screenshot({path:join(output,name+'.png'),fullPage:true,animations:'disabled'});
-    report.matrix.push({route,size,zoom:factor,theme,lang,passed,violations:scans.reduce((n,s)=>n+s.report.violations.length,0),indeterminate:scans.reduce((n,s)=>n+s.report.indeterminate.length,0),axeViolations:accessibility.violations.length,axeIncomplete:accessibility.incomplete.length});
+    report.matrix.push({caseId:name,route,size,zoom:factor,theme,lang,dpr,passed,violations:scans.reduce((n,s)=>n+s.report.violations.length,0),indeterminate:scans.reduce((n,s)=>n+s.report.indeterminate.length,0),axeViolations:accessibility.violations.length,axeIncomplete:accessibility.incomplete.length});
     delete report.pendingCase;
    }}}
   }
-  await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));console.log(JSON.stringify({route,matrixCases:report.matrix.length}));
+  await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));console.log(JSON.stringify({shard:shardIndex,route,matrixCases:report.matrix.length,acceptanceScope:'partial-route-shard'}));
  }
  report.phase='coverage-verification';const expected=routes.length*sizes.length*zoomFactors.length*2*2;
- try{assertAdminVisualDialogCoverage(dialogInventory,report.dialogs);report.dialogCoverage={passed:true};}catch(error){report.dialogCoverage={passed:false,code:error.message};}
+ report.dialogCoverage={scope:'observed-applicable-dialogs',passed:report.dialogs.every(dialog=>dialog.passed),fullDeclaredCoverage:'aggregate-only'};
  await resetFixtureReadWindow();report.reviewsStayedPending=true;
  for(const status of ['approved','rejected','deferred']){const response=await page.request.get(base+'/api/admin/reviews?status='+status+'&limit=1');if(!response.ok()){report.reviewsStayedPending=false;break;}const json=await response.json();if(Number(json.meta?.total)!==0)report.reviewsStayedPending=false;}
- report.expectedCases=expected;report.finishedAt=new Date().toISOString();report.phase='finished';report.passed=report.reviewsStayedPending&&report.dialogCoverage.passed&&report.matrix.length===expected&&report.matrix.every(row=>row.passed)&&!report.apiErrors.length&&!report.browserErrors.length&&!report.blockedRequests.length&&!report.redisErrors.length;
- await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));if(!report.passed)process.exitCode=1;
+ report.expectedCases=expected;report.finishedAt=new Date().toISOString();report.phase='finished';report.shardComplete=report.reviewsStayedPending&&report.dialogCoverage.passed&&report.matrix.length===expected&&report.matrix.every(row=>row.passed)&&!report.apiErrors.length&&!report.browserErrors.length&&!report.blockedRequests.length&&!report.redisErrors.length;
+ await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));if(!report.shardComplete)process.exitCode=1;
 }catch{report.finishedAt=new Date().toISOString();report.failure={code:report.activeDialog?'ADMIN_VISUAL_DIALOG_FAILURE':'ADMIN_VISUAL_BROWSER_FAILURE',phase:report.phase,case:report.currentCase,dialog:report.activeDialog};await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));process.exitCode=1;}finally{await context.close();await redis.quit();}

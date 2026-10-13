@@ -59,8 +59,8 @@ jobs:
             sleep 2
           done
           echo "EPHEMERAL_BOOTSTRAP_TIMEOUT"; exit 1
-      - name: Every admin route, native zoom, theme, language and size; scanner plus axe
-        run: node scripts/admin-visual-ci.mjs
+      - name: Every admin route, native zoom, theme, language and size; two shards with aggregate proof
+        run: node scripts/admin-visual-ci-all.mjs
       - name: Upload sanitized visual evidence only
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
@@ -68,6 +68,7 @@ jobs:
           name: admin-visual-strict
           path: |
             ${{ runner.temp }}/ayahx-admin-visual/evidence
+            ${{ runner.temp }}/ayahx-admin-visual/shards/*/evidence
             ${{ runner.temp }}/ayahx-admin-visual/seed-evidence.json
           if-no-files-found: error
           retention-days: 7
