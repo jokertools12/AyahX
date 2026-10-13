@@ -56,11 +56,19 @@ export async function measureAdminVisualEvidenceTarget({selector,action='measure
  const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),rects=[],texts=[];
  while(walker.nextNode()){
   const text=walker.currentNode,parent=text.parentElement;if(!text.textContent.trim()||!parent||!visible(parent))continue;
-  const range=document.createRange();range.selectNodeContents(text);
-  // Line-feed/caret fragments have no painted area. Do not invent a crop for
-  // them; every remaining Range still requires positive, visible geometry.
-  const lines=[...range.getClientRects()].filter(rect=>rect.width!==0&&rect.height!==0);if(!lines.length){reject('TEXT_RANGE_MISSING',null,parent);return failure('TEXT_NOT_FULLY_VISIBLE');}if(lines.some(rect=>!rectVisible(rect,parent)))return failure('TEXT_NOT_FULLY_VISIBLE');
-  rects.push(...lines.map(rect=>({x:rect.x,y:rect.y,width:rect.width,height:rect.height})));texts.push(text.textContent);
+  // PRE indentation has positive-width Range rectangles but no glyph paint.
+  // Select exact source-line offsets; only whitespace at the line edges is
+  // omitted. Internal spaces, bidi/wrapped fragments and every nonempty glyph
+  // (including a one-character brace) keep their strict geometry checks.
+  for(const line of text.textContent.matchAll(/[^\r\n\u2028\u2029]+/gu)){
+   const start=line[0].search(/\S/u);if(start<0)continue;
+   const range=document.createRange();range.setStart(text,line.index+start);range.setEnd(text,line.index+line[0].trimEnd().length);
+   // A newline/caret can have zero area; a nonempty source line still needs
+   // at least one positive, fully visible rectangle, never a fabricated crop.
+   const lines=[...range.getClientRects()].filter(rect=>rect.width!==0&&rect.height!==0);if(!lines.length){reject('TEXT_RANGE_MISSING',null,parent);return failure('TEXT_NOT_FULLY_VISIBLE');}if(lines.some(rect=>!rectVisible(rect,parent)))return failure('TEXT_NOT_FULLY_VISIBLE');
+   rects.push(...lines.map(rect=>({x:rect.x,y:rect.y,width:rect.width,height:rect.height})));
+  }
+  texts.push(text.textContent);
  }
  // Generated labels and overlapping Range fragments cannot be distinguished
  // from unrelated pixels by a text-only crop; leave them unresolved.

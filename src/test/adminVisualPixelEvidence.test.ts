@@ -182,11 +182,39 @@ describe('serialized real browser text-range guard (synthetic DOM unit geometry)
  });
  it('captures painted multiline PRE text while ignoring only zero-area newline fragments',async()=>{
   const pre=document.createElement('pre');pre.id='target';pre.textContent='{"key":\n"value"}\n';element.replaceWith(pre);element=pre;Object.defineProperty(pre,'scrollIntoView',{configurable:true,value:vi.fn()});
-  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,15,60,14),bounds(80,15,0,14),bounds(20,30,80,14),bounds(100,30,0,14),bounds(20,44,10,0)]});
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){return this.startOffset===0?[bounds(20,15,60,14),bounds(80,15,0,14)]:[bounds(20,30,80,14),bounds(100,30,0,14),bounds(20,44,10,0)];}});
   const measured=await measureAdminVisualEvidenceTarget({selector:'#target'});expect(measured).toMatchObject({ready:true,visibleText:'{"key":\n"value"}\n',rects:[{x:20,y:15,width:60,height:14},{x:20,y:30,width:80,height:14}]});
   Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,15,0,14)]});
   expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'TEXT_RANGE_MISSING'}});
   for(const width of [-1,NaN]){Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,15,60,14),bounds(20,30,width,14)]});expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'EMPTY_RECT'}});}
+ });
+ it('uses exact nonempty PRE source-line offsets, excluding positive-width indentation crops',async()=>{
+  const source='{\r\n  "component": "Drawer",  \r\n \t \r\n  "demo": true \n}\n',pre=document.createElement('pre');pre.id='target';pre.textContent=source;element.replaceWith(pre);element=pre;
+  const captured:Array<{start:number;end:number;text:string}>=[];
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){
+   const text=this.toString();captured.push({start:this.startOffset,end:this.endOffset,text});
+   if(text===source)return [bounds(20,12,9,7),bounds(20,20,18,7),bounds(38,20,90,7),bounds(20,28,18,7),bounds(38,28,60,7),bounds(20,36,9,7)];
+   const index=['{','"component": "Drawer",','"demo": true','}'].indexOf(text);return index<0?[bounds(20,20,18,7)]:[bounds(20,index*8+12,index===0||index===3?9:80,7)];
+  }});
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)(),proof=await standalone({selector:'#target'});
+  expect(proof).toMatchObject({ready:true,visibleText:source,rects:[{x:20,y:12,width:9,height:7},{x:20,y:20,width:80,height:7},{x:20,y:28,width:80,height:7},{x:20,y:36,width:9,height:7}]});
+  expect(captured.map(row=>row.text)).toEqual(['{','"component": "Drawer",','"demo": true','}']);
+  for(const match of source.matchAll(/\S/gu))expect(captured.some(row=>row.start<=match.index!&&row.end>match.index!)).toBe(true);
+  for(const row of captured){expect(source.slice(row.start,row.end)).toBe(row.text);expect(row.text).toBe(row.text.trim());}
+ });
+ it('preserves internal spaces and every wrapped bidi rectangle after trimming only source-line edges',async()=>{
+  const source='  اكتب abc123 للتأكيد  ',text=element.querySelector('span')!.firstChild!;text.textContent=source;
+  const captured:string[]=[];
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){captured.push(this.toString());return[bounds(20,12,20,12),bounds(40,12,30,12),bounds(70,12,20,12),bounds(20,27,35,12),bounds(55,27,0,12)];}});
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)(),proof=await standalone({selector:'#target'});
+  expect(proof).toMatchObject({ready:true,visibleText:source,rects:[{x:20,y:12,width:20,height:12},{x:40,y:12,width:30,height:12},{x:70,y:12,width:20,height:12},{x:20,y:27,width:35,height:12}]});
+  expect(captured).toEqual(['اكتب abc123 للتأكيد']);
+ });
+ it('never discards a nonempty brace whose source-line range has missing paint geometry',async()=>{
+  const pre=document.createElement('pre');pre.id='target';pre.textContent='{\n  "demo": true\n}\n';element.replaceWith(pre);element=pre;
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:function(this:Range){return this.toString()==='}'?[bounds(20,35,0,7)]:[bounds(20,this.toString()==='{'?12:23,80,7)];}});
+  const standalone=new Function(`return (${measureAdminVisualEvidenceTarget.toString()});`)();
+  expect(await standalone({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'TEXT_RANGE_MISSING'}});
  });
  it('fails closed when borders leave no interior ownership rectangle',async()=>{
   const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element)=>({...style(node),...(node===element?{borderLeftWidth:'60px',borderRightWidth:'60px'}:{})}));
