@@ -33,3 +33,5 @@ body:has(.admin-app) :is([role=dialog],[role=alertdialog]){font-family:Cairo,san
 body:has(.admin-app) :is([role=dialog],[role=alertdialog]){max-height:calc(100dvh - 32px);max-width:calc(100vw - 32px);overflow-y:auto}
 
 .admin-app .admin-quran,body:has(.admin-app) [role=dialog] .admin-quran{font-size:calc(28px * var(--admin-font-scale,1));line-height:1.9}.admin-app [role=switch],body:has(.admin-app) [role=dialog] [role=switch]{border:2px solid var(--admin-outline)}
+
+.admin-mobile-cards>article{display:grid;gap:16px}.admin-mobile-cards>article>.admin-check-label{justify-self:start;width:44px}
