@@ -18,7 +18,14 @@ export async function measureAdminVisualAccessibility(){
   // DPR geometry can represent a shared CSS edge a few millionths of a pixel
   // differently. This bounded tolerance cannot hide a 0.001px clipping defect.
   const tolerance=0.0001;
-  const r=el.getBoundingClientRect();if(r.width<=0||r.height<=0)return reject('EMPTY_RECT',r);if(r.left < -tolerance||r.top < -tolerance||r.right>innerWidth+tolerance||r.bottom>innerHeight+tolerance)return reject('VIEWPORT_CLIPPING',r);
+  const r=el.getBoundingClientRect();if(r.width<=0||r.height<=0)return reject('EMPTY_RECT',r);
+  // Inline elements can span several line boxes. Their union contains the
+  // unpainted gap between lines, so use every client rect for clipping and hit
+  // testing. This keeps an actual overlay or clipped line as a hard failure
+  // while avoiding a fabricated "covered" result in the inter-line gap.
+  const boxes=[...el.getClientRects()];
+  if(!boxes.length)return reject('EMPTY_CLIENT_RECTS',r);
+  if(boxes.some(box=>box.width<=0||box.height<=0||box.left < -tolerance||box.top < -tolerance||box.right>innerWidth+tolerance||box.bottom>innerHeight+tolerance))return reject('VIEWPORT_CLIPPING',r);
   for(let p=el;p;p=p.parentElement){
    const s=getComputedStyle(p),b=p.getBoundingClientRect();
    const ancestor={ancestorTag:p.tagName,ancestorRect:pack(b),overflowX:s.overflowX,overflowY:s.overflowY,borders:{left:parseFloat(s.borderLeftWidth)||0,right:parseFloat(s.borderRightWidth)||0,top:parseFloat(s.borderTopWidth)||0,bottom:parseFloat(s.borderBottomWidth)||0},scroll:{left:p.scrollLeft,top:p.scrollTop}};
@@ -26,18 +33,21 @@ export async function measureAdminVisualAccessibility(){
    // A painted target border box cannot clip itself at its inner border edge.
    // Ancestors still clip this box; exact axe then checks the actual content.
    if(p===el)continue;
-   if(/hidden|clip|auto|scroll/.test(s.overflowX)&&(r.left<b.left+(parseFloat(s.borderLeftWidth)||0)-tolerance||r.right>b.right-(parseFloat(s.borderRightWidth)||0)+tolerance))return reject('ANCESTOR_CLIPPING_X',r,ancestor);
-   if(/hidden|clip|auto|scroll/.test(s.overflowY)&&(r.top<b.top+(parseFloat(s.borderTopWidth)||0)-tolerance||r.bottom>b.bottom-(parseFloat(s.borderBottomWidth)||0)+tolerance))return reject('ANCESTOR_CLIPPING_Y',r,ancestor);
+   if(/hidden|clip|auto|scroll/.test(s.overflowX)&&boxes.some(box=>box.left<b.left+(parseFloat(s.borderLeftWidth)||0)-tolerance||box.right>b.right-(parseFloat(s.borderRightWidth)||0)+tolerance))return reject('ANCESTOR_CLIPPING_X',r,ancestor);
+   if(/hidden|clip|auto|scroll/.test(s.overflowY)&&boxes.some(box=>box.top<b.top+(parseFloat(s.borderTopWidth)||0)-tolerance||box.bottom>b.bottom-(parseFloat(s.borderBottomWidth)||0)+tolerance))return reject('ANCESTOR_CLIPPING_Y',r,ancestor);
   }
   // A rectangular viewport inclusion alone cannot prove paint through an
   // independent overlay. Require the reported target to own every hit point.
   if(typeof document.elementsFromPoint!=='function')return reject('HIT_TEST_UNAVAILABLE',r);
   // Rounded controls do not paint their rectangular corners. Test the center
   // and the four edge midpoints, which remain inside their actual hit shape.
-  const style=getComputedStyle(el),left=r.left+(parseFloat(style.borderLeftWidth)||0),right=r.right-(parseFloat(style.borderRightWidth)||0),top=r.top+(parseFloat(style.borderTopWidth)||0),bottom=r.bottom-(parseFloat(style.borderBottomWidth)||0);
-  if(right<=left||bottom<=top)return reject('HIT_CONTENT_RECT_EMPTY',r);
-  const cx=(left+right)/2,cy=(top+bottom)/2;
-  return [[cx,cy],[cx,top+.1],[right-.1,cy],[cx,bottom-.1],[left+.1,cy]].every(([x,y])=>{const hit=document.elementsFromPoint(x,y)[0];return !!hit&&(hit===el||el.contains(hit))||reject('HIT_TARGET_NOT_OWNED',r,{point:{x,y},hitTopTag:hit?.tagName??null,hitTopRect:pack(hit?.getBoundingClientRect())});});
+  const style=getComputedStyle(el);
+  return boxes.every(box=>{
+   const left=box.left+(parseFloat(style.borderLeftWidth)||0),right=box.right-(parseFloat(style.borderRightWidth)||0),top=box.top+(parseFloat(style.borderTopWidth)||0),bottom=box.bottom-(parseFloat(style.borderBottomWidth)||0);
+   if(right<=left||bottom<=top)return reject('HIT_CONTENT_RECT_EMPTY',box);
+   const cx=(left+right)/2,cy=(top+bottom)/2;
+   return [[cx,cy],[cx,top+.1],[right-.1,cy],[cx,bottom-.1],[left+.1,cy]].every(([x,y])=>{const hit=document.elementsFromPoint(x,y)[0];return !!hit&&(hit===el||el.contains(hit))||reject('HIT_TARGET_NOT_OWNED',box,{point:{x,y},hitTopTag:hit?.tagName??null,hitTopRect:pack(hit?.getBoundingClientRect())});});
+  });
  };
  for(const rule of result.incomplete){
   if(rule.id!=='color-contrast'){incomplete.push(summarize(rule));continue;}
