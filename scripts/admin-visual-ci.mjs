@@ -52,7 +52,7 @@ async function zoom(factor){
 async function settle(){
  await page.locator('.admin-app h1').first().waitFor({timeout:30000});
  await page.locator('.admin-table-placeholder,section[aria-busy=true],main[aria-busy=true],[data-admin-page-loading]').first().waitFor({state:'hidden',timeout:30000});
- await page.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+ await page.evaluate(async()=>{await document.fonts.ready;await Promise.allSettled(document.getAnimations().filter(animation=>animation.effect?.getTiming().iterations!==Infinity).map(animation=>animation.finished));await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
 }
 async function scanAll(touch){
  const scans=[];

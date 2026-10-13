@@ -7,11 +7,14 @@ import {join} from 'node:path';
 import {homedir} from 'node:os';
 const schema=process.env.AYAHX_ADMIN_LOCAL_SCHEMA??'ayahx_d2_a1_verified_20261011';
 if(!/^ayahx_d2_(a1|batch5)_[a-z0-9_]+$/.test(schema))throw new Error('LOCAL_SCHEMA_REQUIRED');
-const batch5=schema.startsWith('ayahx_d2_batch5_'),port=batch5?3005:3001;
+const batch5=schema.startsWith('ayahx_d2_batch5_'),port=batch5?Number(process.env.AYAHX_ADMIN_LOCAL_PORT??3005):3001;
+if(batch5&&![3005,3006].includes(port))throw new Error('LOCAL_PORT_REQUIRED');
+const redisDatabase=batch5?Number(process.env.AYAHX_ADMIN_LOCAL_REDIS_DB??15):10;
+if(batch5&&![13,15].includes(redisDatabase))throw new Error('LOCAL_REDIS_DATABASE_REQUIRED');
 const privateDir=join(process.env.LOCALAPPDATA??join(homedir(),'AppData','Local'),'AyahX','private-backups');await mkdir(privateDir,{recursive:true});
 const privateFile=join(privateDir,batch5?'batch5-local-admin-runtime.json':'a1-local-admin-runtime.json');
 let secret:{jwt:string;totp:string};try{secret=JSON.parse(await readFile(privateFile,'utf8'));}catch(error){if((error as NodeJS.ErrnoException).code!=='ENOENT')throw error;secret={jwt:randomBytes(32).toString('base64'),totp:randomBytes(32).toString('base64')};await writeFile(privateFile,JSON.stringify(secret),{mode:0o600,flag:'wx'});}
-const env:NodeJS.ProcessEnv={NODE_ENV:'test',JWT_SECRET:secret.jwt,ADMIN_2FA_ENC_KEY:secret.totp,REDIS_URL:`redis://127.0.0.1:6380/${batch5?15:10}`,STORAGE_VOLUME_BYTES:'5000000000'};
+const env:NodeJS.ProcessEnv={NODE_ENV:'test',JWT_SECRET:secret.jwt,ADMIN_2FA_ENC_KEY:secret.totp,REDIS_URL:`redis://127.0.0.1:6380/${redisDatabase}`,STORAGE_VOLUME_BYTES:'5000000000'};
 // Global render queue/database modules read config at import time. Pin every
 // destination before importing that runtime; local QA cannot inherit Railway.
 Object.assign(process.env,env,{MYSQL_HOST:'127.0.0.1',MYSQL_PORT:'33319',MYSQL_USER:'root',MYSQL_PASSWORD:'',MYSQL_DATABASE:schema,MYSQL_POOL_SIZE:'4',OBJECT_STORAGE_DRIVER:'local',RENDER_QUEUE_DRIVER:'bullmq',RENDER_BACKGROUND_MAINTENANCE:'false'});
