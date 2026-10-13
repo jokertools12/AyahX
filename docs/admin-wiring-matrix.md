@@ -1,5 +1,7 @@
 # مصفوفة ربط الأدمن — A1 وA2a والدفعة 5
 
+حالة13 أكتوبر: الربط المحلي واختبارات المهام لا تعني تسليمًا إنتاجيًا. الفحص البصري2176 حالة متوقف وغير مقبول؛ production008 والقبول القرائي والنشر ولقطات «بعد» معلّقة. PR24 مسودة. [تقرير التوقف](data/batch5-visual-stop-report.ar.md).
+
 المرجع الفعلي: `server/routes/admin/adminA1Endpoints.ts` و`adminA2bEndpoints.ts` و`adminMediaEndpoints.ts` و`adminRenderLab.ts` و`server/routes/adminCatalog.ts` و`server/routes/catalog.ts` وخدماتها، مع `src/admin/pages` و`src/admin/pages/catalog`. المسارات في الجدول تبدأ بعد `/api/admin` إلا حين يُذكر خلاف ذلك. كل mutation مأذون يسجل `audit_logs` داخل معاملته؛ منع UPDATE/DELETE للسجل على مستوى MySQL. الأذونات الفعلية محفوظة في `admin_roles` و`admin_permissions` مع توسيع `user_roles`؛ لا يُفترض وجود جداول جديدة باسم `roles` أو `role_permissions`.
 
 الحالات: **موصول ومتحقق HTTP محليًا** تعني تنفيذ الطلب الفعلي على القاعدة المحلية، وليست إثباتًا لنشر production. **واجهة موصولة؛ E2E معلّق** تعني أن المكون يستدعي العقد الفعلي وأن نتيجة تدفق المتصفح النهائي لم تُثبت بعد. نتائج اللقطات وaxe تخص عرض الصفحات، ولا تحوّل كل زر تلقائيًا إلى تدفق ناجح.
