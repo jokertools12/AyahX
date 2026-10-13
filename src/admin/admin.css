@@ -55,3 +55,11 @@ body:has(.admin-app) [data-sonner-toast] button{min-width:44px;min-height:44px;f
 /* A native select's intrinsic option width must not enlarge a field's grid
    track after its wrapping toolbar has shrunk at phone/browser zoom sizes. */
 .admin-field{grid-template-columns:minmax(0,1fr);max-width:100%}.admin-select{min-width:0}
+/* Preserve a full checkbox hit area beside wrapping permission descriptions. */
+.admin-permission-grid>label{display:grid;grid-template-columns:44px minmax(0,1fr);align-items:start;gap:12px;min-width:0}.admin-permission-grid>label>span{min-width:0;overflow-wrap:anywhere}
+.admin-permission-grid [role=checkbox][data-state]{width:44px;height:44px;min-width:44px;min-height:44px;padding:0;align-self:start;border:1px solid var(--admin-outline);background:hsl(var(--card));color:hsl(var(--foreground))}
+.admin-app .admin-json,body:has(.admin-app) :is([role=dialog],[role=alertdialog]) .admin-json{font-size:calc(15px * var(--admin-font-scale,1))!important}
+/* Admin tab controls wrap at native zoom without losing the focusable target. */
+.admin-app [role=tablist],body:has(.admin-app) :is([role=dialog],[role=alertdialog]) [role=tablist]{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;justify-content:flex-start;min-height:44px;height:auto;min-width:0;max-width:100%;background:hsl(var(--muted));color:hsl(var(--foreground))}
+.admin-app [role=tab],body:has(.admin-app) :is([role=dialog],[role=alertdialog]) [role=tab]{min-width:44px;max-width:100%;min-height:44px;height:auto;padding:8px 12px;white-space:normal;overflow-wrap:anywhere;border:1px solid var(--admin-outline);background:hsl(var(--card));color:hsl(var(--foreground))}
+.admin-app [role=tab][data-state=active],body:has(.admin-app) :is([role=dialog],[role=alertdialog]) [role=tab][data-state=active]{background:hsl(var(--muted));color:hsl(var(--foreground));font-weight:700;box-shadow:none}
