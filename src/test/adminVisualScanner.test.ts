@@ -129,6 +129,21 @@ describe('admin visual document scanner', () => {
     layout('<div><div><button id="a">First</button></div><div><button id="b">Second</button></div></div>', { a: [10, 10, 100, 44], b: [114, 10, 100, 44] });
     expect(codes()).toContain('CONTROL_GAP');
   });
+  it('measures overlap and gaps only inside actual ancestor overflow clips',()=>{
+    layout('<input id="search"/><p id="heading">Heading</p><div id="panel" style="overflow-y:auto"><button id="hidden-row">Hidden result</button><button id="part-row">Part result</button><button id="next-row">Next result</button></div>',{search:[10,100,300,44],heading:[10,60,300,30],panel:[10,160,300,150],'hidden-row':[10,55,300,44],'part-row':[10,135,300,44],'next-row':[10,183,300,44]});
+    const report=scanAdminVisualDocument({touch:false});
+    expect(report.violations.filter(issue=>issue.code==='CONTENT_OVERLAP')).toEqual([]);
+    expect(report.violations.filter(issue=>issue.code==='CONTROL_GAP')).toHaveLength(1);
+    expect(report.violations.find(issue=>issue.code==='CONTROL_GAP')).toMatchObject({selector:'#part-row',relatedSelector:'#next-row',actual:4});
+    expect(report.violations.some(issue=>issue.selector==='#hidden-row')).toBe(false);
+    document.getElementById('panel')!.style.overflowY='visible';expect(codes()).toContain('CONTENT_OVERLAP');
+  });
+  it('preserves the 8px gap with only a bounded floating point comparison tolerance',()=>{
+    layout('<button id="a">A</button><button id="b">B</button>',{a:[10,10,100,44],b:[117.999969482421875,10,100,44]});
+    expect(codes()).not.toContain('CONTROL_GAP');
+    document.getElementById('b')!.setAttribute('data-box','117.9998,10,100,44');expect(codes()).toContain('CONTROL_GAP');
+    document.getElementById('b')!.setAttribute('data-box','117,10,100,44');expect(codes()).toContain('CONTROL_GAP');
+  });
   it('does not mistake scrolling under an independent opaque sticky banner for a layout gap',()=>{
     layout('<header id="header" style="position:sticky;background-color:rgb(255,255,255)"><button id="a">A</button><button id="b">B</button></header><main><button id="flow">Flow</button></main>',{header:[0,0,800,50],a:[10,0,100,44],b:[114,0,100,44],flow:[10,49,100,44]});
     const report=scanAdminVisualDocument({touch:false});expect(report.violations.filter(issue=>issue.code==='CONTROL_GAP')).toHaveLength(1);expect(report.violations.find(issue=>issue.code==='CONTROL_GAP')?.relatedSelector).toBe('#b');

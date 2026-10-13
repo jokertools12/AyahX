@@ -77,9 +77,27 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     }
     return false;
   };
+  // Layout rectangles survive ancestor scrolling even where overflow has
+  // removed every painted pixel. Pair geometry uses the actual clipped paint;
+  // control sizes and truncation checks retain the original layout rectangle.
+  const paintRect = (el: Element, rect: DOMRect, includeSelf = true): DOMRect | null => {
+    let left = Math.max(0, rect.left), top = Math.max(0, rect.top), right = Math.min(width, rect.right), bottom = Math.min(height, rect.bottom);
+    for (let p: Element | null = includeSelf ? el : el.parentElement; p; p = p.parentElement) {
+      const s = style(p), bounds = p.getBoundingClientRect();
+      if (/hidden|clip|auto|scroll/.test(s.overflowX)) {
+        left = Math.max(left, bounds.left + (parseFloat(s.borderLeftWidth) || 0));
+        right = Math.min(right, bounds.right - (parseFloat(s.borderRightWidth) || 0));
+      }
+      if (/hidden|clip|auto|scroll/.test(s.overflowY)) {
+        top = Math.max(top, bounds.top + (parseFloat(s.borderTopWidth) || 0));
+        bottom = Math.min(bottom, bounds.bottom - (parseFloat(s.borderBottomWidth) || 0));
+      }
+    }
+    return right > left && bottom > top ? { x: left, y: top, left, top, right, bottom, width: right - left, height: bottom - top } as DOMRect : null;
+  };
   const visible = (el: Element): boolean => {
     const r = el.getBoundingClientRect();
-    return !hidden(el) && r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < height;
+    return !hidden(el) && r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < height && !!paintRect(el, r, false);
   };
   const dialogs = [...document.querySelectorAll('[role="dialog"][aria-modal="true"],dialog[open]')].filter(visible);
   const scope = dialogs.at(-1) ?? document.body;
@@ -257,7 +275,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     // metrics overestimate each fragment safely; distinct wrapped lines retain
     // the original conservative Range boxes.
     const singleLine=!!ranges.length&&ranges.every(r=>Math.abs(r.top-ranges[0].top)<=.25&&Math.abs(r.bottom-ranges[0].bottom)<=.25);
-    const rects = ranges.map(r=>inkRect(el,node.textContent!,r,singleLine)).filter(r => r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < height && !fullyOccluded(el, r));
+    const rects = ranges.map(r=>inkRect(el,node.textContent!,r,singleLine)).filter(r => !!paintRect(el,r) && !fullyOccluded(el, paintRect(el,r)!));
     if (!rects.length) continue;
     scanned.textNodes++;
     const s = style(el), font = parseFloat(s.fontSize);
@@ -274,7 +292,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
       else if (line / font < thresholds.arabicLineHeight) record(el, 'ARABIC_LINE_HEIGHT', 'Arabic line-height is below 1.7.', undefined, line / font, thresholds.arabicLineHeight);
     }
     measureContrast(el, s.color, thresholds.textContrast, 'TEXT_CONTRAST');
-    for (const rect of rects) { geometry(el, rect); painted.push({ el, rect, kind: 'text' }); }
+    for (const rect of rects) { geometry(el, rect); painted.push({ el, rect: paintRect(el,rect)!, kind: 'text' }); }
   }
   const controls = [...scope.querySelectorAll('button,input:not([type="hidden"]),select,textarea,a[href],[role="button"],[role="checkbox"],[role="switch"],[role="combobox"]')].filter(el => visible(el) && !fullyOccluded(el, el.getBoundingClientRect()));
   const controlRects = new Map<Element, DOMRect>();
@@ -290,7 +308,9 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
       const labels = [...(el.labels ?? [])].filter(visible).sort((a, b) => b.getBoundingClientRect().height - a.getBoundingClientRect().height);
       if (labels[0]) hit = labels[0];
     }
-    const r = hit.getBoundingClientRect(); controlRects.set(el, r); controlTargets.set(el, hit);
+    const r = hit.getBoundingClientRect(), clipped = paintRect(hit,r,false);
+    if(!clipped)continue;
+    controlRects.set(el, clipped); controlTargets.set(el, hit);
     const minimum = touch ? thresholds.touchControl : thresholds.desktopControl;
     if (r.height < minimum) record(el, 'CONTROL_HEIGHT', 'Interactive hit target is too short.', r, r.height, minimum);
     const hasVisibleLabel = [...el.childNodes].some(n => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()) || [...el.querySelectorAll('*')].some(c => !c.closest('[aria-hidden="true"]') && visible(c) && c.textContent?.trim());
@@ -300,7 +320,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     if (iconOnly && (!name || !hasTooltip(el) && !el.getAttribute('aria-label')?.trim() && !ids.length)) record(el, 'ICON_NAME', 'Icon control has no accessible explanatory name.', r);
     if (iconOnly && !hasTooltip(el)) record(el, 'ICON_TOOLTIP', 'Icon control has no explanatory tooltip.', r);
     if (iconOnly && Math.min(r.width, r.height) < thresholds.iconSize) record(el, 'ICON_TARGET_SIZE', 'Icon hit target must be at least 40 by 40.', r, Math.min(r.width, r.height), thresholds.iconSize);
-    geometry(el, r); painted.push({ el, rect: r, kind: 'control', hitTarget: hit });
+    geometry(el, r); painted.push({ el, rect: clipped, kind: 'control', hitTarget: hit });
     const s = style(el);
     if (el.matches('input,select,textarea')) {
       const font = parseFloat(s.fontSize);
@@ -321,6 +341,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   }
   for (let i = 0; i < controls.length; i++) for (let j = i + 1; j < controls.length; j++) {
       const firstTarget = controlTargets.get(controls[i])!, secondTarget = controlTargets.get(controls[j])!;
+      if(!firstTarget||!secondTarget)continue;
       if (firstTarget.contains(secondTarget) || secondTarget.contains(firstTarget)) continue;
       // Scrolling can place any flow control 0-7px below an independent sticky
       // banner. These controls are not adjacent in layout. Gaps within a banner
@@ -331,7 +352,9 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
       const verticalIntersection = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
       const horizontalIntersection = Math.min(a.right, b.right) - Math.max(a.left, b.left);
       const gap = verticalIntersection > 0 ? Math.max(a.left, b.left) - Math.min(a.right, b.right) : horizontalIntersection > 0 ? Math.max(a.top, b.top) - Math.min(a.bottom, b.bottom) : Infinity;
-      if (gap >= 0 && gap < thresholds.gap) record(controls[i], 'CONTROL_GAP', 'Adjacent controls have less than 8px separation.', a, gap, thresholds.gap, controls[j]);
+      // Native zoom introduces at most sub-1e-4px representation noise in an
+      // exact 8px CSS gap. The reported and required threshold stays 8px.
+      if (gap >= 0 && gap < thresholds.gap - 0.0001) record(controls[i], 'CONTROL_GAP', 'Adjacent controls have less than 8px separation.', a, gap, thresholds.gap, controls[j]);
   }
   for (const table of [...scope.querySelectorAll('table,[role="table"],[role="grid"]')].filter(visible)) {
     scanned.tables++;
