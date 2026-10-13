@@ -353,12 +353,25 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     if (iconOnly && Math.min(r.width, r.height) < thresholds.iconSize) record(el, 'ICON_TARGET_SIZE', 'Icon hit target must be at least 40 by 40.', r, Math.min(r.width, r.height), thresholds.iconSize);
     geometry(el, r); painted.push({ el, rect: clipped, kind: 'control', hitTarget: hit });
     const s = style(el);
-    if (el.matches('input,select,textarea')) {
+    const selectionInput = el instanceof HTMLInputElement && ['checkbox','radio'].includes(el.type);
+    // Checkbox/radio color is not painted text. Their labels are independently
+    // scanned at 4.5; keep target and boundary/state paint checks at 3 below.
+    if (el.matches('input,select,textarea') && !selectionInput) {
       const font = parseFloat(s.fontSize);
       const minimumFont = el.closest('td,th,[role="cell"]') ? thresholds.tableFont : thresholds.baseFont;
       if (!Number.isFinite(font)) record(el, 'FONT_UNRESOLVED', 'Computed input font size is unavailable.', r, undefined, minimumFont, undefined, true);
       else if (font < minimumFont) record(el, 'FONT_TOO_SMALL', 'Input text is smaller than its semantic minimum.', r, font, minimumFont);
       measureContrast(el, s.color, thresholds.textContrast, 'TEXT_CONTRAST');
+    }
+    if(selectionInput && el.checked){
+      const mark=getComputedStyle(el,'::after');
+      const borders=['top','right','bottom','left'].filter(side=>parseFloat(mark.getPropertyValue(`border-${side}-width`))>0&&!['none','hidden'].includes(mark.getPropertyValue(`border-${side}-style`))&&color(mark.getPropertyValue(`border-${side}-color`))?.[3]!==0);
+      const fill=color(mark.backgroundColor),painted=!!mark.content&&!['none','normal'].includes(mark.content)&&mark.display!=='none'&&mark.visibility==='visible'&&parseFloat(mark.width)>0&&parseFloat(mark.height)>0&&Number(mark.opacity)===1&&identityFilter(mark.filter)&&identityFilter(mark.backdropFilter)&&(!mark.mixBlendMode||mark.mixBlendMode==='normal');
+      if(!painted||!borders.length&&!fill?.[3])record(el,'UI_SELECTION_UNRESOLVED','Checked native control state requires explicit measurable glyph paint or direct pixel evidence.',r,undefined,thresholds.uiContrast,undefined,true);
+      else{
+        for(const side of borders)measureContrast(el,mark.getPropertyValue(`border-${side}-color`),thresholds.uiContrast,'UI_SELECTION_CONTRAST');
+        if(fill?.[3])measureContrast(el,mark.backgroundColor,thresholds.uiContrast,'UI_SELECTION_CONTRAST');
+      }
     }
     if (iconOnly) measureContrast(el, s.color, thresholds.uiContrast, 'UI_ICON_CONTRAST');
     const border = ['Top', 'Right', 'Bottom', 'Left'].filter(side => parseFloat(s.getPropertyValue(`border-${side.toLowerCase()}-width`)) > 0 && !['none', 'hidden'].includes(s.getPropertyValue(`border-${side.toLowerCase()}-style`)) && color(s.getPropertyValue(`border-${side.toLowerCase()}-color`))?.[3]!==0);

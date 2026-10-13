@@ -179,6 +179,27 @@ describe('admin visual document scanner', () => {
     expect(report.violations.map(x => x.code)).not.toContain('CONTROL_HEIGHT');
     expect(report.violations.map(x => x.code)).not.toContain('CONTENT_OVERLAP');
   });
+  it('measures the painted checked checkbox/radio glyph at 3:1 instead of treating a textless input color as text',()=>{
+    layout('<label id="label"><input id="check" type="checkbox" checked style="color:rgb(0,0,0);background-color:rgb(0,0,0);border:2px solid rgb(0,0,0)"/><span id="label-text">Remember</span></label>',{label:[10,10,200,44],check:[10,10,44,44],'label-text':[66,19,140,26]});
+    const original=getComputedStyle;
+    let markColor='rgb(255,255,255)';
+    vi.stubGlobal('getComputedStyle',(el:Element,pseudo?:string)=>pseudo==='::after'?{content:'""',display:'block',visibility:'visible',opacity:'1',filter:'none',backdropFilter:'none',mixBlendMode:'normal',width:'10px',height:'18px',backgroundColor:'transparent',getPropertyValue:(key:string)=>/border-(bottom|right)-width/.test(key)?'2px':/border-(bottom|right)-style/.test(key)?'solid':/border-(bottom|right)-color/.test(key)?markColor:''}:original(el));
+    for(const type of ['checkbox','radio']){
+      (document.getElementById('check') as HTMLInputElement).type=type;
+      const report=scanAdminVisualDocument({touch:false});expect(report.violations.filter(issue=>issue.code==='TEXT_CONTRAST')).toEqual([]);expect(report.indeterminate).toEqual([]);expect(report.thresholds).toMatchObject({textContrast:4.5,uiContrast:3});
+    }
+    markColor='rgb(0,0,0)';expect(scanAdminVisualDocument({touch:false}).violations.find(issue=>issue.code==='UI_SELECTION_CONTRAST')).toMatchObject({selector:'#check',actual:1,minimum:3});
+    document.getElementById('check')!.style.borderColor='rgb(255,255,255)';expect(codes()).toContain('UI_BORDER_CONTRAST');
+  });
+  it('fails closed when checked native state paint has no measurable explicit glyph',()=>{
+    layout('<label id="label"><input id="check" type="checkbox" checked style="background-color:rgb(0,0,0);border:2px solid rgb(0,0,0)"/><span id="label-text">Remember</span></label>',{label:[10,10,200,44],check:[10,10,44,44],'label-text':[66,19,140,26]});
+    const original=getComputedStyle;vi.stubGlobal('getComputedStyle',(el:Element,pseudo?:string)=>pseudo==='::after'?{content:'none',display:'none',visibility:'visible',opacity:'1',width:'auto',height:'auto',getPropertyValue:()=>''}:original(el));
+    expect(scanAdminVisualDocument({touch:false}).indeterminate.find(issue=>issue.code==='UI_SELECTION_UNRESOLVED')).toMatchObject({selector:'#check',minimum:3});
+  });
+  it('continues to reject actual input text and associated checkbox-label text with contrast 1 at 4.5:1',()=>{
+    layout('<input id="text" value="Actual text" style="color:rgb(255,255,255);background-color:rgb(255,255,255);border:2px solid rgb(0,0,0)"/><label id="label"><input id="check" type="checkbox" style="border:2px solid rgb(0,0,0)"/><span id="label-text" style="color:rgb(255,255,255);background-color:rgb(255,255,255)">Remember</span></label>',{text:[10,10,200,44],label:[10,70,200,44],check:[10,70,44,44],'label-text':[66,79,140,26]});
+    const failures=scanAdminVisualDocument({touch:false}).violations.filter(issue=>issue.code==='TEXT_CONTRAST');expect(failures).toEqual(expect.arrayContaining([expect.objectContaining({selector:'#text',actual:1,minimum:4.5}),expect.objectContaining({selector:'#label-text',actual:1,minimum:4.5})]));
+  });
   it('reports unnamed and narrow icon controls separately', () => {
     layout('<button id="icon"><svg aria-hidden="true"></svg></button>', { icon: [10, 10, 32, 44] });
     expect(codes()).toEqual(expect.arrayContaining(['ICON_NAME', 'ICON_TARGET_SIZE']));
