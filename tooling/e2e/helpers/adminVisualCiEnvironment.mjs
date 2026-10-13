@@ -9,6 +9,9 @@ export function pinAdminVisualCiEnvironment(env) {
     MYSQL_HOST:'127.0.0.1',MYSQL_PORT:'33319',MYSQL_USER:'root',MYSQL_PASSWORD:'',
     MYSQL_DATABASE:'ayahx_ci_admin_visual',MYSQL_POOL_SIZE:'4',
     REDIS_URL:'redis://127.0.0.1:6380/15',RENDER_QUEUE_DRIVER:'database',
+    // The authenticated media router and queue must share one disposable,
+    // checkout-local boundary. Never inherit a developer or Railway path.
+    RENDER_STORAGE_DIR:'uploads/renders',
     RENDER_BACKGROUND_MAINTENANCE:'false',STORAGE_VOLUME_BYTES:'5000000000',
     JWT_SECRET:randomBytes(32).toString('base64'),ADMIN_2FA_ENC_KEY:randomBytes(32).toString('base64'),
     // dotenv does not replace existing keys. External storage cannot be inherited.

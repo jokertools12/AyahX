@@ -161,7 +161,10 @@ const shardActors:Array<{id:string;email:string;password:string;renderJobId:stri
 const syntheticManifest={schemaVersion:'2.0.0',fixture:'CI_VISUAL_ONLY_SYNTHETIC_BLACK',actual_quran_render:false,acceptance_evidence:false};
 const visualMediaEvidence:Array<{synthetic_black:true;no_audio:true;duration_seconds:number;bytes:number;sha256:string;probe_source:'REAL_FFPROBE_LOCAL_ENCODED_ARTIFACT';fixture_tag:'CI_VISUAL_ONLY_SYNTHETIC_BLACK';actual_quran_render:false;human_acceptance:false}>=[];
 for(const actor of shardActors){
- const clipDirectory=join(process.cwd(),'uploads',actor.id,'admin-visual-ci');await mkdir(clipDirectory,{recursive:true,mode:0o700});
+ // Match the same bounded local root used by RenderJobQueue and the
+ // authenticated media router. This is a disposable synthetic CI artifact,
+ // never an acceptance render or a production storage location.
+ const clipDirectory=join(process.cwd(),env.RENDER_STORAGE_DIR!,actor.id,'admin-visual-ci');await mkdir(clipDirectory,{recursive:true,mode:0o700});
  const clipPath=join(clipDirectory,actor.renderJobId+'.mp4');
  await runRenderV2Process(getFfmpegBinary(),['-nostdin','-y','-v','error','-f','lavfi','-i','color=c=black:s=320x180:r=24:d=1','-an','-c:v','libx264','-pix_fmt','yuv420p','-movflags','+faststart',clipPath]);
  const mediaProbe=await runRenderV2Process(getFfprobeBinary(),['-v','error','-show_format','-show_streams','-of','json',clipPath]);

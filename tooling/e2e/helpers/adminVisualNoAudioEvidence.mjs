@@ -36,7 +36,10 @@ export async function collectAdminVisualNoAudioEvidence(page,{accessibility,fixt
    const proof={ruleId:rule.id,target:node.target,resolved:false,reason:'NO_AUDIO_DIRECT_EVIDENCE_UNAVAILABLE',fixtureTag:seed.fixtureTag,actual_quran_render:false,human_acceptance:false};
    try{
     if(seed.fixtureTag!=='CI_VISUAL_ONLY_SYNTHETIC_BLACK'||seed.actual_quran_render!==false||seed.human_acceptance!==false||seed.jobId!==fixture.renderJobId)throw new Error('CI_SCOPE');
-    const path=await io.realpath(seed.localPath),root=await io.realpath(resolve(workspace,'uploads',fixture.id,'admin-visual-ci')),location=relative(root,path);
+    // Match the disposable CI storage root pinned for both RenderJobQueue and
+    // AdminRenderMedia. Keep the actor-specific directory exact: a nominated
+    // artifact cannot escape into another CI actor's files or production paths.
+    const path=await io.realpath(seed.localPath),root=await io.realpath(resolve(workspace,'uploads','renders',fixture.id,'admin-visual-ci')),location=relative(root,path);
     if(isAbsolute(location)||location.startsWith('..')||basename(path)!==fixture.renderJobId+'.mp4'||dirname(path)!==root)throw new Error('CI_PATH');
     const file=await io.stat(path);if(!file.isFile()||file.size<=0||file.size>10*1024*1024)throw new Error('CI_SIZE');
     const beforeBytes=await io.readFile(path),probe=await io.probeFile(path),afterBytes=await io.readFile(path);
