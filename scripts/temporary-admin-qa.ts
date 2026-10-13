@@ -30,6 +30,13 @@ export async function createQaAccount(db:CatalogDatabase,account:QaAccount):Prom
  const [scheduler]=await db.read('SELECT @@event_scheduler enabled');assert.equal(scheduler.enabled,'ON','QA_AUTOMATIC_EXPIRY_REQUIRED');
  const [old]=await db.read('SELECT id FROM users WHERE id=? OR email=?',[account.id,account.email]);assert.equal(old,undefined,'QA_ACCOUNT_COLLISION');
  const hash=await bcrypt.hash(account.password,12),expires=account.expiresAt.slice(0,19).replace('T',' ');
+ const clockGuard=async(reader:Pick<CatalogTx,'read'>)=>{
+  const [clock]=await reader.read("SELECT TIMESTAMPDIFF(MICROSECOND,UTC_TIMESTAMP(6),CAST(? AS DATETIME(6))) remaining_us,@@event_scheduler scheduler_enabled",[expires]);
+  assert.equal(clock?.scheduler_enabled,'ON','QA_AUTOMATIC_EXPIRY_REQUIRED');
+  assert.ok(Number.isSafeInteger(Number(clock?.remaining_us))&&Number(clock?.remaining_us)>=120000000,'QA_PROVISIONING_WINDOW_REQUIRED');
+ };
+ // Reject short/resumed provisioning before installing an unused expiry event.
+ await clockGuard(db);
  // Install expiry BEFORE creating any credential or role. MySQL persists this
  // one-shot event across application restarts; its identity is strictly owned.
  const body=`BEGIN START TRANSACTION; UPDATE users SET is_banned=1,ban_reason='TEMPORARY_QA_EXPIRED',password_hash='!TEMPORARY_QA_EXPIRED' WHERE id='${account.id}'; DELETE FROM admin_sessions WHERE user_id='${account.id}'; DELETE FROM user_roles WHERE user_id='${account.id}'; COMMIT; END`;
@@ -39,10 +46,20 @@ export async function createQaAccount(db:CatalogDatabase,account:QaAccount):Prom
  const [event]=await db.read('SELECT STATUS,TIME_ZONE FROM information_schema.EVENTS WHERE EVENT_SCHEMA=DATABASE() AND EVENT_NAME=?',[account.eventName]);
  assert.equal(event?.STATUS,'ENABLED','QA_EXPIRY_EVENT_NOT_ENABLED');assert.equal(event?.TIME_ZONE,'+00:00','QA_EXPIRY_EVENT_NOT_UTC');
  await db.transaction(async tx=>{
+  // The one-shot event may run while bcrypt/SSH/provisioning is in flight.
+  // Use MySQL's authoritative UTC clock and the exact installed event twice;
+  // either failure rolls back every user/role/audit insert in this transaction.
+  const guard=async()=>{
+   await clockGuard(tx);
+   const [owned]=await tx.read("SELECT EVENT_DEFINITION,STATUS,TIME_ZONE,DATE_FORMAT(EXECUTE_AT,'%Y-%m-%d %H:%i:%s') expires FROM information_schema.EVENTS WHERE EVENT_SCHEMA=DATABASE() AND EVENT_NAME=?",[account.eventName]);
+   assert.equal(owned?.EVENT_DEFINITION,body,'QA_EXPIRY_EVENT_MISMATCH');assert.equal(owned?.STATUS,'ENABLED','QA_EXPIRY_EVENT_NOT_ENABLED');assert.equal(owned?.TIME_ZONE,'+00:00','QA_EXPIRY_EVENT_NOT_UTC');assert.equal(owned?.expires,expires,'QA_EXPIRY_DEADLINE_MISMATCH');
+  };
+  await guard();
   await tx.execute('INSERT INTO users(id,email,password_hash) VALUES(?,?,?)',[account.id,account.email,hash]);
   await tx.execute('INSERT INTO profiles(id,user_id,display_name) VALUES(?,?,?)',[randomUUID(),account.id,'حساب تحقق مؤقت — قراءة فقط']);
   await tx.execute("INSERT INTO user_roles(id,user_id,role) VALUES(?,?,'admin')",[randomUUID(),account.id]);
   await appendCatalogAudit(tx,actor(),'admin.qa_created','temporary_admin_qa',account.id,null,{expires_at:account.expiresAt,event_name:account.eventName,scope:'read_only_browser_qa',original_admins_unchanged:true});
+  await guard();
  });account.state='active';
 }
 export async function deleteQaAccount(db:CatalogDatabase,account:QaAccount):Promise<{deleted:true;sessions:number;auditRetained:number}>{
@@ -102,8 +119,8 @@ async function main(){
  }finally{if(session)await session.close();if(pool)await pool.end();}
 }
 /** Fixed allowlist of result shapes; never logs raw rows or credentials. */
-function parseQaRows(sql:string,raw:string){
- const columns=/GET_LOCK/u.test(sql)?['acquired']:/RELEASE_LOCK/u.test(sql)?['released']:/@@event_scheduler/u.test(sql)?['enabled']:/SELECT EVENT_DEFINITION/u.test(sql)?['EVENT_DEFINITION','expires']:/information_schema.EVENTS/u.test(sql)?['STATUS','TIME_ZONE']:/SELECT a.hash/u.test(sql)?['hash']:/COUNT\(\*\) n/u.test(sql)?['n']:/SELECT \(SELECT COUNT/u.test(sql)?['users','sessions','roles','audit']:/SELECT id,email/u.test(sql)?['id','email']:/SELECT id,is_banned/u.test(sql)?['id','is_banned']:/SELECT id FROM users/u.test(sql)?['id']:null;
+export function parseQaRows(sql:string,raw:string){
+ const columns=/GET_LOCK/u.test(sql)?['acquired']:/RELEASE_LOCK/u.test(sql)?['released']:/TIMESTAMPDIFF\(MICROSECOND,UTC_TIMESTAMP/u.test(sql)?['remaining_us','scheduler_enabled']:/@@event_scheduler/u.test(sql)?['enabled']:/SELECT EVENT_DEFINITION,STATUS,TIME_ZONE/u.test(sql)?['EVENT_DEFINITION','STATUS','TIME_ZONE','expires']:/SELECT EVENT_DEFINITION/u.test(sql)?['EVENT_DEFINITION','expires']:/information_schema.EVENTS/u.test(sql)?['STATUS','TIME_ZONE']:/SELECT a.hash/u.test(sql)?['hash']:/COUNT\(\*\) n/u.test(sql)?['n']:/SELECT \(SELECT COUNT/u.test(sql)?['users','sessions','roles','audit']:/SELECT id,email/u.test(sql)?['id','email']:/SELECT id,is_banned/u.test(sql)?['id','is_banned']:/SELECT id FROM users/u.test(sql)?['id']:null;
  assert.ok(columns,'QA_SQL_RESULT_SHAPE_UNREGISTERED');return raw.trimEnd()?raw.trimEnd().split(/\r?\n/u).map(line=>Object.fromEntries(line.split('\t').map((value,index)=>[columns[index],value==='NULL'?null:value]))):[];
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)main().catch(error=>{const code=error&&typeof error==='object'&&'code' in error?String(error.code):error instanceof Error?error.message:'';console.error(JSON.stringify({code:/^[A-Z0-9_:]+$/u.test(code)?code:'TEMPORARY_QA_OPERATION_FAILED',assertion:error?.name==='AssertionError'&&/^[A-Z0-9_]+$/u.test(error.message)?error.message:null}));process.exitCode=1;});
