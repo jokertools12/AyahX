@@ -63,3 +63,8 @@ body:has(.admin-app) [data-sonner-toast] button{min-width:44px;min-height:44px;f
 .admin-app [role=tablist],body:has(.admin-app) :is([role=dialog],[role=alertdialog]) [role=tablist]{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;justify-content:flex-start;min-height:44px;height:auto;min-width:0;max-width:100%;background:hsl(var(--muted));color:hsl(var(--foreground))}
 .admin-app [role=tab],body:has(.admin-app) :is([role=dialog],[role=alertdialog]) [role=tab]{min-width:44px;max-width:100%;min-height:44px;height:auto;padding:8px 12px;white-space:normal;overflow-wrap:anywhere;border:1px solid var(--admin-outline);background:hsl(var(--card));color:hsl(var(--foreground))}
 .admin-app [role=tab][data-state=active],body:has(.admin-app) :is([role=dialog],[role=alertdialog]) [role=tab][data-state=active]{background:hsl(var(--muted));color:hsl(var(--foreground));font-weight:700;box-shadow:none}
+/* Arabic permission names and their descriptions need separate ink rows. */
+.admin-permission-grid>label>span{display:grid;gap:8px}
+.admin-app button.bg-secondary,body:has(.admin-app) :is([role=dialog],[role=alertdialog]) button.bg-secondary{border:1px solid var(--admin-outline)}
+/* Sheet's generic gap needs a layout context; keep admin header/body ink apart. */
+body:has(.admin-app) .admin-drawer{display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:20px}body:has(.admin-app) .admin-drawer>div{min-width:0}
