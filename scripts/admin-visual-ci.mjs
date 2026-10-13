@@ -41,6 +41,10 @@ const worker=context.serviceWorkers()[0]??await context.waitForEvent('servicewor
 async function zoom(factor){
  const actual=await worker.evaluate(async({base,factor})=>{const tabs=await chrome.tabs.query({url:base+'/*'});if(tabs.length!==1)throw new Error('NATIVE_ZOOM_TARGET_REQUIRED');await chrome.tabs.setZoom(tabs[0].id,factor);return chrome.tabs.getZoom(tabs[0].id);},{base,factor});
  if(Math.abs(actual-factor)>.001)throw new Error('NATIVE_ZOOM_NOT_APPLIED');
+ // Chrome's tab setting resolves before the page renderer necessarily applies
+ // the zoom. Wait on its actual DPR, then two painted frames, never a sleep.
+ await page.waitForFunction(factor=>Math.abs(devicePixelRatio-factor)<.02,factor,{polling:'raf',timeout:10000});
+ await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
 }
 async function settle(){
  await page.locator('.admin-app h1').first().waitFor({timeout:30000});
