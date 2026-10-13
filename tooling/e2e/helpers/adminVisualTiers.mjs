@@ -13,6 +13,12 @@ export function requireAdminVisualTier(tier){
  return tier;
 }
 export function adminVisualCombinationKey(row){return JSON.stringify([row.size?.width,row.size?.height,row.zoom,row.theme,row.lang]);}
+/** Match the CSS visibility contracts of responsive shell controls. */
+export function adminVisualDialogSupportedAtCase(slug,row){
+ if(slug==='mobile-nav')return (row.size?.width??0)<=1099;
+ if(slug==='keyboard-help')return (row.size?.width??0)>767;
+ return true;
+}
 // Only these shared shell dialogs have route-independent content. Route-local
 // dialogs can differ between tab/query contexts even with the same declaration.
 export function adminVisualDialogReuseScope(dialog,row){
@@ -39,7 +45,7 @@ export function assertAdminVisualTierDialogCoverage(inventory,observed,tier){
  const combinations=tier==='tier1'?adminVisualLaunchDialogCombinations:[null];
  for(const combo of combinations){
   const passed=new Set(observed.filter(row=>row.passed&&(!combo||adminVisualCombinationKey(row)===adminVisualCombinationKey(combo))).map(row=>row.slug));
-  const missing=inventory.map(dialog=>dialog.slug).filter(slug=>!passed.has(slug));
+  const missing=inventory.map(dialog=>dialog.slug).filter(slug=>adminVisualDialogSupportedAtCase(slug,combo??{})&&!passed.has(slug));
   if(missing.length)throw new Error('UNTESTED_DECLARED_ADMIN_DIALOGS:'+missing.join(',')+(combo?':'+adminVisualCombinationKey(combo):''));
  }
 }

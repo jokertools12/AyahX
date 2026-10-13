@@ -5,7 +5,7 @@ import {join} from 'node:path';
 import {describe,it,expect} from 'vitest';
 import {buildAdminVisualRoutes,buildAdminVisualDialogs} from '../../tooling/e2e/helpers/adminVisualInventory.mjs';
 import {expectedAdminVisualCases,selectAdminVisualShard,adminVisualCaseKey,adminVisualCaseName,aggregateAdminVisualShards} from '../../tooling/e2e/helpers/adminVisualSharding.mjs';
-import {adminVisualLaunchCombinations,adminVisualLaunchCorePatterns,adminVisualLaunchDialogCombinations,adminVisualCombinationKey,shouldScanAdminVisualDialogs,adminVisualDialogReuseScope} from '../../tooling/e2e/helpers/adminVisualTiers.mjs';
+import {adminVisualLaunchCombinations,adminVisualLaunchCorePatterns,adminVisualLaunchDialogCombinations,adminVisualCombinationKey,shouldScanAdminVisualDialogs,adminVisualDialogReuseScope,adminVisualDialogSupportedAtCase} from '../../tooling/e2e/helpers/adminVisualTiers.mjs';
 const fixture={reciterId:'reader',reviewId:'review',recitationId:'recording',youtubeRecitationId:'youtube',timingsRecitationId:'pinned',timingsSurah:103,timingsAyah:1,renderJobId:'actor-one'};
 const source=readFileSync('src/admin/AdminRoot.tsx','utf8');
 type VisualRoute={pattern:string;path:string;view?:string};
@@ -56,6 +56,8 @@ describe('Batch 5b strict visual tiers',()=>{
   first.report.dialogs=first.report.dialogs.filter(row=>!(row.slug===slug&&row.size.width===390));
   expect(aggregate).toThrow('UNTESTED_DECLARED_ADMIN_DIALOGS:'+slug);
   expect(adminVisualLaunchDialogCombinations.map(adminVisualCombinationKey)).toEqual(['[1366,768,1,"light","ar"]','[390,844,1.5,"dark","ar"]']);
+  expect(adminVisualDialogSupportedAtCase('mobile-nav',adminVisualLaunchDialogCombinations[0])).toBe(false);expect(adminVisualDialogSupportedAtCase('mobile-nav',adminVisualLaunchDialogCombinations[1])).toBe(true);
+  expect(adminVisualDialogSupportedAtCase('keyboard-help',adminVisualLaunchDialogCombinations[0])).toBe(true);expect(adminVisualDialogSupportedAtCase('keyboard-help',adminVisualLaunchDialogCombinations[1])).toBe(false);
  });
  it('rejects missing core routes, launch combinations, a wrong tier and duplicate/substituted case dimensions',()=>{
   expect(()=>aggregateAdminVisualShards([],[[{pattern:'',path:'/admin'}]],dialogInventory,'tier1')).toThrow('ADMIN_VISUAL_LAUNCH_CORE_MISSING');

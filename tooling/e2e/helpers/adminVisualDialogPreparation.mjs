@@ -11,25 +11,6 @@ export const adminVisualPreviewRoles=Object.freeze(['admin','content_manager','m
 export function assertAdminVisualRoleFixture(role,available){
  if(!adminVisualPreviewRoles.includes(role)||!Array.isArray(available)||!available.includes(role))throw new Error('ADMIN_VISUAL_ROLE_FIXTURE_NOT_AVAILABLE');
 }
-/** Responsive-only openers are clicked while genuinely visible, then the
- * requested native measurement window is restored before any dialog scan. */
-export async function openAdminVisualResponsiveDialog(page,scope,slug,currentCase,applyZoom){
- const temporary=slug==='mobile-nav'?{width:390,height:844}:slug==='keyboard-help'?{width:1366,height:768}:null;
- if(!temporary)return false;
- await page.setViewportSize(temporary);await applyZoom(1);
- try{
-  const candidates=scope.locator(`[data-admin-visual-open="${slug}"]`);let opener;
-  for(let index=0;index<await candidates.count();index++){const candidate=candidates.nth(index);if(await candidate.isVisible()&&await candidate.isEnabled()){opener=candidate;break;}}
-  if(!opener)throw new Error('ADMIN_VISUAL_RESPONSIVE_OPENER_MISSING');
-  await opener.click();
-  // The Sheet has a finite opening animation. Resizing while it is still
-  // running leaves Chromium with an interrupted animation that never reaches
-  // its terminal state, so settle it at the viewport where the control is
-  // genuinely visible before returning to the requested measurement window.
-  await page.evaluate(waitForAdminVisualPaint);
- }finally{await page.setViewportSize(currentCase.size);await applyZoom(currentCase.zoom);await page.evaluate(waitForAdminVisualPaint);}
- return true;
-}
 export function isOwnedAdminVisualPreview(proof,fixture){
  return typeof fixture.safeReviewId==='string'&&/^[a-zA-Z0-9_-]+$/u.test(fixture.safeReviewId)&&proof?.count===1&&Array.isArray(proof.ids)&&proof.ids.length===1&&proof.ids[0]===fixture.safeReviewId&&Array.isArray(proof.types)&&proof.types.length===1&&proof.types[0]==='data_conflict';
 }

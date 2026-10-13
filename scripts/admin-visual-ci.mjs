@@ -8,7 +8,7 @@ import {loadAdminVisualScanner} from '../tooling/e2e/helpers/loadAdminVisualScan
 import {buildAdminVisualRoutes,buildAdminVisualDialogs} from '../tooling/e2e/helpers/adminVisualInventory.mjs';
 import {selectAdminVisualShard,expectedAdminVisualCases,adminVisualCaseName,ADMIN_VISUAL_SHARD_COUNT} from '../tooling/e2e/helpers/adminVisualSharding.mjs';
 import {requireAdminVisualTier,shouldScanAdminVisualDialogs,adminVisualCombinationKey,adminVisualDialogReuseScope} from '../tooling/e2e/helpers/adminVisualTiers.mjs';
-import {allowedAdminVisualWrite,prepareAdminVisualDialogContext,openAdminVisualResponsiveDialog} from '../tooling/e2e/helpers/adminVisualDialogPreparation.mjs';
+import {allowedAdminVisualWrite,prepareAdminVisualDialogContext} from '../tooling/e2e/helpers/adminVisualDialogPreparation.mjs';
 import {measureAdminVisualAccessibility} from '../tooling/e2e/helpers/adminVisualAccessibility.mjs';
 import {collectAdminVisualEvidence} from '../tooling/e2e/helpers/adminVisualPixelEvidence.mjs';
 import {collectAdminVisualNoAudioEvidence} from '../tooling/e2e/helpers/adminVisualNoAudioEvidence.mjs';
@@ -140,12 +140,10 @@ async function scanDialogs(caseId,touch){
   if(tier==='tier1'&&measuredLaunchDialogs.has(coverageKey)){previouslyMeasuredDialogs.push({slug,reuseScope,caseId:measuredLaunchDialogs.get(coverageKey)});visited.add(slug);continue;}
   const candidates=scope.locator(`[data-admin-visual-open="${slug}"]`);let opener;
   for(let index=0;index<await candidates.count();index++){const candidate=candidates.nth(index);if(await candidate.isVisible()&&await candidate.isEnabled()){opener=candidate;break;}}
-  let responsiveOpened=false;
-  if(!opener&&['mobile-nav','keyboard-help'].includes(slug)){
-   report.activeDialog=slug;report.phase='dialog-responsive-preparation';
-   responsiveOpened=await openAdminVisualResponsiveDialog(page,scope,slug,report.currentCase,zoom);
-  }
-  if(!opener&&!responsiveOpened)continue;
+  // A responsive opener is verified only in a measurement where it is truly
+  // visible. Resizing an already-open Radix Sheet fabricates an impossible
+  // desktop/mobile state and can interrupt its native animation.
+  if(!opener)continue;
   applicable.add(slug);
   report.activeDialog=slug;report.phase='dialog-open';
   if(opener)await opener.click();
