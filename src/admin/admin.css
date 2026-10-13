@@ -31,3 +31,5 @@ body:has(.admin-app) :is([role=dialog],[role=alertdialog]){font-family:Cairo,san
 /* Disabled actions remain readable and explain their gate without faded text. */
 .admin-app :is(button,input,select,textarea):disabled,body:has(.admin-app) :is([role=dialog],[role=alertdialog]) :is(button,input,select,textarea):disabled{opacity:1;color:hsl(var(--foreground));background:hsl(var(--muted));border:1px solid var(--admin-outline);cursor:not-allowed}.admin-app [aria-disabled=true],body:has(.admin-app) [role=dialog] [aria-disabled=true]{opacity:1}
 body:has(.admin-app) :is([role=dialog],[role=alertdialog]){max-height:calc(100dvh - 32px);max-width:calc(100vw - 32px);overflow-y:auto}
+
+.admin-app .admin-quran,body:has(.admin-app) [role=dialog] .admin-quran{font-size:calc(28px * var(--admin-font-scale,1));line-height:1.9}.admin-app [role=switch],body:has(.admin-app) [role=dialog] [role=switch]{border:2px solid var(--admin-outline)}

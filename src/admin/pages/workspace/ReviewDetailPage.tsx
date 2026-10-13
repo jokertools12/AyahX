@@ -25,7 +25,7 @@ export function ReviewDecisionPanel({ item, subject, onDone, listening = false }
     if (result) { setNotes(''); onDone?.(result); }
   };
   useEffect(() => {
-    const handler = (event: KeyboardEvent) => { if (document.querySelectorAll('[data-admin-review-decision]').length > 1 && !panel.current?.contains(document.activeElement)) return; const editing = event.target instanceof HTMLElement && !!event.target.closest('input,textarea,select,[contenteditable=true]'); const action = reviewShortcut(event, editing); if (action && ['approved', 'rejected', 'deferred'].includes(action)) { event.preventDefault(); void decide(action as ReviewDecisionInput['status']); } };
+    const handler = (event: KeyboardEvent) => { if(document.querySelector('[role=dialog][data-state=open]'))return; if (document.querySelectorAll('[data-admin-review-decision]').length > 1 && !panel.current?.contains(document.activeElement)) return; const editing = event.target instanceof HTMLElement && !!event.target.closest('input,textarea,select,[contenteditable=true]'); const action = reviewShortcut(event, editing); if (action && ['approved', 'rejected', 'deferred'].includes(action)) { event.preventDefault(); void decide(action as ReviewDecisionInput['status']); } };
     window.addEventListener('keydown', handler); return () => window.removeEventListener('keydown', handler);
   });
   const approvalReady = commonReady && licenseAllowed && (!license || (confirmation === code && !!code && !!reference.trim())) && (!rightsReview || !!reference.trim()) && (item.type !== 'label_review' || !!label.trim());

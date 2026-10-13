@@ -1,9 +1,9 @@
 import {auditActionLabel} from '../i18n/adminLabels';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, useCallback, forwardRef, type ComponentPropsWithoutRef, type ElementRef, type ReactNode } from 'react';
 import { CheckCircle2, AlertTriangle, CircleHelp, XCircle, Copy, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent as BaseDialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { copy } from '../adminClipboard';
 import { useText } from '../adminState';
@@ -16,8 +16,15 @@ export { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 export { Textarea } from '@/components/ui/textarea';
 export { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 export { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-export { Sheet as Drawer, SheetContent as DrawerContent, SheetHeader as DrawerHeader, SheetTitle as DrawerTitle, SheetDescription as DrawerDescription } from '@/components/ui/sheet';
-export { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter };
+import {SheetContent as BaseDrawerContent} from '@/components/ui/sheet';
+export { Sheet as Drawer, SheetHeader as DrawerHeader, SheetTitle as DrawerTitle, SheetDescription as DrawerDescription } from '@/components/ui/sheet';
+export { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogFooter };
+/** Scope translated close names/tooltips to admin, without changing shared public primitives. */
+function labelClose(element:HTMLElement|null,label:string){const close=element?[...element.children].find((child):child is HTMLButtonElement=>child instanceof HTMLButtonElement&&child.classList.contains('absolute')):undefined;if(close){close.setAttribute('title',label);close.setAttribute('aria-label',label);}}
+export const DialogContent=forwardRef<ElementRef<typeof BaseDialogContent>,ComponentPropsWithoutRef<typeof BaseDialogContent>>((props,ref)=>{const t=useText(),label=t('إغلاق النافذة','Close dialog'),[node,setNode]=useState<HTMLDivElement|null>(null);const attach=useCallback((element:HTMLDivElement|null)=>{setNode(element);if(typeof ref==='function')ref(element);else if(ref)ref.current=element;},[ref]);useEffect(()=>labelClose(node,label),[node,label]);return <BaseDialogContent {...props} ref={attach}/>;});
+DialogContent.displayName='AdminDialogContent';
+export const DrawerContent=forwardRef<ElementRef<typeof BaseDrawerContent>,ComponentPropsWithoutRef<typeof BaseDrawerContent>>((props,ref)=>{const t=useText(),label=t('إغلاق التفاصيل','Close details'),[node,setNode]=useState<HTMLDivElement|null>(null);const attach=useCallback((element:HTMLDivElement|null)=>{setNode(element);if(typeof ref==='function')ref(element);else if(ref)ref.current=element;},[ref]);useEffect(()=>labelClose(node,label),[node,label]);return <BaseDrawerContent {...props} ref={attach}/>;});
+DrawerContent.displayName='AdminDrawerContent';
 export function StatusChip({status,lang='ar'}:{status:string;lang?:'ar'|'en'}){const s=term(status);const Icon=s.tone==='success'?CheckCircle2:s.tone==='danger'?XCircle:s.tone==='warning'?AlertTriangle:CircleHelp;return <span className="admin-chip" data-tone={s.tone} title={termHelp(status,lang)}><Icon size={18} aria-hidden="true"/>{termLabel(status,lang)}</span>;}
 export function PageHeader({title,description,action,children,help}:{title:string;description?:string;action?:ReactNode;children?:ReactNode;help?:string}){const t=useText();const route=window.location.pathname.split('/')[2]??'start';const aliases:Record<string,string>={'provider-licenses':'licenses','licensed-audio':'licensed','reciter-wizard':'wizard','render-lab':'render',project:'project'};const key=help??aliases[route]??route;const explanation=pageHelp[key];return <header className="admin-stack"><div className="admin-row admin-page-header" style={{justifyContent:'space-between'}}><div><h1 className="admin-page-title">{title}</h1>{description&&<p className="admin-muted">{description}</p>}</div>{action}</div><details className="admin-page-help"><summary><CircleHelp size={20} aria-hidden="true"/>{t('ما هذه الصفحة وماذا أفعل فيها؟','What is this page and what should I do?')}</summary><p>{explanation?t(explanation.ar,explanation.en):description??t('اقرأ المعلومات واختر الإجراء المناسب لصلاحياتك. أي تغيير يُسجّل في سجل التغييرات.','Read the information and choose an action allowed by your permissions. Changes are recorded in the audit history.')}</p></details>{children}</header>;}
 export function Field({label,id,children,hint}:{label:string;id:string;children:ReactNode;hint?:string}){return <div className="admin-field"><label htmlFor={id}>{label}</label>{children}{hint&&<small className="admin-muted">{hint}</small>}</div>;}
