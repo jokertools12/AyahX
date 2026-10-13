@@ -33,7 +33,7 @@ export async function measureAdminVisualEvidenceTarget({selector,action='measure
  };
  const rectVisible=(rect,node,targetBorderBox=false)=>{
   const tolerance=.0001;
-  if(rect.width<=0||rect.height<=0)return reject('EMPTY_RECT',rect,node);
+  if(![rect.width,rect.height,rect.left,rect.top,rect.right,rect.bottom].every(Number.isFinite)||rect.width<=0||rect.height<=0)return reject('EMPTY_RECT',rect,node);
   if(rect.left<-tolerance||rect.top<-tolerance||rect.right>innerWidth+tolerance||rect.bottom>innerHeight+tolerance)return reject('VIEWPORT_CLIPPING',rect,node);
   if(!visible(node))return reject('ANCESTOR_NOT_VISIBLE',rect,node);
   for(let p=node;p;p=p.parentElement){const s=getComputedStyle(p),r=p.getBoundingClientRect();
@@ -45,15 +45,20 @@ export async function measureAdminVisualEvidenceTarget({selector,action='measure
    if(/hidden|clip|auto|scroll/.test(s.overflowY)&&(rect.top<r.top+(parseFloat(s.borderTopWidth)||0)-tolerance||rect.bottom>r.bottom-(parseFloat(s.borderBottomWidth)||0)+tolerance))return reject('ANCESTOR_CLIPPING_Y',rect,node,clipping);
   }
   if(typeof document.elementsFromPoint!=='function')return reject('HIT_TEST_UNAVAILABLE',rect,node);
-  const cx=(rect.left+rect.right)/2,cy=(rect.top+rect.bottom)/2;
-  return[[cx,cy],[cx,rect.top+.1],[rect.right-.1,cy],[cx,rect.bottom-.1],[rect.left+.1,cy]].every(([x,y])=>{const top=document.elementsFromPoint(x,y)[0];return top&&(top===el||el.contains(top))||reject('HIT_TARGET_NOT_OWNED',rect,node,{point:{x,y},hitTopTag:top?.tagName??null,hitTopRect:pack(top?.getBoundingClientRect())});});
+  const style=targetBorderBox?getComputedStyle(el):null;
+  const left=rect.left+(parseFloat(style?.borderLeftWidth)||0),right=rect.right-(parseFloat(style?.borderRightWidth)||0),top=rect.top+(parseFloat(style?.borderTopWidth)||0),bottom=rect.bottom-(parseFloat(style?.borderBottomWidth)||0);
+  if(right<=left||bottom<=top)return reject('HIT_CONTENT_RECT_EMPTY',rect,node);
+  const cx=(left+right)/2,cy=(top+bottom)/2;
+  return[[cx,cy],[cx,top+.1],[right-.1,cy],[cx,bottom-.1],[left+.1,cy]].every(([x,y])=>{const hit=document.elementsFromPoint(x,y)[0];return hit&&(hit===el||el.contains(hit))||reject('HIT_TARGET_NOT_OWNED',rect,node,{point:{x,y},hitTopTag:hit?.tagName??null,hitTopRect:pack(hit?.getBoundingClientRect())});});
  };
  if(!rectVisible(el.getBoundingClientRect(),el,true))return failure('TARGET_NOT_FULLY_VISIBLE');
  const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),rects=[],texts=[];
  while(walker.nextNode()){
   const text=walker.currentNode,parent=text.parentElement;if(!text.textContent.trim()||!parent||!visible(parent))continue;
   const range=document.createRange();range.selectNodeContents(text);
-  const lines=[...range.getClientRects()];if(!lines.length){reject('TEXT_RANGE_MISSING',null,parent);return failure('TEXT_NOT_FULLY_VISIBLE');}if(lines.some(rect=>!rectVisible(rect,parent)))return failure('TEXT_NOT_FULLY_VISIBLE');
+  // Line-feed/caret fragments have no painted area. Do not invent a crop for
+  // them; every remaining Range still requires positive, visible geometry.
+  const lines=[...range.getClientRects()].filter(rect=>rect.width!==0&&rect.height!==0);if(!lines.length){reject('TEXT_RANGE_MISSING',null,parent);return failure('TEXT_NOT_FULLY_VISIBLE');}if(lines.some(rect=>!rectVisible(rect,parent)))return failure('TEXT_NOT_FULLY_VISIBLE');
   rects.push(...lines.map(rect=>({x:rect.x,y:rect.y,width:rect.width,height:rect.height})));texts.push(text.textContent);
  }
  // Generated labels and overlapping Range fragments cannot be distinguished

@@ -57,6 +57,15 @@ describe('real contrast remeasurement acceptance',()=>{
   run.mockResolvedValueOnce(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}]})).mockResolvedValueOnce(result({passes:[{id:'color-contrast',nodes:[node(target)]}]}));
   const measured=await measureAdminVisualAccessibility();expect(measured.incomplete).toEqual([]);expect(measured.remeasurements[0].resolved).toBe(true);expect(run).toHaveBeenCalledTimes(2);
  });
+ it('tests exact owner inside its computed border, never accepts a parent covering the inner edge',async()=>{
+  const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(el:Element)=>({...style(el),...(el===target?{borderLeftWidth:'1px',borderRightWidth:'1px',borderTopWidth:'1px',borderBottomWidth:'1px'}:{})}));
+  Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:(x:number,y:number)=>x<21||x>119||y<31||y>59?[target.parentElement!]:[target]});
+  run.mockResolvedValueOnce(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}]})).mockResolvedValueOnce(result({passes:[{id:'color-contrast',nodes:[node(target)]}]}));
+  expect((await measureAdminVisualAccessibility()).remeasurements[0].resolved).toBe(true);
+  Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:(x:number,y:number)=>y>58.8?[target.parentElement!]:[target]});
+  run.mockResolvedValueOnce(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}]}));
+  const blocked=await measureAdminVisualAccessibility();expect(blocked.incomplete).toHaveLength(1);expect(blocked.remeasurements[0].visibilityDiagnostic).toMatchObject({code:'HIT_TARGET_NOT_OWNED',point:{x:70,y:58.9},hitTopTag:'DIV'});
+ });
  it.each([0.0000038,0.001])('accepts only floating shared-edge noise, never actual clipping (%s px)',async(difference)=>{
   const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(el:Element)=>({...style(el),overflowX:el.id==='panel'?'auto':'visible'}));
   vi.spyOn(document.getElementById('panel')!,'getBoundingClientRect').mockImplementation(()=>({...rect(),right:120-difference,width:100-difference}) as DOMRect);

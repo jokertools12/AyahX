@@ -149,6 +149,25 @@ describe('serialized real browser text-range guard (synthetic DOM unit geometry)
   Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,10,100,25.5)]});
   expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'ANCESTOR_CLIPPING_Y',ancestorTag:'BUTTON',borders:{top:1,bottom:1},rect:{y:10,height:25.5}}});
  });
+ it('checks border-box owner inside actual borders while keeping every text Range hit strict',async()=>{
+  const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element)=>({...style(node),...(node===element?{borderLeftWidth:'1px',borderRightWidth:'1px',borderTopWidth:'1px',borderBottomWidth:'1px'}:{})}));
+  Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:(x:number,y:number)=>x<11||x>129||y<11||y>49?[element.parentElement!]:[element]});
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:true});
+  Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:(x:number,y:number)=>x===70&&y===20.1?[element.parentElement!]:[element]});
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'HIT_TARGET_NOT_OWNED',point:{x:70,y:20.1},hitTopTag:'DIV'}});
+ });
+ it('captures painted multiline PRE text while ignoring only zero-area newline fragments',async()=>{
+  const pre=document.createElement('pre');pre.id='target';pre.textContent='{"key":\n"value"}\n';element.replaceWith(pre);element=pre;Object.defineProperty(pre,'scrollIntoView',{configurable:true,value:vi.fn()});
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,15,60,14),bounds(80,15,0,14),bounds(20,30,80,14),bounds(100,30,0,14),bounds(20,44,10,0)]});
+  const measured=await measureAdminVisualEvidenceTarget({selector:'#target'});expect(measured).toMatchObject({ready:true,visibleText:'{"key":\n"value"}\n',rects:[{x:20,y:15,width:60,height:14},{x:20,y:30,width:80,height:14}]});
+  Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,15,0,14)]});
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'TEXT_RANGE_MISSING'}});
+  for(const width of [-1,NaN]){Object.defineProperty(Range.prototype,'getClientRects',{configurable:true,value:()=>[bounds(20,15,60,14),bounds(20,30,width,14)]});expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TEXT_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'EMPTY_RECT'}});}
+ });
+ it('fails closed when borders leave no interior ownership rectangle',async()=>{
+  const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element)=>({...style(node),...(node===element?{borderLeftWidth:'60px',borderRightWidth:'60px'}:{})}));
+  expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'TARGET_NOT_FULLY_VISIBLE',visibilityDiagnostic:{code:'HIT_CONTENT_RECT_EMPTY'}});
+ });
  it('cannot crop generated or overlapping text as if it were ordinary glyph paint',async()=>{
   const style=getComputedStyle;vi.stubGlobal('getComputedStyle',(node:Element,pseudo?:string)=>({...style(node),content:pseudo?'"Badge"':'none'}));expect(await measureAdminVisualEvidenceTarget({selector:'#target'})).toMatchObject({ready:false,reason:'GENERATED_VISIBLE_CONTENT'});
  });

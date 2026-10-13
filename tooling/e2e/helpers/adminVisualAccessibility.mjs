@@ -34,8 +34,10 @@ export async function measureAdminVisualAccessibility(){
   if(typeof document.elementsFromPoint!=='function')return reject('HIT_TEST_UNAVAILABLE',r);
   // Rounded controls do not paint their rectangular corners. Test the center
   // and the four edge midpoints, which remain inside their actual hit shape.
-  const cx=(r.left+r.right)/2,cy=(r.top+r.bottom)/2;
-  return [[cx,cy],[cx,r.top+.1],[r.right-.1,cy],[cx,r.bottom-.1],[r.left+.1,cy]].every(([x,y])=>{const hit=document.elementsFromPoint(x,y)[0];return !!hit&&(hit===el||el.contains(hit))||reject('HIT_TARGET_NOT_OWNED',r,{point:{x,y},hitTopTag:hit?.tagName??null,hitTopRect:pack(hit?.getBoundingClientRect())});});
+  const style=getComputedStyle(el),left=r.left+(parseFloat(style.borderLeftWidth)||0),right=r.right-(parseFloat(style.borderRightWidth)||0),top=r.top+(parseFloat(style.borderTopWidth)||0),bottom=r.bottom-(parseFloat(style.borderBottomWidth)||0);
+  if(right<=left||bottom<=top)return reject('HIT_CONTENT_RECT_EMPTY',r);
+  const cx=(left+right)/2,cy=(top+bottom)/2;
+  return [[cx,cy],[cx,top+.1],[right-.1,cy],[cx,bottom-.1],[left+.1,cy]].every(([x,y])=>{const hit=document.elementsFromPoint(x,y)[0];return !!hit&&(hit===el||el.contains(hit))||reject('HIT_TARGET_NOT_OWNED',r,{point:{x,y},hitTopTag:hit?.tagName??null,hitTopRect:pack(hit?.getBoundingClientRect())});});
  };
  for(const rule of result.incomplete){
   if(rule.id!=='color-contrast'){incomplete.push(summarize(rule));continue;}
