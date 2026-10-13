@@ -26,6 +26,7 @@ import { AdminMediaTasks } from './adminMediaTasks';
 import { AdminReciterWizard } from './adminReciterWizard';
 import { AdminRenderMedia } from './adminRenderMedia';
 import { registerAdminMediaEndpoints } from '../routes/admin/adminMediaEndpoints';
+import { AdminFeedbackService } from './adminFeedbackService';
 
 export interface AdminRuntimeOptions {
   db: CatalogDatabase;
@@ -69,7 +70,7 @@ export function createAdminRuntime(options: AdminRuntimeOptions) {
       read: new AdminCatalogReadService(options.db),
       tasks: new AdminCatalogTaskService(options.db),
       reviews: new HumanReviewService(options.db),
-    }); registerRenderLabEndpoints(register, lab, renderMedia); registerAdminA2bEndpoints(register, new AdminOwnerWorkspace(options.db,process.cwd(),{isChapterReady:(id,surah,complete)=>media.isLicensedChapterReady(id,surah,complete)},env)); registerAdminMediaEndpoints(register,media,mediaTasks,new AdminReciterWizard(options.db,options.source)); },
+    }); registerRenderLabEndpoints(register, lab, renderMedia); registerAdminA2bEndpoints(register, new AdminOwnerWorkspace(options.db,process.cwd(),{isChapterReady:(id,surah,complete)=>media.isLicensedChapterReady(id,surah,complete)},env), new AdminFeedbackService(options.db)); registerAdminMediaEndpoints(register,media,mediaTasks,new AdminReciterWizard(options.db,options.source)); },
   });
   let stopping: Promise<void> | undefined, closing: Promise<void> | undefined;
   const stopTasks = (): Promise<void> => stopping ??= Promise.all([worker.close(),mediaTasks.close()]).then(()=>{});

@@ -53,6 +53,8 @@ describe('production admin runtime boundaries', () => {
     expect(inventory.some(row => row.path === '/dashboard')).toBe(true);
     expect(inventory.some(row => row.path === '/catalog/reciters')).toBe(true);
     expect(inventory.some(row => row.path === '/catalog/timings')).toBe(true);
+    expect(inventory.some(row => row.path === '/feedback' && row.method === 'post' && row.writes)).toBe(true);
+    expect(inventory.some(row => row.path === '/feedback/:id/status' && row.method === 'patch' && row.writes)).toBe(true);
     expect(inventory.filter(row => row.method !== 'get').every(row => row.writes)).toBe(true);
     await runtime.close();
     expect(db.read).not.toHaveBeenCalled(); expect(db.execute).not.toHaveBeenCalled(); expect(db.transaction).not.toHaveBeenCalled();

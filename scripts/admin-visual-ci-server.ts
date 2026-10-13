@@ -70,6 +70,8 @@ for(const up of [upQuranTextTables,upQuranCatalogTables,upQuranTimingTables,upRe
 // migration008 fails visibly; the visual job can never silently skip it.
 const migration008='../server/db/migrations/008_addAdminReviewWorkspace.ts';
 const {upAdminReviewWorkspace}=await import(migration008);await upAdminReviewWorkspace(db);await activateRenderV2Access(db);
+const migration009='../server/db/migrations/009_addAdminFeedback.ts';
+const {upAdminFeedback}=await import(migration009);await upAdminFeedback(db);
 const release='https://github.com/QUD-Technologies/quranic-universal-audio/releases/download/v3.2.0/';
 async function asset(name:string,sha:string){if(!/^[a-zA-Z0-9_.-]+$/u.test(name)||!/^[a-f0-9]{64}$/u.test(sha))throw new Error('PUBLIC_RELEASE_PIN_INVALID');const response=await fetch(release+name,{signal:AbortSignal.timeout(120000)});if(!response.ok)throw new Error('PUBLIC_RELEASE_FETCH_FAILED_'+response.status);const raw=await response.text();if(checksumText(raw)!==sha)throw new Error('PUBLIC_RELEASE_PIN_MISMATCH');return raw;}
 const script=await asset('digital_khatt_v2_script.json','19d5694b057dc68c3811e28f3ad1d58c0f07021a0c67a85cd25619ece7a9bf86');

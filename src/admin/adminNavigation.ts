@@ -1,4 +1,4 @@
-import { House, ClipboardCheck, AudioLines, UsersRound, Library, Grid2X2, Clock3, ShieldCheck, Tags, HardDrive, FileAudio, Clapperboard, Rocket, Map, Users, LockKeyhole, Settings, ScrollText, BookOpen, CircleHelp, Plus } from 'lucide-react';
+import { House, ClipboardCheck, AudioLines, UsersRound, Library, Grid2X2, Clock3, ShieldCheck, Tags, HardDrive, FileAudio, Clapperboard, Rocket, Map, Users, LockKeyhole, Settings, ScrollText, BookOpen, CircleHelp, Plus, MessageSquareText, MonitorCog } from 'lucide-react';
 
 export const adminGroups = [
   { id: 'start', ar: 'ابدأ من هنا', en: 'Start here' },
@@ -14,6 +14,7 @@ export const adminGroups = [
 ] as const;
 export const adminNavigation = [
   { path: '/admin', ar: 'ابدأ من هنا', en: 'Start here', permission: 'dashboard.read', key: 'h', group: 'start', icon: House },
+  { path: '/admin/feedback', ar: 'ملاحظاتي', en: 'My notes', permission: 'dashboard.read', key: 'k', group: 'start', icon: MessageSquareText },
   { path: '/admin/reviews', ar: 'مركز المراجعة', en: 'Review center', permission: 'review.read', key: 'v', group: 'reviews', icon: ClipboardCheck },
   { path: '/admin/provider-licenses', ar: 'تراخيص المزوّدين', en: 'Provider licenses', permission: 'providers.read', key: 'i', group: 'reviews', icon: ShieldCheck },
   { path: '/admin/labels', ar: 'الأسماء الوصفية', en: 'Recording labels', permission: 'recitations.read', key: 'n', group: 'reviews', icon: Tags },
@@ -36,4 +37,5 @@ export const adminNavigation = [
   { path: '/admin/settings', ar: 'إعدادات الموقع', en: 'Website settings', permission: 'settings.read', key: 's', group: 'settings', icon: Settings },
   { path: '/admin/providers', ar: 'مصادر الصوت', en: 'Audio providers', permission: 'providers.read', key: 'p', group: 'settings', icon: Library },
   { path: '/admin/help', ar: 'دليل الاستخدام والمصطلحات', en: 'Guide and glossary', permission: 'dashboard.read', key: '?', group: 'settings', icon: CircleHelp },
+  { path: '/admin/diagnostics', ar: 'تشخيص المتصفح', en: 'Browser diagnostics', permission: 'dashboard.read', key: 'x', group: 'settings', icon: MonitorCog },
 ] as const;
