@@ -10,6 +10,7 @@ function api(retained=false){
   '/api/admin/catalog/reciters?limit=1':{data:[{id:'reader'}]},
   '/api/admin/reviews?type=voice_confirmation&limit=1':{data:[{id:'review',recitation_id:'recording'}]},
   '/api/admin/licensed-audio':{data:{items:[{id:'licensed'}]}},
+  '/api/admin/render-lab/choices':{data:{recitations:[{id:'recording'}]}},
   '/api/admin/catalog/recitations/recording/chapters':{data:{recitation:{id:'recording'},chapters:[{surah:103,ayah_count:3,ready_ayahs:3}]}},
   '/api/admin/catalog/timings?recitation_id=recording&surah=103&from=1&to=3&limit=1':{data:[{recitation_id:'recording',surah:103,ayah:1}]},
   '/api/admin/render-lab/jobs':{data:{items:retained?[{id:'actual-retained-job',status:'succeeded',artifact_available:true}]:[]}},
@@ -37,6 +38,51 @@ describe('production visual capture inventory and complete coverage',()=>{
   const reader=api(true);await expect(discoverAdminCaptureTargets(reader.read,{renderJobId:'actual-retained-job',production:true})).resolves.toMatchObject({targetEvidence:{render_selection:'root_supplied_get_verified',synthetic_targets:false}});
   reader.responses['/api/admin/render-lab/jobs/actual-retained-job']={data:{id:'actual-retained-job',status:'succeeded',artifact:{requiresAdminAuthentication:true,playPath:'/api/admin/render-lab/jobs/actual-retained-job/media'},qa_report_json:{fixture:'CI_VISUAL_ONLY_SYNTHETIC_BLACK',actual_quran_render:false}}};
   await expect(discoverAdminCaptureTargets(reader.read,{renderJobId:'actual-retained-job',production:true})).rejects.toThrow('PRODUCTION_SYNTHETIC_VIDEO_FORBIDDEN');
+ });
+ it('keeps the actual voice/listening subject while selecting a separate imported timing recording',async()=>{
+  const reader=api();reader.responses['/api/admin/render-lab/choices']={data:{recitations:[{id:'recording'},{id:'imported'}]}};
+  reader.responses['/api/admin/catalog/timings?recitation_id=recording&surah=103&from=1&to=3&limit=1']={data:[]};
+  reader.responses['/api/admin/catalog/recitations/imported/chapters']={data:{recitation:{id:'imported'},chapters:[{surah:103,ayah_count:3,ready_ayahs:0}]}};
+  reader.responses['/api/admin/catalog/timings?recitation_id=imported&surah=103&from=1&to=3&limit=1']={data:[{recitation_id:'imported',surah:103,ayah:2}]};
+  const targets=await discoverAdminCaptureTargets(reader.read);
+  expect(targets.fixture).toMatchObject({reviewId:'review',recitationId:'recording',timingsRecitationId:'imported',timingsSurah:103,timingsAyah:2});
+  expect(targets.targetEvidence).toMatchObject({timing_selection:'render_choices_get_verified',timing_empty_chapters:[{recitation_id:'recording',surah:103}]});
+ });
+ it('GET-verifies an explicit timing target and never substitutes another one when it is empty or invalid',async()=>{
+  const reader=api();await expect(discoverAdminCaptureTargets(reader.read,{timingsRecitationId:'recording'})).resolves.toMatchObject({targetEvidence:{timing_selection:'root_supplied_get_verified'}});
+  expect(reader.read.mock.calls.map(([path])=>path)).not.toContain('/api/admin/render-lab/choices');
+  await expect(discoverAdminCaptureTargets(reader.read,{timingsRecitationId:'../recording'})).rejects.toThrow('CAPTURE_TIMING_RECITATION_ID_INVALID');
+  reader.responses['/api/admin/catalog/timings?recitation_id=recording&surah=103&from=1&to=3&limit=1']={data:[]};
+  await expect(discoverAdminCaptureTargets(reader.read,{timingsRecitationId:'recording'})).rejects.toThrow('REAL_TIMING_ROW_REQUIRED');
+ });
+ it('uses actual paged catalog DTOs if render choices have no stored target; unknown metadata remains an error',async()=>{
+  const reader=api();reader.responses['/api/admin/render-lab/choices']={data:{recitations:[]}};
+  reader.responses['/api/admin/catalog/recitations?page=1&limit=100']={data:[{id:'recording'}],meta:{page:1,limit:100,total:1,totalPages:1}};
+  await expect(discoverAdminCaptureTargets(reader.read)).resolves.toMatchObject({targetEvidence:{timing_selection:'catalog_recitations_get_verified'}});
+  reader.responses['/api/admin/catalog/recitations?page=1&limit=100']={data:[{id:'recording'}],meta:{page:1,limit:100,total:101,totalPages:2}};
+  await expect(discoverAdminCaptureTargets(reader.read)).rejects.toThrow('CAPTURE_RECITATIONS_PAGE_INCOMPLETE');
+  reader.responses['/api/admin/catalog/recitations?page=1&limit=100']={data:[{id:'recording'}]};
+  await expect(discoverAdminCaptureTargets(reader.read)).rejects.toThrow('CAPTURE_RECITATIONS_PAGE_INVALID');
+ });
+ it('stops on actual GET errors and identity drift instead of hiding them by switching timing subjects',async()=>{
+  const reader=api();reader.responses['/api/admin/render-lab/choices']={data:{recitations:[{id:'recording'},{id:'unused'}]}};
+  const failure=vi.fn(async(path:string)=>{if(path.includes('/catalog/timings?'))throw new Error('ACTUAL_GET_FAILED');return reader.read(path);});
+  await expect(discoverAdminCaptureTargets(failure)).rejects.toThrow('ACTUAL_GET_FAILED');
+  expect(failure.mock.calls.map(([path])=>path)).not.toContain('/api/admin/catalog/recitations/unused/chapters');
+  reader.responses['/api/admin/catalog/recitations/recording/chapters']={data:{recitation:{id:'wrong'},chapters:[{surah:103,ayah_count:3,ready_ayahs:3}]}};
+  await expect(discoverAdminCaptureTargets(reader.read)).rejects.toThrow('CAPTURE_CHAPTER_IDENTITY_INVALID');
+ });
+ it('continues to a real later catalog page and rejects duplicate or malformed subjects',async()=>{
+  const reader=api();reader.responses['/api/admin/render-lab/choices']={data:{recitations:[]}};
+  const empty=Array.from({length:100},(_,index)=>({id:'empty-'+index}));
+  reader.responses['/api/admin/catalog/recitations?page=1&limit=100']={data:empty,meta:{page:1,limit:100,total:101,totalPages:2}};
+  for(const row of empty)reader.responses['/api/admin/catalog/recitations/'+row.id+'/chapters']={data:{recitation:{id:row.id},chapters:[]}};
+  reader.responses['/api/admin/catalog/recitations?page=2&limit=100']={data:[{id:'recording'}],meta:{page:2,limit:100,total:101,totalPages:2}};
+  await expect(discoverAdminCaptureTargets(reader.read)).resolves.toMatchObject({fixture:{timingsRecitationId:'recording'}});
+  reader.responses['/api/admin/catalog/recitations?page=2&limit=100']={data:[empty[0]],meta:{page:2,limit:100,total:101,totalPages:2}};
+  await expect(discoverAdminCaptureTargets(reader.read)).rejects.toThrow('CAPTURE_TIMING_RECITATION_ID_INVALID');
+  reader.responses['/api/admin/render-lab/choices']={data:{recitations:[{id:'../escape'}]}};
+  await expect(discoverAdminCaptureTargets(reader.read)).rejects.toThrow('CAPTURE_TIMING_CHOICES_INVALID');
  });
  it('rejects unknown metadata, nonexistent real IDs and timing/chapter identity drift',async()=>{
   const unknown=api();unknown.responses['/api/admin/render-lab/jobs']={data:{}};await expect(discoverAdminCaptureTargets(unknown.read)).rejects.toThrow('CAPTURE_API_RESPONSE_SHAPE_INVALID');

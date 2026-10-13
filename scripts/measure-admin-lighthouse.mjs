@@ -40,7 +40,7 @@ async function main(){
   const chromeVersion=await browser.version();
   await page.goto(base.origin+'/admin',{waitUntil:'networkidle0',timeout:60000});await page.waitForSelector('#admin-main h1.admin-page-title',{timeout:45000});
   const read=async path=>{const result=await page.evaluate(async path=>{const response=await fetch(path,{method:'GET',credentials:'include'});return{ok:response.ok,payload:response.ok?await response.json():null};},path);if(!result.ok)throw new Error('LIGHTHOUSE_TARGET_GET_FAILED');return result.payload;};
-  const targets=await discoverAdminCaptureTargets(read,{renderJobId:argument('--render-job-id')});
+  const targets=await discoverAdminCaptureTargets(read,{renderJobId:argument('--render-job-id'),timingsRecitationId:argument('--timing-recitation-id')});
   const source=await readFile(join(root,'src/admin/AdminRoot.tsx'),'utf8'),routes=buildAdminLighthouseRoutes(source,targets.fixture,requested);
   for(const path of routes){
    console.log(JSON.stringify({phase:'measuring',path}));

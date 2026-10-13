@@ -16,6 +16,8 @@ if(phase==='after'&&!revision)throw new Error('AFTER_CAPTURE_REVISION_REQUIRED')
 const filtered=process.argv.includes('--routes'),publicOnly=process.argv.includes('--public-only'),partial=filtered||publicOnly;
 const renderJobIndex=process.argv.indexOf('--render-job-id'),renderJobId=renderJobIndex<0?undefined:process.argv[renderJobIndex+1];
 if(renderJobIndex>=0&&(!renderJobId||renderJobId.startsWith('--')))throw new Error('CAPTURE_RENDER_JOB_ID_REQUIRED');
+const timingIndex=process.argv.indexOf('--timing-recitation-id'),timingsRecitationId=timingIndex<0?undefined:process.argv[timingIndex+1];
+if(timingIndex>=0&&(!timingsRecitationId||timingsRecitationId.startsWith('--')))throw new Error('CAPTURE_TIMING_RECITATION_ID_REQUIRED');
 // tsx adds external __name helpers; compile this trusted local module without
 // keepNames before serializing its self-contained browser function.
 const scanner=scanOnly?new Function((await transform(await readFile(new URL('../tooling/e2e/helpers/adminVisualScanner.ts',import.meta.url),'utf8'),{loader:'ts',format:'esm',keepNames:false,target:'es2022'})).code.replace(/export\s*\{[^}]*\};?/gu,'')+';return scanAdminVisualDocument;')():null;
@@ -121,7 +123,7 @@ try{
  };
  let targets,inventory=[];
  if(!publicOnly){
-  if(phase==='after')targets=await discoverAdminCaptureTargets(read,{renderJobId,production:!local});
+  if(phase==='after')targets=await discoverAdminCaptureTargets(read,{renderJobId,timingsRecitationId,production:!local});
   else{const readers=await read('/api/admin/catalog/reciters?limit=1');targets={fixture:{reciterId:readers.data?.[0]?.id},limitations:[],targetEvidence:{source:'authenticated_get',baseline:'original13'}};}
   const routeSource=await readFile('src/admin/AdminRoot.tsx','utf8');inventory=buildAdminCaptureInventory(routeSource,targets.fixture,phase);
   const sourceSha=createHash('sha256').update(routeSource).digest('hex');
