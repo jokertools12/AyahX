@@ -1,6 +1,7 @@
 import {isDeepStrictEqual} from 'node:util';
+import {assertAdminVisualReviewInvariant} from './adminVisualReviewProof.mjs';
 import {assertAdminVisualScanEvidence,assertAdminVisualDirectEvidence} from './adminVisualEvidenceValidation.mjs';
-import {launchAdminVisualCases,requireAdminVisualTier,assertAdminVisualLaunchCoreCoverage,assertAdminVisualTierDialogCoverage,shouldScanAdminVisualDialogs,adminVisualCombinationKey} from './adminVisualTiers.mjs';
+import {launchAdminVisualCases,requireAdminVisualTier,assertAdminVisualLaunchCoreCoverage,assertAdminVisualTierDialogCoverage,shouldScanAdminVisualDialogs,adminVisualCombinationKey,adminVisualDialogReuseScope} from './adminVisualTiers.mjs';
 
 // These are the original acceptance dimensions. Sharding changes scheduling,
 // never the number of measurements, native zoom or scanner/axe thresholds.
@@ -54,6 +55,7 @@ export function assertAdminVisualShard({report,exitCode,caseEvidence},fullInvent
  requireProof(report.expectedCases===expected.length&&Array.isArray(report.matrix)&&report.matrix.length===expected.length,'ADMIN_VISUAL_CHILD_CASE_COUNT_MISMATCH');
  for(const key of ['apiErrors','browserErrors','blockedRequests','redisErrors'])assertEmpty(report[key],'ADMIN_VISUAL_CHILD_'+key.toUpperCase());
  requireProof(report.reviewsStayedPending===true,'ADMIN_VISUAL_HUMAN_REVIEWS_CHANGED');
+ assertAdminVisualReviewInvariant(report.reviewInvariant);
  requireProof(caseEvidence instanceof Map&&caseEvidence.size===expected.length,'ADMIN_VISUAL_CASE_FILES_MISSING');
  const seen=new Set(),observedDialogs=[],scheduledDialogReferences=[];
  for(const row of report.matrix){
@@ -71,7 +73,9 @@ export function assertAdminVisualShard({report,exitCode,caseEvidence},fullInvent
   requireProof(Array.isArray(references)&&new Set(references.map(reference=>reference.slug)).size===references.length,'ADMIN_VISUAL_DIALOG_REFERENCE_INVALID');
   for(const reference of references){
    requireProof(tier==='tier1'&&shouldScanAdminVisualDialogs(row,tier)&&dialogInventory.some(dialog=>dialog.slug===reference.slug)&&!proof.applicableDialogs.includes(reference.slug)&&typeof reference.caseId==='string','ADMIN_VISUAL_DIALOG_REFERENCE_INVALID');
-   scheduledDialogReferences.push({...reference,combination:adminVisualCombinationKey(row)});
+   const declared=dialogInventory.find(dialog=>dialog.slug===reference.slug);
+   requireProof(reference.reuseScope===adminVisualDialogReuseScope(declared,row),'ADMIN_VISUAL_DIALOG_REFERENCE_SCOPE_INVALID');
+   scheduledDialogReferences.push({...reference,combination:adminVisualCombinationKey(row),route:row.route,position:report.matrix.indexOf(row)});
   }
   for(const dialog of proof.dialogs){
    requireProof(dialogInventory.some(declared=>declared.slug===dialog.slug)&&!scanned.has(dialog.slug),'ADMIN_VISUAL_DIALOG_UNKNOWN_OR_DUPLICATE');scanned.add(dialog.slug);
@@ -81,7 +85,11 @@ export function assertAdminVisualShard({report,exitCode,caseEvidence},fullInvent
   exact([...scanned].sort(),[...proof.applicableDialogs].sort(),'ADMIN_VISUAL_APPLICABLE_DIALOG_UNTESTED');
  }
  exact(report.dialogs,observedDialogs,'ADMIN_VISUAL_DIALOG_REPORT_PROOF_MISMATCH');
- for(const reference of scheduledDialogReferences)requireProof(observedDialogs.some(dialog=>dialog.slug===reference.slug&&dialog.caseId===reference.caseId&&adminVisualCombinationKey(dialog)===reference.combination),'ADMIN_VISUAL_DIALOG_REFERENCE_MISSING_DIRECT_PROOF');
+ for(const reference of scheduledDialogReferences){
+  const measured=report.matrix.find(row=>row.caseId===reference.caseId),declared=dialogInventory.find(dialog=>dialog.slug===reference.slug);
+  requireProof(measured&&report.matrix.indexOf(measured)<reference.position&&adminVisualDialogReuseScope(declared,measured)===reference.reuseScope,'ADMIN_VISUAL_DIALOG_REFERENCE_SCOPE_INVALID');
+  requireProof(observedDialogs.some(dialog=>dialog.slug===reference.slug&&dialog.caseId===reference.caseId&&adminVisualCombinationKey(dialog)===reference.combination),'ADMIN_VISUAL_DIALOG_REFERENCE_MISSING_DIRECT_PROOF');
+ }
  return{routeInventory:assigned,matrix:report.matrix,dialogs:observedDialogs};
 }
 
@@ -94,9 +102,10 @@ export function aggregateAdminVisualShards(children,inventories,dialogInventory,
  const slots=inventories[0].map(adminVisualRouteSlot);
  for(const inventory of inventories)exact(inventory.map(adminVisualRouteSlot),slots,'ADMIN_VISUAL_SHARD_SOURCE_SLOTS_CHANGED');
  const accepted=children.map((child,index)=>assertAdminVisualShard(child,inventories[index],dialogInventory,index,tier));
+ for(const child of children)exact(child.report.reviewInvariant.before,children[0].report.reviewInvariant.before,'ADMIN_VISUAL_REVIEW_SHARD_BASELINE_MISMATCH');
  const routeInventory=inventories[0].map((_,position)=>inventories[position%ADMIN_VISUAL_SHARD_COUNT][position]);
  const matrix=accepted.flatMap(child=>child.matrix),dialogs=accepted.flatMap(child=>child.dialogs);
  requireProof(matrix.length===expectedAdminVisualCases(routeInventory,tier).length&&new Set(matrix.map(adminVisualCaseKey)).size===matrix.length,'ADMIN_VISUAL_AGGREGATE_CASE_COVERAGE_INVALID');
  assertAdminVisualTierDialogCoverage(dialogInventory,dialogs,tier);
- return{version:'admin-visual-ci-all-2',acceptanceScope:tier==='tier1'?'complete-launch-matrix':'complete-route-matrix',tier,mode:'strict',routeInventory,routes:routeInventory.map(route=>route.path),dialogInventory,matrix,dialogs,expectedCases:matrix.length,dialogCoverage:{passed:true},reviewsStayedPending:true,apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[],passed:true,shards:children.map((child,index)=>({index,exitCode:child.exitCode,shardComplete:child.report.shardComplete,cases:child.report.matrix.length}))};
+ return{version:'admin-visual-ci-all-2',acceptanceScope:tier==='tier1'?'complete-launch-matrix':'complete-route-matrix',tier,mode:'strict',routeInventory,routes:routeInventory.map(route=>route.path),dialogInventory,matrix,dialogs,expectedCases:matrix.length,dialogCoverage:{passed:true},reviewInvariants:children.map(child=>child.report.reviewInvariant),reviewsStayedPending:true,apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[],passed:true,shards:children.map((child,index)=>({index,exitCode:child.exitCode,shardComplete:child.report.shardComplete,cases:child.report.matrix.length}))};
 }

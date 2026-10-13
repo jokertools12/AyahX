@@ -1,6 +1,8 @@
 // @vitest-environment node
-import {describe,it,expect} from 'vitest';
-import {allowedAdminVisualWrite,isOwnedAdminVisualPreview,canReuseAdminVisualPreview} from '../../tooling/e2e/helpers/adminVisualDialogPreparation.mjs';
+import {describe,it,expect,vi} from 'vitest';
+import {readFileSync} from 'node:fs';
+import {ADMIN_ROLES} from '../../server/admin/adminPermissions';
+import {allowedAdminVisualWrite,isOwnedAdminVisualPreview,canReuseAdminVisualPreview,assertAdminVisualRoleFixture,adminVisualPreviewRoles,openAdminVisualResponsiveDialog} from '../../tooling/e2e/helpers/adminVisualDialogPreparation.mjs';
 describe('disposable visual preview network admission',()=>{
  const fixture={safeReviewId:'ci-informational-review'};
  it('allows only login and the informational preview for exactly one owned review',()=>{
@@ -13,6 +15,22 @@ describe('disposable visual preview network admission',()=>{
  });
  it('never treats absent fixture metadata as a matching target',()=>{
   expect(allowedAdminVisualWrite('POST','/api/admin/reviews/bulk-preview',{ids:[undefined],status:'approved'},{})).toBe(false);
+ });
+ it('previews only a supported role actually returned by the real role selector',()=>{
+  expect([...adminVisualPreviewRoles].sort()).toEqual(ADMIN_ROLES.filter(role=>role!=='super_admin').sort());
+  expect(()=>assertAdminVisualRoleFixture('analyst',ADMIN_ROLES)).not.toThrow();
+  for(const role of ['ci_visual_reviewer','super_admin',undefined])expect(()=>assertAdminVisualRoleFixture(role,ADMIN_ROLES)).toThrow('ROLE_FIXTURE_NOT_AVAILABLE');
+  expect(()=>assertAdminVisualRoleFixture('analyst',['admin'])).toThrow('ROLE_FIXTURE_NOT_AVAILABLE');
+  const server=readFileSync('scripts/admin-visual-ci-server.ts','utf8');expect(server).toContain("fixtureRoleSlug:'analyst'");expect(server).not.toContain("VALUES('ci_visual_reviewer'");
+  expect(allowedAdminVisualWrite('PUT','/api/admin/roles/analyst/permissions',{},fixture)).toBe(false);
+ });
+ it.each(['mobile-nav','keyboard-help'])('opens %s through an actually visible responsive control and restores native measurement dimensions',async slug=>{
+  const state={size:{width:1366,height:768},zoom:1},requested={size:{width:390,height:844},zoom:1.5},click=vi.fn();
+  const page={setViewportSize:vi.fn(async size=>{state.size=size;}),evaluate:vi.fn(async()=>{})},zoom=vi.fn(async factor=>{state.zoom=factor;});
+  const candidate={isVisible:async()=>slug==='mobile-nav'?state.size.width===390:state.size.width===1366,isEnabled:async()=>true,click};
+  const scope={locator:()=>({count:async()=>1,nth:()=>candidate})};
+  expect(await openAdminVisualResponsiveDialog(page,scope,slug,requested,zoom)).toBe(true);expect(click).toHaveBeenCalledOnce();expect(click).toHaveBeenCalledWith();
+  expect(state).toEqual(requested);expect(zoom.mock.calls.map(([factor])=>factor)).toEqual([1,1.5]);expect(page.evaluate).toHaveBeenCalledOnce();
  });
  it('can reuse only the real one-item informational response and the same visible selected state',()=>{
   const proof={count:1,ids:[fixture.safeReviewId],types:['data_conflict']},ui={previewPresent:true,previewCount:1,selectedCount:1,selectedIds:[fixture.safeReviewId]};

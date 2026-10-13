@@ -1,10 +1,11 @@
 // @vitest-environment node
+import {snapshotAdminVisualReviews,proveAdminVisualReviewInvariant} from '../../tooling/e2e/helpers/adminVisualReviewProof.mjs';
 import {readFileSync,readdirSync} from 'node:fs';
 import {join} from 'node:path';
 import {describe,it,expect} from 'vitest';
 import {buildAdminVisualRoutes,buildAdminVisualDialogs} from '../../tooling/e2e/helpers/adminVisualInventory.mjs';
 import {expectedAdminVisualCases,selectAdminVisualShard,adminVisualCaseKey,adminVisualCaseName,aggregateAdminVisualShards} from '../../tooling/e2e/helpers/adminVisualSharding.mjs';
-import {adminVisualLaunchCombinations,adminVisualLaunchCorePatterns,adminVisualLaunchDialogCombinations,adminVisualCombinationKey,shouldScanAdminVisualDialogs} from '../../tooling/e2e/helpers/adminVisualTiers.mjs';
+import {adminVisualLaunchCombinations,adminVisualLaunchCorePatterns,adminVisualLaunchDialogCombinations,adminVisualCombinationKey,shouldScanAdminVisualDialogs,adminVisualDialogReuseScope} from '../../tooling/e2e/helpers/adminVisualTiers.mjs';
 const fixture={reciterId:'reader',reviewId:'review',recitationId:'recording',youtubeRecitationId:'youtube',timingsRecitationId:'pinned',timingsSurah:103,timingsAyah:1,renderJobId:'actor-one'};
 const source=readFileSync('src/admin/AdminRoot.tsx','utf8');
 type VisualRoute={pattern:string;path:string;view?:string};
@@ -27,7 +28,7 @@ function child(index:number){
   for(const slug of applicableDialogs)dialogs.push({caseId,slug,passed:true,size:row.size,zoom:row.zoom,theme:row.theme,lang:row.lang});
   return{...row,caseId,dpr:row.zoom,passed:true,violations:0,indeterminate:0,axeViolations:0,axeIncomplete:0};
  });
- return{exitCode:0,caseEvidence,report:{version:'admin-visual-ci-shard-2',mode:'strict',tier:'tier1',acceptanceScope:'partial-route-shard',passed:false,shardComplete:true,phase:'finished',shard:{index,count:2},fullRouteInventory:inventories[index],routeInventory,routes:routeInventory.map((route)=>route.path),dialogInventory,matrix,dialogs,expectedCases:cases.length,reviewsStayedPending:true,apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[]}};
+ return{exitCode:0,caseEvidence,report:{version:'admin-visual-ci-shard-2',mode:'strict',tier:'tier1',acceptanceScope:'partial-route-shard',passed:false,shardComplete:true,phase:'finished',shard:{index,count:2},fullRouteInventory:inventories[index],routeInventory,routes:routeInventory.map((route)=>route.path),dialogInventory,matrix,dialogs,expectedCases:cases.length,reviewsStayedPending:true,reviewInvariant:proveAdminVisualReviewInvariant(snapshotAdminVisualReviews([]),snapshotAdminVisualReviews([])),apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[]}};
 }
 describe('Batch 5b strict visual tiers',()=>{
  it('covers every one of the 34 source views at exactly the five requested launch combinations, plus five core views at 200%',()=>{
@@ -64,11 +65,20 @@ describe('Batch 5b strict visual tiers',()=>{
  });
  it('uses an earlier direct dialog measurement only as a scheduling reference at the identical combination',()=>{
   const children=[child(0),child(1)],first=children[0],proofs=[...first.caseEvidence.values()];
-  const measured=proofs.find(row=>row.dialogs.length),later=proofs.find(row=>row.route!==measured.route&&adminVisualCombinationKey(row)===adminVisualCombinationKey(measured));
-  later.previouslyMeasuredDialogs=[{slug:measured.dialogs[0].slug,caseId:adminVisualCaseName(measured)}];
+  const measured=proofs.find(row=>row.dialogs.some(dialog=>dialog.slug==='keyboard-help')),later=proofs.find(row=>row.route!==measured.route&&adminVisualCombinationKey(row)===adminVisualCombinationKey(measured));
+  later.previouslyMeasuredDialogs=[{slug:'keyboard-help',reuseScope:'shared-admin-shell',caseId:adminVisualCaseName(measured)}];
   expect(aggregateAdminVisualShards(children,inventories,dialogInventory,'tier1').passed).toBe(true);
   later.previouslyMeasuredDialogs[0].caseId='invented-cached-proof';
-  expect(()=>aggregateAdminVisualShards(children,inventories,dialogInventory,'tier1')).toThrow('ADMIN_VISUAL_DIALOG_REFERENCE_MISSING_DIRECT_PROOF');
+  expect(()=>aggregateAdminVisualShards(children,inventories,dialogInventory,'tier1')).toThrow('ADMIN_VISUAL_DIALOG_REFERENCE_SCOPE_INVALID');
+ });
+ it('never reuses page-specific or future dialogs across route/tab scope',()=>{
+  const row={route:'/admin/reciters/reader?tab=a'},other={route:'/admin/reciters/reader?tab=b'},declared={slug:'reciter-audit-detail',file:'src/admin/pages/catalog/ReciterAudit.tsx'};
+  expect(adminVisualDialogReuseScope(declared,row)).not.toBe(adminVisualDialogReuseScope(declared,other));
+  expect(adminVisualDialogReuseScope({slug:'new-shell-dialog',file:'src/admin/AdminShell.tsx'},row)).toBe('route:'+row.route);
+  const children=[child(0),child(1)],proofs=[...children[0].caseEvidence.values()];
+  const measured=proofs.find(proof=>proof.dialogs.some(dialog=>dialog.slug==='audit-detail')),later=proofs.find(proof=>proof.route!==measured.route&&adminVisualCombinationKey(proof)===adminVisualCombinationKey(measured));
+  later.previouslyMeasuredDialogs=[{slug:'audit-detail',reuseScope:'route:'+later.route,caseId:adminVisualCaseName(measured)}];
+  expect(()=>aggregateAdminVisualShards(children,inventories,dialogInventory,'tier1')).toThrow('ADMIN_VISUAL_DIALOG_REFERENCE_SCOPE_INVALID');
  });
  it('runs launch only on PR and full only on manual/weekly events, with verified billing guard and no job above sixty minutes',()=>{
   const workflow=readFileSync('.github/workflows/admin-visual.yml','utf8');

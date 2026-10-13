@@ -1,4 +1,5 @@
 // @vitest-environment node
+import {snapshotAdminVisualReviews,proveAdminVisualReviewInvariant} from '../../tooling/e2e/helpers/adminVisualReviewProof.mjs';
 import {readFileSync} from 'node:fs';
 import {describe,expect,it} from 'vitest';
 import {buildAdminVisualRoutes} from '../../tooling/e2e/helpers/adminVisualInventory.mjs';
@@ -21,7 +22,7 @@ function child(index:number){
   caseEvidence.set(adminVisualCaseKey(item),proof);for(const slug of applicableDialogs)dialogs.push({caseId,slug,passed:true});
   return{...item,caseId,dpr:item.zoom,passed:true,violations:0,indeterminate:0,axeViolations:0,axeIncomplete:0};
  });
- return{exitCode:0,caseEvidence,report:{version:'admin-visual-ci-shard-2',mode:'strict',acceptanceScope:'partial-route-shard',passed:false,shardComplete:true,phase:'finished',shard:{index,count:2},fullRouteInventory:inventories[index],routeInventory,routes:routeInventory.map(route=>route.path),dialogInventory,expectedCases:matrix.length,matrix,dialogs,reviewsStayedPending:true,apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[]}};
+ return{exitCode:0,caseEvidence,report:{version:'admin-visual-ci-shard-2',mode:'strict',acceptanceScope:'partial-route-shard',passed:false,shardComplete:true,phase:'finished',shard:{index,count:2},fullRouteInventory:inventories[index],routeInventory,routes:routeInventory.map(route=>route.path),dialogInventory,expectedCases:matrix.length,matrix,dialogs,reviewsStayedPending:true,reviewInvariant:proveAdminVisualReviewInvariant(snapshotAdminVisualReviews([]),snapshotAdminVisualReviews([])),apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[]}};
 }
 const complete=()=>[child(0),child(1)];
 const aggregate=(children=complete())=>aggregateAdminVisualShards(children,inventories,dialogInventory);
@@ -74,6 +75,9 @@ describe('strict visual shard aggregation',()=>{
    const children=complete();children[0].report[field].push({code:'failure'});expect(()=>aggregate(children)).toThrow();
   }
   const children=complete();children[1].report.reviewsStayedPending=false;expect(()=>aggregate(children)).toThrow('ADMIN_VISUAL_HUMAN_REVIEWS_CHANGED');
+  const missing=complete();delete missing[0].report.reviewInvariant;expect(()=>aggregate(missing)).toThrow('ADMIN_VISUAL_REVIEW_INVARIANT_REQUIRED');
+  const changed=complete();changed[0].report.reviewInvariant.after.stateSha256='a'.repeat(64);expect(()=>aggregate(changed)).toThrow('ADMIN_VISUAL_HUMAN_REVIEWS_CHANGED');
+  const disagree=complete();disagree[1].report.reviewInvariant.before.stateSha256='a'.repeat(64);disagree[1].report.reviewInvariant.after.stateSha256='a'.repeat(64);expect(()=>aggregate(disagree)).toThrow('ADMIN_VISUAL_REVIEW_SHARD_BASELINE_MISMATCH');
  });
  it('requires all applicable dialogs per case, matching dialog report rows, and union of all declared dialogs',()=>{
   const missing=complete();missing[0].caseEvidence.values().next().value.dialogs=[];expect(()=>aggregate(missing)).toThrow('ADMIN_VISUAL_APPLICABLE_DIALOG_UNTESTED');

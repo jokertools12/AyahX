@@ -28,8 +28,12 @@ async function runChild(index,privateDirectory){
   return await new Promise(resolve=>{
    const child=spawn(process.execPath,[join(root,'scripts/admin-visual-ci.mjs')],{cwd:root,env:{...process.env,AYAHX_ADMIN_CI_PRIVATE_DIR:privateDirectory,AYAHX_ADMIN_VISUAL_SHARD_INDEX:String(index),AYAHX_ADMIN_VISUAL_SHARD_COUNT:String(ADMIN_VISUAL_SHARD_COUNT)},stdio:['ignore',log.fd,log.fd]});
    running.add(child);let spawnFailed=false;
+   const configured=process.env.AYAHX_ADMIN_VISUAL_BUDGET_MINUTES,budget=configured===undefined?(tier==='tier1'?35:Infinity):Number(configured);
+   if(budget!==Infinity&&(!Number.isInteger(budget)||budget<1)){child.kill('SIGTERM');spawnFailed=true;}
+   // Kill only this owned browser child after its budget plus bounded cleanup.
+   const hardTimer=Number.isFinite(budget)?setTimeout(()=>child.kill('SIGKILL'),budget*60000+45000):null;hardTimer?.unref();
    child.once('error',()=>{spawnFailed=true;});
-   child.once('close',(exitCode,signal)=>{running.delete(child);resolve({index,exitCode:spawnFailed?null:exitCode,signal:signal??null,spawnFailed});});
+   child.once('close',(exitCode,signal)=>{clearTimeout(hardTimer);running.delete(child);resolve({index,exitCode:spawnFailed?null:exitCode,signal:signal??null,spawnFailed});});
   });
  }finally{await log.close();}
 }

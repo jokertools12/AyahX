@@ -13,6 +13,12 @@ export function requireAdminVisualTier(tier){
  return tier;
 }
 export function adminVisualCombinationKey(row){return JSON.stringify([row.size?.width,row.size?.height,row.zoom,row.theme,row.lang]);}
+// Only these shared shell dialogs have route-independent content. Route-local
+// dialogs can differ between tab/query contexts even with the same declaration.
+export function adminVisualDialogReuseScope(dialog,row){
+ const shell=dialog.file?.replaceAll('\\','/').endsWith('/admin/AdminShell.tsx');
+ return shell&&['keyboard-help','quick-search','reading-preferences'].includes(dialog.slug)?'shared-admin-shell':'route:'+row.route;
+}
 export function launchAdminVisualCases(inventory){
  return inventory.flatMap(({path,pattern,view})=>[
   ...adminVisualLaunchCombinations.map(combo=>({route:path,...combo})),

@@ -1,3 +1,4 @@
+import {waitForAdminVisualPaint} from './adminVisualPaint.mjs';
 /** CI-owned preview only. No confirmation submission or direct API request. */
 export function allowedAdminVisualWrite(method,path,body,fixture){
  if(method!=='POST')return false;
@@ -6,6 +7,24 @@ export function allowedAdminVisualWrite(method,path,body,fixture){
 }
 
 const previewProofs=new WeakMap(),observedPages=new WeakSet();
+export const adminVisualPreviewRoles=Object.freeze(['admin','content_manager','moderator','support','finance','analyst']);
+export function assertAdminVisualRoleFixture(role,available){
+ if(!adminVisualPreviewRoles.includes(role)||!Array.isArray(available)||!available.includes(role))throw new Error('ADMIN_VISUAL_ROLE_FIXTURE_NOT_AVAILABLE');
+}
+/** Responsive-only openers are clicked while genuinely visible, then the
+ * requested native measurement window is restored before any dialog scan. */
+export async function openAdminVisualResponsiveDialog(page,scope,slug,currentCase,applyZoom){
+ const temporary=slug==='mobile-nav'?{width:390,height:844}:slug==='keyboard-help'?{width:1366,height:768}:null;
+ if(!temporary)return false;
+ await page.setViewportSize(temporary);await applyZoom(1);
+ try{
+  const candidates=scope.locator(`[data-admin-visual-open="${slug}"]`);let opener;
+  for(let index=0;index<await candidates.count();index++){const candidate=candidates.nth(index);if(await candidate.isVisible()&&await candidate.isEnabled()){opener=candidate;break;}}
+  if(!opener)throw new Error('ADMIN_VISUAL_RESPONSIVE_OPENER_MISSING');
+  await opener.click();
+ }finally{await page.setViewportSize(currentCase.size);await applyZoom(currentCase.zoom);await page.evaluate(waitForAdminVisualPaint);}
+ return true;
+}
 export function isOwnedAdminVisualPreview(proof,fixture){
  return typeof fixture.safeReviewId==='string'&&/^[a-zA-Z0-9_-]+$/u.test(fixture.safeReviewId)&&proof?.count===1&&Array.isArray(proof.ids)&&proof.ids.length===1&&proof.ids[0]===fixture.safeReviewId&&Array.isArray(proof.types)&&proof.types.length===1&&proof.types[0]==='data_conflict';
 }
@@ -45,6 +64,7 @@ export async function prepareAdminVisualDialogContext(page,scope,fixture){
   await scope.locator('#move-reason').fill('CI_VISUAL_ONLY: preview, no recording move');
  }else if(!slug&&path==='/admin/roles'){
   const select=scope.locator('#selected-role'),before=await select.inputValue();
+  assertAdminVisualRoleFixture(fixture.fixtureRoleSlug,await select.locator('option').evaluateAll(options=>options.map(option=>option.value)));
   await select.selectOption(fixture.fixtureRoleSlug);
   await (await firstVisible(scope.getByRole('checkbox'))).click();
   return async()=>{await scope.getByRole('button',{name:/إلغاء التغييرات|Discard changes/u}).click();await select.selectOption(before);};

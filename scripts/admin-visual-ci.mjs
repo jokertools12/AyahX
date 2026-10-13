@@ -7,10 +7,12 @@ import {chromium} from '../tooling/e2e/node_modules/playwright-core/index.mjs';
 import {loadAdminVisualScanner} from '../tooling/e2e/helpers/loadAdminVisualScanner.mjs';
 import {buildAdminVisualRoutes,buildAdminVisualDialogs} from '../tooling/e2e/helpers/adminVisualInventory.mjs';
 import {selectAdminVisualShard,expectedAdminVisualCases,adminVisualCaseName,ADMIN_VISUAL_SHARD_COUNT} from '../tooling/e2e/helpers/adminVisualSharding.mjs';
-import {requireAdminVisualTier,shouldScanAdminVisualDialogs,adminVisualCombinationKey} from '../tooling/e2e/helpers/adminVisualTiers.mjs';
-import {allowedAdminVisualWrite,prepareAdminVisualDialogContext} from '../tooling/e2e/helpers/adminVisualDialogPreparation.mjs';
+import {requireAdminVisualTier,shouldScanAdminVisualDialogs,adminVisualCombinationKey,adminVisualDialogReuseScope} from '../tooling/e2e/helpers/adminVisualTiers.mjs';
+import {allowedAdminVisualWrite,prepareAdminVisualDialogContext,openAdminVisualResponsiveDialog} from '../tooling/e2e/helpers/adminVisualDialogPreparation.mjs';
 import {measureAdminVisualAccessibility} from '../tooling/e2e/helpers/adminVisualAccessibility.mjs';
 import {collectAdminVisualEvidence} from '../tooling/e2e/helpers/adminVisualPixelEvidence.mjs';
+import {readAdminVisualReviewSnapshot,proveAdminVisualReviewInvariant} from '../tooling/e2e/helpers/adminVisualReviewProof.mjs';
+import {guardAdminVisualEvaluate,withAdminVisualDeadline,startAdminVisualProgressCheckpoint,acquireAdminVisualNativeWorker} from '../tooling/e2e/helpers/adminVisualRuntimeGuards.mjs';
 import {waitForAdminVisualPaint} from '../tooling/e2e/helpers/adminVisualPaint.mjs';
 if(process.env.CI!=='true'||process.env.AYAHX_ADMIN_VISUAL_CI!=='1')throw new Error('EPHEMERAL_CI_ONLY');
 const base=process.env.AYAHX_ADMIN_VISUAL_BASE??'http://127.0.0.1:3005',baseUrl=new URL(base);
@@ -41,8 +43,9 @@ const scanner=await loadAdminVisualScanner();
 const axe=await readFile('tooling/e2e/node_modules/axe-core/axe.min.js','utf8');
 const extension=join(directory,'native-zoom-extension');await mkdir(extension,{recursive:true});
 await writeFile(join(extension,'manifest.json'),JSON.stringify({manifest_version:3,name:'AyahX CI native zoom',version:'1.0',permissions:['tabs'],background:{service_worker:'background.js'}}));
-await writeFile(join(extension,'background.js'),'chrome.runtime.onInstalled.addListener(()=>{});');
+await writeFile(join(extension,'background.js'),'chrome.runtime.onInstalled.addListener(()=>{});chrome.tabs.onUpdated.addListener(()=>{});setInterval(()=>{void chrome.runtime.getPlatformInfo();},20000);');
 const context=await chromium.launchPersistentContext(join(directory,'chrome-profile'),{channel:'chromium',headless:true,viewport:{width:1366,height:768},args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`]});
+context.setDefaultTimeout(30000);
 const redis=new Redis('redis://127.0.0.1:6380/'+redisDb,{maxRetriesPerRequest:1,retryStrategy:null});
 const report={version:'admin-visual-ci-shard-2',startedAt:new Date().toISOString(),mode:'strict',tier,fixtureSource:fixture.seedProofSource??'ephemeral-public-pinned-sources',acceptanceScope:'partial-route-shard',shard:{index:shardIndex,count:ADMIN_VISUAL_SHARD_COUNT},fullRouteInventory,routeInventory,dialogInventory,routes,matrix:[],dialogs:[],apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[],phase:'initialization',currentCase:null,activeDialog:null,passed:false,shardComplete:false};
 redis.on('error',()=>report.redisErrors.push({code:'EPHEMERAL_REDIS_UNAVAILABLE'}));
@@ -56,10 +59,14 @@ await context.route('**/*',async route=>{
  await route.continue();
 });
 context.on('response',response=>{const url=new URL(response.url());if(url.origin===base&&url.pathname.startsWith('/api/')&&response.status()>=400)report.apiErrors.push({path:url.pathname,status:response.status()});});
-const page=await context.newPage();page.on('pageerror',()=>report.browserErrors.push({code:'UNCAUGHT_PAGE_ERROR'}));
-const worker=context.serviceWorkers()[0]??await context.waitForEvent('serviceworker');
+const page=await context.newPage();page.setDefaultTimeout(30000);page.setDefaultNavigationTimeout(30000);
+guardAdminVisualEvaluate(page,{remainingMs:()=>deadline-Date.now()});
+const stopProgress=startAdminVisualProgressCheckpoint(report,output,{onError:()=>report.browserErrors.push({code:'ADMIN_VISUAL_PROGRESS_CHECKPOINT_FAILED'})});
+page.on('pageerror',()=>report.browserErrors.push({code:'UNCAUGHT_PAGE_ERROR'}));
+const extensionWorkerUrl=(await acquireAdminVisualNativeWorker(context,{remainingMs:()=>deadline-Date.now()})).url();
 async function zoom(factor){
- const actual=await worker.evaluate(async({base,factor})=>{const tabs=await chrome.tabs.query({url:base+'/*'});if(tabs.length!==1)throw new Error('NATIVE_ZOOM_TARGET_REQUIRED');await chrome.tabs.setZoom(tabs[0].id,factor);return chrome.tabs.getZoom(tabs[0].id);},{base,factor});
+ const worker=await acquireAdminVisualNativeWorker(context,{expectedUrl:extensionWorkerUrl,remainingMs:()=>deadline-Date.now()});
+ const actual=await worker.evaluate(async({base,factor})=>{if(chrome.runtime.getManifest().name!=='AyahX CI native zoom')throw new Error('NATIVE_ZOOM_EXTENSION_IDENTITY_REQUIRED');const tabs=await chrome.tabs.query({url:base+'/*'});if(tabs.length!==1)throw new Error('NATIVE_ZOOM_TARGET_REQUIRED');await chrome.tabs.setZoom(tabs[0].id,factor);return chrome.tabs.getZoom(tabs[0].id);},{base,factor});
  if(Math.abs(actual-factor)>.001)throw new Error('NATIVE_ZOOM_NOT_APPLIED');
  // Chrome's tab setting resolves before the page renderer necessarily applies
  // the zoom. Wait on its actual DPR, then two painted frames, never a sleep.
@@ -106,15 +113,21 @@ async function scanDialogs(caseId,touch){
     checkDeadline();
     if(visited.has(slug))continue;
   if(typeof slug!=='string'||!/^[a-z0-9-]+$/u.test(slug))throw new Error('INVALID_DIALOG_INVENTORY_ID');
+  if(!dialogInventory.some(item=>item.slug===slug))throw new Error('UNDECLARED_DIALOG_OPENER:'+slug);
+  const reuseScope=adminVisualDialogReuseScope(dialogInventory.find(dialog=>dialog.slug===slug),report.currentCase);
+  const coverageKey=JSON.stringify([slug,reuseScope,adminVisualCombinationKey(report.currentCase)]);
+  if(tier==='tier1'&&measuredLaunchDialogs.has(coverageKey)){previouslyMeasuredDialogs.push({slug,reuseScope,caseId:measuredLaunchDialogs.get(coverageKey)});visited.add(slug);continue;}
   const candidates=scope.locator(`[data-admin-visual-open="${slug}"]`);let opener;
   for(let index=0;index<await candidates.count();index++){const candidate=candidates.nth(index);if(await candidate.isVisible()&&await candidate.isEnabled()){opener=candidate;break;}}
-  if(!opener)continue;
-  if(!dialogInventory.some(item=>item.slug===slug))throw new Error('UNDECLARED_DIALOG_OPENER:'+slug);
-  const coverageKey=JSON.stringify([slug,adminVisualCombinationKey(report.currentCase)]);
-  if(tier==='tier1'&&measuredLaunchDialogs.has(coverageKey)){previouslyMeasuredDialogs.push({slug,caseId:measuredLaunchDialogs.get(coverageKey)});visited.add(slug);continue;}
+  let responsiveOpened=false;
+  if(!opener&&['mobile-nav','keyboard-help'].includes(slug)){
+   report.activeDialog=slug;report.phase='dialog-responsive-preparation';
+   responsiveOpened=await openAdminVisualResponsiveDialog(page,scope,slug,report.currentCase,zoom);
+  }
+  if(!opener&&!responsiveOpened)continue;
   applicable.add(slug);
   report.activeDialog=slug;report.phase='dialog-open';
-  await opener.click();
+  if(opener)await opener.click();
   visited.add(slug);
   const dialog=page.locator(`[data-admin-visual-dialog="${slug}"]`);
   report.phase='dialog-visible';
@@ -153,6 +166,7 @@ try{
  // The initial unauthenticated identity is expected and removed before matrix.
  await page.locator('#admin-email').fill(fixture.email);await page.locator('#admin-password').fill(fixture.password);
  const login=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/admin/auth/login');await page.locator('form button[type=submit]').click();if((await login).status()!==200)throw new Error('REAL_CI_LOGIN_FAILED');await settle();report.apiErrors=[];
+ report.phase='review-baseline';await resetFixtureReadWindow();report.reviewBaseline=await readAdminVisualReviewSnapshot(page.request,base);
  for(const route of routes){
   report.phase='route-navigation';report.currentCase={route};report.activeDialog=null;
   await resetFixtureReadWindow();await page.goto(base+route);await settle();
@@ -182,8 +196,10 @@ try{
  }
  report.phase='coverage-verification';const expected=scheduledCases.length;
  report.dialogCoverage={scope:'observed-applicable-dialogs',passed:report.dialogs.every(dialog=>dialog.passed),fullDeclaredCoverage:'aggregate-only'};
- await resetFixtureReadWindow();report.reviewsStayedPending=true;
- for(const status of ['approved','rejected','deferred']){const response=await page.request.get(base+'/api/admin/reviews?status='+status+'&limit=1');if(!response.ok()){report.reviewsStayedPending=false;break;}const json=await response.json();if(Number(json.meta?.total)!==0)report.reviewsStayedPending=false;}
+ await resetFixtureReadWindow();report.phase='review-invariant';report.reviewsStayedPending=false;
+ report.reviewAfter=await readAdminVisualReviewSnapshot(page.request,base);
+ report.reviewInvariant=proveAdminVisualReviewInvariant(report.reviewBaseline,report.reviewAfter);
+ report.reviewsStayedPending=report.reviewInvariant.unchanged;
  report.expectedCases=expected;report.finishedAt=new Date().toISOString();report.phase='finished';report.shardComplete=report.reviewsStayedPending&&report.dialogCoverage.passed&&report.matrix.length===expected&&report.matrix.every(row=>row.passed)&&!report.apiErrors.length&&!report.browserErrors.length&&!report.blockedRequests.length&&!report.redisErrors.length;
  await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));if(!report.shardComplete)process.exitCode=1;
-}catch(error){report.finishedAt=new Date().toISOString();report.failure={code:error?.message==='ADMIN_VISUAL_BUDGET_EXHAUSTED'?'ADMIN_VISUAL_BUDGET_EXHAUSTED':report.activeDialog?'ADMIN_VISUAL_DIALOG_FAILURE':'ADMIN_VISUAL_BROWSER_FAILURE',phase:report.phase,case:report.currentCase,dialog:report.activeDialog};await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));process.exitCode=1;}finally{await context.close();await redis.quit();}
+}catch(error){report.finishedAt=new Date().toISOString();report.failure={code:/^ADMIN_VISUAL_(?:REVIEW_[A-Z_]+|HUMAN_REVIEWS_CHANGED|ROLE_FIXTURE_NOT_AVAILABLE|RESPONSIVE_OPENER_MISSING|EVALUATE_TIMEOUT|NATIVE_ZOOM_TIMEOUT|NATIVE_WORKER_UNAVAILABLE|NATIVE_WORKER_AMBIGUOUS|BUDGET_EXHAUSTED)$/u.test(error?.message??'')?error.message:report.activeDialog?'ADMIN_VISUAL_DIALOG_FAILURE':'ADMIN_VISUAL_BROWSER_FAILURE',phase:report.phase,case:report.currentCase,dialog:report.activeDialog};await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));process.exitCode=1;}finally{await stopProgress();await withAdminVisualDeadline(()=>context.close(),{code:'ADMIN_VISUAL_BROWSER_CLOSE_TIMEOUT',timeoutMs:15000});await redis.quit();}
