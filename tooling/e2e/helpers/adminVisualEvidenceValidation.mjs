@@ -18,6 +18,7 @@ export function assertAdminVisualPixelProof(proof,kind='text'){
   const ratio=adminVisualContrastRatio(image.foreground,image.background);
   requireProof(Number.isFinite(image.ratio)&&Math.abs(ratio-image.ratio)<1e-10&&ratio>=minimum,'ADMIN_VISUAL_PIXEL_CONTRAST_FAILED');
   requireProof(Number.isInteger(image.width)&&Number.isInteger(image.height)&&image.width>0&&image.height>0&&image.totalPixels===image.width*image.height&&image.backgroundPixels>=image.totalPixels*.5&&image.foregroundPixels>=Math.max(3,Math.ceil(image.totalPixels*.002))&&image.unexplainedPixels<=Math.max(1,image.totalPixels*.005)&&image.antialiasTolerance===16&&image.colorTolerance===4,'ADMIN_VISUAL_PIXEL_SUPPORT_REQUIRED');
+  requireProof(Number.isInteger(image.perimeterPixels)&&image.perimeterPixels>0&&image.backgroundPerimeterPixels/image.perimeterPixels>=.85,'ADMIN_VISUAL_PIXEL_BACKGROUND_AMBIGUOUS');
  }
 }
 export function assertAdminVisualAxNameProof(proof){

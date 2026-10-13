@@ -52,6 +52,10 @@ describe('dominant background / supported farthest foreground PNG proof',()=>{
   const {pixels}=image();for(let offset=0;offset<pixels.data.length;offset+=4)pixels.data.set([(offset*7)%256,(offset*13)%256,(offset*23)%256,255],offset);
   expect(inspectAdminVisualPixels(pixels)).toMatchObject({status:'ambiguous',passed:false,reason:'NO_DOMINANT_BACKGROUND'});
  });
+ it('rejects a dark background stop that resembles an antialias shade instead of certifying only the dominant white stop',()=>{
+  const canvas=createCanvas(100,20),context=canvas.getContext('2d');context.fillStyle='#fff';context.fillRect(0,0,100,20);context.fillStyle='#555';context.fillRect(70,0,30,20);context.fillStyle='#000';context.fillRect(10,4,8,12);context.fillRect(80,4,8,12);
+  expect(inspectAdminVisualPixels(context.getImageData(0,0,100,20))).toMatchObject({passed:false,status:'ambiguous',reason:'AMBIGUOUS_BACKGROUND_PERIMETER'});
+ });
  it('reports undecodable PNG as ambiguous with its original byte hash',async()=>{expect(await inspectAdminVisualPng(Buffer.from('invalid'))).toMatchObject({passed:false,reason:'PNG_DECODE_FAILED',sha256:createHash('sha256').update('invalid').digest('hex')});});
 });
 

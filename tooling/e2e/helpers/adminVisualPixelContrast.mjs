@@ -26,6 +26,13 @@ export function inspectAdminVisualPixels({data,width,height},{kind='text'}={}){
  const bins=[...histogram.values()].map(bin=>({...bin,color:bin.color.map(value=>value/bin.count)})).sort((a,b)=>b.count-a.count);
  const background=bins[0];
  if(background.count/total<.5)return unknown('NO_DOMINANT_BACKGROUND');
+ // Text Range line boxes have whitespace around their glyphs. A second
+ // background occupying their perimeter is a gradient/image, not antialias.
+ // Otherwise a black glyph on a dark gradient stop could be certified using
+ // only the dominant white stop. Such paint needs more specific evidence.
+ let perimeterPixels=0,backgroundPerimeterPixels=0;
+ for(let y=0;y<height;y++)for(let x=0;x<width;x++)if(x===0||y===0||x===width-1||y===height-1){perimeterPixels++;if(distance(pixels[y*width+x],background.color)<=7)backgroundPerimeterPixels++;}
+ if(backgroundPerimeterPixels/perimeterPixels<.85)return unknown('AMBIGUOUS_BACKGROUND_PERIMETER');
  const support=Math.max(3,Math.ceil(total*.002)),candidates=bins.filter(bin=>bin.count>=support&&distance(bin.color,background.color)>16);
  if(!candidates.length)return unknown('NO_SUPPORTED_FOREGROUND');
  const foreground=candidates.sort((a,b)=>distance(b.color,background.color)-distance(a.color,background.color))[0];
@@ -40,7 +47,7 @@ export function inspectAdminVisualPixels({data,width,height},{kind='text'}={}){
  // must be investigated instead of selecting whichever color looks best.
  if(unexplained>Math.max(1,total*.005))return unknown('AMBIGUOUS_MULTICOLOR_PAINT');
  const ratio=adminVisualContrastRatio(foreground.color,background.color),passed=ratio>=minimum;
- return{...base,status:passed?'pass':'fail',passed,reason:passed?'PIXEL_CONTRAST_PASS':'PIXEL_CONTRAST_BELOW_MINIMUM',ratio,background:background.color,foreground:foreground.color,backgroundPixels:background.count,foregroundPixels:foreground.count,unexplainedPixels:unexplained};
+ return{...base,status:passed?'pass':'fail',passed,reason:passed?'PIXEL_CONTRAST_PASS':'PIXEL_CONTRAST_BELOW_MINIMUM',ratio,background:background.color,foreground:foreground.color,backgroundPixels:background.count,foregroundPixels:foreground.count,unexplainedPixels:unexplained,perimeterPixels,backgroundPerimeterPixels};
 }
 
 export async function inspectAdminVisualPng(png,options){
