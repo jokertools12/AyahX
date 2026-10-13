@@ -7,6 +7,7 @@ import {resolve} from 'node:path';
 import {adminReviewWorkspaceMigrationSql,adminReviewColumns,draftNullableColumns} from '../server/db/migrations/008_addAdminReviewWorkspace';
 import {openRailwayMysqlSession} from './lib/railwayMysqlSession';
 import {captureInventory,ENVIRONMENTS,identifier,type Inventory} from './lib/railwayQuranOps';
+import {assertAdminWorkspaceDryRun,closeAdminWorkspaceReport} from './lib/adminWorkspaceMigrationProof';
 
 const args=process.argv.slice(2),apply=args.includes('--apply');
 const option=(name:string)=>{const i=args.indexOf(name);assert.ok(i>=0&&args[i+1]&&!args[i+1].startsWith('--'),'OPTION_REQUIRED:'+name);return resolve(args[i+1]);};
@@ -29,7 +30,7 @@ assert.equal(archiveHash.digest('hex'),backup.encrypted_sha256,'BACKUP_ARCHIVE_S
 assert.deepEqual(backup.row_counts,baseline.row_counts,'BACKUP_INVENTORY_MISMATCH');
 assert.deepEqual(backup.checksums,baseline.checksums,'BACKUP_CHECKSUM_INVENTORY_MISMATCH');
 const dryRun=apply?await json(option('--dry-run')):null;
-if(apply){assert.equal(dryRun.passed,true);assert.equal(dryRun.applied,false);assert.equal(dryRun.sql_sha256,sqlSha);assert.notEqual(option('--report'),option('--dry-run'));}
+if(apply){assertAdminWorkspaceDryRun(dryRun,sqlSha);assert.notEqual(option('--report'),option('--dry-run'));}
 const report:Record<string,unknown>={started_at:new Date().toISOString(),applied:apply,passed:false,sql_sha256:sqlSha,rehearsal_passed:true,backup_restored_tables:backup.restored_tables};
 const protectedTables=['users','profiles','user_roles','subscriptions','payment_requests','saved_videos','render_jobs','system_settings','notifications','quran_surahs','quran_ayahs','quran_words','ayah_timings'];
 const planned={new_tables:['admin_preferences','admin_media_tasks'],review_columns:Object.keys(adminReviewColumns),recitation_columns:['timing_reference_recitation_id'],nullable_existing_columns:Object.keys(draftNullableColumns),inserted_rows:0,updated_rows:0};
@@ -62,9 +63,9 @@ try{
   for(const row of rows){assert.equal(row[2],'YES');assert.equal(row[3],row[1]==='target_subject_id'?'utf8mb4_bin':'utf8mb4_unicode_ci');}
   Object.assign(report,{critical_after:after.critical_counts,disk_after:await session.storage(),original_columns_unchanged:true,protected_checksums_unchanged:true,new_columns_nullable_collation_verified:true});
  }
- report.passed=true;
+ report.checks_passed=true;
 }catch(error){report.failure=error instanceof Error&&/^[A-Z0-9_:. -]{1,120}$/u.test(error.message)?error.message:'ADMIN_WORKSPACE_MIGRATION_FAILED';throw error;}
 finally{
- try{report.serial=await session.close();}finally{report.finished_at=new Date().toISOString();await writeFile(option('--report'),JSON.stringify(report,null,2)+'\n',{mode:0o600,flag:'wx'});}
+ try{await closeAdminWorkspaceReport(report,()=>session.close());}finally{report.finished_at=new Date().toISOString();await writeFile(option('--report'),JSON.stringify(report,null,2)+'\n',{mode:0o600,flag:'wx'});}
 }
 console.log(JSON.stringify({applied:apply,passed:report.passed,sql_sha256:sqlSha,planned,d1:report.d1,d3:report.d3}));
