@@ -1,3 +1,5 @@
+import {AdminApiError} from '../../adminApi';
+import {readableCode} from '../../workspace/readableEvidence';
 import { useEffect, useRef, useState } from 'react';
 import { Upload, X } from 'lucide-react';
 import { useAdmin, useText } from '../../adminState';
@@ -23,8 +25,8 @@ export default function LicensedAudioUpload({ recitationId, rightsRef, enabled }
           clearUploadCheckpoint(localStorage, user.id, recitationId, planned.surah);
           if (result.verificationTaskId) setTasks(old => ({ ...old, [planned.surah]: result.verificationTaskId! }));
         } catch (error) {
-          const cancelled = error instanceof DOMException && error.name === 'AbortError';
-          setErrors(old => ({ ...old, [planned.surah]: cancelled ? t('أوقفت النقل. نقطة الاستئناف محفوظة؛ اختر الملف نفسه وأعد البدء.', 'Transfer stopped. The checkpoint is retained; choose the same file and restart.') : t('لم يكتمل الرفع. لم نُخفِ الخطأ أو نتجاوز الفحص. أعد المحاولة بنفس الملف للاستئناف.', 'Upload did not complete. No failure or check was bypassed. Retry with the same file to resume.') }));
+          const cancelled = error instanceof DOMException && error.name === 'AbortError',code=error instanceof AdminApiError?error.code:error instanceof Error&&/^(?:AUDIO|LICENSED|STORAGE)_[A-Z0-9_]+$/u.test(error.message)?error.message:null;
+          setErrors(old => ({ ...old, [planned.surah]: cancelled ? t('أوقفت النقل. نقطة الاستئناف محفوظة؛ اختر الملف نفسه وأعد البدء.', 'Transfer stopped. The checkpoint is retained; choose the same file and restart.') : (code?readableCode(code,lang)+'. ':'')+t('لم يكتمل الرفع. أعد المحاولة بنفس الملف للاستئناف.', 'Upload did not complete. Retry with the same file to resume.') }));
           break;
         }
       }
