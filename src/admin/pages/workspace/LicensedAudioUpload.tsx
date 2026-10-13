@@ -22,6 +22,7 @@ export default function LicensedAudioUpload({ recitationId, rightsRef, enabled }
         if (abort.signal.aborted) break;
         try {
           const result = await uploadLicensedAudio({ planned, recitationId, rightsRef, signal: abort.signal, checkpoint: readUploadCheckpoint(localStorage, user.id, recitationId, planned.surah), onCheckpoint: checkpoint => saveUploadCheckpoint(localStorage, user.id, recitationId, planned.surah, checkpoint), onProgress: value => setProgress(old => ({ ...old, [planned.surah]: value })) });
+          setErrors(old => { const next = { ...old }; delete next[planned.surah]; return next; });
           clearUploadCheckpoint(localStorage, user.id, recitationId, planned.surah);
           if (result.verificationTaskId) setTasks(old => ({ ...old, [planned.surah]: result.verificationTaskId! }));
         } catch (error) {

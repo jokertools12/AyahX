@@ -61,6 +61,11 @@ describe('real contrast remeasurement acceptance',()=>{
   run.mockResolvedValue(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}],passes:[{id:'color-contrast',nodes:[node(target)]}]}));
   const measured=await measureAdminVisualAccessibility();expect(measured.incomplete).toHaveLength(1);expect(run).toHaveBeenCalledTimes(1);
  });
+ it('requires real contrast proof at painted points of a rounded target, whose empty corners hit its parent',async()=>{
+  Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:(x:number,y:number)=>((x<22||x>118)&&(y<32||y>58))?[target.parentElement!]:[target]});
+  run.mockResolvedValueOnce(result({incomplete:[{id:'color-contrast',nodes:[node(target)]}]})).mockResolvedValueOnce(result({passes:[{id:'color-contrast',nodes:[node(target)]}]}));
+  const measured=await measureAdminVisualAccessibility();expect(measured.incomplete).toEqual([]);expect(measured.remeasurements[0].resolved).toBe(true);expect(run).toHaveBeenCalledTimes(2);
+ });
  it('preserves original and newly measured violations even alongside exact passes',async()=>{
   const initial={id:'button-name',nodes:[node(other,['#other'])]},actual={id:'color-contrast',nodes:[node(target)]};
   run.mockResolvedValueOnce(result({violations:[initial],incomplete:[actual]})).mockResolvedValueOnce(result({violations:[actual],passes:[{id:'color-contrast',nodes:[node(target)]}]}));

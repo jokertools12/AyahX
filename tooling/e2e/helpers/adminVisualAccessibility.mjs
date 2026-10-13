@@ -21,7 +21,10 @@ export async function measureAdminVisualAccessibility(){
   // A rectangular viewport inclusion alone cannot prove paint through an
   // independent overlay. Require the reported target to own every hit point.
   if(typeof document.elementsFromPoint!=='function')return false;
-  return [[(r.left+r.right)/2,(r.top+r.bottom)/2],[r.left+.1,r.top+.1],[r.right-.1,r.top+.1],[r.left+.1,r.bottom-.1],[r.right-.1,r.bottom-.1]].every(([x,y])=>{const hit=document.elementsFromPoint(x,y)[0];return !!hit&&(hit===el||el.contains(hit));});
+  // Rounded controls do not paint their rectangular corners. Test the center
+  // and the four edge midpoints, which remain inside their actual hit shape.
+  const cx=(r.left+r.right)/2,cy=(r.top+r.bottom)/2;
+  return [[cx,cy],[cx,r.top+.1],[r.right-.1,cy],[cx,r.bottom-.1],[r.left+.1,cy]].every(([x,y])=>{const hit=document.elementsFromPoint(x,y)[0];return !!hit&&(hit===el||el.contains(hit));});
  };
  for(const rule of result.incomplete){
   if(rule.id!=='color-contrast'){incomplete.push(summarize(rule));continue;}

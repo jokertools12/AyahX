@@ -19,7 +19,15 @@ const report={version:'admin-human-1',startedAt:new Date().toISOString(),mode:ma
 const browser=await chromium.launch({headless:!args.includes('--headed')});
 const context=await browser.newContext({viewport:{width:1366,height:768},locale:'ar-EG',reducedMotion:'reduce'});
 const page=await context.newPage();page.setDefaultTimeout(20000);
-const uploadLifecycles=new Set();
+const uploadLifecycles=new Set(),readWindows=new Map();
+report.setupRateWindowWaits=[];
+async function waitForIndependentReadWindow(){
+ const bucket=Math.floor(Date.now()/60000),requests=readWindows.get(bucket)??0;
+ if(requests<18)return;
+ const until=(bucket+1)*60000+100,started=Date.now();
+ await page.waitForFunction(until=>Date.now()>=until,until,{polling:100,timeout:61000});
+ report.setupRateWindowWaits.push({beforeTask:true,observedReadRequests:requests,waitMs:Date.now()-started,rateLimitUnchanged:true});
+}
 const knownCode=error=>/^[A-Z][A-Z0-9_:-]{2,100}$/u.test(String(error?.message))?error.message:'BROWSER_ACTION_FAILED';
 page.on('pageerror',()=>report.browserErrors.push({code:'UNCAUGHT_PAGE_ERROR'}));
 await context.route('**/*',async route=>{
@@ -42,6 +50,7 @@ await context.route('**/*',async route=>{
 context.on('response',async response=>{
  const url=new URL(response.url());
  if(url.origin!==base)return;
+ if(url.pathname.startsWith('/api/admin/')&&response.request().method()==='GET'){const bucket=Math.floor(Date.now()/60000);readWindows.set(bucket,(readWindows.get(bucket)??0)+1);}
  if(url.pathname.startsWith('/api/')&&response.status()>=400)report.apiErrors.push({path:url.pathname,status:response.status()});
  // Only real prepare responses may authorize subsequent upload lifecycle calls.
  // This handler never changes responses or sends its own request.
@@ -134,6 +143,8 @@ const handlers={
   const [prepareResponse,finishResponse]=await Promise.all([prepared,finished,click(b,page.getByRole('button',{name:'ابدأ الرفع أو استأنف',exact:true}),'start-fixture-upload')]);
   if(!prepareResponse.ok())throw new Error('ACTUAL_UPLOAD_PREPARE_FAILED');
   if(!finishResponse.ok())throw new Error('ACTUAL_UPLOAD_FINISH_FAILED');
+  await page.getByRole('button',{name:'أوقف النقل مع حفظ الاستئناف',exact:true}).waitFor({state:'hidden'});
+  await enabled(page.getByRole('button',{name:'ابدأ الرفع أو استأنف',exact:true}));
   return{upload:'actual_owned_fixture_upload_completed',source:'user_owned_test_audio',youtubeAudioExtracted:false};
  },
  async M7(b){
@@ -189,7 +200,7 @@ try{
  if(await page.locator('.admin-app').getAttribute('lang')!=='ar'){await page.getByRole('button',{name:/تغيير اللغة|Change language/u}).click();await heading('ابدأ من هنا');}
  report.apiErrors=[];
  for(const task of humanTasks.filter(task=>selected.includes(task.id))){
-  await start();const budget=new HumanTaskBudget(task,manifest.mode),beforeErrors=report.apiErrors.length,beforeBlocked=report.blockedRequests.length;
+  await waitForIndependentReadWindow();await start();const budget=new HumanTaskBudget(task,manifest.mode),beforeErrors=report.apiErrors.length,beforeBlocked=report.blockedRequests.length;
   try{
    const result=await handlers[task.id](budget);budget.enforce();
    if(report.apiErrors.length>beforeErrors||report.blockedRequests.length>beforeBlocked)throw new Error('TASK_NETWORK_GATE_FAILED');
