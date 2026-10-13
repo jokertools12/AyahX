@@ -12,6 +12,7 @@ export function setAdminVisualScanPhase(report,operation,position={}){
 export function diagnoseAdminVisualPaintDocument(){
  const all=document.getAnimations(),fonts=[...document.fonts];
  return{version:'admin-visual-paint-diagnostic-1',acceptance:false,
+  visibility:document.visibilityState??null,focused:typeof document.hasFocus==='function'?document.hasFocus():null,
   fonts:{status:document.fonts.status,total:fonts.length,loading:fonts.filter(font=>font.status==='loading').length,error:fonts.filter(font=>font.status==='error').length},
   viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},
   animationCount:all.length,animations:all.slice(0,64).map(animation=>{

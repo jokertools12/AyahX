@@ -15,8 +15,8 @@ describe('exact visual scan phase diagnostics',()=>{
   const paused={playState:'paused',pending:false,currentTime:123,playbackRate:0,effect:{target:{tagName:'DIV',id:'NEVER_EXPORTED'},getTiming:()=>({iterations:1,duration:400})},finished:new Promise(()=>{})};
   const infinite={...paused,playState:'running',effect:{getTiming:()=>({iterations:Infinity,duration:1000})}};
   const fonts=Object.assign([{status:'loading'},{status:'error'}],{status:'loading',ready:new Promise(()=>{})});
-  vi.stubGlobal('document',{fonts,getAnimations:()=>[paused,infinite]});vi.stubGlobal('innerWidth',911);vi.stubGlobal('innerHeight',512);vi.stubGlobal('devicePixelRatio',1.5);
-  const result=diagnoseAdminVisualPaintDocument();expect(result).toMatchObject({acceptance:false,fonts:{status:'loading',loading:1,error:1},animationCount:2});
+  vi.stubGlobal('document',{fonts,getAnimations:()=>[paused,infinite],visibilityState:'hidden',hasFocus:()=>false});vi.stubGlobal('innerWidth',911);vi.stubGlobal('innerHeight',512);vi.stubGlobal('devicePixelRatio',1.5);
+  const result=diagnoseAdminVisualPaintDocument();expect(result).toMatchObject({acceptance:false,visibility:'hidden',focused:false,fonts:{status:'loading',loading:1,error:1},animationCount:2});
   expect(result.animations[0]).toMatchObject({playState:'paused',iterations:1,playbackRate:0});expect(result.animations[1].infinite).toBe(true);expect(JSON.stringify(result)).not.toContain('NEVER_EXPORTED');
   const standalone=new Function(`return (${diagnoseAdminVisualPaintDocument.toString()});`)();expect(standalone()).toEqual(result);
  });
