@@ -33,8 +33,8 @@ describe('strict visual shard aggregation',()=>{
   const first=buildAdminVisualRoutes(source,fixture),second=buildAdminVisualRoutes(source,{...fixture,renderJobId:'second-owned-video'});
   const parts=[selectAdminVisualShard(first,0),selectAdminVisualShard(second,1)];
   expect(first).toHaveLength(34);expect(parts.map(part=>part.length)).toEqual([17,17]);
-  expect(parts.flatMap(expectedAdminVisualCases)).toHaveLength(2176);
-  expect(new Set(parts.flatMap(expectedAdminVisualCases).map(adminVisualCaseKey)).size).toBe(2176);
+  expect(parts.flatMap(part=>expectedAdminVisualCases(part))).toHaveLength(2176);
+  expect(new Set(parts.flatMap(part=>expectedAdminVisualCases(part)).map(adminVisualCaseKey)).size).toBe(2176);
   expect(()=>selectAdminVisualShard(first,0,1)).toThrow('ADMIN_VISUAL_SHARD_CONFIG_INVALID');
  });
  it('publishes full acceptance only after both partial children and all file/dialog proofs pass',()=>{

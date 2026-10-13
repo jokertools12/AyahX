@@ -261,13 +261,15 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   };
   const measureContrast = (el: Element, foreground: string, minimum: number, code: string, backgroundEl: Element | null = el): void => {
     const fg = color(foreground), bgs = backgrounds(backgroundEl);
-    if (!fg || !bgs) {
-      record(el, 'CONTRAST_UNRESOLVED', 'Contrast needs pixel/manual evidence for an unsupported color, image, opacity, filter or blend.', undefined, undefined, minimum, undefined, true);
+    const unresolved = (reason: string): void => {
+      record(el, 'CONTRAST_UNRESOLVED', reason, undefined, undefined, minimum, undefined, true);
       const issue = indeterminate.find(item => item.code === 'CONTRAST_UNRESOLVED' && item.selector === selector(el));
-      if (issue) issue.contrastKind = code === 'TEXT_CONTRAST' ? 'text' : 'nontext';
-      return;
-    }
-    if (bgs.length > 1 && fg[3] < 1) { record(el, 'CONTRAST_UNRESOLVED', 'Translucent foreground over a gradient needs pixel evidence.', undefined, undefined, undefined, undefined, true); return; }
+      // One element can have unresolved text and border checks. Keep that
+      // combination conservative: text pixels cannot certify its UI boundary.
+      if (issue) issue.contrastKind = issue.contrastKind === 'nontext' || code !== 'TEXT_CONTRAST' ? 'nontext' : 'text';
+    };
+    if (!fg || !bgs) { unresolved('Contrast needs pixel/manual evidence for an unsupported color, image, opacity, filter or blend.'); return; }
+    if (bgs.length > 1 && fg[3] < 1) { unresolved('Translucent foreground over a gradient needs pixel evidence.'); return; }
     let ratio = Math.min(...bgs.map(bg => contrast(over(fg, bg), bg)));
     if (bgs.length > 1) {
       // Endpoints alone can miss grey text disappearing in a black-to-white gradient.

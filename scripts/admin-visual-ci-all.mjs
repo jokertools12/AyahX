@@ -5,6 +5,8 @@ import {join,resolve,relative,isAbsolute} from 'node:path';
 import {buildAdminVisualRoutes,buildAdminVisualDialogs} from '../tooling/e2e/helpers/adminVisualInventory.mjs';
 import {aggregateAdminVisualShards,adminVisualCaseKey,adminVisualCaseName,ADMIN_VISUAL_SHARD_COUNT} from '../tooling/e2e/helpers/adminVisualSharding.mjs';
 
+import {requireAdminVisualTier} from '../tooling/e2e/helpers/adminVisualTiers.mjs';
+const tier=requireAdminVisualTier(process.env.AYAHX_ADMIN_VISUAL_TIER??'tier1');
 if(process.env.CI!=='true'||process.env.AYAHX_ADMIN_VISUAL_CI!=='1')throw new Error('EPHEMERAL_CI_ONLY');
 if(process.env.DATABASE_URL||process.env.MYSQL_URL||process.env.RAILWAY_ENVIRONMENT_ID)throw new Error('EXTERNAL_DATABASE_ENV_FORBIDDEN');
 if(!process.env.AYAHX_ADMIN_CI_PRIVATE_DIR)throw new Error('PRIVATE_DIRECTORY_OUTSIDE_GIT_REQUIRED');
@@ -31,7 +33,7 @@ async function runChild(index,privateDirectory){
   });
  }finally{await log.close();}
 }
-let aggregate={version:'admin-visual-ci-all-2',acceptanceScope:'incomplete-route-matrix',mode:'strict',startedAt,passed:false,shards:[]};
+let aggregate={version:'admin-visual-ci-all-2',acceptanceScope:'incomplete-route-matrix',mode:'strict',tier,startedAt,passed:false,shards:[]};
 try{
  const source=await readFile(join(directory,'fixture.json'),'utf8'),seed=JSON.parse(source);
  if(!Array.isArray(seed.shardActors)||seed.shardActors.length!==ADMIN_VISUAL_SHARD_COUNT)throw new Error('DISTINCT_ADMIN_VISUAL_SHARD_ACTORS_REQUIRED');
@@ -47,6 +49,14 @@ try{
   await writeFile(join(child,'fixture.json'),JSON.stringify(fixtures[index]),{flag:'wx',mode:0o600});privateDirectories.push(child);
  }
  const exits=await Promise.all(privateDirectories.map((child,index)=>runChild(index,child)));
+ // Preserve every finished child's sanitized progress, including timeout/failure.
+ // A partial Tier 2 run is evidence of incompleteness, never acceptance.
+ aggregate.partialReports=[];
+ for(const exit of exits){
+  try{const childReport=JSON.parse(await readFile(join(privateDirectories[exit.index],'evidence','report.json'),'utf8'));
+   aggregate.partialReports.push({index:exit.index,expectedCases:childReport.expectedCases??0,measuredCases:childReport.matrix?.length??0,failedCases:childReport.matrix?.filter(row=>!row.passed).length??0,phase:childReport.phase,shardComplete:childReport.shardComplete,failure:childReport.failure??null});
+  }catch{aggregate.partialReports.push({index:exit.index,code:'ADMIN_VISUAL_CHILD_REPORT_UNAVAILABLE'});}
+ }
  aggregate.shards=exits;
  if(interrupted)throw new Error('ADMIN_VISUAL_AGGREGATE_INTERRUPTED');
  const children=[];
@@ -65,7 +75,7 @@ try{
   }
   children.push({report,exitCode:exit.exitCode,caseEvidence});
  }
- aggregate={...aggregate,...aggregateAdminVisualShards(children,inventories,dialogInventory),startedAt};
+ aggregate={...aggregate,...aggregateAdminVisualShards(children,inventories,dialogInventory,tier),startedAt};
 }catch(error){
  const code=typeof error?.message==='string'?error.message.split(':')[0]:'';
  aggregate.failure={code:/^[A-Z0-9_]{1,100}$/u.test(code)?code:'ADMIN_VISUAL_AGGREGATE_VALIDATION_FAILED'};

@@ -1,5 +1,6 @@
 import {isDeepStrictEqual} from 'node:util';
-import {assertAdminVisualDialogCoverage} from './adminVisualInventory.mjs';
+import {assertAdminVisualScanEvidence,assertAdminVisualDirectEvidence} from './adminVisualEvidenceValidation.mjs';
+import {launchAdminVisualCases,requireAdminVisualTier,assertAdminVisualLaunchCoreCoverage,assertAdminVisualTierDialogCoverage,shouldScanAdminVisualDialogs,adminVisualCombinationKey} from './adminVisualTiers.mjs';
 
 // These are the original acceptance dimensions. Sharding changes scheduling,
 // never the number of measurements, native zoom or scanner/axe thresholds.
@@ -26,49 +27,35 @@ export function adminVisualCaseKey(row){
 export function adminVisualCaseName(row){
  return row.route.replace(/[^a-zA-Z0-9_-]/gu,'_')+`-${row.size.width}-${row.zoom*100}-${row.theme}-${row.lang}`;
 }
-export function expectedAdminVisualCases(inventory){
+export function expectedAdminVisualCases(inventory,tier='tier2'){
+ requireAdminVisualTier(tier);
+ if(tier==='tier1')return launchAdminVisualCases(inventory);
  return inventory.flatMap(({path})=>adminVisualLanguages.flatMap(lang=>adminVisualSizes.flatMap(size=>adminVisualZooms.flatMap(zoom=>adminVisualThemes.map(theme=>({route:path,size,zoom,theme,lang}))))));
 }
 
 function assertEmpty(value,code){requireProof(Array.isArray(value)&&value.length===0,code);}
 function assertScanEvidence(scans){
  requireProof(Array.isArray(scans)&&scans.length>0,'ADMIN_VISUAL_SCANS_REQUIRED');
- for(const scan of scans){
-  requireProof(scan?.report?.version==='admin-visual-1'&&scan.report.mode==='strict'&&scan.report.shouldFail===false&&scan.report.compliant===true,'ADMIN_VISUAL_STRICT_SCAN_REQUIRED');
-  assertEmpty(scan.report.violations,'ADMIN_VISUAL_SCAN_VIOLATIONS');assertEmpty(scan.report.indeterminate,'ADMIN_VISUAL_SCAN_INDETERMINATE');
- }
+ for(const scan of scans)assertAdminVisualScanEvidence(scan?.report);
 }
-function assertAccessibilityEvidence(accessibility){
- requireProof(accessibility&&Array.isArray(accessibility.originalIncomplete)&&Array.isArray(accessibility.remeasurements),'ADMIN_VISUAL_AXE_EVIDENCE_REQUIRED');
- assertEmpty(accessibility.violations,'ADMIN_VISUAL_AXE_VIOLATIONS');assertEmpty(accessibility.incomplete,'ADMIN_VISUAL_AXE_INCOMPLETE');
- // Resolved contrast nodes need the actual visible exact-target PASS proof.
- for(const rule of accessibility.originalIncomplete){
-  requireProof(rule.id==='color-contrast'&&Array.isArray(rule.nodes),'ADMIN_VISUAL_AXE_UNRESOLVED_RULE');
-  for(const node of rule.nodes){
-   const matches=accessibility.remeasurements.filter(proof=>isDeepStrictEqual(proof.target,node.target));
-   requireProof(matches.length===1,'ADMIN_VISUAL_AXE_REMEASUREMENT_REQUIRED');
-   const proof=matches[0];
-   requireProof(proof.resolved===true&&proof.reason==='EXACT_VISIBLE_CONTRAST_PASS'&&proof.fullyVisibleBeforeRun===true&&proof.fullyVisibleAfterRun===true,'ADMIN_VISUAL_AXE_EXACT_PASS_REQUIRED');
-   assertEmpty(proof.violations,'ADMIN_VISUAL_AXE_REMEASUREMENT_VIOLATIONS');assertEmpty(proof.incomplete,'ADMIN_VISUAL_AXE_REMEASUREMENT_INCOMPLETE');
-   requireProof(Array.isArray(proof.passTargets)&&proof.passTargets.some(target=>isDeepStrictEqual(target,node.target)),'ADMIN_VISUAL_AXE_TARGET_PASS_REQUIRED');
-  }
- }
-}
+const assertAccessibilityEvidence=assertAdminVisualDirectEvidence;
 
 /** A successful child is partial evidence, never full acceptance by itself. */
-export function assertAdminVisualShard({report,exitCode,caseEvidence},fullInventory,dialogInventory,index){
+export function assertAdminVisualShard({report,exitCode,caseEvidence},fullInventory,dialogInventory,index,tier='tier2'){
+ requireAdminVisualTier(tier);
+ if(tier==='tier1')requireProof(report?.tier===tier,'ADMIN_VISUAL_CHILD_TIER_MISMATCH');
  requireProof(exitCode===0,'ADMIN_VISUAL_CHILD_EXIT_FAILED');
  requireProof(report?.version==='admin-visual-ci-shard-2'&&report.mode==='strict'&&report.acceptanceScope==='partial-route-shard'&&report.passed===false&&report.shardComplete===true&&report.phase==='finished'&&!report.failure,'ADMIN_VISUAL_CHILD_INCOMPLETE');
  exact(report.shard,{index,count:ADMIN_VISUAL_SHARD_COUNT},'ADMIN_VISUAL_CHILD_SHARD_MISMATCH');
  exact(report.fullRouteInventory,fullInventory,'ADMIN_VISUAL_CHILD_SOURCE_INVENTORY_CHANGED');
- const assigned=selectAdminVisualShard(fullInventory,index),expected=expectedAdminVisualCases(assigned),keys=new Set(expected.map(adminVisualCaseKey));
+ const assigned=selectAdminVisualShard(fullInventory,index),expected=expectedAdminVisualCases(assigned,tier),keys=new Set(expected.map(adminVisualCaseKey));
  exact(report.routeInventory,assigned,'ADMIN_VISUAL_CHILD_ROUTE_PARTITION_CHANGED');exact(report.routes,assigned.map(route=>route.path),'ADMIN_VISUAL_CHILD_ROUTES_CHANGED');
  exact(report.dialogInventory,dialogInventory,'ADMIN_VISUAL_CHILD_DIALOG_INVENTORY_CHANGED');
  requireProof(report.expectedCases===expected.length&&Array.isArray(report.matrix)&&report.matrix.length===expected.length,'ADMIN_VISUAL_CHILD_CASE_COUNT_MISMATCH');
  for(const key of ['apiErrors','browserErrors','blockedRequests','redisErrors'])assertEmpty(report[key],'ADMIN_VISUAL_CHILD_'+key.toUpperCase());
  requireProof(report.reviewsStayedPending===true,'ADMIN_VISUAL_HUMAN_REVIEWS_CHANGED');
  requireProof(caseEvidence instanceof Map&&caseEvidence.size===expected.length,'ADMIN_VISUAL_CASE_FILES_MISSING');
- const seen=new Set(),observedDialogs=[];
+ const seen=new Set(),observedDialogs=[],scheduledDialogReferences=[];
  for(const row of report.matrix){
   const key=adminVisualCaseKey(row);
   requireProof(keys.has(key),'ADMIN_VISUAL_UNEXPECTED_CASE_DIMENSION');requireProof(!seen.has(key),'ADMIN_VISUAL_DUPLICATE_CASE');seen.add(key);
@@ -79,27 +66,37 @@ export function assertAdminVisualShard({report,exitCode,caseEvidence},fullInvent
   assertScanEvidence(proof.scans);assertAccessibilityEvidence(proof.accessibility);
   requireProof(Array.isArray(proof.applicableDialogs)&&new Set(proof.applicableDialogs).size===proof.applicableDialogs.length&&Array.isArray(proof.dialogs),'ADMIN_VISUAL_DIALOG_APPLICABILITY_REQUIRED');
   const scanned=new Set();
+  if(!shouldScanAdminVisualDialogs(row,tier))requireProof(proof.applicableDialogs.length===0&&proof.dialogs.length===0,'ADMIN_VISUAL_UNSCHEDULED_DIALOG_CASE');
+  const references=proof.previouslyMeasuredDialogs??[];
+  requireProof(Array.isArray(references)&&new Set(references.map(reference=>reference.slug)).size===references.length,'ADMIN_VISUAL_DIALOG_REFERENCE_INVALID');
+  for(const reference of references){
+   requireProof(tier==='tier1'&&shouldScanAdminVisualDialogs(row,tier)&&dialogInventory.some(dialog=>dialog.slug===reference.slug)&&!proof.applicableDialogs.includes(reference.slug)&&typeof reference.caseId==='string','ADMIN_VISUAL_DIALOG_REFERENCE_INVALID');
+   scheduledDialogReferences.push({...reference,combination:adminVisualCombinationKey(row)});
+  }
   for(const dialog of proof.dialogs){
    requireProof(dialogInventory.some(declared=>declared.slug===dialog.slug)&&!scanned.has(dialog.slug),'ADMIN_VISUAL_DIALOG_UNKNOWN_OR_DUPLICATE');scanned.add(dialog.slug);
    requireProof(dialog.passed===true,'ADMIN_VISUAL_DIALOG_FAILED');assertScanEvidence(dialog.scans);assertAccessibilityEvidence(dialog.accessibility);
-   observedDialogs.push({caseId:row.caseId,slug:dialog.slug,passed:true});
+   observedDialogs.push({caseId:row.caseId,slug:dialog.slug,passed:true,...(tier==='tier1'?{size:row.size,zoom:row.zoom,theme:row.theme,lang:row.lang}:{})});
   }
   exact([...scanned].sort(),[...proof.applicableDialogs].sort(),'ADMIN_VISUAL_APPLICABLE_DIALOG_UNTESTED');
  }
  exact(report.dialogs,observedDialogs,'ADMIN_VISUAL_DIALOG_REPORT_PROOF_MISMATCH');
+ for(const reference of scheduledDialogReferences)requireProof(observedDialogs.some(dialog=>dialog.slug===reference.slug&&dialog.caseId===reference.caseId&&adminVisualCombinationKey(dialog)===reference.combination),'ADMIN_VISUAL_DIALOG_REFERENCE_MISSING_DIRECT_PROOF');
  return{routeInventory:assigned,matrix:report.matrix,dialogs:observedDialogs};
 }
 
 /** Only this all-shards verifier is allowed to publish passed=true. */
-export function aggregateAdminVisualShards(children,inventories,dialogInventory){
+export function aggregateAdminVisualShards(children,inventories,dialogInventory,tier='tier2'){
+ requireAdminVisualTier(tier);
+ if(tier==='tier1')assertAdminVisualLaunchCoreCoverage(inventories[0]??[]);
  requireProof(Array.isArray(children)&&children.length===ADMIN_VISUAL_SHARD_COUNT&&Array.isArray(inventories)&&inventories.length===ADMIN_VISUAL_SHARD_COUNT,'ADMIN_VISUAL_ALL_SHARDS_REQUIRED');
  requireProof(Array.isArray(dialogInventory)&&dialogInventory.length>0&&new Set(dialogInventory.map(dialog=>dialog.slug)).size===dialogInventory.length,'ADMIN_VISUAL_SOURCE_DIALOG_INVENTORY_REQUIRED');
  const slots=inventories[0].map(adminVisualRouteSlot);
  for(const inventory of inventories)exact(inventory.map(adminVisualRouteSlot),slots,'ADMIN_VISUAL_SHARD_SOURCE_SLOTS_CHANGED');
- const accepted=children.map((child,index)=>assertAdminVisualShard(child,inventories[index],dialogInventory,index));
+ const accepted=children.map((child,index)=>assertAdminVisualShard(child,inventories[index],dialogInventory,index,tier));
  const routeInventory=inventories[0].map((_,position)=>inventories[position%ADMIN_VISUAL_SHARD_COUNT][position]);
  const matrix=accepted.flatMap(child=>child.matrix),dialogs=accepted.flatMap(child=>child.dialogs);
- requireProof(matrix.length===expectedAdminVisualCases(routeInventory).length&&new Set(matrix.map(adminVisualCaseKey)).size===matrix.length,'ADMIN_VISUAL_AGGREGATE_CASE_COVERAGE_INVALID');
- assertAdminVisualDialogCoverage(dialogInventory,dialogs);
- return{version:'admin-visual-ci-all-2',acceptanceScope:'complete-route-matrix',mode:'strict',routeInventory,routes:routeInventory.map(route=>route.path),dialogInventory,matrix,dialogs,expectedCases:matrix.length,dialogCoverage:{passed:true},reviewsStayedPending:true,apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[],passed:true,shards:children.map((child,index)=>({index,exitCode:child.exitCode,shardComplete:child.report.shardComplete,cases:child.report.matrix.length}))};
+ requireProof(matrix.length===expectedAdminVisualCases(routeInventory,tier).length&&new Set(matrix.map(adminVisualCaseKey)).size===matrix.length,'ADMIN_VISUAL_AGGREGATE_CASE_COVERAGE_INVALID');
+ assertAdminVisualTierDialogCoverage(dialogInventory,dialogs,tier);
+ return{version:'admin-visual-ci-all-2',acceptanceScope:tier==='tier1'?'complete-launch-matrix':'complete-route-matrix',tier,mode:'strict',routeInventory,routes:routeInventory.map(route=>route.path),dialogInventory,matrix,dialogs,expectedCases:matrix.length,dialogCoverage:{passed:true},reviewsStayedPending:true,apiErrors:[],browserErrors:[],blockedRequests:[],redisErrors:[],passed:true,shards:children.map((child,index)=>({index,exitCode:child.exitCode,shardComplete:child.report.shardComplete,cases:child.report.matrix.length}))};
 }

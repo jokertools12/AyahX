@@ -2,10 +2,9 @@ name: Admin visual strict
 on:
   pull_request:
     paths: ['src/**', 'server/**', 'shared/**', 'scripts/admin-visual-ci*', 'tooling/e2e/helpers/**', 'database/**', 'package*.json', 'tooling/e2e/package*.json', 'index.html', 'vite.config.ts', 'tailwind.config.ts', 'docs/roadmap.json', 'docs/admin-guide.ar.md', 'docs/data/provider-terms-digest.md', '.github/workflows/admin-visual.yml']
-  push:
-    branches: [main]
-    paths: ['src/**', 'server/**', 'shared/**', 'scripts/admin-visual-ci*', 'tooling/e2e/helpers/**', 'database/**', 'package*.json', 'tooling/e2e/package*.json', 'index.html', 'vite.config.ts', 'tailwind.config.ts', 'docs/roadmap.json', 'docs/admin-guide.ar.md', 'docs/data/provider-terms-digest.md', '.github/workflows/admin-visual.yml']
   workflow_dispatch:
+  schedule:
+    - cron: '17 2 * * 0'
 permissions:
   contents: read
 concurrency:
@@ -13,8 +12,18 @@ concurrency:
   cancel-in-progress: true
 jobs:
   admin-visual:
+    # Root enables only after recording repository visibility, plan and minutes.
+    if: ${{ vars.ADMIN_VISUAL_BILLING_APPROVED == 'true' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - tier: ${{ github.event_name == 'pull_request' && 'tier1' || 'tier2' }}
+            minutes: ${{ github.event_name == 'pull_request' && 40 || 60 }}
+            budget: ${{ github.event_name == 'pull_request' && 35 || 55 }}
+    name: Admin visual ${{ matrix.tier }}
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: ${{ matrix.minutes }}
     services:
       mysql:
         image: mysql:9.7.2
@@ -32,6 +41,8 @@ jobs:
           --health-interval=5s --health-timeout=3s --health-retries=12
     env:
       AYAHX_ADMIN_VISUAL_CI: '1'
+      AYAHX_ADMIN_VISUAL_TIER: ${{ matrix.tier }}
+      AYAHX_ADMIN_VISUAL_BUDGET_MINUTES: ${{ matrix.budget }}
       AYAHX_ADMIN_CI_PRIVATE_DIR: ${{ runner.temp }}/ayahx-admin-visual
       E2E_TELEMETRY_DISABLED: '1'
     steps:
@@ -59,13 +70,13 @@ jobs:
             sleep 2
           done
           echo "EPHEMERAL_BOOTSTRAP_TIMEOUT"; exit 1
-      - name: Every admin route, native zoom, theme, language and size; two shards with aggregate proof
+      - name: Scheduled strict matrix; two native browser actors with aggregate proof
         run: node scripts/admin-visual-ci-all.mjs
       - name: Upload sanitized visual evidence only
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: admin-visual-strict
+          name: admin-visual-${{ matrix.tier }}
           path: |
             ${{ runner.temp }}/ayahx-admin-visual/evidence
             ${{ runner.temp }}/ayahx-admin-visual/shards/*/evidence
