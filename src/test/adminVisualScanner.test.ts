@@ -190,6 +190,18 @@ describe('admin visual document scanner', () => {
     layout('<footer id="footer" style="position:sticky;background-color:rgb(255,255,255)"><button id="a">A</button></footer><main><button id="flow">Flow</button></main>',{footer:[0,0,800,50],a:[10,0,100,44],flow:[10,44,100,44]});
     expect(scanAdminVisualDocument({touch:false}).violations.find(issue=>issue.code==='CONTROL_GAP')).toMatchObject({selector:'#a',relatedSelector:'#flow',actual:0,minimum:8});
   });
+  it.each(['HEADER','banner'])('separates an independent opaque app %s from pinned table headers without exempting their own control gaps',kind=>{
+    vi.stubGlobal('innerWidth',911);Object.defineProperties(document.documentElement,{clientWidth:{configurable:true,value:911},scrollWidth:{configurable:true,value:911}});Object.defineProperty(document.body,'scrollWidth',{configurable:true,value:911});
+    const appHeader=kind==='HEADER'?'<header':'<div role="banner"',appClose=kind==='HEADER'?'header':'div';
+    layout(`${appHeader} id="app-header" style="position:sticky;background-color:rgb(255,255,255);z-index:20"><button id="language">EN</button><button id="app-neighbor">Next</button></${appClose}><main><table><thead><tr><th id="first" style="position:sticky;background-color:rgb(255,255,255);z-index:1"><button id="sort">Sort</button></th><th id="second" style="position:sticky;background-color:rgb(255,255,255);z-index:1"><button id="sort-neighbor">Other</button></th></tr></thead><tbody><tr><td>Data</td></tr></tbody></table></main>`,{'app-header':[0,0,911,72],language:[793.333333,13.666667,49.333333,44],'app-neighbor':[846.666666,13.666667,49.333333,44],first:[700,29.948,100,91.333],second:[790,29.948,100,91.333],sort:[717.22,53.448,72.113295,44],'sort-neighbor':[793.333333,53.448,72,44]});
+    const gaps=scanAdminVisualDocument({touch:false}).violations.filter(issue=>issue.code==='CONTROL_GAP');
+    expect(gaps.map(issue=>[issue.selector,issue.relatedSelector])).toEqual([['#language','#app-neighbor'],['#sort','#sort-neighbor']]);
+    expect(gaps.every(issue=>issue.actual!>=3.9999&&issue.actual!<4.0001&&issue.minimum===8)).toBe(true);
+  });
+  it('retains a real control gap when the pinned table is contained inside the app header region',()=>{
+    layout('<header id="app-header" style="position:sticky;background-color:rgb(255,255,255)"><button id="language">EN</button><table><thead><tr><th id="table-header" style="position:sticky;background-color:rgb(255,255,255)"><button id="sort">Sort</button></th></tr></thead></table></header>',{'app-header':[0,0,800,100],language:[10,0,100,44],'table-header':[0,48,800,50],sort:[10,48,100,44]});
+    expect(scanAdminVisualDocument({touch:false}).violations.find(issue=>issue.code==='CONTROL_GAP')).toMatchObject({selector:'#language',relatedSelector:'#sort',actual:4,minimum:8});
+  });
   it('counts an associated label as a checkbox hit target', () => {
     layout('<label id="label"><input id="checkbox" type="checkbox"/><span id="label-text">Remember</span></label>', { label: [10, 10, 160, 44], checkbox: [15, 20, 16, 16], 'label-text': [40, 19, 100, 26] });
     const report = scanAdminVisualDocument({ touch: true });

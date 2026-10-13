@@ -328,8 +328,8 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   const controls = [...scope.querySelectorAll('button,input:not([type="hidden"]),select,textarea,a[href],[role="button"],[role="checkbox"],[role="switch"],[role="combobox"]')].filter(el => visible(el) && !fullyOccluded(el, el.getBoundingClientRect()));
   const controlRects = new Map<Element, DOMRect>();
   const controlTargets = new Map<Element, Element>();
-  const stickyHeader = (el:Element):Element|null=>{
-    for(let p:Element|null=el;p;p=p.parentElement){const s=style(p);if((p.tagName==='HEADER'||p.tagName==='TH'||['banner','columnheader'].includes(p.getAttribute('role')??''))&&['fixed','sticky'].includes(s.position)&&color(s.backgroundColor)?.[3]===1){let opaque=true;for(let ancestor:Element|null=p;ancestor;ancestor=ancestor.parentElement){const a=style(ancestor);if(Number(a.opacity)!==1||!identityFilter(a.filter)||a.mixBlendMode&&a.mixBlendMode!=='normal')opaque=false;}if(opaque)return p;}}
+  const stickyHeader = (el:Element):{kind:'banner'|'table';region:Element}|null=>{
+    for(let p:Element|null=el;p;p=p.parentElement){const s=style(p);if((p.tagName==='HEADER'||p.tagName==='TH'||['banner','columnheader'].includes(p.getAttribute('role')??''))&&['fixed','sticky'].includes(s.position)&&color(s.backgroundColor)?.[3]===1){let opaque=true;for(let ancestor:Element|null=p;ancestor;ancestor=ancestor.parentElement){const a=style(ancestor);if(Number(a.opacity)!==1||!identityFilter(a.filter)||a.mixBlendMode&&a.mixBlendMode!=='normal')opaque=false;}if(opaque){const table=p.tagName==='TH'||p.getAttribute('role')==='columnheader';return{kind:table?'table':'banner',region:table?p.closest('table,[role="table"],[role="grid"]')??p:p};}}}
     return null;
   };
   for (const el of controls) {
@@ -392,6 +392,9 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
       // or within normal flow are still measured at the original 8px threshold.
       const firstHeader=stickyHeader(controls[i]),secondHeader=stickyHeader(controls[j]);
       if(firstHeader!==secondHeader&&(firstHeader&&!secondHeader||secondHeader&&!firstHeader))continue;
+      // The app banner and an independently scrolling table header can both
+      // be pinned. Their viewport intersection is not a shared layout gap.
+      if(firstHeader&&secondHeader&&firstHeader.kind!==secondHeader.kind&&!firstHeader.region.contains(secondHeader.region)&&!secondHeader.region.contains(firstHeader.region))continue;
       const a = controlRects.get(controls[i])!, b = controlRects.get(controls[j])!;
       const verticalIntersection = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
       const horizontalIntersection = Math.min(a.right, b.right) - Math.max(a.left, b.left);
