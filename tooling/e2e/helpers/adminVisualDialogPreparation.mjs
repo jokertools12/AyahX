@@ -22,6 +22,11 @@ export async function openAdminVisualResponsiveDialog(page,scope,slug,currentCas
   for(let index=0;index<await candidates.count();index++){const candidate=candidates.nth(index);if(await candidate.isVisible()&&await candidate.isEnabled()){opener=candidate;break;}}
   if(!opener)throw new Error('ADMIN_VISUAL_RESPONSIVE_OPENER_MISSING');
   await opener.click();
+  // The Sheet has a finite opening animation. Resizing while it is still
+  // running leaves Chromium with an interrupted animation that never reaches
+  // its terminal state, so settle it at the viewport where the control is
+  // genuinely visible before returning to the requested measurement window.
+  await page.evaluate(waitForAdminVisualPaint);
  }finally{await page.setViewportSize(currentCase.size);await applyZoom(currentCase.zoom);await page.evaluate(waitForAdminVisualPaint);}
  return true;
 }
