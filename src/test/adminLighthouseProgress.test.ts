@@ -61,7 +61,7 @@ describe('bounded safe Lighthouse diagnostics',()=>{
  it('source persists before navigation/measurement/settle and bounds native worker replacement without retries',()=>{
   const lighthouse=readFileSync('scripts/measure-admin-lighthouse.mjs','utf8'),capture=readFileSync('scripts/capture-admin-visual-truth.mjs','utf8');
   expect(lighthouse).toContain("progress.checkpoint('navigate',path)");expect(lighthouse).toContain("progress.checkpoint('lighthouse',path)");expect(lighthouse).toContain("progress.checkpoint('settle',path)");
-  expect(lighthouse).toContain('progress.page(summarizeAdminLighthouse');expect(lighthouse).toContain('progress.fail(error)');expect(lighthouse).not.toContain('JSON.stringify(result.lhr');expect(lighthouse).not.toContain('error.stack');
+  expect(lighthouse).toContain('summarizeAdminLighthouse(result.lhr,path)');expect(lighthouse).toContain('progress.fail(error)');expect(lighthouse).not.toContain('JSON.stringify(result.lhr');expect(lighthouse).not.toContain('error.stack');
   expect(capture).toContain('acquireAdminVisualNativeWorker(context,{expectedUrl:nativeWorkerUrl})');expect(capture).toContain('chrome.runtime.getPlatformInfo()');expect(capture).toContain('},20000)');
  });
 });
