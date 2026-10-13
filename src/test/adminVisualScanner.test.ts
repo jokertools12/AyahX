@@ -23,7 +23,7 @@ beforeEach(() => {
     const defaults: Record<string, string> = { display: 'block', visibility: 'visible', opacity: '1', position: 'static', fontSize: '15px', lineHeight: '25.5px', color: 'rgb(0, 0, 0)', backgroundColor: 'rgba(0, 0, 0, 0)', backgroundImage: 'none', overflowX: 'visible', overflowY: 'visible', filter: 'none', backdropFilter: 'none', mixBlendMode: 'normal' };
     const resolve = (name: string): string => {
       const kebab = name.replace(/[A-Z]/g, c => '-' + c.toLowerCase());
-      return el.style?.getPropertyValue(kebab) || defaults[name] || '';
+      return (name === 'backdropFilter' ? el.getAttribute('data-backdrop-filter') : null) || el.style?.getPropertyValue(kebab) || defaults[name] || '';
     };
     return new Proxy({ getPropertyValue: (name: string) => resolve(name.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase())) }, { get(target, key) { return key === 'getPropertyValue' ? target.getPropertyValue : resolve(String(key)); } });
   });
@@ -41,6 +41,24 @@ beforeEach(() => {
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); document.body.innerHTML = ''; });
 
 describe('admin visual document scanner', () => {
+  it.each(['blur(0px)', 'blur(-0em)', 'brightness(1)', 'brightness(100%)', 'contrast(+01.000)', 'opacity(1)', 'saturate(100%)', 'grayscale(0)', 'invert(0%)', 'sepia(0.0)', 'hue-rotate(0deg)', 'blur(0px) brightness(1) grayscale(0)'])('measures exact identity filter %s without inventing an effective layer', filter => {
+    layout(`<p id="identity" style="filter:${filter};background-color:rgb(255,255,255)">Readable</p>`, {identity:[10,20,200,30]});
+    expect(scanAdminVisualDocument({touch:false}).indeterminate).toEqual([]);
+    document.getElementById('identity')!.style.color='rgb(200,200,200)';
+    expect(codes()).toContain('TEXT_CONTRAST');
+  });
+  it.each(['blur(0.00001px)', 'brightness(0.999999999999999999999)', 'brightness(1.000000000000000001)', 'grayscale(0.000001)', 'contrast(99.999%)', 'hue-rotate(1deg)', 'url(#unknown)', 'drop-shadow(0 0 transparent)', 'brightness(1) blur(1px)', 'unknown(0)', 'brightness(calc(1))', 'brightness(1e0)', 'blur()', 'none blur(0px)'])('retains indeterminate contrast for effective or unsupported filter %s', filter => {
+    layout(`<p id="effective" style="filter:${filter};background-color:rgb(255,255,255)">Readable</p>`, {effective:[10,20,200,30]});
+    expect(scanAdminVisualDocument({touch:false}).indeterminate.some(issue=>issue.code==='CONTRAST_UNRESOLVED')).toBe(true);
+  });
+  it('accepts exact backdrop identities and opacity one but retains translucent ancestors',()=>{
+    layout('<section id="layer" data-backdrop-filter="blur(0px) brightness(100%)" style="opacity:1"><p id="text">Readable</p></section>',{layer:[0,0,400,100],text:[10,20,200,30]});
+    expect(scanAdminVisualDocument({touch:false}).indeterminate).toEqual([]);
+    document.getElementById('layer')!.style.opacity='0.999';
+    expect(scanAdminVisualDocument({touch:false}).indeterminate.some(issue=>issue.code==='CONTRAST_UNRESOLVED')).toBe(true);
+    document.getElementById('layer')!.style.opacity='1';document.getElementById('layer')!.setAttribute('data-backdrop-filter','blur(0.01px)');
+    expect(scanAdminVisualDocument({touch:false}).indeterminate.some(issue=>issue.code==='CONTRAST_UNRESOLVED')).toBe(true);
+  });
   it('does not call a populated table empty while its rows are below the viewport', () => {
     layout('<table id="table"><thead><tr><th>Heading</th></tr></thead><tbody><tr id="row"><td>Existing data</td></tr></tbody></table>', {table:[10,570,500,300],row:[10,640,500,52]});
     expect(codes()).not.toContain('EMPTY_TABLE_NO_HELP');

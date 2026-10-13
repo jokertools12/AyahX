@@ -10,6 +10,7 @@ export interface AdminVisualIssue {
   actual?: number;
   minimum?: number;
   relatedSelector?: string;
+  contrastKind?: 'text' | 'nontext';
 }
 export interface AdminVisualReport {
   version: 'admin-visual-1';
@@ -40,6 +41,29 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   const violations: AdminVisualIssue[] = [];
   const indeterminate: AdminVisualIssue[] = [];
   const scanned = { textNodes: 0, controls: 0, tables: 0 };
+  // Exact CSS identities only. Decimal strings are matched lexically: rounding
+  // a near-one Number must never certify an effective filter as an identity.
+  const identityFilter = (value: string | undefined): boolean => {
+    if (!value || value.trim().toLowerCase() === 'none') return true;
+    let rest = value.trim().toLowerCase();
+    const zero = '[+-]?0+(?:\\.0*)?';
+    const one = '\\+?0*1(?:\\.0*)?';
+    const hundred = '\\+?0*100(?:\\.0*)?';
+    const length = '(?:px|em|rem|ex|ch|cap|ic|lh|rlh|cm|mm|q|in|pt|pc|vw|vh|vmin|vmax|svw|svh|lvw|lvh|dvw|dvh)?';
+    while (rest) {
+      const part = /^([a-z-]+)\(([^()]*)\)/.exec(rest);
+      if (!part) return false;
+      const [, name, raw] = part, amount = raw.trim();
+      const pattern = name === 'blur' ? zero + length
+        : name === 'hue-rotate' ? zero + '(?:deg|grad|rad|turn)?'
+        : ['brightness', 'contrast', 'opacity', 'saturate'].includes(name) ? '(?:' + one + '|' + hundred + '%)'
+        : ['grayscale', 'invert', 'sepia'].includes(name) ? zero + '%?'
+        : null;
+      if (!pattern || !new RegExp('^(?:' + pattern + ')$').test(amount)) return false;
+      rest = rest.slice(part[0].length).trimStart();
+    }
+    return true;
+  };
   const seen = new Set<string>();
   const styleCache = new Map<Element, CSSStyleDeclaration>();
   const style = (el: Element): CSSStyleDeclaration => {
@@ -196,11 +220,11 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
           if (cover.contains(el) || el.contains(cover)) continue;
           const r = cover.getBoundingClientRect(), s = style(cover);
           if (r.left > left || r.right < right || r.top > topEdge || r.bottom < bottom) continue;
-          if (color(s.backgroundColor)?.[3] !== 1 || s.filter && s.filter !== 'none' || s.mixBlendMode && s.mixBlendMode !== 'normal') continue;
+          if (color(s.backgroundColor)?.[3] !== 1 || !identityFilter(s.filter) || s.mixBlendMode && s.mixBlendMode !== 'normal') continue;
           let opaque = true, positionedLayer = false;
           for (let p: Element | null = cover; p; p = p.parentElement) {
             const ancestor = style(p);
-            if (Number(ancestor.opacity) !== 1 || ancestor.filter && ancestor.filter !== 'none' || ancestor.mixBlendMode && ancestor.mixBlendMode !== 'normal') opaque = false;
+            if (Number(ancestor.opacity) !== 1 || !identityFilter(ancestor.filter) || ancestor.mixBlendMode && ancestor.mixBlendMode !== 'normal') opaque = false;
             if (ancestor.position === 'fixed' || ancestor.position === 'sticky') positionedLayer = true;
           }
           // Ordinary overlapping controls remain a defect even when opaque.
@@ -226,7 +250,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
         colors = colors.flatMap(c => stops.map(stop => over(stop!, c)));
         if (colors.length > 256) return null;
       }
-      if (s.mixBlendMode && s.mixBlendMode !== 'normal' || s.filter && s.filter !== 'none' || s.backdropFilter && s.backdropFilter !== 'none' || Number(s.opacity) < 1) return null;
+      if (s.mixBlendMode && s.mixBlendMode !== 'normal' || !identityFilter(s.filter) || !identityFilter(s.backdropFilter) || Number(s.opacity) < 1) return null;
     }
     return colors.filter((c, i, all) => all.findIndex(other => other.every((v, channel) => v === c[channel])) === i);
   };
@@ -237,7 +261,12 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   };
   const measureContrast = (el: Element, foreground: string, minimum: number, code: string, backgroundEl: Element | null = el): void => {
     const fg = color(foreground), bgs = backgrounds(backgroundEl);
-    if (!fg || !bgs) { record(el, 'CONTRAST_UNRESOLVED', 'Contrast needs pixel/manual evidence for an unsupported color, image, opacity, filter or blend.', undefined, undefined, undefined, undefined, true); return; }
+    if (!fg || !bgs) {
+      record(el, 'CONTRAST_UNRESOLVED', 'Contrast needs pixel/manual evidence for an unsupported color, image, opacity, filter or blend.', undefined, undefined, minimum, undefined, true);
+      const issue = indeterminate.find(item => item.code === 'CONTRAST_UNRESOLVED' && item.selector === selector(el));
+      if (issue) issue.contrastKind = code === 'TEXT_CONTRAST' ? 'text' : 'nontext';
+      return;
+    }
     if (bgs.length > 1 && fg[3] < 1) { record(el, 'CONTRAST_UNRESOLVED', 'Translucent foreground over a gradient needs pixel evidence.', undefined, undefined, undefined, undefined, true); return; }
     let ratio = Math.min(...bgs.map(bg => contrast(over(fg, bg), bg)));
     if (bgs.length > 1) {
@@ -298,7 +327,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
   const controlRects = new Map<Element, DOMRect>();
   const controlTargets = new Map<Element, Element>();
   const stickyHeader = (el:Element):Element|null=>{
-    for(let p:Element|null=el;p;p=p.parentElement){const s=style(p);if((p.tagName==='HEADER'||p.getAttribute('role')==='banner')&&['fixed','sticky'].includes(s.position)&&color(s.backgroundColor)?.[3]===1){let opaque=true;for(let ancestor:Element|null=p;ancestor;ancestor=ancestor.parentElement){const a=style(ancestor);if(Number(a.opacity)!==1||a.filter&&a.filter!=='none'||a.mixBlendMode&&a.mixBlendMode!=='normal')opaque=false;}if(opaque)return p;}}
+    for(let p:Element|null=el;p;p=p.parentElement){const s=style(p);if((p.tagName==='HEADER'||p.getAttribute('role')==='banner')&&['fixed','sticky'].includes(s.position)&&color(s.backgroundColor)?.[3]===1){let opaque=true;for(let ancestor:Element|null=p;ancestor;ancestor=ancestor.parentElement){const a=style(ancestor);if(Number(a.opacity)!==1||!identityFilter(a.filter)||a.mixBlendMode&&a.mixBlendMode!=='normal')opaque=false;}if(opaque)return p;}}
     return null;
   };
   for (const el of controls) {
