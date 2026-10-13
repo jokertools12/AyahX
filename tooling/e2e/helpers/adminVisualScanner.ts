@@ -134,14 +134,34 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     const alpha = front[3] + back[3] * (1 - front[3]);
     return [0, 1, 2].map(i => alpha ? (front[i] * front[3] + back[i] * back[3] * (1 - front[3])) / alpha : 0).concat(alpha) as Color;
   };
+  const stackingChains=new Map<Element,Element[]>();
+  const stackingChain=(el:Element):Element[]=>{
+    if(stackingChains.has(el))return stackingChains.get(el)!;
+    const chain:Element[]=[];
+    for(let p:Element|null=el;p;p=p.parentElement){const s=style(p),parent=p.parentElement&&style(p.parentElement),positioned=s.position!=='static'&&!!s.position,flexItem=parent&&/flex|grid/.test(parent.display),z=s.zIndex&&s.zIndex!=='auto';
+      if(p===document.documentElement||['fixed','sticky'].includes(s.position)||z&&(positioned||flexItem)||Number(s.opacity)<1||s.transform&&s.transform!=='none'||s.perspective&&s.perspective!=='none'||s.filter&&s.filter!=='none'||s.backdropFilter&&s.backdropFilter!=='none'||s.mixBlendMode&&s.mixBlendMode!=='normal'||s.isolation==='isolate'||/paint|layout|strict|content/.test(s.contain)||/transform|opacity|filter|perspective/.test(s.willChange))chain.unshift(p);
+    }
+    stackingChains.set(el,chain);return chain;
+  };
+  const provenStackingAbove=(cover:Element,target:Element):boolean=>{
+    const front=stackingChain(cover),back=stackingChain(target);let index=0;
+    while(index<front.length&&index<back.length&&front[index]===back[index])index++;
+    if(!front[index])return false;
+    const level=(el:Element|undefined)=>el&&style(el).zIndex&&style(el).zIndex!=='auto'?Number(style(el).zIndex):0;
+    const top=level(front[index]),bottom=level(back[index]);
+    // Equal levels need paint-order details unavailable from hit testing when
+    // pointer-events:none. Strictly ordered context levels prove this case.
+    return Number.isFinite(top)&&Number.isFinite(bottom)&&top>bottom;
+  };
   // A sticky header may cover a whole Range rectangle after scrolling. Only
   // discard it when hit testing proves a separate, fully opaque covering layer.
   // Partial coverage remains measurable; transparency must never hide failures.
   const fullyOccluded = (el: Element, rect: DOMRect): boolean => {
     if (typeof document.elementsFromPoint !== 'function') return false;
-    // Pointer-events:none elements are absent from hit testing. Their paint
-    // order cannot be proven by this API, so retain them conservatively.
-    for (let p: Element | null = el; p; p = p.parentElement) if (style(p).pointerEvents === 'none') return false;
+    // Pointer-events:none targets are absent from hit testing. For them require
+    // additional proof from independently ordered CSS stacking contexts.
+    let pointerUncertain=false;
+    for (let p: Element | null = el; p; p = p.parentElement) if (style(p).pointerEvents === 'none') pointerUncertain=true;
     const left = Math.max(0, rect.left), right = Math.min(width, rect.right);
     const topEdge = Math.max(0, rect.top), bottom = Math.min(height, rect.bottom);
     if (right <= left || bottom <= topEdge) return false;
@@ -163,7 +183,7 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
             if (ancestor.position === 'fixed' || ancestor.position === 'sticky') positionedLayer = true;
           }
           // Ordinary overlapping controls remain a defect even when opaque.
-          if (opaque && positionedLayer) return true;
+          if (opaque && positionedLayer&&(!pointerUncertain||provenStackingAbove(cover,el))) return true;
         }
       }
       return false;

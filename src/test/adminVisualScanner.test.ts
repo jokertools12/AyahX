@@ -96,6 +96,15 @@ describe('admin visual document scanner', () => {
     expect(codes()).toContain('CONTENT_OVERLAP');
     Reflect.deleteProperty(document, 'elementsFromPoint');
   });
+  it('proves pointer-events-none occlusion only with a higher independent stacking context',()=>{
+    layout('<button id="under" style="pointer-events:none;font-size:8px">Disabled under</button><header id="cover" style="position:sticky;z-index:20;background-color:rgb(255,255,255)">Header</header>',{under:[10,10,100,44],cover:[0,0,800,60]});
+    Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:()=>[document.getElementById('cover')!,document.body]});
+    expect(scanAdminVisualDocument({touch:false}).violations.some(issue=>issue.selector==='#under')).toBe(false);
+    document.getElementById('under')!.style.position='relative';document.getElementById('under')!.style.zIndex='30';
+    expect(codes()).toContain('FONT_TOO_SMALL');
+    document.getElementById('under')!.style.zIndex='20';expect(codes()).toContain('FONT_TOO_SMALL');
+    Reflect.deleteProperty(document,'elementsFromPoint');
+  });
   it('keeps a partially covered text run measurable but ignores only its sticky covered intersection', () => {
     layout('<p id="row" style="font-size:8px">Partly covered</p><header id="cover" style="position:sticky;background-color:rgb(255,255,255)">Header</header>', { row: [10, 50, 100, 30], cover: [0, 0, 800, 60] });
     document.getElementById('cover')!.setAttribute('data-text-box', '10,50,80,10');
