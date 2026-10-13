@@ -25,7 +25,7 @@ export function digestProvider(markdown: string, code: string): ProviderDigest {
 }
 export class AdminOwnerWorkspace {
   readonly reviews: AdminReviewWorkspace;
-  constructor(private readonly db: CatalogDatabase, private readonly root = process.cwd(),private readonly licensed?:LicensedChapterGate) { this.reviews = new AdminReviewWorkspace(db); }
+  constructor(private readonly db: CatalogDatabase, private readonly root = process.cwd(),private readonly licensed?:LicensedChapterGate,private readonly env:NodeJS.ProcessEnv=process.env) { this.reviews = new AdminReviewWorkspace(db); }
   async preferences(userId: string): Promise<AdminPreferences> {
     const [row] = await this.db.read('SELECT density,font_scale FROM admin_preferences WHERE user_id=?', [userId]);
     return { density: row?.density === 'compact' ? 'compact' : 'comfortable', font_scale: [1, 1.1, 1.2].includes(Number(row?.font_scale)) ? Number(row.font_scale) as AdminPreferences['font_scale'] : 1 };
@@ -71,7 +71,9 @@ export class AdminOwnerWorkspace {
   async summary(): Promise<WorkspaceSummary> {
     const review_counts = await this.reviews.counts(), launch = await this.launch();
     const youtube = launch.checks.find(row => row.code === 'licensed_files')!.count;
-    return { review_counts, launch, alerts: [{ code: 'R2_TOKEN_RENEWAL', message: 'جدّد رموز التخزين قبل 9 نوفمبر؛ خطوات التجديد في مركز التخزين.', expires_at: '2026-11-09T00:00:00.000Z' }, ...(youtube ? [{ code: 'YOUTUBE_FILES_MISSING', message: 'تلاوات YouTube تحتاج ملفات صوت مرخّصة قبل استخدامها في الفيديو.', count: youtube }] : [])], public_state: { catalog_enabled: launch.catalog_enabled, public_flow_v2_ready: false, message: 'الزوار يرون الموقع الحالي؛ الكتالوج الجديد مغلق ولم يُربط بواجهة الاختيار بعد.' } };
+    const configuredExpiry=this.env.R2_TOKEN_EXPIRES_AT,expiry=configuredExpiry&&Number.isFinite(Date.parse(configuredExpiry))?new Date(configuredExpiry).toISOString():null;
+    const renewal=expiry?{code:'R2_TOKEN_RENEWAL',message:`جدّد رموز التخزين قبل ${new Date(expiry).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric',timeZone:'Africa/Cairo'})}؛ خطوات التجديد في مركز التخزين.`,expires_at:expiry}:{code:'R2_TOKEN_EXPIRY_UNAVAILABLE',message:'تاريخ انتهاء رموز التخزين غير مسجّل. راجع مركز التخزين قبل تجديدها.'};
+    return { review_counts, launch, alerts: [renewal, ...(youtube ? [{ code: 'YOUTUBE_FILES_MISSING', message: 'تلاوات YouTube تحتاج ملفات صوت مرخّصة قبل استخدامها في الفيديو.', count: youtube }] : [])], public_state: { catalog_enabled: launch.catalog_enabled, public_flow_v2_ready: false, message: 'الزوار يرون الموقع الحالي؛ الكتالوج الجديد مغلق ولم يُربط بواجهة الاختيار بعد.' } };
   }
   async project(): Promise<CatalogRow> {
     const [roadmap, guide_markdown] = await Promise.all([readFile(resolve(this.root, 'docs/roadmap.json'), 'utf8'), readFile(resolve(this.root, 'docs/admin-guide.ar.md'), 'utf8')]);

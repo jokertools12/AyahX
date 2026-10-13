@@ -1,3 +1,9 @@
+# الدفعة 5 — قراءة الاستئناف، 2026-10-13
+
+الميزانية المقروءة:18.79180886851142$،تقدير21.481748524449337$،hard30/soft20،غيرمتجاوز؛ المتبقي11.20819113148858$. الفارق منذ بداية الدفعة18.4330035673$ يخص workspace كله ولا يثبت توفيرًا أو تكلفة دفعة معزولة. قراءة05:26:34UTC تثبتD1=114/6236/77433 وD3=422463 والبصمة القانونية وحسابي الأدمن الأصليين وأدوارهما. الأعداد الحرجة13/16/3/7/82/16/13/49 بالترتيب users/subscriptions/payment_requests/saved_videos/render_jobs/system_settings/user_roles/notifications.
+
+حساب QA الإنتاجي السابق انتهى آليًا ثم حُذف22:33UTC في12أكتوبر؛ users/sessions/roles0 وتدقيق2محفوظ. لا حساب QA فعّال. أضيف R2_TOKEN_EXPIRES_AT=2026-11-09T15:36:41Z إلى خدمة التطبيق معskipDeploys؛ لا نشر بسبب هذا التغيير. رُفع صوت اختبار مملوك إلىحاويةstaging من النسخة المحلية،ثم عادت CORS إلى أصلstagingوحده؛publicDevelopmentURL معطّل. services/volumes/resources كما هي وstaging متوقفة. migration008 لم تُطبق بعد؛ نسخة جديدة مستعادة شرط قبلDDL. [السجل المرحلي](data/batch5-local-status.ar.md).
+
 # الدفعة 4 — D7 ، 2026-10-12
 
 PR21 ثم PR22 مدموجان بعد CI ؛ الخدمات الأربع SUCCESS على 3dac144. فُعّلت render.test للدورين فقط بعد النشر. المصفوفة الإنتاجية تسعة فيديوهات ورفضان، والمخرجات الجديدة منظفة. أول فشل صوتي محفوظ وصُحح EOF دون تغيير v1. عائق SSH_CONNECTION_LIMIT عولج بنقل stdin وجلسة انتظار واحدة، دون restart أو تغيير الموارد. [المصفوفة](data/d7-production-matrix-proof.json)، [التقرير](data/render-verification-report.md).

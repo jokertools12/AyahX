@@ -1,0 +1,141 @@
+{
+  "checked_at": "2026-10-13T05:41:30.982Z",
+  "local_only": true,
+  "production_acceptance": false,
+  "method": "Full twelve-task run plus focused rerun of fixed M11 on the same tagged fixture; failed originals retained privately",
+  "single_uninterrupted_run": false,
+  "source_runs": [
+    {
+      "file": "batch5-human-local-third-result-20261013/report.json",
+      "sha256": "e3f284b1d8726e5cd94f3898de2730ee9b6a68dd272401dbb3ae6b4f79e5a0fc"
+    },
+    {
+      "file": "batch5-human-local-m11-dt-20261013/report.json",
+      "sha256": "b961f05ee5cf14d6d6c7d6e9e8ae9dc39a6a2bcacd008bff38347ac92f4f6448"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "M1",
+      "title": "تأكيد صوت قارئ",
+      "budget": 4,
+      "unit": "clicks",
+      "clicks": 4,
+      "steps": 0,
+      "elapsedMs": 1724,
+      "passed": true
+    },
+    {
+      "id": "M2",
+      "title": "قرار ترخيص مزوّد",
+      "budget": 4,
+      "unit": "clicks",
+      "clicks": 2,
+      "steps": 0,
+      "elapsedMs": 461,
+      "passed": true
+    },
+    {
+      "id": "M3",
+      "title": "تعديل اسم تلاوة",
+      "budget": 3,
+      "unit": "clicks",
+      "clicks": 2,
+      "steps": 0,
+      "elapsedMs": 362,
+      "passed": true
+    },
+    {
+      "id": "M4",
+      "title": "إخفاء وإظهار قارئ",
+      "budget": 3,
+      "unit": "clicks",
+      "clicks": 3,
+      "steps": 0,
+      "elapsedMs": 1070,
+      "passed": true
+    },
+    {
+      "id": "M5",
+      "title": "سبب عدم ظهور تلاوة",
+      "budget": 2,
+      "unit": "clicks",
+      "clicks": 2,
+      "steps": 0,
+      "elapsedMs": 693,
+      "passed": true
+    },
+    {
+      "id": "M6",
+      "title": "بدء رفع ملف مرخّص",
+      "budget": 5,
+      "unit": "clicks",
+      "clicks": 5,
+      "steps": 0,
+      "elapsedMs": 3697,
+      "passed": true
+    },
+    {
+      "id": "M7",
+      "title": "إضافة قارئ وتلاوة بنمط روابط",
+      "budget": 10,
+      "unit": "steps",
+      "clicks": 9,
+      "steps": 6,
+      "elapsedMs": 6473,
+      "passed": true
+    },
+    {
+      "id": "M8",
+      "title": "إنشاء فيديو تجريبي ومشاهدته",
+      "budget": 6,
+      "unit": "clicks",
+      "clicks": 6,
+      "steps": 0,
+      "elapsedMs": 30244,
+      "passed": true
+    },
+    {
+      "id": "M9",
+      "title": "معرفة ما تبقّى",
+      "budget": 2,
+      "unit": "clicks",
+      "clicks": 1,
+      "steps": 0,
+      "elapsedMs": 148,
+      "passed": true
+    },
+    {
+      "id": "M10",
+      "title": "قراءة خطوات تجديد R2",
+      "budget": 3,
+      "unit": "clicks",
+      "clicks": 1,
+      "steps": 0,
+      "elapsedMs": 121,
+      "passed": true
+    },
+    {
+      "id": "M11",
+      "title": "رؤية الكلمات الناقصة",
+      "budget": 4,
+      "unit": "clicks",
+      "clicks": 2,
+      "steps": 0,
+      "elapsedMs": 352,
+      "passed": true
+    },
+    {
+      "id": "M12",
+      "title": "فهم معاينة الظهور العام",
+      "budget": 2,
+      "unit": "clicks",
+      "clicks": 1,
+      "steps": 0,
+      "elapsedMs": 253,
+      "passed": true
+    }
+  ],
+  "task_gates_passed": true,
+  "scope_complete": false
+}

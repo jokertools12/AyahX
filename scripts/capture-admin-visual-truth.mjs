@@ -136,4 +136,4 @@ try{
  await Promise.all(tasks);report.finished_at=new Date().toISOString();await writeFile(join(output,'report.json'),JSON.stringify(report,null,2));
  console.log(JSON.stringify({complete:true,cases:report.matrix.length,public_references:report.public_references.length,network_errors:report.network_errors.length,browser_errors:report.browser_errors.length,blocked_writes:report.blocked_writes.length,private_output:output}));
  if(scanOnly&&phase==='after'&&report.matrix.some(row=>!row.scanner_pass))process.exitCode=1;
-}finally{await context.close();}
+}catch(error){const code=error instanceof Error&&/^[A-Z0-9_]+$/u.test(error.message)?error.message:'ADMIN_VISUAL_CAPTURE_FAILED';console.error(code);process.exitCode=1;}finally{await context.close();}

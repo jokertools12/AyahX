@@ -173,9 +173,9 @@ const handlers={
    const popup=page.locator('[data-radix-popper-content-wrapper]');await type(b,popup.locator('input'),t.nearComplete.labelAr);await click(b,popup.getByRole('button',{name:t.nearComplete.labelAr,exact:true}),'choose-near-complete-recording');
   }
   const chapter=page.locator('.admin-matrix button').filter({has:page.getByText(String(t.nearComplete.surah),{exact:true})});await click(b,chapter,'open-near-complete-chapter');
-  const dialog=page.getByRole('dialog');await dialog.getByText('الكلمات الناقصة',{exact:true}).waitFor();
-  const missing=await dialog.locator('dl>div').filter({has:dialog.getByText('الكلمات الناقصة',{exact:true})}).locator('dd').textContent();if(Number(missing)!==t.nearComplete.missingWords)throw new Error('MISSING_WORD_COUNT_MISMATCH');
-  const section=dialog.locator('section').filter({has:dialog.getByRole('heading',{level:3,name:'الكلمات التي ينقصها توقيت',exact:true})});await section.waitFor();
+  const dialog=page.getByRole('dialog'),missingLabel=dialog.locator('dt').filter({hasText:/^الكلمات الناقصة$/u});await missingLabel.waitFor();
+  const missing=await missingLabel.locator('..').locator('dd').textContent();if(Number(missing)!==t.nearComplete.missingWords)throw new Error('MISSING_WORD_COUNT_MISMATCH');
+  const section=dialog.getByRole('heading',{level:3,name:'الكلمات التي ينقصها توقيت',exact:true}).locator('..');await section.waitFor();
   const words=section.locator('ul>li');if(await words.count()!==t.nearComplete.missingWords)throw new Error('HUMAN_MISSING_WORD_LIST_COUNT_MISMATCH');
   for(let index=0;index<await words.count();index++){const word=words.nth(index);await word.getByText(/الكلمة القانونية رقم\s+\d+/u).waitFor();if(!/[\u0600-\u06ff]/u.test(await word.locator('span').last().textContent()??''))throw new Error('HUMAN_MISSING_WORD_REASON_REQUIRED');}
   return{missingWordEvidenceVisible:true,humanWordPositionsAndReasonsVisible:true,expectedMissingWords:t.nearComplete.missingWords};

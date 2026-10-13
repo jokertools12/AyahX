@@ -15,6 +15,17 @@ function database(read: (sql: string, params?: unknown[]) => Promise<CatalogRow[
   const db: CatalogDatabase = { read: vi.fn(read), execute: vi.fn(async () => {}), transaction: async work => work(db) }; return db;
 }
 describe('owner review safety', () => {
+  it('reads renewed R2 expiration from the same server configuration and declares its absence',async()=>{
+    for(const expiry of ['2027-01-21T12:34:56Z',undefined]){
+      const owner=new AdminOwnerWorkspace(database(async()=>[]),process.cwd(),undefined,{R2_TOKEN_EXPIRES_AT:expiry});
+      vi.spyOn(owner.reviews,'counts').mockResolvedValue([]);
+      vi.spyOn(owner,'launch').mockResolvedValue({completed:0,total:1,percent:0,checks:[{code:'licensed_files',title:'files',complete:false,count:0,owner:'owner'}],catalog_enabled:false,public_flow_v2_ready:false,can_open:false,blocked_reason:'D8',preview:[]});
+      const alert=(await owner.summary()).alerts[0];
+      expect(alert.expires_at).toBe(expiry?'2027-01-21T12:34:56.000Z':undefined);
+      expect(alert.code).toBe(expiry?'R2_TOKEN_RENEWAL':'R2_TOKEN_EXPIRY_UNAVAILABLE');
+      expect(alert.message).not.toContain('9 نوفمبر');
+    }
+  });
   it('rejects bulk voice, license, rights and stale decisions before any write', () => {
     for (const type of ['voice_confirmation', 'provider_license', 'youtube_rights', 'basmala_audio', 'offset_exception']) expect(() => assertSafeBulkReviews([{ id: 'a', type, status: 'pending' }], ['a'])).toThrow('REVIEW_BULK_UNSAFE');
     expect(() => assertSafeBulkReviews([{ id: 'a', type: 'data_conflict', status: 'approved' }], ['a'])).toThrow('REVIEW_BULK_UNSAFE');

@@ -81,7 +81,7 @@ async function scanDialogs(caseId,touch){
   await opener.click();
   const dialog=page.locator(`[data-admin-visual-dialog="${slug}"]`);
   await dialog.waitFor({state:'visible',timeout:10000});
-  await page.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+  await page.evaluate(async()=>{await document.fonts.ready;await Promise.allSettled(document.getAnimations().filter(animation=>animation.effect?.getTiming().iterations!==Infinity).map(animation=>animation.finished));await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
   const scans=await scanAll(touch),accessibility=await scanAccessibility();
   const passed=scans.every(scan=>!scan.report.shouldFail)&&!accessibility.violations.length&&!accessibility.incomplete.length;
   const result={slug,scans,accessibility,passed};results.push(result);report.dialogs.push({caseId,slug,passed});

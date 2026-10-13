@@ -31,7 +31,7 @@ COPY --from=build /app/shared ./shared
 COPY --from=build /app/database ./database
 # Owner workspace reads only these public, versioned documents at runtime.
 COPY --from=build /app/docs/roadmap.json /app/docs/admin-guide.ar.md ./docs/
-COPY --from=build /app/docs/plan/provider-terms-digest.md ./docs/plan/
+COPY --from=build /app/docs/data/provider-terms-digest.md ./docs/data/
 ENV FFMPEG_PATH=/usr/bin/ffmpeg
 ENV FFPROBE_PATH=/usr/bin/ffprobe
 ENV CHROME_BIN=/usr/bin/chromium
