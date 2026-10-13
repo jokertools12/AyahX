@@ -105,6 +105,14 @@ describe('admin visual document scanner', () => {
     document.getElementById('under')!.style.zIndex='20';expect(codes()).toContain('FONT_TOO_SMALL');
     Reflect.deleteProperty(document,'elementsFromPoint');
   });
+  it('does not let z-index escape a modern containing stacking context',()=>{
+    layout('<button id="under" style="pointer-events:none;font-size:8px">Under</button><div id="container"><header id="cover" style="position:sticky;z-index:20;background-color:rgb(255,255,255)">Header</header></div>',{under:[10,10,100,44],container:[0,0,800,60],cover:[0,0,800,60]});
+    Object.defineProperty(document,'elementsFromPoint',{configurable:true,value:()=>[document.getElementById('cover')!,document.body]});
+    const previous=getComputedStyle;
+    vi.stubGlobal('getComputedStyle',(el:Element)=>new Proxy(previous(el),{get(target,key){if(key==='getPropertyValue')return(name:string)=>el.id==='container'&&name==='container-type'?'inline-size':target.getPropertyValue(name);return Reflect.get(target,key);}}));
+    expect(codes()).toContain('FONT_TOO_SMALL');
+    Reflect.deleteProperty(document,'elementsFromPoint');
+  });
   it('keeps a partially covered text run measurable but ignores only its sticky covered intersection', () => {
     layout('<p id="row" style="font-size:8px">Partly covered</p><header id="cover" style="position:sticky;background-color:rgb(255,255,255)">Header</header>', { row: [10, 50, 100, 30], cover: [0, 0, 800, 60] });
     document.getElementById('cover')!.setAttribute('data-text-box', '10,50,80,10');

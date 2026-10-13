@@ -139,7 +139,10 @@ export function scanAdminVisualDocument(options: AdminVisualScanOptions = {}): A
     if(stackingChains.has(el))return stackingChains.get(el)!;
     const chain:Element[]=[];
     for(let p:Element|null=el;p;p=p.parentElement){const s=style(p),parent=p.parentElement&&style(p.parentElement),positioned=s.position!=='static'&&!!s.position,flexItem=parent&&/flex|grid/.test(parent.display),z=s.zIndex&&s.zIndex!=='auto';
-      if(p===document.documentElement||['fixed','sticky'].includes(s.position)||z&&(positioned||flexItem)||Number(s.opacity)<1||s.transform&&s.transform!=='none'||s.perspective&&s.perspective!=='none'||s.filter&&s.filter!=='none'||s.backdropFilter&&s.backdropFilter!=='none'||s.mixBlendMode&&s.mixBlendMode!=='normal'||s.isolation==='isolate'||/paint|layout|strict|content/.test(s.contain)||/transform|opacity|filter|perspective/.test(s.willChange))chain.unshift(p);
+      const independent=['transform','scale','rotate','translate','perspective','filter','backdrop-filter','clip-path','mask-image','mask-border-source'].some(name=>{const value=s.getPropertyValue(name);return !!value&&value!=='none';});
+      // Include modern containment/individual transforms: a high z-index
+      // inside one such ancestor cannot escape that ancestor's own level.
+      if(p===document.documentElement||['fixed','sticky'].includes(s.position)||z&&(positioned||flexItem)||Number(s.opacity)<1||independent||s.mixBlendMode&&s.mixBlendMode!=='normal'||s.isolation==='isolate'||['size','inline-size'].includes(s.getPropertyValue('container-type'))||/paint|layout|strict|content/.test(s.contain)||/transform|scale|rotate|translate|opacity|filter|perspective|clip-path|mask|isolation|contain/.test(s.willChange))chain.unshift(p);
     }
     stackingChains.set(el,chain);return chain;
   };
