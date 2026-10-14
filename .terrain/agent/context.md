@@ -8,7 +8,7 @@ output. Cross-check live source and refresh the source pack before decisions.
 - API: `server/index.ts`, `server/routes/`, `server/middleware/auth.ts`;
   Express, authenticated operations and server-managed provider settings.
 - Persistence: `server/db.ts`, `server/db/`, `database/`; MySQL. Do not
-  assume migrations from the separate admin-rebuild worktree are installed.
+  assume migrations from another worktree are installed.
 - Render workers: `server/worker.ts`, `server/renderControl.ts`,
   `server/services/renderJobQueue.ts`, `renderQueueBroker.ts`,
   `videoRenderingService.ts`, `server/renderer/`; BullMQ/Redis, FFmpeg and
