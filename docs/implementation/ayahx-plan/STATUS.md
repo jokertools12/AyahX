@@ -88,3 +88,7 @@ Fresh v4 runtime principals were provisioned and verified against migration003: 
 بعد موافقة المالك على staging فقط، طُبّق مصدر `main` وإزالة `db:setup` من pre-deploy لـ API على API/Skia/control. النشرات الحالية على commit `8437a30d77b8da1856523eaff5508dc6c0ba5091` هي SUCCESS: API `5aa5c0d5-ea60-44f8-b9ac-2248de9477e6`، Skia `9894a89f-7a2a-41d1-b908-61b5179758d5`، وcontrol `7b285628-2ca0-434f-9aa6-6f9d2b34a99f`. حالة البيئة تعرض الخدمات الست Online ولا توجد pending changes. فحص `/api/health/ready` أعاد HTTP 200 و`database=connected`، مع `storage.driver=local`. production لم يتغير.
 
 تبقى بوابة R2 والرندر الحي الكامل مفتوحة: لم يُنشأ مفتاح Cloudflare staging بسبب فشل Computer Use قبل تشغيل المتصفح ورفض Cloudflare API إنشاء permission group/token بـ `9109 Unauthorized`. لا تُضبط متغيرات R2 ولا يُقبل artifact النهائي قبل توفير مفتاح محدود لـ `ayahx-audio-staging` ثم مطابقة R2/DB/download/worker logs.
+
+## 2026-10-16 — explicit Hugging Face QUD adapter boundary
+
+أضيف موصل اختياري صريح `huggingface_qud_aligner` خلف متغيرات الخادم `HF_QUD_ALIGNER_API_URL`/`HF_QUD_ALIGNER_URL` و`HF_TOKEN`. يظهر الموصل كـ external review required، ويتطلب endpoint مهيأً ومراجعة بشرية؛ لا يوجد fallback صامت أو رفع وسائط خاصة أو تفعيل فعلي في Railway. الاختبار يثبت أنه غير مهيأ افتراضيًا، بينما تبقى نتيجة QUD provisional ولا تصبح canonical أو approved تلقائيًا.
