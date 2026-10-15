@@ -1,8 +1,9 @@
-import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import type { Connection, RowDataPacket } from 'mysql2/promise';
 import { z } from 'zod';
 import { availabilitySnapshotSchema } from '../../../shared/recordingAvailability';
+import { canonicalJson, hashBytes } from '../../utils/canonicalIntegrity';
+export { canonicalJson, hashBytes } from '../../utils/canonicalIntegrity';
 
 export const catalogTables = ['quran_data_sources', 'mushaf_profiles', 'reciter_catalog', 'reciter_recordings', 'recitation_coverage'] as const;
 const protectedTables = ['users', 'user_roles', 'render_jobs', 'saved_videos', 'alignment_documents', 'system_settings'];
@@ -31,19 +32,6 @@ export const migrationSha256 = hashBytes(migrationSql);
 const statements = migrationSql.replace(/^\s*--.*$/gm, '').split(';').map(s => s.trim()).filter(Boolean);
 const circularName = 'fk_catalog_current_coverage';
 
-export function hashBytes(value: string): string { return createHash('sha256').update(value, 'utf8').digest('hex'); }
-/** Exact strings are preserved: no Unicode normalization. Arrays retain order; object keys sort by UTF-16 code unit. */
-export function canonicalJson(value: unknown): string {
-  if (value === null || typeof value === 'boolean' || typeof value === 'string') return JSON.stringify(value);
-  if (typeof value === 'number' && Number.isFinite(value)) return JSON.stringify(value);
-  if (Array.isArray(value)) {
-    if (Object.keys(value).length !== value.length) throw new Error('CANONICAL_JSON_REQUIRES_DENSE_ARRAY');
-    return '[' + Array.from(value, canonicalJson).join(',') + ']';
-  }
-  if (typeof value === 'object' && Object.getPrototypeOf(value) === Object.prototype)
-    return `{${Object.keys(value).sort().map(k => `${JSON.stringify(k)}:${canonicalJson((value as Record<string, unknown>)[k])}`).join(',')}}`;
-  throw new Error('CANONICAL_JSON_REQUIRES_JSON_VALUES');
-}
 export function validatedSnapshot(input: unknown) {
   const snapshot = availabilitySnapshotSchema.parse(input);
   const json = canonicalJson(snapshot);

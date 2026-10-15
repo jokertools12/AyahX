@@ -67,3 +67,15 @@ Astra راجع تصميم الجداول الخمسة وأكد composite pointer
 ### Task 1.1 update
 
 Implementation and Astra review complete for inactive five-table slice. Restored rehearsal and staging dry-run PASS; 18 tests/lint/strict TS PASS. Current private receipt lives in catalog-rehearsal-result.json (report.receipt), with exact target/server UUID/backup SHA/schema digest/SQL SHA and 24-hour backup freshness gate. Next: finish CI/build, commit/PR, green CI, then apply same reviewed SQL to named staging schema using receipt and verify all prior schema/rows, idempotent dry-run. New source activation and runtime repository remain separate unfinished work. Refresh backup/rehearsal if receipt expires; do not drop failed scratch or user data.
+
+### Latest execution gate
+
+PR29 merged main90bf8f8; inactive catalog migration actually applied to staging railway, postcheckpending0, 23nonvolatile rowdigests unchanged/24schemas unchanged, 0catalogrows. Staging code deployment is PENDING: exact2field source patch64461cfe-41b1-41b8-86cb-7a32db50792d prepared, accept-deploy rejected by approval gate. User question pending; do not bypass. On approval inspect pendingpatch and accept, then terminalSUCCESS+livechecks. Current APIb628a8b remains running.
+
+Next local slice on codex/ayahx-catalog-trust: coordinator owns pure hash helper extraction + docs/CI; Sol child catalog_migration owns ONLY recordingAvailabilityRepository.ts, catalogApprovalPolicy.ts and its test. Astra read-only design reviewed: explicit authority-verifier defaultdeny, bothsourcebranches, fullidentity/hashcounts/font, UTCtimestamps, live revocation, noactivation/writer/route/export integration. Font inventory found OFL candidate hashes but noapprovedcanonicalmushafprofile; preserve pending state.
+
+Task1.2 next: Astra proposed separate catalog_role_grants + append-only catalog_audit_events, atomic grant/target locking and evidence verification. Ownerbootstrapaccount question pending alongside stagingdeployapproval. Continue read-only loader and source/profile preparation; noarbitrary ownergrant. Full1.1 remains partial because audit/assets/templates notyetmigrated.
+
+Task0.3 loader implemented;44tests/95combinedchecks and types/lintPASS; Astra nohighmedium. Still noauthoritativeevidencestore/noapprovedrows/noroutes/exportwiring. New liveemptyreadprobe UNVERIFIED: RailwaySSH returns accountdiscovery ratherthan executingscript (minimalmarkerfailed too), do not trust exit0. Purehelperdoesn'timportSQL. Next finishbuild/CI/PR forcodex/ayahx-catalog-trust, then Task1.2 grants/audit (owneridentitypending) and sourceprofilecanonical evidence. Stagingcodeapprovalquestionstillpending; do not bypass.
+
+SSH diagnostic resolved by observing SLEEPING, waking with publicready200 and verifyingmarker. Actual new loader SQL executed once on verifiedstaging:0rows/null/0authoritycalls/no writes. Validprivateprobereport saved. Do not rerun blindSSH loops; check serviceawake and outputsemantics. Still nodeployapproval/owneridentityresponse. BuildPASS; preparing trust PR.

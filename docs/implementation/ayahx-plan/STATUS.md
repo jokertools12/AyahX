@@ -27,8 +27,8 @@ SUCCESS عند b628a8b، وتحقق runtime versions وGET gzip200؛ دُمج ma
 | --- | --- | --- |
 | 0.1 | Provider/source registry والترخيص | سجل المرشحين + GET للأدمن متحقق محليًا؛ مراجعات المصادر الفعلية باقية |
 | 0.2 | Riwayah/numbering/font map | runtime binding schema متحقق محليًا؛ بيانات canonical/font QA باقية |
-| 0.3 | Recording coverage contract | guard + fresh-loader boundary و33 tests محليًا؛ repository/export integration باقٍ |
-| 1.1 | MySQL additive migration | خمسة جداول خاملة + runner متحقق محليًا وعلى restored scratch؛ staging dry-run ناجح؛ CI/apply باقيان |
+| 0.3 | Recording coverage contract | guard + trusted injected repository و44 اختبارًا جديدًا محليًا؛ authority store وruntime/export wiring باقيان |
+| 1.1 | MySQL additive migration | خمسة جداول خاملة + runner متحقق محليًا وتجربة restore؛ PR29 مدموج وstaging apply متحقق؛ نشر الكود معلّق عند بوابة الموافقة |
 | 1.2 | RBAC وAudit | إصلاح admin-only لاعتماد/رفض التوقيت متحقق محليًا؛ RBAC التفصيلي وaudit العام باقيان |
 | 1.3 | Source resolution attempts | لم يُقيّم |
 | 2.1 | Adapter/cache أولي | لم يُقيّم |

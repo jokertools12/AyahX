@@ -58,3 +58,13 @@ fallback للمصادر المتطابقة فقط؛ نتائج AI مسودات �
 ## 2026-10-15 Task 1.1 inactive foundation acceptance
 
 Astra reviewed the new five-table design and implementation. Keep existing alignment_documents unchanged. Persist snapshot identity/revision as canonical validated JSON with SHA, separate approval/revocation evidence, and composite same-recording current-revision FK. No writer/activation is exposed yet. Run additive DDL explicitly with verified target and backup/restoration/rehearsal receipt, strict SQL and FK checks enabled; DDL is not transactional. A failed initial rehearsal requires a fresh restored scratch. A receipt-backed apply may resume only exact compatible partial schema. Preserve raw SHOW CREATE evidence; normalize only redundant explicit charset implied by the next matching collation and table AUTO_INCREMENT counters.
+
+## 2026-10-15 catalog trust boundary (Task0.3)
+
+Fresh read-only loader will independently validate both audio and canonical-text source approvals, profile/font/count identity and coverage checksums. Embedded approved flags and matching SHA cannot prove reviewer authority. Inject a fresh approval-evidence verifier that defaults to denial until authoritative audit-backed approvals exist. No writer, activation or export-route bypass in this slice. Current disabled CHECKs remain. Reuse a pure canonical JSON/SHA helper without SQL/filesystem imports; preserve existing hashes. Future export must pin revisions and revalidate at worker start, not trust a client snapshot.
+
+## Task1.2 proposed authorization overlay (Astra design review)
+
+Use separate server-read catalog grants (read_only/editor/approver/owner) and append-only catalog audit/evidence events; do not mutate user_roles or infer owner from legacyadmin, firstrow, body/JWTclaims. Current auth LIMIT1 role selection is unsuitable for new overlay because existing schema allows multiple roles. Atomic mutations lock activegrant+target and write audit in sametransaction; audit failure rolls back. Subject/revision/SHA + full context/capability bind approval, current revocation checked eachload. Explicit revocation policy is separate from later actor-role loss. Enforce append-only at DB; request-id retries bind exact payload and conflictingreuse rejects. Guard lastowner.
+
+Bootstrap requires explicitly designated existing account in exact environment and one-time audited bootstrap; user identity clarification pending (email/userID + whether same staging/production). Do not select an existingadmin arbitrarily or grant owner to alladmins. This design has not been implemented or applied. SourceactivationCHECKs remain unchanged; destructive/private-media consent boundaries stillapply.
