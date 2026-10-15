@@ -133,3 +133,7 @@ Admin source inventory now explains why a candidate remains disabled. This is re
 ## 2026-10-16 checkpoint — cache layer
 
 The cache layer is available to the resolver but remains best-effort and process-local. Durable attempts, source evidence, approval, and final export revalidation remain authoritative.
+
+## 2026-10-16 checkpoint — full suite green
+
+The local integration checkpoint is green after the lock-pinned source cache and admin inventory changes. Live R2 wiring, staging re-render reconciliation, one remaining plan preset, and later production gates remain open; no production action is implied by this local result.

@@ -365,3 +365,10 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - `npx tsc --noEmit`: exit 0.
 - Targeted ESLint and `git diff --check`: exit 0.
 - Cache hits remain lock/revision pinned and are revalidated before selection; no provider activation or silent fallback was added.
+
+## 2026-10-16 — full integration verification after cache
+
+- `npm run build`: exit 0; Vite transformed 3042 modules and server bundle completed.
+- `npm test`: 108 test files passed, 1 skipped; 887 tests passed, 6 skipped.
+- The existing multi-engine test matrix still includes legacy Browser Cloud fixtures for regression coverage; no new Cloud Browser service, route, or deployment was added.
+- Source cache, source registry diagnostics, admin inventory, storage readiness, and template expansion are included in the passing suite.
