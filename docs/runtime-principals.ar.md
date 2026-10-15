@@ -49,3 +49,7 @@ node node_modules/tsx/dist/cli.mjs scripts/enterprise-runtime-principal.ts `
 ## Ledger migration
 
 Migration003 was rehearsed and applied on staging with empty request/attempt tables and four immutable triggers; authority counts stayed 1/1. The current runtime grant plan intentionally excludes these new tables, so no service writer is active yet. Extend and review the plan before runtime persistence or adapter wiring.
+
+## حسابات v4
+
+تم إنشاء حسابات v4 جديدة وفحص الدخول والمنح: API111 نقطة صلاحية، Skia/control105. لم تُبدّل متغيرات الخدمات؛ حسابات v1 باقية حتى مراجعة wiring والنشر.

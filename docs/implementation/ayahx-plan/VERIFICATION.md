@@ -273,3 +273,8 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - PR39 merged after contracts/public UI CI success. A restored staging rehearsal executed all six ordered steps (two tables and four immutable triggers) with strict MySQL session settings and matching protected baseline; the staging dry-run then reported pending=0.
 - Staging apply verified the physical target, created empty source_resolution_requests/source_resolution_attempts, and preserved catalog authority counts at 1 grant / 1 audit event. Private evidence: source-ledger-staging-apply-result.json; no production change.
 - Runtime principals intentionally do not yet receive grants on the new ledger tables. Runtime persistence/writer wiring, adapter invocation and concurrency/idempotency under live workload remain gated until the privilege plan and service contract are updated and tested.
+
+## 2026-10-15 — Runtime v4 ledger privilege verification
+
+- Fresh staging principals ayahx_api/skia/control_staging_v4 were created and independently verified against the physical MySQL target. API has 33 tables / 111 privilege points; Skia and control each have 33 / 105. Authority counts remained 1/1. Private evidence: runtime-v4-ledger-verification.json.
+- No service variables were changed to v4 and production was untouched. Existing v1 service accounts remain active until a separately reviewed deployment/wiring gate passes.
