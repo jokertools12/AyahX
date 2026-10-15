@@ -10,7 +10,7 @@ export type QuranSourceCandidate = Readonly<{
   kinds: readonly string[];
   reference?: string;
   revision?: string;
-  productionEnabled: false;
+  productionEnabled: boolean;
   endpoint: SourceReview;
   license: SourceReview;
   storage: SourceReview;
