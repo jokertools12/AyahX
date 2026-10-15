@@ -54,7 +54,12 @@ Use `npm --prefix tooling test` and `npm --prefix tooling run doctor` for toolki
 changes. Render changes require actual output inspection, audio/timing checks
 and worker logs. A successful build or health endpoint alone is not live
 acceptance. Railway completion requires terminal deployment SUCCESS plus the
-relevant live UI/assets/artifacts. Deployment is a separate explicit action.
+relevant live UI/assets/artifacts. The owner's 2026-10-15 enterprise execution
+request explicitly authorizes staging then production deployment after gates,
+GitHub push/PR/merge respecting protection, R2 changes, and necessary live
+migrations with backup/rehearsal/recovery verification. Verify resource identity
+first. Private-media consent and admin timing approval remain mandatory;
+irrecoverable deletion and substantial paid expansion need an owner decision.
 
 Public UI E2E tests use tester-army/e2e in `tooling/e2e` (separate lockfile).
 Install with `npm --prefix tooling/e2e ci`, then run `npm run test:e2e`.
@@ -66,3 +71,20 @@ default suite; AI-backed specs belong under `tooling/e2e/tests/agent/` and run
 only with `npm run test:e2e:agent`. Keep the auth/API/report boundaries below.
 Keep reports/traces/cache private; never add credentials or authenticated
 storage to Git. Default tests have no model calls and no API writes.
+
+## Codex model coordination
+
+For a user-requested run or continuation of the enterprise plan, read
+`.codex/ORCHESTRATION.md` and the progress records in
+`docs/implementation/ayahx-plan/`. Use Sol as coordinator, Luna for bounded work,
+and Astra for consequential review. The user requested this model delegation;
+keep it within the current harness rules and the plan's authorized local scope.
+At most two subagents may run concurrently, with one writer per file. Subagents
+must not recursively delegate. Use fresh, compact task briefs for model overrides.
+
+Opening the project or preparing this setup does not start plan implementation.
+Only a user request to start/continue the plan activates its execution workflow.
+The supplied package is at `AyahX_Enterprise_Plan_Package_2026-10-14/` inside this
+checkout. The actual target is this Desktop checkout, overriding older Downloads
+path examples. Preserve the package as reference material. Codex's coding models
+are separate from the application's production AI provider configuration.

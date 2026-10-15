@@ -1,0 +1,36 @@
+name: Enterprise foundation
+on:
+  pull_request:
+    paths: ['server/**', 'shared/**', 'src/**', 'package*.json', 'tsconfig*.json', '.github/workflows/enterprise-foundation.yml']
+  push:
+    branches: [main, staging]
+    paths: ['server/**', 'shared/**', 'src/**', 'package*.json', 'tsconfig*.json', '.github/workflows/enterprise-foundation.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: enterprise-foundation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24.18.0'
+          cache: npm
+      - run: npm ci
+      - name: Lint foundation
+        run: npx eslint shared/recordingAvailability.ts server/services/recordingAvailabilityService.ts server/services/quranSourceRegistry.ts server/routes/quran.ts src/test/recordingAvailability.test.ts src/test/quranSourceRegistry.test.ts src/test/quranSourceCatalogApi.test.ts
+      - name: Typecheck application and tests
+        run: npx tsc --noEmit -p tsconfig.app.json
+      - name: Typecheck tooling entrypoint
+        run: npx tsc --noEmit -p tsconfig.node.json
+      - name: Verify contract and HTTP authorization
+        run: npm test -- --run src/test/recordingAvailability.test.ts src/test/quranSourceRegistry.test.ts src/test/quranSourceCatalogApi.test.ts
+      - name: Build browser and server
+        run: npm run build
