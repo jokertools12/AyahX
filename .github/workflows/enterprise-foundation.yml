@@ -62,5 +62,10 @@ jobs:
           npx eslint server/db/runtimeSchemaContract.ts server/db/runtimeSchemaReadiness.ts server/services/runtimeDatabaseReadiness.ts server/services/runtimeInitialization.ts server/db/migrations/addSettingsTable.ts src/test/runtimeSchemaReadiness.test.ts src/test/runtimeInitialization.test.ts src/test/settingsRuntimeBoundary.test.ts src/test/renderMaintenanceLifecycle.test.ts
           npx tsc --noEmit --strict --skipLibCheck --module ESNext --moduleResolution bundler --target ES2022 --esModuleInterop server/db/runtimeSchemaReadiness.ts server/services/runtimeDatabaseReadiness.ts server/services/runtimeInitialization.ts server/db/migrations/addSettingsTable.ts
           npm test -- --run src/test/runtimeSchemaReadiness.test.ts src/test/runtimeInitialization.test.ts src/test/settingsRuntimeBoundary.test.ts src/test/settingsCrypto.test.ts src/test/renderMaintenanceLifecycle.test.ts
+      - name: Check limited runtime principal provisioning
+        run: |
+          npx eslint server/db/runtimePrivilegePlan.ts server/db/provisionRuntimePrincipal.ts server/db/runtimeGrantVerification.ts scripts/enterprise-runtime-principal.ts src/test/runtimePrivilegePlan.test.ts src/test/provisionRuntimePrincipal.test.ts src/test/runtimeGrantVerification.test.ts src/test/runtimePrincipalCli.test.ts
+          npx tsc --noEmit --strict --skipLibCheck --module ESNext --moduleResolution bundler --target ES2022 --esModuleInterop server/db/runtimePrivilegePlan.ts server/db/provisionRuntimePrincipal.ts server/db/runtimeGrantVerification.ts scripts/enterprise-runtime-principal.ts
+          npm test -- --run src/test/runtimePrivilegePlan.test.ts src/test/provisionRuntimePrincipal.test.ts src/test/runtimeGrantVerification.test.ts src/test/runtimePrincipalCli.test.ts
       - name: Build browser and server
         run: npm run build

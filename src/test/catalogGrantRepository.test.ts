@@ -62,7 +62,8 @@ describe('audit-backed catalog grant repository', () => {
     const query = vi.fn().mockResolvedValueOnce([raw]).mockResolvedValueOnce([events]);
     const parsed = await readCatalogGrantState({ query } as unknown as CatalogGrantConnection, true);
     expect(verifiedCatalogGrants(parsed, 'editor', 2000)).toHaveLength(1);
-    expect(query.mock.calls.every(([sql]) => sql.endsWith('FOR UPDATE'))).toBe(true);
+    expect(query.mock.calls[0][0]).toMatch(/FROM catalog_role_grants ORDER BY id FOR UPDATE$/);
+    expect(query.mock.calls[1][0]).toMatch(/FROM catalog_audit_events ORDER BY id FOR SHARE$/);
     const badQuery = vi.fn().mockResolvedValueOnce([[{ ...raw[0], grantedAtEpochMs: '1e3' }]])
       .mockResolvedValueOnce([[{ ...events[0], contextSha256: 'e'.repeat(64) }]]);
     const invalid = await readCatalogGrantState({ query: badQuery } as unknown as CatalogGrantConnection);
@@ -76,5 +77,13 @@ describe('audit-backed catalog grant repository', () => {
     expect((await readCatalogUser(connection, 'owner', true))?.id).toBe('owner');
     expect(query.mock.calls[0]).toEqual([expect.stringContaining('WHERE BINARY id = BINARY ?'), ['owner']]);
     await expect(readCatalogUser(connection, 'owner')).rejects.toThrow('offline');
+  });
+  it('takes a current shared audit read without requiring audit UPDATE permission', async () => {
+    const query = vi.fn(async (sql: string) => {
+      if (sql.includes('FROM catalog_audit_events') && sql.endsWith('FOR UPDATE')) throw new Error('ER_TABLEACCESS_DENIED_ERROR');
+      if (sql.includes('FROM catalog_audit_events') && !sql.endsWith('FOR SHARE')) throw new Error('CURRENT_LOCKING_READ_REQUIRED');
+      return [[]];
+    });
+    await expect(readCatalogGrantState({ query } as unknown as CatalogGrantConnection, true)).resolves.toMatchObject({ rawGrantCount: 0, rawAuditCount: 0 });
   });
 });
