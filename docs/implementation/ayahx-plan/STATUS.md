@@ -44,7 +44,7 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 | 5.3 | Typography/ornaments | لم يُقيّم |
 | 5.4 | Scene/preview | لم يُقيّم |
 | 5.5 | Review/render | لم يُقيّم |
-| 6.1 | R2 lifecycle | لم يُقيّم |
+| 6.1 | R2 lifecycle | قاعدة staging `temp-48h/` لمدة 48 ساعة وCORS موثقان حيًا؛ production وDB/object reconciliation والاختبار الزمني الفعلي باقية |
 | 6.2 | Staging evidence | مصرح؛ ينتظر اكتمال الشرائح وبواباتها |
 | 6.3 | Production gate | مصرح بعد staging والمراجعة؛ لم يبدأ |
 

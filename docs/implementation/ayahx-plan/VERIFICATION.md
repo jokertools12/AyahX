@@ -278,3 +278,9 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 
 - Fresh staging principals ayahx_api/skia/control_staging_v4 were created and independently verified against the physical MySQL target. API has 33 tables / 111 privilege points; Skia and control each have 33 / 105. Authority counts remained 1/1. Private evidence: runtime-v4-ledger-verification.json.
 - No service variables were changed to v4 and production was untouched. Existing v1 service accounts remain active until a separately reviewed deployment/wiring gate passes.
+
+## 2026-10-15 — Staging R2 lifecycle verification
+
+- After Cloudflare reauthentication, the verified account contained `ayahx-audio-prod` and `ayahx-audio-staging`; no bucket or object mutation was made in production.
+- Staging bucket `ayahx-audio-staging` had the expected Railway CORS origin and no custom domain or objects under `temp-48h/`.
+- Added and re-read the staging-only lifecycle rule `auto-delete-temp-renders-after-48-hours` for prefix `temp-48h/` at 172800 seconds, while preserving the existing one-day incomplete-multipart abort rule. Sanitized evidence: `tooling/reports/enterprise-baseline/r2-staging-lifecycle-verification.json`.
