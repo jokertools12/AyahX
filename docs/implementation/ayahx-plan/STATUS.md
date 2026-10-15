@@ -19,7 +19,7 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 
 | Task | النطاق | حالة مطابقة المصدر/القبول |
 | --- | --- | --- |
-| 0.1 | Provider/source registry والترخيص | سجل المرشحين + GET للأدمن متحقق محليًا؛ مراجعات المصادر الفعلية باقية |
+| 0.1 | Provider/source registry والترخيص | سجل المرشحين + بوابة evidence + GET للأدمن وصفحة `/admin/sources` مدموجة؛ مراجعات المصادر الفعلية باقية |
 | 0.2 | Riwayah/numbering/font map | runtime binding schema متحقق محليًا؛ بيانات canonical/font QA باقية |
 | 0.3 | Recording coverage contract | guard + trusted injected repository و44 اختبارًا جديدًا محليًا؛ authority store وruntime/export wiring باقيان |
 | 1.1 | MySQL additive migration | خمسة جداول خاملة + runner متحقق محليًا وتجربة restore؛ PR29–33 مدموجة و001/002 staging apply متحقق؛ runtime8618dcb وowner bootstrap متحققان؛ assets/templates وغيرها باقية |
@@ -33,7 +33,7 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 | 3.2 | Skia server renderer | لم يُقيّم |
 | 3.3 | FFmpeg encoder/muxer | لم يُقيّم |
 | 3.4 | Server render lifecycle | لم يُقيّم |
-| 4.1 | Admin Dashboard | لم يُقيّم |
+| 4.1 | Admin Dashboard | شريحة inventory قراءة فقط مدموجة في `/admin/sources`؛ بقية لوحة الأدمن باقية |
 | 4.2 | Reciters/Riwayat/Sources | لم يُقيّم |
 | 4.3 | Ibtihalat + Sync Studio | لم يُقيّم |
 | 4.4 | Typography/Templates/Storage | لم يُقيّم |
