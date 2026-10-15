@@ -41,7 +41,7 @@ describe('runtime principal operator CLI', () => {
     await main(apply(), environment()); const secret = JSON.parse(readFileSync(credentials, 'utf8')); const report = readFileSync(output, 'utf8');
     expect(secret.password).toMatch(/^[A-Za-z0-9_-]{43}$/);
     expect(vi.mocked(provisionRuntimePrincipal).mock.calls.map(call => call[1].mode)).toEqual(['inspect', 'apply']);
-    expect(JSON.parse(report)).toMatchObject({ status: 'applied', effective: { tableCount: 31 } });
+    expect(JSON.parse(report)).toMatchObject({ status: 'applied', effective: { tableCount: 33 } });
     expect(report).not.toContain(secret.password); expect(runtimeEnd).toHaveBeenCalledOnce(); expect(operatorEnd).toHaveBeenCalledOnce();
   });
   it('cannot infer trusted environment from the input target', async () => {

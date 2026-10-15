@@ -4,7 +4,7 @@ import { runtimeSchemaColumns } from './runtimeSchemaContract';
 export type RuntimeDatabaseService = 'api' | 'skia' | 'control';
 export type RuntimePrivilege = Readonly<{ privilege: 'SELECT' | 'INSERT' | 'UPDATE' | 'DELETE'; columns?: readonly string[] }>;
 export type RuntimeGrantStatement = Readonly<{ schema: string; table: string; service: RuntimeDatabaseService; scope: 'table';
-  classification: 'legacy_compatibility' | 'inactive_catalog' | 'authority'; access: readonly RuntimePrivilege[];
+  classification: 'legacy_compatibility' | 'inactive_catalog' | 'authority' | 'resolution_ledger'; access: readonly RuntimePrivilege[];
   sql: string; params: readonly [string, '%'] }>;
 export type RuntimePrivilegePlan = Readonly<{ schema: string; user: string; accountHost: '%'; service: RuntimeDatabaseService;
   scope: 'explicit_table'; compatibility: 'legacy_24_table_dml_upper_bound'; statements: readonly RuntimeGrantStatement[] }>;
@@ -19,6 +19,7 @@ const legacyTables = Object.freeze(['achievements', 'alignment_documents', 'alig
   'system_settings', 'user_achievements', 'user_follows', 'user_roles', 'users', 'video_comments', 'video_likes']);
 const inactiveTables = Object.freeze(['quran_data_sources', 'mushaf_profiles', 'reciter_catalog', 'reciter_recordings', 'recitation_coverage']);
 const authorityTables = Object.freeze(['catalog_role_grants', 'catalog_audit_events']);
+const resolutionLedgerTables = Object.freeze(['source_resolution_attempts', 'source_resolution_requests']);
 const select: RuntimePrivilege = Object.freeze({ privilege: 'SELECT' });
 const insert: RuntimePrivilege = Object.freeze({ privilege: 'INSERT' });
 const readOnly = Object.freeze([select]);
@@ -35,16 +36,18 @@ const quote = (value: string) => '`' + value + '`'; // Only validated/fixed iden
  */
 export function buildRuntimePrivilegePlan(input: unknown): RuntimePrivilegePlan {
   const { schema, user, service } = runtimePrivilegeInputSchema.parse(input);
-  const expected = [...legacyTables, ...inactiveTables, ...authorityTables].sort();
+  const expected = [...legacyTables, ...inactiveTables, ...authorityTables, ...resolutionLedgerTables].sort();
   const actual = Object.keys(runtimeSchemaColumns).sort();
-  if (expected.length !== 31 || new Set(expected).size !== 31 || JSON.stringify(actual) !== JSON.stringify(expected))
+  if (expected.length !== 33 || new Set(expected).size !== 33 || JSON.stringify(actual) !== JSON.stringify(expected))
     throw new Error('RUNTIME_PRIVILEGE_SCHEMA_CONTRACT_CHANGED');
   if (grantRevocation[2].columns!.some(column => !runtimeSchemaColumns.catalog_role_grants.includes(column)))
     throw new Error('RUNTIME_PRIVILEGE_REVOCATION_COLUMNS_CHANGED');
   const statements = actual.map((table): RuntimeGrantStatement => {
-    const classification = legacyTables.includes(table) ? 'legacy_compatibility' : inactiveTables.includes(table) ? 'inactive_catalog' : 'authority';
-    const access: readonly RuntimePrivilege[] = classification === 'legacy_compatibility' ? legacyDml : classification === 'inactive_catalog' || service !== 'api'
-      ? readOnly : table === 'catalog_role_grants' ? grantRevocation : auditAppend;
+    const classification = legacyTables.includes(table) ? 'legacy_compatibility' : inactiveTables.includes(table) ? 'inactive_catalog'
+      : authorityTables.includes(table) ? 'authority' : 'resolution_ledger';
+    const access: readonly RuntimePrivilege[] = classification === 'legacy_compatibility' ? legacyDml
+      : classification === 'resolution_ledger' ? service === 'api' ? auditAppend : readOnly
+      : classification === 'inactive_catalog' || service !== 'api' ? readOnly : table === 'catalog_role_grants' ? grantRevocation : auditAppend;
     const privileges = access.map(entry => entry.privilege + (entry.columns ? ' (' + entry.columns.map(quote).join(', ') + ')' : '')).join(', ');
     return Object.freeze({ schema, table, service, scope: 'table', classification, access,
       sql: `GRANT ${privileges} ON ${quote(schema)}.${quote(table)} TO ?@?`, params: Object.freeze([user, '%'] as const) });

@@ -23,6 +23,8 @@ export const runtimeSchemaColumns: Readonly<Record<string, readonly string[]>> =
   render_job_audit: Object.freeze(['id', 'job_id', 'user_id', 'event', 'details', 'created_at']),
   render_jobs: Object.freeze(['id', 'user_id', 'idempotency_key', 'engine', 'enqueue_state', 'status', 'progress', 'stage', 'manifest', 'output_path', 'output_filename', 'output_size_bytes', 'duration_seconds', 'metadata', 'error_code', 'error_message', 'retry_count', 'max_retries', 'created_at', 'updated_at', 'heartbeat_at', 'worker_id', 'active_user_id', 'started_at', 'completed_at', 'expires_at', 'content_expires_at']),
   saved_videos: Object.freeze(['id', 'user_id', 'surah_name', 'surah_number', 'start_ayah', 'end_ayah', 'reciter_id', 'reciter_name', 'video_url', 'thumbnail_url', 'aspect_ratio', 'background_type', 'is_public', 'created_at', 'expires_at', 'render_engine']),
+  source_resolution_attempts: Object.freeze(['id', 'server_request_id', 'payload_hash', 'lock_hash', 'policy_hash', 'policy_revision', 'ordinal', 'source_id', 'source_revision', 'phase', 'started_at_epoch_ms', 'ended_at_epoch_ms', 'duration_ms', 'status', 'failure_class', 'reason_code', 'selected_marker']),
+  source_resolution_requests: Object.freeze(['server_request_id', 'actor_reference', 'ownership_reference', 'purpose', 'required_timing', 'lock_hash', 'policy_hash', 'payload_hash', 'policy_revision', 'policy_json', 'created_at']),
   subscriptions: Object.freeze(['id', 'user_id', 'plan', 'status', 'starts_at', 'expires_at', 'created_at', 'updated_at']),
   system_settings: Object.freeze(['key_name', 'value_text', 'is_secret', 'category', 'updated_at']),
   user_achievements: Object.freeze(['id', 'user_id', 'achievement_id', 'unlocked_at']),
