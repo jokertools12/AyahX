@@ -1,5 +1,19 @@
 # Enterprise baseline dependency audit triage
 
+## Focused server patches — 2026-10-15
+
+Updated compression 1.8.1 -> 1.8.2 and the existing Express transitive proxy-addr
+2.0.7 -> 2.0.8 through its compatible dependency range (no override or new direct
+dependency). Official advisory fixed versions and npm metadata were checked.
+Changes are limited to those two packages and compression's destroy dependency.
+
+Verification: 4 HTTP integration tests cover gzip payload integrity, interrupted
+compressed responses, mapped-prefix IP spoof rejection and the existing single
+proxy hop. Full suite 479 passed / 6 skipped, application typecheck and build
+passed. Audit after patches: 26 findings (4 critical, 14 high, 8 moderate);
+compression/proxy-addr findings absent. This is partial remediation, not a clean
+audit or production approval. Remaining groups below still require resolution.
+
 Read-only triage checked 2026-10-15 from ignored `tooling/reports/enterprise-baseline/npm-audit.json`, `package.json`, `package-lock.json` (lockfile v3), `npm explain`, and `npm ls --omit=dev`. Baseline reports 28 findings: 5 critical, 15 high, 8 moderate. `git diff -- package.json package-lock.json` was empty; no dependency edits are part of the current working diff. These findings are inherited baseline, not introduced by this PR. This is not a production-readiness determination.
 
 ## Reachability
