@@ -8,7 +8,7 @@ import { renderDeterministicVideo } from './deterministicVideoRenderer';
 import { logger } from '../logger';
 import { config } from '../config';
 import { enqueueRenderJob, resolveRenderQueueEngine, RenderQueueEngine, startRenderWorker } from './renderQueueBroker';
-import { deleteStoredRender, isObjectStoragePath, uploadRender } from './objectStorage';
+import { deleteStoredRender, isObjectStoragePath, isPermanentObjectStoragePath, uploadRender } from './objectStorage';
 import { recordRenderAudit, recordRenderResources, renderDurationSeconds } from './renderObservability';
 import { estimateRenderJobProfile, readCgroupCpuUsageMicros, readMemoryPeakBytes, readOomKillCount, resolveConcurrencySetting } from './renderCapacity';
 import { runRenderJobInChild, stopRenderChild } from './renderChildRunner';
@@ -342,10 +342,15 @@ export class RenderJobQueue {
             logger.warn(`Failed to unlink expired render artifact [${job.id}]:`, e.message);
           }
         } else if (isObjectStoragePath(job.output_path)) {
-          await deleteStoredRender(job.output_path).catch((error) => {
+          if (isPermanentObjectStoragePath(job.output_path)) {
             deletionComplete = false;
-            logger.warn(`Failed to delete expired object [${job.id}]:`, error);
-          });
+            logger.warn(`Skipped permanent object during expiry cleanup [${job.id}].`);
+          } else {
+            await deleteStoredRender(job.output_path).catch((error) => {
+              deletionComplete = false;
+              logger.warn(`Failed to delete expired object [${job.id}]:`, error);
+            });
+          }
         }
         if (!deletionComplete) return;
         await query(
