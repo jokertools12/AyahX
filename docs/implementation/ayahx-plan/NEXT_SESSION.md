@@ -8,7 +8,7 @@
 ## الحالة المقبولة
 
 - repo jokertools12/AyahX ؛ baseline42b04fd98912081d6c967ac7ec7cb931ce4519ab.
-- PR26–34 مدموجة؛ main`db6d67de2507a9a0e6afa765a88a9ca68b08ff1f`.
+- PR26–35 مدموجة؛ main`d040e7e11acc2b8c4590b231f4350375acc9055f`.
 - staging API runtime/source8618dcba4cfaeaa827aad74bf56154245cde09c7 ، deployment
   cc650771-ed5c-482e-a7a2-d4f11eed30bc SUCCESS ، fileSHA متطابق، publicUI10/10.
   accept-deploy قال cancellation أولًا، ثم بعد الموافقة الدقيقة nothing_staged ؛
@@ -23,7 +23,28 @@
 - trusted availability/grant history مفحوصان؛ محتوى/source/retention approvals
   و atomic export pinning و management UI لم تنفذ بعد. SourcesdisabledCHECKs باقية.
 
-## حد DDL وحسابات runtime
+## نقطة التنفيذ الحالية
+
+PR35 head acfca12931c1ff531fe15e80e8e8001041a75b9d مدموج؛ CI contracts38728500151
+وpublicUI38728500115 SUCCESS confirmed exact-head via Code Review. Patch staging
+ac4aa3ee-0a9a-493b-9e0f-d0451c3ae74a يحوي13تغييرًا غيرمدمر: API/Skia/control
+مصدر main مثبت على acfca12، وإزالة API preDeploy db:setup. لا تغيير أسرار أوDB.
+accept-deploy رفض بدعوى غياب الموافقة؛ فحص patch بعده يؤكد STAGED دون تطبيق.
+سؤال موافقة محدد معلق؛ لا تستخدم CLI أو namespaceآخر لتجاوز الرفض. عند الرد،
+افحص الحالة الفعلية أولًا ثم طبّق إن بقي التغيير؛ لا تخلط pending مع deployment.
+
+مسار المشغّل اختبر فعليًا: قراءة credentials الخاصة بـMySQL محليًا في الذاكرة
+ثم stdin إلى عملية SSH واحدة، وتحقق target بلا استعمال إعداد اتصال التطبيق.
+private operator-stdin-verification.json. لا سر في argv أوstdout أوملف دائم.
+أعد التحقق بعد cutover مع CLI inspect لتثبت التسليم تحت هوية التطبيق المحدودة.
+SSH instance pin7277439a-80b7-47e6-b35f-c216ff0a7576 حل ردaccountdiscovery؛ حدّث
+المعرف بعد النشر باستخدام ssh config --dry-run، وتحقق marker مستقل.
+
+الفرع المحلي الجديد codex/ayahx-source-resolution-contract يبدأ من mergedmain.
+SOURCE_RESOLUTION_SPEC.md تصميم فقط لـTasks1.3/2.4 قيد مراجعة Astra؛ لا migrations
+أوsourcesأوnetworkcalls. أكمل staginggate عند وصول الموافقة قبل تغيير31tablecontract.
+
+## حد DDL وحسابات runtime — أدلة الشريحة السابقة
 
 PR34 لحدود DDL التشغيلية مدموجة في main@`db6d67de2507a9a0e6afa765a88a9ca68b08ff1f` وغير منشورة. الفرع المحلي التالي `codex/ayahx-runtime-db-grants` يضيف provisioning للحسابات الجديدة فقط؛ PR35 لم يُنشأ. حالة staging لم تتغير: API على8618dcb مع owner/audit1/1، والعمال على baseline. كل خدمات Node ما زالت على حساب DB الحالي؛ preDeploy لم يتغير.
 
