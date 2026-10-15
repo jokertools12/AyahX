@@ -267,3 +267,9 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - API, Skia and control deployed d040e7e; API pre-deploy is empty. Three new staging principals were provisioned privately and only MYSQL_USER/MYSQL_PASSWORD changed on those services. Previous API credentials were saved in private DPAPI form; production and authority rows were untouched.
 - Fresh physical verification matched the staging MySQL UUID/schema and reported the three service-specific runtime accounts; authority counts remained one grant and one audit event. API readiness returned HTTP 200. Public staging E2E passed 5 desktop and 5 mobile tests after cutover.
 - Skia had no errors. Control deployment is SUCCESS but its container repeatedly receives SIGTERM after startup; stale advisory connection 19953 was diagnosed and killed without changing rows. Restart still needs operational stabilization; do not promote production or call render gate complete. Private evidence: runtime-principal-live-verification.json.
+
+## 2026-10-15 — Source resolution ledger migration 003
+
+- PR39 merged after contracts/public UI CI success. A restored staging rehearsal executed all six ordered steps (two tables and four immutable triggers) with strict MySQL session settings and matching protected baseline; the staging dry-run then reported pending=0.
+- Staging apply verified the physical target, created empty source_resolution_requests/source_resolution_attempts, and preserved catalog authority counts at 1 grant / 1 audit event. Private evidence: source-ledger-staging-apply-result.json; no production change.
+- Runtime principals intentionally do not yet receive grants on the new ledger tables. Runtime persistence/writer wiring, adapter invocation and concurrency/idempotency under live workload remain gated until the privilege plan and service contract are updated and tested.

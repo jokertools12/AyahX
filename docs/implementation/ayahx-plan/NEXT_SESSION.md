@@ -78,3 +78,7 @@ concurrentlypatch/Vitest/Vite/Tailwindupgrade عملمنفصل. لا source/mode
 الملكية: parent للربط/index/worker/control/setup/docs/CI/external ؛ Sol أنهى settings
 و queue lifecycle ؛ Astra أنهى follow-up. لاكتّابنشطون. حدأقصى 2children/لا recursive.
 السجل VERIFICATION/DECISIONS/COVERAGE ؛ لا تعتمد health/build لقبولالرندر.
+
+## Latest migration evidence
+
+Migration003 source-resolution ledger was rehearsed and applied on staging. It created two tables and four immutable triggers; post-apply dry-run pending0, ledger rows0/0, authority1/1. Do not wire runtime accounts yet: update the explicit privilege plan for ledger access, provision fresh v2 principals or a reviewed grant transition, then test the repository against real MySQL. Production remains untouched.
