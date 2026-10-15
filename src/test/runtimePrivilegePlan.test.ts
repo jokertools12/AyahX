@@ -6,21 +6,37 @@ import { runtimeSchemaColumns } from '../../server/db/runtimeSchemaContract';
 const tables = ['achievements', 'alignment_documents', 'alignment_review_events', 'catalog_audit_events', 'catalog_role_grants',
   'daily_cloud_render_usage', 'daily_render_engine_usage', 'daily_video_usage', 'favorite_performers', 'favorite_reciters', 'favorite_surahs',
   'mushaf_profiles', 'notifications', 'payment_requests', 'profiles', 'quran_data_sources', 'recitation_coverage', 'reciter_catalog',
-  'reciter_recordings', 'render_engine_capacity', 'render_job_audit', 'render_jobs', 'saved_videos', 'subscriptions', 'system_settings',
+  'reciter_recordings', 'render_engine_capacity', 'render_job_audit', 'render_jobs', 'saved_videos', 'source_resolution_attempts', 'source_resolution_requests', 'subscriptions', 'system_settings',
   'user_achievements', 'user_follows', 'user_roles', 'users', 'video_comments', 'video_likes'];
 const inactive = ['quran_data_sources', 'mushaf_profiles', 'reciter_catalog', 'reciter_recordings', 'recitation_coverage'];
 const plan = (service: RuntimeDatabaseService = 'api') => buildRuntimePrivilegePlan({ schema: 'fixture_ayahx', user: 'fixture_api_01', service });
 describe('pure explicit runtime MySQL privilege plan', () => {
-  it.each(['api', 'skia', 'control'] as const)('covers all31 fixed tables exactly once for %s with qualified table scope and value parameters', service => {
+  it.each(['api', 'skia', 'control'] as const)('covers all33 fixed tables exactly once for %s with qualified table scope and value parameters', service => {
     const result = plan(service);
     expect(result.statements.map(statement => statement.table)).toEqual(tables);
     expect([...Object.keys(runtimeSchemaColumns)].sort()).toEqual(tables);
-    expect(new Set(result.statements.map(s => s.table)).size).toBe(31);
+    expect(new Set(result.statements.map(s => s.table)).size).toBe(33);
     for (const statement of result.statements) {
       expect(statement).toMatchObject({ schema: 'fixture_ayahx', service, scope: 'table', params: ['fixture_api_01', '%'] });
       expect(statement.sql).toContain(' ON `fixture_ayahx`.`' + statement.table + '` TO ?@?');
       expect(statement.sql).not.toContain('fixture_api_01');
       expect(statement.sql).not.toMatch(/\*|WITH GRANT OPTION|\bALL\b|\bROLE\b|\bPROXY\b|\b(?:CREATE|ALTER|DROP|TRIGGER|INDEX|REFERENCES|EXECUTE|SUPER|FILE|PROCESS|SHUTDOWN)\b|;/);
+    }
+  });
+  it('grants API append/read access to both immutable resolution ledger tables', () => {
+    for (const table of ['source_resolution_attempts', 'source_resolution_requests']) {
+      const statement = plan().statements.find(s => s.table === table)!;
+      expect(statement.classification).toBe('resolution_ledger');
+      expect(statement.access).toEqual([{ privilege: 'SELECT' }, { privilege: 'INSERT' }]);
+      expect(statement.sql).toBe(`GRANT SELECT, INSERT ON \`fixture_ayahx\`.\`${table}\` TO ?@?`);
+      expect(statement.sql).not.toMatch(/\bUPDATE\b|\bDELETE\b/);
+    }
+  });
+  it.each(['skia', 'control'] as const)('keeps %s resolution ledger access read-only', service => {
+    for (const statement of plan(service).statements.filter(s => s.classification === 'resolution_ledger')) {
+      expect(statement.access).toEqual([{ privilege: 'SELECT' }]);
+      expect(statement.sql).toMatch(/^GRANT SELECT ON /);
+      expect(statement.sql).not.toMatch(/\bINSERT\b|\bUPDATE\b|\bDELETE\b/);
     }
   });
   it('restricts API authority grants to append/read plus the exact two revocation columns', () => {
@@ -68,7 +84,7 @@ describe('pure explicit runtime MySQL privilege plan', () => {
   });
   it('accepts exact identifier boundaries without broad schema patterns', () => {
     const result = buildRuntimePrivilegePlan({ schema: 's'.repeat(64), user: 'u'.repeat(32), service: 'api' });
-    expect(result.statements).toHaveLength(31);
+    expect(result.statements).toHaveLength(33);
     expect(result.accountHost).toBe('%');
     expect(result.statements.every(s => s.params[0].length === 32 && s.params[1] === '%')).toBe(true);
     expect(() => buildRuntimePrivilegePlan({ schema: 'mysql_', user: 'u', service: 'api' })).not.toThrow();

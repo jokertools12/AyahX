@@ -8,7 +8,7 @@ describe('effective runtime direct-grant verification', () => {
   it('accepts exactly the reviewed grants with optional USAGE and reordered columns', () => {
     const value = input(); value.grants.push('GRANT USAGE ON *.* TO `fixture_runtime`@`%`');
     value.grants = value.grants.map(s => s.replace('`revoked_at_epoch_ms`, `revocation_audit_event_id`', '`revocation_audit_event_id`, `revoked_at_epoch_ms`')).reverse();
-    expect(verifyRuntimeGrants(plan, value).tableCount).toBe(31);
+    expect(verifyRuntimeGrants(plan, value).tableCount).toBe(33);
   });
   it.each([
     'GRANT ALL PRIVILEGES ON *.* TO `fixture_runtime`@`%`',
@@ -36,6 +36,6 @@ describe('effective runtime direct-grant verification', () => {
     const value = input(); const index = value.grants.findIndex(s => s.includes('`catalog_role_grants`'));
     value.grants.splice(index, 1, 'GRANT SELECT, INSERT ON `railway`.`catalog_role_grants` TO `fixture_runtime`@`%`',
       'GRANT UPDATE (`revoked_at_epoch_ms`, `revocation_audit_event_id`) ON `railway`.`catalog_role_grants` TO `fixture_runtime`@`%`');
-    expect(verifyRuntimeGrants(plan, value).tableCount).toBe(31);
+    expect(verifyRuntimeGrants(plan, value).tableCount).toBe(33);
   });
 });

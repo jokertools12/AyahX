@@ -26,17 +26,17 @@ function fixture(overrides: { identity?: Record<string, unknown>; mandatoryRoles
   return { connection: { query } as unknown as Pick<Connection, 'query'>, query, mutations };
 }
 describe('new runtime MySQL principal provisioning core', () => {
-  it('inspects exact target, all-host account absence and31-table columns without account/application mutation', async () => {
+  it('inspects exact target, all-host account absence and33-table columns without account/application mutation', async () => {
     const f = fixture(); const result = await provisionRuntimePrincipal(f.connection, options);
-    expect(result.status).toBe('inspected'); expect(result.plan.statements).toHaveLength(31); expect(f.mutations).toEqual([]);
+    expect(result.status).toBe('inspected'); expect(result.plan.statements).toHaveLength(33); expect(f.mutations).toEqual([]);
     expect(f.query).toHaveBeenCalledWith('SELECT GET_LOCK(?, 0) AS acquired', [`ayahx_catalog_${hashBytes(target.schema).slice(0, 32)}`]);
     expect(f.query).toHaveBeenCalledWith('SELECT User AS user, Host AS host FROM mysql.user WHERE BINARY User = BINARY ?', ['fixture_api']);
     expect(f.query.mock.calls.at(-1)).toEqual(['SELECT RELEASE_LOCK(?)', [`ayahx_catalog_${hashBytes(target.schema).slice(0, 32)}`]]);
     expect(f.query.mock.calls.some(([sql]) => /\bINSERT\b|\bUPDATE\b|\bDELETE\b|\bCREATE\b|\bALTER\b|\bDROP\b/.test(sql))).toBe(false);
   });
-  it.each(['api', 'skia', 'control'] as const)('creates the new %s account before applying exactly its31 fixed grants', async service => {
+  it.each(['api', 'skia', 'control'] as const)('creates the new %s account before applying exactly its33 fixed grants', async service => {
     const f = fixture(); const result = await provisionRuntimePrincipal(f.connection, { ...options, service, mode: 'apply', password });
-    expect(result.status).toBe('applied'); expect(f.mutations).toHaveLength(32);
+    expect(result.status).toBe('applied'); expect(f.mutations).toHaveLength(34);
     expect(f.query).toHaveBeenCalledWith('CREATE USER ?@? IDENTIFIED BY ?', ['fixture_api', '%', password]);
     expect(f.mutations[0]).toBe('CREATE USER ?@? IDENTIFIED BY ?');
     expect(f.mutations.slice(1)).toEqual(result.plan.statements.map(statement => statement.sql));
