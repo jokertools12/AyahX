@@ -82,3 +82,9 @@ Fresh v4 runtime principals were provisioned and verified against migration003: 
 ## 2026-10-16 — lock-pinned source cache
 
 أضيف كاش process-local محدود العمر لنتائج المصدر بعد التحقق، ومفتاحه يضم `sourceId@revision` و`lockHash`؛ لذلك لا يمكنه عبور الرواية أو المصحف أو النطاق أو بصمة الصوت. resolver يعيد التحقق من المرشح عند cache hit ويسجل محاولات ledger كالمعتاد؛ الكاش تسريع مؤقت ولا يحل محل persistence أو approval.
+
+## 2026-10-16 — staging deployment after explicit approval
+
+بعد موافقة المالك على staging فقط، طُبّق مصدر `main` وإزالة `db:setup` من pre-deploy لـ API على API/Skia/control. النشرات الحالية على commit `8437a30d77b8da1856523eaff5508dc6c0ba5091` هي SUCCESS: API `5aa5c0d5-ea60-44f8-b9ac-2248de9477e6`، Skia `9894a89f-7a2a-41d1-b908-61b5179758d5`، وcontrol `7b285628-2ca0-434f-9aa6-6f9d2b34a99f`. حالة البيئة تعرض الخدمات الست Online ولا توجد pending changes. فحص `/api/health/ready` أعاد HTTP 200 و`database=connected`، مع `storage.driver=local`. production لم يتغير.
+
+تبقى بوابة R2 والرندر الحي الكامل مفتوحة: لم يُنشأ مفتاح Cloudflare staging بسبب فشل Computer Use قبل تشغيل المتصفح ورفض Cloudflare API إنشاء permission group/token بـ `9109 Unauthorized`. لا تُضبط متغيرات R2 ولا يُقبل artifact النهائي قبل توفير مفتاح محدود لـ `ayahx-audio-staging` ثم مطابقة R2/DB/download/worker logs.

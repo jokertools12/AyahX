@@ -137,3 +137,7 @@ The cache layer is available to the resolver but remains best-effort and process
 ## 2026-10-16 checkpoint — full suite green
 
 The local integration checkpoint is green after the lock-pinned source cache and admin inventory changes. Live R2 wiring, staging re-render reconciliation, one remaining plan preset, and later production gates remain open; no production action is implied by this local result.
+
+## 2026-10-16 checkpoint — staging deploy accepted and verified
+
+The owner explicitly approved staging deployment to the merged `main` revision. API/Skia/control are SUCCESS on `8437a30d77b8da1856523eaff5508dc6c0ba5091`; all six staging services are Online with no pending work, and `/api/health/ready` is HTTP 200 with MySQL connected. The app still uses local storage. Resume by creating the staging-only R2 key through Cloudflare's authorized UI/API path, set only staging API `OBJECT_STORAGE_*` variables, redeploy, then run one Skia job and reconcile the R2 object, DB output path, download stream, expiry prefix, and worker logs. Do not touch production or add the final 36th preset without a new explicit approval.

@@ -372,3 +372,10 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - `npm test`: 108 test files passed, 1 skipped; 887 tests passed, 6 skipped.
 - The existing multi-engine test matrix still includes legacy Browser Cloud fixtures for regression coverage; no new Cloud Browser service, route, or deployment was added.
 - Source cache, source registry diagnostics, admin inventory, storage readiness, and template expansion are included in the passing suite.
+
+## 2026-10-16 — live staging deployment verification
+
+- Railway staging environment `e726848b-49ec-45ab-bce8-a1462dd85bc8` reported all six services Online, zero recent failures, and no pending staged/applying work.
+- API, Skia, and control deployments for merged `main` commit `8437a30d77b8da1856523eaff5508dc6c0ba5091` reached SUCCESS (deployment IDs recorded in STATUS.md). Production was not touched.
+- `https://ayahx-staging.up.railway.app/api/health/ready` returned HTTP 200 with `database=connected` and sanitized `storage={ready:true,driver:local}`.
+- This proves deployment and baseline readiness only. R2-backed render acceptance, object/DB/download reconciliation, and worker-log evidence remain pending until the staging-only Cloudflare credential can be created without exposing a secret.
