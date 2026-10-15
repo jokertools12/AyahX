@@ -54,3 +54,31 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 لا تنقل شريحة إلى متحقق حيًا بناءً على اختبار محلي.
 
 Fresh v4 runtime principals were provisioned and verified against migration003: API111 privilege points, Skia/control105; no service cutover yet. Existing v1 accounts remain active by design.
+
+## 2026-10-16 — R2 contract preparation (local)
+
+أضيفت `resolveStorageConfig` في `server/config.ts` لتوحيد عقد `OBJECT_STORAGE_*` مع مرادفات `R2_*` الواردة في الخطة، مع إبقاء `local` هو الافتراضي إلى أن يحدد النشر `OBJECT_STORAGE_DRIVER=s3`. يعرِض التشخيص المنقح حالة bucket/endpoint/credentials دون قيم سرية. الاختبار المركز `storageConfig.test.ts` و`objectStorageKey.test.ts` نجحا (6/6)، وTypeScript نجح. لا تغيير خارجي أو production؛ تفعيل R2 الحي ينتظر مفتاحًا محدودًا لـstaging فقط.
+
+## 2026-10-16 — storage readiness guard
+
+أضيف `getStorageReadiness` وفحصه إلى `/api/health/ready` وdiagnostics: local يبقى جاهزًا، بينما S3/R2 يرفض الجاهزية عند غياب bucket أو endpoint أو أحد المفتاحين. لا توجد network calls أو قيم سرية في الفحص. RED ثم GREEN: `storageReadiness.test.ts` (3/3)، `observability.test.ts` (9/9)، TypeScript exit 0، وESLint بلا أخطاء.
+
+## 2026-10-16 — approved template expansion
+
+بموافقة المالك على إضافة 13 قالبًا، توسعت `VIDEO_PRESETS` من 22 إلى 35 قالبًا فعليًا. أضيفت عائلات المسجد والمصحف والشموع وneon والرسوم والصحراء والهلال وminimal والأقواس والهوية الذهبية، مع عقود RTL الحالية ونسب 9:16/16:9. `videoPresets.test.ts` يثبت العدد 35 وفرادة IDs ووجود الإعدادات الأساسية (7/7). الخطة المرجعية تذكر 36 قالبًا؛ بقي قالب واحد فقط كفجوة معلّمة لأن الموافقة كانت محددة بـ13 إضافة.
+
+## 2026-10-16 — R2 credential creation attempt
+
+بعد موافقة المالك على مفتاح staging المقيّد، فشل Computer Use قبل فتح المتصفح مرتين بعد reset بنفس الخطأ `failed to write kernel assets` (os error 3). Cloudflare API integration نجحت في القراءة السابقة لكنها رفضت permission-group/token creation بالخطأ 9109 Unauthorized. لذلك لم يُنشأ أي credential ولم تُغيّر Railway variables؛ R2 live wiring بقيت غير مفعلة عمدًا. `npm run build` بعد توسيع القوالب نجح (3042 modules).
+
+## 2026-10-16 — source activation gap diagnostics
+
+أضيفت `getQuranSourceActivationGaps` وربطها بـ`GET /api/quran/sources`. كل سجل يعيد `activationReady` وcodes ثابتة مثل `production_disabled` و`license_unverified` دون كشف references أو أسرار. هذا يحسن Admin inventory ويجعل سبب بقاء المصدر معطلاً قابلًا للتدقيق، من دون تفعيل adapters أو network fallback.
+
+## 2026-10-16 — admin source blocker visibility
+
+حدّثت `/admin/sources` لعرض أسباب منع التفعيل المترجمة من `activationGaps` مع حالة وصول قابلة للقراءة عبر لوحة المفاتيح؛ لا تعرض الصفحة credentials أو references الحساسة. الاختبار يثبت الحالة المعطلة ورسالة الترخيص.
+
+## 2026-10-16 — lock-pinned source cache
+
+أضيف كاش process-local محدود العمر لنتائج المصدر بعد التحقق، ومفتاحه يضم `sourceId@revision` و`lockHash`؛ لذلك لا يمكنه عبور الرواية أو المصحف أو النطاق أو بصمة الصوت. resolver يعيد التحقق من المرشح عند cache hit ويسجل محاولات ledger كالمعتاد؛ الكاش تسريع مؤقت ولا يحل محل persistence أو approval.

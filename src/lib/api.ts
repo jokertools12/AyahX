@@ -25,6 +25,8 @@ export interface QuranSourceCandidate {
   cors: { status: 'needs_review' | 'verified' | 'not_applicable'; reference?: string };
   rateLimits: { status: 'needs_review' | 'verified' | 'not_applicable'; reference?: string };
   identity: { status: 'needs_review' | 'verified' | 'not_applicable'; reference?: string };
+  activationReady?: boolean;
+  activationGaps?: string[];
 }
 
 export interface Profile {

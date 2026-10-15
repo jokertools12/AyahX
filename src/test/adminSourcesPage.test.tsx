@@ -9,6 +9,7 @@ const fixtures = vi.hoisted(() => ({
     id: 'qud-universal-audio', kinds: ['audio', 'word_timing'], revision: 'v3.2.0', productionEnabled: false,
     endpoint: { status: 'verified', reference: 'fixture-endpoint' }, license: { status: 'needs_review' },
     storage: { status: 'needs_review' }, cors: { status: 'needs_review' }, rateLimits: { status: 'needs_review' }, identity: { status: 'needs_review' },
+    activationReady: false, activationGaps: ['production_disabled', 'license_unverified'],
   }] }),
 }));
 vi.mock('@/hooks/useAuth', () => ({ useAuth: () => ({ user: fixtures.user, loading: false }) }));
@@ -23,6 +24,8 @@ describe('admin source inventory page', () => {
     await waitFor(() => expect(screen.getByText('qud-universal-audio')).toBeInTheDocument());
     expect(screen.getByText('مراجعة فقط')).toBeInTheDocument();
     expect(screen.getByText('معطّل')).toBeInTheDocument();
+    expect(screen.getByText('ما يلزم قبل التفعيل')).toBeInTheDocument();
+    expect(screen.getByText('الترخيص غير موثق')).toBeInTheDocument();
     expect(fixtures.getSources).toHaveBeenCalledOnce();
   });
 });

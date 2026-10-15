@@ -308,3 +308,67 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - After Cloudflare reauthentication, the verified account contained `ayahx-audio-prod` and `ayahx-audio-staging`; no bucket or object mutation was made in production.
 - Staging bucket `ayahx-audio-staging` had the expected Railway CORS origin and no custom domain or objects under `temp-48h/`.
 - Added and re-read the staging-only lifecycle rule `auto-delete-temp-renders-after-48-hours` for prefix `temp-48h/` at 172800 seconds, while preserving the existing one-day incomplete-multipart abort rule. Sanitized evidence: `tooling/reports/enterprise-baseline/r2-staging-lifecycle-verification.json`.
+
+## 2026-10-16 — R2 configuration contract
+
+- `npx vitest run src/test/storageConfig.test.ts src/test/objectStorageKey.test.ts`: 2 files, 6 tests passed.
+- `npx tsc --noEmit`: exit 0.
+- `npx eslint server/config.ts src/test/storageConfig.test.ts`: no errors (pre-existing explicit-any warning in sanitized config).
+- The code does not enable S3/R2 implicitly and does not read secrets into tracked files. Live R2 object reconciliation remains pending until a scoped staging credential is created and configured.
+
+## 2026-10-16 — integration checkpoint
+
+- `npm run build`: exit 0; Vite transformed 3042 modules and server bundle completed.
+- `npm test`: 106 test files passed, 1 skipped; 877 tests passed, 6 skipped. The existing test matrix still contains legacy Browser Cloud fixtures; no new Cloud Browser service or route was added by this branch.
+- An initial `npm test -- --runInBand` probe was invalid because Vitest does not support the Jest-only flag; the corrected command above is the authoritative result.
+
+## 2026-10-16 — storage readiness evidence
+
+- RED confirmed missing `getStorageReadiness` before implementation.
+- GREEN: `npx vitest run src/test/storageReadiness.test.ts src/test/observability.test.ts` passed (12/12).
+- `npx tsc --noEmit` passed; targeted ESLint reported warnings only in pre-existing `any` diagnostics.
+- `/api/health/ready` now exposes sanitized storage readiness and fails closed for incomplete S3 mode; local mode is unchanged.
+
+## 2026-10-16 — template expansion evidence
+
+- `npx vitest run src/test/videoPresets.test.ts`: 7/7 passed.
+- `npx tsc --noEmit`: exit 0.
+- Targeted ESLint for `src/data/videoPresets.ts` and `src/test/videoPresets.test.ts`: exit 0.
+- No external assets, cloud-browser engine, or provider credentials were added.
+
+## 2026-10-16 — R2 credential gate evidence
+
+- Explicit user confirmation received for a staging-only R2 key.
+- Computer Use initialization failed twice before browser access: `failed to write kernel assets` / OS error 3.
+- Cloudflare `execute` read calls work for account/R2 inspection, but token permission-group and token creation calls return `9109 Unauthorized`.
+- No API key, secret, Railway variable, or production resource was created or changed.
+- `npm run build` after template expansion exited 0.
+
+## 2026-10-16 — source gap evidence
+
+- RED: test failed before `getQuranSourceActivationGaps` existed.
+- GREEN: `quranSourceRegistry.test.ts` 7/7 and `quranSourceCatalogApi.test.ts` 4/4 passed.
+- `npx tsc --noEmit`: exit 0.
+- Targeted ESLint: 0 errors; existing explicit-any warnings only.
+- All candidates remain disabled; no source was activated or sent to production.
+
+## 2026-10-16 — admin source UI evidence
+
+- `npx vitest run src/test/adminSourcesPage.test.tsx src/test/quranSourceCatalogApi.test.ts`: 5/5 passed.
+- `npx tsc --noEmit`: exit 0.
+- Targeted ESLint for page/test: exit 0.
+- RTL status and no-store inventory behavior preserved; no source activation added.
+
+## 2026-10-16 — source cache evidence
+
+- RED/GREEN: `sourceResolutionCache.test.ts` 3/3 and `sourceResolutionService.test.ts` 7/7 passed.
+- `npx tsc --noEmit`: exit 0.
+- Targeted ESLint and `git diff --check`: exit 0.
+- Cache hits remain lock/revision pinned and are revalidated before selection; no provider activation or silent fallback was added.
+
+## 2026-10-16 — full integration verification after cache
+
+- `npm run build`: exit 0; Vite transformed 3042 modules and server bundle completed.
+- `npm test`: 108 test files passed, 1 skipped; 887 tests passed, 6 skipped.
+- The existing multi-engine test matrix still includes legacy Browser Cloud fixtures for regression coverage; no new Cloud Browser service, route, or deployment was added.
+- Source cache, source registry diagnostics, admin inventory, storage readiness, and template expansion are included in the passing suite.

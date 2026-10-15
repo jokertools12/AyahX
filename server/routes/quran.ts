@@ -7,7 +7,7 @@ import { logger } from '../logger';
 import { AuthenticatedRequest, requireAuth } from '../middleware/auth';
 import { generalApiLimiter } from '../middleware/rateLimiter';
 import { fingerprintTrustedQuranAudio } from '../services/audioFingerprintService';
-import { listQuranSourceCandidates } from '../services/quranSourceRegistry';
+import { getQuranSourceActivationGaps, listQuranSourceCandidates } from '../services/quranSourceRegistry';
 
 const router = Router();
 
@@ -17,7 +17,12 @@ router.get('/sources', requireAuth, (req: AuthenticatedRequest, res: Response) =
   if (req.user?.role !== 'admin') {
     return res.status(403).json({ error: 'هذه العملية متاحة للأدمن فقط', code: 'ADMIN_REQUIRED' });
   }
-  return res.json({ status: 'review_pending', sources: listQuranSourceCandidates() });
+  const sources = listQuranSourceCandidates().map((source) => ({
+    ...source,
+    activationReady: getQuranSourceActivationGaps(source).length === 0,
+    activationGaps: getQuranSourceActivationGaps(source),
+  }));
+  return res.json({ status: 'review_pending', sources });
 });
 
 /**

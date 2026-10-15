@@ -101,3 +101,39 @@ limits/identity مكتملة؛ كل المرشحين الحاليين ما زا�
 والمصحف والعد والنطاق وبصمات النص/الصوت والقارئ والتسجيل وحالة الاعتماد.
 تشغيل الاختبارات المحلي الكامل: 103 ملفات، 869 اختبارًا ناجحًا، 6 متخطاة.
 لم تُربط النتيجة بمسار API أو مزود خارجي بعد، ولم يُنشر هذا التغيير إلى Railway.
+
+## 2026-10-16 checkpoint — R2 wiring ready, credential gate remains
+
+The application now accepts the plan's `R2_*` vocabulary as aliases while preserving the canonical `OBJECT_STORAGE_*` contract and local default. Focused tests and TypeScript passed. Next action, after action-time confirmation for Cloudflare key creation, is to create a staging-bucket-only R2 key, set staging API variables without printing values, redeploy staging, and rerun the real Skia artifact with R2 object/DB/download reconciliation. Production remains untouched.
+
+## 2026-10-16 — verification refresh
+
+The current branch is clean apart from the two preserved untracked plan directories, and local HEAD matches the pushed remote branch at `888311c`. Production and Railway resources were not changed in this checkpoint. The full local build and test suite pass; next implementation remains gated by template-design approval and the separate action-time R2 key confirmation.
+
+## 2026-10-16 checkpoint — fail-closed storage readiness
+
+Before setting R2 credentials, staging will report local readiness. After credentials are entered, the same readiness response must show `driver: s3` and `ready: true` before the real render/R2 reconciliation gate.
+
+## 2026-10-16 checkpoint — template library
+
+The approved 13-template increment is complete at 35 total presets. One additional preset is still required to match the reference plan's 36 count and will be added only after explicit approval for that extra item.
+
+## 2026-10-16 checkpoint — external credential tool failure
+
+The next safe action is to restore Computer Use kernel access or have the owner create the scoped staging R2 token in Cloudflare's R2 API Tokens screen, then provide only the generated credentials through the approved secure Railway variable path. Do not paste secrets into chat or files. Once available, verify `/api/health/ready`, deploy staging, run a real Skia job, and reconcile the R2 object, DB path, download stream, expiry prefix, and worker logs.
+
+## 2026-10-16 checkpoint — source review visibility
+
+The source inventory API now makes activation blockers machine-readable for the future admin UI. The next source work still requires evidence-backed endpoint/license/identity review; do not mark a candidate verified from this diagnostic alone.
+
+## 2026-10-16 checkpoint — source inventory UI
+
+Admin source inventory now explains why a candidate remains disabled. This is review visibility only; evidence review and adapter activation remain separate gates.
+
+## 2026-10-16 checkpoint — cache layer
+
+The cache layer is available to the resolver but remains best-effort and process-local. Durable attempts, source evidence, approval, and final export revalidation remain authoritative.
+
+## 2026-10-16 checkpoint — full suite green
+
+The local integration checkpoint is green after the lock-pinned source cache and admin inventory changes. Live R2 wiring, staging re-render reconciliation, one remaining plan preset, and later production gates remain open; no production action is implied by this local result.

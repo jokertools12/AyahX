@@ -4,7 +4,7 @@ import compression from 'compression';
 import fs from 'fs';
 import path from 'path';
 
-import { config } from './config';
+import { config, getStorageReadiness } from './config';
 import { logger, requestLogger } from './logger';
 import { authenticateToken } from './middleware/auth';
 import { pingDatabase, closePool } from './db';
@@ -132,13 +132,21 @@ app.get('/api/health/live', (_req, res) => {
  * Readiness Probe: Verifies database connectivity before routing user traffic.
  */
 app.get('/api/health/ready', async (_req, res) => {
+  const storage = getStorageReadiness(config.storage);
+  if (!storage.ready) {
+    return res.status(503).json({
+      status: 'not_ready',
+      storage,
+      message: 'Object storage configuration is incomplete',
+    });
+  }
   const dbPing = await pingDatabase();
   if (dbPing.ok) {
     try { await ensureRuntimeInitialized(); }
     catch {
       return res.status(503).json({ status: 'not_ready', database: 'connected', schema: 'unavailable', message: 'Database schema readiness unavailable' });
     }
-    return res.json({ status: 'ready', database: 'connected', latencyMs: dbPing.latencyMs });
+    return res.json({ status: 'ready', database: 'connected', storage, latencyMs: dbPing.latencyMs });
   }
   return res.status(503).json({
     status: 'not_ready',
@@ -171,6 +179,7 @@ app.get('/api/health', async (_req, res) => {
         latencyMs: dbPing.latencyMs,
         ...(dbPing.ok ? {} : { message: config.isProd ? 'Database connection check failed' : dbPing.error }),
       },
+      storage: getStorageReadiness(config.storage),
     },
   };
 

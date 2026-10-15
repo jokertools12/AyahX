@@ -53,6 +53,54 @@ export interface AppConfig {
   };
 }
 
+type StorageEnvironment = Record<string, string | undefined>;
+
+/**
+ * Resolve the application's S3-compatible storage contract from environment
+ * variables. OBJECT_STORAGE_* is the canonical contract; the R2_* aliases
+ * keep the deployment guide's vocabulary usable without moving secrets into
+ * tracked configuration. The caller still has to opt into `s3` explicitly.
+ */
+export function resolveStorageConfig(env: StorageEnvironment = process.env): AppConfig['storage'] {
+  const value = (...names: string[]): string | undefined => {
+    for (const name of names) {
+      const candidate = env[name]?.trim();
+      if (candidate) return candidate;
+    }
+    return undefined;
+  };
+
+  return {
+    driver: env.OBJECT_STORAGE_DRIVER === 's3' ? 's3' : 'local',
+    bucket: value('OBJECT_STORAGE_BUCKET', 'R2_BUCKET_NAME'),
+    region: value('OBJECT_STORAGE_REGION', 'R2_REGION') || 'auto',
+    endpoint: value('OBJECT_STORAGE_ENDPOINT', 'R2_ENDPOINT'),
+    forcePathStyle: (value('OBJECT_STORAGE_FORCE_PATH_STYLE', 'R2_FORCE_PATH_STYLE') || 'false') === 'true',
+    accessKeyId: value('OBJECT_STORAGE_ACCESS_KEY_ID', 'R2_ACCESS_KEY_ID'),
+    secretAccessKey: value('OBJECT_STORAGE_SECRET_ACCESS_KEY', 'R2_SECRET_ACCESS_KEY'),
+    publicBaseUrl: value('OBJECT_STORAGE_PUBLIC_BASE_URL', 'R2_PUBLIC_DOMAIN'),
+  };
+}
+
+export type StorageReadiness =
+  | { ready: true; driver: 'local' | 's3' }
+  | { ready: false; driver: 's3'; missing: Array<'bucket' | 'endpoint' | 'accessKeyId' | 'secretAccessKey'> };
+
+/**
+ * Readiness is deliberately structural: it never makes a network request or
+ * exposes a credential. A cloud-backed deployment must fail closed before it
+ * accepts a render that cannot be uploaded or downloaded by another replica.
+ */
+export function getStorageReadiness(storage: AppConfig['storage']): StorageReadiness {
+  if (storage.driver === 'local') return { ready: true, driver: 'local' };
+  const missing: Array<'bucket' | 'endpoint' | 'accessKeyId' | 'secretAccessKey'> = [];
+  if (!storage.bucket) missing.push('bucket');
+  if (!storage.endpoint) missing.push('endpoint');
+  if (!storage.accessKeyId) missing.push('accessKeyId');
+  if (!storage.secretAccessKey) missing.push('secretAccessKey');
+  return missing.length ? { ready: false, driver: 's3', missing } : { ready: true, driver: 's3' };
+}
+
 const nodeEnv = (process.env.NODE_ENV || 'development') as 'development' | 'production' | 'test';
 const isProd = nodeEnv === 'production';
 
@@ -99,14 +147,7 @@ export const config: AppConfig = {
     workerId: process.env.RENDER_WORKER_ID || `${process.pid}-${Math.random().toString(36).slice(2, 8)}`,
   },
   storage: {
-    driver: process.env.OBJECT_STORAGE_DRIVER === 's3' ? 's3' : 'local',
-    bucket: process.env.OBJECT_STORAGE_BUCKET || undefined,
-    region: process.env.OBJECT_STORAGE_REGION || 'auto',
-    endpoint: process.env.OBJECT_STORAGE_ENDPOINT || undefined,
-    forcePathStyle: process.env.OBJECT_STORAGE_FORCE_PATH_STYLE === 'true',
-    accessKeyId: process.env.OBJECT_STORAGE_ACCESS_KEY_ID || undefined,
-    secretAccessKey: process.env.OBJECT_STORAGE_SECRET_ACCESS_KEY || undefined,
-    publicBaseUrl: process.env.OBJECT_STORAGE_PUBLIC_BASE_URL || undefined,
+    ...resolveStorageConfig(),
   },
 };
 
@@ -141,6 +182,13 @@ export function getSanitizedConfig(): Record<string, any> {
     },
     pexels: {
       configured: Boolean(config.pexels.apiKey),
+    },
+    storage: {
+      driver: config.storage.driver,
+      bucket: config.storage.bucket || null,
+      endpointConfigured: Boolean(config.storage.endpoint),
+      credentialsConfigured: Boolean(config.storage.accessKeyId && config.storage.secretAccessKey),
+      publicBaseConfigured: Boolean(config.storage.publicBaseUrl),
     },
   };
 }

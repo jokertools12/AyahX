@@ -10,6 +10,16 @@ describe('Video Quality Presets and Dimensions', () => {
     }
   });
 
+  it('ships the approved expanded template library without duplicate identities', () => {
+    expect(VIDEO_PRESETS).toHaveLength(35);
+    expect(new Set(VIDEO_PRESETS.map((preset) => preset.id)).size).toBe(VIDEO_PRESETS.length);
+    for (const preset of VIDEO_PRESETS) {
+      expect(['9:16', '16:9']).toContain(preset.recommendedAspectRatio);
+      expect(preset.textSettings.fontFamily).toBeTruthy();
+      expect(preset.displaySettings.visualDesign).toBeTruthy();
+    }
+  });
+
   it('defines all required quality levels', () => {
     const requiredKeys: ExportQuality[] = ['medium', 'high', 'ultra'];
     for (const key of requiredKeys) {

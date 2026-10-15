@@ -8,6 +8,7 @@ import {
   type TerminalSourceAttempt,
 } from '../../shared/sourceResolution';
 import type { SourceResolutionAttemptRepository } from '../db/sourceResolutionAttemptRepository';
+import type { SourceResolutionCache } from './sourceResolutionCache';
 
 export type SourceCandidateValidator<T> = (
   candidate: T,
@@ -32,6 +33,8 @@ export interface SourceResolutionResolverOptions<T> {
   adapters: SourceAdapterMap<T>;
   repository: SourceResolutionAttemptRepository;
   validateCandidate: SourceCandidateValidator<T>;
+  cache?: SourceResolutionCache<T>;
+  cacheTtlMs?: number;
   now?: () => number;
 }
 
@@ -66,7 +69,7 @@ function adapterResult<T>(result: Awaited<ReturnType<SourceAdapter<T>>>): { cand
 const terminalStatus = (failure: SourceFailure): 'failed' | 'rejected' =>
   canFallbackSource(failure) ? 'failed' : 'rejected';
 
-export async function resolveSource<T>({ request: input, adapters, repository, validateCandidate, now = Date.now }: SourceResolutionResolverOptions<T>): Promise<ResolutionOutcome<T>> {
+export async function resolveSource<T>({ request: input, adapters, repository, validateCandidate, cache, cacheTtlMs, now = Date.now }: SourceResolutionResolverOptions<T>): Promise<ResolutionOutcome<T>> {
   const request = resolutionRequestSchema.parse(input);
   await repository.createRequestAnchor(request);
   const attempts: ResolutionAttempt[] = [];
@@ -88,9 +91,14 @@ export async function resolveSource<T>({ request: input, adapters, repository, v
     if (source.licenseDecision === 'blocked') failure = 'license_blocked';
     else if (source.consentDecision === 'blocked') failure = 'privacy_blocked';
     else {
-      const adapter = findAdapter(adapters, source.sourceId, source.sourceRevision);
-      if (!adapter) failure = 'not_indexed';
-      else {
+      const cached = cache?.get(request, source);
+      if (cached !== undefined) {
+        candidate = cached;
+        failure = await validateCandidate(candidate, request, source);
+      } else {
+        const adapter = findAdapter(adapters, source.sourceId, source.sourceRevision);
+        if (!adapter) failure = 'not_indexed';
+        else {
         try {
           const result = adapterResult(await adapter(request, source));
           if (result.failure) failure = result.failure;
@@ -102,6 +110,7 @@ export async function resolveSource<T>({ request: input, adapters, repository, v
           // Provider exceptions are terminal unknown_error; never infer timeout or continue silently.
           failure = 'unknown_error';
           candidate = undefined;
+        }
         }
       }
     }
@@ -119,6 +128,9 @@ export async function resolveSource<T>({ request: input, adapters, repository, v
     const shouldContinue = failure !== null && canFallbackSource(failure) && ordinal + 1 < request.policy.sources.length;
     if (!shouldContinue) {
       await repository.appendTerminal(request, started, terminal);
+      if (!failure && candidate !== undefined) {
+        cache?.set(request, source, candidate, cacheTtlMs ?? 60_000);
+      }
       if (failure) return { status: terminalStatus(failure), failure, attempts };
       return {
         status: request.purpose === 'review' ? 'review_required' : 'selected',
