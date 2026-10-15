@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { resolveSource, type SourceAdapter, type SourceAdapterMap } from '../../server/services/sourceResolutionService';
+import type { SourceResolutionAttemptRepository } from '../../server/db/sourceResolutionAttemptRepository';
 import type { ResolutionRequest, StartedSourceAttempt, TerminalSourceAttempt } from '../../shared/sourceResolution';
 
 const hash = 'a'.repeat(64);
@@ -8,14 +9,14 @@ const request = (purpose: ResolutionRequest['purpose'] = 'final_export'): Resolu
   serverRequestId: 'req', actorReference: 'actor', ownershipReference: 'owner', purpose, requiredTiming: 'ayah', lock, lockHash: hash, policyHash: hash, payloadHash: hash,
   policy: { revision: 'p1', sources: ['one', 'two', 'three'].map(sourceId => ({ sourceId, sourceRevision: 'v1', eligibleLock: lock, licenseReference: 'lic', licenseDecision: 'allowed' as const, consentDecision: 'not_required' as const, consentReference: null })) },
 });
-function repo(events: string[]) {
+function repo(events: string[]): SourceResolutionAttemptRepository {
   return {
     createRequestAnchor: vi.fn(async () => { events.push('anchor'); return 'created' as const; }),
     appendStarted: vi.fn(async (_r: ResolutionRequest, a: StartedSourceAttempt) => { events.push(`start:${a.sourceId}`); }),
     appendTerminal: vi.fn(async (_r: ResolutionRequest, _s: StartedSourceAttempt, t: TerminalSourceAttempt) => { events.push(`end:${t.sourceId}:${t.status}`); }),
     appendTerminalThen: vi.fn(async <T>(_r: ResolutionRequest, _s: StartedSourceAttempt, t: TerminalSourceAttempt, next: () => Promise<T>): Promise<T> => { events.push(`end:${t.sourceId}:${t.status}`); return next(); }),
     readAttempts: vi.fn(async () => []),
-  };
+  } as SourceResolutionAttemptRepository;
 }
 
 describe('source resolution service', () => {
