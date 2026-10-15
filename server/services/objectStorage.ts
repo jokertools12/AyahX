@@ -35,6 +35,10 @@ export function objectKeyFromPath(value: string): string {
   return value.replace(/^s3:\/\/[^/]+\//, '');
 }
 
+export function isPermanentObjectStoragePath(value: string | null | undefined): boolean {
+  return isObjectStoragePath(value) && objectKeyFromPath(value!).startsWith('permanent/');
+}
+
 function safeObjectComponent(value: string): string {
   return value.replace(/[^A-Za-z0-9._-]/g, '_').slice(0, 128) || 'unknown';
 }
