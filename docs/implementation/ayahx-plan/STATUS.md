@@ -12,12 +12,13 @@ public UI desktop/mobile10/10.001/002 مطبقان:31tables/2audit triggers، pe
 تهيئة owner للحساب المحدد staging متحققة:منحة واحدة/حدث تدقيق واحد،8capabilities،
 live401/403/400/404 للحدود المقصودة. هوية الحساب والتقارير الخاصة لا تدخل Git.
 
-الفرع المحلي codex/ayahx-runtime-db-boundary يزيل DDL التلقائي ويضيف readiness
-وقيود بدء الصيانة.28اختبارًا للشريحة و183اختبارًا مركبًا PASS؛ appTS/lint/build
-PASS. مراجعة Astra عالجت ملاحظتي مؤقتات مبكرة وإعادة التهيئة، ثم لا high/medium.
-فحص metadata حي قرأ31جدولًا/246عمودًا؛ لا يثبت عزل الصلاحيات. مستخدم DB وpreDeploy
-الحاليان لم يتغيرا؛ التبديل والتحقق من الخدمات الثلاث باقيان قبل production.
-production باقٍ عند baseline؛ Enterprise SQL/owner لم يطبقا هناك، ولا قبول رندر جديد.
+PR34 لحدود DDL التشغيلية مدموجة في main@db6d67de2507a9a0e6afa765a88a9ca68b08ff1f
+لكنها غير منشورة. الإعداد المحلي في codex/ayahx-runtime-db-grants يضيف CLI لحسابات
+runtime جديدة فقط وخطة 31 منحة. مخطط clone معزول على MySQL staging وبيانات اصطناعية:
+51/51 تحققًا PASS، بما فيها
+منع DDL وتغيير التدقيق والهوية، واختبارات التراجع والتزامن/الحذف. لا توجد حسابات
+runtime حقيقية أو تغييرات أسرار/preDeploy. staging API ما زال 8618dcba (owner/audit
+1/1) والعمال على baseline. لا إجراء production أو قبول رندر جديد.
 المرجع: `AyahX_Enterprise_Plan_Package_2026-10-14/00_PLAN/IMPLEMENTATION_TASKS.md`.
 قبل التنفيذ، اربط كل صف في `FEATURE_COVERAGE.ar.md` بالمصدر والاختبار والدليل؛
 هذا الجدول فهرس مهام، وليس بديلًا لمصفوفة الميزات أو معايير قبولها.
@@ -28,7 +29,7 @@ production باقٍ عند baseline؛ Enterprise SQL/owner لم يطبقا هن�
 | 0.2 | Riwayah/numbering/font map | runtime binding schema متحقق محليًا؛ بيانات canonical/font QA باقية |
 | 0.3 | Recording coverage contract | guard + trusted injected repository و44 اختبارًا جديدًا محليًا؛ authority store وruntime/export wiring باقيان |
 | 1.1 | MySQL additive migration | خمسة جداول خاملة + runner متحقق محليًا وتجربة restore؛ PR29–33 مدموجة و001/002 staging apply متحقق؛ runtime8618dcb وowner bootstrap متحققان؛ assets/templates وغيرها باقية |
-| 1.2 | RBAC وAudit | grant/audit persistence وAPI وowner staging متحققة حيًا؛ عزل DB وcontent/source/retention writers وUI باقية |
+| 1.2 | RBAC وAudit | grant/audit persistence وAPI وowner staging متحققة حيًا؛ PR34 DDL boundary مدموجة غير منشورة؛ clone صلاحيات 51/51 على مخطط staging معزول؛ provision حقيقي وcredential cutover وcontent/source/retention writers وUI باقية |
 | 1.3 | Source resolution attempts | لم يُقيّم |
 | 2.1 | Adapter/cache أولي | لم يُقيّم |
 | 2.2 | Adapters خارجية تدريجية | لم يُقيّم |

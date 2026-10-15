@@ -36,12 +36,14 @@ export async function readCatalogGrantState(connection: CatalogGrantConnection, 
     granting_audit_event_id AS grantingAuditEventId, granted_at_epoch_ms AS grantedAtEpochMs,
     revoked_at_epoch_ms AS revokedAtEpochMs, revocation_audit_event_id AS revocationAuditEventId
     FROM catalog_role_grants ORDER BY id${suffix}`);
+  // Audit rows are immutable. A current shared read preserves locking semantics using SELECT alone;
+  // FOR UPDATE would require an unwanted audit UPDATE/DELETE/LOCK TABLES privilege.
   const rawEvents = await catalogRows(connection, `SELECT id, action, actor_user_id AS actorUserId,
     authorizing_grant_id AS authorizingGrantId, required_capability AS requiredCapability, created_at_epoch_ms AS createdAtEpochMs,
     request_id AS requestId, request_payload_sha256 AS requestPayloadSha256, reason, subject_kind AS subjectKind,
     subject_id AS subjectId, subject_revision AS subjectRevision, subject_sha256 AS subjectSha256, context_json AS contextJson,
     context_sha256 AS contextSha256, before_json AS beforeJson, after_json AS afterJson, revokes_event_id AS revokesEventId
-    FROM catalog_audit_events ORDER BY id${suffix}`);
+    FROM catalog_audit_events ORDER BY id${lock ? ' FOR SHARE' : ''}`);
   const grants: CatalogGrant[] = []; const events: CatalogAuditEvent[] = [];
   for (const row of rawGrants) {
     const parsed = catalogGrantSchema.safeParse({ ...row, schemaVersion: 1, grantedAtEpochMs: epoch.safeParse(row.grantedAtEpochMs).data,

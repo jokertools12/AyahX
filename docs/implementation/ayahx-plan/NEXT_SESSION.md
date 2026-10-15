@@ -8,7 +8,7 @@
 ## الحالة المقبولة
 
 - repo jokertools12/AyahX ؛ baseline42b04fd98912081d6c967ac7ec7cb931ce4519ab.
-- PR26–33 مدموجة؛ mainc438bd98ce1ddded0ced5b31320b04ee2d4d9cfa.
+- PR26–34 مدموجة؛ main`db6d67de2507a9a0e6afa765a88a9ca68b08ff1f`.
 - staging API runtime/source8618dcba4cfaeaa827aad74bf56154245cde09c7 ، deployment
   cc650771-ed5c-482e-a7a2-d4f11eed30bc SUCCESS ، fileSHA متطابق، publicUI10/10.
   accept-deploy قال cancellation أولًا، ثم بعد الموافقة الدقيقة nothing_staged ؛
@@ -23,26 +23,15 @@
 - trusted availability/grant history مفحوصان؛ محتوى/source/retention approvals
   و atomic export pinning و management UI لم تنفذ بعد. SourcesdisabledCHECKs باقية.
 
-## الفرع المحلي التالي
+## حد DDL وحسابات runtime
 
-codex/ayahx-runtime-db-boundary مبني على mergedmain. يزيل DDL التلقائي من API/
-worker/control/settings reads ، وينقل legacy preparation إلى explicit db:setup.
-Metadata-only readiness لوجود الأعمدة؛ لا يدعي التحقق من القيود/الصلاحيات.
-Shared startup/readiness initialization يعيد المحاولة، و queue timers تبدأ صراحةً
-بعد الفحص وتتوقف عند shutdown. إعدادات DB/env/decryption والانتقال المشروط
-لتشفير الأسرار القديمة باقية. لا schema writes عند settingsread.
+PR34 لحدود DDL التشغيلية مدموجة في main@`db6d67de2507a9a0e6afa765a88a9ca68b08ff1f` وغير منشورة. الفرع المحلي التالي `codex/ayahx-runtime-db-grants` يضيف provisioning للحسابات الجديدة فقط؛ PR35 لم يُنشأ. حالة staging لم تتغير: API على8618dcb مع owner/audit1/1، والعمال على baseline. كل خدمات Node ما زالت على حساب DB الحالي؛ preDeploy لم يتغير.
 
-28 اختبارًا للشريحة/crypto (25new) و 183combined عبر 14files PASS ؛ appTS ، isolated
-helper strictTS ، lint ، build PASS. Large renderer strict graph له أخطاء قديمة؛ لا
-تدّع full-server strictclean. Astra راجع، عالجنا 2medium ثم follow-up بلا high/medium.
-Read-only live presence probe نجح 31table/246column ، private runtime-schema-readonly-result.json.
-هذا ليس نشرًا للكود الجديد أو دليل limited-user permissions.
+خطة grants صريحة على31 جدولًا:24 legacy tables كاملة DML كحد توافق أعلى لا كحد أدنى لكل خدمة؛5 inactive catalog SELECT فقط؛ API يضيف audit append-only ويحدّث حقلي الإلغاء المحددين فقط في جدول المنح؛ Skia/control يقرآن authority فقط. تتطلب CLI بيئة موثوقة وURI مشغل منفصلًا، هدفًا ماديًا مطابقًا، اسم مستخدم جديدًا وmandatory_roles فارغة، وملفات خاصة جديدة؛ بعد التطبيق تتحقق من login حقيقي وSHOW GRANTS بدقة. MySQL يحتفظ ببيانات المشغل المنفصلة؛ المسار المقصود حقن URI إلى عملية SSH واحدة بعد تحميله خاصًا، بلا TCP proxy، ولم يُتحقق بعد من التسليم بعد cutover. لا تضعه في متغيرات الخدمات. DDL auto-commit؛ الفشل لا يعاد آليًا ولا يتبعه DROP.
 
-التالي: راجع diff/checkpoint/commit/PR/attach/CI/merge لشريحة runtimeboundary.
-ثم provision/test runtime identity محدودة وإزالة API preDeployDDL ، ونشر/تحقق
-API و Skia/control بهذا الكود والحسابات. لا تغيّر credentials قبل إزالة المسارات
-التلقائية والتحقق من ترتيب النشر. API preDeploy الحالي npmrun db:setup ، وكل
-خدمات Node الثلاث ما زالت تستخدم حساب DB القديم. gateproduction غيرمكتمل.
+clone مستعاد على مخطط تجريبي معزول داخل MySQL staging وبfixtures اصطناعية اجتاز51/51 تحققًا؛ API107 privilege points وSkia103. اختبرت المنع من DDL/trigger/audit/identity/account/cross-schema، grant/retry/revoke/audit rollback، owner concurrency/deletion races وحماية آخر مالك، وبقاء nonfixture users. التقرير خاص: `tooling/reports/enterprise-baseline/runtime-principal-clone-continuation-result.json`. Astra أصلح مشكلتين متوسطتين في CLI (receipt corruption وفحص physical target) وأكد خلو follow-up من high/medium. فشل clone سابق بسبب audit FOR UPDATE صُحح إلى SELECT locking read ثم نجح القبول.
+
+6 suites/118 tests PASS، app TypeScript وisolated helper/CLI strict TypeScript وtargeted lint و`npm run build` PASS؛ CI enterprise-foundation أضيفت إليها خطوة المحدودية الجديدة لكن لم تُسجل نتيجة CI لعدم إنشاء PR35 بعد. لا provisioning حقيقي أو live secret change أو production action حاليًا. الخطوة التالية: راجع diff ثم commit وPR35/CI؛ بعد الدمج أزل preDeploy `npm run db:setup` بمسار ترحيل صريح محافظ على DDL القديمة، ثم انشر runtime boundary للخدمات الثلاث قبل أي principal/credential switch. دليل التشغيل: `docs/runtime-principals.ar.md`.
 
 ## الموارد والأدلة الخاصة
 
