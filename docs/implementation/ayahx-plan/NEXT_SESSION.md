@@ -1,5 +1,12 @@
 # نقطة الاستئناف
 
+الأحدث: الفرع codex/ayahx-server-security-patches يتضمن إصلاحي compression1.8.2
+وproxy-addr2.0.8 فقط + HTTP regression4؛ full suite479 pass/6 skip وtsc/build pass.
+audit ما زال26 finding؛ التفاصيل DEPENDENCY_AUDIT. افتح PR stacked إلى فرع
+codex/ayahx-alignment-approval إلى أن يدمج PR27. PR27 CI أخضر ونشر staging بدأ؛
+تحقق من terminal SUCCESS والـrevision bb773db ثم live non-admin reviews=403
+قبل الدمج. لا production إلى حين معالجة بقية البوابات؛ pinned42b04fd محفوظ.
+
 آخر تقدم: PR26 مدموج main@5b7b04b بعد CI/staging SUCCESS (76fa649، deployment
 40abc3d7-1381-4fb3-b04c-bf688f7cd558) و10 E2E حية. production pinned 42b04fd.
 شريحة 1.2 التالية على codex/ayahx-alignment-approval: admin-only timing approval،

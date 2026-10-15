@@ -1,5 +1,17 @@
 # سجل التحقق
 
+## 2026-10-15 — إصلاحا اعتماديات HTTP قبل production
+
+- compression 1.8.2 وproxy-addr 2.0.8 ثبتا من npm بعد فحص advisory الرسمي؛
+  لا major upgrade ولا overrides. lock diff يقتصر على الحزمتين وdestroy التابع.
+- 4 HTTP integration tests ناجحة لضغط gzip وقطع الاستجابة والثقة بالـproxy.
+- المجموعة الكاملة بعد الإصلاحات: exit 0، 82 files pass/1 skip، 479 tests pass/6 skip.
+- app TypeScript وbuild: exit 0. eslint الاختبار الجديد exit 0.
+- audit الجديد 26 (4 critical/14 high/8 moderate)؛ الحزمتان خارج النتائج.
+  تقرير ignored npm-audit-server-patches.json؛ audit ليس clean وبقية المعالجة باقية.
+- PR27 approval-only: CI contracts/public-ui SUCCESS على bb773db؛ نشر staging
+  بدأ عبر patch 6eb181be-152a-4903-b62d-bdef28bf260a، لم يثبت القبول الحي بعد.
+
 ## 2026-10-15 — قبول staging للأساس وشريحة صلاحيات 1.2
 
 - PR26: head 76fa649565b0eac309b67bbfc077872549553a22، CI contracts وpublic-ui
