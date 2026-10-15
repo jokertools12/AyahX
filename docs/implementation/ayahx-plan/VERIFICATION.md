@@ -279,6 +279,19 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - Fresh staging principals ayahx_api/skia/control_staging_v4 were created and independently verified against the physical MySQL target. API has 33 tables / 111 privilege points; Skia and control each have 33 / 105. Authority counts remained 1/1. Private evidence: runtime-v4-ledger-verification.json.
 - No service variables were changed to v4 and production was untouched. Existing v1 service accounts remain active until a separately reviewed deployment/wiring gate passes.
 
+## 2026-10-15 — Staging v4 runtime cutover and resolver deployment
+
+- The first resolver deployment (`900ae231-dc49-40c1-9fe5-456bb02c629e`) was
+  rejected by readiness because it ran before the v4 ledger grants. It was not
+  promoted; staging was restored by redeploying the known `d040e7e` revision.
+- After setting the three staging services to their pre-provisioned v4 runtime
+  principals without exposing credentials, API, Skia and control were deployed
+  from the merged main checkout: `8455703b`, `9893a0f0`, and `bce1d360`.
+- API readiness returned 200 with `database=connected`; unauthenticated source
+  inventory returned 401; the control leader lock was observed under v4 after a
+  controlled stale-lock kill. No production variables or deployments changed.
+  Sanitized evidence: `tooling/reports/enterprise-baseline/runtime-v4-live-cutover-verification.json`.
+
 ## 2026-10-15 — Staging R2 lifecycle verification
 
 - After Cloudflare reauthentication, the verified account contained `ayahx-audio-prod` and `ayahx-audio-staging`; no bucket or object mutation was made in production.
