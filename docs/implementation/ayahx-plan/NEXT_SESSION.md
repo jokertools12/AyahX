@@ -101,3 +101,7 @@ limits/identity مكتملة؛ كل المرشحين الحاليين ما زا�
 والمصحف والعد والنطاق وبصمات النص/الصوت والقارئ والتسجيل وحالة الاعتماد.
 تشغيل الاختبارات المحلي الكامل: 103 ملفات، 869 اختبارًا ناجحًا، 6 متخطاة.
 لم تُربط النتيجة بمسار API أو مزود خارجي بعد، ولم يُنشر هذا التغيير إلى Railway.
+
+## 2026-10-16 checkpoint — R2 wiring ready, credential gate remains
+
+The application now accepts the plan's `R2_*` vocabulary as aliases while preserving the canonical `OBJECT_STORAGE_*` contract and local default. Focused tests and TypeScript passed. Next action, after action-time confirmation for Cloudflare key creation, is to create a staging-bucket-only R2 key, set staging API variables without printing values, redeploy staging, and rerun the real Skia artifact with R2 object/DB/download reconciliation. Production remains untouched.

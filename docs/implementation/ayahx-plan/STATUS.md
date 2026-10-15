@@ -54,3 +54,7 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 لا تنقل شريحة إلى متحقق حيًا بناءً على اختبار محلي.
 
 Fresh v4 runtime principals were provisioned and verified against migration003: API111 privilege points, Skia/control105; no service cutover yet. Existing v1 accounts remain active by design.
+
+## 2026-10-16 — R2 contract preparation (local)
+
+أضيفت `resolveStorageConfig` في `server/config.ts` لتوحيد عقد `OBJECT_STORAGE_*` مع مرادفات `R2_*` الواردة في الخطة، مع إبقاء `local` هو الافتراضي إلى أن يحدد النشر `OBJECT_STORAGE_DRIVER=s3`. يعرِض التشخيص المنقح حالة bucket/endpoint/credentials دون قيم سرية. الاختبار المركز `storageConfig.test.ts` و`objectStorageKey.test.ts` نجحا (6/6)، وTypeScript نجح. لا تغيير خارجي أو production؛ تفعيل R2 الحي ينتظر مفتاحًا محدودًا لـstaging فقط.

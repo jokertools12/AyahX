@@ -308,3 +308,10 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - After Cloudflare reauthentication, the verified account contained `ayahx-audio-prod` and `ayahx-audio-staging`; no bucket or object mutation was made in production.
 - Staging bucket `ayahx-audio-staging` had the expected Railway CORS origin and no custom domain or objects under `temp-48h/`.
 - Added and re-read the staging-only lifecycle rule `auto-delete-temp-renders-after-48-hours` for prefix `temp-48h/` at 172800 seconds, while preserving the existing one-day incomplete-multipart abort rule. Sanitized evidence: `tooling/reports/enterprise-baseline/r2-staging-lifecycle-verification.json`.
+
+## 2026-10-16 — R2 configuration contract
+
+- `npx vitest run src/test/storageConfig.test.ts src/test/objectStorageKey.test.ts`: 2 files, 6 tests passed.
+- `npx tsc --noEmit`: exit 0.
+- `npx eslint server/config.ts src/test/storageConfig.test.ts`: no errors (pre-existing explicit-any warning in sanitized config).
+- The code does not enable S3/R2 implicitly and does not read secrets into tracked files. Live R2 object reconciliation remains pending until a scoped staging credential is created and configured.
