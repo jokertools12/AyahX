@@ -15,10 +15,11 @@ describe('source resolution attempt SQL boundary', () => {
     expect(await repository.createRequestAnchor(request)).toBe('created');
     await repository.appendStarted(request, started);
     await repository.appendTerminal(request, started, terminal);
-    expect(query.mock.calls[1][0]).toBe(sourceResolutionRequestInsertSql);
-    expect(query.mock.calls[2][0]).toBe(sourceResolutionAttemptInsertSql);
-    expect(query.mock.calls.flatMap(call => call[1])).not.toContain('https://');
-    expect(query.mock.calls.every(call => !call[0].includes('' + request.serverRequestId))).toBe(true);
+    const calls = query.mock.calls as Array<[string, readonly unknown[]]>;
+    expect(calls[1]?.[0]).toBe(sourceResolutionRequestInsertSql);
+    expect(calls[2]?.[0]).toBe(sourceResolutionAttemptInsertSql);
+    expect(calls.flatMap(call => call[1])).not.toContain('https://');
+    expect(calls.every(call => !call[0].includes('' + request.serverRequestId))).toBe(true);
   });
   it('treats same id and payload as idempotent and changed payload as conflict', async () => {
     const query = vi.fn(async () => [{ serverRequestId: request.serverRequestId, payloadHash: request.payloadHash }] as unknown[]);
