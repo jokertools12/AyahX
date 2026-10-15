@@ -498,7 +498,7 @@ const LEGACY_PRESETS: VideoPreset[] = [
     id: 'neon-rose-karaoke', name: 'نيون وردي كاراوكي', description: 'ألوان وردية وفوشية لإبراز الكلمة الحالية دون تشويش.',
     previewGradient: 'linear-gradient(145deg, #201139 0%, #8c2d76 48%, #f4a4d1 100%)',
     textSettings: { fontSize: 30, fontFamily: '"Noto Naskh Arabic", serif', textColor: '#fff3fb', shadowIntensity: 0.54, overlayOpacity: 0.5 },
-    displaySettings: { visualDesign: 'moonlit', showSurahName: true, showReciterName: true, ayahNumberStyle: 'star', ayahNumberColor: 'silver', highlightStyle: 'glow', glowStyle: 'ruby', frameStyle: 'none', screenBorderStyle: 'subtleVignette', ayahTransition: 'blur' },
+    displaySettings: { visualDesign: 'moonlit', showSurahName: true, showReciterName: true, ayahNumberStyle: 'star', ayahNumberColor: 'silver', highlightStyle: 'glow', glowStyle: 'neon', frameStyle: 'none', screenBorderStyle: 'subtleVignette', ayahTransition: 'blur' },
     recommendedBackground: 'stars-img-1', recommendedAspectRatio: '9:16', exportQuality: 'high',
   },
   {
