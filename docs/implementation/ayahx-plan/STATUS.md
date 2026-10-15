@@ -30,9 +30,9 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 | 2.3 | Phonemizer وAI alignment | لم يُقيّم |
 | 2.4 | Strict fallback | لم يُقيّم |
 | 3.1 | Browser live preview/local export | لم يُقيّم |
-| 3.2 | Skia server renderer | لم يُقيّم |
+| 3.2 | Skia server renderer | real staging `skia_canvas` MP4 متحقق: H.264/yuv420p/AAC/720x1280/13.004s؛ visual/audio inspection الأعمق باقٍ |
 | 3.3 | FFmpeg encoder/muxer | لم يُقيّم |
-| 3.4 | Server render lifecycle | لم يُقيّم |
+| 3.4 | Server render lifecycle | staging job succeeded وDB/download path متحقق؛ R2-backed artifact وworker log reconciliation باقية |
 | 4.1 | Admin Dashboard | شريحة inventory قراءة فقط مدموجة في `/admin/sources`؛ بقية لوحة الأدمن باقية |
 | 4.2 | Reciters/Riwayat/Sources | لم يُقيّم |
 | 4.3 | Ibtihalat + Sync Studio | لم يُقيّم |
@@ -45,7 +45,7 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 | 5.4 | Scene/preview | لم يُقيّم |
 | 5.5 | Review/render | لم يُقيّم |
 | 6.1 | R2 lifecycle | قاعدة staging `temp-48h/` لمدة 48 ساعة وCORS موثقان حيًا؛ production وDB/object reconciliation والاختبار الزمني الفعلي باقية |
-| 6.2 | Staging evidence | API/Skia/control v4 deployments SUCCESS وAPI readiness 200؛ real render artifact/audio/timing/R2 object reconciliation باقية |
+| 6.2 | Staging evidence | API/Skia/control v4 SUCCESS، API 200، وreal Skia MP4 verified؛ R2 object reconciliation وvisual/audio review باقية |
 | 6.3 | Production gate | مصرح بعد staging والمراجعة؛ لم يبدأ |
 
 عند التشغيل أضف لكل شريحة: IDs/صفوف الميزات، ملفات التغيير، مالك الكتابة،
