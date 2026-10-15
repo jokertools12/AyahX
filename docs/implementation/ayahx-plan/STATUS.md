@@ -66,3 +66,7 @@ Fresh v4 runtime principals were provisioned and verified against migration003: 
 ## 2026-10-16 — approved template expansion
 
 بموافقة المالك على إضافة 13 قالبًا، توسعت `VIDEO_PRESETS` من 22 إلى 35 قالبًا فعليًا. أضيفت عائلات المسجد والمصحف والشموع وneon والرسوم والصحراء والهلال وminimal والأقواس والهوية الذهبية، مع عقود RTL الحالية ونسب 9:16/16:9. `videoPresets.test.ts` يثبت العدد 35 وفرادة IDs ووجود الإعدادات الأساسية (7/7). الخطة المرجعية تذكر 36 قالبًا؛ بقي قالب واحد فقط كفجوة معلّمة لأن الموافقة كانت محددة بـ13 إضافة.
+
+## 2026-10-16 — R2 credential creation attempt
+
+بعد موافقة المالك على مفتاح staging المقيّد، فشل Computer Use قبل فتح المتصفح مرتين بعد reset بنفس الخطأ `failed to write kernel assets` (os error 3). Cloudflare API integration نجحت في القراءة السابقة لكنها رفضت permission-group/token creation بالخطأ 9109 Unauthorized. لذلك لم يُنشأ أي credential ولم تُغيّر Railway variables؛ R2 live wiring بقيت غير مفعلة عمدًا. `npm run build` بعد توسيع القوالب نجح (3042 modules).

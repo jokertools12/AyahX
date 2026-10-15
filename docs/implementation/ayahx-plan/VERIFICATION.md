@@ -335,3 +335,11 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - `npx tsc --noEmit`: exit 0.
 - Targeted ESLint for `src/data/videoPresets.ts` and `src/test/videoPresets.test.ts`: exit 0.
 - No external assets, cloud-browser engine, or provider credentials were added.
+
+## 2026-10-16 — R2 credential gate evidence
+
+- Explicit user confirmation received for a staging-only R2 key.
+- Computer Use initialization failed twice before browser access: `failed to write kernel assets` / OS error 3.
+- Cloudflare `execute` read calls work for account/R2 inspection, but token permission-group and token creation calls return `9109 Unauthorized`.
+- No API key, secret, Railway variable, or production resource was created or changed.
+- `npm run build` after template expansion exited 0.

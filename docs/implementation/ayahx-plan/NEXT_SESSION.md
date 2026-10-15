@@ -117,3 +117,7 @@ Before setting R2 credentials, staging will report local readiness. After creden
 ## 2026-10-16 checkpoint — template library
 
 The approved 13-template increment is complete at 35 total presets. One additional preset is still required to match the reference plan's 36 count and will be added only after explicit approval for that extra item.
+
+## 2026-10-16 checkpoint — external credential tool failure
+
+The next safe action is to restore Computer Use kernel access or have the owner create the scoped staging R2 token in Cloudflare's R2 API Tokens screen, then provide only the generated credentials through the approved secure Railway variable path. Do not paste secrets into chat or files. Once available, verify `/api/health/ready`, deploy staging, run a real Skia job, and reconcile the R2 object, DB path, download stream, expiry prefix, and worker logs.
