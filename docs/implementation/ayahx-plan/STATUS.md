@@ -5,7 +5,7 @@ GitHub وRailway وR2 وstaging ثم production بعد البوابات. اله�
 والحزمة المرجعية محفوظة دون تعديل. COVERAGE.md هي المطابقة التفصيلية.
 
 Baseline42b04fd98912081d6c967ac7ec7cb931ce4519ab؛ repo jokertools12/AyahX.
-PR26–33 مدموجة؛ main c438bd98ce1ddded0ced5b31320b04ee2d4d9cfa.
+PR26–35 مدموجة؛ main d040e7e11acc2b8c4590b231f4350375acc9055f.
 staging API يعمل على8618dcba4cfaeaa827aad74bf56154245cde09c7، deployment
 cc650771-ed5c-482e-a7a2-d4f11eed30bc SUCCESS، runtime SHA وملف الخدمة متطابقان،
 public UI desktop/mobile10/10.001/002 مطبقان:31tables/2audit triggers، pending0.
@@ -19,6 +19,9 @@ runtime جديدة فقط وخطة 31 منحة. مخطط clone معزول على
 منع DDL وتغيير التدقيق والهوية، واختبارات التراجع والتزامن/الحذف. لا توجد حسابات
 runtime حقيقية أو تغييرات أسرار/preDeploy. staging API ما زال 8618dcba (owner/audit
 1/1) والعمال على baseline. لا إجراء production أو قبول رندر جديد.
+PR35 head acfca12931c1ff531fe15e80e8e8001041a75b9d اجتاز CI العقود والواجهة.
+تغيير staging مجهز لـAPI/Skia/control إلى هذا الرأس مع preDeploy فارغ للـAPI؛
+رفضت بوابة accept-deploy الموافقة ولم يُطبق، والموافقة المحددة معلقة.
 المرجع: `AyahX_Enterprise_Plan_Package_2026-10-14/00_PLAN/IMPLEMENTATION_TASKS.md`.
 قبل التنفيذ، اربط كل صف في `FEATURE_COVERAGE.ar.md` بالمصدر والاختبار والدليل؛
 هذا الجدول فهرس مهام، وليس بديلًا لمصفوفة الميزات أو معايير قبولها.
