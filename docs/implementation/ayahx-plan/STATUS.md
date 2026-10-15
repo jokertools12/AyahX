@@ -78,3 +78,7 @@ Fresh v4 runtime principals were provisioned and verified against migration003: 
 ## 2026-10-16 — admin source blocker visibility
 
 حدّثت `/admin/sources` لعرض أسباب منع التفعيل المترجمة من `activationGaps` مع حالة وصول قابلة للقراءة عبر لوحة المفاتيح؛ لا تعرض الصفحة credentials أو references الحساسة. الاختبار يثبت الحالة المعطلة ورسالة الترخيص.
+
+## 2026-10-16 — lock-pinned source cache
+
+أضيف كاش process-local محدود العمر لنتائج المصدر بعد التحقق، ومفتاحه يضم `sourceId@revision` و`lockHash`؛ لذلك لا يمكنه عبور الرواية أو المصحف أو النطاق أو بصمة الصوت. resolver يعيد التحقق من المرشح عند cache hit ويسجل محاولات ledger كالمعتاد؛ الكاش تسريع مؤقت ولا يحل محل persistence أو approval.

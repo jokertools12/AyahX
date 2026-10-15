@@ -129,3 +129,7 @@ The source inventory API now makes activation blockers machine-readable for the 
 ## 2026-10-16 checkpoint — source inventory UI
 
 Admin source inventory now explains why a candidate remains disabled. This is review visibility only; evidence review and adapter activation remain separate gates.
+
+## 2026-10-16 checkpoint — cache layer
+
+The cache layer is available to the resolver but remains best-effort and process-local. Durable attempts, source evidence, approval, and final export revalidation remain authoritative.

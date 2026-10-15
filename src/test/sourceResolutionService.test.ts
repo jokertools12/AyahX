@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { resolveSource, type SourceAdapter, type SourceAdapterMap } from '../../server/services/sourceResolutionService';
 import type { SourceResolutionAttemptRepository } from '../../server/db/sourceResolutionAttemptRepository';
 import type { ResolutionRequest, StartedSourceAttempt, TerminalSourceAttempt } from '../../shared/sourceResolution';
+import { createSourceResolutionCache } from '../../server/services/sourceResolutionCache';
 
 const hash = 'a'.repeat(64);
 const lock = { reciterId: 'r', recordingId: 'rec', riwayahCode: 'hafs', mushafProfileId: 'm', numberingSystem: 'n', surahNumber: 1, fromAyah: 1, toAyah: 1, textRevision: 't', textFingerprint: hash, audioAssetId: 'a', audioFingerprint: hash, requiredTiming: 'ayah' as const };
@@ -64,5 +65,16 @@ describe('source resolution service', () => {
     expect(result).toMatchObject({ status: 'rejected', failure: 'unknown_error' });
     expect(calls).toEqual(['one']);
     expect(JSON.stringify(events)).not.toContain('provider detail');
+  });
+
+  it('uses a lock-pinned cached candidate without invoking the adapter', async () => {
+    const cache = createSourceResolutionCache<string>(() => 1000);
+    const first = request();
+    const source = first.policy.sources[0];
+    cache.set(first, source, 'cached', 5000);
+    const adapter = vi.fn(async () => ({ candidate: 'network' }));
+    const result = await resolveSource({ request: first, adapters: { 'one@v1': adapter }, repository: repo([]), cache, validateCandidate: () => null });
+    expect(result).toMatchObject({ status: 'selected', candidate: 'cached', sourceId: 'one', sourceRevision: 'v1' });
+    expect(adapter).not.toHaveBeenCalled();
   });
 });

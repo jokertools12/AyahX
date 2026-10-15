@@ -358,3 +358,10 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - `npx tsc --noEmit`: exit 0.
 - Targeted ESLint for page/test: exit 0.
 - RTL status and no-store inventory behavior preserved; no source activation added.
+
+## 2026-10-16 — source cache evidence
+
+- RED/GREEN: `sourceResolutionCache.test.ts` 3/3 and `sourceResolutionService.test.ts` 7/7 passed.
+- `npx tsc --noEmit`: exit 0.
+- Targeted ESLint and `git diff --check`: exit 0.
+- Cache hits remain lock/revision pinned and are revalidated before selection; no provider activation or silent fallback was added.
