@@ -12,16 +12,7 @@ public UI desktop/mobile10/10.001/002 مطبقان:31tables/2audit triggers، pe
 تهيئة owner للحساب المحدد staging متحققة:منحة واحدة/حدث تدقيق واحد،8capabilities،
 live401/403/400/404 للحدود المقصودة. هوية الحساب والتقارير الخاصة لا تدخل Git.
 
-PR34 لحدود DDL التشغيلية مدموجة في main@db6d67de2507a9a0e6afa765a88a9ca68b08ff1f
-لكنها غير منشورة. الإعداد المحلي في codex/ayahx-runtime-db-grants يضيف CLI لحسابات
-runtime جديدة فقط وخطة 31 منحة. مخطط clone معزول على MySQL staging وبيانات اصطناعية:
-51/51 تحققًا PASS، بما فيها
-منع DDL وتغيير التدقيق والهوية، واختبارات التراجع والتزامن/الحذف. لا توجد حسابات
-runtime حقيقية أو تغييرات أسرار/preDeploy. staging API ما زال 8618dcba (owner/audit
-1/1) والعمال على baseline. لا إجراء production أو قبول رندر جديد.
-PR35 head acfca12931c1ff531fe15e80e8e8001041a75b9d اجتاز CI العقود والواجهة.
-تغيير staging مجهز لـAPI/Skia/control إلى هذا الرأس مع preDeploy فارغ للـAPI؛
-رفضت بوابة accept-deploy الموافقة ولم يُطبق، والموافقة المحددة معلقة.
+PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11acc2b8c4590b231f4350375acc9055f منشور في staging. API preDeploy فارغ، والحسابات runtime الثلاثة الجديدة تحققت من الهدف المادي والمنح الفعالة؛ API وSkia مستقرتان، API health وE2E العام 10/10 ناجحان، وowner/audit بقيَا 1/1. control غير مستقر بعد SIGTERM/restart رغم SUCCESS؛ اتصال advisory عالق شُخّص وحُرر، والاستقرار التشغيلي باقٍ قبل قبول الرندر. production لم يتغير.
 المرجع: `AyahX_Enterprise_Plan_Package_2026-10-14/00_PLAN/IMPLEMENTATION_TASKS.md`.
 قبل التنفيذ، اربط كل صف في `FEATURE_COVERAGE.ar.md` بالمصدر والاختبار والدليل؛
 هذا الجدول فهرس مهام، وليس بديلًا لمصفوفة الميزات أو معايير قبولها.
