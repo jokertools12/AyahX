@@ -90,6 +90,47 @@ export function canFallbackSource(input: unknown): boolean {
   return ['timeout', 'rate_limited', 'not_indexed', 'capacity'].includes(classifySourceFailure(input));
 }
 
+const candidateReviewStatus = z.enum(['draft', 'reviewed', 'approved', 'rejected', 'expired', 'provisional']);
+const candidateAyahRange = z.string().regex(/^\d{1,3}:\d{1,4}-\d{1,4}$/);
+const candidateTextSchema = z.object({
+  riwayahCode: opaqueReference, mushafProfileId: opaqueReference, numberingSystem: opaqueReference,
+  ayahRange: candidateAyahRange, textFingerprint: sha256Schema, reviewStatus: candidateReviewStatus,
+}).strict();
+const candidateAlignmentSchema = candidateTextSchema.extend({
+  reciterId: opaqueReference, recordingId: opaqueReference, audioFingerprint: sha256Schema,
+}).strict();
+const resolutionCandidateSchema = z.object({ text: candidateTextSchema, alignment: candidateAlignmentSchema.optional() }).strict();
+
+/** Validates provider output against the immutable lock before a result is selected. */
+export function validateResolutionCandidate(lockInput: unknown, candidateInput: unknown, purpose: ResolutionRequest['purpose']): SourceFailure | null {
+  const lockResult = resolutionLockSchema.safeParse(lockInput);
+  const candidateResult = resolutionCandidateSchema.safeParse(candidateInput);
+  if (!lockResult.success || !candidateResult.success) return 'invalid_payload';
+  const lock = lockResult.data;
+  const candidate = candidateResult.data;
+  const expectedRange = `${lock.surahNumber}:${lock.fromAyah}-${lock.toAyah}`;
+  const text = candidate.text;
+  if (text.riwayahCode !== lock.riwayahCode) return 'riwayah_mismatch';
+  if (text.mushafProfileId !== lock.mushafProfileId) return 'mushaf_mismatch';
+  if (text.numberingSystem !== lock.numberingSystem) return 'numbering_mismatch';
+  if (text.ayahRange !== expectedRange) return 'range_mismatch';
+  if (text.textFingerprint !== lock.textFingerprint) return 'fingerprint_mismatch';
+  if (text.reviewStatus !== 'approved') return 'approval_required';
+  const alignment = candidate.alignment;
+  if (!alignment) return 'not_indexed';
+  if (alignment.riwayahCode !== lock.riwayahCode) return 'riwayah_mismatch';
+  if (alignment.mushafProfileId !== lock.mushafProfileId) return 'mushaf_mismatch';
+  if (alignment.numberingSystem !== lock.numberingSystem) return 'numbering_mismatch';
+  if (alignment.ayahRange !== expectedRange) return 'range_mismatch';
+  if (alignment.textFingerprint !== lock.textFingerprint) return 'fingerprint_mismatch';
+  if (alignment.audioFingerprint !== lock.audioFingerprint) return 'audio_mismatch';
+  if (alignment.reciterId !== lock.reciterId) return 'reciter_mismatch';
+  if (alignment.recordingId !== lock.recordingId) return 'recording_mismatch';
+  if (alignment.reviewStatus === 'rejected' || alignment.reviewStatus === 'expired') return 'invalid_payload';
+  if (purpose === 'final_export' && alignment.reviewStatus !== 'approved') return 'approval_required';
+  return null;
+}
+
 const attemptIdentity = z.object({
   serverRequestId: opaqueReference, payloadHash: sha256Schema, lockHash: sha256Schema, policyHash: sha256Schema,
   policyRevision: opaqueReference,

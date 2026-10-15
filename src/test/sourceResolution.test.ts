@@ -4,6 +4,7 @@ import {
   orderedSourcePolicyHashInput, orderedSourcePolicySchema, resolutionLockHashInput, resolutionLockSchema,
   resolutionRequestHashInput, resolutionRequestSchema, sourceFailureSchema, startedSourceAttemptSchema,
   terminalSourceAttemptSchema, validateSourceAttemptPair,
+  validateResolutionCandidate,
   type ResolutionLock, type ResolutionRequest, type StartedSourceAttempt, type TerminalSourceAttempt,
 } from '../../shared/sourceResolution';
 
@@ -140,6 +141,18 @@ describe('pure source-resolution contract validation', () => {
 
   it.each(sourceFailureSchema.options)('permits fallback only for explicit transient code %s', failure => {
     expect(canFallbackSource(failure)).toBe(['timeout', 'rate_limited', 'not_indexed', 'capacity'].includes(failure));
+  });
+
+  it('rejects provider candidates that change Quran identity or lack approval', () => {
+    const lock = makeLock();
+    const candidate = {
+      text: { riwayahCode: lock.riwayahCode, mushafProfileId: lock.mushafProfileId, numberingSystem: lock.numberingSystem, ayahRange: '1:1-7', textFingerprint: hash, reviewStatus: 'approved' as const },
+      alignment: { riwayahCode: lock.riwayahCode, mushafProfileId: lock.mushafProfileId, numberingSystem: lock.numberingSystem, ayahRange: '1:1-7', textFingerprint: hash, reviewStatus: 'approved' as const, reciterId: lock.reciterId, recordingId: lock.recordingId, audioFingerprint: hash },
+    };
+    expect(validateResolutionCandidate(lock, candidate, 'final_export')).toBeNull();
+    expect(validateResolutionCandidate(lock, { ...candidate, text: { ...candidate.text, riwayahCode: 'warsh-fixture' } }, 'final_export')).toBe('riwayah_mismatch');
+    expect(validateResolutionCandidate(lock, { ...candidate, alignment: undefined }, 'final_export')).toBe('not_indexed');
+    expect(validateResolutionCandidate(lock, { ...candidate, alignment: { ...candidate.alignment, reviewStatus: 'provisional' as const } }, 'final_export')).toBe('approval_required');
   });
   it.each([null, undefined, 'TIMEOUT', 'network_error', new Error('private failure'), { failureClass: 'timeout' }])('makes unknown failure terminal without inspecting raw data', failure => {
     expect(classifySourceFailure(failure)).toBe('unknown_error');
