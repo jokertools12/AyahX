@@ -230,3 +230,19 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - CLI requires independent trusted server environment, exact physical target/account, server-only `ENTERPRISE_AUTHORITY_DATABASE_URL`, explicit private input and new wx report. No HTTP bootstrap, automatic bootstrap, account deletion request execution, source activation, production deployment or credential change.
 - Weekly account usage35% used at this checkpoint; no credits/reset consumed. Remaining full plan is active and incomplete.
 - Type-only Zod repair applied: eventFor body follows z.infer<typeof commonInput>; app TypeScript and strict isolated compilation now pass, service11/11 pass after repair. Runtime validation and SQL unchanged.
+
+## 2026-10-15 — PR33 staging deployment and owner acceptance
+
+- PR33 head8618dcba4cfaeaa827aad74bf56154245cde09c7: CI contracts38722283063/publicUI38722282885 SUCCESS, confirmed exact-head via Code Review; merged mainc438bd98ce1ddded0ced5b31320b04ee2d4d9cfa.
+- Initially accept-deploy returned cancellation. Human explicitly approved this exact head. Retried call then reported nothing_staged; independent state showed actual new deployment cc650771-ed5c-482e-a7a2-d4f11eed30bc BUILDING then SUCCESS. Source branch/commit and runtime SHA now all agree on8618dcb. No bypass through CLI/another namespace.
+- Runtime catalogGrantService normalizedLF SHA245fee2eed75bc12c336c7c86e106f32ec5fb419847e660da57fb5d50f415012 matched reviewed source. Before bootstrap grants0/audit0. Fresh live desktop/mobile E2E10/10 PASS; inspected101runtime entries, no operational error (ErrorState asset200 was a text-match false positive).
+- Privileged CLI ran against exact staging target/account with private authorization reference and wx report. Owner bootstrap committed one grant/one event. Live API confirmed exact actor,8owner capabilities,oneownergrant,private/no-store. Visitor401, nonexistent actor403, HTTP bootstrap404,invalidgrant400; after these probes counts1/1. No real account deleted or password changed.
+- Private owner-bootstrap-staging-report.json and owner-bootstrap-staging-verification.json preserved; verifiedAt1792061888006. Account IDs/emails, JWT and DB URL never added to Git. Production untouched; production owner identity stays pending its separate acceptance gates.
+
+## 2026-10-15 — Runtime DB boundary prepared locally
+
+- Removed automatic API/Skia/control DDL and settings-read CREATE. Explicit db:setup now calls former legacy preparation functions; 001/002 stay separately receipt-gated. Runtime presence checker is metadata-only31tables/246columns,10s successcache,coalesced checks,failed-check retries; ready503 when incomplete.
+- Astra initial review found2medium issues: singleton constructor timers before readiness, and API retention not restarting after transient failure. Fixed with explicit idempotent timer start/stop/shutdown and shared retryable startup/readiness initialization. Follow-up confirms both resolved and no remaining high/medium in scope.
+-28boundary/crypto tests PASS (25new),183combined tests PASS across14files; appTS and isolated helper strictTS,lint,build PASS. Existing large renderer strict compilation still has preexisting errors, not a new clean full-server-strict claim. No new app credentials or preDeploy changes yet.
+- Read-only live column-presence probe passed31tables/246columns; runtime-schema-readonly-result.json private, verifiedAt1792062016205. This used current credential and is not evidence of limited privileges or new runtime deployment.
+- Next: commit/PR/CI for runtime boundary, then separately provision/test limited runtime credentials and remove preDeploy DDL before deploying across API/Skia/control. Keep owner and audit history intact.

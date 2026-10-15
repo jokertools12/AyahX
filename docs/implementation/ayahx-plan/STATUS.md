@@ -1,24 +1,23 @@
 # حالة تنفيذ خطة AyahX
 
-آخر تحديث: 2026-10-15. التنفيذ الكامل مفعل بطلب المالك المرفق في هذه الجلسة.
-يشمل التفويض GitHub وRailway staging ثم production وR2 والمهاجرات الآمنة بعد
-التحقق والمراجعة. انتهى تأجيل التنفيذ السابق؛ لا يعني ذلك اكتمال أي ميزة.
-المطابقة التفصيلية: COVERAGE.md. المنسق Sol؛ Luna يملك مصفوفة المطابقة فقط.
+آخر تحديث: 2026-10-15. هدف Enterprise الكامل نشط وغير مكتمل؛ التفويض يشمل
+GitHub وRailway وR2 وstaging ثم production بعد البوابات. الهدف Desktop checkout،
+والحزمة المرجعية محفوظة دون تعديل. COVERAGE.md هي المطابقة التفصيلية.
 
-Baseline: `42b04fd98912081d6c967ac7ec7cb931ce4519ab`، الفرع
-`codex/ayahx-enterprise-plan`، remote `jokertools12/AyahX`.
-حُفظت تغييرات الإعداد السابقة في `tooling/reports/enterprise-baseline/` محليًا.
-الحزمة المرجعية محفوظة دون تعديل ولا تضاف وسائطها إلى commits التنفيذ.
+Baseline42b04fd98912081d6c967ac7ec7cb931ce4519ab؛ repo jokertools12/AyahX.
+PR26–33 مدموجة؛ main c438bd98ce1ddded0ced5b31320b04ee2d4d9cfa.
+staging API يعمل على8618dcba4cfaeaa827aad74bf56154245cde09c7، deployment
+cc650771-ed5c-482e-a7a2-d4f11eed30bc SUCCESS، runtime SHA وملف الخدمة متطابقان،
+public UI desktop/mobile10/10.001/002 مطبقان:31tables/2audit triggers، pending0.
+تهيئة owner للحساب المحدد staging متحققة:منحة واحدة/حدث تدقيق واحد،8capabilities،
+live401/403/400/404 للحدود المقصودة. هوية الحساب والتقارير الخاصة لا تدخل Git.
 
-الأساس: PR #26 دُمج في main عند `5b7b04b`؛ staging على `76fa649`، deployment
-`40abc3d7-1381-4fb3-b04c-bf688f7cd558` SUCCESS. GET مصادر حي للأدمن +401 للزائر،
-و10/10 public UI E2E حية. لا يعني ذلك اكتمال 0.1–0.3 أو أي مسار رندر جديد.
-production باقٍ عند baseline؛ تنبيهات الاعتماديات تمنع إعلان الجاهزية.
-1.2 شريحة admin-only approval منشورة staging bb773db وlive user403؛ PR27 دُمج
-main@92b8f62. باقي RBAC/audit غير مكتمل. PR28 HTTP patches اجتاز CI ونشر staging
-SUCCESS عند b628a8b، وتحقق runtime versions وGET gzip200؛ دُمج main@0219c0a.
-1.1 الجداول الخمسة الخاملة مطبقة staging؛ PR29/30/31 مدموجة، والكود الحالي staging bb609e4 متحقق runtime و10/10 UI. PR32 مدموج main@8906572؛ authority002 مطبق staging:31 جدولًا و2triggers، pending0 و28nonvolatile tables دون تغير. جداول grants/audit فارغة؛ writer/bootstrap قيد التنفيذ.
-
+الفرع المحلي codex/ayahx-runtime-db-boundary يزيل DDL التلقائي ويضيف readiness
+وقيود بدء الصيانة.28اختبارًا للشريحة و183اختبارًا مركبًا PASS؛ appTS/lint/build
+PASS. مراجعة Astra عالجت ملاحظتي مؤقتات مبكرة وإعادة التهيئة، ثم لا high/medium.
+فحص metadata حي قرأ31جدولًا/246عمودًا؛ لا يثبت عزل الصلاحيات. مستخدم DB وpreDeploy
+الحاليان لم يتغيرا؛ التبديل والتحقق من الخدمات الثلاث باقيان قبل production.
+production باقٍ عند baseline؛ Enterprise SQL/owner لم يطبقا هناك، ولا قبول رندر جديد.
 المرجع: `AyahX_Enterprise_Plan_Package_2026-10-14/00_PLAN/IMPLEMENTATION_TASKS.md`.
 قبل التنفيذ، اربط كل صف في `FEATURE_COVERAGE.ar.md` بالمصدر والاختبار والدليل؛
 هذا الجدول فهرس مهام، وليس بديلًا لمصفوفة الميزات أو معايير قبولها.
@@ -28,8 +27,8 @@ SUCCESS عند b628a8b، وتحقق runtime versions وGET gzip200؛ دُمج ma
 | 0.1 | Provider/source registry والترخيص | سجل المرشحين + GET للأدمن متحقق محليًا؛ مراجعات المصادر الفعلية باقية |
 | 0.2 | Riwayah/numbering/font map | runtime binding schema متحقق محليًا؛ بيانات canonical/font QA باقية |
 | 0.3 | Recording coverage contract | guard + trusted injected repository و44 اختبارًا جديدًا محليًا؛ authority store وruntime/export wiring باقيان |
-| 1.1 | MySQL additive migration | خمسة جداول خاملة + runner متحقق محليًا وتجربة restore؛ PR29–32 مدموجة و001/002 staging apply متحقق؛ runtime الحالي bb609e4، ونشر writer لم يبدأ |
-| 1.2 | RBAC وAudit | إصلاح admin-only لاعتماد/رفض التوقيت متحقق محليًا؛ RBAC التفصيلي وaudit العام باقيان |
+| 1.1 | MySQL additive migration | خمسة جداول خاملة + runner متحقق محليًا وتجربة restore؛ PR29–33 مدموجة و001/002 staging apply متحقق؛ runtime8618dcb وowner bootstrap متحققان؛ assets/templates وغيرها باقية |
+| 1.2 | RBAC وAudit | grant/audit persistence وAPI وowner staging متحققة حيًا؛ عزل DB وcontent/source/retention writers وUI باقية |
 | 1.3 | Source resolution attempts | لم يُقيّم |
 | 2.1 | Adapter/cache أولي | لم يُقيّم |
 | 2.2 | Adapters خارجية تدريجية | لم يُقيّم |

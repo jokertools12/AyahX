@@ -57,5 +57,10 @@ jobs:
           npx eslint server/db/databaseIdentity.ts server/services/catalogGrantRepository.ts server/services/catalogGrantService.ts server/services/catalogGrantRuntime.ts server/routes/catalog.ts scripts/enterprise-owner-bootstrap.ts src/test/catalogGrantRepository.test.ts src/test/catalogGrantService.test.ts src/test/catalogGrantApi.test.ts src/test/catalogAccountDeletion.test.ts src/test/enterpriseOwnerBootstrapCli.test.ts
           npx tsc --noEmit --strict --skipLibCheck --module ESNext --moduleResolution bundler --target ES2022 --esModuleInterop server/db/databaseIdentity.ts server/services/catalogGrantRepository.ts server/services/catalogGrantService.ts server/services/catalogGrantRuntime.ts server/routes/catalog.ts scripts/enterprise-owner-bootstrap.ts
           npm test -- --run src/test/catalogGrantRepository.test.ts src/test/catalogGrantService.test.ts src/test/catalogGrantApi.test.ts src/test/catalogAccountDeletion.test.ts src/test/enterpriseOwnerBootstrapCli.test.ts
+      - name: Check runtime database boundary
+        run: |
+          npx eslint server/db/runtimeSchemaContract.ts server/db/runtimeSchemaReadiness.ts server/services/runtimeDatabaseReadiness.ts server/services/runtimeInitialization.ts server/db/migrations/addSettingsTable.ts src/test/runtimeSchemaReadiness.test.ts src/test/runtimeInitialization.test.ts src/test/settingsRuntimeBoundary.test.ts src/test/renderMaintenanceLifecycle.test.ts
+          npx tsc --noEmit --strict --skipLibCheck --module ESNext --moduleResolution bundler --target ES2022 --esModuleInterop server/db/runtimeSchemaReadiness.ts server/services/runtimeDatabaseReadiness.ts server/services/runtimeInitialization.ts server/db/migrations/addSettingsTable.ts
+          npm test -- --run src/test/runtimeSchemaReadiness.test.ts src/test/runtimeInitialization.test.ts src/test/settingsRuntimeBoundary.test.ts src/test/settingsCrypto.test.ts src/test/renderMaintenanceLifecycle.test.ts
       - name: Build browser and server
         run: npm run build

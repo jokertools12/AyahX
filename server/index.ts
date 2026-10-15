@@ -26,10 +26,8 @@ import { catalogGrantService } from './services/catalogGrantRuntime';
 
 
 
-import { ensureRenderJobsTable } from './db/migrations/addRenderJobsTable';
-import { ensurePlanEntitlementSchema } from './db/migrations/ensurePlanEntitlementSchema';
-import { ensureSettingsTable } from './services/settingsService';
-import { ensureAlignmentTables } from './db/migrations/addAlignmentTables';
+import { assertRuntimeSchemaReady } from './services/runtimeDatabaseReadiness';
+import { createRuntimeInitialization } from './services/runtimeInitialization';
 import { startAlignmentRetentionCleanup } from './services/alignmentRetentionService';
 import { renderJobQueue } from './services/renderJobQueue';
 import { prometheusMetrics } from './services/renderObservability';
@@ -37,6 +35,15 @@ import { prometheusMetrics } from './services/renderObservability';
 const app = express();
 let isShuttingDown = false;
 let stopAlignmentRetentionCleanup: (() => void) | null = null;
+const ensureRuntimeInitialized = createRuntimeInitialization(assertRuntimeSchemaReady, async () => {
+  if (isShuttingDown) throw new Error('RUNTIME_SHUTTING_DOWN');
+  await renderJobQueue.recoverStaleJobs(true);
+  if (isShuttingDown) throw new Error('RUNTIME_SHUTTING_DOWN');
+  renderJobQueue.startBackgroundMaintenance();
+  if (process.env.RENDER_BACKGROUND_MAINTENANCE !== 'false' && !stopAlignmentRetentionCleanup) {
+    stopAlignmentRetentionCleanup = startAlignmentRetentionCleanup();
+  }
+});
 
 // Railway terminates TLS before the app. Trust exactly that proxy hop so
 // req.ip is the real client address without trusting client-supplied headers
@@ -127,6 +134,10 @@ app.get('/api/health/live', (_req, res) => {
 app.get('/api/health/ready', async (_req, res) => {
   const dbPing = await pingDatabase();
   if (dbPing.ok) {
+    try { await ensureRuntimeInitialized(); }
+    catch {
+      return res.status(503).json({ status: 'not_ready', database: 'connected', schema: 'unavailable', message: 'Database schema readiness unavailable' });
+    }
     return res.json({ status: 'ready', database: 'connected', latencyMs: dbPing.latencyMs });
   }
   return res.status(503).json({
@@ -266,18 +277,9 @@ export const server = app.listen(config.port, () => {
     environment: config.nodeEnv,
   });
 
-  // Ensure render_jobs and system_settings tables are initialized
-  Promise.all([
-    ensureRenderJobsTable().then(() => renderJobQueue.recoverStaleJobs(true)),
-    ensurePlanEntitlementSchema(),
-    ensureSettingsTable(),
-    ensureAlignmentTables().then(() => {
-      if (process.env.RENDER_BACKGROUND_MAINTENANCE !== 'false' && !isShuttingDown && !stopAlignmentRetentionCleanup) {
-        stopAlignmentRetentionCleanup = startAlignmentRetentionCleanup();
-      }
-    }),
-  ]).catch((err) => {
-    logger.warn('Startup database initialization deferred (database may still be starting):', err.message);
+  // Schema changes run explicitly with migration credentials before deployment.
+  ensureRuntimeInitialized().catch(() => {
+    logger.warn('Runtime database readiness unavailable; verify explicit migrations before serving this revision.');
   });
 });
 

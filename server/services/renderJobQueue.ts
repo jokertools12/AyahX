@@ -122,6 +122,8 @@ export class RenderJobQueue {
     capacity: Record<RenderQueueEngine, { replicas: number; slotsPerReplica: number }>;
   } | null = null;
   private queueSnapshotRefresh: Promise<void> | null = null;
+  private cleanupInterval: ReturnType<typeof setInterval> | null = null;
+  private recoveryInterval: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
     this.maxConcurrency = resolveConcurrencySetting(undefined, config.queue.workerConcurrency);
@@ -129,30 +131,42 @@ export class RenderJobQueue {
     if (!fs.existsSync(this.storageDir)) {
       fs.mkdirSync(this.storageDir, { recursive: true });
     }
+  }
 
+  /** Start only after schema readiness has been verified by the owning process. */
+  public startBackgroundMaintenance(): void {
     // Dedicated control/worker processes own maintenance in production.
     // A request-only API must go quiet between visits so Railway can sleep it.
     if (process.env.RENDER_BACKGROUND_MAINTENANCE === 'false') return;
+    if (this.cleanupInterval !== null || this.recoveryInterval !== null) return;
 
     // Start automated disk garbage collector (runs every 30 minutes, unref'd for test safety)
-    const cleanupInterval = setInterval(() => {
+    this.cleanupInterval = setInterval(() => {
       this.cleanupExpiredRenders().catch(() => {});
     }, 30 * 60 * 1000);
-    cleanupInterval.unref?.();
+    this.cleanupInterval.unref?.();
 
     // A worker can disappear without taking the Node process down (OOM kill,
     // Chromium crash, host interruption). Reclaim only jobs whose heartbeat
     // has stopped, so long-running healthy renders are never interrupted.
-    const recoveryInterval = setInterval(() => {
+    this.recoveryInterval = setInterval(() => {
       this.recoverStaleJobs(true).catch(() => {});
     }, 60 * 1000);
-    recoveryInterval.unref?.();
+    this.recoveryInterval.unref?.();
+  }
+
+  public stopBackgroundMaintenance(): void {
+    if (this.cleanupInterval !== null) clearInterval(this.cleanupInterval);
+    if (this.recoveryInterval !== null) clearInterval(this.recoveryInterval);
+    this.cleanupInterval = null;
+    this.recoveryInterval = null;
   }
 
   /**
    * Graceful shutdown hook: Aborts all active render workers, freeing Puppeteer and FFmpeg processes.
    */
   public shutdown(): void {
+    this.stopBackgroundMaintenance();
     logger.info(`Shutting down RenderJobQueue. Aborting ${this.activeJobAbortControllers.size} active worker(s)...`);
     for (const [jobId, controller] of this.activeJobAbortControllers.entries()) {
       try {

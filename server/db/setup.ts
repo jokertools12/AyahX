@@ -67,6 +67,16 @@ async function setupDatabase() {
     }
 
     const { applyPerformanceIndexes } = await import('./optimizeIndexes');
+    // Explicit privileged preparation replaces the former startup/lazy DDL.
+    // Enterprise 001/002 remain separately receipt-gated commands.
+    const { ensureRenderJobsTable } = await import('./migrations/addRenderJobsTable');
+    const { ensurePlanEntitlementSchema } = await import('./migrations/ensurePlanEntitlementSchema');
+    const { ensureAlignmentTables } = await import('./migrations/addAlignmentTables');
+    const { ensureSettingsTable } = await import('./migrations/addSettingsTable');
+    await ensureRenderJobsTable();
+    await ensurePlanEntitlementSchema();
+    await ensureSettingsTable();
+    await ensureAlignmentTables();
     const indexReport = await applyPerformanceIndexes();
     console.log(`Performance indexes verified (${indexReport.existing.length} verified, ${indexReport.created.length} created).`);
   } catch (err) {
