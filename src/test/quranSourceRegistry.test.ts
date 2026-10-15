@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getQuranSourceCandidate, listQuranSourceCandidates } from '../../server/services/quranSourceRegistry';
+import { getQuranSourceCandidate, isQuranSourceActivationReady, listQuranSourceCandidates } from '../../server/services/quranSourceRegistry';
 
 const expectedIds = [
   'approved-local-cache', 'qul', 'qud-universal-ayahs', 'quran-com-v4', 'cpfair-quran-align',
@@ -40,5 +40,22 @@ describe('Quran source candidate registry', () => {
     expect(getQuranSourceCandidate('qud-universal-audio')?.revision).toBe('v3.2.0');
     expect(getQuranSourceCandidate('cpfair-quran-align')?.revision).toBe('quran-align@release-2016-11-24');
     expect(getQuranSourceCandidate('qud-universal-audio')?.id).not.toBe('qud-universal-ayahs');
+  });
+
+  it('keeps activation denied until every evidence field is reviewed', () => {
+    expect(listQuranSourceCandidates().every((source) => !isQuranSourceActivationReady(source))).toBe(true);
+    const reviewed = {
+      ...listQuranSourceCandidates()[0],
+      productionEnabled: true as const,
+      revision: 'local-v1',
+      endpoint: { status: 'verified' as const, reference: 'https://internal.example/endpoint' },
+      license: { status: 'verified' as const, reference: 'https://internal.example/license' },
+      storage: { status: 'verified' as const, reference: 'https://internal.example/storage' },
+      cors: { status: 'not_applicable' as const },
+      rateLimits: { status: 'not_applicable' as const },
+      identity: { status: 'verified' as const, reference: 'https://internal.example/identity' },
+    };
+    expect(isQuranSourceActivationReady(reviewed)).toBe(true);
+    expect(isQuranSourceActivationReady({ ...reviewed, license: { status: 'verified' } })).toBe(false);
   });
 });
