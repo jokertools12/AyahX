@@ -74,3 +74,7 @@ Fresh v4 runtime principals were provisioned and verified against migration003: 
 ## 2026-10-16 — source activation gap diagnostics
 
 أضيفت `getQuranSourceActivationGaps` وربطها بـ`GET /api/quran/sources`. كل سجل يعيد `activationReady` وcodes ثابتة مثل `production_disabled` و`license_unverified` دون كشف references أو أسرار. هذا يحسن Admin inventory ويجعل سبب بقاء المصدر معطلاً قابلًا للتدقيق، من دون تفعيل adapters أو network fallback.
+
+## 2026-10-16 — admin source blocker visibility
+
+حدّثت `/admin/sources` لعرض أسباب منع التفعيل المترجمة من `activationGaps` مع حالة وصول قابلة للقراءة عبر لوحة المفاتيح؛ لا تعرض الصفحة credentials أو references الحساسة. الاختبار يثبت الحالة المعطلة ورسالة الترخيص.

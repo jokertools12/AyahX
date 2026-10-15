@@ -351,3 +351,10 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - `npx tsc --noEmit`: exit 0.
 - Targeted ESLint: 0 errors; existing explicit-any warnings only.
 - All candidates remain disabled; no source was activated or sent to production.
+
+## 2026-10-16 — admin source UI evidence
+
+- `npx vitest run src/test/adminSourcesPage.test.tsx src/test/quranSourceCatalogApi.test.ts`: 5/5 passed.
+- `npx tsc --noEmit`: exit 0.
+- Targeted ESLint for page/test: exit 0.
+- RTL status and no-store inventory behavior preserved; no source activation added.

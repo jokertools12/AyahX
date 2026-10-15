@@ -125,3 +125,7 @@ The next safe action is to restore Computer Use kernel access or have the owner 
 ## 2026-10-16 checkpoint — source review visibility
 
 The source inventory API now makes activation blockers machine-readable for the future admin UI. The next source work still requires evidence-backed endpoint/license/identity review; do not mark a candidate verified from this diagnostic alone.
+
+## 2026-10-16 checkpoint — source inventory UI
+
+Admin source inventory now explains why a candidate remains disabled. This is review visibility only; evidence review and adapter activation remain separate gates.

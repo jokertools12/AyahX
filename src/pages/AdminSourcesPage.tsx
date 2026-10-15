@@ -11,6 +11,17 @@ const evidenceLabels: Array<keyof Pick<QuranSourceCandidate, 'endpoint' | 'licen
   'endpoint', 'license', 'storage', 'cors', 'rateLimits', 'identity',
 ];
 
+const activationGapLabels: Record<string, string> = {
+  production_disabled: 'التفعيل الإنتاجي متوقف',
+  revision_missing: 'لا توجد نسخة مثبتة',
+  endpoint_unverified: 'نقطة الوصول غير موثقة',
+  license_unverified: 'الترخيص غير موثق',
+  storage_unverified: 'التخزين غير موثق',
+  cors_unverified: 'CORS غير موثق',
+  rateLimits_unverified: 'حدود المعدل غير موثقة',
+  identity_unverified: 'الهوية غير موثقة',
+};
+
 export default function AdminSourcesPage() {
   const { user, loading: authLoading } = useAuth();
   const [sources, setSources] = useState<QuranSourceCandidate[]>([]);
@@ -45,9 +56,10 @@ export default function AdminSourcesPage() {
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {sources.map((source) => {
               const verified = evidenceLabels.filter((field) => source[field].status === 'verified').length;
+              const activationGaps = source.activationGaps || [];
               return <Card key={source.id} className="border-border/60 bg-card/80">
                 <CardHeader className="pb-3"><div className="flex items-start justify-between gap-3"><CardTitle className="text-lg">{source.id}</CardTitle><Badge variant={source.productionEnabled ? 'default' : 'outline'}>{source.productionEnabled ? 'مفعّل' : 'معطّل'}</Badge></div><p className="text-xs text-muted-foreground">{source.reference || 'مرجع يحتاج توثيقًا'}{source.revision ? ` · ${source.revision}` : ''}</p></CardHeader>
-                <CardContent className="space-y-4"><div className="flex items-center justify-between text-sm"><span className="text-muted-foreground">أدلة موثقة</span><span className="font-semibold">{verified}/{evidenceLabels.length}</span></div><div className="flex flex-wrap gap-2">{evidenceLabels.map((field) => <Badge key={field} variant={source[field].status === 'verified' || source[field].status === 'not_applicable' ? 'secondary' : 'outline'} className="gap-1 text-xs">{source[field].status === 'verified' ? <CheckCircle2 className="h-3 w-3" aria-hidden="true" /> : null}{field}</Badge>)}</div><div className="flex flex-wrap gap-1">{source.kinds.map((kind) => <span key={kind} className="rounded-full bg-muted px-2 py-1 text-xs text-muted-foreground">{kind}</span>)}</div></CardContent>
+                <CardContent className="space-y-4"><div className="flex items-center justify-between text-sm"><span className="text-muted-foreground">أدلة موثقة</span><span className="font-semibold">{verified}/{evidenceLabels.length}</span></div><div className="flex flex-wrap gap-2">{evidenceLabels.map((field) => <Badge key={field} variant={source[field].status === 'verified' || source[field].status === 'not_applicable' ? 'secondary' : 'outline'} className="gap-1 text-xs">{source[field].status === 'verified' ? <CheckCircle2 className="h-3 w-3" aria-hidden="true" /> : null}{field}</Badge>)}</div><div className="flex flex-wrap gap-1">{source.kinds.map((kind) => <span key={kind} className="rounded-full bg-muted px-2 py-1 text-xs text-muted-foreground">{kind}</span>)}</div>{activationGaps.length > 0 ? <div role="status" aria-label="أسباب منع التفعيل" className="border-t border-border/50 pt-3"><p className="mb-2 text-xs font-medium text-muted-foreground">ما يلزم قبل التفعيل</p><ul className="space-y-1 text-xs text-muted-foreground">{activationGaps.map((gap) => <li key={gap}>{activationGapLabels[gap] || gap}</li>)}</ul></div> : <div role="status" className="flex items-center gap-1 text-xs text-emerald-600"><CheckCircle2 className="h-3 w-3" aria-hidden="true" />جاهز للمراجعة النهائية</div>}</CardContent>
               </Card>;
             })}
           </div>
