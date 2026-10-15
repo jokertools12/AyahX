@@ -292,6 +292,17 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
   controlled stale-lock kill. No production variables or deployments changed.
   Sanitized evidence: `tooling/reports/enterprise-baseline/runtime-v4-live-cutover-verification.json`.
 
+## 2026-10-15 — Real staging Skia artifact
+
+- A disposable staging account was used to resolve the pinned QUA word timing
+  map and submit one `skia_canvas` job. The job succeeded and the downloaded
+  MP4 passed ffprobe: H.264, `yuv420p`, 720x1280, AAC, 13.004 seconds, 436396
+  bytes. Evidence: `tooling/reports/enterprise-baseline/staging-real-skia-render-verification.json`.
+- The staging API currently exposes local object storage variables rather than
+  R2 credentials, so the artifact was not present in the R2 `temp-48h/` listing.
+  The R2 lifecycle is configured and verified, but application R2 wiring remains
+  the next infrastructure step; production was untouched.
+
 ## 2026-10-15 — Staging R2 lifecycle verification
 
 - After Cloudflare reauthentication, the verified account contained `ayahx-audio-prod` and `ayahx-audio-staging`; no bucket or object mutation was made in production.
