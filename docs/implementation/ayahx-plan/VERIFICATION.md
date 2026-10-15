@@ -272,7 +272,7 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 
 - PR39 merged after contracts/public UI CI success. A restored staging rehearsal executed all six ordered steps (two tables and four immutable triggers) with strict MySQL session settings and matching protected baseline; the staging dry-run then reported pending=0.
 - Staging apply verified the physical target, created empty source_resolution_requests/source_resolution_attempts, and preserved catalog authority counts at 1 grant / 1 audit event. Private evidence: source-ledger-staging-apply-result.json; no production change.
-- Runtime principals intentionally do not yet receive grants on the new ledger tables. Runtime persistence/writer wiring, adapter invocation and concurrency/idempotency under live workload remain gated until the privilege plan and service contract are updated and tested.
+- The reviewed v4 principals include the new ledger grants (API 33 tables / 111 privilege points; Skia and control 33 / 105), but service variables still use v1. Runtime persistence/writer wiring, adapter invocation and concurrency/idempotency under live workload remain gated until the resolver is wired and staging is redeployed.
 
 ## 2026-10-15 — Runtime v4 ledger privilege verification
 
