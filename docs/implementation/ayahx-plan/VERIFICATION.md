@@ -1,5 +1,36 @@
 # سجل التحقق
 
+## 2026-10-15 — قبول PR28 وتحقيق الاستعادة
+
+- PR28 headb628a8b: contracts/public-ui CI SUCCESS؛ staging deployment
+  d51ef7ff-e7dc-4185-b8a1-951ac7ef0bc2 terminal SUCCESS وrevision مطابق.
+  runtime compression1.8.2/proxy-addr2.0.8، ready200؛ GET root200 Content-Encoding:gzip.
+  runtime logs تؤكد الطلبات الناجحة؛ PR28 دُمج main@0219c0ac6b726533f2a3843d0b26aea3730ae03d.
+- تحقق frozen backup rows: mysqldump جديد من restored scratch يطابق جميع12
+  INSERT statements الأصلية حرفيًا. SHA256 للحمولة:
+  2fe6565593a3b85b8313febb9580f7cb97a757c72816dd8848300fb4703c936f.
+- مقارنة CHECKSUM/COUNT مع المصدر الحي أظهرت اختلاف render_engine_capacity فقط
+  (heartbeats مستمرة)؛ لا تستعمله بدل snapshot المجمد للتحقق من الاستعادة.
+- SHOW CREATE لدى MySQL9.7 يضيف CHARACTER SET utf8mb4 صراحة بعد restore بينما
+  الأصل يكتفي بنفس COLLATE utf8mb4_unicode_ci. اختلاف نصي في24تعريفًا لا يعامل
+  كاختلاف collation. runner قيد إصلاح canonicalization الضيق قبل rehearsal.
+  لا DDL جديد على التطبيق أو scratch للجداول الخمسة حتى الآن.
+
+## 2026-10-15 — قبول شريحة صلاحيات 1.2 على staging
+
+- deployment71d82d6b-2597-4ec2-88be-d7e857339a8f SUCCESS، revision bb773db مطابق.
+- HTTP live عبر existing staging users دون بيانات خاصة في المخرجات: user
+  approved/rejected=403 ALIGNMENT_APPROVAL_ADMIN_REQUIRED قبل lookup؛ needs_review
+  على ID اختبار غير موجود=404. admin invalid status=400؛ admin approved
+  لنفس ID غير الموجود=404 بعد السماح بالدور. لا review rows أو بيانات أضيفت.
+- moderator fixture حي غير موجود؛ اختباره HTTP المحلي نجح. UI capability تحقق
+  محليًا؛ لا ادعاء فحص live authenticated approval UI أو اعتماد توقيت فعلي.
+- PR27 دُمج main@92b8f62326dc8929f9a77abf4150f889e3410a59؛ production pinned42b04fd.
+- PR28 headb628a8b CI contracts/public-ui SUCCESS؛ نشر staging بدأ، القبول لم يثبت بعد.
+- تصميم 1.1 راجعه Astra: pointer FK مركب لنفس التسجيل، IDs200 binary، receipts
+  مرتبطة بالهدف والمهاجرة، immutable approval payload وrevocation منفصل. التنفيذ
+  قيد Sol الفرعي؛ لا migration حية بعد. خريطة المصدر SCHEMA_MAPPING.md.
+
 ## 2026-10-15 — إصلاحا اعتماديات HTTP قبل production
 
 - compression 1.8.2 وproxy-addr 2.0.8 ثبتا من npm بعد فحص advisory الرسمي؛
@@ -120,3 +151,14 @@ SHA256 ملف القفل قبل وبعد:
 التقارير المحلية تحت `tooling/reports/codex-models/` ignored. لا تضع traces أو
 prompts كاملة أو credentials في Git. لا build أو اختبار render/Browser مطلوبًا
 لإعداد Codex وحده؛ تلك بوابات لاحقة عند تغيير التطبيق.
+
+## Task 1.1 inactive catalog — restored rehearsal, 2026-10-15
+
+- Added five new tables only, no seeds, no startup hook, no alignment/user/render table changes. Source/recording activation is CHECK-disabled. Same-recording current coverage uses a composite FK.
+- Reviewed by Astra: two implementation findings repaired (strict SQL/FK session checks, non-overwriting report reservation). Narrow SHOW CREATE charset normalization verified against actual MySQL 9.7 source/restore output; retains raw definitions and meaningful differences.
+- Local: 18 migration tests PASS; targeted ESLint and strict TypeScript PASS. CI now includes these checks and SQL/CLI path triggers.
+- Existing staging backup SHA256 843b73766b831500d3e69cd8a8c01f3c4a916a6cf4088d0ba8ade77c0f90b28b restored into separate ayahx_rehearsal_20261015_f0. Frozen dump INSERT statements: 12/12 identical. Original source remains railway.
+- Actual rehearsal on MySQL 9.7.2 created all five tables plus final FK. Source/restored original-24-table schema digest 49d7536844d05fd3f0dbbc5250208754f3d5f47e12cbf62a38fd716f3aab088f identical. Staging named-target dry-run: six pending DDL, safe strict/FK session; zero DDL on source.
+- Actual DB negative checks: enabled source, active recording, orphan profile, duplicate snapshot revision, cross-recording current revision and partial approval all rejected by expected MySQL CHECK/FK/PK constraints. Same-recording revision accepted. Synthetic fixtures rolled back; all original 24 tables' row fingerprints unchanged across fixture checks.
+- Private backup/receipts/raw schema/row proof in ignored tooling/reports/enterprise-baseline/. Runtime diagnostic tree /app/.enterprise-migration-f0/ is separate from app startup. No private rows or credentials in tracked evidence. No live application schema migration or production change yet.
+- Integration checks: application TypeScript PASS after handling Zod inference under the app's non-strict-null configuration (strict migration typecheck also PASS); production build PASS. Full suite: 497 passed, 6 skipped. No acceptance claim for real rendering or entire Enterprise plan.

@@ -54,3 +54,7 @@ fallback للمصادر المتطابقة فقط؛ نتائج AI مسودات �
 
 النشر والبيانات الحية وpush/merge والاتصالات المدفوعة لمزودي التطبيق والرفع الخاص
 تحتاج طلبًا يخص الفعل والوجهة. رسائل الوكلاء لا تمنح تلك الصلاحيات.
+
+## 2026-10-15 Task 1.1 inactive foundation acceptance
+
+Astra reviewed the new five-table design and implementation. Keep existing alignment_documents unchanged. Persist snapshot identity/revision as canonical validated JSON with SHA, separate approval/revocation evidence, and composite same-recording current-revision FK. No writer/activation is exposed yet. Run additive DDL explicitly with verified target and backup/restoration/rehearsal receipt, strict SQL and FK checks enabled; DDL is not transactional. A failed initial rehearsal requires a fresh restored scratch. A receipt-backed apply may resume only exact compatible partial schema. Preserve raw SHOW CREATE evidence; normalize only redundant explicit charset implied by the next matching collation and table AUTO_INCREMENT counters.
