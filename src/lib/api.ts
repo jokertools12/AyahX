@@ -13,6 +13,20 @@ export interface User {
   role: 'admin' | 'moderator' | 'user';
 }
 
+export interface QuranSourceCandidate {
+  id: string;
+  kinds: string[];
+  reference?: string;
+  revision?: string;
+  productionEnabled: boolean;
+  endpoint: { status: 'needs_review' | 'verified' | 'not_applicable'; reference?: string };
+  license: { status: 'needs_review' | 'verified' | 'not_applicable'; reference?: string };
+  storage: { status: 'needs_review' | 'verified' | 'not_applicable'; reference?: string };
+  cors: { status: 'needs_review' | 'verified' | 'not_applicable'; reference?: string };
+  rateLimits: { status: 'needs_review' | 'verified' | 'not_applicable'; reference?: string };
+  identity: { status: 'needs_review' | 'verified' | 'not_applicable'; reference?: string };
+}
+
 export interface Profile {
   id: string;
   user_id: string;
@@ -577,6 +591,9 @@ export const api = {
   },
 
   quran: {
+    async getSources() {
+      return request<{ status: 'review_pending'; sources: QuranSourceCandidate[] }>('/api/quran/sources');
+    },
     async fingerprintAudio(audioUrl: string) {
       return request<{ fingerprint: { sha256: string; byteLength: number; sourceUrl: string } }>('/api/quran/audio-fingerprint', {
         method: 'POST',
