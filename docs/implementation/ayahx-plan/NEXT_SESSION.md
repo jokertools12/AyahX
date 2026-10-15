@@ -82,3 +82,14 @@ concurrentlypatch/Vitest/Vite/Tailwindupgrade عملمنفصل. لا source/mode
 ## Latest migration evidence
 
 Migration003 source-resolution ledger was rehearsed and applied on staging. It created two tables and four immutable triggers; post-apply dry-run pending0, ledger rows0/0, authority1/1. Do not wire runtime accounts yet: update the explicit privilege plan for ledger access, provision fresh v2 principals or a reviewed grant transition, then test the repository against real MySQL. Production remains untouched.
+
+## Checkpoint 2026-10-15 — source resolver service
+
+PR43 (`36c81697276e26ed85bcf94ee5c519ca18fd096e`) مدموج بعد نجاح Enterprise
+foundation و AyahX E2E على exact head `3eeb8949e28620f6c674c6b53ffbdd9193ffacf6`.
+الخدمة النقية `server/services/sourceResolutionService.ts` تسجل started/terminal
+بترتيب المصادر، تفرض قرارات license/consent، تتحقق من المرشح، وتسمح fallback
+فقط للأخطاء المؤقتة المسموح بها. اختبارات الخدمة الستة و typecheck التطبيق ناجحة.
+لم تُربط الخدمة بعد بمسارات API أو مزودات الشبكة، لذلك لا يوجد تغيير نشر أو قبول
+رندر جديد. الخطوة التالية هي ربطها بحدود المزود مع حفظ الهوية والـ hashes، ثم
+إعادة اختبار staging قبل أي ترقية.
