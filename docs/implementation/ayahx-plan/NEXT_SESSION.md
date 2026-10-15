@@ -1,81 +1,73 @@
-# نقطة الاستئناف
+# نقطة الاستئناف — 2026-10-15
 
-آخر تحديث 2026-10-15. التنفيذ الكامل وتفويض GitHub/Railway/R2/المهاجرات الآمنة
-مفعلان بطلب المالك؛ لا طلب جديد للخطوات الروتينية. المشروع Desktop والحزمة
-المرجعية داخله محفوظة دون تعديل. الهدف ما زال نشطًا والخطة غير مكتملة.
+الهدف Enterprise الكامل نشط وغير مكتمل. طلب المالك في attachment38097f07 يجيز
+GitHub/Railway/R2/migrations مع gates؛ لا تشغيل أو شراء reset/credits تلقائيًا.
+الهدف Desktop checkout والحزمة المرجعية محفوظة دون تعديل/untracked.
 
-## Git والنشر
+## Git والقبول
 
-- baseline للاستعادة: 42b04fd98912081d6c967ac7ec7cb931ce4519ab.
-- PR26 الأساس مدموج main@5b7b04b، وPR27 اعتماد التوقيت للأدمن مدموج main@92b8f62.
-- PR28 HTTP security patches مدموج main@0219c0a؛ head b628a8b265dae780759aa1f9b469f51d4ed1ad76.
-  CI contracts/public-ui SUCCESS. staging deployment d51ef7ff-e7dc-4185-b8a1-951ac7ef0bc2 SUCCESS؛
-  runtime compression1.8.2/proxy-addr2.0.8 وGET rootgzip200/ready200.
-- staging السابق bb773db (deployment71d82d6b-2597-4ec2-88be-d7e857339a8f) SUCCESS.
-  live user approved/rejected=403، draft على وثيقة غير موجودة=404؛ admin invalid=400
-  وapproved على وثيقة غير موجودة=404. لا بيانات أضيفت. moderator فحص محلي فقط لغياب fixture حي.
-- أساس staging76fa649: deployment40abc3d7-1381-4fb3-b04c-bf688f7cd558 SUCCESS؛
-  GET sources admin200/visitor401، 13disabled؛ public E2E10/10 محلي وحي.
-- production code services جميعًا pinned42b04fd؛ لم تنشر تغييرات Enterprise عليه بعد.
+- repo jokertools12/AyahX؛ baseline42b04fd98912081d6c967ac7ec7cb931ce4519ab.
+- PR26 الأساس وPR27 admin-only timing وPR28 HTTP patches مدموجة.
+- PR29 الجداول الخمسة الخاملة مدموج main90bf8f8273c335e1086b33778329d8a6823d26d7.
+  tests497pass/6skip، focused18pass، lint/types/build، CI contracts/public-uiSUCCESS.
+- PR30 trusted read-only loader مدموج main58d0f5a1e76321df38aa2e6a2eb6688496a7eb10؛
+  headcdba88f4c107e2d4ed619f8332e3ac0844822448؛ focused95pass (44new)، lint/types/build
+  وCI contracts/public-uiSUCCESS؛ Astra لا high/medium في الشريحة المعزولة.
+- الفرع الحالي codex/ayahx-catalog-access مبني على main58d0f5a.
 
-## العمل الحالي والملكية
+## قاعدة البيانات الفعلية
 
-الفرع المحلي codex/ayahx-data-foundation مبني على security-patches/main المحدث.
-Sol الفرعي catalog_migration يملك فقط أربعة ملفات migration جديدة: SQL تحت
- database/migrations/ وenterpriseCatalog.ts وCLI scripts/enterprise-catalog-migration.ts
- واختباره. لا يطبق SQL ولا ينشر. المنسق يملك السجلات والتكامل والموارد الخارجية.
-Astra راجع تصميم الجداول الخمسة وأكد composite pointer FK والهوية الثنائية
-والـreceipts المربوطة بالهدف/المهاجرة وimmutability/revocation. يجب مراجعة التنفيذ
-قبل تطبيقه، وتجربته على restored scratch أولًا. لا تحميل migrations عند startup.
+- staging project6394b364-57bc-4736-8ce1-10dcf382c1e5 / env e726848b-49ec-45ab-bce8-a1462dd85bc8.
+- MySQL serverUUID6e077998-c7b7-11f1-8cb6-a2aac0196f86، version9.7.2، schema railway.
+- backupخاص staging-before-foundation.sql SHA843b73766b831500d3e69cd8a8c01f3c4a916a6cf4088d0ba8ade77c0f90b28b.
+- restored scratch ayahx_rehearsal_20261015_f0؛ 12INSERTs frozenbackupمطابقة،
+  canonical24table schemaSHA49d7536844d05fd3f0dbbc5250208754f3d5f47e12cbf62a38fd716f3aab088f.
+- migration SQLSHA7c2285c32aaa29fa1d321fa48ddea09382a882d5b4efe51645684a6fbb4cc433:
+  rehearsal/6constraintnegativechecks/dry-run ثم stagingapplyPASS، pending0؛
+  24originalschemas و23nonvolatile rowdigests محفوظة؛ capacityheartbeatمستثنى منrowcomparison.
+  catalogsources/recordings0، disabledCHECKsباقية. لاproductionSQL.
+- receipts/rawproof ignored tooling/reports/enterprise-baseline/. Backup freshness24h؛
+  أيmigrationتالية تحتاج backup/rehearsal/receiptجديدة؛ لاdropللـscratch أوuserdata.
 
-## التالي الدقيق
+## Railway والبوابة المعلقة
 
-1. قبول PR28 اكتمل كما أعلاه. حافظ على production pin والبوابات.
-2. راجع تنفيذ migration من Sol مقابل ملاحظات Astra. عقد الإتاحة هو
-   shared/recordingAvailability.ts. لا تمس alignment_documents الموجود المتعارض
-   مع مسودة الحزمة ولا جداول المستخدمين/الرندر. لا approvals mutation بهذه الشريحة.
-3. جهّز receipts مرتبطة بmigrationSHA وtarget/serverUUID/schema/baseline وbackupSHA،
-   ثم rehearsal ودry-run وAstra قبل staging apply. Docker المحلي غير موجود؛
-   scratch ayahx_rehearsal_20261015_f0 على MySQL staging مستعاد من backup معروف.
-4. أكمل source reviews والخرائط canonical/font hashes وtrusted repository integration؛
-   0.1–0.3 ما زالت جزئية. لا توصل snapshot عميل بوصفه سلطة ولا تتجاوز approval.
-5. استكمل مهام STATUS/COVERAGE الـ28 كلها، بما فيها9Admin و5Studio و36preset
-   والرندر الحقيقي بالصوت والتوقيت، ثم production بعد البوابات.
+- staging API1ff57ef9-b793-4130-ae60-ce8392172cf8 ما زال b628a8b265dae780759aa1f9b469f51d4ed1ad76،
+  deploymentd51ef7ff-e7dc-4185-b8a1-951ac7ef0bc2 سبق SUCCESS وقديدخلSLEEPING.
+- source patch64461cfe-41b1-41b8-86cb-7a32db50792d يحتوي exactly2fields branchmain+
+  commit90bf8f8 فقط؛ accept-deploy رفض برسالة userdidnotapprove. سُئل المالك عبرasync؛
+  لاbypassCLI أوretryحتىحلapproval. inspectpendingpatchقبلأيقبول.
+- productioncode services كلهاbaseline42b04fd، دونEnterprisepromotion؛ السلسلةSkia-only.
+- SSHأعاد accountdiscoveryJSON عندsleep بدلruntime؛ لا تعتمد exit0. أظهرlistdeployments
+  SLEEPING ثم publicready200/connected أعاد التنفيذ. markerثمCOPY_VERIFIED مطلوبة.
+  actualnewloader SQLprobe علىstagingنجح 1query/0rows/null/0authoritycalls/no writes.
+  هذاemptyreadفقط، ليسapproved-row/exportacceptance. Public ready200 بعدschemaapply.
 
-## الأدلة والقيود
+## الشريحة الحالية والملكية
 
-- full local suite بعد HTTP patches:479pass/6skip، app tsc/build pass.
-  approval-focused27، foundation-focused41. الأدلة VERIFICATION.md.
-- npm audit بعد إصلاحي compression1.8.2/proxy-addr2.0.8:26finding
-  (4critical/14high/8moderate). لا audit clean؛ DEPENDENCY_AUDIT يحدد المسارات.
-- backup SQL خاص ignored: tooling/reports/enterprise-baseline/staging-before-foundation.sql.
-  SHA256843B73766B831500D3E69CD8A8C01F3C4A916A6CF4088D0BA8ADE77C0F90B28B.
-  restored scratch:24tables/10achievements/4users. لا تستنتج counts من approximateRows.
-- frozen backup INSERT statements12 طابقت restored dump حرفيًا؛ checksum موثق فيVERIFICATION.
-  schemaSHOWCREATE يختلف بتصريح CHARACTER SET utf8mb4 زائد بعدrestore؛ Sol يصلح
-  normalization الضيق ويحفظ COLLATE/types/defaults/index/FKs. لا تبدأ DDL قبل
-  اكتمال هذا الإصلاح وتطابق baseline المقبول. current runtime capacity heartbeat
-  يختلف عنbackup، وبقية table checksums/counts متطابقة في فحص المصدر الحي.
-- staging/production alignment history counts=0docs/0events وقت الفحص؛ لا revocations عشوائية.
-- R2 account495659d0e5a689a32e39119fb56190a3: ayahx-audio-staging/prod، r2.dev معطل،
-  CORS محدد؛ lifecycle abort multipart1d فقط. API staging بلاR2/storage env؛
-  workers وDB storage integration تحتاج فحصًا. لا تطبق48h على كل bucket.
-- HF auth يعمل بحساب مختلف عنGitHub؛ model_search tool غير متاح منtools/list،
-  لا استدلال أو jobs أو نقل وسائط. استعمل الوثائق الرسمية بديلًا حتى يصل دور AI.
-- آخر usage check12% مستخدم أسبوعيًا؛ لا resets أو شراء رصيد تلقائيًا.
+- Solchild catalog_migration يملك ONLY server/services/catalogAccessPolicy.ts
+  وsrc/test/catalogAccessPolicy.test.ts: matrixread_only/editor/approver/owner،
+  injectedfreshgrants، defaultdeny، noDB/routes/bootstrap. لا تفويض متداخل.
+- Luna font_inventory يملك ONLY AUDIO_SOURCE_REVIEW.md لمراجعة Quran.com/EveryAyah.
+- المنسق يملك docs/CI/integration/resources؛ لاكتابةمتزامنةلنفسملف.
+- Astra راجع Task1.2design: separate catalog_role_grants + append-only catalog_audit_events،
+  atomic grant/target locks+audit، exactsubject/context/capability، requestreplay/conflict،
+  one-timeauditedownerbootstrap/lastowner. SQL/transactionimplementationباقية.
+- سؤال ownerbootstrapaccount صريح (email/userID +staging/production) معلق؛
+  لا تختارfirstadmin أوتمنحكلadminowner. Existinguser_rolesتبقىكماهي.
 
-### Task 1.1 update
+## الاعتماديات التالية
 
-Implementation and Astra review complete for inactive five-table slice. Restored rehearsal and staging dry-run PASS; 18 tests/lint/strict TS PASS. Current private receipt lives in catalog-rehearsal-result.json (report.receipt), with exact target/server UUID/backup SHA/schema digest/SQL SHA and 24-hour backup freshness gate. Next: finish CI/build, commit/PR, green CI, then apply same reviewed SQL to named staging schema using receipt and verify all prior schema/rows, idempotent dry-run. New source activation and runtime repository remain separate unfinished work. Refresh backup/rehearsal if receipt expires; do not drop failed scratch or user data.
+1. استلمpolicy/tests، افحص/CI/راجع، ثم نفذgrants/audit/evidence ومهاجرة إضافية آمنة.
+2. loader الحالي defaultauthoritydeny؛ لاactualevidencestore/approvedrows/route/exportwiring.
+   freshsequentialchecks ليستatomicexportauthorization؛ verifier/workertransactionلاحقًا.
+3. أكمل Task0.1sourceحقوق/endpoint/CORS/rates/revisions و0.2canonicalmushaf/counts/fontbindings.
+   TEXT_SOURCE_REVIEW: QULresource-specificrights/hashes/numberingpending، exactQUDuniversalayahs404.
+   QUA/cpfairmetadata licenses منفصلةعنrecordingaudiorights. FontsOFLcandidatehashesفقط.
+4. Task1.1partial: audit/assets/templates/attempts لمتُهاجر. Task1.2أصلحadminapprovalفقطحتىالآن.
+5. أكملCOVERAGE/28tasks:9Admin/5Studio/36realpresets، Browserlocalexport وSkiaMP4/audio/timing/logs،
+   R2privateprefixes48hDB/providerexpiry، productionبعدgates. لاrealrenderacceptanceبعد.
+6. dependency auditباقٍ26finding (HTTP2fixed فقط)؛ لاproductionجاهز. R2bucketsموجودةprivate
+   لكنruntimeلاOBJECT_STORAGEvars و48hexpiryلمتُطبق. لاتفعلمصادر/AIprovidersبصمت.
 
-### Latest execution gate
-
-PR29 merged main90bf8f8; inactive catalog migration actually applied to staging railway, postcheckpending0, 23nonvolatile rowdigests unchanged/24schemas unchanged, 0catalogrows. Staging code deployment is PENDING: exact2field source patch64461cfe-41b1-41b8-86cb-7a32db50792d prepared, accept-deploy rejected by approval gate. User question pending; do not bypass. On approval inspect pendingpatch and accept, then terminalSUCCESS+livechecks. Current APIb628a8b remains running.
-
-Next local slice on codex/ayahx-catalog-trust: coordinator owns pure hash helper extraction + docs/CI; Sol child catalog_migration owns ONLY recordingAvailabilityRepository.ts, catalogApprovalPolicy.ts and its test. Astra read-only design reviewed: explicit authority-verifier defaultdeny, bothsourcebranches, fullidentity/hashcounts/font, UTCtimestamps, live revocation, noactivation/writer/route/export integration. Font inventory found OFL candidate hashes but noapprovedcanonicalmushafprofile; preserve pending state.
-
-Task1.2 next: Astra proposed separate catalog_role_grants + append-only catalog_audit_events, atomic grant/target locking and evidence verification. Ownerbootstrapaccount question pending alongside stagingdeployapproval. Continue read-only loader and source/profile preparation; noarbitrary ownergrant. Full1.1 remains partial because audit/assets/templates notyetmigrated.
-
-Task0.3 loader implemented;44tests/95combinedchecks and types/lintPASS; Astra nohighmedium. Still noauthoritativeevidencestore/noapprovedrows/noroutes/exportwiring. New liveemptyreadprobe UNVERIFIED: RailwaySSH returns accountdiscovery ratherthan executingscript (minimalmarkerfailed too), do not trust exit0. Purehelperdoesn'timportSQL. Next finishbuild/CI/PR forcodex/ayahx-catalog-trust, then Task1.2 grants/audit (owneridentitypending) and sourceprofilecanonical evidence. Stagingcodeapprovalquestionstillpending; do not bypass.
-
-SSH diagnostic resolved by observing SLEEPING, waking with publicready200 and verifyingmarker. Actual new loader SQL executed once on verifiedstaging:0rows/null/0authoritycalls/no writes. Validprivateprobereport saved. Do not rerun blindSSH loops; check serviceawake and outputsemantics. Still nodeployapproval/owneridentityresponse. BuildPASS; preparing trust PR.
+التحقق التفصيلي والتاريخ في VERIFICATION.md/DECISIONS.md. التقارير والوسائط/private
+traces محليةignored، لاcredentials/rowpayloadsفيGit. آخرusagecheck19%weeklyused؛ لاresets.
