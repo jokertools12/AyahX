@@ -1,5 +1,15 @@
 # نقطة الاستئناف
 
+آخر تقدم: PR26 مدموج main@5b7b04b بعد CI/staging SUCCESS (76fa649، deployment
+40abc3d7-1381-4fb3-b04c-bf688f7cd558) و10 E2E حية. production pinned 42b04fd.
+شريحة 1.2 التالية على codex/ayahx-alignment-approval: admin-only timing approval،
+27 targeted tests/build/tsc ناجحة، Astra لا high/medium. افتح PR منفصل وأكمل CI
+ثم staging/live authorization evidence. فحص DB التاريخي للبيئتين: 0 docs/events.
+SOURCE_REVIEW وDEPENDENCY_AUDIT يسجلان حقوق المصادر المعلقة وتنبيهات npm baseline؛
+عالج compression/proxy-addr patches ثم مجموعات router/tooling بتحقق مناسب قبل production.
+نسخة staging SQL خاصة تم restore لها في ayahx_rehearsal_20261015_f0 بنجاح؛
+قاعدة التجربة باقية، لا حذف بيانات أصلية. السجل VERIFICATION يحتوي checksum.
+
 الحالة: التنفيذ الكامل مفعل بطلب المالك بتاريخ 2026-10-15، محليًا وعلى GitHub
 وRailway staging ثم production وR2 وقواعد البيانات بعد البوابات. النص أدناه
 من جلسة التجهيز تاريخي؛ لا يفرض طلب تفويض روتيني جديد.

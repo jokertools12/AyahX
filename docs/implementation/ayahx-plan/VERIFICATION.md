@@ -1,5 +1,28 @@
 # سجل التحقق
 
+## 2026-10-15 — قبول staging للأساس وشريحة صلاحيات 1.2
+
+- PR26: head 76fa649565b0eac309b67bbfc077872549553a22، CI contracts وpublic-ui
+  SUCCESS؛ دُمج main@5b7b04bd6ffb3187f9f57299db04f8cb8b2b0cc5.
+- staging deployment 40abc3d7-1381-4fb3-b04c-bf688f7cd558: terminal SUCCESS،
+  RAILWAY_GIT_COMMIT_SHA مطابق 76fa649. ready 200، DB connected؛ GET sources
+  401 visitor و200 existing admin، 13 sources disabled، private/no-store.
+- `AYAHX_E2E_URL=https://ayahx-staging.up.railway.app npm run test:e2e`:
+  exit 0، 10/10 desktop/mobile tests. run 01a13ec1-c4f7-7c61-bfcf-ca086d5ef7c2.
+- Staging backup private: tooling/reports/enterprise-baseline/staging-before-foundation.sql،
+  SHA256 843B73766B831500D3E69CD8A8C01F3C4A916A6CF4088D0BA8ADE77C0F90B28B.
+  mysqldump consistent snapshot نجح؛ استعيد في قاعدة ayahx_rehearsal_20261015_f0
+  المنفصلة على MySQL staging: 24 tables، 10 achievements، 4 users. هذه بيانات
+  موجودة قبل التنفيذ؛ approximateRows من information_schema ليس عددًا دقيقًا.
+  قاعدة التجربة باقية كنسخة استعادة خاصة؛ لم تتغير بيانات المصدر.
+- schema الحي يؤكد تعارض alignment_documents الحالي مع مسودة الحزمة؛ لا تطبقها مباشرة.
+- 1.2: 27 focused tests pass (9 route/2 UI/9 provider/7 attestation)؛ app tsc
+  والبناء exit 0؛ eslint 0 errors و27 warnings في الملفات القديمة المعدلة.
+- Astra راجع الإصلاح: لا high/medium regression. audit حي للبيئتين وجد 0 alignment
+  documents و0 review events وقت الفحص؛ لا اعتماد سابق يعالج عشوائيًا.
+- DEPENDENCY_AUDIT.md: inherited npm audit 28 findings. لا production deployment
+  أو جاهزية أمنية مثبتة. فحص الإنتاج read-only؛ جميع code services pinned 42b04fd.
+
 ## 2026-10-15 — التنفيذ: preflight وأساس 0.1–0.3
 
 - تفويض التنفيذ الخارجي والنشر بعد البوابات فعال؛ تحديث ORCHESTRATION والبرومبت
