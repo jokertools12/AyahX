@@ -109,3 +109,7 @@ The application now accepts the plan's `R2_*` vocabulary as aliases while preser
 ## 2026-10-16 — verification refresh
 
 The current branch is clean apart from the two preserved untracked plan directories, and local HEAD matches the pushed remote branch at `888311c`. Production and Railway resources were not changed in this checkpoint. The full local build and test suite pass; next implementation remains gated by template-design approval and the separate action-time R2 key confirmation.
+
+## 2026-10-16 checkpoint — fail-closed storage readiness
+
+Before setting R2 credentials, staging will report local readiness. After credentials are entered, the same readiness response must show `driver: s3` and `ready: true` before the real render/R2 reconciliation gate.

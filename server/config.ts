@@ -82,6 +82,25 @@ export function resolveStorageConfig(env: StorageEnvironment = process.env): App
   };
 }
 
+export type StorageReadiness =
+  | { ready: true; driver: 'local' | 's3' }
+  | { ready: false; driver: 's3'; missing: Array<'bucket' | 'endpoint' | 'accessKeyId' | 'secretAccessKey'> };
+
+/**
+ * Readiness is deliberately structural: it never makes a network request or
+ * exposes a credential. A cloud-backed deployment must fail closed before it
+ * accepts a render that cannot be uploaded or downloaded by another replica.
+ */
+export function getStorageReadiness(storage: AppConfig['storage']): StorageReadiness {
+  if (storage.driver === 'local') return { ready: true, driver: 'local' };
+  const missing: Array<'bucket' | 'endpoint' | 'accessKeyId' | 'secretAccessKey'> = [];
+  if (!storage.bucket) missing.push('bucket');
+  if (!storage.endpoint) missing.push('endpoint');
+  if (!storage.accessKeyId) missing.push('accessKeyId');
+  if (!storage.secretAccessKey) missing.push('secretAccessKey');
+  return missing.length ? { ready: false, driver: 's3', missing } : { ready: true, driver: 's3' };
+}
+
 const nodeEnv = (process.env.NODE_ENV || 'development') as 'development' | 'production' | 'test';
 const isProd = nodeEnv === 'production';
 
