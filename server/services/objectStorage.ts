@@ -35,8 +35,18 @@ export function objectKeyFromPath(value: string): string {
   return value.replace(/^s3:\/\/[^/]+\//, '');
 }
 
+function safeObjectComponent(value: string): string {
+  return value.replace(/[^A-Za-z0-9._-]/g, '_').slice(0, 128) || 'unknown';
+}
+
+/** Keys under this prefix are the only render objects eligible for the R2 48h lifecycle. */
+export function renderObjectKey(userId: string, jobId: string, at = new Date()): string {
+  const date = at.toISOString().slice(0, 10);
+  return `temp-48h/renders/${date}/${safeObjectComponent(userId)}_${safeObjectComponent(jobId)}.mp4`;
+}
+
 export async function uploadRender(localPath: string, userId: string, jobId: string): Promise<string> {
-  const key = `renders/${userId}/${jobId}.mp4`;
+  const key = renderObjectKey(userId, jobId);
   // Upload streams large MP4s as bounded multipart parts while retaining a
   // single request for small files. This avoids buffering a whole render in
   // the API process and leaves no partial object marked as a successful job.
