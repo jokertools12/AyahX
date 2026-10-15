@@ -141,3 +141,7 @@ The local integration checkpoint is green after the lock-pinned source cache and
 ## 2026-10-16 checkpoint — staging deploy accepted and verified
 
 The owner explicitly approved staging deployment to the merged `main` revision. API/Skia/control are SUCCESS on `8437a30d77b8da1856523eaff5508dc6c0ba5091`; all six staging services are Online with no pending work, and `/api/health/ready` is HTTP 200 with MySQL connected. The app still uses local storage. Resume by creating the staging-only R2 key through Cloudflare's authorized UI/API path, set only staging API `OBJECT_STORAGE_*` variables, redeploy, then run one Skia job and reconcile the R2 object, DB output path, download stream, expiry prefix, and worker logs. Do not touch production or add the final 36th preset without a new explicit approval.
+
+## 2026-10-16 checkpoint — Computer Use retry
+
+A fresh Computer Use kernel reset and `cua.getState()` retry failed before browser access with the same `failed to write kernel assets` / OS error 3. Cloudflare API token listing independently returned `9109 Unauthorized`. No credential or Railway variable was changed; the next action still requires restored Computer Use or an authorized Cloudflare token-creation path.
