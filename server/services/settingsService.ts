@@ -7,7 +7,6 @@ import {
   isSettingsSecretEncryptionConfigured,
 } from './secretSettingsCrypto';
 
-let tableInitialized = false;
 let attemptedLegacySecretMigration = false;
 
 function decodeSettingValue(value: string, isSecret: boolean, key: string): string {
@@ -52,28 +51,6 @@ async function migrateLegacyPlaintextSecrets(): Promise<void> {
 }
 
 /**
- * Ensures the system_settings table exists in MySQL
- */
-export async function ensureSettingsTable(): Promise<void> {
-  if (tableInitialized) return;
-  try {
-    await query(`
-      CREATE TABLE IF NOT EXISTS system_settings (
-        key_name VARCHAR(100) NOT NULL PRIMARY KEY,
-        value_text TEXT NOT NULL,
-        is_secret BOOLEAN NOT NULL DEFAULT FALSE,
-        category VARCHAR(50) NOT NULL DEFAULT 'general',
-        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    `);
-    tableInitialized = true;
-    await migrateLegacyPlaintextSecrets();
-  } catch (err: any) {
-    logger.error(`Failed to ensure system_settings table: ${err.message}`);
-  }
-}
-
-/**
  * Retrieves many raw values in one bounded query. Database values retain the
  * existing stored-settings precedence; process.env remains the safe fallback
  * for Railway-managed deployments and bootstrapping.
@@ -84,7 +61,7 @@ export async function getRawSettings(keys: string[]): Promise<Record<string, str
   for (const key of uniqueKeys) result[key] = process.env[key] || '';
   if (uniqueKeys.length === 0) return result;
 
-  await ensureSettingsTable();
+  await migrateLegacyPlaintextSecrets();
   try {
     const placeholders = uniqueKeys.map(() => '?').join(', ');
     const rows = await query<Array<{ key_name: string; value_text: string; is_secret: boolean }>>(

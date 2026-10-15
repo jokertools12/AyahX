@@ -1,5 +1,5 @@
 import { closePool } from './db';
-import { ensureRenderJobsTable } from './db/migrations/addRenderJobsTable';
+import { assertRuntimeSchemaReady } from './services/runtimeDatabaseReadiness';
 import { renderJobQueue, startDedicatedRenderWorker } from './services/renderJobQueue';
 import { logger } from './logger';
 import { activeRenderChildCount, stopAllRenderChildren, waitForRenderChildren } from './services/renderChildRunner';
@@ -11,7 +11,8 @@ let reconcileTimer: ReturnType<typeof setInterval> | null = null;
 let shuttingDown = false;
 
 async function main() {
-  await ensureRenderJobsTable();
+  await assertRuntimeSchemaReady();
+  renderJobQueue.startBackgroundMaintenance();
   await renderJobQueue.recoverStaleJobs();
   dedicatedWorker = startDedicatedRenderWorker();
   await renderJobQueue.reconcileQueuedJobs();

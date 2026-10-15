@@ -59,8 +59,8 @@ Read-only source inventory for `AyahX_Enterprise_Plan_Package_2026-10-14/00_PLAN
 | 0.1 | D01–D02, S06–S07, S11, V02, V06 | Inventory/source review first; current providers are distributed, not a reviewed registry. |
 | 0.2 | S03–S05, S08, S11–S14, V05 | Identity map precedes interval filtering, typography and canonical marker decisions. |
 | 0.3 | S01, S03, S07–S08 | Contract precedes reciter-first flow; aggregate QUA coverage is insufficient. |
-| 1.1 | A02–A03, A09, D06 | Partial: PR29 adds inactive source/profile/reciter/recording/coverage tables; restored rehearsal and actual staging apply verified (VERIFICATION.md). Audit/assets/templates and code-deployment acceptance remain. |
-| 1.2 | A01–A09, A04–A05, D04–D05 | Authorization/audit is cross-cutting and stays Sol-owned. |
+| 1.1 | A02–A03, A09, D06 | Partial: PR29 adds inactive source/profile/reciter/recording/coverage tables; restored rehearsal and actual staging apply verified (VERIFICATION.md). PR32/33 add audit/grants with reviewed staging migration and owner bootstrap; assets/templates and remaining ledgers still missing. |
+| 1.2 | A01–A09, A04–A05, D04–D05 | Partial: audited role grants/API, last-owner protection and exact-account bootstrap verified on staging (PR33). Content/source/retention mutations, management UI and runtime credential isolation remain; capabilities alone do not complete those rows. |
 | 1.3 | D03–D05, S08 | Attempt ledger needed before strict resolution/fallback. |
 | 2.1 | D01–D04, S06–S08 | Registry and identity contract before adapter/cache. |
 | 2.2 | D01, S06–S08 | Enable sources one at a time after license/identity fixtures. |

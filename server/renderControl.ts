@@ -1,5 +1,5 @@
 import { acquireMysqlAdvisoryLock, closePool, releaseMysqlAdvisoryLock } from './db';
-import { ensureRenderJobsTable } from './db/migrations/addRenderJobsTable';
+import { assertRuntimeSchemaReady } from './services/runtimeDatabaseReadiness';
 import { logger } from './logger';
 import { renderJobQueue } from './services/renderJobQueue';
 import { renderAutoscalerIntervalMs, runRenderAutoscalerTick } from './services/renderAutoscaler';
@@ -24,7 +24,7 @@ async function waitForLeader(lockName: string) {
 async function main(): Promise<void> {
   const lockName = process.env.RENDER_CONTROL_LEADER_LOCK || 'ayahx-render-control-leader-v1';
   const leaderConnection = await waitForLeader(lockName);
-  await ensureRenderJobsTable();
+  await assertRuntimeSchemaReady();
   const stopAlignmentRetentionCleanup = startAlignmentRetentionCleanup();
   await renderJobQueue.recoverStaleJobs(true);
   await renderJobQueue.reconcileQueuedJobs();
