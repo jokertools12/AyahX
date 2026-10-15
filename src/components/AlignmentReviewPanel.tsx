@@ -12,6 +12,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 interface AlignmentReviewPanelProps {
   timingMap: TimingMap | null;
   isAuthenticated: boolean;
+  canApproveAlignment?: boolean;
   reciterId: string;
   surahNumber: number;
   startAyah: number;
@@ -64,6 +65,7 @@ function toFiniteNumber(value: string, fallback: number): number {
 export function AlignmentReviewPanel({
   timingMap,
   isAuthenticated,
+  canApproveAlignment = false,
   reciterId,
   surahNumber,
   startAyah,
@@ -180,14 +182,14 @@ export function AlignmentReviewPanel({
     setBusy('approve');
     try {
       const result = await api.alignments.review(documentId, {
-        status: 'approved',
+        status: canApproveAlignment ? 'approved' : 'needs_review',
         note: note.trim() || undefined,
         revisions: changedRevisions,
       });
       setDocumentId(result.document.documentId);
       onTimingMapChange(result.timingMap as TimingMap);
       setNote('');
-      toast.success('تم اعتماد المحاذاة كنسخة جديدة مرتبطة بالصوت');
+      toast.success(canApproveAlignment ? 'تم اعتماد المحاذاة كنسخة جديدة مرتبطة بالصوت' : 'تم حفظ التعديلات كمسودة تنتظر مراجعة الأدمن');
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'تعذر اعتماد المحاذاة');
     } finally {
@@ -232,9 +234,13 @@ export function AlignmentReviewPanel({
           </Button>
           <Button size="sm" className="h-8 text-xs gap-1" onClick={approveReview} disabled={busy !== null || !documentId}>
             {busy === 'approve' ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}
-            اعتماد بعد التحقق
+            {canApproveAlignment ? 'اعتماد بعد التحقق' : 'حفظ تعديلات للمراجعة'}
           </Button>
         </div>
+
+        {isAuthenticated && !canApproveAlignment && (
+          <p className="text-xs text-muted-foreground">يمكنك حفظ التوقيت المقترح؛ الاعتماد النهائي للتصدير يتطلب مراجعة الأدمن.</p>
+        )}
 
         {documentId && (
           <p className="text-[11px] text-muted-foreground break-all">معرّف النسخة: {documentId}</p>

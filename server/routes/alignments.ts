@@ -240,13 +240,17 @@ router.delete('/:id', requireAuth, async (req: AuthenticatedRequest, res: Respon
 
 router.post('/:id/reviews', requireAuth, aiRateLimiter, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const alignmentId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-    const base = await getAlignmentDocument(alignmentId, ownerContext(req));
-    if (!base) return res.status(404).json({ error: 'وثيقة المحاذاة غير موجودة' });
     const status = req.body?.status;
     if (!['approved', 'needs_review', 'rejected'].includes(status)) {
       return res.status(400).json({ error: 'قرار المراجعة غير صالح' });
     }
+    // Ownership permits draft editing; it never grants approval authority.
+    if (status !== 'needs_review' && req.user!.role !== 'admin') {
+      return res.status(403).json({ error: 'اعتماد المحاذاة أو رفضها يتطلب مراجعة الأدمن', code: 'ALIGNMENT_APPROVAL_ADMIN_REQUIRED' });
+    }
+    const alignmentId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const base = await getAlignmentDocument(alignmentId, ownerContext(req));
+    if (!base) return res.status(404).json({ error: 'وثيقة المحاذاة غير موجودة' });
     const revisions = Array.isArray(req.body?.revisions) ? req.body.revisions : [];
     const note = typeof req.body?.note === 'string' ? req.body.note.slice(0, 2000) : undefined;
     const result = applyAlignmentReview(base, revisions, {

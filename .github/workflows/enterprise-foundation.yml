@@ -31,6 +31,6 @@ jobs:
       - name: Typecheck tooling entrypoint
         run: npx tsc --noEmit -p tsconfig.node.json
       - name: Verify contract and HTTP authorization
-        run: npm test -- --run src/test/recordingAvailability.test.ts src/test/quranSourceRegistry.test.ts src/test/quranSourceCatalogApi.test.ts
+        run: npm test -- --run src/test/recordingAvailability.test.ts src/test/quranSourceRegistry.test.ts src/test/quranSourceCatalogApi.test.ts src/test/alignmentReviewAuthorization.test.ts src/test/alignmentReviewPanel.test.tsx src/test/alignmentProvider.test.ts src/test/alignmentAttestation.test.ts
       - name: Build browser and server
         run: npm run build

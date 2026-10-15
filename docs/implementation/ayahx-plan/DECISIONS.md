@@ -1,5 +1,21 @@
 # سجل القرارات
 
+## 2026-10-15 — أساس منشور وقرار الاعتماد البشري
+
+PR26 اجتاز CI contracts/public-ui ونشر staging عند 76fa649 و10 public E2E
+حية وGET مصادر للأدمن قبل الدمج main@5b7b04b. جميع خدمات production البرمجية
+فُحصت pinned 42b04fd قبل الدمج؛ لا نشر production ضمن هذه الشريحة.
+
+المصدر أثبت أن POST alignment reviews يسمح للمالك العادي بـapproved ثم يصدر
+attestation. Astra أكد الخلل. القاعدة: approved/rejected للأدمن الحالي فقط؛
+needs_review للمالك بعد تحقق الملكية، وهوية المراجع من auth. roles التفصيلية لاحقًا.
+حالة UI لا تمنح صلاحية؛ API يرفض قبل قراءة الوثيقة. فحص live staging/production
+وجد 0 alignment documents و0 events؛ لا historical rows تحتاج إلغاء وقت الفحص.
+
+تقرير npm audit كشف 28 تنبيهًا baseline (5 critical/15 high/8 moderate) دون تغيير
+اعتماديات في PR26. DEPENDENCY_AUDIT.md يميز runtime/dev ومسار التصحيح؛ تعالج
+الإصلاحات المحددة قبل production، ولا يشغل npm audit fix --force دون مراجعة.
+
 ## 2026-10-15 — تفعيل التنفيذ والتفويض الخارجي
 
 طلب المالك المرفق supersedes قرار التجهيز فقط أدناه. التنفيذ محلي وعلى موارد

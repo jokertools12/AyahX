@@ -2644,6 +2644,7 @@ export default function PreviewPage() {
               <AlignmentReviewPanel
                 timingMap={activeTimingMap}
                 isAuthenticated={isAuthenticated}
+                canApproveAlignment={user?.role === 'admin'}
                 reciterId={String(reciter?.id || reciterId)}
                 surahNumber={surahNumber}
                 startAyah={startAyah}
