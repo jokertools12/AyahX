@@ -13,7 +13,7 @@ function repo(events: string[]) {
     createRequestAnchor: vi.fn(async () => { events.push('anchor'); return 'created' as const; }),
     appendStarted: vi.fn(async (_r: ResolutionRequest, a: StartedSourceAttempt) => { events.push(`start:${a.sourceId}`); }),
     appendTerminal: vi.fn(async (_r: ResolutionRequest, _s: StartedSourceAttempt, t: TerminalSourceAttempt) => { events.push(`end:${t.sourceId}:${t.status}`); }),
-    appendTerminalThen: vi.fn(async (_r: ResolutionRequest, _s: StartedSourceAttempt, t: TerminalSourceAttempt, next: () => Promise<unknown>) => { events.push(`end:${t.sourceId}:${t.status}`); await next(); }),
+    appendTerminalThen: vi.fn(async <T>(_r: ResolutionRequest, _s: StartedSourceAttempt, t: TerminalSourceAttempt, next: () => Promise<T>): Promise<T> => { events.push(`end:${t.sourceId}:${t.status}`); return next(); }),
     readAttempts: vi.fn(async () => []),
   };
 }
