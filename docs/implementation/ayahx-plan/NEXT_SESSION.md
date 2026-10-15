@@ -42,17 +42,13 @@ SSH instance pin7277439a-80b7-47e6-b35f-c216ff0a7576 حل ردaccountdiscovery؛
 
 الفرع المحلي الجديد codex/ayahx-source-resolution-contract يبدأ من mergedmain.
 SOURCE_RESOLUTION_SPEC.md تصميم فقط لـTasks1.3/2.4 قيد مراجعة Astra؛ لا migrations
-أوsourcesأوnetworkcalls. أكمل staginggate عند وصول الموافقة قبل تغيير31tablecontract.
+أوsourcesأوnetworkcalls. Staging patch applied after explicit approval. API/Skia/control now use new runtime accounts and API preDeploy empty; API/Skia are stable, public E2E10/10 passes, but control gets SIGTERM after startup despite SUCCESS. Stale advisory connection was diagnosed/killed; repeat control restart and inspect logs before any render gate. Do not promote production or call isolation complete until control is stable and a real render artifact is accepted.
 
-## حد DDL وحسابات runtime — أدلة الشريحة السابقة
+## حد DDL وحسابات runtime — الحالة الحالية
 
-PR34 لحدود DDL التشغيلية مدموجة في main@`db6d67de2507a9a0e6afa765a88a9ca68b08ff1f` وغير منشورة. الفرع المحلي التالي `codex/ayahx-runtime-db-grants` يضيف provisioning للحسابات الجديدة فقط؛ PR35 لم يُنشأ. حالة staging لم تتغير: API على8618dcb مع owner/audit1/1، والعمال على baseline. كل خدمات Node ما زالت على حساب DB الحالي؛ preDeploy لم يتغير.
+PR34 وPR35 مدموجتان؛ main عند d040e7e11acc2b8c4590b231f4350375acc9055f. Staging patch applied after explicit approval: API/Skia/control run this code, API preDeploy is empty, and three dedicated runtime accounts are active. Fresh physical checks match the staging MySQL target and authority counts remain 1/1; API health and public E2E10/10 pass. Skia is stable. Control is still operationally unstable after SIGTERM/restart; stale advisory connection19953 was diagnosed/killed without row changes, but a real render gate and production promotion remain blocked until control stabilizes.
 
-خطة grants صريحة على31 جدولًا:24 legacy tables كاملة DML كحد توافق أعلى لا كحد أدنى لكل خدمة؛5 inactive catalog SELECT فقط؛ API يضيف audit append-only ويحدّث حقلي الإلغاء المحددين فقط في جدول المنح؛ Skia/control يقرآن authority فقط. تتطلب CLI بيئة موثوقة وURI مشغل منفصلًا، هدفًا ماديًا مطابقًا، اسم مستخدم جديدًا وmandatory_roles فارغة، وملفات خاصة جديدة؛ بعد التطبيق تتحقق من login حقيقي وSHOW GRANTS بدقة. MySQL يحتفظ ببيانات المشغل المنفصلة؛ المسار المقصود حقن URI إلى عملية SSH واحدة بعد تحميله خاصًا، بلا TCP proxy، ولم يُتحقق بعد من التسليم بعد cutover. لا تضعه في متغيرات الخدمات. DDL auto-commit؛ الفشل لا يعاد آليًا ولا يتبعه DROP.
-
-clone مستعاد على مخطط تجريبي معزول داخل MySQL staging وبfixtures اصطناعية اجتاز51/51 تحققًا؛ API107 privilege points وSkia103. اختبرت المنع من DDL/trigger/audit/identity/account/cross-schema، grant/retry/revoke/audit rollback، owner concurrency/deletion races وحماية آخر مالك، وبقاء nonfixture users. التقرير خاص: `tooling/reports/enterprise-baseline/runtime-principal-clone-continuation-result.json`. Astra أصلح مشكلتين متوسطتين في CLI (receipt corruption وفحص physical target) وأكد خلو follow-up من high/medium. فشل clone سابق بسبب audit FOR UPDATE صُحح إلى SELECT locking read ثم نجح القبول.
-
-6 suites/118 tests PASS، app TypeScript وisolated helper/CLI strict TypeScript وtargeted lint و`npm run build` PASS؛ CI enterprise-foundation أضيفت إليها خطوة المحدودية الجديدة لكن لم تُسجل نتيجة CI لعدم إنشاء PR35 بعد. لا provisioning حقيقي أو live secret change أو production action حاليًا. الخطوة التالية: راجع diff ثم commit وPR35/CI؛ بعد الدمج أزل preDeploy `npm run db:setup` بمسار ترحيل صريح محافظ على DDL القديمة، ثم انشر runtime boundary للخدمات الثلاث قبل أي principal/credential switch. دليل التشغيل: `docs/runtime-principals.ar.md`.
+The 24-table DML plan remains a compatibility upper bound; inactive catalog tables are SELECT-only; API authority writes are limited to audited grant/revocation fields and workers read authority only. Keep operator credentials private and separate from service variables. Production has no runtime principal or credential change.
 
 ## الموارد والأدلة الخاصة
 
