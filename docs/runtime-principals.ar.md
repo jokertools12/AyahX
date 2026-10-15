@@ -45,3 +45,7 @@ node node_modules/tsx/dist/cli.mjs scripts/enterprise-runtime-principal.ts `
 التحقق على clone منفصل يثبت سلوك الأداة فقط. قبل تغيير إعداد أي خدمة، يجب إزالة أمر `db:setup` من pre-deploy، والتأكد أن API وSkia وcontrol لا تنفذ DDL عند البدء، وتوفير مسار ترحيل منفصل بامتيازاته المناسبة، ثم اختبار حسابات مستقلة على نسخة staging والتحقق من عمليات الخدمة ومنع DDL وتعديل/حذف سجلات التدقيق. انشر وتحقق من كل خدمة على حدة مع الاحتفاظ بمسار رجوع مضبوط. لا تغيّر الحساب الحالي أو بيانات الاتصال للإنتاج استنادًا إلى نتائج clone.
 
 **الحالة الحالية:** PR34 وPR35 مدموجتان؛ main عند `d040e7e11acc2b8c4590b231f4350375acc9055f`. رأس PR35 المختبر `acfca12` اجتاز CI ونُشر في staging؛ API وSkia وcontrol تحققت من الحسابات الجديدة والهدف المادي. API health وE2E العام 10/10 ناجحان، وسجل owner/audit بقي 1/1. control تعافى بعد SIGTERM/restart: اتصال advisory عالق شُخّص وحُرر، ثم بقي SSH والقفل بالحساب الجديد حيّين بعد الانتظار. يجب ربطه بفحص render حقيقي قبل قبول الرندر؛ production لم يتغير.
+
+## Ledger migration
+
+Migration003 was rehearsed and applied on staging with empty request/attempt tables and four immutable triggers; authority counts stayed 1/1. The current runtime grant plan intentionally excludes these new tables, so no service writer is active yet. Extend and review the plan before runtime persistence or adapter wiring.
