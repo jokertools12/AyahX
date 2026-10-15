@@ -10,7 +10,7 @@ export type QuranSourceCandidate = Readonly<{
   kinds: readonly string[];
   reference?: string;
   revision?: string;
-  productionEnabled: false;
+  productionEnabled: boolean;
   endpoint: SourceReview;
   license: SourceReview;
   storage: SourceReview;
@@ -18,6 +18,8 @@ export type QuranSourceCandidate = Readonly<{
   rateLimits: SourceReview;
   identity: SourceReview;
 }>;
+
+const evidenceFields = ['endpoint', 'license', 'storage', 'cors', 'rateLimits', 'identity'] as const;
 
 const review = (reference?: string): SourceReview => ({ status: 'needs_review', ...(reference ? { reference } : {}) });
 const na: SourceReview = { status: 'not_applicable' };
@@ -76,4 +78,14 @@ export function listQuranSourceCandidates(): QuranSourceCandidate[] {
 export function getQuranSourceCandidate(id: string): QuranSourceCandidate | undefined {
   const found = candidates.find((item) => item.id === id);
   return found ? copy(found) : undefined;
+}
+
+/** Inventory presence is not enough to activate a source in production. */
+export function isQuranSourceActivationReady(source: QuranSourceCandidate): boolean {
+  if (!source.productionEnabled || !source.revision) return false;
+  return evidenceFields.every((field) => {
+    const evidence = source[field];
+    return evidence.status === 'not_applicable'
+      || (evidence.status === 'verified' && typeof evidence.reference === 'string' && evidence.reference.length > 0);
+  });
 }
