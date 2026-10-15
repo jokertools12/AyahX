@@ -43,5 +43,8 @@ describe('source catalog authorization', () => {
     expect(result.status).toBe('review_pending');
     expect(result.sources).toHaveLength(13);
     expect(result.sources.every((source: { productionEnabled: boolean }) => source.productionEnabled === false)).toBe(true);
+    expect(result.sources.every((source: { activationReady: boolean; activationGaps: string[] }) => (
+      source.activationReady === false && source.activationGaps.length > 0
+    ))).toBe(true);
   });
 });

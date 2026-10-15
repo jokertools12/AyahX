@@ -70,3 +70,7 @@ Fresh v4 runtime principals were provisioned and verified against migration003: 
 ## 2026-10-16 — R2 credential creation attempt
 
 بعد موافقة المالك على مفتاح staging المقيّد، فشل Computer Use قبل فتح المتصفح مرتين بعد reset بنفس الخطأ `failed to write kernel assets` (os error 3). Cloudflare API integration نجحت في القراءة السابقة لكنها رفضت permission-group/token creation بالخطأ 9109 Unauthorized. لذلك لم يُنشأ أي credential ولم تُغيّر Railway variables؛ R2 live wiring بقيت غير مفعلة عمدًا. `npm run build` بعد توسيع القوالب نجح (3042 modules).
+
+## 2026-10-16 — source activation gap diagnostics
+
+أضيفت `getQuranSourceActivationGaps` وربطها بـ`GET /api/quran/sources`. كل سجل يعيد `activationReady` وcodes ثابتة مثل `production_disabled` و`license_unverified` دون كشف references أو أسرار. هذا يحسن Admin inventory ويجعل سبب بقاء المصدر معطلاً قابلًا للتدقيق، من دون تفعيل adapters أو network fallback.

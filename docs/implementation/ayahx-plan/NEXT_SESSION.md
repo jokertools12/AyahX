@@ -121,3 +121,7 @@ The approved 13-template increment is complete at 35 total presets. One addition
 ## 2026-10-16 checkpoint — external credential tool failure
 
 The next safe action is to restore Computer Use kernel access or have the owner create the scoped staging R2 token in Cloudflare's R2 API Tokens screen, then provide only the generated credentials through the approved secure Railway variable path. Do not paste secrets into chat or files. Once available, verify `/api/health/ready`, deploy staging, run a real Skia job, and reconcile the R2 object, DB path, download stream, expiry prefix, and worker logs.
+
+## 2026-10-16 checkpoint — source review visibility
+
+The source inventory API now makes activation blockers machine-readable for the future admin UI. The next source work still requires evidence-backed endpoint/license/identity review; do not mark a candidate verified from this diagnostic alone.

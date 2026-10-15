@@ -82,10 +82,26 @@ export function getQuranSourceCandidate(id: string): QuranSourceCandidate | unde
 
 /** Inventory presence is not enough to activate a source in production. */
 export function isQuranSourceActivationReady(source: QuranSourceCandidate): boolean {
-  if (!source.productionEnabled || !source.revision) return false;
-  return evidenceFields.every((field) => {
+  return getQuranSourceActivationGaps(source).length === 0;
+}
+
+export type QuranSourceActivationGap = 'production_disabled' | 'revision_missing' | `${typeof evidenceFields[number]}_unverified`;
+
+/**
+ * Returns stable, non-sensitive reasons a candidate cannot be activated.
+ * References and credentials are intentionally excluded so this can be shown
+ * in the admin inventory without turning it into a secret or provider dump.
+ */
+export function getQuranSourceActivationGaps(source: QuranSourceCandidate): QuranSourceActivationGap[] {
+  const gaps: QuranSourceActivationGap[] = [];
+  if (!source.productionEnabled) gaps.push('production_disabled');
+  if (!source.revision) gaps.push('revision_missing');
+  for (const field of evidenceFields) {
     const evidence = source[field];
-    return evidence.status === 'not_applicable'
-      || (evidence.status === 'verified' && typeof evidence.reference === 'string' && evidence.reference.length > 0);
-  });
+    if (evidence.status !== 'not_applicable'
+      && (evidence.status !== 'verified' || typeof evidence.reference !== 'string' || evidence.reference.length === 0)) {
+      gaps.push(`${field}_unverified` as QuranSourceActivationGap);
+    }
+  }
+  return gaps;
 }

@@ -343,3 +343,11 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - Cloudflare `execute` read calls work for account/R2 inspection, but token permission-group and token creation calls return `9109 Unauthorized`.
 - No API key, secret, Railway variable, or production resource was created or changed.
 - `npm run build` after template expansion exited 0.
+
+## 2026-10-16 — source gap evidence
+
+- RED: test failed before `getQuranSourceActivationGaps` existed.
+- GREEN: `quranSourceRegistry.test.ts` 7/7 and `quranSourceCatalogApi.test.ts` 4/4 passed.
+- `npx tsc --noEmit`: exit 0.
+- Targeted ESLint: 0 errors; existing explicit-any warnings only.
+- All candidates remain disabled; no source was activated or sent to production.
