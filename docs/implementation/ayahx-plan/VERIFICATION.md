@@ -315,3 +315,9 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - `npx tsc --noEmit`: exit 0.
 - `npx eslint server/config.ts src/test/storageConfig.test.ts`: no errors (pre-existing explicit-any warning in sanitized config).
 - The code does not enable S3/R2 implicitly and does not read secrets into tracked files. Live R2 object reconciliation remains pending until a scoped staging credential is created and configured.
+
+## 2026-10-16 — integration checkpoint
+
+- `npm run build`: exit 0; Vite transformed 3042 modules and server bundle completed.
+- `npm test`: 106 test files passed, 1 skipped; 877 tests passed, 6 skipped. The existing test matrix still contains legacy Browser Cloud fixtures; no new Cloud Browser service or route was added by this branch.
+- An initial `npm test -- --runInBand` probe was invalid because Vitest does not support the Jest-only flag; the corrected command above is the authoritative result.

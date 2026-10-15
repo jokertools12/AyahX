@@ -105,3 +105,7 @@ limits/identity مكتملة؛ كل المرشحين الحاليين ما زا�
 ## 2026-10-16 checkpoint — R2 wiring ready, credential gate remains
 
 The application now accepts the plan's `R2_*` vocabulary as aliases while preserving the canonical `OBJECT_STORAGE_*` contract and local default. Focused tests and TypeScript passed. Next action, after action-time confirmation for Cloudflare key creation, is to create a staging-bucket-only R2 key, set staging API variables without printing values, redeploy staging, and rerun the real Skia artifact with R2 object/DB/download reconciliation. Production remains untouched.
+
+## 2026-10-16 — verification refresh
+
+The current branch is clean apart from the two preserved untracked plan directories, and local HEAD matches the pushed remote branch at `888311c`. Production and Railway resources were not changed in this checkpoint. The full local build and test suite pass; next implementation remains gated by template-design approval and the separate action-time R2 key confirmation.
