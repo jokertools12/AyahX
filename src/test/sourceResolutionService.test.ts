@@ -18,6 +18,9 @@ function repo(events: string[]): SourceResolutionAttemptRepository {
     readAttempts: vi.fn(async () => []),
   } as SourceResolutionAttemptRepository;
 }
+function rejectOnce(fn: unknown, error: Error): void {
+  (fn as { mockRejectedValueOnce: (value: Error) => unknown }).mockRejectedValueOnce(error);
+}
 
 describe('source resolution service', () => {
   it('falls back in pinned order and persists terminal before next start', async () => {
@@ -47,9 +50,9 @@ describe('source resolution service', () => {
     expect(final).toMatchObject({ status: 'rejected', failure: 'approval_required' });
   });
   it('propagates anchor conflicts and persistence failures', async () => {
-    const events: string[] = []; const repository = repo(events); repository.createRequestAnchor.mockRejectedValueOnce(new Error('conflict'));
+    const events: string[] = []; const repository = repo(events); rejectOnce(repository.createRequestAnchor, new Error('conflict'));
     await expect(resolveSource({ request: request(), adapters: {}, repository, validateCandidate: () => null })).rejects.toThrow('conflict');
-    const failing = repo([]); failing.appendStarted.mockRejectedValueOnce(new Error('write failed'));
+    const failing = repo([]); rejectOnce(failing.appendStarted, new Error('write failed'));
     await expect(resolveSource({ request: request(), adapters: {}, repository: failing, validateCandidate: () => null })).rejects.toThrow('write failed');
   });
   it('records provider exceptions as terminal unknown_error without fallback', async () => {
