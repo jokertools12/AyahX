@@ -1,10 +1,10 @@
 name: Enterprise foundation
 on:
   pull_request:
-    paths: ['server/**', 'shared/**', 'src/**', 'database/migrations/**', 'scripts/enterprise-catalog-migration.ts', 'package*.json', 'tsconfig*.json', '.github/workflows/enterprise-foundation.yml']
+    paths: ['server/**', 'shared/**', 'src/**', 'database/migrations/**', 'scripts/enterprise-*-migration.ts', 'package*.json', 'tsconfig*.json', '.github/workflows/enterprise-foundation.yml']
   push:
     branches: [main, staging]
-    paths: ['server/**', 'shared/**', 'src/**', 'database/migrations/**', 'scripts/enterprise-catalog-migration.ts', 'package*.json', 'tsconfig*.json', '.github/workflows/enterprise-foundation.yml']
+    paths: ['server/**', 'shared/**', 'src/**', 'database/migrations/**', 'scripts/enterprise-*-migration.ts', 'package*.json', 'tsconfig*.json', '.github/workflows/enterprise-foundation.yml']
   workflow_dispatch:
 
 permissions:
@@ -45,6 +45,11 @@ jobs:
           npx eslint server/services/catalogAccessPolicy.ts src/test/catalogAccessPolicy.test.ts
           npx tsc --noEmit --strict --skipLibCheck --module ESNext --moduleResolution bundler --target ES2022 --esModuleInterop server/services/catalogAccessPolicy.ts
           npm test -- --run src/test/catalogAccessPolicy.test.ts
+      - name: Check authority schema runner
+        run: |
+          npx eslint server/db/migrations/additiveMigrationRunner.ts server/db/migrations/enterpriseAuthority.ts scripts/enterprise-authority-migration.ts src/test/enterpriseAuthorityMigration.test.ts
+          npx tsc --noEmit --strict --skipLibCheck --module ESNext --moduleResolution bundler --target ES2022 --esModuleInterop server/db/migrations/enterpriseAuthority.ts scripts/enterprise-authority-migration.ts
+          npm test -- --run src/test/enterpriseAuthorityMigration.test.ts
       - name: Verify contract and HTTP authorization
         run: npm test -- --run src/test/recordingAvailability.test.ts src/test/quranSourceRegistry.test.ts src/test/quranSourceCatalogApi.test.ts src/test/alignmentReviewAuthorization.test.ts src/test/alignmentReviewPanel.test.tsx src/test/alignmentProvider.test.ts src/test/alignmentAttestation.test.ts src/test/httpMiddlewareSecurity.test.ts
       - name: Build browser and server

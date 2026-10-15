@@ -17,7 +17,7 @@ production باقٍ عند baseline؛ تنبيهات الاعتماديات تم
 1.2 شريحة admin-only approval منشورة staging bb773db وlive user403؛ PR27 دُمج
 main@92b8f62. باقي RBAC/audit غير مكتمل. PR28 HTTP patches اجتاز CI ونشر staging
 SUCCESS عند b628a8b، وتحقق runtime versions وGET gzip200؛ دُمج main@0219c0a.
-1.1 أساس الجداول الإضافية قيد التنفيذ والمراجعة دون تطبيقها على schema التطبيق بعد.
+1.1 الجداول الخمسة الخاملة مطبقة staging؛ PR29/30/31 مدموجة، والكود الحالي staging bb609e4 متحقق runtime و10/10 UI. شريحة authority002 متحققة على restored scratch وتنتظر CI ثم staging apply.
 
 المرجع: `AyahX_Enterprise_Plan_Package_2026-10-14/00_PLAN/IMPLEMENTATION_TASKS.md`.
 قبل التنفيذ، اربط كل صف في `FEATURE_COVERAGE.ar.md` بالمصدر والاختبار والدليل؛
