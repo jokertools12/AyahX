@@ -62,3 +62,7 @@ Fresh v4 runtime principals were provisioned and verified against migration003: 
 ## 2026-10-16 — storage readiness guard
 
 أضيف `getStorageReadiness` وفحصه إلى `/api/health/ready` وdiagnostics: local يبقى جاهزًا، بينما S3/R2 يرفض الجاهزية عند غياب bucket أو endpoint أو أحد المفتاحين. لا توجد network calls أو قيم سرية في الفحص. RED ثم GREEN: `storageReadiness.test.ts` (3/3)، `observability.test.ts` (9/9)، TypeScript exit 0، وESLint بلا أخطاء.
+
+## 2026-10-16 — approved template expansion
+
+بموافقة المالك على إضافة 13 قالبًا، توسعت `VIDEO_PRESETS` من 22 إلى 35 قالبًا فعليًا. أضيفت عائلات المسجد والمصحف والشموع وneon والرسوم والصحراء والهلال وminimal والأقواس والهوية الذهبية، مع عقود RTL الحالية ونسب 9:16/16:9. `videoPresets.test.ts` يثبت العدد 35 وفرادة IDs ووجود الإعدادات الأساسية (7/7). الخطة المرجعية تذكر 36 قالبًا؛ بقي قالب واحد فقط كفجوة معلّمة لأن الموافقة كانت محددة بـ13 إضافة.

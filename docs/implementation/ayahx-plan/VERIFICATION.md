@@ -328,3 +328,10 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - GREEN: `npx vitest run src/test/storageReadiness.test.ts src/test/observability.test.ts` passed (12/12).
 - `npx tsc --noEmit` passed; targeted ESLint reported warnings only in pre-existing `any` diagnostics.
 - `/api/health/ready` now exposes sanitized storage readiness and fails closed for incomplete S3 mode; local mode is unchanged.
+
+## 2026-10-16 — template expansion evidence
+
+- `npx vitest run src/test/videoPresets.test.ts`: 7/7 passed.
+- `npx tsc --noEmit`: exit 0.
+- Targeted ESLint for `src/data/videoPresets.ts` and `src/test/videoPresets.test.ts`: exit 0.
+- No external assets, cloud-browser engine, or provider credentials were added.

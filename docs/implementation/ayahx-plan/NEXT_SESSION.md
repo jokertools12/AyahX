@@ -113,3 +113,7 @@ The current branch is clean apart from the two preserved untracked plan director
 ## 2026-10-16 checkpoint — fail-closed storage readiness
 
 Before setting R2 credentials, staging will report local readiness. After credentials are entered, the same readiness response must show `driver: s3` and `ready: true` before the real render/R2 reconciliation gate.
+
+## 2026-10-16 checkpoint — template library
+
+The approved 13-template increment is complete at 35 total presets. One additional preset is still required to match the reference plan's 36 count and will be added only after explicit approval for that extra item.
