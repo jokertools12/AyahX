@@ -4,6 +4,8 @@ import crypto from 'crypto';
 import { query, transaction } from '../db';
 import { AuthenticatedRequest, signToken, requireAuth } from '../middleware/auth';
 import { authRateLimiter } from '../middleware/rateLimiter';
+import { CatalogGrantError } from '../services/catalogGrantService';
+import { catalogGrantService } from '../services/catalogGrantRuntime';
 
 const router = Router();
 
@@ -294,13 +296,19 @@ router.delete('/delete-account', requireAuth, async (req: AuthenticatedRequest, 
     }
 
     // Cascades deletion across profiles, saved_videos, video_comments, video_likes, follows, favorites, notifications
-    await query('DELETE FROM users WHERE id = ?', [userId]);
+    await catalogGrantService.deleteAccount(userId, users[0].password_hash);
 
     return res.json({
       success: true,
       message: 'تم حذف الحساب وجميع البيانات المرتبطة به بنجاح نهائي'
     });
   } catch (err: any) {
+    if (err instanceof CatalogGrantError) {
+      if (err.code === 'CATALOG_LAST_OWNER') return res.status(409).json({ error: 'يجب نقل صلاحية المالك إلى حساب نشط آخر قبل حذف الحساب.' });
+      if (err.code === 'CATALOG_PASSWORD_CHANGED') return res.status(409).json({ error: 'تغيرت بيانات الحساب. أعد التحقق من كلمة المرور.' });
+      if (err.code === 'CATALOG_BUSY') return res.status(409).json({ error: 'توجد عملية أخرى قيد التنفيذ. أعد المحاولة.' });
+      if (err.code === 'CATALOG_TARGET_MISSING') return res.status(404).json({ error: 'المستخدم غير موجود' });
+    }
     console.error('Delete account error:', err);
     return res.status(500).json({ error: 'فشل حذف الحساب، يرجى المحاولة لاحقاً' });
   }

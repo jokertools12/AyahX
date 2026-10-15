@@ -1,10 +1,10 @@
 name: Enterprise foundation
 on:
   pull_request:
-    paths: ['server/**', 'shared/**', 'src/**', 'database/migrations/**', 'scripts/enterprise-*-migration.ts', 'package*.json', 'tsconfig*.json', '.github/workflows/enterprise-foundation.yml']
+    paths: ['server/**', 'shared/**', 'src/**', 'database/migrations/**', 'scripts/enterprise-*.ts', 'package*.json', 'tsconfig*.json', '.github/workflows/enterprise-foundation.yml']
   push:
     branches: [main, staging]
-    paths: ['server/**', 'shared/**', 'src/**', 'database/migrations/**', 'scripts/enterprise-*-migration.ts', 'package*.json', 'tsconfig*.json', '.github/workflows/enterprise-foundation.yml']
+    paths: ['server/**', 'shared/**', 'src/**', 'database/migrations/**', 'scripts/enterprise-*.ts', 'package*.json', 'tsconfig*.json', '.github/workflows/enterprise-foundation.yml']
   workflow_dispatch:
 
 permissions:
@@ -52,5 +52,10 @@ jobs:
           npm test -- --run src/test/enterpriseAuthorityMigration.test.ts
       - name: Verify contract and HTTP authorization
         run: npm test -- --run src/test/recordingAvailability.test.ts src/test/quranSourceRegistry.test.ts src/test/quranSourceCatalogApi.test.ts src/test/alignmentReviewAuthorization.test.ts src/test/alignmentReviewPanel.test.tsx src/test/alignmentProvider.test.ts src/test/alignmentAttestation.test.ts src/test/httpMiddlewareSecurity.test.ts
+      - name: Check audited catalog role management
+        run: |
+          npx eslint server/db/databaseIdentity.ts server/services/catalogGrantRepository.ts server/services/catalogGrantService.ts server/services/catalogGrantRuntime.ts server/routes/catalog.ts scripts/enterprise-owner-bootstrap.ts src/test/catalogGrantRepository.test.ts src/test/catalogGrantService.test.ts src/test/catalogGrantApi.test.ts src/test/catalogAccountDeletion.test.ts src/test/enterpriseOwnerBootstrapCli.test.ts
+          npx tsc --noEmit --strict --skipLibCheck --module ESNext --moduleResolution bundler --target ES2022 --esModuleInterop server/db/databaseIdentity.ts server/services/catalogGrantRepository.ts server/services/catalogGrantService.ts server/services/catalogGrantRuntime.ts server/routes/catalog.ts scripts/enterprise-owner-bootstrap.ts
+          npm test -- --run src/test/catalogGrantRepository.test.ts src/test/catalogGrantService.test.ts src/test/catalogGrantApi.test.ts src/test/catalogAccountDeletion.test.ts src/test/enterpriseOwnerBootstrapCli.test.ts
       - name: Build browser and server
         run: npm run build

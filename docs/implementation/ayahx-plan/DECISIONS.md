@@ -74,3 +74,11 @@ Bootstrap requires explicitly designated existing account in exact environment a
 Current auth account deletion at server/routes/auth.ts:273-307 deletes users directly after password verification. Before enabling owner grants, protect last active owner against deletion as well as grant revocation, using the same transaction/locks; otherwise existing account deletion bypasses a grant-only guard. Two confirmed owner identities are privately resolved, one existing account per environment.
 
 Audit triggers enforce ordinary UPDATE/DELETE rejection, but the current app database credential may hold schema privileges. Before production authority activation, split explicit privileged migrations/bootstrap from application credentials lacking DROP/TRUNCATE/trigger operations; inventory startup/preDeploy DDL first. Do not remove app privileges while startup still requires schema changes. No credential changes or owner bootstrap in the inactive002 slice.
+
+## Task1.2 accepted grant-management boundary
+
+Owner identities were explicitly designated by the human and privately matched to one existing account in each environment. No account removal is needed. Implement audited bootstrap only for those exact matches; never infer ownership from legacy admin.
+
+Historical grant validity uses grantedAt <= eventTime and revokedAt >= eventTime, with same-millisecond ties trusting server transaction order under the global membership/migration lock. Current authorization rejects every revoked grant. Later role loss or account removal does not erase correctly authorized historical actions. No cryptographic guarantee against privileged database compromise is claimed; production credential isolation remains a gate.
+
+Astra implementation review found no high/medium issue; real MySQL clone23checks cover contention/rollback/deletion versus revocation. Preserve immutable grants/audit evidence and synthetic clone fixtures. Owner bootstrap on application staging follows reviewed merged deployment and live verification of deletion protection. Production remains gated separately.
