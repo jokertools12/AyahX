@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { resolveSource, type SourceAdapterMap } from '../../server/services/sourceResolutionService';
+import { resolveSource, type SourceAdapter, type SourceAdapterMap } from '../../server/services/sourceResolutionService';
 import type { ResolutionRequest, StartedSourceAttempt, TerminalSourceAttempt } from '../../shared/sourceResolution';
 
 const hash = 'a'.repeat(64);
@@ -11,9 +11,9 @@ const request = (purpose: ResolutionRequest['purpose'] = 'final_export'): Resolu
 function repo(events: string[]) {
   return {
     createRequestAnchor: vi.fn(async () => { events.push('anchor'); return 'created' as const; }),
-    appendStarted: vi.fn(async (_r: ResolutionRequest, a: StartedSourceAttempt) => events.push(`start:${a.sourceId}`)),
-    appendTerminal: vi.fn(async (_r: ResolutionRequest, _s: StartedSourceAttempt, t: TerminalSourceAttempt) => events.push(`end:${t.sourceId}:${t.status}`)),
-    appendTerminalThen: vi.fn(async (_r: ResolutionRequest, _s: StartedSourceAttempt, t: TerminalSourceAttempt, next: () => Promise<unknown>) => { events.push(`end:${t.sourceId}:${t.status}`); return next(); }),
+    appendStarted: vi.fn(async (_r: ResolutionRequest, a: StartedSourceAttempt) => { events.push(`start:${a.sourceId}`); }),
+    appendTerminal: vi.fn(async (_r: ResolutionRequest, _s: StartedSourceAttempt, t: TerminalSourceAttempt) => { events.push(`end:${t.sourceId}:${t.status}`); }),
+    appendTerminalThen: vi.fn(async (_r: ResolutionRequest, _s: StartedSourceAttempt, t: TerminalSourceAttempt, next: () => Promise<unknown>) => { events.push(`end:${t.sourceId}:${t.status}`); await next(); }),
     readAttempts: vi.fn(async () => []),
   };
 }
@@ -21,12 +21,12 @@ function repo(events: string[]) {
 describe('source resolution service', () => {
   it('falls back in pinned order and persists terminal before next start', async () => {
     const events: string[] = []; const repository = repo(events);
-    const adapters: SourceAdapterMap<string> = new Map([
+    const adapters: SourceAdapterMap<string> = new Map<string, SourceAdapter<string>>([
       ['one@v1', async () => ({ failure: 'timeout' as const })],
       ['two@v1', async () => ({ candidate: 'ok' })],
     ]);
     const result = await resolveSource({ request: request(), adapters, repository, validateCandidate: () => null, now: (() => { let n = 0; return () => n += 1; })() });
-    expect(result.status).toBe('selected'); expect(result.candidate).toBe('ok');
+    expect(result.status).toBe('selected'); if ('candidate' in result) expect(result.candidate).toBe('ok');
     expect(events).toEqual(['anchor', 'start:one', 'end:one:failed', 'start:two', 'end:two:selected']);
   });
   it('stops on identity mismatch and does not call later adapters', async () => {
