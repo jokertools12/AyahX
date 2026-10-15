@@ -15,7 +15,7 @@ describe('source resolution attempt SQL boundary', () => {
     expect(await repository.createRequestAnchor(request)).toBe('created');
     await repository.appendStarted(request, started);
     await repository.appendTerminal(request, started, terminal);
-    const calls = query.mock.calls as Array<[string, readonly unknown[]]>;
+    const calls = query.mock.calls as unknown as Array<[string, readonly unknown[]]>;
     expect(calls[1]?.[0]).toBe(sourceResolutionRequestInsertSql);
     expect(calls[2]?.[0]).toBe(sourceResolutionAttemptInsertSql);
     expect(calls.flatMap(call => call[1])).not.toContain('https://');
