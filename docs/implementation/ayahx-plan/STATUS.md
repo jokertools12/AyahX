@@ -52,3 +52,5 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 الحالة، أوامر التحقق وexit codes، روابط الأدلة والعائق والخطوة التالية.
 الحالات: قيد التنفيذ، مطبق غير متحقق، متحقق محليًا، متحقق حيًا، أو معطل مع السبب.
 لا تنقل شريحة إلى متحقق حيًا بناءً على اختبار محلي.
+
+Fresh v4 runtime principals were provisioned and verified against migration003: API111 privilege points, Skia/control105; no service cutover yet. Existing v1 accounts remain active by design.
