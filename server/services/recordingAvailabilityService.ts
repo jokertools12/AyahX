@@ -2,11 +2,13 @@ import {
   rangeSelectionSchema, evaluateRecordingRange,
   type AvailabilitySnapshot, type ReaderScope, type RangeDecision,
 } from '../../shared/recordingAvailability';
+import { fingerprintTrustedQuranAudio } from './audioFingerprintService';
 
 /** Inject a repository backed by approved server records, never a client snapshot. */
 export type AvailabilityLoader = (scope: ReaderScope) => Promise<AvailabilitySnapshot | null>;
 export async function revalidateRenderManifestAvailability(
   manifestInput: unknown, loadCurrent: AvailabilityLoader, clock: () => number = Date.now,
+  fingerprintAudio: (url: string) => Promise<{ sha256: string }> = fingerprintTrustedQuranAudio,
 ): Promise<RangeDecision> {
   if (!manifestInput || typeof manifestInput !== 'object') return { allowed: false, reason: 'invalid_payload' };
   const manifest = manifestInput as Record<string, any>;
@@ -23,12 +25,19 @@ export async function revalidateRenderManifestAvailability(
   if (!checked.decision.allowed) return checked.decision;
   const covered = checked.snapshot?.intervals.filter(interval => interval.surahNumber === range.surahNumber
     && interval.toAyah >= range.startAyah && interval.fromAyah <= range.endAyah) ?? [];
+  let audioFingerprintMatches = false;
+  try {
+    const fingerprint = await fingerprintAudio(manifest.audio.audioUrl);
+    audioFingerprintMatches = fingerprint.sha256 === availability.audioFingerprint;
+  } catch {
+    audioFingerprintMatches = false;
+  }
   const bindingMatches = covered.length > 0 && covered.every(interval => {
     const timing = interval.timing;
     return interval.audioState === 'verified' && interval.audioAssetId === availability.audioAssetId
       && interval.audioFingerprint === availability.audioFingerprint
       && timing?.documentId === availability.timingDocumentId && timing?.revision === availability.timingRevision;
-  }) && manifest.audio.audioContentHash === availability.audioFingerprint
+  }) && audioFingerprintMatches && manifest.audio.audioContentHash === availability.audioFingerprint
     && manifest.timingMap.audioContentHash === availability.audioFingerprint
     && manifest.timingMap.mapId === availability.timingDocumentId
     && manifest.timingMap.availabilityTimingDocumentId === availability.timingDocumentId

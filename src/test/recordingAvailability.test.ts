@@ -119,10 +119,11 @@ describe('recording-scoped availability contract', () => {
       timingMap: { mapId: 'timing-a', availabilityTimingDocumentId: 'timing-a', availabilityTimingRevision: 't1', audioContentHash: hash,
         validationStatus: 'approved', review: { status: 'approved' } },
     };
-    expect(await revalidateRenderManifestAvailability(manifest, async () => makeSnapshot(), () => 1500)).toEqual({ allowed: true });
-    expect(await revalidateRenderManifestAvailability({ ...manifest, timingMap: { ...manifest.timingMap, mapId: 'other' } }, async () => makeSnapshot(), () => 1500))
+    const fingerprint = async () => ({ sha256: hash });
+    expect(await revalidateRenderManifestAvailability(manifest, async () => makeSnapshot(), () => 1500, fingerprint)).toEqual({ allowed: true });
+    expect(await revalidateRenderManifestAvailability({ ...manifest, timingMap: { ...manifest.timingMap, mapId: 'other' } }, async () => makeSnapshot(), () => 1500, fingerprint))
       .toEqual(deny('identity_mismatch'));
-    expect(await revalidateRenderManifestAvailability({ ...manifest, timingMap: { ...manifest.timingMap, validationStatus: 'needs_review' } }, async () => makeSnapshot(), () => 1500))
+    expect(await revalidateRenderManifestAvailability({ ...manifest, timingMap: { ...manifest.timingMap, validationStatus: 'needs_review' } }, async () => makeSnapshot(), () => 1500, fingerprint))
       .toEqual(deny('identity_mismatch'));
   });
 });

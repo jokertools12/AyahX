@@ -18,6 +18,11 @@ const QURAN_AUDIO_HOSTS = new Set([
   'audio.qurancdn.com',
   'verses.quran.com',
   'download.quranicaudio.com',
+  'mp3quran.net',
+  'tarteel.ai',
+  'quranicaudio.com',
+  'tvquran.com',
+  'archive.org',
 ]);
 
 function assertTrustedQuranAudioUrl(sourceUrl: string): URL {
