@@ -159,3 +159,7 @@ The remaining gate is a word-by-word timing render: the current staging attestat
 ## 2026-10-16 checkpoint — final staging R2 timing gate passed
 
 The same-process resolve-known plus render flow now passes the attestation gate. Staging produced an approved word-timing Skia MP4 in R2 with reconciled DB path, object size/ETag, download bytes, worker deployment, and ffprobe evidence. The earlier invalid proof was a cross-replica/request-session issue in the probe method, not a production code change. The remaining plan work is broader Enterprise coverage and credential rotation; do not promote production from this staging evidence alone.
+
+## 2026-10-16 checkpoint — production isolation rechecked
+
+Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f465f`, commit `42b04fd98912081d6c967ac7ec7cb931ce4519ab`. No production deployment or variable change was made while R2 was wired and verified in staging.
