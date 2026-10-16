@@ -12,6 +12,11 @@ import { deleteStoredRender, isObjectStoragePath, isPermanentObjectStoragePath, 
 import { recordRenderAudit, recordRenderResources, renderDurationSeconds } from './renderObservability';
 import { estimateRenderJobProfile, readCgroupCpuUsageMicros, readMemoryPeakBytes, readOomKillCount, resolveConcurrencySetting } from './renderCapacity';
 import { runRenderJobInChild, stopRenderChild } from './renderChildRunner';
+import { createRecordingAvailabilityLoader } from './recordingAvailabilityRepository';
+import { createCatalogAuthorityVerifier } from './catalogAuthorityVerifier';
+import { revalidateRenderManifestAvailability } from './recordingAvailabilityService';
+
+const recordingAvailabilityLoader = createRecordingAvailabilityLoader(query, createCatalogAuthorityVerifier(query));
 
 function queueEngineForManifest(manifest: RenderManifest | string | unknown): RenderQueueEngine {
   let value: unknown = manifest;
@@ -93,6 +98,7 @@ type RenderFailureCode = 'USER_INPUT' | 'ASSET' | 'ENGINE' | 'OOM_SUSPECTED' | '
 
 export function classifyRenderFailure(message: string): { code: RenderFailureCode; transient: boolean } {
   const normalized = message.toLowerCase();
+  if (/availability_reload_failed/.test(normalized)) return { code: 'ENGINE', transient: true };
   if (/out of memory|enomem|sigkill|oom|memory limit/.test(normalized)) return { code: 'OOM_SUSPECTED', transient: true };
   if (/timeout|deadline|timed out/.test(normalized)) return { code: 'TIMEOUT', transient: true };
   // A permanent 4xx/missing asset must not be retried until all attempts are
@@ -849,6 +855,16 @@ export class RenderJobQueue {
 
     try {
       const manifest: RenderManifest = typeof job.manifest === 'string' ? JSON.parse(job.manifest) : job.manifest;
+      let availabilityDecision;
+      try {
+        availabilityDecision = await revalidateRenderManifestAvailability(manifest, recordingAvailabilityLoader);
+      } catch (error) {
+        throw new Error(`AVAILABILITY_RELOAD_FAILED:${String((error as any)?.message || error || 'unknown')}`);
+      }
+      if (!availabilityDecision.allowed) {
+        const reason = 'reason' in availabilityDecision ? availabilityDecision.reason : 'availability_unknown';
+        throw new Error(`AVAILABILITY_REJECTED:${reason}`);
+      }
       const userStorageDir = path.join(this.storageDir, job.user_id);
       await fs.promises.mkdir(userStorageDir, { recursive: true });
       const outputFilename = `quran_reel_${manifest.canonicalAyahRange.surahNumber}_${manifest.canonicalAyahRange.startAyah}-${manifest.canonicalAyahRange.endAyah}_${jobId.substring(0, 8)}.mp4`;
