@@ -33,6 +33,7 @@ export type AlignmentProviderKey =
   | 'manual'
   | 'internal_ctc'
   | 'quranic_universal_aligner'
+  | 'huggingface_qud_aligner'
   | 'lafzize'
   | 'verified_dataset';
 
@@ -427,6 +428,9 @@ const externalProviderConfig: Record<Exclude<AlignmentProviderKey, 'quran_founda
 }> = {
   internal_ctc: { envUrl: 'ALIGNMENT_INTERNAL_CTC_URL', tokenEnv: 'ALIGNMENT_INTERNAL_CTC_TOKEN', version: 'internal-ctc-v1' },
   quranic_universal_aligner: { envUrl: 'QUA_ALIGNER_API_URL', altEnvUrl: 'QUA_ALIGNER_URL', tokenEnv: 'QUA_ALIGNER_API_TOKEN', version: 'qua-adapter-v1' },
+  // The HF Space is reached through an explicit server-side adapter endpoint.
+  // No Gradio call or private upload is implicit in this provider boundary.
+  huggingface_qud_aligner: { envUrl: 'HF_QUD_ALIGNER_API_URL', altEnvUrl: 'HF_QUD_ALIGNER_URL', tokenEnv: 'HF_TOKEN', version: 'hf-qud-adapter-v1' },
   lafzize: { envUrl: 'LAFZIZE_API_URL', altEnvUrl: 'LAFZIZE_URL', tokenEnv: 'LAFZIZE_API_TOKEN', version: 'lafzize-adapter-v1' },
 };
 
@@ -533,19 +537,20 @@ export function getAlignmentProviderRegistry(): AlignmentProviderRegistry {
     .register(verifiedDatasetProvider())
     .register(externalProvider('internal_ctc'))
     .register(externalProvider('quranic_universal_aligner'))
+    .register(externalProvider('huggingface_qud_aligner'))
     .register(externalProvider('lafzize'));
   return defaultRegistry;
 }
 
 export function getAlignmentProviderDescriptors(): AlignmentProviderDescriptor[] {
-  const external = (id: 'internal_ctc' | 'quranic_universal_aligner' | 'lafzize'): AlignmentProviderDescriptor => {
+  const external = (id: 'internal_ctc' | 'quranic_universal_aligner' | 'huggingface_qud_aligner' | 'lafzize'): AlignmentProviderDescriptor => {
     const config = externalProviderConfig[id];
     const endpointConfigured = Boolean(process.env[config.envUrl] || (config.altEnvUrl && process.env[config.altEnvUrl]));
     const licenseApproved = id !== 'lafzize' || process.env.LAFZIZE_LICENSE_REVIEW_APPROVED === 'true';
     const configured = endpointConfigured && licenseApproved;
     return {
       id,
-      label: id === 'internal_ctc' ? 'AyahX Internal CTC' : id === 'quranic_universal_aligner' ? 'Quranic Universal Aligner' : 'Lafzize adapter',
+      label: id === 'internal_ctc' ? 'AyahX Internal CTC' : id === 'quranic_universal_aligner' ? 'Quranic Universal Aligner' : id === 'huggingface_qud_aligner' ? 'Hugging Face QUD adapter' : 'Lafzize adapter',
       configured,
       // The bundled CTC adapter produces word spans. Letter/phoneme timing is
       // accepted only from an explicitly configured adapter that can attest
@@ -577,6 +582,7 @@ export function getAlignmentProviderDescriptors(): AlignmentProviderDescriptor[]
     },
     external('internal_ctc'),
     external('quranic_universal_aligner'),
+    external('huggingface_qud_aligner'),
     external('lafzize'),
   ];
 }

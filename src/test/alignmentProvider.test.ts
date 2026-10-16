@@ -229,6 +229,13 @@ describe('alignment orchestration', () => {
     expect(qua?.requiresHumanReview).toBe(true);
     expect(qua?.legalStatus).toBe('external_review_required');
 
+    const hf = descriptors.find((provider) => provider.id === 'huggingface_qud_aligner');
+    expect(hf).toBeDefined();
+    expect(hf?.configured).toBe(false);
+    expect(hf?.requiresHumanReview).toBe(true);
+    expect(hf?.legalStatus).toBe('external_review_required');
+    expect(hf?.unavailableReason).toContain('لم يتم تهيئة');
+
     expect(descriptors.find((provider) => provider.id === 'quran_foundation')).toBeUndefined();
     expect(getAlignmentProviderDescriptors()
       .find((provider) => provider.id === 'quran_foundation')).toBeUndefined();

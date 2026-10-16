@@ -95,7 +95,10 @@ export function getStorageReadiness(storage: AppConfig['storage']): StorageReadi
   if (storage.driver === 'local') return { ready: true, driver: 'local' };
   const missing: Array<'bucket' | 'endpoint' | 'accessKeyId' | 'secretAccessKey'> = [];
   if (!storage.bucket) missing.push('bucket');
-  if (!storage.endpoint) missing.push('endpoint');
+  // AWS S3 resolves its regional endpoint when one is not supplied. R2 and
+  // other endpoint-based providers use path-style mode in this contract, so
+  // keep the fail-closed check for those deployments.
+  if (storage.forcePathStyle && !storage.endpoint) missing.push('endpoint');
   if (!storage.accessKeyId) missing.push('accessKeyId');
   if (!storage.secretAccessKey) missing.push('secretAccessKey');
   return missing.length ? { ready: false, driver: 's3', missing } : { ready: true, driver: 's3' };
