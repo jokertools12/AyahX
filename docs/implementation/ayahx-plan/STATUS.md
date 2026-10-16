@@ -25,7 +25,7 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 | 1.1 | MySQL additive migration | خمسة جداول خاملة + runner متحقق محليًا وتجربة restore؛ PR29–33 مدموجة و001/002 staging apply متحقق؛ runtime8618dcb وowner bootstrap متحققان؛ assets/templates وغيرها باقية |
 | 1.2 | RBAC وAudit | grant/audit persistence وAPI وowner staging متحققة حيًا؛ PR34 DDL boundary مدموجة غير منشورة؛ clone صلاحيات 51/51 على مخطط staging معزول؛ provision حقيقي وcredential cutover وcontent/source/retention writers وUI باقية |
 | 1.3 | Source resolution attempts | migration003 وv4 grants وstaging runtime cutover متحققون؛ resolver deployment/API health/control lock evidence موجود؛ adapter invocation/idempotency under live workload باقية |
-| 2.1 | Adapter/cache أولي | لم يُقيّم |
+| 2.1 | Adapter/cache أولي | محول local approved مقيد بالقفل والبصمة مع provenance schema واختبارات fallback/mismatch محلية؛ ربطه بمخزن الإنتاج/الـR2 باقٍ |
 | 2.2 | Adapters خارجية تدريجية | لم يُقيّم |
 | 2.3 | Phonemizer وAI alignment | لم يُقيّم |
 | 2.4 | Strict fallback | لم يُقيّم |

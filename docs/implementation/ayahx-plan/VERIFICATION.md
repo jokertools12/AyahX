@@ -399,3 +399,10 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 ## 2026-10-16 checkpoint — attested word-timing R2 render accepted
 
 عولج فشل `ALIGNMENT_ATTESTATION_INVALID` باستخدام نفس عملية Node واتصال HTTP لإصدار resolve-known proof ثم إرسال render؛ نجح job word-by-word الموثق `b7dd333c-64d7-4852-a91a-9e2060058bbf` بحالة `approved_attested_word_map`. output path في DB هو `s3://ayahx-audio-staging/temp-48h/renders/2026-10-16/6d4452ba-a77a-49fe-ab03-bc383071794e_b7dd333c-64d7-4852-a91a-9e2060058bbf.mp4`. R2 object وdownload كلاهما 117576 bytes وETag `6e794ff001fc30906155f3a51252628b`. ffprobe أثبت H.264، 720x1280، yuv420p، AAC stereo، duration 1.022s. Worker deployment `18ddb6b1-42c0-4bad-a200-3008d01e4c44` SUCCESS؛ الدليل المنقح: `tooling/reports/enterprise-baseline/staging-r2-attested-render-verification.json`. Production لم يتغير.
+
+## 2026-10-16 — approved source adapter slice (Task 2.1)
+
+- أضيف `server/services/approvedSourceAdapters.ts` كمحول server-owned لسجلات المصدر المعتمدة، ولا ينفذ network fallback أو يرفع بيانات.
+- أضيف `resolutionProvenanceSchema` إلى `shared/sourceResolution.ts`؛ النتيجة تحمل source/revision/license/retrievedAt/content checksum، والمحول يرفض lock mismatch أو provenance الغائب.
+- الدليل: `npx vitest run src/test/sourceResolution.test.ts src/test/sourceResolutionService.test.ts src/test/approvedSourceAdapters.test.ts` — 3 ملفات، 94 اختبارًا ناجحًا؛ `npm test -- --run` — 109 ملفات، 891 اختبارًا ناجحًا و6 متخطاة؛ `npx tsc --noEmit` و`npm run build` exit 0.
+- الحالة: متحقق محليًا فقط؛ لم يُربط بعد ببيانات production أو R2، ولا يغيّر staging/production.

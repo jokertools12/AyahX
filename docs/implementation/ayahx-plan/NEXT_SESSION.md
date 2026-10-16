@@ -163,3 +163,9 @@ The same-process resolve-known plus render flow now passes the attestation gate.
 ## 2026-10-16 checkpoint — production isolation rechecked
 
 Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f465f`, commit `42b04fd98912081d6c967ac7ec7cb931ce4519ab`. No production deployment or variable change was made while R2 was wired and verified in staging.
+
+## 2026-10-16 — next source-resolution increment
+
+- Task 2.1 local slice landed in the working branch: `approvedSourceAdapters.ts` exposes server-owned, lock-pinned adapters with provenance validation; shared candidate schema now accepts explicit provenance.
+- Local evidence: focused 94/94, full 891 passed/6 skipped, TypeScript and production build exit 0.
+- Remaining: connect the adapter factory to the approved repository/cache boundary, then add one external adapter only after endpoint/license/revision evidence. Do not enable unreviewed sources or promote production.
