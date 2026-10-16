@@ -443,3 +443,8 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - أضيف `createCatalogContentApprovalService` لكتابة `content_approve` في `catalog_audit_events` مع authorizing grant، hash/context، وidempotency على `(actor, requestId)`.
 - الاختبارات: writer + verifier **6/6**، TypeScript وESLint exit 0.
 - لم يُوصل writer بالـHTTP أو runtime ولم تُطبق migration جديدة؛ التشغيل الحي يبقى خلف بوابة authority والمراجعة.
+## 2026-10-16 — timing binding evidence contract
+
+- وسّعت approval envelope ليشمل `timing`، وأصبح verifier يطابق `documentId/revision` وhash و`review=approved` مع حدث `content_approve` ذي context `timing_approve`.
+- الاختبارات writer/verifier: 6/6، TypeScript وESLint exit 0.
+- لا يزال الربط بالـHTTP والـruntime والمراجعة الحية مؤجلًا إلى بوابة migration والصلاحيات.

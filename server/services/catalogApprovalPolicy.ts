@@ -5,7 +5,7 @@ import { canonicalJson, hashBytes } from '../utils/canonicalIntegrity';
 
 export const catalogId = z.string().min(1).max(200).refine(value => value.trim() === value);
 export const approvalEnvelopeSchema = z.object({
-  schemaVersion: z.literal(1), subjectKind: z.enum(['source', 'profile', 'coverage']),
+  schemaVersion: z.literal(1), subjectKind: z.enum(['source', 'profile', 'coverage', 'timing']),
   subjectId: catalogId, subjectRevision: catalogId, subjectSha256: sha256Schema,
   actorId: catalogId, evidenceId: catalogId, approvedAtEpochMs: z.number().int().nonnegative().safe(),
 }).strict();

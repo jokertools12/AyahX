@@ -199,3 +199,7 @@ Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f46
 
 - Added the append-only content approval writer contract with authorization and idempotent request handling; six focused writer/verifier tests pass.
 - Keep it server-side and unexposed until the runtime authorization route and migration gate are reviewed.
+## 2026-10-16 — timing evidence checkpoint
+
+- Timing approval evidence now has a concrete fail-closed contract: approved review, document/revision identity, timing hash, and immutable audit context.
+- Keep runtime wiring gated until migration and capability checks are verified in staging.
