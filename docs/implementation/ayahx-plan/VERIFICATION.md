@@ -422,3 +422,8 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - إعادة التشغيل نجحت: `Enterprise foundation` run 64 و`AyahX E2E` run 127.
 - بعد الدمج، Railway staging أكد revision `d268d9a` وحالة SUCCESS لخدمات API/Skia/control، وreadiness الحي أعاد `database=connected` و`storage.driver=s3`.
 - هذه بوابة staging فقط؛ لا يوجد نشر production أو قبول نهائي للرندر من هذه الشريحة.
+## 2026-10-16 — FFmpeg encoder/muxer local acceptance (Task 3.3)
+
+- الاختبارات المستهدفة `ffmpegBinary`, `ffmpegRenderingService`, و`deterministicRenderer` نجحت: 3 ملفات و18 اختبارًا.
+- الدليل يغطي H.264/AAC MP4، profile 60fps/320kbps دون fallback، أبعاد 16:9، audio effects، ffprobe، واستعادة/تنظيف ملف مؤقت عند الإلغاء.
+- الحالة: متحقق محليًا؛ لا يُعد هذا قبولًا حيًا لمسار Skia→FFmpeg→R2 الكامل.
