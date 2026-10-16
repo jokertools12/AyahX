@@ -145,3 +145,7 @@ The owner explicitly approved staging deployment to the merged `main` revision. 
 ## 2026-10-16 checkpoint — Computer Use retry
 
 A fresh Computer Use kernel reset and `cua.getState()` retry failed before browser access with the same `failed to write kernel assets` / OS error 3. Cloudflare API token listing independently returned `9109 Unauthorized`. No credential or Railway variable was changed; the next action still requires restored Computer Use or an authorized Cloudflare token-creation path.
+
+## 2026-10-16 checkpoint — PR60 merged and staging rollout
+
+PR60 was squash-merged after `contracts` and `public-ui` both passed on head `7fdd476`; merge commit is `4ba67bb1b227173fdbec4605789d1e705bc9d5c0`. Railway automatically started staging deployments for API, control, and Skia. API deployment `ec501382-ac6e-4549-b2dd-25eb5187c5ba` and control deployment `3dd156a6-26dc-4679-8901-89f5913b2b47` reached SUCCESS; Skia deployment `18ddb6b1-42c0-4bad-a200-3008d01e4c44` was still BUILDING at the last successful Railway read. Subsequent Railway reads returned a temporary viewer-role error, so Skia SUCCESS and final all-service reconciliation remain unverified. Production is untouched.
