@@ -203,3 +203,7 @@ Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f46
 
 - Timing approval evidence now has a concrete fail-closed contract: approved review, document/revision identity, timing hash, and immutable audit context.
 - Keep runtime wiring gated until migration and capability checks are verified in staging.
+## 2026-10-16 — approval runtime wiring
+
+- Approval writer is now reachable only through authenticated `/api/catalog/approvals`, with capability authorization derived from current MySQL grants.
+- Before staging deploy, run the enterprise CI and review the route/migration boundary; no production action is implied.

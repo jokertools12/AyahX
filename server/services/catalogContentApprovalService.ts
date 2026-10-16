@@ -14,6 +14,7 @@ export type CatalogApprovalConnection = Pick<{
 export type CatalogApprovalAuthorization = (actorId: string) => Promise<{ allowed: boolean; authorizingGrantId?: string }>;
 export type CatalogApprovalInput = { requestId: string; reason: string; approval: unknown };
 export type CatalogApprovalResult = { auditEventId: string; replayed: boolean };
+export type CatalogContentApprovalService = ReturnType<typeof createCatalogContentApprovalService>;
 
 export const catalogApprovalInputSchema = z.object({
   requestId: z.string().min(1).max(200).refine(value => value.trim() === value),

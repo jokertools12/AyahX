@@ -448,3 +448,8 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - وسّعت approval envelope ليشمل `timing`، وأصبح verifier يطابق `documentId/revision` وhash و`review=approved` مع حدث `content_approve` ذي context `timing_approve`.
 - الاختبارات writer/verifier: 6/6، TypeScript وESLint exit 0.
 - لا يزال الربط بالـHTTP والـruntime والمراجعة الحية مؤجلًا إلى بوابة migration والصلاحيات.
+## 2026-10-16 — catalog approval runtime route
+
+- رُبط `content_approve` بصلاحية Catalog Grant فعلية عبر `authorize`، وأضيف `POST /api/catalog/approvals` خلف JWT وappend-only writer.
+- الاختبارات: Catalog API **5/5**، writer/verifier **6/6**، TypeScript وESLint exit 0.
+- endpoint لا يعتمد على role claim أو body actor؛ يستمد actor من JWT ثم يعيد التحقق من grant في MySQL. لم يُنشر بعد إلى Railway.

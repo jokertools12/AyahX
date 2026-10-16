@@ -90,6 +90,18 @@ export function createCatalogGrantService(getConnection: () => Promise<CatalogGr
         .map(g => ({ grantId: g.grantId, role: g.role, grantingAuditEventId: g.grantingAuditEventId })) };
     } finally { connection.release(); }
   }
+  async function authorize(actorIdInput: unknown, capabilityInput: unknown): Promise<{ allowed: boolean; grantId?: string }> {
+    const actorId = input(catalogUserId, actorIdInput);
+    const capability = input(catalogCapabilitySchema, capabilityInput);
+    const connection = await getConnection();
+    try {
+      const user = await readCatalogUser(connection, actorId);
+      if (!user) return fail('CATALOG_ACTOR_MISSING', 403);
+      const state = await readCatalogGrantState(connection); const now = validClock(clock);
+      const grants = verifiedCatalogGrants(state, user.id, now);
+      return createCatalogAccessPolicy(async () => grants, () => now)({ id: user.id, active: true }, capability);
+    } finally { connection.release(); }
+  }
   async function createGrant(actorIdInput: unknown, bodyInput: unknown): Promise<MutationResult> {
     const actorId = input(catalogUserId, actorIdInput); const body = input(createInput, bodyInput);
     const payload = catalogHash({ action: 'grant_create', ...body });
@@ -161,7 +173,7 @@ export function createCatalogGrantService(getConnection: () => Promise<CatalogGr
       return { deleted: true };
     });
   }
-  return { getAccess, createGrant, revokeGrant, bootstrapOwner, deleteAccount };
+  return { getAccess, authorize, createGrant, revokeGrant, bootstrapOwner, deleteAccount };
 }
 // Match the migration lock: raw UTF-8 schema hash, not canonical JSON's quoted string hash.
 const catalogHashSchema = (schema: string) => hashBytes(schema).slice(0, 32);
