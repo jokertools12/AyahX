@@ -27,7 +27,9 @@ function failureForRecord(record: ApprovedSourceRecord, request: ResolutionReque
   const provenanceResult = resolutionProvenanceSchema.safeParse(record.provenance);
   if (!provenanceResult.success) return 'invalid_payload';
   const provenance = provenanceResult.data;
-  const candidateProvenance = resolutionCandidateSchema.parse(record.candidate).provenance;
+  const candidateResult = resolutionCandidateSchema.safeParse(record.candidate);
+  if (!candidateResult.success) return 'invalid_payload';
+  const candidateProvenance = candidateResult.data.provenance;
   if (!candidateProvenance || JSON.stringify(candidateProvenance) !== JSON.stringify(provenance)) return 'invalid_payload';
   if (provenance.sourceId !== record.sourceId || provenance.sourceRevision !== record.sourceRevision
     || provenance.licenseReference !== source.licenseReference) return 'invalid_payload';

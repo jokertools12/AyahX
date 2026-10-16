@@ -35,4 +35,10 @@ describe('approved source adapters', () => {
     const result = await adapters['local@v1'](request, request.policy.sources[0]);
     expect(result).toBe('invalid_payload');
   });
+
+  it('classifies malformed records as invalid payloads without throwing provider details', async () => {
+    const malformed = { ...candidate, text: { ...candidate.text, textFingerprint: 'bad' } };
+    const adapters = createApprovedSourceAdapters([{ sourceId: 'local', sourceRevision: 'v1', eligibleLock: lock, candidate: malformed as never, provenance }]);
+    await expect(adapters['local@v1'](request, request.policy.sources[0])).resolves.toBe('invalid_payload');
+  });
 });
