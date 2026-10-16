@@ -385,3 +385,7 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - Added an explicit server-side `huggingface_qud_aligner` provider boundary using `HF_QUD_ALIGNER_API_URL`/`HF_QUD_ALIGNER_URL` and `HF_TOKEN`; secrets remain outside client code and tracked configuration.
 - The provider is registered as `external_review_required`, requires human review, and is unavailable until an adapter endpoint is deliberately configured. It does not call Hugging Face, upload private audio, enable fallback, or mark output approved.
 - `npx vitest run src/test/alignmentProvider.test.ts`: 9/9 passed; `npx tsc --noEmit` and `git diff --check` passed.
+
+## 2026-10-17 — review correction for AWS S3 endpoint resolution
+
+عالجت ملاحظة P1 من مراجعة PR60: `/api/health/ready` لا يطلب endpoint عند استخدام AWS S3 القياسي مع virtual-hosted mode، بينما يبقى endpoint إلزاميًا في R2/المزوّدات المعتمدة على path-style (`OBJECT_STORAGE_FORCE_PATH_STYLE=true`). اختبارات readiness/config (16 اختبارًا مع alignment provider) وTypeScript والبناء الإنتاجي نجحت.
