@@ -195,3 +195,7 @@ Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f46
 
 - Added a fail-closed catalog approval verifier for immutable `content_approve` audit evidence, with hash/subject/time checks and three focused tests.
 - It is intentionally not wired into runtime until an append-only approval writer and migration gate exist; timing-binding evidence remains denied.
+## 2026-10-16 — approval writer checkpoint
+
+- Added the append-only content approval writer contract with authorization and idempotent request handling; six focused writer/verifier tests pass.
+- Keep it server-side and unexposed until the runtime authorization route and migration gate are reviewed.
