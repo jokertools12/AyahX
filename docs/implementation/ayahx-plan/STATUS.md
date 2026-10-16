@@ -55,6 +55,10 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 
 Fresh v4 runtime principals were provisioned and verified against migration003: API111 privilege points, Skia/control105; no service cutover yet. Existing v1 accounts remain active by design.
 
+## 2026-10-16 — approval review and QUA evidence checkpoint
+
+أضيف endpoint قراءة محمي `GET /api/catalog/approvals` وبطاقة سجل الاعتمادات المنقحة إلى `/admin/dashboard`. لا تعرض الواجهة payload أو context ولا تنفذ اعتمادًا. سجل QUA الرسمي موثق في `SOURCE_REVIEW.ar.md`، لكن حقوق التسجيلات الصوتية upstream ما زالت غير محسومة، لذلك تبقى المصادر معطلة. production ما زال على `42b04fd`، بينما staging على `a82020b` وجميع خدمات API/Skia/control ناجحة.
+
 ## 2026-10-16 — R2 contract preparation (local)
 
 أضيفت `resolveStorageConfig` في `server/config.ts` لتوحيد عقد `OBJECT_STORAGE_*` مع مرادفات `R2_*` الواردة في الخطة، مع إبقاء `local` هو الافتراضي إلى أن يحدد النشر `OBJECT_STORAGE_DRIVER=s3`. يعرِض التشخيص المنقح حالة bucket/endpoint/credentials دون قيم سرية. الاختبار المركز `storageConfig.test.ts` و`objectStorageKey.test.ts` نجحا (6/6)، وTypeScript نجح. لا تغيير خارجي أو production؛ تفعيل R2 الحي ينتظر مفتاحًا محدودًا لـstaging فقط.

@@ -211,3 +211,9 @@ Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f46
 
 - Task 3.1 is locally verified by 19 focused tests for preview, local WebM, MP4 conversion, cancellation, and export settings.
 - Remaining is device capability/visual benchmark evidence; server Cloud Browser remains disabled by architecture.
+
+## 2026-10-16 — approval and source-review checkpoint
+
+- `/api/catalog/approvals` and the admin dashboard card are deployed to staging and read-only; no approval records exist yet.
+- QUA v3.2.0 evidence is documented in `SOURCE_REVIEW.ar.md`, while upstream recording rights remain an activation blocker.
+- production remains isolated on `42b04fd`; do not promote until source rights, final render evidence, and explicit production review are complete.
