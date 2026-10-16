@@ -15,8 +15,15 @@ import { recordRenderAudit } from '../services/renderObservability';
 import { verifyApprovedTimingMapAttestation } from '../services/alignmentAttestation';
 import { validateCloudRenderLimits } from '../../shared/cloudRenderPolicy';
 import { getCloudRenderPolicy } from '../services/cloudRenderPolicy';
+import { revalidateRecordingRange, type AvailabilityLoader } from '../services/recordingAvailabilityService';
 
 const router = Router();
+let recordingAvailabilityLoader: AvailabilityLoader | null = null;
+
+/** Configure the fail-closed loader once the application has its DB runtime. */
+export function configureRenderJobAvailability(loader: AvailabilityLoader): void {
+  recordingAvailabilityLoader = loader;
+}
 
 router.get('/policy', (_req, res) => res.json(getCloudRenderPolicy()));
 
@@ -105,6 +112,31 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
         error: 'لا يمكن تصدير تحريك كلمة-بكلمة قبل توثيق خريطة التوقيت من الخادم.',
         code: timingAttestation.code,
       });
+    }
+
+    // A client may carry a server-issued recording identity from selection or
+    // resume. Final export must revalidate it against current approved rows;
+    // never trust a browser snapshot or silently fall back to legacy audio.
+    if (manifestValidation.manifest.availabilitySelection) {
+      if (!recordingAvailabilityLoader) {
+        return res.status(503).json({ error: 'لا تتوفر خدمة التحقق من توافر التسجيل حاليًا.', code: 'AVAILABILITY_UNAVAILABLE' });
+      }
+      const availability = manifestValidation.manifest.availabilitySelection;
+      const selection = {
+        ...availability,
+        surahNumber: manifestValidation.manifest.canonicalAyahRange.surahNumber,
+        fromAyah: manifestValidation.manifest.canonicalAyahRange.startAyah,
+        toAyah: manifestValidation.manifest.canonicalAyahRange.endAyah,
+        intent: 'final_export' as const,
+      };
+      const decision = await revalidateRecordingRange(selection, recordingAvailabilityLoader);
+      if (!decision.allowed) {
+        return res.status(409).json({
+          error: 'لم تعد تغطية التسجيل أو اعتماد التوقيت صالحًا لهذا التصدير. أعد التحقق من الاختيار.',
+          code: `AVAILABILITY_${decision.reason.toUpperCase()}`,
+          reason: decision.reason,
+        });
+      }
     }
 
     // getActivePlanForUser already excludes expired subscriptions. Avoid a

@@ -2,6 +2,7 @@ import { TimingMap } from './timingMap';
 import type { AnimationProfile } from './animationTimeline';
 import { ExportQuality, getQualityDimensions } from '@/hooks/useVideoRecorder';
 import { AudioEffects } from '@/hooks/useAudioEffects';
+import type { ReaderScope } from '../../shared/recordingAvailability';
 
 export interface ClientManifestParams {
   aspectRatio: '9:16' | '16:9';
@@ -16,6 +17,7 @@ export interface ClientManifestParams {
   ayahRange: { start: number; end: number };
   ayahs: { numberInSurah: number; text: string }[];
   reciter: { id: string; name: string; quranFoundationId?: number; everyAyahSubfolder?: string };
+  availabilitySelection?: ReaderScope & { snapshotRevision: string; requiredTiming: 'ayah' | 'word' | 'letter' };
   timingMap: TimingMap;
   audio: {
     sourceMode: 'qf' | 'everyayah' | 'single_url';
@@ -92,6 +94,8 @@ export function buildClientRenderManifest(params: ClientManifestParams): any {
         text: a.text,
       })),
     },
+
+    availabilitySelection: params.availabilitySelection,
 
     contentKind: params.contentKind || 'quran',
     lyrics: params.lyrics?.map((line) => ({

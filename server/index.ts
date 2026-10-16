@@ -16,13 +16,15 @@ import subscriptionsRouter from './routes/subscriptions';
 import achievementsRouter from './routes/achievements';
 import socialRouter from './routes/social';
 import servicesRouter from './routes/services';
-import renderJobsRouter from './routes/renderJobs';
+import renderJobsRouter, { configureRenderJobAvailability } from './routes/renderJobs';
 import quranRouter from './routes/quran';
 import videoTranscodeRouter from './routes/videoTranscode';
 import alignmentsRouter from './routes/alignments';
 import adminRouter from './routes/admin';
 import { createCatalogRouter } from './routes/catalog';
 import { catalogGrantService, catalogContentApprovalService } from './services/catalogGrantRuntime';
+import { createRecordingAvailabilityLoader } from './services/recordingAvailabilityRepository';
+import { createCatalogAuthorityVerifier } from './services/catalogAuthorityVerifier';
 
 
 
@@ -34,6 +36,7 @@ import { renderJobQueue } from './services/renderJobQueue';
 import { prometheusMetrics } from './services/renderObservability';
 
 const app = express();
+configureRenderJobAvailability(createRecordingAvailabilityLoader(query, createCatalogAuthorityVerifier(query)));
 let isShuttingDown = false;
 let stopAlignmentRetentionCleanup: (() => void) | null = null;
 const ensureRuntimeInitialized = createRuntimeInitialization(assertRuntimeSchemaReady, async () => {

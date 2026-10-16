@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { readerScopeSchema, timingLevelSchema } from '../../shared/recordingAvailability';
 
 const animationProfileSchema = z.enum([
   'static',
@@ -101,6 +102,14 @@ export const RenderManifestSchema = z.object({
       })
     ).min(1),
   }),
+
+  // Optional server-issued availability identity. When present, the render
+  // admission route revalidates the exact recording/range against the current
+  // approved snapshot before creating a durable job.
+  availabilitySelection: readerScopeSchema.extend({
+    snapshotRevision: z.string().min(1).max(200),
+    requiredTiming: timingLevelSchema,
+  }).strict().optional(),
 
   // Ibtahalat reuses the exact scene shell but provides time-bounded lyric
   // lines rather than Quran word spans. Keeping this in the manifest makes
