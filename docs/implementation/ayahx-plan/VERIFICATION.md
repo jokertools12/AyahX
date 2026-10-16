@@ -453,3 +453,8 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - رُبط `content_approve` بصلاحية Catalog Grant فعلية عبر `authorize`، وأضيف `POST /api/catalog/approvals` خلف JWT وappend-only writer.
 - الاختبارات: Catalog API **5/5**، writer/verifier **6/6**، TypeScript وESLint exit 0.
 - endpoint لا يعتمد على role claim أو body actor؛ يستمد actor من JWT ثم يعيد التحقق من grant في MySQL. لم يُنشر بعد إلى Railway.
+## 2026-10-16 — Browser local preview/export acceptance (Task 3.1)
+
+- الاختبارات المستهدفة `previewStudio`, `videoRecorderConversion`, `localEncoder`, و`exportSettingsDisclosure` نجحت: 4 ملفات و19 اختبارًا.
+- الدليل يغطي Browser preview state، WebM/local encoding، MP4 conversion، cancellation، حفظ إعدادات التصدير، وعدم رفع التسجيل المحلي تلقائيًا.
+- تحذير React `act` موجود في اختبار مشاركة واحد ولا يغير النتيجة؛ لا يُعد هذا قبول Cloud Browser أو benchmark للأجهزة.

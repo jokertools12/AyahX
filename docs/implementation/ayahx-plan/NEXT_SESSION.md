@@ -207,3 +207,7 @@ Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f46
 
 - Approval writer is now reachable only through authenticated `/api/catalog/approvals`, with capability authorization derived from current MySQL grants.
 - Before staging deploy, run the enterprise CI and review the route/migration boundary; no production action is implied.
+## 2026-10-16 — browser local checkpoint
+
+- Task 3.1 is locally verified by 19 focused tests for preview, local WebM, MP4 conversion, cancellation, and export settings.
+- Remaining is device capability/visual benchmark evidence; server Cloud Browser remains disabled by architecture.
