@@ -26,9 +26,9 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 | 1.2 | RBAC وAudit | grant/audit persistence وAPI وowner staging متحققة حيًا؛ PR34 DDL boundary مدموجة غير منشورة؛ clone صلاحيات 51/51 على مخطط staging معزول؛ provision حقيقي وcredential cutover وcontent/source/retention writers وUI باقية |
 | 1.3 | Source resolution attempts | migration003 وv4 grants وstaging runtime cutover متحققون؛ resolver deployment/API health/control lock evidence موجود؛ adapter invocation/idempotency under live workload باقية |
 | 2.1 | Adapter/cache أولي | محول local approved مقيد بالقفل والبصمة مع provenance schema واختبارات fallback/mismatch محلية؛ ربطه بمخزن الإنتاج/الـR2 باقٍ |
-| 2.2 | Adapters خارجية تدريجية | لم يُقيّم |
-| 2.3 | Phonemizer وAI alignment | لم يُقيّم |
-| 2.4 | Strict fallback | لم يُقيّم |
+| 2.2 | Adapters خارجية تدريجية | متحقق محليًا للمصادر المثبتة QUA وquran-align مع checksum/riwayah/host guards؛ live provider acceptance باقية |
+| 2.3 | Phonemizer وAI alignment | حدود QUD/HF وalignment review موجودة ومختبرة محليًا؛ لا HF call أو private upload أو اعتماد تلقائي |
+| 2.4 | Strict fallback | متحقق محليًا عبر lock/policy identity وledger resolver tests؛ workload حي متعدد المصادر باقٍ |
 | 3.1 | Browser live preview/local export | لم يُقيّم |
 | 3.2 | Skia server renderer | attested staging `skia_canvas` MP4 accepted with R2/DB/download/ffprobe reconciliation; visual inspection beyond ffprobe remains |
 | 3.3 | FFmpeg encoder/muxer | متحقق محليًا: H.264/AAC MP4، 60fps/320kbps، ffprobe، أبعاد 16:9، effects، cleanup؛ القبول الحي الكامل ما زال مرتبطًا بمسار render lifecycle |
