@@ -427,3 +427,9 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - الاختبارات المستهدفة `ffmpegBinary`, `ffmpegRenderingService`, و`deterministicRenderer` نجحت: 3 ملفات و18 اختبارًا.
 - الدليل يغطي H.264/AAC MP4، profile 60fps/320kbps دون fallback، أبعاد 16:9، audio effects، ffprobe، واستعادة/تنظيف ملف مؤقت عند الإلغاء.
 - الحالة: متحقق محليًا؛ لا يُعد هذا قبولًا حيًا لمسار Skia→FFmpeg→R2 الكامل.
+## 2026-10-16 — source mesh local acceptance (Tasks 2.2–2.4)
+
+- المحولات الحالية `quranUniversalAudioService` و`quranAlignService` مثبتة بإصدارات/checksums وتتحقق من الرواية والنص وعناوين الصوت المسموح بها.
+- حدود QUD/HF alignment تبقى review-gated وprovisional، ولا تنفذ اتصالًا خارجيًا أو رفعًا خاصًا افتراضيًا.
+- `sourceResolution` يثبت policy lock والـfallback المقيد وسجل المحاولات. الدليل: 5 ملفات و106 اختبارات ناجحة (`quranUniversalAudioService`, `quranAlignService`, `alignmentProvider`, `sourceResolution`, `sourceResolutionService`).
+- الحالة: متحقق محليًا؛ لا يُثبت هذا قبول provider حي أو اعتماد AI.

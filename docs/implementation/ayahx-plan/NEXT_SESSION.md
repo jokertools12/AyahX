@@ -187,3 +187,7 @@ Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f46
 
 - Task 3.3 is locally verified by 18 focused tests covering encoding, mux/audio effects, dimensions, ffprobe, and cleanup.
 - Remaining gate is live lifecycle evidence with the approved Skia artifact and worker logs; keep production isolated.
+## 2026-10-16 — source mesh checkpoint
+
+- Local source mesh evidence is green: pinned QUA/quran-align adapters, explicit HF review boundary, and strict lock-pinned fallback (106 focused tests).
+- Remaining gate is a controlled live multi-source workload using approved records; do not enable provider fallback or AI approval implicitly.
