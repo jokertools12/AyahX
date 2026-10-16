@@ -29,4 +29,10 @@ describe('approved source adapters', () => {
     const result = await adapters['local@v1'](request, request.policy.sources[0]);
     expect(result).toBe('invalid_payload');
   });
+
+  it('rejects provenance licensed under a different policy reference', async () => {
+    const adapters = createApprovedSourceAdapters([{ sourceId: 'local', sourceRevision: 'v1', eligibleLock: lock, candidate, provenance: { ...provenance, licenseReference: 'other-license' } }]);
+    const result = await adapters['local@v1'](request, request.policy.sources[0]);
+    expect(result).toBe('invalid_payload');
+  });
 });

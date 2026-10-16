@@ -1,5 +1,6 @@
 import {
   resolutionCandidateSchema,
+  resolutionProvenanceSchema,
   resolutionLockHashInput,
   validateResolutionCandidate,
   type ResolutionCandidate,
@@ -19,13 +20,17 @@ export type ApprovedSourceRecord = Readonly<{
 
 const sourceKey = (sourceId: string, sourceRevision: string) => `${sourceId}@${sourceRevision}`;
 
-function failureForRecord(record: ApprovedSourceRecord, request: ResolutionRequest): SourceFailure | null {
+function failureForRecord(record: ApprovedSourceRecord, request: ResolutionRequest, source: ResolutionRequest['policy']['sources'][number]): SourceFailure | null {
   if (resolutionLockHashInput(record.eligibleLock) !== resolutionLockHashInput(request.lock)) return 'not_indexed';
   const candidateFailure = validateResolutionCandidate(request.lock, record.candidate, request.purpose);
   if (candidateFailure) return candidateFailure;
-  const provenance = resolutionCandidateSchema.parse(record.candidate).provenance;
-  if (!provenance) return 'invalid_payload';
-  if (provenance.sourceId !== record.sourceId || provenance.sourceRevision !== record.sourceRevision) return 'invalid_payload';
+  const provenanceResult = resolutionProvenanceSchema.safeParse(record.provenance);
+  if (!provenanceResult.success) return 'invalid_payload';
+  const provenance = provenanceResult.data;
+  const candidateProvenance = resolutionCandidateSchema.parse(record.candidate).provenance;
+  if (!candidateProvenance || JSON.stringify(candidateProvenance) !== JSON.stringify(provenance)) return 'invalid_payload';
+  if (provenance.sourceId !== record.sourceId || provenance.sourceRevision !== record.sourceRevision
+    || provenance.licenseReference !== source.licenseReference) return 'invalid_payload';
   if (provenance.licenseReference.length === 0 || provenance.contentChecksum.length !== 64) return 'invalid_payload';
   return null;
 }
@@ -40,7 +45,7 @@ export function createApprovedSourceAdapters(records: readonly ApprovedSourceRec
     const key = sourceKey(record.sourceId, record.sourceRevision);
     adapters[key] = async (request, source) => {
       if (source.sourceId !== record.sourceId || source.sourceRevision !== record.sourceRevision) return 'not_indexed';
-      const failure = failureForRecord(record, request);
+      const failure = failureForRecord(record, request, source);
       if (failure) return failure;
       return {
         ...record.candidate,
