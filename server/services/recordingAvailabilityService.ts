@@ -27,7 +27,7 @@ export async function revalidateRenderManifestAvailability(
     const timing = interval.timing;
     return interval.audioState === 'verified' && interval.audioAssetId === availability.audioAssetId
       && interval.audioFingerprint === availability.audioFingerprint
-      && timing?.documentId === availability.timingDocumentId && timing.revision === availability.timingRevision;
+      && timing?.documentId === availability.timingDocumentId && timing?.revision === availability.timingRevision;
   }) && manifest.audio.audioContentHash === availability.audioFingerprint
     && manifest.timingMap.audioContentHash === availability.audioFingerprint
     && manifest.timingMap.mapId === availability.timingDocumentId
