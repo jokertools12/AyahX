@@ -5,7 +5,7 @@ import { Layout } from '@/components/Layout';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
-import { api, type QuranSourceCandidate } from '@/lib/api';
+import { api, type CatalogApprovalRecord, type QuranSourceCandidate } from '@/lib/api';
 
 const evidenceLabels: Array<keyof Pick<QuranSourceCandidate, 'endpoint' | 'license' | 'storage' | 'cors' | 'rateLimits' | 'identity'>> = [
   'endpoint', 'license', 'storage', 'cors', 'rateLimits', 'identity',
@@ -28,12 +28,14 @@ export default function AdminSourcesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [overview, setOverview] = useState<Awaited<ReturnType<typeof api.admin.getOverview>> | null>(null);
+  const [approvals, setApprovals] = useState<CatalogApprovalRecord[]>([]);
 
   useEffect(() => {
     if (!user || user.role !== 'admin') return;
-    Promise.all([api.quran.getSources(), api.admin.getOverview()]).then(([result, summary]) => {
+    Promise.all([api.quran.getSources(), api.admin.getOverview(), api.admin.getApprovals()]).then(([result, summary, approvalRows]) => {
       setSources(result.sources);
       setOverview(summary);
+      setApprovals(approvalRows);
     }).catch((err: unknown) => {
       setError(err instanceof Error ? err.message : 'تعذر تحميل سجل المصادر');
     }).finally(() => setLoading(false));
@@ -64,6 +66,10 @@ export default function AdminSourcesPage() {
             <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">المصادر</p><p className="font-semibold">{overview.sources.reviewPending} قيد المراجعة · {overview.sources.activationReady} جاهز</p></CardContent></Card>
             <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">محرك الرندر الافتراضي</p><p className="font-semibold">{overview.renderPolicy.defaultEngine || 'غير متاح'}</p></CardContent></Card>
           </section>}
+          <Card className="mb-6 border-border/60 bg-card/80">
+            <CardHeader className="pb-3"><CardTitle className="text-lg">سجل الاعتمادات المنقحة</CardTitle><p className="text-xs text-muted-foreground">قراءة فقط؛ لا يعرض payload أو context ولا ينفذ أي اعتماد.</p></CardHeader>
+            <CardContent>{approvals.length === 0 ? <p className="text-sm text-muted-foreground">لا توجد اعتمادات مسجلة.</p> : <ul className="grid gap-2 md:grid-cols-2">{approvals.map((approval) => <li key={approval.auditEventId} className="rounded-md border border-border/50 p-3 text-xs"><div className="flex flex-wrap items-center justify-between gap-2"><span className="font-semibold">{approval.subjectKind} · {approval.subjectId}</span><Badge variant="secondary">معتمد</Badge></div><p className="mt-1 text-muted-foreground">revision: {approval.subjectRevision} · {new Date(approval.approvedAtEpochMs).toLocaleString('ar-EG')}</p><p className="mt-1 text-muted-foreground">السبب: {approval.reason}</p></li>)}</ul>}</CardContent>
+          </Card>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {sources.map((source) => {
               const verified = evidenceLabels.filter((field) => source[field].status === 'verified').length;

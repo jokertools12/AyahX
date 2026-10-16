@@ -12,9 +12,10 @@ const fixtures = vi.hoisted(() => ({
     activationReady: false, activationGaps: ['production_disabled', 'license_unverified'],
   }] }),
   getOverview: vi.fn().mockResolvedValue({ environment: 'test', database: { status: 'connected', latencyMs: 1 }, storage: { ready: true, driver: 'local' }, renderPolicy: { enabledEngines: ['skia_canvas'], defaultEngine: 'skia_canvas', maxBacklog: 50 }, sources: { total: 13, activationReady: 0, reviewPending: 13 } }),
+  getApprovals: vi.fn().mockResolvedValue([{ auditEventId: 'event-1', actorId: 'admin', authorizingGrantId: 'grant-1', approvedAtEpochMs: 1000, requestId: 'request-1', reason: 'fixture approval', subjectKind: 'source', subjectId: 'source-a', subjectRevision: 'v1', subjectSha256: 'a'.repeat(64) }]),
 }));
 vi.mock('@/hooks/useAuth', () => ({ useAuth: () => ({ user: fixtures.user, loading: false }) }));
-vi.mock('@/lib/api', () => ({ api: { quran: { getSources: fixtures.getSources }, admin: { getOverview: fixtures.getOverview } } }));
+vi.mock('@/lib/api', () => ({ api: { quran: { getSources: fixtures.getSources }, admin: { getOverview: fixtures.getOverview, getApprovals: fixtures.getApprovals } } }));
 vi.mock('@/components/Layout', () => ({ Layout: ({ children }: { children: React.ReactNode }) => <main>{children}</main> }));
 
 afterEach(() => { cleanup(); vi.clearAllMocks(); });
@@ -27,6 +28,8 @@ describe('admin source inventory page', () => {
     expect(screen.getByText('معطّل')).toBeInTheDocument();
     expect(screen.getByText('ما يلزم قبل التفعيل')).toBeInTheDocument();
     expect(screen.getByText('الترخيص غير موثق')).toBeInTheDocument();
+    expect(screen.getByText('سجل الاعتمادات المنقحة')).toBeInTheDocument();
+    expect(screen.getByText('source · source-a')).toBeInTheDocument();
     expect(fixtures.getSources).toHaveBeenCalledOnce();
   });
 });

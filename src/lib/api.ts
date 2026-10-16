@@ -29,6 +29,19 @@ export interface QuranSourceCandidate {
   activationGaps?: string[];
 }
 
+export interface CatalogApprovalRecord {
+  auditEventId: string;
+  actorId: string;
+  authorizingGrantId: string;
+  approvedAtEpochMs: number;
+  requestId: string;
+  reason: string;
+  subjectKind: string;
+  subjectId: string;
+  subjectRevision: string;
+  subjectSha256: string;
+}
+
 export interface Profile {
   id: string;
   user_id: string;
@@ -635,6 +648,9 @@ export const api = {
         renderPolicy: { enabledEngines: string[]; defaultEngine: string | null; maxBacklog: number };
         sources: { total: number; activationReady: number; reviewPending: number };
       }>('/api/admin/overview');
+    },
+    async getApprovals(limit = 20) {
+      return request<CatalogApprovalRecord[]>(`/api/catalog/approvals?limit=${Math.min(Math.max(limit, 1), 100)}`);
     },
   },
 
