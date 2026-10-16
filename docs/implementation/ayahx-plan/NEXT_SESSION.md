@@ -169,3 +169,8 @@ Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f46
 - Task 2.1 local slice landed in the working branch: `approvedSourceAdapters.ts` exposes server-owned, lock-pinned adapters with provenance validation; shared candidate schema now accepts explicit provenance.
 - Local evidence: focused 94/94, full 891 passed/6 skipped, TypeScript and production build exit 0.
 - Remaining: connect the adapter factory to the approved repository/cache boundary, then add one external adapter only after endpoint/license/revision evidence. Do not enable unreviewed sources or promote production.
+## 2026-10-16 — admin overview increment
+
+- Added the first operational dashboard slice: `/api/admin/overview` and sanitized status cards on `/admin/sources` for MySQL, storage, render policy, and source review counts.
+- Local evidence: focused API/UI tests 3/3, TypeScript and production build exit 0. No Railway or production mutation.
+- Next: wait for PR61 CI/review, then connect approved source adapters to the repository boundary before enabling any external provider.

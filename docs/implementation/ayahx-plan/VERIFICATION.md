@@ -406,3 +406,9 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - أضيف `resolutionProvenanceSchema` إلى `shared/sourceResolution.ts`؛ النتيجة تحمل source/revision/license/retrievedAt/content checksum، والمحول يرفض lock mismatch أو provenance الغائب.
 - الدليل: `npx vitest run src/test/sourceResolution.test.ts src/test/sourceResolutionService.test.ts src/test/approvedSourceAdapters.test.ts` — 3 ملفات، 94 اختبارًا ناجحًا؛ `npm test -- --run` — 109 ملفات، 891 اختبارًا ناجحًا و6 متخطاة؛ `npx tsc --noEmit` و`npm run build` exit 0.
 - الحالة: متحقق محليًا فقط؛ لم يُربط بعد ببيانات production أو R2، ولا يغيّر staging/production.
+## 2026-10-16 — admin operational overview (Task 4.1)
+
+- أضيف `GET /api/admin/overview` محمي بدور الأدمن، ويعرض حالة MySQL والتخزين وسياسة الرندر وعدّاد المصادر دون credentials أو تفاصيل حساسة.
+- رُبط الملخص بصفحة `/admin/sources` مع حالات RTL قابلة للقراءة، واختبار رفض المستخدم واختبار الاستجابة المنقحة.
+- الدليل: `npx vitest run src/test/adminOverviewApi.test.ts src/test/adminSourcesPage.test.tsx` — 3/3، `npx tsc --noEmit`، و`npm run build` exit 0.
+- الحالة: متحقق محليًا؛ لم يُنشر بعد إلى staging.

@@ -626,6 +626,18 @@ export const api = {
     },
   },
 
+  admin: {
+    async getOverview() {
+      return request<{
+        environment: string;
+        database: { status: 'connected' | 'degraded'; latencyMs: number };
+        storage: { ready: boolean; driver: string; bucket?: string; reason?: string };
+        renderPolicy: { enabledEngines: string[]; defaultEngine: string | null; maxBacklog: number };
+        sources: { total: number; activationReady: number; reviewPending: number };
+      }>('/api/admin/overview');
+    },
+  },
+
   alignments: {
     async getProviders() {
       return request<{ providers: Array<{

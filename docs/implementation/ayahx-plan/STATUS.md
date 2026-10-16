@@ -33,7 +33,7 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 | 3.2 | Skia server renderer | attested staging `skia_canvas` MP4 accepted with R2/DB/download/ffprobe reconciliation; visual inspection beyond ffprobe remains |
 | 3.3 | FFmpeg encoder/muxer | لم يُقيّم |
 | 3.4 | Server render lifecycle | staging job succeeded with R2-backed output path, expiry prefix, download, and worker deployment evidence |
-| 4.1 | Admin Dashboard | شريحة inventory قراءة فقط مدموجة في `/admin/sources`؛ بقية لوحة الأدمن باقية |
+| 4.1 | Admin Dashboard | overview منقح لحالة DB/storage/render policy/source review مربوط بصفحة `/admin/sources`؛ بقية لوحة الأدمن باقية |
 | 4.2 | Reciters/Riwayat/Sources | لم يُقيّم |
 | 4.3 | Ibtihalat + Sync Studio | لم يُقيّم |
 | 4.4 | Typography/Templates/Storage | لم يُقيّم |
