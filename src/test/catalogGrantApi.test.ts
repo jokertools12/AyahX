@@ -6,7 +6,7 @@ import { createCatalogRouter } from '../../server/routes/catalog';
 import { authenticateToken, signToken } from '../../server/middleware/auth';
 import { CatalogGrantError } from '../../server/services/catalogGrantService';
 vi.mock('../../server/db', () => ({ query: vi.fn(async () => [{ role: 'admin' }]) }));
-const service = { getAccess: vi.fn(), createGrant: vi.fn(), revokeGrant: vi.fn(), approve: vi.fn() };
+const service = { getAccess: vi.fn(), createGrant: vi.fn(), revokeGrant: vi.fn(), approve: vi.fn(), listApprovals: vi.fn() };
 let server: Server; let base: string;
 beforeAll(async () => {
   const app = express(); app.use(express.json()); app.use(authenticateToken); app.use('/api/catalog', createCatalogRouter(service));
@@ -46,6 +46,12 @@ describe('catalog role-management router factory', () => {
     const response = await fetch(base + '/api/catalog/approvals', { method: 'POST', headers: headers(), body: JSON.stringify(body) });
     expect(response.status).toBe(200); expect(await response.json()).toEqual({ auditEventId: 'event-1', replayed: false });
     expect(service.approve).toHaveBeenCalledExactlyOnceWith('server-actor', body);
+  });
+  it('routes read-only approval evidence with the authenticated actor identity', async () => {
+    service.listApprovals.mockResolvedValueOnce([{ auditEventId: 'event-1', subjectKind: 'source' }]);
+    const response = await fetch(base + '/api/catalog/approvals?limit=10', { headers: headers() });
+    expect(response.status).toBe(200); expect(await response.json()).toEqual([{ auditEventId: 'event-1', subjectKind: 'source' }]);
+    expect(service.listApprovals).toHaveBeenCalledExactlyOnceWith('server-actor', '10');
   });
   it('never exposes bootstrap or raw database diagnostics', async () => {
     expect((await fetch(base + '/api/catalog/bootstrap', { method: 'POST', headers: headers(), body: '{}' })).status).toBe(404);

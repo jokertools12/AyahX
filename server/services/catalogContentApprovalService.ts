@@ -14,6 +14,10 @@ export type CatalogApprovalConnection = Pick<{
 export type CatalogApprovalAuthorization = (actorId: string) => Promise<{ allowed: boolean; authorizingGrantId?: string }>;
 export type CatalogApprovalInput = { requestId: string; reason: string; approval: unknown };
 export type CatalogApprovalResult = { auditEventId: string; replayed: boolean };
+export type CatalogApprovalListing = {
+  auditEventId: string; actorId: string; authorizingGrantId: string; approvedAtEpochMs: number;
+  requestId: string; reason: string; subjectKind: string; subjectId: string; subjectRevision: string; subjectSha256: string;
+};
 export type CatalogContentApprovalService = ReturnType<typeof createCatalogContentApprovalService>;
 
 export const catalogApprovalInputSchema = z.object({
@@ -47,6 +51,30 @@ export function createCatalogContentApprovalService(
   clock: () => number = Date.now,
 ) {
   return {
+    async listApprovals(actorId: string, limitInput: unknown = 50): Promise<CatalogApprovalListing[]> {
+      const limit = typeof limitInput === 'number' && Number.isSafeInteger(limitInput) ? Math.min(Math.max(limitInput, 1), 100) : 50;
+      const authorization = await authorize(actorId);
+      if (!authorization.allowed) throw new CatalogApprovalError('CATALOG_APPROVAL_FORBIDDEN');
+      const connection = await getConnection();
+      try {
+        const [rows] = await connection.query(`SELECT id AS auditEventId, actor_user_id AS actorId,
+          authorizing_grant_id AS authorizingGrantId, created_at_epoch_ms AS approvedAtEpochMs,
+          request_id AS requestId, reason, subject_kind AS subjectKind, subject_id AS subjectId,
+          subject_revision AS subjectRevision, subject_sha256 AS subjectSha256
+          FROM catalog_audit_events WHERE action = 'content_approve'
+          ORDER BY created_at_epoch_ms DESC, id DESC LIMIT ${limit}`);
+        return (Array.isArray(rows) ? rows : []).map(row => {
+          const value = row as Record<string, unknown>;
+          return {
+            auditEventId: String(value.auditEventId), actorId: String(value.actorId),
+            authorizingGrantId: String(value.authorizingGrantId), approvedAtEpochMs: Number(value.approvedAtEpochMs),
+            requestId: String(value.requestId), reason: String(value.reason),
+            subjectKind: String(value.subjectKind), subjectId: String(value.subjectId),
+            subjectRevision: String(value.subjectRevision), subjectSha256: String(value.subjectSha256),
+          };
+        });
+      } finally { connection.release(); }
+    },
     async approve(actorId: string, input: CatalogApprovalInput): Promise<CatalogApprovalResult> {
       const body = parsedInput(input);
       const approval = approvalEnvelopeSchema.parse(body.approval);

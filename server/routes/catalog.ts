@@ -13,7 +13,7 @@ const messages: Record<string, string> = {
   CATALOG_APPROVAL_FORBIDDEN: 'ليست لديك صلاحية اعتماد المحتوى.', CATALOG_APPROVAL_UNAVAILABLE: 'اعتماد المحتوى غير متاح حاليًا.',
 };
 /** Mount explicitly after the existing authentication middleware. Never mount bootstrapOwner over HTTP. */
-export function createCatalogRouter(service: Pick<CatalogGrantService, 'getAccess' | 'createGrant' | 'revokeGrant'> & { approve?: CatalogContentApprovalService['approve'] }) {
+export function createCatalogRouter(service: Pick<CatalogGrantService, 'getAccess' | 'createGrant' | 'revokeGrant'> & { approve?: CatalogContentApprovalService['approve']; listApprovals?: CatalogContentApprovalService['listApprovals'] }) {
   const router = Router();
   router.use((_req, res, next) => { res.setHeader('Cache-Control', 'private, no-store'); next(); });
   router.use(requireAuth);
@@ -30,6 +30,9 @@ export function createCatalogRouter(service: Pick<CatalogGrantService, 'getAcces
   router.post('/grants/:id/revoke', handler(req => service.revokeGrant(req.user!.id, req.params.id, req.body)));
   router.post('/approvals', handler(req => service.approve
     ? service.approve(req.user!.id, req.body)
+    : Promise.reject(new CatalogGrantError('CATALOG_APPROVAL_UNAVAILABLE', 503))));
+  router.get('/approvals', handler(req => service.listApprovals
+    ? service.listApprovals(req.user!.id, req.query.limit)
     : Promise.reject(new CatalogGrantError('CATALOG_APPROVAL_UNAVAILABLE', 503))));
   return router;
 }
