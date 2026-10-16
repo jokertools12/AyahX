@@ -34,6 +34,7 @@ const TermsPage = lazy(() => import("./pages/TermsPage"));
 const FaqPage = lazy(() => import("./pages/FaqPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const AdminSourcesPage = lazy(() => import("./pages/AdminSourcesPage"));
+const AdminRecitersPage = lazy(() => import("./pages/AdminRecitersPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient({
@@ -89,6 +90,7 @@ const App = () => (
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/admin/sources" element={<ProtectedRoute><AdminSourcesPage /></ProtectedRoute>} />
             <Route path="/admin/dashboard" element={<ProtectedRoute><AdminSourcesPage /></ProtectedRoute>} />
+            <Route path="/admin/reciters" element={<ProtectedRoute><AdminRecitersPage /></ProtectedRoute>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
             </Routes>
