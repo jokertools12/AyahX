@@ -21,7 +21,7 @@ describe('admin overview', () => {
     expect(response.status).toBe(403);
   });
   it('returns sanitized operational summary to an admin', async () => {
-    const response = await fetch(`${base}/api/admin/overview`, { headers: { Authorization: `Bearer ${signToken({ id: 'admin', email: 'admin@example.test', role: 'admin' })}` } });
+    const response = await fetch(`${base}/api/admin/overview`, { headers: { Authorization: `Bearer ${signToken({ id: 'admin', email: 'admin@example.test' })}` } });
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body.database).toMatchObject({ status: 'connected', latencyMs: 3 });
