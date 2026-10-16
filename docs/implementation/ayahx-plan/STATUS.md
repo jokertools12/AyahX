@@ -92,3 +92,9 @@ Fresh v4 runtime principals were provisioned and verified against migration003: 
 ## 2026-10-16 — explicit Hugging Face QUD adapter boundary
 
 أضيف موصل اختياري صريح `huggingface_qud_aligner` خلف متغيرات الخادم `HF_QUD_ALIGNER_API_URL`/`HF_QUD_ALIGNER_URL` و`HF_TOKEN`. يظهر الموصل كـ external review required، ويتطلب endpoint مهيأً ومراجعة بشرية؛ لا يوجد fallback صامت أو رفع وسائط خاصة أو تفعيل فعلي في Railway. الاختبار يثبت أنه غير مهيأ افتراضيًا، بينما تبقى نتيجة QUD provisional ولا تصبح canonical أو approved تلقائيًا.
+
+## 2026-10-16 — PR61 merge and staging rollout
+
+PR61 دُمج بعد نجاح `Enterprise foundation` و`AyahX E2E` على إصلاح fixture الخاص بـTypeScript. `main` الحالي هو `d268d9a55568f00802ad2946939aaae758455e67`.
+
+نشرات staging الثلاث على نفس revision وبحالة SUCCESS: API `3dca7786-5876-4b52-9ee6-7ff62a4ca6ab`، Skia `7c7a9fa1-97f7-48d3-b98b-d2c20720da12`، control `6eae3bff-bb0a-417b-8236-0f7988447d3e`. فحص `https://ayahx-staging.up.railway.app/api/health/ready` أعاد HTTP 200، `database=connected` و`storage.driver=s3`. production لم يتغير.

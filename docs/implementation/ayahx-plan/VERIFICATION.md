@@ -416,3 +416,9 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 
 - `getCloudRenderPolicy` يستبعد `browser_cloud` دائمًا؛ متغير البيئة التاريخي لا ينشئ queue على Railway. هذا لا يحذف fixtures أو مسار Browser المحلي من الاختبارات.
 - الدليل: اختبار policy الجديد مع الاختبارات الحالية، ثم TypeScript والبناء؛ لا تغيير خارجي أو production.
+## 2026-10-16 — PR61 CI and staging acceptance
+
+- فشل CI الأول في `contracts` بسبب `role` زائد في fixture `adminOverviewApi.test.ts`؛ أُصلح بإزالة الحقل غير الموجود في نوع `signToken`.
+- إعادة التشغيل نجحت: `Enterprise foundation` run 64 و`AyahX E2E` run 127.
+- بعد الدمج، Railway staging أكد revision `d268d9a` وحالة SUCCESS لخدمات API/Skia/control، وreadiness الحي أعاد `database=connected` و`storage.driver=s3`.
+- هذه بوابة staging فقط؛ لا يوجد نشر production أو قبول نهائي للرندر من هذه الشريحة.
