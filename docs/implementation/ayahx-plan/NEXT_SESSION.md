@@ -155,3 +155,7 @@ PR60 was squash-merged after `contracts` and `public-ui` both passed on head `7f
 The owner supplied staging-only R2 credentials. They were set on API staging through Railway CLI without printing values; production was untouched. API deployment `6907246f-1451-4b18-938d-ae4c6189e0b1` is SUCCESS and readiness reports `storage.driver=s3`. A real static Skia probe produced job `8b599efd-6650-4965-963a-7d4a834d0df0`; the DB path, R2 object under `temp-48h/`, object size/ETag, and download size reconcile. Do not expose or reuse the credentials; rotate the supplied secret if it was pasted into any external surface.
 
 The remaining gate is a word-by-word timing render: the current staging attestation check returned `ALIGNMENT_ATTESTATION_INVALID` when a freshly issued known-alignment proof was submitted. Investigate same-user/map serialization or replica secret consistency before claiming full render acceptance. Keep the static R2 evidence separate from final timing acceptance.
+
+## 2026-10-16 checkpoint — final staging R2 timing gate passed
+
+The same-process resolve-known plus render flow now passes the attestation gate. Staging produced an approved word-timing Skia MP4 in R2 with reconciled DB path, object size/ETag, download bytes, worker deployment, and ffprobe evidence. The earlier invalid proof was a cross-replica/request-session issue in the probe method, not a production code change. The remaining plan work is broader Enterprise coverage and credential rotation; do not promote production from this staging evidence alone.
