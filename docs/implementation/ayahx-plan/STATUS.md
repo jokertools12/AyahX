@@ -29,7 +29,7 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 | 2.2 | Adapters خارجية تدريجية | متحقق محليًا للمصادر المثبتة QUA وquran-align مع checksum/riwayah/host guards؛ live provider acceptance باقية |
 | 2.3 | Phonemizer وAI alignment | حدود QUD/HF وalignment review موجودة ومختبرة محليًا؛ لا HF call أو private upload أو اعتماد تلقائي |
 | 2.4 | Strict fallback | متحقق محليًا عبر lock/policy identity وledger resolver tests؛ workload حي متعدد المصادر باقٍ |
-| 3.1 | Browser live preview/local export | لم يُقيّم |
+| 3.1 | Browser live preview/local export | متحقق محليًا: preview، WebM/local encoder، MP4 conversion، cancellation وsettings disclosure؛ browser capability/device benchmark الحي باقٍ |
 | 3.2 | Skia server renderer | attested staging `skia_canvas` MP4 accepted with R2/DB/download/ffprobe reconciliation; visual inspection beyond ffprobe remains |
 | 3.3 | FFmpeg encoder/muxer | متحقق محليًا: H.264/AAC MP4، 60fps/320kbps، ffprobe، أبعاد 16:9، effects، cleanup؛ القبول الحي الكامل ما زال مرتبطًا بمسار render lifecycle |
 | 3.4 | Server render lifecycle | staging job succeeded with R2-backed output path, expiry prefix, download, and worker deployment evidence |
