@@ -433,3 +433,8 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - حدود QUD/HF alignment تبقى review-gated وprovisional، ولا تنفذ اتصالًا خارجيًا أو رفعًا خاصًا افتراضيًا.
 - `sourceResolution` يثبت policy lock والـfallback المقيد وسجل المحاولات. الدليل: 5 ملفات و106 اختبارات ناجحة (`quranUniversalAudioService`, `quranAlignService`, `alignmentProvider`, `sourceResolution`, `sourceResolutionService`).
 - الحالة: متحقق محليًا؛ لا يُثبت هذا قبول provider حي أو اعتماد AI.
+## 2026-10-16 — catalog approval authority verifier
+
+- أضيف `createCatalogAuthorityVerifier` لقراءة أحداث `content_approve` من `catalog_audit_events` والتحقق من subject/revision/hash/وقت الاعتماد وسلامة context.
+- الحارس fail-closed: timing binding بلا evidence مخصص يعيد `false`، والصفوف المشوهة أو المستقبلية لا تصبح authority.
+- الدليل: `catalogAuthorityVerifier.test.ts` (3/3)، TypeScript وESLint exit 0. لم يُوصل verifier بالـruntime ولم تُنفذ migration أو كتابة اعتماد حية.

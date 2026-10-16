@@ -191,3 +191,7 @@ Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f46
 
 - Local source mesh evidence is green: pinned QUA/quran-align adapters, explicit HF review boundary, and strict lock-pinned fallback (106 focused tests).
 - Remaining gate is a controlled live multi-source workload using approved records; do not enable provider fallback or AI approval implicitly.
+## 2026-10-16 — authority verifier contract
+
+- Added a fail-closed catalog approval verifier for immutable `content_approve` audit evidence, with hash/subject/time checks and three focused tests.
+- It is intentionally not wired into runtime until an append-only approval writer and migration gate exist; timing-binding evidence remains denied.
