@@ -23,7 +23,7 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 | 0.2 | Riwayah/numbering/font map | runtime binding schema متحقق محليًا؛ بيانات canonical/font QA باقية |
 | 0.3 | Recording coverage contract | guard + trusted injected repository و44 اختبارًا جديدًا محليًا؛ authority store وruntime/export wiring باقيان |
 | 1.1 | MySQL additive migration | خمسة جداول خاملة + runner متحقق محليًا وتجربة restore؛ PR29–33 مدموجة و001/002 staging apply متحقق؛ runtime8618dcb وowner bootstrap متحققان؛ assets/templates وغيرها باقية |
-| 1.2 | RBAC وAudit | grant/audit persistence وAPI وowner staging متحققة حيًا؛ PR34 DDL boundary مدموجة غير منشورة؛ clone صلاحيات 51/51 على مخطط staging معزول؛ provision حقيقي وcredential cutover وcontent/source/retention writers وUI باقية |
+| 1.2 | RBAC وAudit | grant/audit persistence وAPI وowner staging متحققة حيًا؛ authority verifier لقراءة `content_approve` append-only أضيف محليًا؛ writers وruntime wiring وUI باقية |
 | 1.3 | Source resolution attempts | migration003 وv4 grants وstaging runtime cutover متحققون؛ resolver deployment/API health/control lock evidence موجود؛ adapter invocation/idempotency under live workload باقية |
 | 2.1 | Adapter/cache أولي | محول local approved مقيد بالقفل والبصمة مع provenance schema واختبارات fallback/mismatch محلية؛ ربطه بمخزن الإنتاج/الـR2 باقٍ |
 | 2.2 | Adapters خارجية تدريجية | متحقق محليًا للمصادر المثبتة QUA وquran-align مع checksum/riwayah/host guards؛ live provider acceptance باقية |
