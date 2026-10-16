@@ -389,3 +389,9 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 ## 2026-10-17 — review correction for AWS S3 endpoint resolution
 
 عالجت ملاحظة P1 من مراجعة PR60: `/api/health/ready` لا يطلب endpoint عند استخدام AWS S3 القياسي مع virtual-hosted mode، بينما يبقى endpoint إلزاميًا في R2/المزوّدات المعتمدة على path-style (`OBJECT_STORAGE_FORCE_PATH_STYLE=true`). اختبارات readiness/config (16 اختبارًا مع alignment provider) وTypeScript والبناء الإنتاجي نجحت.
+
+## 2026-10-16 checkpoint — R2 staging artifact verified
+
+بعد ضبط متغيرات R2 على API staging وإعادة نشر API `6907246f-1451-4b18-938d-ae4c6189e0b1` بنجاح، أعاد `/api/health/ready` HTTP 200 مع `database=connected` و`storage.driver=s3`. نجح probe Skia ثابت بحساب staging disposable: job `8b599efd-6650-4965-963a-7d4a834d0df0`، artifact 124932 bytes، وDB output path هو `s3://ayahx-audio-staging/temp-48h/...mp4`. Cloudflare R2 أعاد object واحدًا تحت `temp-48h/` بنفس الحجم وETag `9df63ef2799a6729a7f5958ec784b764`، والتنزيل أعاد 124932 bytes. Worker deployment `18ddb6b1-42c0-4bad-a200-3008d01e4c44` SUCCESS وسجل بدء worker. الدليل المنقح: `tooling/reports/enterprise-baseline/staging-r2-render-verification.json`.
+
+الـprobe ثابت وموسوم `needs_review_static_probe`. محاولة word-by-word باستخدام attestation صادرة من `/api/alignments/resolve-known` رُفضت بـ`ALIGNMENT_ATTESTATION_INVALID`، لذلك قبول التوقيت/الصوت الكامل ما زال مفتوحًا للتحقيق، ولا يوجد تغيير production.
