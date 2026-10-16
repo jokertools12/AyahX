@@ -183,3 +183,7 @@ Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f46
 - PR61 merged as `d268d9a`; Enterprise foundation and AyahX E2E are green.
 - Staging API, Skia, and control deployments all report SUCCESS on the same main revision. Live readiness confirms MySQL and S3/R2 storage.
 - Next: connect approved source adapters to the repository boundary, then perform the remaining live render/visual gates. Keep production untouched until those gates and the explicit production review are complete.
+## 2026-10-16 — FFmpeg acceptance checkpoint
+
+- Task 3.3 is locally verified by 18 focused tests covering encoding, mux/audio effects, dimensions, ffprobe, and cleanup.
+- Remaining gate is live lifecycle evidence with the approved Skia artifact and worker logs; keep production isolated.

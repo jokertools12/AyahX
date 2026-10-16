@@ -31,7 +31,7 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 | 2.4 | Strict fallback | لم يُقيّم |
 | 3.1 | Browser live preview/local export | لم يُقيّم |
 | 3.2 | Skia server renderer | attested staging `skia_canvas` MP4 accepted with R2/DB/download/ffprobe reconciliation; visual inspection beyond ffprobe remains |
-| 3.3 | FFmpeg encoder/muxer | لم يُقيّم |
+| 3.3 | FFmpeg encoder/muxer | متحقق محليًا: H.264/AAC MP4، 60fps/320kbps، ffprobe، أبعاد 16:9، effects، cleanup؛ القبول الحي الكامل ما زال مرتبطًا بمسار render lifecycle |
 | 3.4 | Server render lifecycle | staging job succeeded with R2-backed output path, expiry prefix, download, and worker deployment evidence |
 | 4.1 | Admin Dashboard | overview منقح لحالة DB/storage/render policy/source review مربوط بصفحة `/admin/sources`؛ بقية لوحة الأدمن باقية |
 | 4.2 | Reciters/Riwayat/Sources | لم يُقيّم |
