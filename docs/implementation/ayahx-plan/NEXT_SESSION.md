@@ -211,3 +211,8 @@ Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f46
 
 - Task 3.1 is locally verified by 19 focused tests for preview, local WebM, MP4 conversion, cancellation, and export settings.
 - Remaining is device capability/visual benchmark evidence; server Cloud Browser remains disabled by architecture.
+
+## 2026-10-16 — staging R2 lifecycle rule
+
+- Applied and verified Cloudflare R2 lifecycle on `ayahx-audio-staging`: `temp-48h/` objects expire after 172800 seconds; the existing 7-day multipart-abort rule remains enabled.
+- Production bucket and Railway production were untouched. A timed expiry observation on a disposable staging object remains before claiming provider expiry completion.
