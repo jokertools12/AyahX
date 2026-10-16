@@ -38,7 +38,7 @@ PR34 لحدود DDL التشغيلية وPR35 مدموجتان؛ main d040e7e11a
 | 4.3 | Ibtihalat + Sync Studio | لم يُقيّم |
 | 4.4 | Typography/Templates/Storage | لم يُقيّم |
 | 4.5 | Users/Community | لم يُقيّم |
-| 4.6 | Engines/System | لم يُقيّم |
+| 4.6 | Engines/System | policy الخادم تستبعد `browser_cloud` حتى مع flag قديم؛ Browser يبقى قدرة عميل، وإعدادات FFmpeg/Skia التفصيلية باقية |
 | 5.1 | الصوت والقارئ والتسجيل | لم يُقيّم |
 | 5.2 | السور والآيات المتاحة | لم يُقيّم |
 | 5.3 | Typography/ornaments | لم يُقيّم |

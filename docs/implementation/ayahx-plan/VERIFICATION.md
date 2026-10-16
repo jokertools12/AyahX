@@ -412,3 +412,7 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - رُبط الملخص بصفحة `/admin/sources` مع حالات RTL قابلة للقراءة، واختبار رفض المستخدم واختبار الاستجابة المنقحة.
 - الدليل: `npx vitest run src/test/adminOverviewApi.test.ts src/test/adminSourcesPage.test.tsx` — 3/3، `npx tsc --noEmit`، و`npm run build` exit 0.
 - الحالة: متحقق محليًا؛ لم يُنشر بعد إلى staging.
+## 2026-10-16 — server browser queue disabled (Task 4.6)
+
+- `getCloudRenderPolicy` يستبعد `browser_cloud` دائمًا؛ متغير البيئة التاريخي لا ينشئ queue على Railway. هذا لا يحذف fixtures أو مسار Browser المحلي من الاختبارات.
+- الدليل: اختبار policy الجديد مع الاختبارات الحالية، ثم TypeScript والبناء؛ لا تغيير خارجي أو production.

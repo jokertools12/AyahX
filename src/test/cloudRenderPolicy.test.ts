@@ -30,4 +30,11 @@ describe('cloud production limits', () => {
     vi.stubEnv('ENGINE_SKIA_ENABLED', 'false');
     expect(getCloudRenderPolicy().defaultEngine).toBeNull();
   });
+
+  it('never enables a server browser queue, even when the legacy flag is set', () => {
+    vi.stubEnv('ENGINE_BROWSER_ENABLED', 'true');
+    vi.stubEnv('ENGINE_SKIA_ENABLED', 'true');
+    expect(getCloudRenderPolicy().enabledEngines).toEqual(['skia_canvas']);
+    expect(getCloudRenderPolicy().enabledEngines).not.toContain('browser_cloud');
+  });
 });

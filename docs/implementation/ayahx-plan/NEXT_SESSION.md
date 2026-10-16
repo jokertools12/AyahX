@@ -174,3 +174,7 @@ Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f46
 - Added the first operational dashboard slice: `/api/admin/overview` and sanitized status cards on `/admin/sources` for MySQL, storage, render policy, and source review counts.
 - Local evidence: focused API/UI tests 3/3, TypeScript and production build exit 0. No Railway or production mutation.
 - Next: wait for PR61 CI/review, then connect approved source adapters to the repository boundary before enabling any external provider.
+## 2026-10-16 — server engine boundary
+
+- Closed the server-side `browser_cloud` policy path. Legacy browser fixtures remain for compatibility, while Railway policy can expose Skia (and approved FFmpeg muxing) only.
+- Next: land the PR after CI, then continue the approved-source repository boundary; no Cloud Browser deployment should be added.
