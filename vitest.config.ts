@@ -7,6 +7,9 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
+    // Renderer tests launch FFmpeg/Chromium and contend for the same local
+    // resources; serial files keep the full suite deterministic.
+    fileParallelism: false,
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
   },
