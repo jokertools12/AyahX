@@ -131,10 +131,11 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
       };
       const decision = await revalidateRecordingRange(selection, recordingAvailabilityLoader);
       if (!decision.allowed) {
+        const reason = 'reason' in decision ? decision.reason : 'availability_unknown';
         return res.status(409).json({
           error: 'لم تعد تغطية التسجيل أو اعتماد التوقيت صالحًا لهذا التصدير. أعد التحقق من الاختيار.',
-          code: `AVAILABILITY_${decision.reason.toUpperCase()}`,
-          reason: decision.reason,
+          code: `AVAILABILITY_${reason.toUpperCase()}`,
+          reason,
         });
       }
     }

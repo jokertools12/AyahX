@@ -4,13 +4,13 @@ import { approvalEnvelopeSchema, catalogSubjectSha256 } from './catalogApprovalP
 import { catalogAuthorityEvidenceContext, catalogAuthorityEvidenceContextSha256 } from './catalogAuthorityVerifier';
 import { canonicalJson } from '../utils/canonicalIntegrity';
 
-export type CatalogApprovalConnection = Pick<{
-  query: (sql: string, parameters?: readonly unknown[]) => Promise<[unknown[], unknown]>;
+export type CatalogApprovalConnection = {
+  query: (sql: string, parameters?: unknown[]) => Promise<[unknown[], unknown]>;
   beginTransaction: () => Promise<void>;
   commit: () => Promise<void>;
   rollback: () => Promise<void>;
   release: () => void;
-}, 'query' | 'beginTransaction' | 'commit' | 'rollback' | 'release'>;
+};
 export type CatalogApprovalAuthorization = (actorId: string) => Promise<{ allowed: boolean; authorizingGrantId?: string }>;
 export type CatalogApprovalInput = { requestId: string; reason: string; approval: unknown };
 export type CatalogApprovalResult = { auditEventId: string; replayed: boolean };
@@ -40,7 +40,7 @@ export class CatalogApprovalError extends Error {
 
 function parsedInput(input: unknown) {
   const result = catalogApprovalInputSchema.safeParse(input);
-  if (!result.success) throw new CatalogApprovalError('CATALOG_REQUEST_CONFLICT', 'CATALOG_APPROVAL_INPUT_INVALID');
+  if (!result.success) throw new CatalogApprovalError('CATALOG_REQUEST_CONFLICT', 'CATALOG_REQUEST_CONFLICT');
   return result.data;
 }
 
@@ -79,7 +79,7 @@ export function createCatalogContentApprovalService(
       const body = parsedInput(input);
       const approval = approvalEnvelopeSchema.parse(body.approval);
       const now = clock();
-      if (!Number.isSafeInteger(now) || approval.approvedAtEpochMs > now) throw new CatalogApprovalError('CATALOG_REQUEST_CONFLICT', 'CATALOG_APPROVAL_TIME_INVALID');
+      if (!Number.isSafeInteger(now) || approval.approvedAtEpochMs > now) throw new CatalogApprovalError('CATALOG_REQUEST_CONFLICT');
       const authorization = await authorize(actorId);
       if (!authorization.allowed || !authorization.authorizingGrantId) throw new CatalogApprovalError('CATALOG_APPROVAL_FORBIDDEN');
         const context = approval.subjectKind === 'timing'
