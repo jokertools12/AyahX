@@ -17,7 +17,7 @@ export interface ClientManifestParams {
   ayahRange: { start: number; end: number };
   ayahs: { numberInSurah: number; text: string }[];
   reciter: { id: string; name: string; quranFoundationId?: number; everyAyahSubfolder?: string };
-  availabilitySelection?: ReaderScope & { snapshotRevision: string; requiredTiming: 'ayah' | 'word' | 'letter' };
+  availabilitySelection?: ReaderScope & { snapshotRevision: string; requiredTiming: 'ayah' | 'word' | 'letter'; audioAssetId: string; audioFingerprint: string; timingDocumentId: string; timingRevision: string };
   timingMap: TimingMap;
   audio: {
     sourceMode: 'qf' | 'everyayah' | 'single_url';

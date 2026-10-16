@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { evaluateRecordingRange, quranFontBindingSchema, type AvailabilitySnapshot, type RangeSelection } from '../../shared/recordingAvailability';
-import { revalidateRecordingRange } from '../../server/services/recordingAvailabilityService';
+import { loadAndEvaluateRecordingRange, revalidateRecordingRange } from '../../server/services/recordingAvailabilityService';
 
 // Synthetic identity fixtures, not approved Quran/font/source mappings.
 const scope = { reciterId: 'reader', recordingId: 'recording-a', riwayahCode: 'hafs-fixture', mushafProfileId: 'mushaf-fixture', numberingSystem: 'kufi-fixture' };
@@ -98,5 +98,16 @@ describe('recording-scoped availability contract', () => {
     expect(await revalidateRecordingRange(makeSelection(), load, () => 1500)).toEqual(deny('timing_or_approval_missing'));
     expect(load).toHaveBeenCalledWith(scope);
     expect(await revalidateRecordingRange({ ...makeSelection(), snapshot: makeSnapshot() }, load)).toEqual(deny('invalid_payload'));
+  });
+  it('returns the exact freshly loaded snapshot for downstream audio/timing binding', async () => {
+    const snapshot = makeSnapshot();
+    const result = await loadAndEvaluateRecordingRange(makeSelection(), async () => snapshot, () => 1500);
+    expect(result.decision).toEqual({ allowed: true });
+    expect(result.snapshot).toBe(snapshot);
+  });
+  it('propagates loader failures so admission can return service unavailable', async () => {
+    await expect(loadAndEvaluateRecordingRange(makeSelection(), async () => {
+      throw new Error('database unavailable');
+    }, () => 1500)).rejects.toThrow('database unavailable');
   });
 });

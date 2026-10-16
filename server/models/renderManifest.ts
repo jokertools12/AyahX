@@ -109,6 +109,10 @@ export const RenderManifestSchema = z.object({
   availabilitySelection: readerScopeSchema.extend({
     snapshotRevision: z.string().min(1).max(200),
     requiredTiming: timingLevelSchema,
+    audioAssetId: z.string().min(1).max(200),
+    audioFingerprint: z.string().regex(/^[a-f0-9]{64}$/),
+    timingDocumentId: z.string().min(1).max(200),
+    timingRevision: z.string().min(1).max(200),
   }).strict().optional(),
 
   // Ibtahalat reuses the exact scene shell but provides time-bounded lyric

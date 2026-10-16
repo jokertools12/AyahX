@@ -15,7 +15,7 @@ import { recordRenderAudit } from '../services/renderObservability';
 import { verifyApprovedTimingMapAttestation } from '../services/alignmentAttestation';
 import { validateCloudRenderLimits } from '../../shared/cloudRenderPolicy';
 import { getCloudRenderPolicy } from '../services/cloudRenderPolicy';
-import { revalidateRecordingRange, type AvailabilityLoader } from '../services/recordingAvailabilityService';
+import { loadAndEvaluateRecordingRange, type AvailabilityLoader } from '../services/recordingAvailabilityService';
 
 const router = Router();
 let recordingAvailabilityLoader: AvailabilityLoader | null = null;
@@ -129,13 +129,38 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
         toAyah: manifestValidation.manifest.canonicalAyahRange.endAyah,
         intent: 'final_export' as const,
       };
-      const decision = await revalidateRecordingRange(selection, recordingAvailabilityLoader);
+      let checked;
+      try {
+        checked = await loadAndEvaluateRecordingRange(selection, recordingAvailabilityLoader);
+      } catch (error) {
+        logger.error('Recording availability reload failed during export admission:', error);
+        return res.status(503).json({ error: 'تعذر التحقق من توافر التسجيل حاليًا. حاول مرة أخرى.', code: 'AVAILABILITY_UNAVAILABLE' });
+      }
+      const decision = checked.decision;
       if (!decision.allowed) {
         const reason = 'reason' in decision ? decision.reason : 'availability_unknown';
         return res.status(409).json({
           error: 'لم تعد تغطية التسجيل أو اعتماد التوقيت صالحًا لهذا التصدير. أعد التحقق من الاختيار.',
           code: `AVAILABILITY_${reason.toUpperCase()}`,
           reason,
+        });
+      }
+      const snapshot = checked.snapshot;
+      const covered = snapshot?.intervals.filter(interval => interval.surahNumber === selection.surahNumber
+        && interval.toAyah >= selection.fromAyah && interval.fromAyah <= selection.toAyah) ?? [];
+      const bindingMatches = covered.length > 0 && covered.every(interval => {
+        const timing = interval.timing;
+        return interval.audioState === 'verified' && interval.audioAssetId === availability.audioAssetId
+          && interval.audioFingerprint === availability.audioFingerprint
+          && timing?.documentId === availability.timingDocumentId
+          && timing.revision === availability.timingRevision;
+      }) && manifestValidation.manifest.audio.audioContentHash === availability.audioFingerprint
+        && manifestValidation.manifest.timingMap.audioContentHash === availability.audioFingerprint;
+      if (!bindingMatches) {
+        return res.status(409).json({
+          error: 'هوية الصوت أو التوقيت في أمر التصدير لا تطابق التسجيل المعتمد.',
+          code: 'AVAILABILITY_IDENTITY_MISMATCH',
+          reason: 'identity_mismatch',
         });
       }
     }
