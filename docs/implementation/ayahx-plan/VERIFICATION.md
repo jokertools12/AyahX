@@ -438,3 +438,8 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 - أضيف `createCatalogAuthorityVerifier` لقراءة أحداث `content_approve` من `catalog_audit_events` والتحقق من subject/revision/hash/وقت الاعتماد وسلامة context.
 - الحارس fail-closed: timing binding بلا evidence مخصص يعيد `false`، والصفوف المشوهة أو المستقبلية لا تصبح authority.
 - الدليل: `catalogAuthorityVerifier.test.ts` (3/3)، TypeScript وESLint exit 0. لم يُوصل verifier بالـruntime ولم تُنفذ migration أو كتابة اعتماد حية.
+## 2026-10-16 — append-only content approval writer
+
+- أضيف `createCatalogContentApprovalService` لكتابة `content_approve` في `catalog_audit_events` مع authorizing grant، hash/context، وidempotency على `(actor, requestId)`.
+- الاختبارات: writer + verifier **6/6**، TypeScript وESLint exit 0.
+- لم يُوصل writer بالـHTTP أو runtime ولم تُطبق migration جديدة؛ التشغيل الحي يبقى خلف بوابة authority والمراجعة.
