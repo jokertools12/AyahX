@@ -178,3 +178,8 @@ Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f46
 
 - Closed the server-side `browser_cloud` policy path. Legacy browser fixtures remain for compatibility, while Railway policy can expose Skia (and approved FFmpeg muxing) only.
 - Next: land the PR after CI, then continue the approved-source repository boundary; no Cloud Browser deployment should be added.
+## 2026-10-16 — merged PR and staging checkpoint
+
+- PR61 merged as `d268d9a`; Enterprise foundation and AyahX E2E are green.
+- Staging API, Skia, and control deployments all report SUCCESS on the same main revision. Live readiness confirms MySQL and S3/R2 storage.
+- Next: connect approved source adapters to the repository boundary, then perform the remaining live render/visual gates. Keep production untouched until those gates and the explicit production review are complete.
