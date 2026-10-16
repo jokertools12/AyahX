@@ -131,6 +131,8 @@ export const RenderManifestSchema = z.object({
 
   timingMap: z.object({
     mapId: z.string().min(1),
+    availabilityTimingDocumentId: z.string().min(1).max(200).optional(),
+    availabilityTimingRevision: z.string().min(1).max(200).optional(),
     // The browser preview and native scene workers use this explicit metadata
     // to resolve whether word offsets belong to the full source recitation or
     // to a local sliced timeline.

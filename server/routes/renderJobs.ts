@@ -155,7 +155,11 @@ router.post('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =
           && timing?.documentId === availability.timingDocumentId
           && timing.revision === availability.timingRevision;
       }) && manifestValidation.manifest.audio.audioContentHash === availability.audioFingerprint
-        && manifestValidation.manifest.timingMap.audioContentHash === availability.audioFingerprint;
+        && manifestValidation.manifest.timingMap.audioContentHash === availability.audioFingerprint
+        && manifestValidation.manifest.timingMap.availabilityTimingDocumentId === availability.timingDocumentId
+        && manifestValidation.manifest.timingMap.availabilityTimingRevision === availability.timingRevision
+        && manifestValidation.manifest.timingMap.validationStatus === 'approved'
+        && manifestValidation.manifest.timingMap.review?.status === 'approved';
       if (!bindingMatches) {
         return res.status(409).json({
           error: 'هوية الصوت أو التوقيت في أمر التصدير لا تطابق التسجيل المعتمد.',

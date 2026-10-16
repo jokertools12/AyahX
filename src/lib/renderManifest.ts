@@ -106,6 +106,8 @@ export function buildClientRenderManifest(params: ClientManifestParams): any {
 
     timingMap: {
       mapId: params.timingMap.mapId,
+      availabilityTimingDocumentId: params.availabilitySelection?.timingDocumentId,
+      availabilityTimingRevision: params.availabilitySelection?.timingRevision,
       // Preserve the origin and composition clock. The scene uses these fields
       // to distinguish absolute Quran Foundation timestamps from a sliced or
       // concatenated audio timeline without a fragile numeric heuristic.

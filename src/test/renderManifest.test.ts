@@ -93,6 +93,11 @@ describe('RenderManifest Specification & Validation', () => {
   it('accepts a fully bound recording availability selection', () => {
     const res = validateRenderManifest({
       ...sampleValidManifest,
+      timingMap: {
+        ...sampleValidManifest.timingMap,
+        availabilityTimingDocumentId: 'timing-a', availabilityTimingRevision: 't1',
+        review: { status: 'approved' as const },
+      },
       availabilitySelection: {
         reciterId: 'reader', recordingId: 'recording-a', riwayahCode: 'hafs-fixture',
         mushafProfileId: 'mushaf-fixture', numberingSystem: 'kufi-fixture', snapshotRevision: 'v1',
