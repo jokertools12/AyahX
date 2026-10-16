@@ -99,7 +99,20 @@ const candidateTextSchema = z.object({
 const candidateAlignmentSchema = candidateTextSchema.extend({
   reciterId: opaqueReference, recordingId: opaqueReference, audioFingerprint: sha256Schema,
 }).strict();
-const resolutionCandidateSchema = z.object({ text: candidateTextSchema, alignment: candidateAlignmentSchema.optional() }).strict();
+export const resolutionProvenanceSchema = z.object({
+  sourceId: opaqueReference,
+  sourceRevision: opaqueReference,
+  licenseReference: opaqueReference,
+  retrievedAt: z.string().datetime({ offset: true }),
+  contentChecksum: sha256Schema,
+}).strict();
+export type ResolutionProvenance = z.infer<typeof resolutionProvenanceSchema>;
+export const resolutionCandidateSchema = z.object({
+  text: candidateTextSchema,
+  alignment: candidateAlignmentSchema.optional(),
+  provenance: resolutionProvenanceSchema.optional(),
+}).strict();
+export type ResolutionCandidate = z.infer<typeof resolutionCandidateSchema>;
 
 /** Validates provider output against the immutable lock before a result is selected. */
 export function validateResolutionCandidate(lockInput: unknown, candidateInput: unknown, purpose: ResolutionRequest['purpose']): SourceFailure | null {

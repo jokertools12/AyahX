@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { AlertTriangle, CheckCircle2, Database, Loader2, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Database, Loader2, ShieldCheck, Server } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,10 +27,14 @@ export default function AdminSourcesPage() {
   const [sources, setSources] = useState<QuranSourceCandidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [overview, setOverview] = useState<Awaited<ReturnType<typeof api.admin.getOverview>> | null>(null);
 
   useEffect(() => {
     if (!user || user.role !== 'admin') return;
-    api.quran.getSources().then((result) => setSources(result.sources)).catch((err: unknown) => {
+    Promise.all([api.quran.getSources(), api.admin.getOverview()]).then(([result, summary]) => {
+      setSources(result.sources);
+      setOverview(summary);
+    }).catch((err: unknown) => {
       setError(err instanceof Error ? err.message : 'تعذر تحميل سجل المصادر');
     }).finally(() => setLoading(false));
   }, [user]);
@@ -53,6 +57,13 @@ export default function AdminSourcesPage() {
 
         {error && <div role="alert" className="mb-6 flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-destructive"><AlertTriangle className="h-4 w-4" aria-hidden="true" />{error}</div>}
         {loading ? <div className="flex min-h-[30vh] items-center justify-center"><Loader2 className="h-8 w-8 animate-spin motion-reduce:animate-none text-primary" aria-label="جاري تحميل المصادر" /></div> : (
+          <>
+          {overview && <section aria-label="ملخص حالة النظام" className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <Card><CardContent className="flex items-center gap-3 p-4"><Server className="h-5 w-5 text-primary" aria-hidden="true" /><div><p className="text-xs text-muted-foreground">قاعدة البيانات</p><p className="font-semibold">{overview.database.status === 'connected' ? 'متصلة' : 'متدهورة'} · {overview.database.latencyMs}ms</p></div></CardContent></Card>
+            <Card><CardContent className="flex items-center gap-3 p-4"><Database className="h-5 w-5 text-primary" aria-hidden="true" /><div><p className="text-xs text-muted-foreground">التخزين</p><p className="font-semibold">{overview.storage.ready ? overview.storage.driver : 'غير جاهز'}</p></div></CardContent></Card>
+            <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">المصادر</p><p className="font-semibold">{overview.sources.reviewPending} قيد المراجعة · {overview.sources.activationReady} جاهز</p></CardContent></Card>
+            <Card><CardContent className="p-4"><p className="text-xs text-muted-foreground">محرك الرندر الافتراضي</p><p className="font-semibold">{overview.renderPolicy.defaultEngine || 'غير متاح'}</p></CardContent></Card>
+          </section>}
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {sources.map((source) => {
               const verified = evidenceLabels.filter((field) => source[field].status === 'verified').length;
@@ -63,6 +74,7 @@ export default function AdminSourcesPage() {
               </Card>;
             })}
           </div>
+          </>
         )}
       </div>
     </Layout>

@@ -20,6 +20,7 @@ import renderJobsRouter from './routes/renderJobs';
 import quranRouter from './routes/quran';
 import videoTranscodeRouter from './routes/videoTranscode';
 import alignmentsRouter from './routes/alignments';
+import adminRouter from './routes/admin';
 import { createCatalogRouter } from './routes/catalog';
 import { catalogGrantService } from './services/catalogGrantRuntime';
 
@@ -213,6 +214,7 @@ app.use('/api/services', servicesRouter);
 app.use('/api/render-jobs', renderJobsRouter);
 app.use('/api/quran', quranRouter);
 app.use('/api/alignments', alignmentsRouter);
+app.use('/api/admin', adminRouter);
 app.use('/api/catalog', createCatalogRouter(catalogGrantService));
 
 // 404 Catch-all for undefined API endpoints

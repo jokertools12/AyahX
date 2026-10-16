@@ -389,3 +389,30 @@ Source configuration still reports commitSha90bf8f8 while actual deployment/runt
 ## 2026-10-17 — review correction for AWS S3 endpoint resolution
 
 عالجت ملاحظة P1 من مراجعة PR60: `/api/health/ready` لا يطلب endpoint عند استخدام AWS S3 القياسي مع virtual-hosted mode، بينما يبقى endpoint إلزاميًا في R2/المزوّدات المعتمدة على path-style (`OBJECT_STORAGE_FORCE_PATH_STYLE=true`). اختبارات readiness/config (16 اختبارًا مع alignment provider) وTypeScript والبناء الإنتاجي نجحت.
+
+## 2026-10-16 checkpoint — R2 staging artifact verified
+
+بعد ضبط متغيرات R2 على API staging وإعادة نشر API `6907246f-1451-4b18-938d-ae4c6189e0b1` بنجاح، أعاد `/api/health/ready` HTTP 200 مع `database=connected` و`storage.driver=s3`. نجح probe Skia ثابت بحساب staging disposable: job `8b599efd-6650-4965-963a-7d4a834d0df0`، artifact 124932 bytes، وDB output path هو `s3://ayahx-audio-staging/temp-48h/...mp4`. Cloudflare R2 أعاد object واحدًا تحت `temp-48h/` بنفس الحجم وETag `9df63ef2799a6729a7f5958ec784b764`، والتنزيل أعاد 124932 bytes. Worker deployment `18ddb6b1-42c0-4bad-a200-3008d01e4c44` SUCCESS وسجل بدء worker. الدليل المنقح: `tooling/reports/enterprise-baseline/staging-r2-render-verification.json`.
+
+الـprobe ثابت وموسوم `needs_review_static_probe`. محاولة word-by-word باستخدام attestation صادرة من `/api/alignments/resolve-known` رُفضت بـ`ALIGNMENT_ATTESTATION_INVALID`، لذلك قبول التوقيت/الصوت الكامل ما زال مفتوحًا للتحقيق، ولا يوجد تغيير production.
+
+## 2026-10-16 checkpoint — attested word-timing R2 render accepted
+
+عولج فشل `ALIGNMENT_ATTESTATION_INVALID` باستخدام نفس عملية Node واتصال HTTP لإصدار resolve-known proof ثم إرسال render؛ نجح job word-by-word الموثق `b7dd333c-64d7-4852-a91a-9e2060058bbf` بحالة `approved_attested_word_map`. output path في DB هو `s3://ayahx-audio-staging/temp-48h/renders/2026-10-16/6d4452ba-a77a-49fe-ab03-bc383071794e_b7dd333c-64d7-4852-a91a-9e2060058bbf.mp4`. R2 object وdownload كلاهما 117576 bytes وETag `6e794ff001fc30906155f3a51252628b`. ffprobe أثبت H.264، 720x1280، yuv420p، AAC stereo، duration 1.022s. Worker deployment `18ddb6b1-42c0-4bad-a200-3008d01e4c44` SUCCESS؛ الدليل المنقح: `tooling/reports/enterprise-baseline/staging-r2-attested-render-verification.json`. Production لم يتغير.
+
+## 2026-10-16 — approved source adapter slice (Task 2.1)
+
+- أضيف `server/services/approvedSourceAdapters.ts` كمحول server-owned لسجلات المصدر المعتمدة، ولا ينفذ network fallback أو يرفع بيانات.
+- أضيف `resolutionProvenanceSchema` إلى `shared/sourceResolution.ts`؛ النتيجة تحمل source/revision/license/retrievedAt/content checksum، والمحول يرفض lock mismatch أو provenance الغائب.
+- الدليل: `npx vitest run src/test/sourceResolution.test.ts src/test/sourceResolutionService.test.ts src/test/approvedSourceAdapters.test.ts` — 3 ملفات، 94 اختبارًا ناجحًا؛ `npm test -- --run` — 109 ملفات، 891 اختبارًا ناجحًا و6 متخطاة؛ `npx tsc --noEmit` و`npm run build` exit 0.
+- الحالة: متحقق محليًا فقط؛ لم يُربط بعد ببيانات production أو R2، ولا يغيّر staging/production.
+## 2026-10-16 — admin operational overview (Task 4.1)
+
+- أضيف `GET /api/admin/overview` محمي بدور الأدمن، ويعرض حالة MySQL والتخزين وسياسة الرندر وعدّاد المصادر دون credentials أو تفاصيل حساسة.
+- رُبط الملخص بصفحة `/admin/sources` مع حالات RTL قابلة للقراءة، واختبار رفض المستخدم واختبار الاستجابة المنقحة.
+- الدليل: `npx vitest run src/test/adminOverviewApi.test.ts src/test/adminSourcesPage.test.tsx` — 3/3، `npx tsc --noEmit`، و`npm run build` exit 0.
+- الحالة: متحقق محليًا؛ لم يُنشر بعد إلى staging.
+## 2026-10-16 — server browser queue disabled (Task 4.6)
+
+- `getCloudRenderPolicy` يستبعد `browser_cloud` دائمًا؛ متغير البيئة التاريخي لا ينشئ queue على Railway. هذا لا يحذف fixtures أو مسار Browser المحلي من الاختبارات.
+- الدليل: اختبار policy الجديد مع الاختبارات الحالية، ثم TypeScript والبناء؛ لا تغيير خارجي أو production.

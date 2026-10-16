@@ -11,9 +11,10 @@ const fixtures = vi.hoisted(() => ({
     storage: { status: 'needs_review' }, cors: { status: 'needs_review' }, rateLimits: { status: 'needs_review' }, identity: { status: 'needs_review' },
     activationReady: false, activationGaps: ['production_disabled', 'license_unverified'],
   }] }),
+  getOverview: vi.fn().mockResolvedValue({ environment: 'test', database: { status: 'connected', latencyMs: 1 }, storage: { ready: true, driver: 'local' }, renderPolicy: { enabledEngines: ['skia_canvas'], defaultEngine: 'skia_canvas', maxBacklog: 50 }, sources: { total: 13, activationReady: 0, reviewPending: 13 } }),
 }));
 vi.mock('@/hooks/useAuth', () => ({ useAuth: () => ({ user: fixtures.user, loading: false }) }));
-vi.mock('@/lib/api', () => ({ api: { quran: { getSources: fixtures.getSources } } }));
+vi.mock('@/lib/api', () => ({ api: { quran: { getSources: fixtures.getSources }, admin: { getOverview: fixtures.getOverview } } }));
 vi.mock('@/components/Layout', () => ({ Layout: ({ children }: { children: React.ReactNode }) => <main>{children}</main> }));
 
 afterEach(() => { cleanup(); vi.clearAllMocks(); });

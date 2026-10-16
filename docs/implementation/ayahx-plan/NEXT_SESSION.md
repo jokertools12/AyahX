@@ -145,3 +145,36 @@ The owner explicitly approved staging deployment to the merged `main` revision. 
 ## 2026-10-16 checkpoint — Computer Use retry
 
 A fresh Computer Use kernel reset and `cua.getState()` retry failed before browser access with the same `failed to write kernel assets` / OS error 3. Cloudflare API token listing independently returned `9109 Unauthorized`. No credential or Railway variable was changed; the next action still requires restored Computer Use or an authorized Cloudflare token-creation path.
+
+## 2026-10-16 checkpoint — PR60 merged and staging rollout
+
+PR60 was squash-merged after `contracts` and `public-ui` both passed on head `7fdd476`; merge commit is `4ba67bb1b227173fdbec4605789d1e705bc9d5c0`. Railway automatically started staging deployments for API, control, and Skia. API deployment `ec501382-ac6e-4549-b2dd-25eb5187c5ba` and control deployment `3dd156a6-26dc-4679-8901-89f5913b2b47` reached SUCCESS; Skia deployment `18ddb6b1-42c0-4bad-a200-3008d01e4c44` was still BUILDING at the last successful Railway read. Subsequent Railway reads returned a temporary viewer-role error, so Skia SUCCESS and final all-service reconciliation remain unverified. Production is untouched.
+
+## 2026-10-16 checkpoint — R2 is wired in staging
+
+The owner supplied staging-only R2 credentials. They were set on API staging through Railway CLI without printing values; production was untouched. API deployment `6907246f-1451-4b18-938d-ae4c6189e0b1` is SUCCESS and readiness reports `storage.driver=s3`. A real static Skia probe produced job `8b599efd-6650-4965-963a-7d4a834d0df0`; the DB path, R2 object under `temp-48h/`, object size/ETag, and download size reconcile. Do not expose or reuse the credentials; rotate the supplied secret if it was pasted into any external surface.
+
+The remaining gate is a word-by-word timing render: the current staging attestation check returned `ALIGNMENT_ATTESTATION_INVALID` when a freshly issued known-alignment proof was submitted. Investigate same-user/map serialization or replica secret consistency before claiming full render acceptance. Keep the static R2 evidence separate from final timing acceptance.
+
+## 2026-10-16 checkpoint — final staging R2 timing gate passed
+
+The same-process resolve-known plus render flow now passes the attestation gate. Staging produced an approved word-timing Skia MP4 in R2 with reconciled DB path, object size/ETag, download bytes, worker deployment, and ffprobe evidence. The earlier invalid proof was a cross-replica/request-session issue in the probe method, not a production code change. The remaining plan work is broader Enterprise coverage and credential rotation; do not promote production from this staging evidence alone.
+
+## 2026-10-16 checkpoint — production isolation rechecked
+
+Railway production API remains on deployment `de533693-da00-4279-a3ea-b0e1901f465f`, commit `42b04fd98912081d6c967ac7ec7cb931ce4519ab`. No production deployment or variable change was made while R2 was wired and verified in staging.
+
+## 2026-10-16 — next source-resolution increment
+
+- Task 2.1 local slice landed in the working branch: `approvedSourceAdapters.ts` exposes server-owned, lock-pinned adapters with provenance validation; shared candidate schema now accepts explicit provenance.
+- Local evidence: focused 94/94, full 891 passed/6 skipped, TypeScript and production build exit 0.
+- Remaining: connect the adapter factory to the approved repository/cache boundary, then add one external adapter only after endpoint/license/revision evidence. Do not enable unreviewed sources or promote production.
+## 2026-10-16 — admin overview increment
+
+- Added the first operational dashboard slice: `/api/admin/overview` and sanitized status cards on `/admin/sources` for MySQL, storage, render policy, and source review counts.
+- Local evidence: focused API/UI tests 3/3, TypeScript and production build exit 0. No Railway or production mutation.
+- Next: wait for PR61 CI/review, then connect approved source adapters to the repository boundary before enabling any external provider.
+## 2026-10-16 — server engine boundary
+
+- Closed the server-side `browser_cloud` policy path. Legacy browser fixtures remain for compatibility, while Railway policy can expose Skia (and approved FFmpeg muxing) only.
+- Next: land the PR after CI, then continue the approved-source repository boundary; no Cloud Browser deployment should be added.
