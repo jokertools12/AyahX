@@ -215,7 +215,7 @@ app.use('/api/render-jobs', renderJobsRouter);
 app.use('/api/quran', quranRouter);
 app.use('/api/alignments', alignmentsRouter);
 app.use('/api/admin', adminRouter);
-app.use('/api/catalog', createCatalogRouter({ ...catalogGrantService, approve: catalogContentApprovalService.approve }));
+app.use('/api/catalog', createCatalogRouter({ ...catalogGrantService, approve: catalogContentApprovalService.approve, listApprovals: catalogContentApprovalService.listApprovals }));
 
 // 404 Catch-all for undefined API endpoints
 app.use('/api', (_req, res) => {

@@ -31,4 +31,12 @@ describe('catalog content approval writer', () => {
     await expect(service.approve('admin', { requestId: 'req-2', reason: 'reviewed source', approval })).rejects.toMatchObject({ code: 'CATALOG_APPROVAL_FORBIDDEN' });
     expect(db.beginTransaction).not.toHaveBeenCalled();
   });
+
+  it('lists redacted approval evidence for an authorized reviewer', async () => {
+    const db = connection([{ auditEventId: 'event-1', actorId: 'admin', authorizingGrantId: 'owner-grant',
+      approvedAtEpochMs: 100, requestId: 'req-1', reason: 'reviewed source', subjectKind: 'source',
+      subjectId: 'source-a', subjectRevision: 'v1', subjectSha256: 'a'.repeat(64) }]);
+    const service = createCatalogContentApprovalService(async () => db, async () => ({ allowed: true, authorizingGrantId: 'owner-grant' }), () => 200);
+    await expect(service.listApprovals('admin', 10)).resolves.toEqual([expect.objectContaining({ auditEventId: 'event-1', subjectId: 'source-a' })]);
+  });
 });
