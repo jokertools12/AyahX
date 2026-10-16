@@ -7,7 +7,7 @@ import path from 'path';
 import { config, getStorageReadiness } from './config';
 import { logger, requestLogger } from './logger';
 import { authenticateToken } from './middleware/auth';
-import { pingDatabase, closePool } from './db';
+import { pingDatabase, closePool, query } from './db';
 
 import authRouter from './routes/auth';
 import videosRouter from './routes/videos';
