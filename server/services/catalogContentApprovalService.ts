@@ -53,7 +53,9 @@ export function createCatalogContentApprovalService(
       if (!Number.isSafeInteger(now) || approval.approvedAtEpochMs > now) throw new CatalogApprovalError('CATALOG_REQUEST_CONFLICT', 'CATALOG_APPROVAL_TIME_INVALID');
       const authorization = await authorize(actorId);
       if (!authorization.allowed || !authorization.authorizingGrantId) throw new CatalogApprovalError('CATALOG_APPROVAL_FORBIDDEN');
-      const context = catalogAuthorityEvidenceContext(approval);
+        const context = approval.subjectKind === 'timing'
+          ? { schemaVersion: 1 as const, kind: 'timing_approve' as const, timingSha256: approval.subjectSha256 }
+          : catalogAuthorityEvidenceContext(approval);
       const payloadSha256 = catalogSubjectSha256({ action: 'content_approve', ...body });
       const connection = await getConnection();
       let begun = false;

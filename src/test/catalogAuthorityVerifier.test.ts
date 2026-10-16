@@ -22,7 +22,10 @@ describe('catalog authority verifier', () => {
   });
 
   it('keeps timing approval fail-closed until dedicated evidence is implemented', async () => {
-    const verify = createCatalogAuthorityVerifier(async () => [], () => 200);
-    expect(await verify({ kind: 'timing_binding', timing: {} as never, snapshotSha256: 'a'.repeat(64), context: {} as never })).toBe(false);
+    const timing = { documentId: 'timing-1', revision: 'r1', review: 'approved', startMs: 0, endMs: 1000 } as never;
+    const timingSha256 = catalogSubjectSha256(timing);
+    const context = { schemaVersion: 1, kind: 'timing_approve', timingSha256 };
+    const verify = createCatalogAuthorityVerifier(async () => [{ id: 'event-timing', action: 'content_approve', requiredCapability: 'content_approve', createdAtEpochMs: 100, subjectKind: 'timing', subjectId: 'timing-1', subjectRevision: 'r1', subjectSha256: timingSha256, contextJson: context, contextSha256: catalogSubjectSha256(context) }], () => 200);
+    expect(await verify({ kind: 'timing_binding', timing, snapshotSha256: 'a'.repeat(64), context: {} as never })).toBe(true);
   });
 });

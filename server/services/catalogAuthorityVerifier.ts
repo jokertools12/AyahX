@@ -15,7 +15,7 @@ export const catalogAuthorityEvidenceReadSql = `SELECT
 const evidenceRowSchema = z.object({
   id: z.string().min(1).max(200), action: z.literal('content_approve'),
   requiredCapability: z.literal('content_approve'), createdAtEpochMs: z.number().int().nonnegative(),
-  subjectKind: z.enum(['source', 'profile', 'coverage']), subjectId: z.string().min(1).max(200),
+  subjectKind: z.enum(['source', 'profile', 'coverage', 'timing']), subjectId: z.string().min(1).max(200),
   subjectRevision: z.string().min(1).max(200), subjectSha256: z.string().regex(/^[a-f0-9]{64}$/),
   contextJson: z.unknown(), contextSha256: z.string().regex(/^[a-f0-9]{64}$/),
 }).strict();
@@ -27,7 +27,12 @@ const decodeJson = (value: unknown): unknown => {
 
 const approvalContextSchema = z.object({
   schemaVersion: z.literal(1), kind: z.literal('content_approve'),
-  approvalSha256: z.string().regex(/^[a-f0-9]{64}$/),
+  approvalSha256: z.string().regex(/^[a-f0-9]{64}$/), timingSha256: z.string().regex(/^[a-f0-9]{64}$/).optional(),
+}).strict();
+
+const timingContextSchema = z.object({
+  schemaVersion: z.literal(1), kind: z.literal('timing_approve'),
+  timingSha256: z.string().regex(/^[a-f0-9]{64}$/),
 }).strict();
 
 /**
@@ -37,7 +42,20 @@ const approvalContextSchema = z.object({
  */
 export function createCatalogAuthorityVerifier(query: CatalogAuthorityQuery, clock: () => number = Date.now): CatalogAuthorityVerifier {
   return async (request: CatalogAuthorityRequest): Promise<boolean> => {
-    if (request.kind === 'timing_binding') return false;
+    if (request.kind === 'timing_binding') {
+      if (request.timing.review !== 'approved') return false;
+      const rows = await query(catalogAuthorityEvidenceReadSql, ['timing', request.timing.documentId, request.timing.revision]);
+      const timingSha256 = catalogSubjectSha256(request.timing);
+      const now = clock();
+      if (!Number.isSafeInteger(now)) return false;
+      return rows.some(raw => {
+        const row = evidenceRowSchema.safeParse({ ...(raw as object), contextJson: decodeJson((raw as Record<string, unknown>)?.contextJson) });
+        if (!row.success || row.data.createdAtEpochMs > now || row.data.subjectSha256 !== timingSha256) return false;
+        if (row.data.contextSha256 !== catalogSubjectSha256(row.data.contextJson)) return false;
+        const context = timingContextSchema.safeParse(row.data.contextJson);
+        return context.success && context.data.timingSha256 === timingSha256;
+      });
+    }
     const approval = approvalEnvelopeSchema.safeParse(request.approval);
     if (!approval.success) return false;
     const now = clock();
