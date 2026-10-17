@@ -11,6 +11,11 @@ Project-local skills are in `.agents/skills`. Choose only the skills relevant to
 the task, and read their SKILL.md before applying them. They become available
 for discovery on the next turn. Installed upstream revisions and integration
 status are in `tooling/upstream-inspection.json` and `docs/toolkit-guide.ar.md`.
+Shared Cursor MCP (Railway, Cloudflare, Playwright, Chrome DevTools) is in
+`.cursor/mcp.json` so any clone or Cursor login gets the same server list.
+Machine-wide skills also sync to `~/.cursor/skills`. Refresh both with
+`powershell -NoProfile -File tooling/setup-cursor-environment.ps1`. OAuth for
+Railway and Cloudflare is once per Cursor account; credentials stay out of Git.
 
 - Requirements and implementation: spec-driven-development,
   planning-and-task-breakdown, incremental-implementation.
