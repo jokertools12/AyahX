@@ -90,6 +90,24 @@ describe('RenderManifest Specification & Validation', () => {
     expect(res.errors).toBeUndefined();
   });
 
+  it('accepts a fully bound recording availability selection', () => {
+    const res = validateRenderManifest({
+      ...sampleValidManifest,
+      timingMap: {
+        ...sampleValidManifest.timingMap,
+        availabilityTimingDocumentId: 'timing-a', availabilityTimingRevision: 't1',
+        review: { status: 'approved' as const },
+      },
+      availabilitySelection: {
+        reciterId: 'reader', recordingId: 'recording-a', riwayahCode: 'hafs-fixture',
+        mushafProfileId: 'mushaf-fixture', numberingSystem: 'kufi-fixture', snapshotRevision: 'v1',
+        requiredTiming: 'ayah', audioAssetId: 'asset-a',
+        audioFingerprint: 'a'.repeat(64), timingDocumentId: 'timing-a', timingRevision: 't1',
+      },
+    });
+    expect(res.valid).toBe(true);
+  });
+
   it('requires a fresh source timestamp for Quran Foundation audio or timing', () => {
     const qfManifest = {
       ...sampleValidManifest,

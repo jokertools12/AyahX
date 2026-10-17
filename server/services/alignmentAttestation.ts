@@ -18,6 +18,7 @@ type AttestableSubsegment = {
 
 export type AttestableTimingMap = {
   mapId?: string;
+  availabilityTimingRevision?: string;
   audioContentHash?: string;
   audioFingerprintKind?: string;
   validationStatus?: string;
@@ -86,6 +87,7 @@ function normalizedSubsegments(items: AttestableSubsegment[] | undefined): Array
 export function alignmentTimingDigest(map: AttestableTimingMap): string {
   const evidence = {
     mapId: map.mapId || '',
+    availabilityTimingRevision: map.availabilityTimingRevision || '',
     audioContentHash: map.audioContentHash || '',
     audioFingerprintKind: map.audioFingerprintKind || '',
     validationStatus: map.validationStatus || '',

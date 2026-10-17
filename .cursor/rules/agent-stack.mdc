@@ -1,0 +1,10 @@
+---
+description: Keep Railway, Cloudflare, browser MCP, and project skills available in every AyahX session
+alwaysApply: true
+---
+
+MCP servers for this repo are in `.cursor/mcp.json` and are merged with the user file `~/.cursor/mcp.json`. Use them in every session when the work needs deploy, R2, Cloudflare, or browser verification.
+
+Skills live in `.agents/skills` (project, any clone/account) and `~/.cursor/skills` (this machine, every project). Read the matching `SKILL.md` before applying. Prefer `use-railway` for Railway, `cloud-fs` for R2, and browser QA skills for UI checks.
+
+Marketplace plugins stay on this Cursor install; they are not in Git. After a new Cursor login, authenticate Railway and Cloudflare once. Refresh the stack with `powershell -NoProfile -File tooling/setup-cursor-environment.ps1`. Never put keys in `VITE_*`, logs, or tracked config.

@@ -1,0 +1,11 @@
+{
+  "note": "Cursor Marketplace plugins cannot be installed from Git. After any Cursor login, install these from Customize so they stay available on this machine. Required for AyahX is railway + cloudflare.",
+  "ayahxRequired": ["railway", "cloudflare"],
+  "recommended": [
+    "railway",
+    "cloudflare",
+    "vercel",
+    "github",
+    "gitlab"
+  ]
+}

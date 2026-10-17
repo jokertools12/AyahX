@@ -2,6 +2,7 @@ import { TimingMap } from './timingMap';
 import type { AnimationProfile } from './animationTimeline';
 import { ExportQuality, getQualityDimensions } from '@/hooks/useVideoRecorder';
 import { AudioEffects } from '@/hooks/useAudioEffects';
+import type { ReaderScope } from '../../shared/recordingAvailability';
 
 export interface ClientManifestParams {
   aspectRatio: '9:16' | '16:9';
@@ -16,6 +17,7 @@ export interface ClientManifestParams {
   ayahRange: { start: number; end: number };
   ayahs: { numberInSurah: number; text: string }[];
   reciter: { id: string; name: string; quranFoundationId?: number; everyAyahSubfolder?: string };
+  availabilitySelection?: ReaderScope & { snapshotRevision: string; requiredTiming: 'ayah' | 'word' | 'letter'; audioAssetId: string; audioFingerprint: string; timingDocumentId: string; timingRevision: string };
   timingMap: TimingMap;
   audio: {
     sourceMode: 'qf' | 'everyayah' | 'single_url';
@@ -93,6 +95,8 @@ export function buildClientRenderManifest(params: ClientManifestParams): any {
       })),
     },
 
+    availabilitySelection: params.availabilitySelection,
+
     contentKind: params.contentKind || 'quran',
     lyrics: params.lyrics?.map((line) => ({
       text: line.text,
@@ -102,6 +106,8 @@ export function buildClientRenderManifest(params: ClientManifestParams): any {
 
     timingMap: {
       mapId: params.timingMap.mapId,
+      availabilityTimingDocumentId: params.availabilitySelection?.timingDocumentId,
+      availabilityTimingRevision: params.availabilitySelection?.timingRevision,
       // Preserve the origin and composition clock. The scene uses these fields
       // to distinguish absolute Quran Foundation timestamps from a sliced or
       // concatenated audio timeline without a fragile numeric heuristic.

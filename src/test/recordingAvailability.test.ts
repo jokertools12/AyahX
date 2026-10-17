@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { evaluateRecordingRange, quranFontBindingSchema, type AvailabilitySnapshot, type RangeSelection } from '../../shared/recordingAvailability';
-import { revalidateRecordingRange } from '../../server/services/recordingAvailabilityService';
+import { loadAndEvaluateRecordingRange, revalidateRecordingRange, revalidateRenderManifestAvailability } from '../../server/services/recordingAvailabilityService';
 
 // Synthetic identity fixtures, not approved Quran/font/source mappings.
 const scope = { reciterId: 'reader', recordingId: 'recording-a', riwayahCode: 'hafs-fixture', mushafProfileId: 'mushaf-fixture', numberingSystem: 'kufi-fixture' };
@@ -98,5 +98,32 @@ describe('recording-scoped availability contract', () => {
     expect(await revalidateRecordingRange(makeSelection(), load, () => 1500)).toEqual(deny('timing_or_approval_missing'));
     expect(load).toHaveBeenCalledWith(scope);
     expect(await revalidateRecordingRange({ ...makeSelection(), snapshot: makeSnapshot() }, load)).toEqual(deny('invalid_payload'));
+  });
+  it('returns the exact freshly loaded snapshot for downstream audio/timing binding', async () => {
+    const snapshot = makeSnapshot();
+    const result = await loadAndEvaluateRecordingRange(makeSelection(), async () => snapshot, () => 1500);
+    expect(result.decision).toEqual({ allowed: true });
+    expect(result.snapshot).toBe(snapshot);
+  });
+  it('propagates loader failures so admission can return service unavailable', async () => {
+    await expect(loadAndEvaluateRecordingRange(makeSelection(), async () => {
+      throw new Error('database unavailable');
+    }, () => 1500)).rejects.toThrow('database unavailable');
+  });
+  it('binds the approved timing document and status to the final-export manifest', async () => {
+    const manifest = {
+      availabilitySelection: { ...scope, snapshotRevision: 'v1', requiredTiming: 'ayah', audioAssetId: 'asset-a', audioFingerprint: hash,
+        timingDocumentId: 'timing-a', timingRevision: 't1' },
+      canonicalAyahRange: { surahNumber: 1, startAyah: 1, endAyah: 7 },
+      audio: { audioContentHash: hash },
+      timingMap: { mapId: 'timing-a', availabilityTimingDocumentId: 'timing-a', availabilityTimingRevision: 't1', audioContentHash: hash,
+        validationStatus: 'approved', review: { status: 'approved' } },
+    };
+    const fingerprint = async () => ({ sha256: hash });
+    expect(await revalidateRenderManifestAvailability(manifest, async () => makeSnapshot(), () => 1500, fingerprint)).toEqual({ allowed: true });
+    expect(await revalidateRenderManifestAvailability({ ...manifest, timingMap: { ...manifest.timingMap, mapId: 'other' } }, async () => makeSnapshot(), () => 1500, fingerprint))
+      .toEqual(deny('identity_mismatch'));
+    expect(await revalidateRenderManifestAvailability({ ...manifest, timingMap: { ...manifest.timingMap, validationStatus: 'needs_review' } }, async () => makeSnapshot(), () => 1500, fingerprint))
+      .toEqual(deny('identity_mismatch'));
   });
 });

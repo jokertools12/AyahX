@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { readerScopeSchema, timingLevelSchema } from '../../shared/recordingAvailability';
 
 const animationProfileSchema = z.enum([
   'static',
@@ -102,6 +103,18 @@ export const RenderManifestSchema = z.object({
     ).min(1),
   }),
 
+  // Optional server-issued availability identity. When present, the render
+  // admission route revalidates the exact recording/range against the current
+  // approved snapshot before creating a durable job.
+  availabilitySelection: readerScopeSchema.extend({
+    snapshotRevision: z.string().min(1).max(200),
+    requiredTiming: timingLevelSchema,
+    audioAssetId: z.string().min(1).max(200),
+    audioFingerprint: z.string().regex(/^[a-f0-9]{64}$/),
+    timingDocumentId: z.string().min(1).max(200),
+    timingRevision: z.string().min(1).max(200),
+  }).strict().optional(),
+
   // Ibtahalat reuses the exact scene shell but provides time-bounded lyric
   // lines rather than Quran word spans. Keeping this in the manifest makes
   // Browser Hybrid, FFmpeg, Skia, and Browser Cloud render the same mode.
@@ -118,6 +131,8 @@ export const RenderManifestSchema = z.object({
 
   timingMap: z.object({
     mapId: z.string().min(1),
+    availabilityTimingDocumentId: z.string().min(1).max(200).optional(),
+    availabilityTimingRevision: z.string().min(1).max(200).optional(),
     // The browser preview and native scene workers use this explicit metadata
     // to resolve whether word offsets belong to the full source recitation or
     // to a local sliced timeline.
